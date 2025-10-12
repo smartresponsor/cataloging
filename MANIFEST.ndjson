@@ -1,0 +1,4 @@
+{"phase": "rc2-stab-01", "item": "tree-ops-safety"}
+{"phase": "rc2-stab-02", "item": "observability-v1"}
+{"phase": "rc2-stab-03", "item": "perf-gate-100k"}
+{"phase": "rc2-stab-04", "item": "smoke-kits"}
