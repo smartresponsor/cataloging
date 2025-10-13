@@ -1,3 +1,8 @@
-# Category RC2 Stabilization Bucket
+# Category RC2.1 Bucket — Draft/Publish
 
-Scope: Tree-OPS safety (invariants), Observability v1 (metrics/traces/alerts), Perf Gate (100k), Smoke kits.
+Scope:
+- Draft/Publish workflow and status policy
+- Version object and compare/rollback skeleton
+- Runbooks and smoke scripts
+
+Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
