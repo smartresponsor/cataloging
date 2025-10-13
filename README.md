@@ -1,8 +1,9 @@
-# Category RC2.1 Bucket — Draft/Publish
+# Category RC2.2 Bucket — Importers, SDK, Security/RBAC
 
 Scope:
-- Draft/Publish workflow and status policy
-- Version object and compare/rollback skeleton
-- Runbooks and smoke scripts
+- Importers: CSV/JSON baseline, Shopify mapper (category/seo/redirect)
+- SDK: PHP + TypeScript clients (idempotent keys, simple signature)
+- Security: OIDC/JWKS verifier, RBAC roles and policy
+- Docs/Runbooks: install/operate/rollback, mapping guides, smoke
 
 Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
