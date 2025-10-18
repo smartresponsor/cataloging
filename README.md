@@ -1,9 +1,11 @@
-# Category RC2.2 Bucket — Importers, SDK, Security/RBAC
+# Category RC3 Bucket
 
-Scope:
-- Importers: CSV/JSON baseline, Shopify mapper (category/seo/redirect)
-- SDK: PHP + TypeScript clients (idempotent keys, simple signature)
-- Security: OIDC/JWKS verifier, RBAC roles and policy
-- Docs/Runbooks: install/operate/rollback, mapping guides, smoke
+This bucket contains 10 production-oriented increments for the Category component (RC3).
+Conventions:
+- Single hyphen in filenames, underscore for phase increments (e.g., 01_0).
+- Singular naming for classes and methods.
+- Mirror interfaces under `src/LayerInterface/...`.
+- Postgres for Data layer, MySQL for Infrastructure projections.
+- Comments are in English only.
+- Author/Owner header is present in all code files.
 
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
