@@ -1,0 +1,14 @@
+{"phase": "03_0", "artifact": "category-core-phase-03_0-schema-slug-i18n-unique.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_1", "artifact": "category-core-phase-03_1-category-order-hint.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_2", "artifact": "category-core-phase-03_2-product-order-hint.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_3", "artifact": "category-core-phase-03_3-category-seo-i18n.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_4", "artifact": "category-core-phase-03_4-multi-tree-guard.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_5", "artifact": "category-core-phase-03_5-collection-rule-engine.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_6", "artifact": "category-core-phase-03_6-search-icu-synonyms.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_7", "artifact": "category-core-phase-03_7-sitemap-hreflang.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_8", "artifact": "category-core-phase-03_8-graphql-connections.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_9", "artifact": "category-core-phase-03_9-perf-tuning.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_10", "artifact": "category-core-phase-03_10-webhooks-quota-admin.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_11", "artifact": "category-core-phase-03_11-import-export.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_12", "artifact": "category-core-phase-03_12-smoke-observability.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
+{"phase": "03_13", "artifact": "category-core-phase-03_13-hardening.zip", "slo_gate": {"read_p95_ms": 250, "write_p95_ms": 700, "error_rate": 0.5, "projection_lag_s": 5}}
