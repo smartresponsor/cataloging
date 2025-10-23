@@ -1,3 +1,9 @@
 /release/
 /archives/
 /.idea/
+# secrets / local
+/tool/deploy-key/deploy-category
+/.idea/
+/category-public/
+/category-release/
+/category-src/
