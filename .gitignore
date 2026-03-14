@@ -10,39 +10,9 @@
 .vscode/
 *.iml
 
-# IDE / editor
-/.idea/
-/.vscode/
-
 # OS
 .DS_Store
 Thumbs.db
 
 # Consumer runtime
 .automation/lock/
-
-# Dependency
-/vendor/
-/node_modules/
-
-# Runtime
-/var/
-/public/bundle/
-/public/build/
-/coverage/
-/build/
-/tmp/
-
-# Automater runtime work directories
-/.automation/.tmp/
-/.automation/.cache/
-/.automation/.log/
-/.automation/.download/
-/.automation/lock/
-
-# Inspection / reports
-/inspection/
-/inspections/
-/report/
-
-
