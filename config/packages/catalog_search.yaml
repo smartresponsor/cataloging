@@ -1,0 +1,3 @@
+services:
+  App\Service\Query\Category\SynonymProvider: ~
+  App\Service\Query\Category\SearchService: ~

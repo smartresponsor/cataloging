@@ -1,0 +1,1 @@
+{"product":{"by":"category_id"},"billing":{"by":"tenant+category_id"},"vendor":{"by":"category.slug"}}

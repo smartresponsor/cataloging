@@ -1,0 +1,3 @@
+services:
+  App\Service\Api\Category\CatalogCategoryCacheService: ~
+  App\Service\Workflow\Category\CategoryInvalidator: ~

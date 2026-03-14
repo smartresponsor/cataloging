@@ -1,0 +1,27 @@
+type RedirectInfo {
+  from: String!
+  to: String!
+  locale: String
+}
+
+enum MovePolicy { preserveSlug rebuildSlug }
+
+type MoveCategoryPayload {
+  ok: Boolean!
+  changedCount: Int!
+  warnings: [String!]!
+  redirects: [RedirectInfo!]!
+}
+
+input MoveCategoryInput {
+  node: ID!
+  newParent: ID!
+  tree: ID!
+  policy: MovePolicy!
+  dryRun: Boolean
+  locale: String
+}
+
+type Mutation {
+  moveCategory(input: MoveCategoryInput!): MoveCategoryPayload!
+}

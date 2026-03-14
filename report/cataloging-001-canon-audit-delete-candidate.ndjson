@@ -1,0 +1,8 @@
+{"path":".git","kind":"root-noise","action":"delete","reason":"VCS state must not live inside a canonical source snapshot."}
+{"path":".idea","kind":"root-noise","action":"delete","reason":"IDE workspace files are local-only and non-canonical."}
+{"path":"src/Service/Category/CanonicalPolicyLocale-.php","kind":"broken-name","action":"delete","reason":"Trailing dash filename is non-canonical; keep only canonical replacement when introduced."}
+{"path":"src/Service/Category/CategorySitemapGenerator-.php","kind":"broken-name","action":"delete","reason":"Trailing dash filename is non-canonical; keep only canonical replacement when introduced."}
+{"path":"tools/release/make-category-f..p.sh","kind":"broken-name","action":"delete","reason":"Broken filename indicates patch remnant and should not stay in canon repo."}
+{"path":"config/config","kind":"duplicate-config-root","action":"review-delete","reason":"Nested config root duplicates the canonical config tree and should be flattened."}
+{"path":"public/public","kind":"duplicate-public-root","action":"review-delete","reason":"Nested public root is suspicious and should be flattened or removed."}
+{"path":"tools/ops-doc/category-core-phase-rc7-01_0-03_13-ops-kit.zip","kind":"embedded-release-artifact","action":"move-out","reason":"Binary release artifacts should not live in the source repo tree."}

@@ -1,0 +1,6 @@
+# delete candidate after alias window closes
+# none of these files are physical shadows yet; keep alias-only cleanup in next wave
+src/Adapter/Category/StorefrontAdapter.php
+public/public/index.php
+config/config/
+.idea/

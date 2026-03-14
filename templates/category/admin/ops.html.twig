@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Category Ops</h1>
+<h2>SLO</h2>
+<pre>{{ slo|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+<h2>DLQ</h2>
+<pre>{{ dlq|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+<h2>Canary</h2>
+<pre>{{ canary|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+<p><a href="/admin/category/audit">audit</a> | <a href="/category-sitemap.xml">sitemap</a></p>
+{% endblock %}

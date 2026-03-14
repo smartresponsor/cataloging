@@ -1,0 +1,5 @@
+services:
+  App\Infrastructure\ProductWebhookPublisher:
+    arguments: ['@http_client', '%env(PRODUCT_WEBHOOK_URL)%']
+  App\Infrastructure\OrderWebhookPublisher:
+    arguments: ['@http_client', '%env(ORDER_WEBHOOK_URL)%']

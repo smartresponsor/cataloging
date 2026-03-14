@@ -1,0 +1,1 @@
+{"steps":["freeze-rc1","smoke-v2","canary-48h","tag-ga","notify"],"rollback":["uninstall-helm","restore-backup","reopen-canary"]}

@@ -1,0 +1,5 @@
+{"path":"src/Domain","kind":"forbidden-layer","target":"src/Service|src/Repository|src/ValueObject|src/Policy","reason":"Current canon forbids /src/Domain root for runtime code."}
+{"path":"src/DomainInterface","kind":"forbidden-layer","target":"src/ServiceInterface|src/RepositoryInterface|src/ValueObjectInterface|src/PolicyInterface","reason":"Current canon forbids /src/DomainInterface root for runtime code."}
+{"path":"src/Adapter","kind":"forbidden-layer","target":"src/Service|src/Controller|src/Repository","reason":"Port/Adapter pattern is not canonical for this repo line."}
+{"path":"src/Infra","kind":"naming-conflict","target":"src/Infrastructure","reason":"Use full Infrastructure naming only."}
+{"path":"src/InfraInterface","kind":"naming-conflict","target":"src/InfrastructureInterface|service-specific interface layer","reason":"Use full Infrastructure naming only, or dissolve into canonical interface layers."}

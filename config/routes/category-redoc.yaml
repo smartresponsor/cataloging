@@ -1,0 +1,13 @@
+category_redoc_ui:
+  path: /api/redoc
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+  defaults:
+    path: '/doc/redoc/'
+    permanent: false
+
+category_redoc_spec:
+  path: /api/redoc/openapi.yaml
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+  defaults:
+    path: '/doc/redoc/category-openapi.yaml'
+    permanent: false

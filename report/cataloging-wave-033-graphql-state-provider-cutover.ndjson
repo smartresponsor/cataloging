@@ -1,0 +1,3 @@
+{"wave":"033","action":"create","path":"src/GraphQl/Category/CategoryStateProvider.php","owner":"canonical"}
+{"wave":"033","action":"replace","path":"src/GraphQl/CategoryStateProvider.php","owner":"compatibility-bridge"}
+{"wave":"033","action":"create","path":"tools/linter/cataloging_graphql_root_check.php","owner":"gate"}

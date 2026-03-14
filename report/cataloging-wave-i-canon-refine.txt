@@ -1,0 +1,8 @@
+Base snapshot: cataloging-065-snapshot-legacy-root-purged.zip
+Operation: post-purge canon refine
+
+Changes:
+- removed src/ServiceInterface/Domaine
+- removed obsolete App\\Http\\Category class_alias bridges from canonical files
+- normalized src/Service/CategoryService.php namespace and imports
+- MANIFEST.txt regenerated to match this snapshot

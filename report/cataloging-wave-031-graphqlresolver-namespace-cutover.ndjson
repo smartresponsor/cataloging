@@ -1,0 +1,2 @@
+{"from": "src/Service/Category/GraphqlResolver.php", "to": "src/Service/Category/Api/GraphqlResolver.php", "state": "bridge"}
+{"from": "src/ServiceInterface/Category/GraphqlResolverInterface.php", "to": "src/ServiceInterface/Category/Api/GraphqlResolverInterface.php", "state": "bridge"}

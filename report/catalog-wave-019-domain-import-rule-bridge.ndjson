@@ -1,0 +1,4 @@
+{"action": "bridge", "legacy": "src/Domain/Category/Import/ImportService.php", "canonical": "src/Service/Category/Import/ImportService.php"}
+{"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleAdminService.php", "canonical": "src/Service/Category/Rule/RuleAdminService.php"}
+{"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleEngine.php", "canonical": "src/Service/Category/Rule/RuleEngine.php"}
+{"action": "bridge", "legacy": "src/Domain/Category/Suggest/RuleSuggestService.php", "canonical": "src/Service/Category/Suggest/RuleSuggestService.php"}

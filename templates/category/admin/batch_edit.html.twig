@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Batch edit categories</h1>
+<form method="post">
+<table>
+  <tr><th>ID</th><th>Name</th><th>Slug</th><th>Locale</th></tr>
+  {% for i in 0..9 %}
+    <tr>
+      <td><input name="rows[{{ i }}][id]" /></td>
+      <td><input name="rows[{{ i }}][name]" /></td>
+      <td><input name="rows[{{ i }}][slug]" pattern="[a-z0-9-]+" /></td>
+      <td><input name="rows[{{ i }}][locale]" value="en" /></td>
+    </tr>
+  {% endfor %}
+</table>
+<button type="submit">Save</button>
+</form>
+{% endblock %}

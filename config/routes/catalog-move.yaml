@@ -1,0 +1,4 @@
+admin_category_move:
+  path: /admin/category/tree/move
+  controller: App\Controller\Admin\CategoryMoveController::move
+  methods: [POST]

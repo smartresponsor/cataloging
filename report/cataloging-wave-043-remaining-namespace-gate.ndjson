@@ -1,0 +1,2 @@
+{"wave":"043","check":"tools/linter/cataloging-smartresponsor-namespace-check.php","scope":"src"}
+{"wave":"043","check":"tools/linter/cataloging-service-category-repository-namespace-check.php","scope":"src/Service/Category/CategoryRepository.php"}

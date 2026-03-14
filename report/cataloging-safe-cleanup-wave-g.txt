@@ -1,0 +1,23 @@
+Removed from snapshot:
+- .git/
+- .idea/
+- tools/Category/rescue/
+- report/category-cache-invalidated.log
+- report/category-dlq-requeue.log
+- config/config/catalog-catalog-webhook.sample.json
+- src/Service/CanonicalPolicyLocale-.php
+- src/Service/CategorySitemapGenerator-.php
+- tools/release/make-category-f..p.sh
+- report/category-f..p-hashes.txt
+- tools/Category/sketch7/*.zip
+- tools/ops-doc/*.zip
+
+Intentionally kept in this cleanup because they still act as compatibility wrappers or may still be autoload entry points:
+- src/Domain/**
+- src/DomainInterface/**
+- src/Infra/**
+- src/InfraInterface/**
+- src/Adapter/**
+- src/Http/**
+- public/public/index.php
+- most of config/config/** (diverged, not exact duplicates)

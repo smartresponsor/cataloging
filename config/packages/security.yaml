@@ -1,0 +1,7 @@
+security:
+  enable_authenticator_manager: true
+  # Example simple role hierarchy
+  role_hierarchy:
+    ROLE_CATEGORY_OWNER: [ROLE_CATEGORY_EDITOR, ROLE_CATEGORY_RULE, ROLE_CATEGORY_MERCH]
+    ROLE_CATEGORY_EDITOR: [ROLE_CATEGORY_RULE, ROLE_CATEGORY_MERCH]
+  access_control: []
