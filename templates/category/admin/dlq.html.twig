@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Category DLQ</h1>
+<table>
+  <tr><th>ID</th><th>Payload</th><th>Last</th><th>Action</th></tr>
+  {% for m in dlq %}
+  <tr>
+    <td>{{ m.id }}</td>
+    <td><pre>{{ m.payload|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre></td>
+    <td>{{ m.last_action }} {{ m.ts }}</td>
+    <td>
+      <form method="post">
+        <input type="hidden" name="id" value="{{ m.id }}" />
+        <button name="action" value="retry">Retry</button>
+        <button name="action" value="delete">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

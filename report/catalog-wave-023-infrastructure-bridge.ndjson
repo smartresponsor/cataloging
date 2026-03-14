@@ -1,0 +1,12 @@
+{"kind": "canonical_add", "path": "src/Infrastructure/Category/CacheInvalidator.php"}
+{"kind": "bridge_rewrite", "path": "src/Infra/Category/CacheInvalidator.php", "owner": "src/Infrastructure/Category/CacheInvalidator.php"}
+{"kind": "canonical_add", "path": "src/Infrastructure/Category/CategoryAuditLogger.php"}
+{"kind": "bridge_rewrite", "path": "src/Infra/Category/CategoryAuditLogger.php", "owner": "src/Infrastructure/Category/CategoryAuditLogger.php"}
+{"kind": "canonical_add", "path": "src/Infrastructure/Category/HttpWebhookSender.php"}
+{"kind": "bridge_rewrite", "path": "src/Infra/Category/HttpWebhookSender.php", "owner": "src/Infrastructure/Category/HttpWebhookSender.php"}
+{"kind": "canonical_add", "path": "src/Infrastructure/Category/MessengerOutboxDispatcher.php"}
+{"kind": "bridge_rewrite", "path": "src/Infra/Category/MessengerOutboxDispatcher.php", "owner": "src/Infrastructure/Category/MessengerOutboxDispatcher.php"}
+{"kind": "canonical_add", "path": "src/Infrastructure/Category/OrderWebhookPublisher.php"}
+{"kind": "bridge_rewrite", "path": "src/Infra/Category/OrderWebhookPublisher.php", "owner": "src/Infrastructure/Category/OrderWebhookPublisher.php"}
+{"kind": "canonical_add", "path": "src/Infrastructure/Category/ProductWebhookPublisher.php"}
+{"kind": "bridge_rewrite", "path": "src/Infra/Category/ProductWebhookPublisher.php", "owner": "src/Infrastructure/Category/ProductWebhookPublisher.php"}

@@ -1,0 +1,3 @@
+services:
+  App\Service\Query\Category\RegionResolver: ~
+  App\Service\Seo\Category\AliasRouter: ~

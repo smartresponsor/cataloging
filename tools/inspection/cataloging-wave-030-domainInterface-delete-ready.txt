@@ -1,0 +1,3 @@
+src/DomainInterface/Category/CategoryServiceInterface.php
+src/DomainInterface/Category/CollectionImportServiceInterface.php
+src/DomainInterface/Category/CollectionServiceInterface.php

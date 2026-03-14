@@ -1,0 +1,4 @@
+{"kind": "canonical_add", "path": "src/InfrastructureInterface/Category/WebhookSenderInterface.php"}
+{"kind": "canonical_add", "path": "src/InfrastructureInterface/Category/OutboxDispatcherInterface.php"}
+{"kind": "bridge_rewrite", "path": "src/InfraInterface/Category/WebhookSenderInterface.php", "owner": "src/InfrastructureInterface/Category/WebhookSenderInterface.php"}
+{"kind": "bridge_rewrite", "path": "src/InfraInterface/Category/OutboxDispatcherInterface.php", "owner": "src/InfrastructureInterface/Category/OutboxDispatcherInterface.php"}

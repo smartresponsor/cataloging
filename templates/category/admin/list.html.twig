@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Category list</h1>
+<a href="?published=1">published</a> | <a href="?">all</a>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Published</th></tr>
+  {% for item in items %}
+    <tr><td>{{ item.id }}</td><td>{{ item.name }}</td><td>{{ item.published }}</td></tr>
+  {% endfor %}
+</table>
+<p>Page: {{ page }}</p>
+{% endblock %}

@@ -1,0 +1,7 @@
+{"kind":"milestone","value":"canon-stable-rc","phase":"2","message":"structural cleanup started"}
+{"kind":"forbidden-path","path":"src/Domain","action":"evacuate-to-canonical-layer"}
+{"kind":"forbidden-path","path":"src/DomainInterface","action":"evacuate-to-canonical-layer-interface"}
+{"kind":"forbidden-path","path":"src/Adapter","action":"remove-after-service-consolidation"}
+{"kind":"forbidden-path","path":"src/Infra","action":"rename-to-Infrastructure-or-evacuate"}
+{"kind":"forbidden-path","path":"src/InfraInterface","action":"rename-to-InfrastructureInterface-or-evacuate"}
+{"kind":"shadow-config-root","path":"config/config","action":"deprecate-then-delete"}

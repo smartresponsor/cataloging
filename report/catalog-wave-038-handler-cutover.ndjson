@@ -1,0 +1,4 @@
+{"file":"src/Controller/Category/CategoryController.php","old_namespace":"App\\Http\\Category","new_namespace":"App\\Controller\\Category","legacy_alias":"App\\Http\\Category\\CategoryController"}
+{"file":"src/Controller/Category/CategoryListHandler.php","old_namespace":"SmartResponsor\\Category\\Http","new_namespace":"App\\Controller\\Category","legacy_alias":"SmartResponsor\\Category\\Http\\CategoryListHandler"}
+{"file":"src/Controller/Category/CollectionListHandler.php","old_namespace":"SmartResponsor\\Category\\Http","new_namespace":"App\\Controller\\Category","legacy_alias":"SmartResponsor\\Category\\Http\\CollectionListHandler"}
+{"file":"src/Controller/Category/StatusHandler.php","old_namespace":"SmartResponsor\\Category\\Http","new_namespace":"App\\Controller\\Category","legacy_alias":"SmartResponsor\\Category\\Http\\StatusHandler"}

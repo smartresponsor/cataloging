@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  category-php:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.category
+    volumes:
+      - ./:/var/www/category
+    depends_on:
+      - pg
+  pg:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: category
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: category
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./ops/catalog-prometheus.yaml:/etc/prometheus/prometheus.yml

@@ -1,0 +1,2 @@
+{"check":"tools/linter/cataloging-controller-namespace-check.php","scope":"src/Controller/Category"}
+{"check":"tools/linter/cataloging-legacy-namespace-check.php","scope":"src"}

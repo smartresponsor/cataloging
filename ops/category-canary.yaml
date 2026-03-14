@@ -1,0 +1,6 @@
+check: category
+targets:
+  - http://localhost:8080/metrics
+slo:
+  p95_ms: 700
+  error_rate: 0.5

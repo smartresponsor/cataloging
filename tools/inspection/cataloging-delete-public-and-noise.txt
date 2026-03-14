@@ -1,0 +1,3 @@
+.git/
+.idea/
+public/public/index.php

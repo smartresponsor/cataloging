@@ -1,0 +1,6 @@
+framework:
+  response_listener: { enabled: true }
+category:
+  security:
+    csp: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    frame_options: 'DENY'

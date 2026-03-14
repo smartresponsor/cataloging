@@ -1,0 +1,1 @@
+{"api":["storefront","search","attachment"],"admin":["list","batch-edit"],"import":["csv","mapper"],"sitemap":["gen","robots"],"canary":["run","report"]}

@@ -1,0 +1,14 @@
+composer install preflight|ok|tooling|medium|low|install vendor stack before inspection|composer install
+bootstrap packages|ok|tooling|medium|low|install missing dev packages|friendsofphp/php-cs-fixer phpstan/phpstan rector/rector deptrac/deptrac phpstan/phpstan-symfony phpstan/phpstan-doctrine
+create config file|ok|config|low|low|config created|D:/PhpstormProjects/www/Cataloging/phpstan.neon.dist
+create config file|ok|config|low|low|config created|D:/PhpstormProjects/www/Cataloging/rector.php
+create config file|ok|config|low|low|config created|D:/PhpstormProjects/www/Cataloging/.php-cs-fixer.dist.php
+create config file|ok|config|low|low|config created|D:/PhpstormProjects/www/Cataloging/deptrac.yaml
+create config file|ok|config|low|low|config created|D:/PhpstormProjects/www/Cataloging/tests/object-manager.php
+create config file|ok|config|low|low|config created|D:/PhpstormProjects/www/Cataloging/tests/console-application.php
+composer scripts added|ok|tooling|low|low|composer scripts ready|qa:phpstan,qa:rector,qa:deptrac,qa:cs,qa,inspection,inspection:bootstrap,inspection:run,inspection:latest,inspection:chat,inspection:baseline,inspection:compare
+symfony cache warmup|ok|runtime|low|low|skip cache warmup for package/component repo|bin/console not found
+php-cs-fixer|fail|style|medium|medium|review php-cs-fixer output and fix findings|failed
+phpstan|fail|typing|high|medium|review phpstan output and fix findings|failed
+rector|fail|quality|medium|medium|review rector output and fix findings|failed
+deptrac|fail|architecture|high|medium|review deptrac output and fix findings|failed

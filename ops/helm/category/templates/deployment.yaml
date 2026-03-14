@@ -1,0 +1,25 @@
+{{- define "category.fullname" -}}
+{{ .Release.Name }}-category
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "category.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: category
+  template:
+    metadata:
+      labels:
+        app: category
+    spec:
+      containers:
+        - name: category
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: APP_ENV
+              value: {{ .Values.env.APP_ENV }}

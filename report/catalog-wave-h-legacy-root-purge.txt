@@ -1,0 +1,16 @@
+Base snapshot: catalog-064-snapshot-safe-cleanup.zip
+Operation: physical purge of legacy roots requested by user
+
+Purged roots:
+- src/Domain
+- src/DomainInterface
+- src/Infra
+- src/InfraInterface
+- src/Adapter
+- src/Http
+
+Notes:
+- Canonical owners remain under src/Service, src/ServiceInterface, src/Infrastructure, src/InfrastructureInterface,
+  src/Controller, src/ControllerInterface, src/EventSubscriber.
+- Historical docs/tools may still mention removed roots as part of migration history.
+- MANIFEST.txt was regenerated to match this snapshot.

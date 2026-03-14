@@ -1,0 +1,13 @@
+security:
+  firewalls:
+    category_api:
+      pattern: ^/api/catalog
+      stateless: true
+      provider: category_jwt
+      jwt: ~
+  providers:
+    category_jwt:
+      id: App\Security\JwtUserProvider
+  access_control:
+    - { path: ^/api/catalog/tree, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/catalog/.+/move, roles: ROLE_ADMIN }
