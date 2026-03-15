@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Service\Category\Domain\Category;
-use App\Service\Category\Repository\CategoryRepository;
+use App\Service\CatalogCategory\Domain\Category;
+use App\Service\CatalogCategory\Repository\CategoryRepository;
 
-final class CategoryService
+final class CatalogCategoryService
 {
     public function __construct(private CategoryRepository $repo)
     {

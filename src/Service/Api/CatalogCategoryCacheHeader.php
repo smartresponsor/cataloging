@@ -7,9 +7,9 @@ Author: Oleksandr Tishchenko <dev@smartresponsor.com>
 Owner: Marketing America Corp
 */
 
-namespace App\Service;
+namespace App\Service\Api;
 
-final class CategoryCacheHeader
+final class CatalogCategoryCacheHeader
 {
     public function make(string $etag, ?\DateTimeImmutable $lastModified = null): array
     {

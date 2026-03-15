@@ -33,9 +33,10 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.6",
         "doctrine/doctrine-migrations-bundle": "^3.4",
-        "phpunit/phpunit": "^10.5",
         "friendsofphp/php-cs-fixer": "^3.94",
-        "phpmd/phpmd": "^2.5"
+        "phpmd/phpmd": "^2.15",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^10.5"
     },
     "autoload": {
         "psr-4": {
@@ -48,18 +49,44 @@
         }
     },
     "scripts": {
-        "md": "tools/php/php84.bat vendor/bin/phpmd src,text cleancode,codesize,design,naming,unusedcode",
-        "md:tests": "tools/php/php84.bat vendor/bin/phpmd tests,text cleancode,codesize,design,naming,unusedcode",
-
-        "test": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml tests",
-        "test:unit": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml --testsuite unit",
-        "test:integration": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml --testsuite integration",
-        "test:e2e": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml --testsuite e2e",
         "lint": "tools/php/php84.bat tools/qa/CatalogPhpLint.php",
 
-        "cs:fix": "tools/php/php82.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
-        "cs:check": "tools/php/php82.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
-        "cs:check-quiet": "tools/php/php82.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
+        "cs:fix": "tools/php/php84.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
+        "cs:check": "tools/php/php84.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
+        "cs:check-quiet": "tools/php/php84.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
+
+        "stan": "@stan:conservative",
+        "stan:conservative": "tools/php/php82.bat vendor/bin/phpstan analyse",
+        "stan:runtime-target": "tools/php/php84.bat vendor/bin/phpstan analyse",
+
+        "md": "tools/php/php84.bat vendor/bin/phpmd src,text phpmd.xml.dist",
+        "md:tests": "tools/php/php84.bat vendor/bin/phpmd tests,text phpmd.xml.dist",
+
+        "test": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist",
+        "test:unit": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
+        "test:integration": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
+        "test:e2e": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist --testsuite e2e",
+
+        "qa:style": [
+            "@lint",
+            "@cs:check"
+        ],
+        "qa:static": [
+            "@stan"
+        ],
+        "qa:smell": [
+            "@md",
+            "@md:tests"
+        ],
+        "qa:test": [
+            "@test"
+        ],
+        "qa:full": [
+            "@qa:style",
+            "@qa:static",
+            "@qa:smell",
+            "@qa:test"
+        ],
 
         "smoke:runtime": "tools/php/php84.bat tools/smoke/category-runtime-smoke.php",
         "smoke:fixtures": "tools/php/php84.bat tools/smoke/category-fixture-sanity.php",
@@ -78,6 +105,7 @@
     "config": {
         "allow-plugins": {
             "symfony/runtime": true
-        }
+        },
+        "sort-packages": true
     }
 }

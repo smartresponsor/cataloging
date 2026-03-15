@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Service\Category\TreeOperation;
+use App\Service\CatalogCategory\TreeOperation;
 use PHPUnit\Framework\TestCase;
 
 final class TreeOperationTest extends TestCase

@@ -9,7 +9,7 @@ Author: Oleksandr Тishchenko <dev@smartresponsor.com>
 
 namespace App\Service;
 
-use App\Service\Category\WarmupPlan;
+use App\Service\CatalogCategory\WarmupPlan;
 
 final class WarmupDispatcher
 {

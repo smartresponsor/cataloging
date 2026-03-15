@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\Category\Domain\Rule;
+namespace App\Service\CatalogCategory\Domain\Rule;
 
 interface RuleRepositoryInterface
 {

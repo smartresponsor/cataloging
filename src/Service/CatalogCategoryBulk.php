@@ -5,10 +5,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\ServiceInterface\CategoryBulkInterface;
-use App\ServiceInterface\CategoryInterface as CategoryService;
+use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
 
-final class CategoryBulk implements CategoryBulkInterface
+final class CatalogCategoryBulk implements CategoryBulkInterface
 {
     private CategoryService $service;
 

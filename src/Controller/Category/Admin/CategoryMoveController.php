@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controller\Admin;
 
-use App\Service\CategoryMoveInterface;
-
 final class CategoryMoveController
 {
     private CategoryMoveInterface $service;

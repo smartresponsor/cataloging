@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace SmartResponsor\Category\Http;
 
-use App\Service\Category\Domain\ApproxTotalService;
+use App\Service\CatalogCategory\Domain\ApproxTotalService;
 
 final class CategoryListHandler
 {

@@ -8,7 +8,7 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Service\Category\Domain;
+namespace App\Service\CatalogCategory\Domain;
 
 use App\ServiceInterface\Category\Domain\CollectionImportServiceInterface;
 

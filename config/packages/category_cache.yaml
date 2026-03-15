@@ -1,3 +1,3 @@
 services:
-  App\Service\CategoryCacheService: ~
-  App\Service\CategoryInvalidator: ~
+  App\Service\CatalogCategoryCacheService: ~
+  App\Service\CatalogCategoryInvalidator: ~

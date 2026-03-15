@@ -8,9 +8,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\ServiceInterface\CategorySitemapGeneratorInterface;
-
-final class CategorySitemapGenerator implements CategorySitemapGeneratorInterface
+final class CatalogCategorySitemapGenerator implements CategorySitemapGeneratorInterface
 {
     public function generateIndex(int $batchSize): string
     {

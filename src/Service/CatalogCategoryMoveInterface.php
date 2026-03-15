@@ -14,7 +14,7 @@ final class MovePolicy
     public const RebuildSlug = 'rebuildSlug';
 }
 
-interface CategoryMoveInterface
+interface CatalogCategoryMoveInterface
 {
     /**
      * Perform a transactional rebase of the node path under the new parent.

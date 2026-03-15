@@ -10,7 +10,7 @@ namespace App\Service;
 
 use SmartResponsor\Category\Layer\Domain\Category;
 
-interface CategoryRepository
+interface CatalogCategoryRepository
 {
     public function save(Category $category): void;
 

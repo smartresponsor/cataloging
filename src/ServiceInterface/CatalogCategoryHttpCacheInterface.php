@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-interface CategorySitemapGeneratorInterface
+interface CatalogCategoryHttpCacheInterface
 {
-    public function generateIndex(int $batchSize): string;
+    public function eTagFor(string $resourceId, array $fieldList): string;
+
+    public function isNotModified(string $eTag, string $ifNoneMatch): bool;
 }

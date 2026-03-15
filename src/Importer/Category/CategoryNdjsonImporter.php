@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Importer\Category;
 
 use App\ImporterInterface\Category\CategoryNdjsonImporterInterface;
-use App\ServiceInterface\CategoryInterface as CategoryService;
+use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
 
 final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 {

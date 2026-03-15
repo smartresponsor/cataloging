@@ -9,7 +9,7 @@ Owner: Marketing America Corp
 
 namespace App\Service;
 
-interface CategoryInterface
+interface CatalogCategoryInterface
 {
     public function id(): string;
 

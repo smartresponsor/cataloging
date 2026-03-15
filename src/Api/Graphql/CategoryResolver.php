@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace SmartResponsor\Category\Api\Graphql;
 
-use App\Service\Category\Domain\Category;
-use App\Service\Category\Repository\CategoryRepository;
+use App\Service\CatalogCategory\Domain\Category;
+use App\Service\CatalogCategory\Repository\CategoryRepository;
 
 final class CategoryResolver
 {

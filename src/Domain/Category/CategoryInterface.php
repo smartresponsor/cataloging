@@ -6,7 +6,7 @@ declare(strict_types=1);
  * DomainInterface mirror for Category domain.
  */
 
-namespace App\Service\Category\Domain;
+namespace App\Service\CatalogCategory\Domain;
 
 interface CategoryInterface
 {
