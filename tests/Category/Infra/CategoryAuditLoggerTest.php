@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category\Infra;
 
-use App\Infra\Category\CategoryAuditLogger;
+use App\Infrastructure\CategoryAuditLogger;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryAuditLoggerTest extends TestCase

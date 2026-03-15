@@ -1,2 +1,2 @@
 services:
-  App\Security\Category\ConsentChecker: ~
+  App\Security\ConsentChecker: ~

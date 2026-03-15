@@ -1,2 +1,2 @@
 services:
-  App\Audit\Category\ActionLogger: ~
+  App\Audit\ActionLogger: ~

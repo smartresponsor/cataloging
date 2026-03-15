@@ -1,2 +1,2 @@
 services:
-  App\Logging\Category\RedactingProcessor: ~
+  App\Logging\RedactingProcessor: ~

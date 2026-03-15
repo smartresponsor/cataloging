@@ -1,11 +1,50 @@
-$ErrorActionPreference = 'Stop'
-$targets = @(
-  'src/Service/Category',
-  'src/ServiceInterface/Category'
+$paths = @(
+    'src/Domain/Category/Acl/AclPolicyService.php'
+    'src/Domain/Category/Acl/AclRepositoryInterface.php'
+    'src/Domain/Category/ApproxTotalService.php'
+    'src/Domain/Category/Category.php'
+    'src/Domain/Category/CategoryInterface.php'
+    'src/Domain/Category/CategoryRepositoryInterface.php'
+    'src/Domain/Category/CategoryService.php'
+    'src/Domain/Category/CollectionImportService.php'
+    'src/Domain/Category/CollectionService.php'
+    'src/Domain/Category/Graphql/CategoryLoader.php'
+    'src/Domain/Category/Graphql/GraphqlGuard.php'
+    'src/Domain/Category/Import/ImportRepositoryInterface.php'
+    'src/Domain/Category/Import/ImportService.php'
+    'src/Domain/Category/Quota/CacheStoreInterface.php'
+    'src/Domain/Category/Quota/QuotaService.php'
+    'src/Domain/Category/Quota/TokenBucket.php'
+    'src/Domain/Category/Rule/RuleAdminService.php'
+    'src/Domain/Category/Rule/RuleEngine.php'
+    'src/Domain/Category/Rule/RuleRepositoryInterface.php'
+    'src/Domain/Category/Seo/SeoRepositoryInterface.php'
+    'src/Domain/Category/Suggest/RuleSuggestService.php'
+    'src/DomainInterface/Category/CategoryServiceInterface.php'
+    'src/DomainInterface/Category/CollectionImportServiceInterface.php'
+    'src/DomainInterface/Category/CollectionServiceInterface.php'
+    'src/Infra/Category/CacheInvalidator.php'
+    'src/Infra/Category/CategoryAuditLogger.php'
+    'src/Infra/Category/HttpWebhookSender.php'
+    'src/Infra/Category/MessengerOutboxDispatcher.php'
+    'src/Infra/Category/OrderWebhookPublisher.php'
+    'src/Infra/Category/ProductWebhookPublisher.php'
+    'src/InfraInterface/Category/OutboxDispatcherInterface.php'
+    'src/InfraInterface/Category/WebhookSenderInterface.php'
+    'src/Adapter/Category/StorefrontAdapter.php'
+    'src/Http/Category/WebhookController.php'
+    'src/Http/Category/SecurityHeaderListener.php'
+    'src/Domain'
+    'src/DomainInterface'
+    'src/Infra'
+    'src/InfraInterface'
+    'src/Adapter'
+    'src/Http'
 )
-foreach ($target in $targets) {
-  if (Test-Path $target) {
-    Remove-Item $target -Recurse -Force
-  }
+
+foreach ($rel in $paths) {
+    $full = Join-Path $PSScriptRoot ('..\' + $rel.Replace('/', '\'))
+    if (Test-Path $full) {
+        Remove-Item $full -Recurse -Force
+    }
 }
-Write-Host 'Catalog Wave A pre-delete complete.'

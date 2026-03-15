@@ -5,12 +5,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Event\Category\CategoryCreated;
-use App\Event\Category\CategoryLinked;
-use App\Event\Category\CategoryMoved;
-use App\Event\Category\CategoryUnlinked;
-use App\PolicyInterface\Category\CategoryPolicyInterface;
-use App\RepositoryInterface\Category\CategoryRepositoryInterface;
+use App\Event\CategoryCreated;
+use App\Event\CategoryLinked;
+use App\Event\CategoryUnlinked;
+use App\PolicyInterface\CategoryPolicyInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CatalogCategoryInterface as CategoryServiceInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 

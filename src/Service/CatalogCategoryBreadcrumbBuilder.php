@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\RepositoryInterface\Category\CategoryRepositoryInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 
 /** Builds breadcrumb chain and SEO meta from repository. */
 final class CatalogCategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterface

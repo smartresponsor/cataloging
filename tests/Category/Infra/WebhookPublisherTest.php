@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category\Infra;
 
-use App\Infra\Category\ProductWebhookPublisher;
+use App\Infrastructure\ProductWebhookPublisher;
 use PHPUnit\Framework\TestCase;
 
 final class WebhookPublisherTest extends TestCase

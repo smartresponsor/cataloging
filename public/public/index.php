@@ -12,9 +12,9 @@ use function FastRoute\simpleDispatcher;
 require __DIR__ . '/../vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/status', ['SmartResponsor\Category\Http\StatusHandler','handle']);
-    $r->addRoute('GET', '/category', ['SmartResponsor\Category\Http\CategoryListHandler','handle']);
-    $r->addRoute('GET', '/collection', ['SmartResponsor\Category\Http\CollectionListHandler','handle']);
+    $r->addRoute('GET', '/status', ['SmartResponsor\Http\StatusHandler','handle']);
+    $r->addRoute('GET', '/category', ['SmartResponsor\Http\CategoryListHandler','handle']);
+    $r->addRoute('GET', '/collection', ['SmartResponsor\Http\CollectionListHandler','handle']);
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
