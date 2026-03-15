@@ -15,7 +15,7 @@ for ($i=0; $i<50; $i++) {
   }
 }
 file_put_contents('report/category-testdata.json', json_encode($out));
-file_put_contents('report/catalog-testdata-summary.json', json_encode([
+file_put_contents('report/category-testdata-summary.json', json_encode([
   'count' => count($out),
   'depth' => 2,
   'locales' => ['en' => count($out)],

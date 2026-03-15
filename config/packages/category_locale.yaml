@@ -1,5 +1,5 @@
 parameters:
   category.default_locale: 'en'
 services:
-  App\Service\Query\Category\LocaleFilter: ~
-  App\Service\Query\Category\LocaleFallback: ~
+  App\Service\Category\LocaleFilter: ~
+  App\Service\Category\LocaleFallback: ~

@@ -7,23 +7,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Service\Command\Category\TreeOperation;
+use App\Service\Category\TreeOperation;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCategoryTreeOperationTest extends TestCase
 {
-    public function testMoveAcceptsDistinctParent(): void
+    public function testMoveKeepsParent(): void
     {
-        $operation = new TreeOperation();
-
-        self::assertNull($operation->move('3', '2'));
-    }
-
-    public function testMoveRejectsSelfParent(): void
-    {
-        $operation = new TreeOperation();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $operation->move('3', '3');
+        $op = new TreeOperation();
+        $tree = [
+            ['id' => 1, 'parent' => null],
+            ['id' => 2, 'parent' => 1],
+            ['id' => 3, 'parent' => 1],
+        ];
+        $result = $op->move($tree, 3, 2);
+        self::assertSame(2, $result[2]['parent']);
     }
 }

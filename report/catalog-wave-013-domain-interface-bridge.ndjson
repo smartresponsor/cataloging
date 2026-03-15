@@ -1,6 +1,0 @@
-{"action": "create", "path": "src/ServiceInterface/Category/CategoryQueryServiceInterface.php"}
-{"action": "create", "path": "src/ServiceInterface/Category/CollectionImportServiceInterface.php"}
-{"action": "create", "path": "src/ServiceInterface/Category/CollectionServiceInterface.php"}
-{"action": "deprecate", "path": "src/DomainInterface/Category/CategoryServiceInterface.php"}
-{"action": "deprecate", "path": "src/DomainInterface/Category/CollectionImportServiceInterface.php"}
-{"action": "deprecate", "path": "src/DomainInterface/Category/CollectionServiceInterface.php"}

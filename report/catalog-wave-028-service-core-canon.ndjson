@@ -1,3 +1,0 @@
-{"from": "src/Domain/Category/CategoryService.php", "to": "src/Service/Category/CategoryQueryService.php", "state": "bridge"}
-{"from": "src/Domain/Category/CollectionImportService.php", "to": "src/Service/Category/CollectionImportService.php", "state": "bridge"}
-{"from": "src/Domain/Category/CollectionService.php", "to": "src/Service/Category/CollectionService.php", "state": "bridge"}

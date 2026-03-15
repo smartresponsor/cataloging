@@ -1,5 +1,0 @@
-{"wave":"046","token":"App\\Domain\\Category","label":"domain-wrapper-namespace"}
-{"wave":"046","token":"App\\ServiceInterface\\Category\\Domain","label":"domain-interface-bridge-namespace"}
-{"wave":"046","token":"App\\Infra\\Category","label":"infra-wrapper-namespace"}
-{"wave":"046","token":"App\\InfraInterface\\Category","label":"infra-interface-bridge-namespace"}
-{"wave":"046","token":"App\\Adapter\\Category","label":"adapter-wrapper-namespace"}

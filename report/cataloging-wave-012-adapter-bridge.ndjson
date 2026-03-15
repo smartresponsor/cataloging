@@ -1,1 +1,0 @@
-{"action": "deprecate", "path": "src/Adapter/Category/StorefrontAdapter.php", "owner": "src/Service/Category/StorefrontTreePresenter.php"}

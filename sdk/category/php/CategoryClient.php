@@ -12,7 +12,7 @@ final class CategoryClient
     }
     public function list(): array
     {
-        $json = @file_get_contents($this->baseUri.'/api/catalog/storefront') ?: '[]';
+        $json = @file_get_contents($this->baseUri.'/api/category/storefront') ?: '[]';
         return json_decode($json, true) ?? [];
     }
 }

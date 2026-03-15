@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
-use App\Service\Seo\Category\SitemapGenerator;
-use App\Service\Query\Category\CanonicalResolver;
+use App\Service\Category\SitemapGenerator;
+use App\Service\Category\CanonicalResolver;
 $resolver = new CanonicalResolver();
 $generator = new SitemapGenerator($resolver);
 $categories = [ ['slug' => 'root'], ['slug' => 'electronics'], ['slug' => 'draft', 'noindex' => true] ];

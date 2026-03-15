@@ -11,6 +11,6 @@ foreach ($expected['category'] as $col) {
     $diff[] = ['table' => 'category', 'missing' => $col];
   }
 }
-file_put_contents('report/catalog-schema-diff.json', json_encode($diff, JSON_PRETTY_PRINT));
+file_put_contents('report/category-schema-diff.json', json_encode($diff, JSON_PRETTY_PRINT));
 if ($diff) { exit(2); }
 echo "schema-ok\n";

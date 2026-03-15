@@ -10,4 +10,4 @@ foreach ($packs as $p) {
     $exists = file_exists($base.'/'.$p);
     $out[] = ['name' => $p, 'exists' => $exists];
 }
-file_put_contents(__DIR__.'/../../report/catalog-rc1-release-bucket.json', json_encode($out, JSON_PRETTY_PRINT));
+file_put_contents(__DIR__.'/../../report/category-rc1-release-bucket.json', json_encode($out, JSON_PRETTY_PRINT));

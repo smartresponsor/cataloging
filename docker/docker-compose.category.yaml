@@ -21,4 +21,4 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./ops/catalog-prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./ops/category-prometheus.yaml:/etc/prometheus/prometheus.yml

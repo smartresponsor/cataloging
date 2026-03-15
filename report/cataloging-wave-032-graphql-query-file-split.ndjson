@@ -1,3 +1,0 @@
-{"wave":"032","action":"create","path":"src/GraphQl/Category/CategoryChildListResolver.php","owner":"canonical"}
-{"wave":"032","action":"create","path":"src/GraphQl/Category/CategoryAncestorListResolver.php","owner":"canonical"}
-{"wave":"032","action":"replace","path":"src/GraphQl/CategoryQueries.php","owner":"compatibility-bridge"}

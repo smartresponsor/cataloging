@@ -7,20 +7,18 @@ declare(strict_types=1);
 
 namespace App\Tests\GraphQl;
 
-use App\GraphQl\CategoryQuery;
+use App\GraphQL\Category\CategoryQuery;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCategoryQueryAdvancedTest extends TestCase
 {
     public function testLocaleFilter(): void
     {
-        $query = new CategoryQuery();
-        $result = $query(null, ['locale' => 'en', 'first' => 5], null, null);
-
-        self::assertNotEmpty($result);
-
-        foreach ($result as $row) {
-            self::assertSame('en', $row['locale']);
+        $q = new CategoryQuery();
+        $res = $q(null, ['locale' => 'en', 'first' => 5], null, null);
+        $this->assertNotEmpty($res);
+        foreach ($res as $row) {
+            $this->assertSame('en', $row['locale']);
         }
     }
 }

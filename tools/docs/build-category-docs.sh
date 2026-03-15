@@ -6,7 +6,7 @@ cat > public/docs/category/index.html <<'HTML'
 <title>Category Docs</title>
 <h1>SmartResponsor Category</h1>
 <ul>
-  <li><a href="../../../../docs/catalog-ga-release-notes-final.md">Release Notes</a></li>
+  <li><a href="../../../../docs/category-ga-release-notes-final.md">Release Notes</a></li>
   <li><a href="../../../../api/catalog-openapi.yaml">OpenAPI</a></li>
 </ul>
 HTML

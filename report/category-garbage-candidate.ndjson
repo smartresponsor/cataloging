@@ -1,6 +1,0 @@
-{"path":"src/Service/Category/CanonicalPolicyLocale-.php","action":"delete","reason":"suspicious-suffix-file"}
-{"path":"src/Service/Category/CategorySitemapGenerator-.php","action":"delete","reason":"suspicious-suffix-file"}
-{"path":"tools/release/make-category-f..p.sh","action":"delete","reason":"broken-script-name"}
-{"path":"report/category-f..p-hashes.txt","action":"delete","reason":"broken-report-name"}
-{"path":"tools/ops-doc","action":"review","reason":"embedded-release-archive-store"}
-{"path":"tools/Category/sketch7","action":"review","reason":"embedded-patch-archive-store"}

@@ -1,16 +1,16 @@
 #!/bin/sh
 set -e
-FILE=report/catalog-slo-current.json
-if [ ! -f "$FILE" ]; then echo '{"error":"no slo file"}' > report/catalog-slo-ci.json; exit 1; fi
+FILE=report/category-slo-current.json
+if [ ! -f "$FILE" ]; then echo '{"error":"no slo file"}' > report/category-slo-ci.json; exit 1; fi
 P95=$(python - <<'PY'
 import json
-d=json.load(open('report/catalog-slo-current.json'))
+d=json.load(open('report/category-slo-current.json'))
 print(d.get('p95_ms', 9999))
 PY
 )
 ERR=$(python - <<'PY'
 import json
-d=json.load(open('report/catalog-slo-current.json'))
+d=json.load(open('report/category-slo-current.json'))
 print(d.get('error_rate', 1))
 PY
 )
@@ -22,5 +22,5 @@ PY
  "$ERR"; then
   STATUS=fail
 fi
-echo '{"p95":'$P95',"error_rate":'$ERR',"status":"'$STATUS'"}' > report/catalog-slo-ci.json
+echo '{"p95":'$P95',"error_rate":'$ERR',"status":"'$STATUS'"}' > report/category-slo-ci.json
 test "$STATUS" = "ok"

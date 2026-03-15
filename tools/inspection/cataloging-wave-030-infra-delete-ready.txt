@@ -1,6 +1,0 @@
-src/Infra/Category/CacheInvalidator.php
-src/Infra/Category/CategoryAuditLogger.php
-src/Infra/Category/HttpWebhookSender.php
-src/Infra/Category/MessengerOutboxDispatcher.php
-src/Infra/Category/OrderWebhookPublisher.php
-src/Infra/Category/ProductWebhookPublisher.php

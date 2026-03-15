@@ -1,7 +1,0 @@
-{"kind": "config_service", "legacy": "App\\Infra\\Category\\HttpWebhookSender", "canonical": "App\\Infrastructure\\Category\\HttpWebhookSender"}
-{"kind": "config_service", "legacy": "App\\Infra\\Category\\MessengerOutboxDispatcher", "canonical": "App\\Infrastructure\\Category\\MessengerOutboxDispatcher"}
-{"kind": "config_service", "legacy": "App\\Infra\\Category\\CacheInvalidator", "canonical": "App\\Infrastructure\\Category\\CacheInvalidator"}
-{"kind": "config_service", "legacy": "App\\Infra\\Category\\ProductWebhookPublisher", "canonical": "App\\Infrastructure\\Category\\ProductWebhookPublisher"}
-{"kind": "config_service", "legacy": "App\\Infra\\Category\\OrderWebhookPublisher", "canonical": "App\\Infrastructure\\Category\\OrderWebhookPublisher"}
-{"kind": "test_use", "legacy": "App\\Infra\\Category\\ProductWebhookPublisher", "canonical": "App\\Infrastructure\\Category\\ProductWebhookPublisher"}
-{"kind": "test_use", "legacy": "App\\Infra\\Category\\CategoryAuditLogger", "canonical": "App\\Infrastructure\\Category\\CategoryAuditLogger"}

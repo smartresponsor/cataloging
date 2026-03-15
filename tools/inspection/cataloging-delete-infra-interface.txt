@@ -1,2 +1,0 @@
-src/InfraInterface/Category/OutboxDispatcherInterface.php
-src/InfraInterface/Category/WebhookSenderInterface.php

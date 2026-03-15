@@ -1,7 +1,0 @@
-{"action": "bridge", "legacy": "src/Domain/Category/Acl/AclRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Acl/AclRepositoryInterface.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Import/ImportRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Import/ImportRepositoryInterface.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Quota/CacheStoreInterface.php", "canonical": "src/ServiceInterface/Category/Quota/CacheStoreInterface.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Rule/RuleRepositoryInterface.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Seo/SeoRepositoryInterface.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/CategoryRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/CategoryRepositoryInterface.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/CategoryInterface.php", "canonical": "src/EntityInterface/Category/CategoryInterface.php"}

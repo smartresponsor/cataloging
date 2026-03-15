@@ -1,6 +1,0 @@
-{"action": "create", "path": "src/Service/Category/CategoryQueryService.php"}
-{"action": "create", "path": "src/Service/Category/CollectionImportService.php"}
-{"action": "create", "path": "src/Service/Category/CollectionService.php"}
-{"action": "deprecate", "path": "src/Domain/Category/CategoryService.php"}
-{"action": "deprecate", "path": "src/Domain/Category/CollectionImportService.php"}
-{"action": "deprecate", "path": "src/Domain/Category/CollectionService.php"}

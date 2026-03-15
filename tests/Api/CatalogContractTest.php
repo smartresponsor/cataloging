@@ -13,6 +13,6 @@ final class CatalogContractTest extends TestCase
 {
     public function testOpenApiExists(): void
     {
-        self::assertFileExists(dirname(__DIR__, 2).'/api/catalog-openapi.yaml');
+        $this->assertFileExists(__DIR__.'/../../../api/catalog-openapi.yaml');
     }
 }

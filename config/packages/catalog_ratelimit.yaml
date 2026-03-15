@@ -1,6 +1,0 @@
-framework:
-  rate_limiter:
-    category_admin_mutate:
-      policy: 'fixed_window'
-      limit: 50
-      interval: '1 minute'

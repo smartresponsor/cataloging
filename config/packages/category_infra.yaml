@@ -1,5 +1,5 @@
 services:
-  App\Infrastructure\HttpWebhookSender:
+  App\Infra\Category\HttpWebhookSender:
     arguments: ['@http_client', '%env(CATEGORY_WEBHOOK_ENDPOINT)%']
-  App\Infrastructure\MessengerOutboxDispatcher: ~
-  App\Infrastructure\CacheInvalidator: ~
+  App\Infra\Category\MessengerOutboxDispatcher: ~
+  App\Infra\Category\CacheInvalidator: ~

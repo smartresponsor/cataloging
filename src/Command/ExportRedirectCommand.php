@@ -25,40 +25,26 @@ final class ExportRedirectCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
-            $catRepo = $this->em->getRepository(CategoryEntity::class);
-            $aliases = $aliasRepo->findAll();
+        $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
+        $catRepo = $this->em->getRepository(CategoryEntity::class);
+        $aliases = $aliasRepo->findAll();
 
-            $lines = [];
-            foreach ($aliases as $alias) {
-                /** @var CategoryEntity|null $category */
-                $category = $catRepo->find($alias->categoryId());
-                if (null === $category) {
-                    continue;
-                }
-
-                $lines[] = $alias->oldSlug().','.$category->getSlug();
+        $lines = [];
+        foreach ($aliases as $alias) {
+            /** @var CategoryEntity|null $cat */
+            $cat = $catRepo->find($alias->categoryId());
+            if (!$cat) {
+                continue;
             }
-
-            $path = getcwd().'/var/export/category_redirects_301.csv';
-            $dir = dirname($path);
-            if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
-                throw new \RuntimeException('The export directory could not be created.');
-            }
-
-            if (false === file_put_contents($path, implode("\n", $lines))) {
-                throw new \RuntimeException('The redirect export file could not be written.');
-            }
-
-            $output->writeln('Redirect export completed successfully: '.$path);
-
-            return Command::SUCCESS;
-        } catch (\Throwable $throwable) {
-            $output->writeln('<error>The redirect export failed. Check the logs or runtime output for details.</error>');
-            $output->writeln('<comment>'.$throwable->getMessage().'</comment>');
-
-            return Command::FAILURE;
+            // format: oldSlug,newSlug
+            $lines[] = $alias->oldSlug().','.$cat->getSlug();
         }
+
+        $path = getcwd().'/var/export/category_redirects_301.csv';
+        @mkdir(dirname($path), 0o755, true);
+        file_put_contents($path, implode("\n", $lines));
+        $output->writeln('Exported: '.$path);
+
+        return Command::SUCCESS;
     }
 }

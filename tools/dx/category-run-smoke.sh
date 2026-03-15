@@ -1,2 +1,2 @@
 #!/bin/sh
-php tools/dx/CatalogDx.php smoke
+php tools/dx/category-dx.php smoke

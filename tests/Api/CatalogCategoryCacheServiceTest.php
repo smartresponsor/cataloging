@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Api;
 
-use App\Service\Api\Category\CatalogCategoryCacheService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 

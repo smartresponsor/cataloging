@@ -1,5 +1,5 @@
 apiVersion: v2
 name: category
-description: SmartResponsor Catalog component
+description: SmartResponsor Category component
 type: application
 version: 0.1.0

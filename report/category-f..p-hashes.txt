@@ -1,0 +1,1 @@
+# run tools/release/make-category-f..p.sh to fill hashes

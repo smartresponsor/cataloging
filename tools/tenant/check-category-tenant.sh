@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-OUT=report/catalog-tenant-health.json
+OUT=report/category-tenant-health.json
 cat > $OUT <<'JSON'
 [
   {"tenant":"default","projections":"ok","quotas":"ok","webhook":"ok","dlq":0},

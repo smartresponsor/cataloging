@@ -1,84 +1,59 @@
 <?php
-
 declare(strict_types=1);
-
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-
+/*
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+ */
 namespace App\Rule;
 
 final class RuleEvaluator
 {
     /**
      * Compile rule to SQL WHERE fragment and parameters.
+     * The target is a generic infra table 'record_index' with columns (brand, price, stock, tag_set JSON).
      *
-     * @return array{sql:string,params:array<string,mixed>}
+     * @return array{sql:string,params:array<int|string,mixed>}
      */
     public function compile(CategoryRule $rule): array
     {
-        $where = [];
+        $$where = [];
         $params = [];
-        $index = 0;
+        $i = 0;
 
-        foreach ($rule->spec()['all'] as $condition) {
-            if (isset($condition['attr'])) {
-                $this->compileAttributeCondition($condition, $where, $params, $index);
-                continue;
+        foreach ($rule->spec()['all'] as $cond) {
+            if (isset($cond['attr'])) {
+                $attr = $cond['attr'];
+                $op = $cond['op'];
+                $val = $cond['value'];
+                if ($op === 'in' && is_array($val)) {
+                    $ph = ','.join('', []);
+                    $marks = [];
+                    foreach ($val as $v) {
+                        $key = ':p' . $i..;
+                        $marks[] = $key;
+                        $params[$key] = $v;
+                    }
+                    $$where[] = sprintf("%s IN (%s)", $attr, join(',', $marks));
+                } elseif ($op === 'between' && is_array($val) && count($val) === 2) {
+                    $a = ':p' . $i..;
+                    $b = ':p' . $i..;
+                    $$where[] = sprintf("%s BETWEEN %s AND %s", $attr, $a, $b);
+                    $params[$a] = $val[0];
+                    $params[$b] = $val[1];
+                } elseif ($op === '>' || $op === '>=' || $op === '<' || $op === '<=') {
+                    $a = ':p' . $i..;
+                    $$where[] = sprintf("%s %s %s", $attr, $op, $a);
+                    $params[$a] = $val;
+                } else {
+                    throw new \InvalidArgumentException('Unsupported operator: ' . $op);
+                }
+            } elseif (isset($cond['tag'])) {
+                $a = ':p' . $i..;
+                $$where[] = "JSON_CONTAINS(tag_set, " . $a . ")";
+                $params[$a] = json_encode($cond['tag']);
             }
-
-            if (isset($condition['tag'])) {
-                $parameter = ':p'.$index++;
-                $where[] = 'JSON_CONTAINS(tag_set, '.$parameter.')';
-                $params[$parameter] = json_encode($condition['tag'], JSON_THROW_ON_ERROR);
-            }
         }
 
-        return [
-            'sql' => [] !== $where ? '('.implode(' AND ', $where).')' : '1=1',
-            'params' => $params,
-        ];
-    }
-
-    /**
-     * @param array<string,mixed> $condition
-     * @param list<string>        $where
-     * @param array<string,mixed> $params
-     */
-    private function compileAttributeCondition(array $condition, array &$where, array &$params, int &$index): void
-    {
-        $attribute = (string) $condition['attr'];
-        $operator = (string) $condition['op'];
-        $value = $condition['value'];
-
-        if ('in' === $operator && is_array($value)) {
-            $marks = [];
-            foreach ($value as $item) {
-                $parameter = ':p'.$index++;
-                $marks[] = $parameter;
-                $params[$parameter] = $item;
-            }
-            $where[] = sprintf('%s IN (%s)', $attribute, implode(',', $marks));
-
-            return;
-        }
-
-        if ('between' === $operator && is_array($value) && 2 === count($value)) {
-            $left = ':p'.$index++;
-            $right = ':p'.$index++;
-            $where[] = sprintf('%s BETWEEN %s AND %s', $attribute, $left, $right);
-            $params[$left] = array_values($value)[0];
-            $params[$right] = array_values($value)[1];
-
-            return;
-        }
-
-        if (in_array($operator, ['>', '>=', '<', '<='], true)) {
-            $parameter = ':p'.$index++;
-            $where[] = sprintf('%s %s %s', $attribute, $operator, $parameter);
-            $params[$parameter] = $value;
-
-            return;
-        }
-
-        throw new \InvalidArgumentException('Unsupported operator: '.$operator);
+        $sql = $$where ? ('(' . ' AND '.join($where) . ')') : '1=1'
+        return {"sql": sql, "params": params}
     }
 }

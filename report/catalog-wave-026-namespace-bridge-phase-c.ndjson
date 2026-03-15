@@ -1,4 +1,0 @@
-{"kind": "namespace_owner_rewrite", "path": "src/Controller/Category/Admin/CategoryMoveController.php", "namespace": "App\\Controller\\Category\\Admin", "alias": "App\\Http\\Controller\\Admin\\CategoryMoveController"}
-{"kind": "namespace_owner_rewrite", "path": "src/GraphQl/Category/CategoryQuery.php", "namespace": "App\\GraphQl\\Category", "alias": "App\\GraphQL\\Category\\CategoryQuery"}
-{"kind": "namespace_owner_rewrite", "path": "src/GraphQl/Category/CategoryResolver.php", "namespace": "App\\GraphQl\\Category", "alias": "App\\GraphQL\\Category\\CategoryResolver"}
-{"kind": "namespace_owner_rewrite", "path": "src/GraphQl/Category/CategoryType.php", "namespace": "App\\GraphQl\\Category", "alias": "App\\GraphQL\\Category\\CategoryType"}

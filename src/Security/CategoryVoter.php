@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\Security;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class CategoryVoter extends Voter
@@ -23,11 +22,11 @@ final class CategoryVoter extends Voter
         return in_array($attribute, [self::OWNER, self::EDITOR, self::RULE, self::MERCH], true);
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
-
-        if (!is_object($user) || !method_exists($user, 'getRoles')) {
+        if (!is_object($user) && !method_exists($user, 'getRoles')) {
+            // allow only if token has direct ROLE grants
             $roles = method_exists($token, 'getRoleNames') ? $token->getRoleNames() : [];
         } else {
             $roles = $user->getRoles();

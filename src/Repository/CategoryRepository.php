@@ -1,62 +1,78 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
+/*
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+ */
 
 namespace App\Repository;
 
-use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\Entity\CategoryEntity;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
+use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * SQL-backed repository. Actual SQL and connections are injected in infrastructure layer.
- * Here we keep contract-level shape and safe defaults.
- */
-final class CategoryRepository implements CategoryRepositoryInterface
+final class CategoryRepository extends ServiceEntityRepository
 {
-    public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array
+    public function __construct(ManagerRegistry $registry)
     {
-        return [];
+        parent::__construct($registry, CategoryEntity::class);
     }
 
-    public function breadcrumb(string $categoryId, string $locale): array
+    /**
+     * Direct children using Postgres ltree: path ~ (parentPath || '.*{1}').
+     *
+     * @return CategoryEntity[]
+     */
+    public function findChildrenLtree(CategoryEntity $node): array
     {
-        return [];
+        /** @var Connection $conn */
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM category WHERE path ~ ($1 || '.*{1}') ORDER BY slug ASC";
+        $stmt = $conn->prepare($sql);
+        $res = $stmt->executeQuery([$node->getPath()]);
+        $rows = $res->fetchAllAssociative();
+
+        return $rows ? $this->hydrate($rows) : [];
     }
 
-    public function slugExists(string $slug, string $taxonomyId, ?string $parentId, string $locale): bool
+    /**
+     * Ancestors using Postgres ltree: path @> :childPath.
+     *
+     * @return CategoryEntity[]
+     */
+    public function findAncestorsLtree(CategoryEntity $node): array
     {
-        return false;
+        /** @var Connection $conn */
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT * FROM category WHERE path @> $1 ORDER BY depth ASC';
+        $stmt = $conn->prepare($sql);
+        $res = $stmt->executeQuery([$node->getPath()]);
+        $rows = $res->fetchAllAssociative();
+
+        return $rows ? $this->hydrate($rows) : [];
     }
 
-    public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta): array
+    /**
+     * Minimal manual hydration (attributes mapping).
+     *
+     * @param array<int,array<string,mixed>> $rows
+     *
+     * @return CategoryEntity[]
+     */
+    private function hydrate(array $rows): array
     {
-        return [
-            'id' => '',
-            'taxonomyId' => $taxonomyId,
-            'parentId' => $parentId,
-            'name' => $name,
-            'slug' => $slug,
-            'meta' => $meta,
-            'path' => '',
-            'order' => 0,
-        ];
-    }
+        $out = [];
+        foreach ($rows as $r) {
+            $e = new CategoryEntity($r['name'], $r['slug'], $r['path'], (int) $r['depth']);
+            // set id via reflection (since ctor generates new one) — keep simple: assign property directly.
+            $ref = new \ReflectionClass($e);
+            $prop = $ref->getProperty('id');
+            $prop->setAccessible(true);
+            $prop->setValue($e, $r['id']);
+            $out[] = $e;
+        }
 
-    public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array
-    {
-        return ['id' => $categoryId, 'parentId' => $newParentId, 'order' => $newOrder];
-    }
-
-    public function attach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
-    {
-    }
-
-    public function detach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
-    {
-    }
-
-    public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array
-    {
-        return [];
+        return $out;
     }
 }

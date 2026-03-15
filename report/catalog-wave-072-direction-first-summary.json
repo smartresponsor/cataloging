@@ -1,8 +1,0 @@
-{
-  "base": "catalog-066-snapshot-canon-refine.zip + 067..071",
-  "moved_file_count": 167,
-  "forbidden_wrapper_dir_count": 0,
-  "php_lint_bad_file_count": 0,
-  "remaining_runtime_wrapper_reference_count": 0,
-  "text_files_rewritten": 67
-}

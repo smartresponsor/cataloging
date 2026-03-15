@@ -1,5 +1,0 @@
-{"file":"src/Controller/Category/AdminCategoryController.php","old_namespace":"App\\Controller","new_namespace":"App\\Controller\\Category","legacy_alias":"App\\Controller\\AdminCategoryController"}
-{"file":"src/Controller/Category/CategoryReadController.php","old_namespace":"App\\Controller","new_namespace":"App\\Controller\\Category","legacy_alias":"App\\Controller\\CategoryReadController"}
-{"file":"src/Controller/Category/CategoryRuleController.php","old_namespace":"App\\Controller","new_namespace":"App\\Controller\\Category","legacy_alias":"App\\Controller\\CategoryRuleController"}
-{"file":"src/Controller/Category/CategorySuggestController.php","old_namespace":"App\\Controller","new_namespace":"App\\Controller\\Category","legacy_alias":"App\\Controller\\CategorySuggestController"}
-{"file":"src/Controller/Category/CategoryMerchController.php","old_namespace":"App\\Controller","new_namespace":"App\\Controller\\Category","legacy_alias":"App\\Controller\\CategoryMerchController"}

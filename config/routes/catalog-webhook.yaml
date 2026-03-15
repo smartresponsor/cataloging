@@ -1,4 +1,0 @@
-api_category_webhook_test:
-  path: /api/catalog/webhook/test
-  controller: App\Controller\WebhookController
-  methods: [POST]

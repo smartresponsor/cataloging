@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
-SRC=${1:-report/catalog-canary-state.json}
-OUT=report/catalog-restore-report.json
+SRC=${1:-report/category-canary-state.json}
+OUT=report/category-restore-report.json
 if [ ! -f "$SRC" ]; then
   echo '{"status":"error","reason":"backup not found"}' > "$OUT"
   exit 1

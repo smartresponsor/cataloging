@@ -1,4 +1,0 @@
-{"action": "bridge", "legacy": "src/Domain/Category/Acl/AclPolicyService.php", "canonical": "src/Service/Category/Acl/AclPolicyService.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/ApproxTotalService.php", "canonical": "src/Service/Category/ApproxTotalService.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Quota/QuotaService.php", "canonical": "src/Service/Category/Quota/QuotaService.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Quota/TokenBucket.php", "canonical": "src/Service/Category/Quota/TokenBucket.php"}

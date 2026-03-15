@@ -1,54 +1,36 @@
 <?php
-
 declare(strict_types=1);
 
-$roots = [
-    __DIR__.'/../../src',
-    __DIR__.'/../../tests',
-    __DIR__.'/../../tools',
-];
+$root = dirname(__DIR__, 2);
+$scan = ['src', 'tests', 'config'];
+$php = PHP_BINARY;
+$errors = [];
 
-$phpBinary = PHP_BINARY;
-$exitCode = 0;
-
-$iterator = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator(__DIR__.'/../../', FilesystemIterator::SKIP_DOTS)
-);
-
-foreach ($iterator as $file) {
-    if (!$file instanceof SplFileInfo) {
+foreach ($scan as $dir) {
+    $full = $root . DIRECTORY_SEPARATOR . $dir;
+    if (!is_dir($full)) {
         continue;
     }
-
-    if (!$file->isFile()) {
-        continue;
-    }
-
-    if ('php' !== strtolower($file->getExtension())) {
-        continue;
-    }
-
-    $path = $file->getPathname();
-
-    $isInAllowedRoot = false;
-
-    foreach ($roots as $root) {
-        if (str_starts_with($path, $root.DIRECTORY_SEPARATOR) || $path === $root) {
-            $isInAllowedRoot = true;
-            break;
+    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($full));
+    foreach ($it as $file) {
+        if (!$file instanceof SplFileInfo || !$file->isFile() || $file->getExtension() !== 'php') {
+            continue;
         }
-    }
-
-    if (!$isInAllowedRoot) {
-        continue;
-    }
-
-    $command = escapeshellarg($phpBinary).' -l '.escapeshellarg($path);
-    passthru($command, $fileExitCode);
-
-    if (0 !== $fileExitCode) {
-        $exitCode = $fileExitCode;
+        $cmd = escapeshellarg($php) . ' -l ' . escapeshellarg($file->getPathname());
+        exec($cmd, $out, $code);
+        if ($code !== 0) {
+            $errors[] = [
+                'file' => str_replace($root . DIRECTORY_SEPARATOR, '', $file->getPathname()),
+                'output' => implode("\n", $out),
+            ];
+        }
     }
 }
 
-exit($exitCode);
+echo json_encode([
+    'checked_roots' => $scan,
+    'error_count' => count($errors),
+    'errors' => $errors,
+], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
+
+exit(count($errors) === 0 ? 0 : 1);

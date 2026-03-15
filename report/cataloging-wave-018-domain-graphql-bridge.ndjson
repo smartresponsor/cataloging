@@ -1,2 +1,0 @@
-{"action": "bridge", "legacy": "src/Domain/Category/Graphql/CategoryLoader.php", "canonical": "src/Service/Category/Graphql/CategoryLoader.php"}
-{"action": "bridge", "legacy": "src/Domain/Category/Graphql/GraphqlGuard.php", "canonical": "src/Service/Category/Graphql/GraphqlGuard.php"}

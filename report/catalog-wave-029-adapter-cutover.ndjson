@@ -1,1 +1,0 @@
-{"from": "src/Adapter/Category/StorefrontAdapter.php", "to": "src/Service/Category/StorefrontTreePresenter.php", "state": "bridge"}

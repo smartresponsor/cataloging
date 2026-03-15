@@ -2,7 +2,7 @@
 set -e
 START=$(date -Iseconds)
 STATUS=green
-cat > report/catalog-canary-window.json <<JSON
+cat > report/category-canary-window.json <<JSON
 {
   "start": "$START",
   "end": "$START",

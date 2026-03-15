@@ -1,8 +1,0 @@
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-apply-delete-family.php"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-domain.txt"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-domain-interface.txt"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-infra.txt"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-infra-interface.txt"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-adapter.txt"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-shadow-config.txt"}
-{"wave":"044","action":"create","path":"tools/inspection/cataloging-delete-public-and-noise.txt"}

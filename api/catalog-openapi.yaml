@@ -1,29 +1,22 @@
 openapi: 3.0.3
 info:
-  title: SmartResponsor Catalog API
-  description: RC-candidate contract draft for the Catalog component.
+  title: SmartResponsor Category API
   version: 1.0.0-rc1
-  x-reviewed-at: '2026-03-13'
 paths:
-  /api/catalog/tree:
+  /api/category/tree:
     get:
       summary: Get category tree
       responses:
-        '200':
-          description: OK
-  /api/catalog/{id}/move:
+        '200': { description: OK }
+  /api/category/{id}/move:
     post:
       summary: Move category
       responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-  /api/catalog/{id}/publish:
+        '200': { description: OK }
+        '400': { description: Bad Request }
+  /api/category/{id}/publish:
     post:
       summary: Publish category
       responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
+        '200': { description: OK }
+        '400': { description: Bad Request }

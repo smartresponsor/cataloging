@@ -1,3 +1,0 @@
-{"wave":"034","action":"replace","path":"public/public/index.php","owner":"wrapper-to-public-index"}
-{"wave":"034","action":"create","path":"tools/linter/cataloging_public_shadow_check.php","owner":"gate"}
-{"wave":"034","action":"create","path":"tools/inspection/cataloging-public-shadow-delete-candidate.txt","owner":"inspection-delete-candidate"}
