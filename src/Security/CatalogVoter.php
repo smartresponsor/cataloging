@@ -10,7 +10,7 @@ namespace App\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-final class CategoryVoter extends Voter
+final class CatalogVoter extends Voter
 {
     public const OWNER = 'category.owner';
     public const EDITOR = 'category.editor';

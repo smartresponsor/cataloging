@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'category:slug:smoke')]
-final class CategorySlugSmokeCommand extends Command
+final class CatalogSlugSmokeCommand extends Command
 {
     public function __construct(private readonly EntityManagerInterface $em)
     {

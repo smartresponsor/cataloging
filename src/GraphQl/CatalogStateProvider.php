@@ -10,14 +10,13 @@ namespace App\GraphQl;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\CategoryEntity;
-use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Simple state provider to enrich CategoryEntity with virtual fields.
  * API Platform will serialize getters.
  */
-final class CategoryStateProvider implements ProviderInterface
+final class CatalogStateProvider implements ProviderInterface
 {
     public function __construct(
         private readonly ProviderInterface $decorated,

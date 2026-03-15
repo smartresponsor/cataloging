@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Observability;
 
-final class CategoryProjectionMetrics
+final class CatalogProjectionMetrics
 {
     private int $lag = 0;
 

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'category:seed')]
-final class CategorySeedCommand extends Command
+final class CatalogSeedCommand extends Command
 {
     public function __construct(private readonly EntityManagerInterface $em)
     {

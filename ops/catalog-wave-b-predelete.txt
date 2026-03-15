@@ -1,0 +1,6 @@
+src/Repository/CategoryRepository.php
+src/Security/CategoryVoter.php
+src/Observability/CategoryProjectionMetrics.php
+src/Command/CategorySeedCommand.php
+src/Command/CategorySlugSmokeCommand.php
+src/GraphQl/CategoryStateProvider.php

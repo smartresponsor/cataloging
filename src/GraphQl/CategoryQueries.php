@@ -9,7 +9,6 @@ namespace App\GraphQl;
 
 use ApiPlatform\GraphQl\Resolver\QueryCollectionResolverInterface;
 use App\Entity\CategoryEntity;
-use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class CategoryChildListResolver implements QueryCollectionResolverInterface

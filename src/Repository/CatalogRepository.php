@@ -12,7 +12,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 
-final class CategoryRepository extends ServiceEntityRepository
+final class CatalogRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
