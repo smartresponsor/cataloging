@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Category;
 
-use App\Service\Category\ChannelFilter;
-use App\Service\Category\ReadOptimizer;
+use App\Service\ChannelFilter;
+use App\Service\ReadOptimizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

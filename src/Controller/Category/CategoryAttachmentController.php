@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Category;
 
-use App\Service\Category\AttachmentService;
+use App\Service\AttachmentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

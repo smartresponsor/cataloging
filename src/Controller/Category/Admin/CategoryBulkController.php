@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Category\Admin;
 
-use App\Service\Category\BulkOperator;
+use App\Service\BulkOperator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

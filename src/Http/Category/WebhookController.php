@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Http\Category;
 
-use App\Service\Category\WebhookDispatcher;
+use App\Service\WebhookDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

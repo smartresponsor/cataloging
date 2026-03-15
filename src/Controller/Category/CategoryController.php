@@ -7,8 +7,8 @@ namespace App\Http\Category;
 
 use App\HttpInterface\Category\CategoryControllerInterface;
 use App\RepositoryInterface\Category\CategoryRepositoryInterface;
-use App\ServiceInterface\Category\CategoryBreadcrumbBuilderInterface;
-use App\ServiceInterface\Category\CategoryInterface as CategoryService;
+use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
+use App\ServiceInterface\CategoryInterface as CategoryService;
 
 final class CategoryController implements CategoryControllerInterface
 {

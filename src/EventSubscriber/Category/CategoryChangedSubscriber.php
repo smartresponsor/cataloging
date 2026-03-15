@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber\Category;
 
-use App\Service\Category\CacheInvalidator;
+use App\Service\CacheInvalidator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CategoryChangedSubscriber implements EventSubscriberInterface

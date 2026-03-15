@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
  */
-use App\Service\Category\ImportFieldMapper;
+use App\Service\ImportFieldMapper;
 require_once __DIR__.'/../../vendor/autoload.php';
 $mapper = new ImportFieldMapper();
 $data = [

@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace App\Command\Category;
 
-use App\Service\Category\ProjectionRunner;
-use App\Service\Category\TreeConsistencyChecker;
+use App\Service\ProjectionRunner;
+use App\Service\TreeConsistencyChecker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

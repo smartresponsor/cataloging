@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Category;
 
-use App\Service\Category\CollectionBuilder;
+use App\Service\CollectionBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
