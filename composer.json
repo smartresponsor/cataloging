@@ -49,23 +49,23 @@
         }
     },
     "scripts": {
-        "lint": "tools/php/php84.bat tools/qa/CatalogPhpLint.php",
+        "lint": "@php tools/php/php84.php tools/qa/CatalogPhpLint.php",
 
-        "cs:fix": "tools/php/php84.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
-        "cs:check": "tools/php/php84.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
-        "cs:check-quiet": "tools/php/php84.bat vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
+        "cs:fix": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
+        "cs:check": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
+        "cs:check-quiet": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
 
         "stan": "@stan:conservative",
-        "stan:conservative": "tools/php/php82.bat vendor/bin/phpstan analyse",
-        "stan:runtime-target": "tools/php/php84.bat vendor/bin/phpstan analyse",
+        "stan:conservative": "@php tools/php/php82.php vendor/bin/phpstan analyse",
+        "stan:runtime-target": "@php tools/php/php84.php vendor/bin/phpstan analyse",
 
-        "md": "tools/php/php84.bat vendor/bin/phpmd src,text phpmd.xml.dist",
-        "md:tests": "tools/php/php84.bat vendor/bin/phpmd tests,text phpmd.xml.dist",
+        "md": "@php tools/php/php84.php vendor/bin/phpmd src,text phpmd.xml.dist",
+        "md:tests": "@php tools/php/php84.php vendor/bin/phpmd tests,text phpmd.xml.dist",
 
-        "test": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist",
-        "test:unit": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
-        "test:integration": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
-        "test:e2e": "tools/php/php84.bat vendor/bin/phpunit -c phpunit.xml.dist --testsuite e2e",
+        "test": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist",
+        "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
+        "test:integration": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
+        "test:e2e": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite e2e",
 
         "qa:style": [
             "@lint",
@@ -88,17 +88,17 @@
             "@qa:test"
         ],
 
-        "smoke:runtime": "tools/php/php84.bat tools/smoke/category-runtime-smoke.php",
-        "smoke:fixtures": "tools/php/php84.bat tools/smoke/category-fixture-sanity.php",
-        "smoke:container": "tools/php/php84.bat tools/smoke/category-container-boot-smoke.php",
-        "smoke:doctrine": "tools/php/php84.bat tools/smoke/category-doctrine-mapping-smoke.php",
-        "smoke:fixture-load": "tools/php/php84.bat tools/smoke/category-fixture-load-smoke.php",
-        "smoke:graphql": "tools/php/php84.bat tools/smoke/category-graphql-smoke.php",
+        "smoke:runtime": "@php tools/php/php84.php tools/smoke/category-runtime-smoke.php",
+        "smoke:fixtures": "@php tools/php/php84.php tools/smoke/category-fixture-sanity.php",
+        "smoke:container": "@php tools/php/php84.php tools/smoke/category-container-boot-smoke.php",
+        "smoke:doctrine": "@php tools/php/php84.php tools/smoke/category-doctrine-mapping-smoke.php",
+        "smoke:fixture-load": "@php tools/php/php84.php tools/smoke/category-fixture-load-smoke.php",
+        "smoke:graphql": "@php tools/php/php84.php tools/smoke/category-graphql-smoke.php",
 
-        "report:owner-overlap": "tools/php/php84.bat tools/inspection/CatalogOwnerOverlapReport.php",
-        "report:route-inventory": "tools/php/php84.bat tools/inspection/CatalogRouteInventoryReport.php",
-        "report:class-alias": "tools/php/php84.bat tools/inspection/CatalogClassAliasReport.php",
-        "report:runtime-proof": "tools/php/php84.bat tools/inspection/CatalogRuntimeProofReport.php"
+        "report:owner-overlap": "@php tools/php/php84.php tools/inspection/CatalogOwnerOverlapReport.php",
+        "report:route-inventory": "@php tools/php/php84.php tools/inspection/CatalogRouteInventoryReport.php",
+        "report:class-alias": "@php tools/php/php84.php tools/inspection/CatalogClassAliasReport.php",
+        "report:runtime-proof": "@php tools/php/php84.php tools/inspection/CatalogRuntimeProofReport.php"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
