@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
+use App\ServiceInterface\CatalogtestsInterface as testsService;
 
-final class CatalogCategoryBulk implements CategoryBulkInterface
+final class CatalogtestsBulk implements testsBulkInterface
 {
-    private CategoryService $service;
+    private testsService $service;
 
-    public function __construct(CategoryService $service)
+    public function __construct(testsService $service)
     {
         $this->service = $service;
     }

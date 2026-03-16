@@ -1,4 +1,4 @@
-name: Category Release
+name: tests Release
 on:
   push:
     tags:

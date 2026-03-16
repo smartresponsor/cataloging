@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'category:export')]
-final class ExportCategoryCommand extends Command
+final class ExporttestsCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

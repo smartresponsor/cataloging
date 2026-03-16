@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(name: 'category:backup')]
-final class BackupCategoryCommand extends Command
+final class BackuptestsCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

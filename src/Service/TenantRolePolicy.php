@@ -17,19 +17,19 @@ final class TenantRolePolicy implements TenantRolePolicyInterface
     public function allow(array $ctx, string $action): bool
     {
         $role = $ctx['role'] ?? '';
-        if (CategoryRole::OWNER === $role) {
+        if (testsRole::OWNER === $role) {
             return true;
         }
-        if (CategoryRole::PUBLISHER === $role) {
+        if (testsRole::PUBLISHER === $role) {
             return in_array($action, ['publish', 'read'], true);
         }
-        if (CategoryRole::EDITOR === $role) {
+        if (testsRole::EDITOR === $role) {
             return in_array($action, ['edit', 'read'], true);
         }
-        if (CategoryRole::READER === $role) {
+        if (testsRole::READER === $role) {
             return 'read' === $action;
         }
-        if (CategoryRole::AUDITOR === $role) {
+        if (testsRole::AUDITOR === $role) {
             return in_array($action, ['read', 'audit'], true);
         }
 

@@ -6,23 +6,23 @@ declare(strict_types=1);
  * GraphQL resolvers (framework-agnostic example).
  */
 
-namespace SmartResponsor\Category\Api\Graphql;
+namespace SmartResponsor\tests\Api\Graphql;
 
-use App\Service\CatalogCategory\Domain\Category;
-use App\Service\CatalogCategory\Repository\CategoryRepository;
+use App\Service\Catalogtests\Domain\tests;
+use App\Service\Catalogtests\Repository\testsRepository;
 
-final class CategoryResolver
+final class testsResolver
 {
-    public function __construct(private CategoryRepository $repo)
+    public function __construct(private testsRepository $repo)
     {
     }
 
-    public function node(string $id): ?Category
+    public function node(string $id): ?tests
     {
         return $this->repo->getById($id);
     }
 
-    public function category(string $slug): ?Category
+    public function category(string $slug): ?tests
     {
         return $this->repo->getBySlug($slug);
     }

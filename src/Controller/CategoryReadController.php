@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\CategoryEntity;
+use App\Entity\testsEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,22 +15,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 
-final class CategoryReadController extends AbstractController
+final class testsReadController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $em, private readonly CategoryRepository $repo, private readonly CacheInterface $cache)
+    public function __construct(private readonly EntityManagerInterface $em, private readonly testsRepository $repo, private readonly CacheInterface $cache)
     {
     }
 
     #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
     public function childList(string $id): JsonResponse
     {
-        /** @var CategoryEntity|null $node */
-        $node = $this->em->getRepository(CategoryEntity::class)->find($id);
+        /** @var testsEntity|null $node */
+        $node = $this->em->getRepository(testsEntity::class)->find($id);
         if (!$node) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
         $child = $this->cache->get('cat_child_'.$node->getId(), fn () => $this->repo->findChildrenLtree($node));
-        $out = array_map(fn (CategoryEntity $c) => ['id' => $c->getId(), 'name' => $c->getName(), 'slug' => $c->getSlug(), 'path' => $c->getPath(), 'depth' => $c->getDepth()], $child);
+        $out = array_map(fn (testsEntity $c) => ['id' => $c->getId(), 'name' => $c->getName(), 'slug' => $c->getSlug(), 'path' => $c->getPath(), 'depth' => $c->getDepth()], $child);
 
         return $this->json(['ok' => true, 'item' => $out]);
     }
@@ -38,13 +38,13 @@ final class CategoryReadController extends AbstractController
     #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
     public function ancestorList(string $id): JsonResponse
     {
-        /** @var CategoryEntity|null $node */
-        $node = $this->em->getRepository(CategoryEntity::class)->find($id);
+        /** @var testsEntity|null $node */
+        $node = $this->em->getRepository(testsEntity::class)->find($id);
         if (!$node) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
         $anc = $this->cache->get('cat_anc_'.$node->getId(), fn () => $this->repo->findAncestorsLtree($node));
-        $out = array_map(fn (CategoryEntity $c) => ['id' => $c->getId(), 'name' => $c->getName(), 'slug' => $c->getSlug(), 'path' => $c->getPath(), 'depth' => $c->getDepth()], $anc);
+        $out = array_map(fn (testsEntity $c) => ['id' => $c->getId(), 'name' => $c->getName(), 'slug' => $c->getSlug(), 'path' => $c->getPath(), 'depth' => $c->getDepth()], $anc);
 
         return $this->json(['ok' => true, 'item' => $out]);
     }
@@ -54,7 +54,7 @@ final class CategoryReadController extends AbstractController
     {
         $first = max(1, min(100, (int) $req->query->get('first', 20)));
         $after = (string) $req->query->get('after', '');
-        $qb = $this->em->getRepository(CategoryEntity::class)->createQueryBuilder('c')->orderBy('c.path', 'ASC')->setMaxResults($first);
+        $qb = $this->em->getRepository(testsEntity::class)->createQueryBuilder('c')->orderBy('c.path', 'ASC')->setMaxResults($first);
         if ('' !== $after) {
             $cursor = base64_decode($after, true) ?: '';
             if ($cursor) {

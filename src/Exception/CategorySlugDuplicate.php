@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-final class CategorySlugDuplicate extends \RuntimeException
+final class testsSlugDuplicate extends \RuntimeException
 {
     public function __construct(string $detail = '')
     {

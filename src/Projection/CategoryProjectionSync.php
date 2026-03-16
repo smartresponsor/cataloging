@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Projection;
 
-use App\ProjectionInterface\CategoryProjectionSyncInterface;
+use App\ProjectionInterface\testsProjectionSyncInterface;
 
 /**
  * Projection sync worker that updates MySQL read models from outbox events.
  * Real DB connections are injected in infrastructure layer.
  */
-final class CategoryProjectionSync implements CategoryProjectionSyncInterface
+final class testsProjectionSync implements testsProjectionSyncInterface
 {
     public function apply(array $event): void
     {

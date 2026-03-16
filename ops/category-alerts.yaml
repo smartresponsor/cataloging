@@ -1,17 +1,17 @@
 groups:
   - name: category
     rules:
-      - alert: CategoryHighLatency
+      - alert: testsHighLatency
         expr: category_p95_ms > 700
         for: 5m
         labels:
           severity: warning
         annotations:
-          summary: 'Category p95 too high'
-      - alert: CategoryErrorRate
+          summary: 'tests p95 too high'
+      - alert: testsErrorRate
         expr: category_error_rate > 0.005
         for: 5m
         labels:
           severity: critical
         annotations:
-          summary: 'Category error rate > 0.5%'
+          summary: 'tests error rate > 0.5%'

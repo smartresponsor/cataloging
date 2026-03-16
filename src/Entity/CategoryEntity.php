@@ -10,8 +10,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GraphQl\Query;
 use ApiPlatform\Metadata\GraphQl\QueryCollection;
-use App\GraphQl\CategoryAncestorListResolver;
-use App\GraphQl\CategoryChildListResolver;
+use App\GraphQl\testsAncestorListResolver;
+use App\GraphQl\testsChildListResolver;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
 
@@ -22,11 +22,11 @@ use Symfony\Component\Uid\Ulid;
     graphQlOperations: [
         new Query(name: 'item'),
         new QueryCollection(name: 'collection'),
-        new QueryCollection(name: 'childList', resolver: CategoryChildListResolver::class),
-        new QueryCollection(name: 'ancestorList', resolver: CategoryAncestorListResolver::class),
+        new QueryCollection(name: 'childList', resolver: testsChildListResolver::class),
+        new QueryCollection(name: 'ancestorList', resolver: testsAncestorListResolver::class),
     ]
 )]
-class CategoryEntity
+class testsEntity
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 26, options: ['fixed' => true])]

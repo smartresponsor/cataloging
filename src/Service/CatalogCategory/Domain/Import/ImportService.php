@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\CatalogCategory\Domain\Import;
+namespace App\Service\Catalogtests\Domain\Import;
 
 final class ImportService
 {
@@ -41,8 +41,8 @@ final class ImportService
                 'path' => $row[$idx['path']] ?? null,
                 'level' => isset($idx['level']) ? (int) ($row[$idx['level']] ?? 0) : null,
             ];
-            $this->validateCategory($payload);
-            $this->repo->upsertCategory($payload);
+            $this->validatetests($payload);
+            $this->repo->upserttests($payload);
             ++$n;
         }
         fclose($h);
@@ -66,8 +66,8 @@ final class ImportService
                 $this->validateRule($json);
                 $this->repo->upsertRule($json);
             } else {
-                $this->validateCategory($json);
-                $this->repo->upsertCategory($json);
+                $this->validatetests($json);
+                $this->repo->upserttests($json);
             }
             ++$n;
         }
@@ -77,7 +77,7 @@ final class ImportService
     }
 
     /** @param array<string,mixed> $row */
-    private function validateCategory(array $row): void
+    private function validatetests(array $row): void
     {
         foreach (['id', 'name', 'slug'] as $k) {
             if (!isset($row[$k]) || !is_string($row[$k]) || '' === $row[$k]) {

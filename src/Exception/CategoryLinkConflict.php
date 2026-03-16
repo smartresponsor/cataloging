@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-final class CategoryLinkConflict extends \RuntimeException
+final class testsLinkConflict extends \RuntimeException
 {
     public function __construct(string $detail = '')
     {

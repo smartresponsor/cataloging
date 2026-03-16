@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class CategoryAttachmentController
+final class testsAttachmentController
 {
     public function __construct(private readonly AttachmentService $service)
     {

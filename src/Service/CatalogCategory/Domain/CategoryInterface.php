@@ -3,12 +3,12 @@
 declare(strict_types=1);
 /**
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * DomainInterface mirror for Category domain.
+ * DomainInterface mirror for tests domain.
  */
 
-namespace App\Service\CatalogCategory\Domain;
+namespace App\Service\Catalogtests\Domain;
 
-interface CategoryInterface
+interface testsInterface
 {
     public function id(): string;
 

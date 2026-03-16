@@ -1,4 +1,4 @@
-# Category import/export
+# tests import/export
 
 Export:
   php bin/console category:export > category.ndjson

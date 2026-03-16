@@ -8,7 +8,7 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Service\CatalogCategory\Domain;
+namespace App\Service\Catalogtests\Domain;
 
 final class ApproxTotalService
 {

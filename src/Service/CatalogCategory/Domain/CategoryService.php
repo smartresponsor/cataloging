@@ -9,13 +9,13 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\CatalogCategory\Domain\Category;
+namespace App\Service\Catalogtests\Domain\tests;
 
-final class CategoryService
+final class testsService
 {
-    private CategoryRepositoryInterface $repo;
+    private testsRepositoryInterface $repo;
 
-    public function __construct(CategoryRepositoryInterface $repo)
+    public function __construct(testsRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }

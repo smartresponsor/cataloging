@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\GraphQL;
 
-final class CategoryResolver
+final class testsResolver
 {
     public function children(array $category): array
     {

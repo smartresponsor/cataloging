@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-interface CategoryLinkInterface
+interface testsLinkInterface
 {
     public function id(): string;
 

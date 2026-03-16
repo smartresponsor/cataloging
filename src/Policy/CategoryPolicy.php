@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
-use App\PolicyInterface\CategoryPolicyInterface;
+use App\PolicyInterface\testsPolicyInterface;
 
 /** Validates format; uniqueness is handled by generator via repository. */
-final class CategoryPolicy implements CategoryPolicyInterface
+final class testsPolicy implements testsPolicyInterface
 {
     public function canEdit(string $actorId, string $taxonomyId, ?string $categoryId): bool
     {

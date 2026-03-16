@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\PolicyInterface;
 
-interface CategoryCanonicalPolicyInterface
+interface testsCanonicalPolicyInterface
 {
     /** Choose canonical slug locale and redirect behavior for alternates. */
     public function canonicalLocale(): string;

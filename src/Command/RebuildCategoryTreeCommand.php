@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'category:rebuild-tree')]
-final class RebuildCategoryTreeCommand extends Command
+final class RebuildtestsTreeCommand extends Command
 {
     public function __construct(
         private readonly TreeConsistencyChecker $checker,

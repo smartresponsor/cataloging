@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-final class CatalogCategorySerializer implements CategorySerializerInterface
+final class CatalogtestsSerializer implements testsSerializerInterface
 {
     public function serialize(array $source, array $includeFieldList, array $excludeFieldList): array
     {

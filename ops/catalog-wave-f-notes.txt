@@ -1,0 +1,7 @@
+Wave F is a proof/control packaging wave.
+No destructive predelete step is required.
+Recommended follow-up:
+- run composer validate
+- run composer test
+- run smoke and report scripts
+- capture outputs into release evidence

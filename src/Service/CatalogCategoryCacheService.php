@@ -9,7 +9,7 @@ namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
 
-final class CatalogCategoryCacheService
+final class CatalogtestsCacheService
 {
     public function __construct(private readonly CacheItemPoolInterface $pool)
     {

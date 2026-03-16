@@ -12,7 +12,7 @@ final class Version20251102030100_category_schema extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Category schema for pgsql + mysql';
+        return 'tests schema for pgsql + mysql';
     }
     public function up(Schema $schema): void
     {

@@ -9,7 +9,7 @@ namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
 
-final class CatalogCategoryInvalidator
+final class CatalogtestsInvalidator
 {
     public function __construct(private readonly CacheItemPoolInterface $pool)
     {

@@ -5,7 +5,7 @@ declare(strict_types=1);
  */
 namespace App\Tools\Dx;
 
-final class CategoryDx
+final class testsDx
 {
     public static function main(array $argv): int
     {
@@ -33,4 +33,4 @@ final class CategoryDx
     }
 }
 
-CategoryDx::main($argv);
+testsDx::main($argv);

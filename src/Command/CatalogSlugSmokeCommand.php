@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\CategoryAliasEntity;
-use App\Entity\CategoryEntity;
+use App\Entity\testsAliasEntity;
+use App\Entity\testsEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -25,8 +25,8 @@ final class CatalogSlugSmokeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
-        $catRepo = $this->em->getRepository(CategoryEntity::class);
+        $aliasRepo = $this->em->getRepository(testsAliasEntity::class);
+        $catRepo = $this->em->getRepository(testsEntity::class);
         $aliases = $aliasRepo->findAll();
         $ok = 0;
         $miss = 0;

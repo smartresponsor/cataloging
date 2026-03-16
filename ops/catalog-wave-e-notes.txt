@@ -1,0 +1,7 @@
+Wave E is a truth-alignment wave.
+No destructive predelete step is required.
+
+Recommended follow-up:
+- keep `api/category-openapi.yaml` temporarily for compatibility
+- treat `api/catalog-openapi.yaml` as canonical going forward
+- later archive or collapse historical `docs/category-*.md` after runtime naming settles

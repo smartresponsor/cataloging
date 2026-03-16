@@ -5,17 +5,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\ControllerInterface\CategoryControllerInterface;
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
+use App\ControllerInterface\testsControllerInterface;
+use App\RepositoryInterface\testsRepositoryInterface;
+use App\ServiceInterface\CatalogtestsInterface as testsService;
 
-final class CategoryController implements CategoryControllerInterface
+final class testsController implements testsControllerInterface
 {
-    private CategoryService $service;
-    private CategoryRepositoryInterface $repo;
-    private CategoryBreadcrumbBuilderInterface $breadcrumb;
+    private testsService $service;
+    private testsRepositoryInterface $repo;
+    private testsBreadcrumbBuilderInterface $breadcrumb;
 
-    public function __construct(CategoryService $service, CategoryRepositoryInterface $repo, CategoryBreadcrumbBuilderInterface $breadcrumb)
+    public function __construct(testsService $service, testsRepositoryInterface $repo, testsBreadcrumbBuilderInterface $breadcrumb)
     {
         $this->service = $service;
         $this->repo = $repo;

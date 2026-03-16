@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-final class CatalogCategoryMoveService implements CategoryMoveInterface
+final class CatalogtestsMoveService implements testsMoveInterface
 {
     private \PDO $pg;
 

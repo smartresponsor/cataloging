@@ -10,7 +10,7 @@ namespace App\EventSubscriber;
 use App\Service\CacheInvalidator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class CategoryChangedSubscriber implements EventSubscriberInterface
+final class testsChangedSubscriber implements EventSubscriberInterface
 {
     public function __construct(private readonly CacheInvalidator $invalidator)
     {

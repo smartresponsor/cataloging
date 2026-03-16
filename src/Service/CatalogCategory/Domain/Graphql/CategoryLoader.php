@@ -9,9 +9,9 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\CatalogCategory\Domain\Graphql;
+namespace App\Service\Catalogtests\Domain\Graphql;
 
-final class CategoryLoader
+final class testsLoader
 {
     /** @var callable(string[]): array<int, array{id: string, name: string, slug: string}> */
     private $batch;

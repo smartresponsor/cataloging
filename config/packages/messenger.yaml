@@ -5,4 +5,4 @@ framework:
       async_high: '%env(RABBITMQ_DSN)%/category?queues[category_high]=1'
       sync: 'sync://'
     routing:
-      'App\Message\RecomputeVirtualCategoryMessage': async_high
+      'App\Message\RecomputeVirtualtestsMessage': async_high

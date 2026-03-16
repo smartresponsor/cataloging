@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ControllerInterface;
 
-interface CategoryControllerInterface
+interface testsControllerInterface
 {
     /** GET /category/{taxonomy}/tree?locale=en&depth=2&parentId=ULID */
     public function tree(array $query, array $route): array;

@@ -1,1 +1,1 @@
-# Category RC1 Release Notes (init)
+# tests RC1 Release Notes (init)

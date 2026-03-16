@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Request;
 
-final class PublishCategoryRequest
+final class PublishtestsRequest
 {
     public function __construct(
         public readonly ?bool $published,

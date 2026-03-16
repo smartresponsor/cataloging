@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Rule;
 
-final class CategoryRulePolicy
+final class testsRulePolicy
 {
     public const MAX_CONDITIONS = 20;
     public const PRICE_MIN = 0;

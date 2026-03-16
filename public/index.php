@@ -13,7 +13,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/status', ['SmartResponsor\Http\StatusHandler','handle']);
-    $r->addRoute('GET', '/category', ['SmartResponsor\Http\CategoryListHandler','handle']);
+    $r->addRoute('GET', '/category', ['SmartResponsor\Http\testsListHandler','handle']);
     $r->addRoute('GET', '/collection', ['SmartResponsor\Http\CollectionListHandler','handle']);
 });
 

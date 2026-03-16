@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'category:import')]
-final class ImportCategoryCommand extends Command
+final class ImporttestsCommand extends Command
 {
     protected function configure(): void
     {

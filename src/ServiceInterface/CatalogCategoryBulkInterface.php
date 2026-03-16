@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-interface CatalogCategoryBulkInterface
+interface CatalogtestsBulkInterface
 {
     /**
      * Execute batch operations (create/move/attach/detach).

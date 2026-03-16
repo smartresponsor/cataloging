@@ -1,77 +1,41 @@
-# Smart Responsor / Catalog — Release Candidate Candidate
+# Smart Responsor / Catalog — RC Working Line
 
-This repository is the current RC-candidate line of the Catalog component.
+This repository is the current working RC line of the Catalog component.
 
 ## Current status
 
-- Canon-clean runtime line after waves W1–W6
-- Wrapper `src/[Layer]/Category/**` debt removed from live code
-- `class_alias` compatibility layer removed
-- duplicate-owner tail collapsed
-- local proof contour prepared for:
-  - `composer validate`
-  - `composer test`
-  - `composer smoke:container`
-  - `composer smoke:doctrine`
-  - `composer smoke:fixture-load`
-  - `composer smoke:graphql`
-  - `composer report:runtime-proof`
-  - `composer report:owner-overlap`
-  - `composer report:route-inventory`
-  - `composer report:class-alias`
+This slice already contains structural migration progress from the canon waves, but it is **not yet a final canon-clean repository**.
 
-## Source-of-truth entry points
+What is already in:
+- PHP 8.4 runtime/tooling baseline
+- service/service-interface wrapper evacuation
+- part of top-level `Catalog` convergence
+- tests/tools alignment
+- syntax stabilization hotfix
 
-Read these first:
+What is still transitional:
+- many historical `docs/category-*.md` documents
+- API contract still carries legacy `category` naming as a compatibility path
+- some component surfaces still use mixed `Category` / `Catalog` vocabulary
+- final docs/API truth reset is still in progress
 
-- `docs/catalog-rc-declaration.md`
-- `docs/catalog-rc-runbook.md`
-- `docs/catalog-api-doc-strategy.md`
+## Canon sources of truth
+
 - `docs/catalog-doc-entry.md`
+- `docs/catalog-current-status.md`
+- `docs/canon/catalog-structural-debt-register.md`
 
-## What this RC line includes
+## API contracts
 
-- category tree query/read flow
-- category create/move/publish flow
-- collection/rule support
-- import/export support
-- SEO/canonical/redirect/sitemap support
-- projection/workflow support
-- webhook/integration support
-- GraphQL and HTTP entry points
-- tenant/security/quota policy
+- canonical working contract: `api/catalog-openapi.yaml`
+- legacy compatibility contract: `api/category-openapi.yaml`
 
-## What this RC line does not claim yet
+## Proof contour
 
-- GA release
-- final release changelog
-- final public SDK policy
-- final stable API compatibility promise
-- full production deployment certification across all environments
-
-## API documentation
-
-- Swagger UI: `/api/doc`
-- ReDoc: `/api/redoc`
-- OpenAPI YAML: `/api/doc/openapi.yaml`
-
-## Quick start
-
-```bash
-composer install
-composer validate
-composer test
-composer smoke:container
-composer smoke:doctrine
-composer smoke:fixture-load
-composer smoke:graphql
-```
-
-## Documentation note
-
-This repository still contains historical build, migration and ops notes under `docs/` and `report/`.
-For RC-candidate usage, prefer the four source-of-truth documents listed above.
-
-## Naming canon
-
-- `docs/canon/catalog-naming-canon.md`
+Typical local checks:
+- `composer validate`
+- `composer test`
+- `composer report:class-alias`
+- `composer report:owner-overlap`
+- `composer report:route-inventory`
+- `composer report:runtime-proof`

@@ -1,34 +1,34 @@
-# Catalog wave C — inner-unit CatalogCategory convergence
+# Catalog wave C — inner-unit Catalogtests convergence
 
 Scope:
-- rename inner service/service-interface classes from `Category...` to `CatalogCategory...`
+- rename inner service/service-interface classes from `tests...` to `Catalogtests...`
 - keep top-level component surface on `Catalog...`
 - do not yet rename unrelated runtime classes outside the inner category service layer
 
 Applied renames:
-- `src/Service/Category.php` -> `src/Service/CatalogCategory.php`
-- `src/Service/CategoryBreadcrumbBuilder.php` -> `src/Service/CatalogCategoryBreadcrumbBuilder.php`
-- `src/Service/CategoryBulk.php` -> `src/Service/CatalogCategoryBulk.php`
-- `src/Service/CategoryCacheHeader.php` -> `src/Service/CatalogCategoryCacheHeader.php`
-- `src/Service/CategoryCacheService.php` -> `src/Service/CatalogCategoryCacheService.php`
-- `src/Service/CategoryHttpCache.php` -> `src/Service/CatalogCategoryHttpCache.php`
-- `src/Service/CategoryInterface.php` -> `src/Service/CatalogCategoryInterface.php`
-- `src/Service/CategoryInvalidator.php` -> `src/Service/CatalogCategoryInvalidator.php`
-- `src/Service/CategoryMoveInterface.php` -> `src/Service/CatalogCategoryMoveInterface.php`
-- `src/Service/CategoryMoveService.php` -> `src/Service/CatalogCategoryMoveService.php`
-- `src/Service/CategoryRepository.php` -> `src/Service/CatalogCategoryRepository.php`
-- `src/Service/CategorySerializer.php` -> `src/Service/CatalogCategorySerializer.php`
-- `src/Service/CategoryService.php` -> `src/Service/CatalogCategoryService.php`
-- `src/Service/CategorySitemapGenerator.php` -> `src/Service/CatalogCategorySitemapGenerator.php`
-- `src/Service/CategorySlugGenerator.php` -> `src/Service/CatalogCategorySlugGenerator.php`
-- `src/Service/Api/CategoryCacheHeader.php` -> `src/Service/Api/CatalogCategoryCacheHeader.php`
-- `src/Service/Security/CategoryRole.php` -> `src/Service/Security/CatalogCategoryRole.php`
-- `src/ServiceInterface/CategoryBreadcrumbBuilderInterface.php` -> `src/ServiceInterface/CatalogCategoryBreadcrumbBuilderInterface.php`
-- `src/ServiceInterface/CategoryBulkInterface.php` -> `src/ServiceInterface/CatalogCategoryBulkInterface.php`
-- `src/ServiceInterface/CategoryHttpCacheInterface.php` -> `src/ServiceInterface/CatalogCategoryHttpCacheInterface.php`
-- `src/ServiceInterface/CategoryInterface.php` -> `src/ServiceInterface/CatalogCategoryInterface.php`
-- `src/ServiceInterface/CategoryRepositoryInterface.php` -> `src/ServiceInterface/CatalogCategoryRepositoryInterface.php`
-- `src/ServiceInterface/CategorySerializerInterface.php` -> `src/ServiceInterface/CatalogCategorySerializerInterface.php`
-- `src/ServiceInterface/CategorySitemapGeneratorInterface.php` -> `src/ServiceInterface/CatalogCategorySitemapGeneratorInterface.php`
-- `src/ServiceInterface/CategorySlugGeneratorInterface.php` -> `src/ServiceInterface/CatalogCategorySlugGeneratorInterface.php`
-- delete malformed duplicate `src/Service/CategorySitemapGenerator-.php`
+- `src/Service/tests.php` -> `src/Service/Catalogtests.php`
+- `src/Service/testsBreadcrumbBuilder.php` -> `src/Service/CatalogtestsBreadcrumbBuilder.php`
+- `src/Service/testsBulk.php` -> `src/Service/CatalogtestsBulk.php`
+- `src/Service/testsCacheHeader.php` -> `src/Service/CatalogtestsCacheHeader.php`
+- `src/Service/testsCacheService.php` -> `src/Service/CatalogtestsCacheService.php`
+- `src/Service/testsHttpCache.php` -> `src/Service/CatalogtestsHttpCache.php`
+- `src/Service/testsInterface.php` -> `src/Service/CatalogtestsInterface.php`
+- `src/Service/testsInvalidator.php` -> `src/Service/CatalogtestsInvalidator.php`
+- `src/Service/testsMoveInterface.php` -> `src/Service/CatalogtestsMoveInterface.php`
+- `src/Service/testsMoveService.php` -> `src/Service/CatalogtestsMoveService.php`
+- `src/Service/testsRepository.php` -> `src/Service/CatalogtestsRepository.php`
+- `src/Service/testsSerializer.php` -> `src/Service/CatalogtestsSerializer.php`
+- `src/Service/testsService.php` -> `src/Service/CatalogtestsService.php`
+- `src/Service/testsSitemapGenerator.php` -> `src/Service/CatalogtestsSitemapGenerator.php`
+- `src/Service/testsSlugGenerator.php` -> `src/Service/CatalogtestsSlugGenerator.php`
+- `src/Service/Api/testsCacheHeader.php` -> `src/Service/Api/CatalogtestsCacheHeader.php`
+- `src/Service/Security/testsRole.php` -> `src/Service/Security/CatalogtestsRole.php`
+- `src/ServiceInterface/testsBreadcrumbBuilderInterface.php` -> `src/ServiceInterface/CatalogtestsBreadcrumbBuilderInterface.php`
+- `src/ServiceInterface/testsBulkInterface.php` -> `src/ServiceInterface/CatalogtestsBulkInterface.php`
+- `src/ServiceInterface/testsHttpCacheInterface.php` -> `src/ServiceInterface/CatalogtestsHttpCacheInterface.php`
+- `src/ServiceInterface/testsInterface.php` -> `src/ServiceInterface/CatalogtestsInterface.php`
+- `src/ServiceInterface/testsRepositoryInterface.php` -> `src/ServiceInterface/CatalogtestsRepositoryInterface.php`
+- `src/ServiceInterface/testsSerializerInterface.php` -> `src/ServiceInterface/CatalogtestsSerializerInterface.php`
+- `src/ServiceInterface/testsSitemapGeneratorInterface.php` -> `src/ServiceInterface/CatalogtestsSitemapGeneratorInterface.php`
+- `src/ServiceInterface/testsSlugGeneratorInterface.php` -> `src/ServiceInterface/CatalogtestsSlugGeneratorInterface.php`
+- delete malformed duplicate `src/Service/testsSitemapGenerator-.php`

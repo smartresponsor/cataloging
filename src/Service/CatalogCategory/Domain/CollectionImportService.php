@@ -8,9 +8,9 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Service\CatalogCategory\Domain;
+namespace App\Service\Catalogtests\Domain;
 
-use App\ServiceInterface\CatalogCategory\Domain\CollectionImportServiceInterface;
+use App\ServiceInterface\Catalogtests\Domain\CollectionImportServiceInterface;
 
 class CollectionImportService implements CollectionImportServiceInterface
 {

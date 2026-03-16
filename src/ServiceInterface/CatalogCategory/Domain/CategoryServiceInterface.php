@@ -8,9 +8,9 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\ServiceInterface\CatalogCategory\Domain;
+namespace App\ServiceInterface\Catalogtests\Domain;
 
-interface CategoryServiceInterface
+interface testsServiceInterface
 {
     // All comments must be in English.
 }

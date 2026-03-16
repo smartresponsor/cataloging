@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
-use App\PolicyInterface\CategoryCanonicalPolicyInterface;
+use App\PolicyInterface\testsCanonicalPolicyInterface;
 
-final class CategoryCanonicalPolicy implements CategoryCanonicalPolicyInterface
+final class testsCanonicalPolicy implements testsCanonicalPolicyInterface
 {
     public function canonicalLocale(): string
     {

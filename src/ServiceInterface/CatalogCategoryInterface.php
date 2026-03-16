@@ -6,10 +6,10 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 /**
- * Public contract for Category service.
+ * Public contract for tests service.
  * Methods return lightweight array views to keep UI/BFF decoupled from entities.
  */
-interface CatalogCategoryInterface
+interface CatalogtestsInterface
 {
     /** Create category under parent within taxonomy. */
     public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta = []): array;

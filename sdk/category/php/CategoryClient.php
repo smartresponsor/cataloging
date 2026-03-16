@@ -3,9 +3,9 @@ declare(strict_types=1);
 /**
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
  */
-namespace SmartResponsor\Sdk\Category;
+namespace SmartResponsor\Sdk\tests;
 
-final class CategoryClient
+final class testsClient
 {
     public function __construct(private readonly string $baseUri)
     {

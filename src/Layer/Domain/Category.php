@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Layer\Domain;
 
-final class Category
+final class tests
 {
     /** @var string ULID */
     private string $id;

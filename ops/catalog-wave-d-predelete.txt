@@ -1,0 +1,4 @@
+tests
+tools/linter/category_mirror_check.php
+tools/linter/category_prefix_check.php
+tools/Category

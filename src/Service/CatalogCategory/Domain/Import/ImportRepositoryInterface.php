@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\CatalogCategory\Domain\Import;
+namespace App\Service\Catalogtests\Domain\Import;
 
 interface ImportRepositoryInterface
 {
@@ -18,7 +18,7 @@ interface ImportRepositoryInterface
      *
      * @param array{id:string, name:string, slug:string, parentId?:string|null, path?:string|null, level?:int|null} $row
      */
-    public function upsertCategory(array $row): void;
+    public function upserttests(array $row): void;
 
     /**
      * Upsert rule definition.

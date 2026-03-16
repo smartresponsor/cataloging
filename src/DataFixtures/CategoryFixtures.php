@@ -10,7 +10,7 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-final class CategoryFixtures extends Fixture
+final class testsFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {

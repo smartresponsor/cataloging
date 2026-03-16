@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 /** Emitted after any update. */
-final class CategoryUpdated
+final class testsUpdated
 {
     /** @var array<string,mixed> */
     private array $payload;

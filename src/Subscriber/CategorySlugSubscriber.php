@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace App\Subscriber;
 
-use App\Entity\CategoryAliasEntity;
-use App\Entity\CategoryEntity;
+use App\Entity\testsAliasEntity;
+use App\Entity\testsEntity;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
-final class CategorySlugSubscriber implements EventSubscriber
+final class testsSlugSubscriber implements EventSubscriber
 {
     public function __construct(private readonly EntityManagerInterface $em)
     {
@@ -28,7 +28,7 @@ final class CategorySlugSubscriber implements EventSubscriber
     public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
-        if (!$entity instanceof CategoryEntity) {
+        if (!$entity instanceof testsEntity) {
             return;
         }
 
@@ -38,11 +38,11 @@ final class CategorySlugSubscriber implements EventSubscriber
             if ($old === $new) {
                 return;
             }
-            $repo = $this->em->getRepository(CategoryAliasEntity::class);
+            $repo = $this->em->getRepository(testsAliasEntity::class);
             if ($repo->findOneBy(['oldSlug' => $old])) {
                 return;
             }
-            $alias = new CategoryAliasEntity($old, $entity->getId());
+            $alias = new testsAliasEntity($old, $entity->getId());
             $this->em->persist($alias);
         }
     }

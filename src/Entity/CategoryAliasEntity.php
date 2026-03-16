@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'category_alias')]
-class CategoryAliasEntity
+class testsAliasEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

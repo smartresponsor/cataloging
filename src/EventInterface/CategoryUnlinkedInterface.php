@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\EventInterface;
 
-interface CategoryUnlinkedInterface
+interface testsUnlinkedInterface
 {
     /** @return array<string,mixed> */
     public function payload(): array;

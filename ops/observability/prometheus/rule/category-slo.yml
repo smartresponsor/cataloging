@@ -3,9 +3,9 @@ groups:
   rules:
   - record: category:read:p95_ms
     expr: histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket{route=~"/api/category.*",method="GET"}[5m])) by (le))
-  - alert: CategoryReadLatencyHigh
+  - alert: testsReadLatencyHigh
     expr: category:read:p95_ms > 0.25
     for: 5m
     labels: { severity: warning }
     annotations:
-      summary: "Category read p95 over SLO"
+      summary: "tests read p95 over SLO"

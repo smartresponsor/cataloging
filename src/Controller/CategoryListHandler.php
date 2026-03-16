@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace SmartResponsor\Http;
 
-use App\Service\CatalogCategory\Domain\ApproxTotalService;
+use App\Service\Catalogtests\Domain\ApproxTotalService;
 
-final class CategoryListHandler
+final class testsListHandler
 {
     public function handle(): void
     {

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Request;
 
-final class MoveCategoryRequest
+final class MovetestsRequest
 {
     public function __construct(
         public readonly ?string $parentId,

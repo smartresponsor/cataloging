@@ -1,4 +1,4 @@
-# Category GA cutover
+# tests GA cutover
 
 1. freeze rc1
 2. run smoke v2

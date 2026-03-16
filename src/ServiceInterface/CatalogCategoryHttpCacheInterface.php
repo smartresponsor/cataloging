@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-interface CatalogCategoryHttpCacheInterface
+interface CatalogtestsHttpCacheInterface
 {
     public function eTagFor(string $resourceId, array $fieldList): string;
 

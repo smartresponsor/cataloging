@@ -9,7 +9,7 @@ namespace App\GraphQL;
 
 use GraphQL\Type\Definition\ResolveInfo;
 
-final class CategoryQuery
+final class testsQuery
 {
     public function __invoke($rootValue, array $args, $context, ResolveInfo $info): array
     {

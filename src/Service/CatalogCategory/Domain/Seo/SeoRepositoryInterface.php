@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\CatalogCategory\Domain\Seo;
+namespace App\Service\Catalogtests\Domain\Seo;
 
 interface SeoRepositoryInterface
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\EventInterface;
 
-interface CategoryMovedInterface
+interface testsMovedInterface
 {
     /** @return array<string,mixed> */
     public function payload(): array;

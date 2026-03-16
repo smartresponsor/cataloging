@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-final class CategoryTaxonomyConflict extends \RuntimeException
+final class testsTaxonomyConflict extends \RuntimeException
 {
     public function __construct(string $detail = '')
     {

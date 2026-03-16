@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'category_html_block')]
-class CategoryHtmlBlock
+class testsHtmlBlock
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

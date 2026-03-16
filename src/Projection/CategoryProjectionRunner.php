@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace App\Projection;
 
-final class CategoryProjectionRunner
+final class testsProjectionRunner
 {
-    public function __construct(private readonly CategoryProjectionMetrics $metrics)
+    public function __construct(private readonly testsProjectionMetrics $metrics)
     {
     }
 

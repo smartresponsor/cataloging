@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ProjectionInterface;
 
-interface CategoryProjectionSyncInterface
+interface testsProjectionSyncInterface
 {
     /** Apply domain event payloads to MySQL read models. */
     public function apply(array $event): void;

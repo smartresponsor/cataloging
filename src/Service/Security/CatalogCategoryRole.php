@@ -9,7 +9,7 @@ Owner: Marketing America Corp
 
 namespace App\Service\Security;
 
-final class CatalogCategoryRole
+final class CatalogtestsRole
 {
     public const OWNER = 'category.owner';
     public const EDITOR = 'category.editor';

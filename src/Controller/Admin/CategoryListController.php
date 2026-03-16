@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class CategoryListController extends AbstractController
+final class testsListController extends AbstractController
 {
     #[Route('/admin/category/list', name: 'admin_category_list', methods: ['GET'])]
     public function __invoke(Request $request): Response

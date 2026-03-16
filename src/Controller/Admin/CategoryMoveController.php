@@ -1,33 +1,42 @@
+<?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
  * Author: Oleksandr Tishchenko <dev@smartresponsor.com>
  */
-<?php
-declare(strict_types=1);
 
-namespace App\Http\Controller\Admin;
+namespace App\Controller\Admin;
 
-final class CategoryMoveController
+use App\Service\CatalogtestsMoveInterface;
+
+final class testsMoveController
 {
-    private CategoryMoveInterface $service;
-
-    public function __construct(CategoryMoveInterface $service)
+    public function __construct(private readonly CatalogtestsMoveInterface $service)
     {
-        $this->service = $service;
     }
 
-    // Pseudo-code: integrate with your framework routing (Symfony/Laravel/etc.)
+    /**
+     * @param array<string,mixed> $body
+     *
+     * @return array{ok:bool,changedCount:int,warnings:array<int,mixed>,redirects:array<int,mixed>}
+     */
     public function move(array $body): array
     {
         [$count, $redirects] = $this->service->move(
-            $body['nodeId'], $body['newParentId'], $body['treeId'], $body['policy'], (bool) ($body['dryRun'] ?? false), $body['locale'] ?? null
+            (string) $body['nodeId'],
+            (string) $body['newParentId'],
+            (string) $body['treeId'],
+            (string) $body['policy'],
+            (bool) ($body['dryRun'] ?? false),
+            isset($body['locale']) ? (string) $body['locale'] : null,
         );
 
         return [
             'ok' => true,
-            'changedCount' => $count,
+            'changedCount' => (int) $count,
             'warnings' => [],
-            'redirects' => $redirects,
+            'redirects' => is_array($redirects) ? $redirects : [],
         ];
     }
 }

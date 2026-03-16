@@ -1,4 +1,4 @@
-# Install Category RC1
+# Install tests RC1
 
 1. php bin/console doctrine:migrations:migrate --no-interaction
 2. psql -f config/sql/pg_ltree.sql

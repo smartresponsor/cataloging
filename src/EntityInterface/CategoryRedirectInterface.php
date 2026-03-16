@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-interface CategoryRedirectInterface
+interface testsRedirectInterface
 {
     public function id(): string;
 

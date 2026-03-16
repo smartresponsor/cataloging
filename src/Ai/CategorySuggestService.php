@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Ai;
 
-final class CategorySuggestService
+final class testsSuggestService
 {
     /** @var array<string,string[]> */
     private array $dict = [

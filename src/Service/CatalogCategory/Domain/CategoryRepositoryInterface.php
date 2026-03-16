@@ -9,9 +9,9 @@ declare(strict_types=1);
  * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
  */
 
-namespace App\Service\CatalogCategory\Domain\Category;
+namespace App\Service\Catalogtests\Domain\tests;
 
-interface CategoryRepositoryInterface
+interface testsRepositoryInterface
 {
     /**
      * @param array<string, mixed> $opt

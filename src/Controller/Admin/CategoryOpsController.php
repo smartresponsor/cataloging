@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class CategoryOpsController extends AbstractController
+final class testsOpsController extends AbstractController
 {
     #[Route('/admin/category/ops', name: 'admin_category_ops')]
     public function __invoke(): Response

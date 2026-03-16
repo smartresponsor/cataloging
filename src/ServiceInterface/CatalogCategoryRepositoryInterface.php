@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 /** LayerInterface mirror (canon) */
-interface CatalogCategoryRepositoryInterface
+interface CatalogtestsRepositoryInterface
 {
     /**
      * @param array<string, mixed> $opt

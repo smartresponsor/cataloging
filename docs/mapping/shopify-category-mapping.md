@@ -1,4 +1,4 @@
-# Shopify → Category Mapping
+# Shopify → tests Mapping
 - title → name
 - handle → slug
 - parent_id → parent relation
