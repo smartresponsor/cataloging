@@ -2,41 +2,17 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @author Manuel Pichler <mapi@phpmd.org>
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license https://opensource.org/licenses/bsd-license.php BSD License
+ * @link http://phpmd.org/
  */
 
 namespace PHPMD;
@@ -45,23 +21,26 @@ use PDepend\Application;
 use PDepend\Engine;
 use PDepend\Input\ExcludePathFilter;
 use PDepend\Input\ExtensionFilter;
+use PHPMD\Cache\CacheFileFilter;
 
 /**
  * Simple factory that is used to return a ready to use PDepend instance.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ParserFactory
 {
+    /** @var string The default config file name */
+    const PDEPEND_CONFIG_FILE_NAME = '/pdepend.xml';
+
+    /** @var string The distribution config file name */
+    const PDEPEND_CONFIG_FILE_NAME_DIST = '/pdepend.xml.dist';
+
     /**
      * Mapping between phpmd option names and those used by pdepend.
      *
      * @var array
      */
     private $phpmd2pdepend = array(
-        'coverage'  =>  'coverage-report'
+        'coverage' => 'coverage-report',
     );
 
     /**
@@ -87,10 +66,11 @@ class ParserFactory
     {
         $application = new Application();
 
-        if (file_exists(getcwd() . '/pdepend.xml')) {
-            $application->setConfigurationFile(getcwd() . '/pdepend.xml');
-        } elseif (file_exists(getcwd() . '/pdepend.xml.dist')) {
-            $application->setConfigurationFile(getcwd() . '/pdepend.xml.dist');
+        $workingDirectory = getcwd();
+        if (file_exists($workingDirectory . self::PDEPEND_CONFIG_FILE_NAME)) {
+            $application->setConfigurationFile($workingDirectory . self::PDEPEND_CONFIG_FILE_NAME);
+        } elseif (file_exists($workingDirectory . self::PDEPEND_CONFIG_FILE_NAME_DIST)) {
+            $application->setConfigurationFile($workingDirectory . self::PDEPEND_CONFIG_FILE_NAME_DIST);
         }
 
         return $application->getEngine();
@@ -109,6 +89,7 @@ class ParserFactory
         $this->initInput($pdepend, $phpmd);
         $this->initIgnores($pdepend, $phpmd);
         $this->initExtensions($pdepend, $phpmd);
+        $this->initResultCache($pdepend, $phpmd);
 
         return $pdepend;
     }
@@ -123,11 +104,12 @@ class ParserFactory
     private function initInput(Engine $pdepend, PHPMD $phpmd)
     {
         foreach (explode(',', $phpmd->getInput()) as $path) {
-            if (is_dir(trim($path))) {
-                $pdepend->addDirectory(trim($path));
-            } else {
-                $pdepend->addFile(trim($path));
+            $trimmedPath = trim($path);
+            if (is_dir($trimmedPath)) {
+                $pdepend->addDirectory($trimmedPath);
+                continue;
             }
+            $pdepend->addFile($trimmedPath);
         }
     }
 
@@ -140,9 +122,9 @@ class ParserFactory
      */
     private function initIgnores(Engine $pdepend, PHPMD $phpmd)
     {
-        if (count($phpmd->getIgnorePattern()) > 0) {
+        if (count($phpmd->getIgnorePatterns()) > 0) {
             $pdepend->addFileFilter(
-                new ExcludePathFilter($phpmd->getIgnorePattern())
+                new ExcludePathFilter($phpmd->getIgnorePatterns())
             );
         }
     }
@@ -160,6 +142,17 @@ class ParserFactory
             $pdepend->addFileFilter(
                 new ExtensionFilter($phpmd->getFileExtensions())
             );
+        }
+    }
+
+    /**
+     * Cache result hook to filter cached files
+     */
+    private function initResultCache(Engine $pdepend, PHPMD $phpmd)
+    {
+        $resultCache = $phpmd->getResultCache();
+        if ($resultCache !== null) {
+            $pdepend->addFileFilter($resultCache->getFileFilter());
         }
     }
 

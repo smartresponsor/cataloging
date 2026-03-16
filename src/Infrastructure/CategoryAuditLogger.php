@@ -9,7 +9,7 @@ namespace App\Infrastructure;
 
 use Psr\Log\LoggerInterface;
 
-final class testsAuditLogger
+final class CategoryAuditLogger
 {
     public function __construct(private readonly LoggerInterface $logger)
     {

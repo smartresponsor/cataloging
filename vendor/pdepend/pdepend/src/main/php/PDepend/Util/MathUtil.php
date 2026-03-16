@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -46,7 +46,7 @@ namespace PDepend\Util;
  * This is a simply utility class that will perform mathematical operations with
  * bcmath when the extension exists, otherwise it will use default math operations.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 final class MathUtil
@@ -55,10 +55,10 @@ final class MathUtil
      * This method will multiply the two given operands with the bcmath extension
      * when available, otherwise it will use the default mathematical operations.
      *
-     * @param string $left  The left arithmetic operand.
-     * @param string $right The right arithmetic operand.
+     * @param numeric-string $left  The left arithmetic operand.
+     * @param numeric-string $right The right arithmetic operand.
      *
-     * @return string
+     * @return numeric-string
      */
     public static function mul($left, $right)
     {
@@ -75,7 +75,7 @@ final class MathUtil
      * @param string $left  The left arithmetic operand.
      * @param string $right The right arithmetic operand.
      *
-     * @return string
+     * @return numeric-string
      */
     public static function add($left, $right)
     {

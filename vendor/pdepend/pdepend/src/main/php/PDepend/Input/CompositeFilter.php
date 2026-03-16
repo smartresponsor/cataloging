@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -46,22 +46,23 @@ namespace PDepend\Input;
  * Simple composite pattern implementation that allows to bundle multiple
  * filter implementations.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CompositeFilter implements Filter
 {
     /**
-     * List of aggregated {@link \PDepend\Input\Filter} objects.
+     * List of aggregated {@link Filter} objects.
      *
-     * @var \PDepend\Input\Filter[]
+     * @var Filter[]
      */
     protected $filters = array();
 
     /**
      * Adds a file filter to this composite.
      *
-     * @param  \PDepend\Input\Filter $filter The new filter object.
+     * @param Filter $filter The new filter object.
+     *
      * @return void
      */
     public function append(Filter $filter)
@@ -73,9 +74,10 @@ class CompositeFilter implements Filter
      * Delegates the given <b>$localPath</b> object to all aggregated filters.
      * Returns <b>true</b> if this filter accepts the given path.
      *
-     * @param  string $relative The relative path to the specified root.
-     * @param  string $absolute The absolute path to a source file.
-     * @return boolean
+     * @param string $relative The relative path to the specified root.
+     * @param string $absolute The absolute path to a source file.
+     *
+     * @return bool
      */
     public function accept($relative, $absolute)
     {

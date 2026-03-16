@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,83 +36,51 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\DependencyInjection;
 
-use PDepend\Util\FileUtil;
-use PDepend\Util\Workarounds;
+use Exception;
+use ReflectionMethod;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration
- *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- */
-class Configuration implements ConfigurationInterface
-{
-    /**
-     * @var array(Extension)
-     */
-    private $extensions = array();
+// <AbstractConfiguration>
+// @codeCoverageIgnoreStart
+if (!class_exists('PDepend\\DependencyInjection\\AbstractConfiguration')) {
+    $typingMode = 'weak';
 
-    public function __construct(array $extensions)
-    {
-        $this->extensions = $extensions;
+    try {
+        $method = new ReflectionMethod(
+            'Symfony\\Component\\Config\\Definition\\ConfigurationInterface',
+            'getConfigTreeBuilder'
+        );
+
+        if (method_exists($method, 'hasReturnType') && $method->hasReturnType()) {
+            $typingMode = 'strong';
+        }
+    } catch (Exception $exception) {
+        // keep "weak"
     }
 
+    require_once __DIR__ . '/../../Lazy/PDepend/DependencyInjection/Configuration.' . $typingMode . '.php';
+}
+// @codeCoverageIgnoreEnd
+// </AbstractConfiguration>
+
+/**
+ * @see ConfigurationInterface
+ * @see TreeBuilder
+ */
+class Configuration extends AbstractConfiguration
+{
     /**
-     * {@inheritDoc}
+     * @param array<Extension> $extensions
      */
-    public function getConfigTreeBuilder()
+    public function __construct(array $extensions)
     {
-        $home = FileUtil::getUserHomeDirOrSysTempDir();
-        $workarounds = new Workarounds();
-
-        $defaultCacheDriver = ($workarounds->hasSerializeReferenceIssue()) ? 'memory' : 'file';
-
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('pdepend');
-
-        $rootNode
-            ->children()
-            ->arrayNode('cache')
-            ->addDefaultsIfNotSet()
-            ->children()
-            ->enumNode('driver')->defaultValue($defaultCacheDriver)->values(array('file', 'memory'))->end()
-            ->scalarNode('location')->defaultValue($home . '/.pdepend')->end()
-            ->end()
-            ->end()
-            ->arrayNode('image_convert')
-            ->addDefaultsIfNotSet()
-            ->children()
-            ->scalarNode('font_size')->defaultValue('11')->end()
-            ->scalarNode('font_family')->defaultValue('Arial')->end()
-            ->end()
-            ->end()
-            ->arrayNode('parser')
-            ->addDefaultsIfNotSet()
-            ->children()
-            ->integerNode('nesting')->defaultValue(65536)->end()
-            ->end()
-            ->end()
-            ->end();
-
-        $extensionsNode = $rootNode
-            ->children()
-            ->arrayNode('extensions')
-            ->addDefaultsIfNotSet()
-            ->children();
-
-        foreach ($this->extensions as $extension) {
-            $extensionNode = $extensionsNode->arrayNode($extension->getName());
-            $extension->getConfig($extensionNode);
-        }
-
-        return $treeBuilder;
+        $this->treeBuilderFactory = new TreeBuilderFactory($extensions);
     }
 }

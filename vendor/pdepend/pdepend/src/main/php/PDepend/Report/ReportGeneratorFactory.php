@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Report;
 
+use RuntimeException;
+use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -55,16 +57,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  *  <tag name="pdepend.logger" option="--my-custom-logger" />
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ReportGeneratorFactory
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var TaggedContainerInterface
      */
     private $container;
 
+    /**
+     * @param TaggedContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -74,10 +79,12 @@ class ReportGeneratorFactory
      * Creates a new generator or returns an existing instance for the given
      * <b>$identifier</b>.
      *
-     * @param  string $identifier The generator identifier.
-     * @param  string $fileName   The log output file name.
-     * @return \PDepend\Report\ReportGenerator
-     * @throws \RuntimeException
+     * @param string $identifier The generator identifier.
+     * @param string $fileName   The log output file name.
+     *
+     * @throws RuntimeException
+     *
+     * @return ReportGenerator
      */
     public function createGenerator($identifier, $fileName)
     {
@@ -95,7 +102,7 @@ class ReportGeneratorFactory
             }
 
             if (!$logger) {
-                throw new \RuntimeException(sprintf('Unknown generator with identifier "%s".', $identifier));
+                throw new RuntimeException(sprintf('Unknown generator with identifier "%s".', $identifier));
             }
 
             // TODO: Refactor this into an external log configurator or a similar
@@ -112,7 +119,7 @@ class ReportGeneratorFactory
     /**
      * Set of created logger instances.
      *
-     * @var \PDepend\Report\ReportGenerator[]
+     * @var ReportGenerator[]
      */
     protected $instances = array();
 }

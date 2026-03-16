@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Source\Tokenizer;
 /**
  * This struct represents a code token.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Token
@@ -53,7 +53,7 @@ class Token
     /**
      * The token type identifier.
      *
-     * @var integer
+     * @var int
      */
     public $type = null;
 
@@ -67,40 +67,40 @@ class Token
     /**
      * The start line number for this token.
      *
-     * @var integer
+     * @var int
      */
     public $startLine = null;
 
     /**
      * The end line number for this token.
      *
-     * @var integer
+     * @var int
      */
     public $endLine = null;
 
     /**
      * The start column number for this token.
      *
-     * @var integer
+     * @var int
      */
     public $startColumn = null;
 
     /**
      * The end column number for this token.
      *
-     * @var integer
+     * @var int
      */
     public $endColumn = null;
 
     /**
      * Constructs a new source token.
      *
-     * @param integer $type        The token type identifier.
-     * @param string  $image       The token image/textual representation.
-     * @param integer $startLine   The start line number for this token.
-     * @param integer $endLine     The end line number for this token.
-     * @param integer $startColumn The start column number for this token.
-     * @param integer $endColumn   The end column number for this token.
+     * @param int    $type        The token type identifier.
+     * @param string $image       The token image/textual representation.
+     * @param int    $startLine   The start line number for this token.
+     * @param int    $endLine     The end line number for this token.
+     * @param int    $startColumn The start column number for this token.
+     * @param int    $endColumn   The end column number for this token.
      */
     public function __construct($type, $image, $startLine, $endLine, $startColumn, $endColumn)
     {

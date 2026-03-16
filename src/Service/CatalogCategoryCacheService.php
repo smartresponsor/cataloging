@@ -9,7 +9,7 @@ namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
 
-final class CatalogtestsCacheService
+final class CatalogCategoryCacheService
 {
     public function __construct(private readonly CacheItemPoolInterface $pool)
     {
@@ -19,9 +19,11 @@ final class CatalogtestsCacheService
     {
         $key = 'category_tree_'.$locale;
         $item = $this->pool->getItem($key);
+
         if ($item->isHit()) {
             return $item->get();
         }
+
         $tree = [];
         $item->set($tree);
         $this->pool->save($item);

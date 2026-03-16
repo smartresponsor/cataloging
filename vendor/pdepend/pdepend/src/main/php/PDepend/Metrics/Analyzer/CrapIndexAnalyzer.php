@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -48,15 +48,19 @@ use PDepend\Metrics\Analyzer;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Source\AST\AbstractASTCallable;
 use PDepend\Source\AST\ASTArtifact;
+use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTFunction;
 use PDepend\Source\AST\ASTMethod;
+use PDepend\Source\AST\ASTNamespace;
+use PDepend\Util\Coverage\Factory;
+use PDepend\Util\Coverage\Report;
 
 /**
  * This analyzer calculates the C.R.A.P. index for methods an functions when a
  * clover coverage report was supplied. This report can be supplied by using the
  * command line option <b>--coverage-report=</b>.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, AnalyzerNodeAware
@@ -75,7 +79,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Calculated crap metrics.
      *
-     * @var array(string=>array)
+     * @var array<string, array<string, float>>
      */
     private $metrics = null;
 
@@ -83,20 +87,19 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      * The coverage report instance representing the supplied coverage report
      * file.
      *
-     * @var \PDepend\Util\Coverage\Report
+     * @var Report
      */
     private $report = null;
 
     /**
-     *
-     * @var \PDepend\Metrics\Analyzer\CyclomaticComplexityAnalyzer
+     * @var CyclomaticComplexityAnalyzer
      */
-    private $ccnAnalyzer = array();
+    private $ccnAnalyzer = null;
 
     /**
      * Returns <b>true</b> when this analyzer is enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEnabled()
     {
@@ -107,8 +110,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      * Returns the calculated metrics for the given node or an empty <b>array</b>
      * when no metrics exist for the given node.
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $artifact
-     * @return array(string=>float)
+     * @return array<string, float>
      */
     public function getNodeMetrics(ASTArtifact $artifact)
     {
@@ -122,7 +124,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      * Returns an array with analyzer class names that are required by the crap
      * index analyzers.
      *
-     * @return array(string)
+     * @return array<string>
      */
     public function getRequiredAnalyzers()
     {
@@ -132,7 +134,8 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Adds an analyzer that this analyzer depends on.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer
+     * @param CyclomaticComplexityAnalyzer $analyzer
+     *
      * @return void
      */
     public function addAnalyzer(Analyzer $analyzer)
@@ -143,7 +146,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Performs the crap index analysis.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
      * @return void
      */
     public function analyze($namespaces)
@@ -156,13 +158,14 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Performs the crap index analysis.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
+     * @param ASTArtifactList<ASTNamespace> $namespaces
+     *
      * @return void
      */
     private function doAnalyze($namespaces)
     {
         $this->metrics = array();
-        
+
         $this->ccnAnalyzer->analyze($namespaces);
 
         $this->fireStartAnalyzer();
@@ -177,7 +180,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Visits the given method.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
@@ -190,7 +192,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Visits the given function.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return void
      */
     public function visitFunction(ASTFunction $function)
@@ -201,7 +202,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Visits the given callable instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTCallable $callable
      * @return void
      */
     private function visitCallable(AbstractASTCallable $callable)
@@ -215,7 +215,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Calculates the crap index for the given callable.
      *
-     * @param  \PDepend\Source\AST\AbstractASTCallable $callable
      * @return float
      */
     private function calculateCrapIndex(AbstractASTCallable $callable)
@@ -236,7 +235,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Calculates the code coverage for the given callable object.
      *
-     * @param  \PDepend\Source\AST\AbstractASTCallable $callable
      * @return float
      */
     private function calculateCoverage(AbstractASTCallable $callable)
@@ -248,7 +246,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      * Returns a previously created report instance or creates a new report
      * instance.
      *
-     * @return \PDepend\Util\Coverage\Report
+     * @return Report
      */
     private function createOrReturnCoverageReport()
     {
@@ -261,11 +259,11 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Creates a new coverage report instance.
      *
-     * @return \PDepend\Util\Coverage\Report
+     * @return Report
      */
     private function createCoverageReport()
     {
-        $factory = new \PDepend\Util\Coverage\Factory();
+        $factory = new Factory();
         return $factory->create($this->options['coverage-report']);
     }
 }

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,8 +36,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.12
  */
 
@@ -53,16 +54,23 @@ use PDepend\Source\AST\ASTMethod;
  * This class provides methods to generate unique, but reproducable identifiers
  * for nodes generated during the parsing process.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.12
  */
 class IdBuilder
 {
     /**
+     * @var array<string, array<string, int>>
+     *
+     * @deprecated 3.0.0 This property will no longer be accessible on the public access level in next major version.
+     */
+    public $offsetInFile = array();
+
+    /**
      * Generates an identifier for the given file instance.
      *
-     * @param  \PDepend\Source\AST\ASTCompilationUnit $compilationUnit
      * @return string
      */
     public function forFile(ASTCompilationUnit $compilationUnit)
@@ -73,7 +81,6 @@ class IdBuilder
     /**
      * Generates an identifier for the given function instance.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return string
      */
     public function forFunction(ASTFunction $function)
@@ -84,23 +91,21 @@ class IdBuilder
     /**
      * Generates an identifier for the given class, interface or trait instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
      * @return string
      */
     public function forClassOrInterface(AbstractASTType $type)
     {
-
         return $this->forOffsetItem(
             $type,
-            ltrim(strrchr(strtolower(get_class($type)), '_'), '_')
+            ltrim(strrchr(strtolower(get_class($type)), '_') ?: '', '_')
         );
     }
 
     /**
      * Generates an identifier for the given source item.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $artifact
-     * @param  string                                  $prefix   The item type identifier.
+     * @param string $prefix The item type identifier.
+     *
      * @return string
      */
     protected function forOffsetItem(AbstractASTArtifact $artifact, $prefix)
@@ -116,7 +121,6 @@ class IdBuilder
     /**
      * Generates an identifier for the given method instance.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return string
      */
     public function forMethod(ASTMethod $method)
@@ -131,7 +135,8 @@ class IdBuilder
     /**
      * Creates a base 36 hash for the given string.
      *
-     * @param  string $string The raw input identifier/string.
+     * @param string $string The raw input identifier/string.
+     *
      * @return string
      */
     protected function hash($string)
@@ -143,8 +148,9 @@ class IdBuilder
      * Returns the node offset/occurence of the given <b>$string</b> within a
      * file.
      *
-     * @param  string $file   The file identifier.
-     * @param  string $string The node identifier.
+     * @param string $file   The file identifier.
+     * @param string $string The node identifier.
+     *
      * @return string
      */
     protected function getOffsetInFile($file, $string)
@@ -156,7 +162,7 @@ class IdBuilder
         }
         return sprintf(
             '%02s',
-            base_convert($this->offsetInFile[$file][$string], 10, 36)
+            base_convert((string)$this->offsetInFile[$file][$string], 10, 36)
         );
     }
 }

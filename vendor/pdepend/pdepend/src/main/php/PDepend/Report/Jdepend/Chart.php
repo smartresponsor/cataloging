@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,27 +36,30 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Report\Jdepend;
 
+use DOMDocument;
+use DOMElement;
 use PDepend\Metrics\Analyzer;
 use PDepend\Metrics\Analyzer\DependencyAnalyzer;
 use PDepend\Report\CodeAwareGenerator;
 use PDepend\Report\FileAwareGenerator;
 use PDepend\Report\NoLogOutputException;
 use PDepend\Source\AST\ASTArtifactList;
+use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\ASTVisitor\AbstractASTVisitor;
-use PDepend\Util\Utf8Util;
 use PDepend\Util\FileUtil;
 use PDepend\Util\ImageConvert;
+use PDepend\Util\Utf8Util;
 
 /**
  * Generates a chart with the aggregated metrics.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGenerator
@@ -71,14 +74,14 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
     /**
      * The context source code.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList
+     * @var ASTArtifactList<ASTNamespace>
      */
     private $code = null;
 
     /**
      * The context analyzer instance.
      *
-     * @var \PDepend\Metrics\Analyzer\DependencyAnalyzer
+     * @var Analyzer\DependencyAnalyzer
      */
     private $analyzer = null;
 
@@ -98,7 +101,7 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
      * Returns an <b>array</b> with accepted analyzer types. These types can be
      * concrete analyzer classes or one of the descriptive analyzer interfaces.
      *
-     * @return array(string)
+     * @return array<string>
      */
     public function getAcceptedAnalyzers()
     {
@@ -108,7 +111,8 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
     /**
      * Sets the context code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList $artifacts
+     * @param ASTArtifactList<ASTNamespace> $artifacts
+     *
      * @return void
      */
     public function setArtifacts(ASTArtifactList $artifacts)
@@ -120,8 +124,9 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
      * Adds an analyzer to log. If this logger accepts the given analyzer it
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
-     * @return boolean
+     * @param Analyzer $analyzer The analyzer to log.
+     *
+     * @return bool
      */
     public function log(Analyzer $analyzer)
     {
@@ -136,8 +141,9 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
     /**
      * Closes the logger process and writes the output file.
      *
+     * @throws NoLogOutputException If the no log target exists.
+     *
      * @return void
-     * @throws \PDepend\Report\NoLogOutputException If the no log target exists.
      */
     public function close()
     {
@@ -148,8 +154,8 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
 
         $bias = 0.1;
 
-        $svg = new \DOMDocument('1.0', 'UTF-8');
-        $svg->load(dirname(__FILE__) . '/chart.svg');
+        $svg = new DOMDocument('1.0', 'UTF-8');
+        $svg->loadXML(file_get_contents(dirname(__FILE__) . '/chart.svg'));
 
         $layer = $svg->getElementById('jdepend.layer');
 
@@ -162,59 +168,16 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
         $legendTemplate = $svg->getElementById('jdepend.legend');
         $legendTemplate->removeAttribute('xml:id');
 
-        $max = 0;
-        $min = 0;
-
-        $items = array();
-        foreach ($this->code as $namespace) {
-            if (!$namespace->isUserDefined()) {
+        foreach ($this->getItems() as $item) {
+            $element = $item['distance'] < $bias ? $good : $bad;
+            $ellipse = $element->cloneNode(true);
+            if (!$ellipse instanceof DOMElement) {
                 continue;
             }
 
-            $metrics = $this->analyzer->getStats($namespace);
-
-            if (count($metrics) === 0) {
-                continue;
-            }
-
-            $size = $metrics['cc'] + $metrics['ac'];
-            if ($size > $max) {
-                $max = $size;
-            } elseif ($min === 0 || $size < $min) {
-                $min = $size;
-            }
-
-            $items[] = array(
-                'size'         =>  $size,
-                'abstraction'  =>  $metrics['a'],
-                'instability'  =>  $metrics['i'],
-                'distance'     =>  $metrics['d'],
-                'name'         =>  Utf8Util::ensureEncoding($namespace->getName())
-            );
-        }
-
-        $diff = (($max - $min) / 10);
-
-        // Sort items by size
-        usort(
-            $items,
-            create_function('$a, $b', 'return ($a["size"] - $b["size"]);')
-        );
-
-        foreach ($items as $item) {
-            if ($item['distance'] < $bias) {
-                $ellipse = $good->cloneNode(true);
-            } else {
-                $ellipse = $bad->cloneNode(true);
-            }
-            $r = 15;
-            if ($diff !== 0) {
-                $r = 5 + (($item['size'] - $min) / $diff);
-            }
-
-            $a = $r / 15;
-            $e = (50 - $r) + ($item['abstraction'] * 320);
-            $f = (20 - $r + 190) - ($item['instability'] * 190);
+            $a = $item['ratio'] / 15;
+            $e = (50 - $item['ratio']) + ($item['abstraction'] * 320);
+            $f = (20 - $item['ratio'] + 190) - ($item['instability'] * 190);
 
             $transform = "matrix({$a}, 0, 0, {$a}, {$e}, {$f})";
 
@@ -228,12 +191,13 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
             if ($result && count($found)) {
                 $angle = rand(0, 314) / 100 - 1.57;
                 $legend = $legendTemplate->cloneNode(true);
-                $legend->setAttribute('x', $e + $r * (1 + cos($angle)));
-                $legend->setAttribute('y', $f + $r * (1 + sin($angle)));
-                $legend->nodeValue = $found[1];
-                $legendTemplate->parentNode->appendChild($legend);
+                if ($legend instanceof DOMElement) {
+                    $legend->setAttribute('x', (string)($e + $item['ratio'] * (1 + cos($angle))));
+                    $legend->setAttribute('y', (string)($f + $item['ratio'] * (1 + sin($angle))));
+                    $legend->nodeValue = $found[1];
+                    $legendTemplate->parentNode->appendChild($legend);
+                }
             }
-
         }
 
         $bad->parentNode->removeChild($bad);
@@ -248,5 +212,56 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
 
         // Remove temp file
         unlink($temp);
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getItems()
+    {
+        $items = array();
+        foreach ($this->code as $namespace) {
+            if (!$namespace->isUserDefined()) {
+                continue;
+            }
+
+            $metrics = $this->analyzer->getStats($namespace);
+
+            if (count($metrics) === 0) {
+                continue;
+            }
+
+            $items[] = array(
+                'size'         =>  $metrics['cc'] + $metrics['ac'],
+                'abstraction'  =>  $metrics['a'],
+                'instability'  =>  $metrics['i'],
+                'distance'     =>  $metrics['d'],
+                'name'         =>  Utf8Util::ensureEncoding($namespace->getName())
+            );
+        }
+
+        // Sort items by size
+        usort(
+            $items,
+            function ($a, $b) {
+                return ($a['size'] - $b['size']);
+            }
+        );
+
+        if ($items) {
+            $max = $items[count($items) - 1]['size'];
+            $min = $items[0]['size'];
+
+            $diff = (($max - $min) / 10);
+
+            foreach ($items as &$item) {
+                $item['ratio'] = 15;
+                if ($diff !== 0) {
+                    $item['ratio'] = 5 + (($item['size'] - $min) / $diff);
+                }
+            }
+        }
+
+        return $items;
     }
 }

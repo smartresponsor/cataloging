@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Report\Jdepend;
 
+use DOMDocument;
+use DOMElement;
+use DOMNode;
 use PDepend\Metrics\Analyzer;
 use PDepend\Metrics\Analyzer\DependencyAnalyzer;
 use PDepend\Report\CodeAwareGenerator;
@@ -49,6 +52,7 @@ use PDepend\Report\FileAwareGenerator;
 use PDepend\Report\NoLogOutputException;
 use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
+use PDepend\Source\AST\ASTCompilationUnit;
 use PDepend\Source\AST\ASTInterface;
 use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\ASTVisitor\AbstractASTVisitor;
@@ -58,7 +62,7 @@ use PDepend\Util\Utf8Util;
  * Generates an xml document with the aggregated metrics. The format is borrowed
  * from <a href="http://clarkware.com/software/JDepend.html">JDepend</a>.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGenerator
@@ -71,30 +75,30 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     private $logFile = null;
 
     /**
-     * The raw {@link \PDepend\Source\AST\ASTNamespace} instances.
+     * The raw {@link ASTNamespace} instances.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList
+     * @var ASTArtifactList<ASTNamespace>
      */
     protected $code = null;
 
     /**
      * Set of all analyzed files.
      *
-     * @var \PDepend\Source\AST\ASTCompilationUnit[]
+     * @var ASTCompilationUnit[]
      */
     protected $fileSet = array();
 
     /**
      * List of all generated project metrics.
      *
-     * @var array(string=>mixed)
+     * @var array<string, mixed>
      */
     protected $projectMetrics = array();
 
     /**
      * List of all collected node metrics.
      *
-     * @var array(string=>array)
+     * @var array<string, array<string, array<int, string>>>
      */
     protected $nodeMetrics = array();
 
@@ -108,28 +112,28 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * The Packages dom element.
      *
-     * @var \DOMElement
+     * @var DOMNode
      */
     protected $packages = null;
 
     /**
      * The Cycles dom element.
      *
-     * @var \DOMElement
+     * @var DOMNode
      */
     protected $cycles = null;
 
     /**
      * The concrete classes element for the current package.
      *
-     * @var \DOMElement
+     * @var DOMElement
      */
     protected $concreteClasses = null;
 
     /**
      * The abstract classes element for the current package.
      *
-     * @var \DOMElement
+     * @var DOMElement
      */
     protected $abstractClasses = null;
 
@@ -149,7 +153,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * Returns an <b>array</b> with accepted analyzer types. These types can be
      * concrete analyzer classes or one of the descriptive analyzer interfaces.
      *
-     * @return array(string)
+     * @return array<string>
      */
     public function getAcceptedAnalyzers()
     {
@@ -159,7 +163,8 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Sets the context code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList $artifacts
+     * @param ASTArtifactList<ASTNamespace> $artifacts
+     *
      * @return void
      */
     public function setArtifacts(ASTArtifactList $artifacts)
@@ -171,8 +176,9 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * Adds an analyzer to log. If this logger accepts the given analyzer it
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
-     * @return boolean
+     * @param Analyzer $analyzer The analyzer to log.
+     *
+     * @return bool
      */
     public function log(Analyzer $analyzer)
     {
@@ -187,8 +193,9 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Closes the logger process and writes the output file.
      *
+     * @throws NoLogOutputException If the no log target exists.
+     *
      * @return void
-     * @throws \PDepend\Report\NoLogOutputException If the no log target exists.
      */
     public function close()
     {
@@ -197,7 +204,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
             throw new NoLogOutputException($this);
         }
 
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument('1.0', 'UTF-8');
 
         $dom->formatOutput = true;
 
@@ -211,13 +218,13 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
         }
 
         $dom->appendChild($jdepend);
-        $dom->save($this->logFile);
+        $buffer = $dom->saveXML();
+        file_put_contents($this->logFile, $buffer);
     }
 
     /**
      * Visits a class node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
      */
     public function visitClass(ASTClass $class)
@@ -246,7 +253,6 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a code interface object.
      *
-     * @param  \PDepend\Source\AST\ASTInterface $interface
      * @return void
      */
     public function visitInterface(ASTInterface $interface)
@@ -271,7 +277,6 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a package node.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace $namespace
      * @return void
      */
     public function visitNamespace(ASTNamespace $namespace)

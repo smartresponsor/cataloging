@@ -2,58 +2,38 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @author Manuel Pichler <mapi@phpmd.org>
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license https://opensource.org/licenses/bsd-license.php BSD License
+ * @link http://phpmd.org/
  */
 
 namespace PHPMD\Renderer;
 
 use PHPMD\AbstractRenderer;
+use PHPMD\Console\OutputInterface;
+use PHPMD\Renderer\Option\Color;
+use PHPMD\Renderer\Option\Verbose;
 use PHPMD\Report;
 
 /**
  * This renderer output a textual log with all found violations and suspect
  * software artifacts.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
-class TextRenderer extends AbstractRenderer
+class TextRenderer extends AbstractRenderer implements Verbose, Color
 {
+    protected $columnSpacing = 2;
+
+    protected $verbosityLevel = OutputInterface::VERBOSITY_NORMAL;
+
+    protected $colored = false;
 
     /**
      * This method will be called when the engine has finished the source analysis
@@ -65,13 +45,42 @@ class TextRenderer extends AbstractRenderer
     public function renderReport(Report $report)
     {
         $writer = $this->getWriter();
+        $longestLocationLength = 0;
+        $longestRuleNameLength = 0;
+        $violations = array();
 
         foreach ($report->getRuleViolations() as $violation) {
-            $writer->write($violation->getFileName());
-            $writer->write(':');
-            $writer->write($violation->getBeginLine());
-            $writer->write("\t");
-            $writer->write($violation->getDescription());
+            $location = $violation->getFileName().':'.$violation->getBeginLine();
+            $rule = $violation->getRule();
+            $ruleName = $rule->getName();
+            $ruleSet = $rule->getRuleSetName();
+            $locationLength = mb_strlen($location);
+            $ruleNameLength = mb_strlen($ruleName);
+            $longestLocationLength = max($longestLocationLength, $locationLength);
+            $longestRuleNameLength = max($longestRuleNameLength, $ruleNameLength);
+            $violations[] = array($violation, $location, $ruleName, $ruleSet, $locationLength, $ruleNameLength);
+        }
+
+        foreach ($violations as $data) {
+            list($violation, $location, $ruleName, $ruleSet, $locationLength, $ruleNameLength) = $data;
+
+            if ($this->verbosityLevel < OutputInterface::VERBOSITY_VERBOSE) {
+                $writer->write($location);
+                $writer->write(str_repeat(' ', $longestLocationLength + $this->columnSpacing - $locationLength));
+            }
+
+            $writer->write($this->applyColor($ruleName, 'yellow'));
+            $writer->write(str_repeat(' ', $longestRuleNameLength + $this->columnSpacing - $ruleNameLength));
+            $writer->write($this->applyColor($violation->getDescription(), 'red'));
+
+            if ($this->verbosityLevel >= OutputInterface::VERBOSITY_VERBOSE) {
+                $writer->write(PHP_EOL);
+                $writer->write('📁 in ' . preg_replace('/:(\d+)$/', ' on line $1', $location) . PHP_EOL);
+                $set = preg_replace('/rules$/', '', strtolower(str_replace(' ', '', $ruleSet)));
+                $url = 'https://phpmd.org/rules/' . $set . '.html#' . strtolower($ruleName);
+                $writer->write('🔗 ' . $set . '.xml ' . $url . PHP_EOL);
+            }
+
             $writer->write(PHP_EOL);
         }
 
@@ -81,5 +90,30 @@ class TextRenderer extends AbstractRenderer
             $writer->write($error->getMessage());
             $writer->write(PHP_EOL);
         }
+    }
+
+    public function setVerbosityLevel($level)
+    {
+        $this->verbosityLevel = (int)$level;
+    }
+
+    public function setColored($colored)
+    {
+        $this->colored = $colored;
+    }
+
+    protected function applyColor($text, $color)
+    {
+        if (!$this->colored) {
+            return $text;
+        }
+
+        $colors = array(
+            'yellow' => 33,
+            'red' => 31,
+        );
+        $color = isset($colors[$color]) ? $colors[$color] : $color;
+
+        return "\033[{$color}m{$text}\033[0m";
     }
 }

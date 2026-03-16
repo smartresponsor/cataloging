@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,31 +36,30 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Report;
 
+use LogicException;
+
 /**
  * This type of exception is thrown, if a required log target/log file wasn't
  * configured for the current logger instance.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
-class NoLogOutputException extends \LogicException
+class NoLogOutputException extends LogicException
 {
     /**
      * Creates a new log target exception for the given log instance.
-     *
-     * @param \PDepend\Report\ReportGenerator $logger
      */
     public function __construct(ReportGenerator $logger)
     {
         $className = get_class($logger);
-        $message   = "The log target is not configured for '{$className}'.";
-        
-        parent::__construct($message);
+
+        parent::__construct("The log target is not configured for '$className'.");
     }
 }

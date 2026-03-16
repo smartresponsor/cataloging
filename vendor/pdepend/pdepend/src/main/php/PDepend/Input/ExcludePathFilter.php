@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Input;
 /**
  * Filters a given file path against a blacklist with disallow path fragments.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ExcludePathFilter implements Filter
@@ -53,7 +53,8 @@ class ExcludePathFilter implements Filter
     /**
      * Regular expression that should not match against the relative file paths.
      *
-     * @var   string
+     * @var string
+     *
      * @since 0.10.0
      */
     protected $relative = '';
@@ -61,7 +62,8 @@ class ExcludePathFilter implements Filter
     /**
      * Regular expression that should not match against the absolute file paths.
      *
-     * @var   string
+     * @var string
+     *
      * @since 0.10.0
      */
     protected $absolute = '';
@@ -70,14 +72,14 @@ class ExcludePathFilter implements Filter
      * Constructs a new exclude path filter instance and accepts an array of
      * exclude pattern as argument.
      *
-     * @param array $patterns List of exclude file path patterns.
+     * @param array<string> $patterns List of exclude file path patterns.
      */
     public function __construct(array $patterns)
     {
         $quoted = array_map('preg_quote', $patterns);
 
         $this->relative = '(' . str_replace('\*', '.*', join('|', $quoted)) . ')i';
-        $this->absolute = '(^(' . str_replace('\*', '.*', join('|', $quoted)) .'))i';
+        $this->absolute = '(^(' . str_replace('\*', '.*', join('|', $quoted)) . '))i';
     }
 
     /**
@@ -86,7 +88,7 @@ class ExcludePathFilter implements Filter
      * @param string $relative The relative path to the specified root.
      * @param string $absolute The absolute path to a source file.
      *
-     * @return boolean
+     * @return bool
      */
     public function accept($relative, $absolute)
     {
@@ -99,7 +101,8 @@ class ExcludePathFilter implements Filter
      *
      * @param string $path The absolute path to a source file.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.10.0
      */
     protected function notAbsolute($path)
@@ -113,7 +116,8 @@ class ExcludePathFilter implements Filter
      *
      * @param string $path The relative path to a source file.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.10.0
      */
     protected function notRelative($path)

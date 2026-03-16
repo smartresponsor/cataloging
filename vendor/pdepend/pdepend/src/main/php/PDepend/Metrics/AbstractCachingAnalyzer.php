@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,22 +36,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 1.0.0
  */
 
 namespace PDepend\Metrics;
 
 use PDepend\Source\AST\AbstractASTArtifact;
+use PDepend\Source\AST\ASTClass;
+use PDepend\Source\AST\ASTCompilationUnit;
+use PDepend\Source\AST\ASTFunction;
+use PDepend\Source\AST\ASTInterface;
+use PDepend\Source\AST\ASTMethod;
 use PDepend\Util\Cache\CacheDriver;
 
 /**
  * This abstract class provides an analyzer that provides the basic infrastructure
  * for caching.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 1.0.0
  */
 abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements AnalyzerCacheAware
@@ -59,28 +66,27 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
     /**
      * Collected node metrics
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $metrics = null;
 
     /**
      * Metrics restored from the cache. This property is only used temporary.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     private $metricsCached = array();
 
     /**
      * Injected cache driver.
      *
-     * @var \PDepend\Util\Cache\CacheDriver
+     * @var CacheDriver
      */
     private $cache;
 
     /**
      * Setter method for the system wide used cache.
      *
-     * @param  \PDepend\Util\Cache\CacheDriver $cache
      * @return void
      */
     public function setCache(CacheDriver $cache)
@@ -91,7 +97,7 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
     /**
      * Getter method for the system wide used cache.
      *
-     * @return \PDepend\Util\Cache\CacheDriver $cache
+     * @return CacheDriver $cache
      */
     public function getCache()
     {
@@ -103,8 +109,9 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
      * restored the metrics it will return <b>TRUE</b>, otherwise the return
      * value will be <b>FALSE</b>.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $node
-     * @return boolean
+     * @param ASTClass|ASTCompilationUnit|ASTFunction|ASTInterface|ASTMethod $node
+     *
+     * @return bool
      */
     protected function restoreFromCache(AbstractASTArtifact $node)
     {

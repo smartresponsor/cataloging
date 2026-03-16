@@ -2,64 +2,59 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license   https://opensource.org/licenses/bsd-license.php BSD License
+ * @link      http://phpmd.org/
  */
 
 namespace PHPMD\TextUI;
 
+use Exception;
+use PHPMD\Baseline\BaselineFileFinder;
+use PHPMD\Baseline\BaselineMode;
+use PHPMD\Baseline\BaselineSetFactory;
+use PHPMD\Baseline\BaselineValidator;
+use PHPMD\Cache\ResultCacheEngineFactory;
+use PHPMD\Cache\ResultCacheKeyFactory;
+use PHPMD\Cache\ResultCacheStateFactory;
+use PHPMD\Console\Output;
+use PHPMD\Console\OutputInterface;
+use PHPMD\Console\StreamOutput;
 use PHPMD\PHPMD;
+use PHPMD\Renderer\RendererFactory;
+use PHPMD\Report;
 use PHPMD\RuleSetFactory;
+use PHPMD\Utility\Paths;
 use PHPMD\Writer\StreamWriter;
 
 /**
  * This class provides a command line interface for PHPMD
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Command
 {
     /**
      * Exit codes used by the phpmd command line tool.
      */
-    const EXIT_SUCCESS   = 0,
-          EXIT_EXCEPTION = 1,
-          EXIT_VIOLATION = 2;
+    const EXIT_SUCCESS = 0,
+        EXIT_EXCEPTION = 1,
+        EXIT_VIOLATION = 2,
+        EXIT_ERROR = 3;
+
+    /** @var Output */
+    private $output;
+
+    public function __construct(Output $output)
+    {
+        $this->output = $output;
+    }
 
     /**
      * This method creates a PHPMD instance and configures this object based
@@ -68,24 +63,26 @@ class Command
      * The return value of this method can be used as an exit code. A value
      * equal to <b>EXIT_SUCCESS</b> means that no violations or errors were
      * found in the analyzed code. Otherwise this method will return a value
-     * equal to <b>EXIT_VIOLATION</b>.
+     * equal to <b>EXIT_VIOLATION</b> or <b>EXIT_ERROR</b> respectively.
      *
-     * The use of flag <b>--ignore-violations-on-exit</b> will result to a
-     * <b>EXIT_SUCCESS</b> even if any violation is found.
+     * The use of the flags <b>--ignore-violations-on-exit</b> and
+     * <b>--ignore-errors-on-exit</b> will result to a <b>EXIT_SUCCESS</b>
+     * even if any violation or error is found.
      *
      * @param \PHPMD\TextUI\CommandLineOptions $opts
-     * @param \PHPMD\RuleSetFactory $ruleSetFactory
+     * @param \PHPMD\RuleSetFactory            $ruleSetFactory
      * @return integer
      */
     public function run(CommandLineOptions $opts, RuleSetFactory $ruleSetFactory)
     {
         if ($opts->hasVersion()) {
             fwrite(STDOUT, sprintf('PHPMD %s', $this->getVersion()) . PHP_EOL);
+
             return self::EXIT_SUCCESS;
         }
 
         // Create a report stream
-        $stream = $opts->getReportFile() ? fopen($opts->getReportFile(), 'wb') : STDOUT;
+        $stream = $opts->getReportFile() ?: STDOUT;
 
         // Create renderer and configure output
         $renderer = $opts->createRenderer();
@@ -95,13 +92,35 @@ class Command
 
         foreach ($opts->getReportFiles() as $reportFormat => $reportFile) {
             $reportRenderer = $opts->createRenderer($reportFormat);
-            $reportRenderer->setWriter(new StreamWriter(fopen($reportFile, 'wb')));
+            $reportRenderer->setWriter(new StreamWriter($reportFile));
 
             $renderers[] = $reportRenderer;
         }
 
+        // Configure baseline violations
+        $report       = null;
+        $finder       = new BaselineFileFinder($opts);
+        $baselineFile = null;
+        if ($opts->generateBaseline() === BaselineMode::GENERATE) {
+            // overwrite any renderer with the baseline renderer
+            $renderers = array(RendererFactory::createBaselineRenderer(new StreamWriter($finder->notNull()->find())));
+        } elseif ($opts->generateBaseline() === BaselineMode::UPDATE) {
+            $baselineFile = $finder->notNull()->existingFile()->find();
+            $baseline     = BaselineSetFactory::fromFile(Paths::getRealPath($baselineFile));
+            $renderers    = array(RendererFactory::createBaselineRenderer(new StreamWriter($baselineFile)));
+            $report       = new Report(new BaselineValidator($baseline, BaselineMode::UPDATE));
+        } else {
+            // try to locate a baseline file and read it
+            $baselineFile = $finder->existingFile()->find();
+            if ($baselineFile !== null) {
+                $baseline = BaselineSetFactory::fromFile(Paths::getRealPath($baselineFile));
+                $report   = new Report(new BaselineValidator($baseline, BaselineMode::NONE));
+            }
+        }
+
         // Configure a rule set factory
         $ruleSetFactory->setMinimumPriority($opts->getMinimumPriority());
+        $ruleSetFactory->setMaximumPriority($opts->getMaximumPriority());
         if ($opts->hasStrict()) {
             $ruleSetFactory->setStrict();
         }
@@ -110,7 +129,7 @@ class Command
         $phpmd->setOptions(
             array_filter(
                 array(
-                    'coverage' => $opts->getCoverageReport()
+                    'coverage' => $opts->getCoverageReport(),
                 )
             )
         );
@@ -122,19 +141,40 @@ class Command
 
         $ignore = $opts->getIgnore();
         if ($ignore !== null) {
-            $phpmd->setIgnorePattern(explode(',', $ignore));
+            $phpmd->addIgnorePatterns(explode(',', $ignore));
+        }
+
+        $ignorePattern = $ruleSetFactory->getIgnorePattern($opts->getRuleSets());
+        $ruleSetList   = $ruleSetFactory->createRuleSets($opts->getRuleSets());
+
+        // Configure Result Cache Engine
+        if ($opts->generateBaseline() === BaselineMode::NONE) {
+            $cacheEngineFactory = new ResultCacheEngineFactory(
+                $this->output,
+                new ResultCacheKeyFactory(getcwd(), $baselineFile),
+                new ResultCacheStateFactory()
+            );
+            $phpmd->setResultCache($cacheEngineFactory->create(getcwd(), $opts, $ruleSetList));
         }
 
         $phpmd->processFiles(
             $opts->getInputPath(),
-            $opts->getRuleSets(),
+            $ignorePattern,
             $renderers,
-            $ruleSetFactory
+            $ruleSetList,
+            $report !== null ? $report : new Report()
         );
 
-        if ($phpmd->hasViolations() && !$opts->ignoreViolationsOnExit()) {
+        if ($phpmd->hasErrors() && !$opts->ignoreErrorsOnExit()) {
+            return self::EXIT_ERROR;
+        }
+
+        if ($phpmd->hasViolations()
+            && !$opts->ignoreViolationsOnExit()
+            && $opts->generateBaseline() === BaselineMode::NONE) {
             return self::EXIT_VIOLATION;
         }
+
         return self::EXIT_SUCCESS;
     }
 
@@ -149,9 +189,10 @@ class Command
 
         $version = '@package_version@';
         if (file_exists($build)) {
-            $data = @parse_ini_file($build);
+            $data    = @parse_ini_file($build);
             $version = $data['project.version'];
         }
+
         return $version;
     }
 
@@ -159,24 +200,40 @@ class Command
      * The main method that can be used by a calling shell script, the return
      * value can be used as exit code.
      *
-     * @param array $args The raw command line arguments array.
-     *
+     * @param string[] $args The raw command line arguments array.
      * @return integer
      */
     public static function main(array $args)
     {
+        $options = null;
+
         try {
             $ruleSetFactory = new RuleSetFactory();
-            $options = new CommandLineOptions($args, $ruleSetFactory->listAvailableRuleSets());
-            $command = new Command();
+            $options        = new CommandLineOptions($args, $ruleSetFactory->listAvailableRuleSets());
+            $errorFile      = $options->getErrorFile();
+            $errorStream    = new StreamWriter($errorFile ?: STDERR);
+            $output         = new StreamOutput($errorStream->getStream(), $options->getVerbosity());
+            $command        = new self($output);
+
+            foreach ($options->getDeprecations() as $deprecation) {
+                $output->write($deprecation . PHP_EOL . PHP_EOL);
+            }
 
             $exitCode = $command->run($options, $ruleSetFactory);
-        } catch (\Exception $e) {
-            fwrite(STDERR, $e->getMessage());
-            fwrite(STDERR, PHP_EOL);
-            
+            unset($errorStream);
+        } catch (Exception $e) {
+            $file = $options ? $options->getErrorFile() : null;
+            $writer = new StreamWriter($file ?: STDERR);
+            $writer->write($e->getMessage() . PHP_EOL);
+
+            if ($options && $options->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
+                $writer->write($e->getFile() . ':' . $e->getLine() . PHP_EOL);
+                $writer->write($e->getTraceAsString() . PHP_EOL);
+            }
+
             $exitCode = self::EXIT_EXCEPTION;
         }
+
         return $exitCode;
     }
 }

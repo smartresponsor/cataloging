@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,13 +45,19 @@ namespace PDepend\Metrics\Analyzer;
 use PDepend\Metrics\AbstractAnalyzer;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Source\AST\ASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
+use PDepend\Source\AST\ASTMemberPrimaryPrefix;
+use PDepend\Source\AST\ASTMethodPostfix;
+use PDepend\Source\AST\ASTNamespace;
+use PDepend\Source\AST\ASTProperty;
+use PDepend\Source\AST\ASTPropertyPostfix;
+use PDepend\Source\AST\ASTSelfReference;
+use PDepend\Source\AST\ASTVariable;
 
 /**
  * This analyzer implements several metrics that describe cohesion of classes
  * and namespaces.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
@@ -64,7 +70,7 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
     /**
      * Collected cohesion metrics for classes.
      *
-     * @var array
+     * @var array<string, array<string, integer>>
      */
     private $nodeMetrics = array();
 
@@ -81,8 +87,7 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
      * )
      * </code>
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $artifact
-     * @return array(string=>mixed)
+     * @return array<string, integer>
      */
     public function getNodeMetrics(ASTArtifact $artifact)
     {
@@ -93,9 +98,7 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
     }
 
     /**
-     * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
-     *
-     * @param \PDepend\Source\AST\ASTNamespace[] $namespaces
+     * Processes all {@link ASTNamespace} code nodes.
      *
      * @return void
      */
@@ -111,7 +114,7 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
     }
 
     /*
-    public function visitProperty(\PDepend\Source\AST\ASTProperty $property)
+    public function visitProperty(ASTProperty $property)
     {
         $this->fireStartProperty($property);
         echo ltrim($property->getName(), '$'), PHP_EOL;
@@ -127,24 +130,24 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
         );
         foreach ($prefixes as $prefix) {
             $variable = $prefix->getChild(0);
-            if ($variable instanceof \PDepend\Source\AST\ASTVariable
+            if ($variable instanceof ASTVariable
                 && $variable->isThis()
             ) {
                 echo "\$this->";
-            } elseif ($variable instanceof \PDepend\Source\AST\ASTSelfReference) {
+            } elseif ($variable instanceof ASTSelfReference) {
                 echo "self::";
             } else {
                 continue;
             }
 
             $next = $prefix->getChild(1);
-            if ($next instanceof \PDepend\Source\AST\ASTMemberPrimaryPrefix) {
+            if ($next instanceof ASTMemberPrimaryPrefix) {
                 $next = $next->getChild(0);
             }
 
-            if ($next instanceof \PDepend\Source\AST\ASTPropertyPostfix) {
+            if ($next instanceof ASTPropertyPostfix) {
                 echo $next->getImage(), PHP_EOL;
-            } elseif ($next instanceof \PDepend\Source\AST\ASTMethodPostfix) {
+            } elseif ($next instanceof ASTMethodPostfix) {
                 echo $next->getImage(), '()', PHP_EOL;
             }
         }

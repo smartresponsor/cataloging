@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
+
+use InvalidArgumentException;
+use OutOfBoundsException;
+use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * This class represents a field or property declaration of a class.
@@ -60,17 +65,43 @@ namespace PDepend\Source\AST;
  * }
  * </code>
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
-class ASTFieldDeclaration extends ASTNode
+class ASTFieldDeclaration extends AbstractASTNode
 {
+    /**
+     * Checks if this parameter has a type.
+     *
+     * @return bool
+     */
+    public function hasType()
+    {
+        return (reset($this->nodes) instanceof ASTType);
+    }
+
+    /**
+     * Returns the type of this parameter.
+     *
+     * @return ASTType
+     */
+    public function getType()
+    {
+        $child = $this->getChild(0);
+        if ($child instanceof ASTType) {
+            return $child;
+        }
+
+        throw new OutOfBoundsException('The parameter does not have a type specification.');
+    }
+
     /**
      * This method returns a OR combined integer of the declared modifiers for
      * this property.
      *
-     * @return integer
+     * @return int
      */
     public function getModifiers()
     {
@@ -84,20 +115,22 @@ class ASTFieldDeclaration extends ASTNode
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param integer $modifiers The declared modifiers for this node.
+     * @param int $modifiers The declared modifiers for this node.
+     *
+     * @throws InvalidArgumentException If the given modifier contains unexpected values.
      *
      * @return void
-     * @throws \InvalidArgumentException If the given modifier contains unexpected values.
      */
     public function setModifiers($modifiers)
     {
         $expected = ~State::IS_PUBLIC
                   & ~State::IS_PROTECTED
                   & ~State::IS_PRIVATE
-                  & ~State::IS_STATIC;
+                  & ~State::IS_STATIC
+                  & ~State::IS_READONLY;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Invalid field modifiers given, allowed modifiers are ' .
                 'IS_PUBLIC, IS_PROTECTED, IS_PRIVATE and IS_STATIC.'
             );
@@ -110,7 +143,7 @@ class ASTFieldDeclaration extends ASTNode
      * Returns <b>true</b> if this node is marked as public, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -121,7 +154,7 @@ class ASTFieldDeclaration extends ASTNode
      * Returns <b>true</b> if this node is marked as protected, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -132,7 +165,7 @@ class ASTFieldDeclaration extends ASTNode
      * Returns <b>true</b> if this node is marked as private, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -143,7 +176,7 @@ class ASTFieldDeclaration extends ASTNode
      * Returns <b>true</b> when this node is declared as static, otherwise
      * the returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -151,26 +184,12 @@ class ASTFieldDeclaration extends ASTNode
     }
 
     /**
-     * Accept method of the visitor design pattern. This method will be called
-     * by a visitor during tree traversal.
-     *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
-     *
-     * @return mixed
-     * @since  0.9.12
-     */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
-    {
-        return $visitor->visitFieldDeclaration($this, $data);
-    }
-
-    /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.10.4
-     * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
+     * @see    ASTNode#getMetadataSize()
      */
     protected function getMetadataSize()
     {

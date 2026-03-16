@@ -2,79 +2,68 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since      0.2.6
+ * @author Manuel Pichler <mapi@phpmd.org>
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license https://opensource.org/licenses/bsd-license.php BSD License
+ * @link http://phpmd.org/
  */
 
 namespace PHPMD\Rule;
 
+use PDepend\Source\AST\ASTArguments;
+use PDepend\Source\AST\ASTArrayIndexExpression;
+use PDepend\Source\AST\ASTFieldDeclaration;
+use PDepend\Source\AST\ASTMemberPrimaryPrefix;
+use PDepend\Source\AST\ASTPropertyPostfix;
+use PDepend\Source\AST\ASTVariable;
+use PDepend\Source\AST\ASTVariableDeclarator;
 use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
 use PHPMD\Node\ASTNode;
+use ReflectionException;
+use ReflectionFunction;
 
 /**
  * Base class for rules that rely on local variables.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since     0.2.6
+ * @since 0.2.6
  */
 abstract class AbstractLocalVariable extends AbstractRule
 {
+    /**
+     * @var array Self reference class names.
+     */
+    protected $selfReferences = array('self', 'static');
+
     /**
      * PHP super globals that are available in all php scopes, so that they
      * can never be unused local variables.
      *
      * @var array(string=>boolean)
+     * @link http://php.net/manual/en/reserved.variables.php
      */
-    private static $superGlobals = array(
-        '$argc'                => true,
-        '$argv'                => true,
-        '$_COOKIE'             => true,
-        '$_ENV'                => true,
-        '$_FILES'              => true,
-        '$_GET'                => true,
-        '$_POST'               => true,
-        '$_REQUEST'            => true,
-        '$_SERVER'             => true,
-        '$_SESSION'            => true,
-        '$GLOBALS'             => true,
-        '$HTTP_RAW_POST_DATA'  => true,
+    protected static $superGlobals = array(
+        '$argc' => true,
+        '$argv' => true,
+        '$_COOKIE' => true,
+        '$_ENV' => true,
+        '$_FILES' => true,
+        '$_GET' => true,
+        '$_POST' => true,
+        '$_REQUEST' => true,
+        '$_SERVER' => true,
+        '$_SESSION' => true,
+        '$GLOBALS' => true,
+        '$HTTP_RAW_POST_DATA' => true,
+        '$php_errormsg' => true,
+        '$http_response_header' => true,
     );
 
     /**
@@ -99,9 +88,21 @@ abstract class AbstractLocalVariable extends AbstractRule
      * @param \PHPMD\AbstractNode $variable
      * @return boolean
      */
+    protected function isSuperGlobal(AbstractNode $variable)
+    {
+        return isset(self::$superGlobals[$variable->getImage()]);
+    }
+
+    /**
+     * Tests if the given variable does not represent one of the PHP super globals
+     * that are available in scopes.
+     *
+     * @param \PHPMD\AbstractNode $variable
+     * @return boolean
+     */
     protected function isNotSuperGlobal(AbstractNode $variable)
     {
-        return !isset(self::$superGlobals[$variable->getImage()]);
+        return !$this->isSuperGlobal($variable);
     }
 
     /**
@@ -113,7 +114,7 @@ abstract class AbstractLocalVariable extends AbstractRule
      */
     protected function isRegularVariable(ASTNode $variable)
     {
-        $node   = $this->stripWrappedIndexExpression($variable);
+        $node = $this->stripWrappedIndexExpression($variable);
         $parent = $node->getParent();
 
         if ($parent->isInstanceOf('PropertyPostfix')) {
@@ -121,10 +122,12 @@ abstract class AbstractLocalVariable extends AbstractRule
             if ($primaryPrefix->getParent()->isInstanceOf('MemberPrimaryPrefix')) {
                 return !$primaryPrefix->getParent()->isStatic();
             }
+
             return ($parent->getChild(0)->getNode() !== $node->getNode()
                 || !$primaryPrefix->isStatic()
             );
         }
+
         return true;
     }
 
@@ -145,6 +148,7 @@ abstract class AbstractLocalVariable extends AbstractRule
         if ($parent->getChild(0)->getNode() === $node->getNode()) {
             return $this->stripWrappedIndexExpression($parent);
         }
+
         return $node;
     }
 
@@ -187,5 +191,188 @@ abstract class AbstractLocalVariable extends AbstractRule
         $parts = explode('\\', trim($node->getImage(), '\\'));
 
         return (0 === strcasecmp(array_pop($parts), $name));
+    }
+
+    /**
+     * Get the image of the given variable node.
+     *
+     * Prefix self:: and static:: properties with "::".
+     *
+     * @param ASTVariable|ASTPropertyPostfix|ASTVariableDeclarator $variable
+     * @return string
+     */
+    protected function getVariableImage($variable)
+    {
+        $image = $variable->getImage();
+
+        if ($this->isFieldDeclaration($variable, $image)) {
+            $image = "::$image";
+        }
+
+        // If variable name is not in the node, it's in the second child
+        if ($image === '::') {
+            return $image.$variable->getChild(1)->getImage();
+        }
+
+        return $this->prependMemberPrimaryPrefix($image, $variable);
+    }
+
+    protected function getParentMemberPrimaryPrefixImage($image, ASTPropertyPostfix $postfix)
+    {
+        do {
+            $postfix = $postfix->getParent();
+        } while ($postfix && $postfix->getChild(0) && $postfix->getChild(0)->getImage() === $image);
+
+        $previousChildImage = $postfix->getChild(0)->getImage();
+
+        if ($postfix instanceof ASTMemberPrimaryPrefix &&
+            in_array($previousChildImage, $this->selfReferences)
+        ) {
+            return $previousChildImage;
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the PDepend node of ASTNode PHPMD node.
+     *
+     * Or return the input as is if it's not an ASTNode PHPMD node.
+     *
+     * @param mixed $node
+     * @return \PDepend\Source\AST\ASTArtifact|\PDepend\Source\AST\ASTNode
+     */
+    protected function getNode($node)
+    {
+        if ($node instanceof ASTNode) {
+            return $node->getNode();
+        }
+
+        return $node;
+    }
+
+    /**
+     * Reflect function trying as namespaced function first, then global function.
+     *
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
+     * @param string $functionName
+     * @return ReflectionFunction|null
+     */
+    private function getReflectionFunctionByName($functionName)
+    {
+        try {
+            return new ReflectionFunction($functionName);
+        } catch (ReflectionException $exception) {
+            $chunks = explode('\\', $functionName);
+
+            if (count($chunks) > 1) {
+                try {
+                    return new ReflectionFunction(end($chunks));
+                } catch (ReflectionException $exception) {
+                }
+                // @TODO: Find a way to handle user-land functions
+                // @TODO: Find a way to handle methods
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return true if the given variable is passed by reference in a native PHP function.
+     *
+     * @param ASTVariable|ASTPropertyPostfix|ASTVariableDeclarator $variable
+     * @return bool
+     */
+    protected function isPassedByReference($variable)
+    {
+        $parent = $this->getNode($variable->getParent());
+
+        if (!($parent && $parent instanceof ASTArguments)) {
+            return false;
+        }
+
+        $argumentPosition = array_search($this->getNode($variable), $parent->getChildren());
+        $function = $this->getNode($parent->getParent());
+        $functionParent = $this->getNode($function->getParent());
+        $functionName = $function->getImage();
+
+        if ($functionParent instanceof ASTMemberPrimaryPrefix) {
+            // @TODO: Find a way to handle methods
+            return false;
+        }
+
+        $reflectionFunction = $this->getReflectionFunctionByName($functionName);
+
+        if (!$reflectionFunction) {
+            return false;
+        }
+
+        $parameters = $reflectionFunction->getParameters();
+
+        return isset($parameters[$argumentPosition]) && $parameters[$argumentPosition]->isPassedByReference();
+    }
+
+    /**
+     * Prepend "::" if the variable has a ASTMemberPrimaryPrefix.
+     *
+     * So we can distinguish members from local variable, identify quickly the scope
+     * by the image and mostly avoid conflict between a local variable and a property
+     * having the same name such as in:
+     *
+     * ```
+     * public function bar()
+     * {
+     *     self::$foo = 9;
+     *     return $foo; // Undefined variable
+     * }
+     * ```
+     *
+     * We'll raise the violation because `$foo` and `self::$foo` are not referring the
+     * same variable and won't overlap in a storage keyed by image as first one
+     * image is "$foo", second one is "::$foo".
+     *
+     * @param ASTVariable|ASTPropertyPostfix|ASTVariableDeclarator $variable
+     * @return string
+     */
+    private function prependMemberPrimaryPrefix($image, $variable)
+    {
+        $base = $this->getNode($variable);
+        $parent = $this->getNode($base->getParent());
+
+        while ($parent && $parent instanceof ASTArrayIndexExpression && $parent->getChild(0) === $base) {
+            $base = $parent;
+            $parent = $this->getNode($base->getParent());
+        }
+
+        if ($parent instanceof ASTPropertyPostfix) {
+            $previousChildImage = $this->getParentMemberPrimaryPrefixImage($image, $parent);
+
+            if (in_array($previousChildImage, $this->selfReferences, true)) {
+                return "::$image";
+            }
+        }
+
+        return $image;
+    }
+
+    /**
+     * Return true if given node (+ optional image) represent en field declaration:
+     *
+     * ```
+     * class Foo
+     * {
+     *   public static $field = 9;
+     * }
+     * ```
+     *
+     * @param ASTVariable|ASTPropertyPostfix|ASTVariableDeclarator $variable
+     * @param string $image
+     * @return bool
+     */
+    private function isFieldDeclaration($variable, $image = '$')
+    {
+        return substr($image, 0, 1) === '$' &&
+            $this->getNode($variable->getParent()) instanceof ASTFieldDeclaration;
     }
 }

@@ -2,41 +2,17 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @author Manuel Pichler <mapi@phpmd.org>
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license https://opensource.org/licenses/bsd-license.php BSD License
+ * @link http://phpmd.org/
  */
 
 namespace PHPMD\Rule;
@@ -49,10 +25,6 @@ use PHPMD\Node\ClassNode;
 /**
  * This rule collects all private fields in a class that aren't used in any
  * method of the analyzed class.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class UnusedPrivateField extends AbstractRule implements ClassAware
 {
@@ -62,7 +34,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      *
      * @var \PHPMD\Node\ASTNode[]
      */
-    private $fields = array();
+    protected $fields = array();
 
     /**
      * This method checks that all private class properties are at least accessed
@@ -73,6 +45,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      */
     public function apply(AbstractNode $node)
     {
+        /** @var ClassNode $field */
         foreach ($this->collectUnusedPrivateFields($node) as $field) {
             $this->addViolation($field, array($field->getImage()));
         }
@@ -85,7 +58,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * @param \PHPMD\Node\ClassNode $class
      * @return \PHPMD\AbstractNode[]
      */
-    private function collectUnusedPrivateFields(ClassNode $class)
+    protected function collectUnusedPrivateFields(ClassNode $class)
     {
         $this->fields = array();
 
@@ -102,9 +75,10 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * @param \PHPMD\Node\ClassNode $class
      * @return void
      */
-    private function collectPrivateFields(ClassNode $class)
+    protected function collectPrivateFields(ClassNode $class)
     {
         foreach ($class->findChildrenOfType('FieldDeclaration') as $declaration) {
+            /** @var ASTNode $declaration */
             if ($declaration->isPrivate()) {
                 $this->collectPrivateField($declaration);
             }
@@ -118,7 +92,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * @param \PHPMD\Node\ASTNode $declaration
      * @return void
      */
-    private function collectPrivateField(ASTNode $declaration)
+    protected function collectPrivateField(ASTNode $declaration)
     {
         $fields = $declaration->findChildrenOfType('VariableDeclarator');
         foreach ($fields as $field) {
@@ -134,9 +108,10 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * @param \PHPMD\Node\ClassNode $class
      * @return void
      */
-    private function removeUsedFields(ClassNode $class)
+    protected function removeUsedFields(ClassNode $class)
     {
         foreach ($class->findChildrenOfType('PropertyPostfix') as $postfix) {
+            /** @var $postfix ASTNode */
             if ($this->isInScopeOfClass($class, $postfix)) {
                 $this->removeUsedField($postfix);
             }
@@ -150,7 +125,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * @param \PHPMD\Node\ASTNode $postfix
      * @return void
      */
-    private function removeUsedField(ASTNode $postfix)
+    protected function removeUsedField(ASTNode $postfix)
     {
         $image = '$';
         $child = $postfix->getFirstChildOfType('Identifier');
@@ -177,7 +152,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
         if ($node === null) {
             return false;
         }
-        
+
         $parent = $node->getParent();
         while (!$parent->isInstanceOf('PropertyPostfix')) {
             if ($parent->isInstanceOf('CompoundVariable')) {
@@ -185,9 +160,10 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
             }
             $parent = $parent->getParent();
             if (is_null($parent)) {
-                   return false;
+                return false;
             }
         }
+
         return true;
     }
 
@@ -201,15 +177,33 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      */
     protected function isInScopeOfClass(ClassNode $class, ASTNode $postfix)
     {
-        $owner = $postfix->getParent()->getChild(0);
-        if ($owner->isInstanceOf('PropertyPostfix')) {
-            $owner = $owner->getParent()->getParent()->getChild(0);
-        }
+        $owner = $this->getOwner($postfix);
+
         return (
             $owner->isInstanceOf('SelfReference') ||
             $owner->isInstanceOf('StaticReference') ||
             strcasecmp($owner->getImage(), '$this') === 0 ||
             strcasecmp($owner->getImage(), $class->getImage()) === 0
         );
+    }
+
+    /**
+     * Looks for owner of the given variable.
+     *
+     * @param \PHPMD\Node\ASTNode $postfix
+     * @return \PHPMD\Node\ASTNode
+     */
+    protected function getOwner(ASTNode $postfix)
+    {
+        $owner = $postfix->getParent()->getChild(0);
+        if ($owner->isInstanceOf('PropertyPostfix')) {
+            $owner = $owner->getParent()->getParent()->getChild(0);
+        }
+
+        if ($owner->getParent()->isInstanceOf('ArrayIndexExpression')) {
+            $owner = $owner->getParent()->getParent()->getChild(0);
+        }
+
+        return $owner;
     }
 }

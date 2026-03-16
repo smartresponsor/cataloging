@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -50,7 +50,7 @@ use PDepend\Source\ASTVisitor\AbstractASTVisitor;
 /**
  * Collects class and namespace metrics based on class and interface methods.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
@@ -58,14 +58,14 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * All found nodes.
      *
-     * @var array(string=>array)
+     * @var array<string, array<string, array<int, string>>>
      */
     private $nodes = array();
 
     /**
      * Returns the collected nodes.
      *
-     * @return array(string=>array)
+     * @return array<string, array<string, array<int, string>>>
      */
     public function getCollectedNodes()
     {
@@ -75,7 +75,6 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * Visits a method node.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
@@ -102,8 +101,6 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
      * Extracts the coupling information between the two given types and their
      * parent namespacess.
      *
-     * @param  \PDepend\Source\AST\AbstractASTClassOrInterface $type
-     * @param  \PDepend\Source\AST\AbstractASTClassOrInterface $dependency
      * @return void
      */
     private function processType(AbstractASTClassOrInterface $type, AbstractASTClassOrInterface $dependency)
@@ -131,7 +128,6 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * Initializes the temporary node container for the given <b>$node</b>.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $node
      * @return void
      */
     private function initNode(AbstractASTArtifact $node)

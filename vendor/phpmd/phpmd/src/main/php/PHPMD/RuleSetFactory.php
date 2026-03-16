@@ -2,52 +2,29 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @author Manuel Pichler <mapi@phpmd.org>
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license https://opensource.org/licenses/bsd-license.php BSD License
+ * @link http://phpmd.org/
  */
 
 namespace PHPMD;
 
+use PHPMD\Exception\RuleClassFileNotFoundException;
+use PHPMD\Exception\RuleClassNotFoundException;
+use PHPMD\Exception\RuleSetNotFoundException;
+use RuntimeException;
+
 /**
  * This factory class is used to create the {@link \PHPMD\RuleSet} instance
  * that PHPMD will use to analyze the source code.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class RuleSetFactory
 {
@@ -60,12 +37,11 @@ class RuleSetFactory
     private $strict = false;
 
     /**
-     * The data directory set by PEAR or a dynamic property set within the class
-     * constructor.
+     * The data directory set within the class constructor.
      *
      * @var string
      */
-    private $location = '@data_dir@';
+    private $location;
 
     /**
      * The minimum priority for rules to load.
@@ -75,16 +51,18 @@ class RuleSetFactory
     private $minimumPriority = Rule::LOWEST_PRIORITY;
 
     /**
+     * The maximum priority for rules to load.
+     *
+     * @var integer
+     */
+    private $maximumPriority = Rule::HIGHEST_PRIORITY;
+
+    /**
      * Constructs a new default rule-set factory instance.
      */
     public function __construct()
     {
-        // PEAR installer workaround
-        if (strpos($this->location, '@data_dir') === 0) {
-            $this->location = __DIR__ . '/../../resources';
-        } else {
-            $this->location .= '/PHPMD/resources';
-        }
+        $this->location = __DIR__ . '/../../resources';
     }
 
     /**
@@ -102,12 +80,22 @@ class RuleSetFactory
      * Sets the minimum priority that a rule must have.
      *
      * @param integer $minimumPriority The minimum priority value.
-     *
      * @return void
      */
     public function setMinimumPriority($minimumPriority)
     {
         $this->minimumPriority = $minimumPriority;
+    }
+
+    /**
+     * Sets the maximum priority that a rule must have.
+     *
+     * @param integer $maximumPriority The maximum priority value.
+     * @return void
+     */
+    public function setMaximumPriority($maximumPriority)
+    {
+        $this->maximumPriority = $maximumPriority;
     }
 
     /**
@@ -126,6 +114,7 @@ class RuleSetFactory
 
             $ruleSetFileName = strtok(',');
         }
+
         return $ruleSets;
     }
 
@@ -138,13 +127,14 @@ class RuleSetFactory
     public function createSingleRuleSet($ruleSetOrFileName)
     {
         $fileName = $this->createRuleSetFileName($ruleSetOrFileName);
+
         return $this->parseRuleSetNode($fileName);
     }
 
     /**
      * Lists available rule-set identifiers.
      *
-     * @return array(string)
+     * @return string[]
      */
     public function listAvailableRuleSets()
     {
@@ -159,40 +149,17 @@ class RuleSetFactory
      * the input when it is already a filename.
      *
      * @param string $ruleSetOrFileName The rule-set filename or identifier.
-     * @return string
+     * @return string Path to rule set file name
+     * @throws RuleSetNotFoundException Thrown if no readable file found
      */
     private function createRuleSetFileName($ruleSetOrFileName)
     {
-        if (file_exists($ruleSetOrFileName) === true) {
-            return $ruleSetOrFileName;
-        }
-
-        $fileName = $this->location . '/' . $ruleSetOrFileName;
-        if (file_exists($fileName) === true) {
-            return $fileName;
-        }
-
-        $fileName = $this->location . '/rulesets/' . $ruleSetOrFileName . '.xml';
-        if (file_exists($fileName) === true) {
-            return $fileName;
-        }
-
-        $fileName = getcwd() . '/rulesets/' . $ruleSetOrFileName . '.xml';
-        if (file_exists($fileName) === true) {
-            return $fileName;
-        }
-
-        foreach (explode(PATH_SEPARATOR, get_include_path()) as $includePath) {
-            $fileName = $includePath . '/' . $ruleSetOrFileName;
-            if (file_exists($fileName) === true) {
-                return $fileName;
-            }
-            $fileName = $includePath . '/' . $ruleSetOrFileName . ".xml";
-            if (file_exists($fileName) === true) {
-                return $fileName;
+        foreach ($this->filePaths($ruleSetOrFileName) as $filePath) {
+            if ($this->isReadableFile($filePath)) {
+                return $filePath;
             }
         }
-        
+
         throw new RuleSetNotFoundException($ruleSetOrFileName);
     }
 
@@ -200,8 +167,7 @@ class RuleSetFactory
      * Lists available rule-set identifiers in given directory.
      *
      * @param string $directory The directory to scan for rule-sets.
-     *
-     * @return array(string)
+     * @return string[]
      */
     private static function listRuleSetsInDirectory($directory)
     {
@@ -214,6 +180,7 @@ class RuleSetFactory
                 }
             }
         }
+
         return $ruleSets;
     }
 
@@ -222,6 +189,7 @@ class RuleSetFactory
      *
      * @param string $fileName
      * @return \PHPMD\RuleSet
+     * @throws RuntimeException When loading the XML file fails.
      */
     private function parseRuleSetNode($fileName)
     {
@@ -233,12 +201,12 @@ class RuleSetFactory
             // Reset error handling to previous setting
             libxml_use_internal_errors($libxml);
 
-            throw new \RuntimeException(trim(libxml_get_last_error()->message));
+            throw new RuntimeException(trim(libxml_get_last_error()->message));
         }
 
         $ruleSet = new RuleSet();
         $ruleSet->setFileName($fileName);
-        $ruleSet->setName((string) $xml['name']);
+        $ruleSet->setName((string)$xml['name']);
 
         if ($this->strict) {
             $ruleSet->setStrict();
@@ -246,21 +214,21 @@ class RuleSetFactory
 
         foreach ($xml->children() as $node) {
             if ($node->getName() === 'php-includepath') {
-                $includePath = (string) $node;
-                
+                $includePath = (string)$node;
+
                 if (is_dir(dirname($fileName) . DIRECTORY_SEPARATOR . $includePath)) {
                     $includePath = dirname($fileName) . DIRECTORY_SEPARATOR . $includePath;
                     $includePath = realpath($includePath);
                 }
-                
+
                 $includePath = get_include_path() . PATH_SEPARATOR . $includePath;
                 set_include_path($includePath);
             }
         }
-        
+
         foreach ($xml->children() as $node) {
             if ($node->getName() === 'description') {
-                $ruleSet->setDescription((string) $node);
+                $ruleSet->setDescription((string)$node);
             } elseif ($node->getName() === 'rule') {
                 $this->parseRuleNode($ruleSet, $node);
             }
@@ -280,13 +248,21 @@ class RuleSetFactory
      */
     private function parseRuleNode(RuleSet $ruleSet, \SimpleXMLElement $node)
     {
-        if (substr($node['ref'], -3, 3) === 'xml') {
-            $this->parseRuleSetReferenceNode($ruleSet, $node);
-        } elseif ('' === (string) $node['ref']) {
+        $ref = (string)$node['ref'];
+
+        if ($ref === '') {
             $this->parseSingleRuleNode($ruleSet, $node);
-        } else {
-            $this->parseRuleReferenceNode($ruleSet, $node);
+
+            return;
         }
+
+        if (substr($ref, -3, 3) === 'xml') {
+            $this->parseRuleSetReferenceNode($ruleSet, $node);
+
+            return;
+        }
+
+        $this->parseRuleReferenceNode($ruleSet, $node);
     }
 
     /**
@@ -318,8 +294,9 @@ class RuleSetFactory
     {
         $ruleSetFactory = new RuleSetFactory();
         $ruleSetFactory->setMinimumPriority($this->minimumPriority);
+        $ruleSetFactory->setMaximumPriority($this->maximumPriority);
 
-        return $ruleSetFactory->createSingleRuleSet((string) $ruleSetNode['ref']);
+        return $ruleSetFactory->createSingleRuleSet((string)$ruleSetNode['ref']);
     }
 
     /**
@@ -334,10 +311,11 @@ class RuleSetFactory
     private function isIncluded(Rule $rule, \SimpleXMLElement $ruleSetNode)
     {
         foreach ($ruleSetNode->exclude as $exclude) {
-            if ($rule->getName() === (string) $exclude['name']) {
+            if ($rule->getName() === (string)$exclude['name']) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -348,26 +326,25 @@ class RuleSetFactory
      * @param \PHPMD\RuleSet $ruleSet
      * @param \SimpleXMLElement $ruleNode
      * @return void
-     * @throws \PHPMD\RuleClassFileNotFoundException
-     * @throws \PHPMD\RuleClassNotFoundException
+     * @throws RuleClassFileNotFoundException
+     * @throws RuleClassNotFoundException
      */
     private function parseSingleRuleNode(RuleSet $ruleSet, \SimpleXMLElement $ruleNode)
     {
-        $fileName = "";
+        $fileName = '';
 
         $ruleSetFolderPath = dirname($ruleSet->getFileName());
 
         if (isset($ruleNode['file'])) {
-            if (is_readable((string) $ruleNode['file'])) {
-                $fileName = (string) $ruleNode['file'];
-
-            } elseif (is_readable($ruleSetFolderPath . DIRECTORY_SEPARATOR . (string) $ruleNode['file'])) {
-                $fileName = $ruleSetFolderPath . DIRECTORY_SEPARATOR . (string) $ruleNode['file'];
+            if (is_readable((string)$ruleNode['file'])) {
+                $fileName = (string)$ruleNode['file'];
+            } elseif (is_readable($ruleSetFolderPath . DIRECTORY_SEPARATOR . (string)$ruleNode['file'])) {
+                $fileName = $ruleSetFolderPath . DIRECTORY_SEPARATOR . (string)$ruleNode['file'];
             }
         }
 
-        $className = (string) $ruleNode['class'];
-        
+        $className = (string)$ruleNode['class'];
+
         if (!is_readable($fileName)) {
             $fileName = strtr($className, '\\', '/') . '.php';
         }
@@ -375,7 +352,7 @@ class RuleSetFactory
         if (!is_readable($fileName)) {
             $fileName = str_replace(array('\\', '_'), '/', $className) . '.php';
         }
-        
+
         if (class_exists($className) === false) {
             $handle = @fopen($fileName, 'r', true);
             if ($handle === false) {
@@ -392,29 +369,29 @@ class RuleSetFactory
 
         /* @var $rule \PHPMD\Rule */
         $rule = new $className();
-        $rule->setName((string) $ruleNode['name']);
-        $rule->setMessage((string) $ruleNode['message']);
-        $rule->setExternalInfoUrl((string) $ruleNode['externalInfoUrl']);
+        $rule->setName((string)$ruleNode['name']);
+        $rule->setMessage((string)$ruleNode['message']);
+        $rule->setExternalInfoUrl((string)$ruleNode['externalInfoUrl']);
 
         $rule->setRuleSetName($ruleSet->getName());
 
-        if (trim($ruleNode['since']) !== '') {
-            $rule->setSince((string) $ruleNode['since']);
+        if (isset($ruleNode['since']) && trim($ruleNode['since']) !== '') {
+            $rule->setSince((string)$ruleNode['since']);
         }
 
         foreach ($ruleNode->children() as $node) {
             if ($node->getName() === 'description') {
-                $rule->setDescription((string) $node);
+                $rule->setDescription((string)$node);
             } elseif ($node->getName() === 'example') {
-                $rule->addExample((string) $node);
+                $rule->addExample((string)$node);
             } elseif ($node->getName() === 'priority') {
-                $rule->setPriority((integer) $node);
+                $rule->setPriority((integer)$node);
             } elseif ($node->getName() === 'properties') {
                 $this->parsePropertiesNode($rule, $node);
             }
         }
 
-        if ($rule->getPriority() <= $this->minimumPriority) {
+        if ($rule->getPriority() <= $this->minimumPriority && $rule->getPriority() >= $this->maximumPriority) {
             $ruleSet->addRule($rule);
         }
     }
@@ -429,7 +406,7 @@ class RuleSetFactory
      */
     private function parseRuleReferenceNode(RuleSet $ruleSet, \SimpleXMLElement $ruleNode)
     {
-        $ref = (string) $ruleNode['ref'];
+        $ref = (string)$ruleNode['ref'];
 
         $fileName = substr($ref, 0, strpos($ref, '.xml/') + 4);
         $fileName = $this->createRuleSetFileName($fileName);
@@ -439,31 +416,31 @@ class RuleSetFactory
         $ruleSetFactory = new RuleSetFactory();
 
         $ruleSetRef = $ruleSetFactory->createSingleRuleSet($fileName);
-        $rule       = $ruleSetRef->getRuleByName($ruleName);
+        $rule = $ruleSetRef->getRuleByName($ruleName);
 
-        if (trim($ruleNode['name']) !== '') {
-            $rule->setName((string) $ruleNode['name']);
+        if (isset($ruleNode['name']) && trim($ruleNode['name']) !== '') {
+            $rule->setName((string)$ruleNode['name']);
         }
-        if (trim($ruleNode['message']) !== '') {
-            $rule->setMessage((string) $ruleNode['message']);
+        if (isset($ruleNode['message']) && trim($ruleNode['message']) !== '') {
+            $rule->setMessage((string)$ruleNode['message']);
         }
-        if (trim($ruleNode['externalInfoUrl']) !== '') {
-            $rule->setExternalInfoUrl((string) $ruleNode['externalInfoUrl']);
+        if (isset($ruleNode['externalInfoUrl']) && trim($ruleNode['externalInfoUrl']) !== '') {
+            $rule->setExternalInfoUrl((string)$ruleNode['externalInfoUrl']);
         }
 
         foreach ($ruleNode->children() as $node) {
             if ($node->getName() === 'description') {
-                $rule->setDescription((string) $node);
+                $rule->setDescription((string)$node);
             } elseif ($node->getName() === 'example') {
-                $rule->addExample((string) $node);
+                $rule->addExample((string)$node);
             } elseif ($node->getName() === 'priority') {
-                $rule->setPriority((integer) $node);
+                $rule->setPriority((integer)$node);
             } elseif ($node->getName() === 'properties') {
                 $this->parsePropertiesNode($rule, $node);
             }
         }
 
-        if ($rule->getPriority() <= $this->minimumPriority) {
+        if ($rule->getPriority() <= $this->minimumPriority && $rule->getPriority() >= $this->maximumPriority) {
             $ruleSet->addRule($rule);
         }
     }
@@ -504,7 +481,7 @@ class RuleSetFactory
      */
     private function addProperty(Rule $rule, \SimpleXMLElement $node)
     {
-        $name  = trim($node['name']);
+        $name = trim($node['name']);
         $value = trim($this->getPropertyValue($node));
         if ($name !== '' && $value !== '') {
             $rule->addProperty($name, $value);
@@ -524,9 +501,10 @@ class RuleSetFactory
     private function getPropertyValue(\SimpleXMLElement $propertyNode)
     {
         if (isset($propertyNode->value)) {
-            return (string) $propertyNode->value;
+            return (string)$propertyNode->value;
         }
-        return (string) $propertyNode['value'];
+
+        return (string)$propertyNode['value'];
     }
 
     /**
@@ -534,10 +512,9 @@ class RuleSetFactory
      *
      * http://pmd.sourceforge.net/pmd-5.0.4/howtomakearuleset.html#Excluding_files_from_a_ruleset
      *
-     * @param $fileName     The filename of a rule-set definition.
-     *
-     * @return array
-     * @throws \RuntimeException
+     * @param string $fileName The filename of a rule-set definition.
+     * @return array|null
+     * @throws RuntimeException Thrown if file is not proper xml
      */
     public function getIgnorePattern($fileName)
     {
@@ -553,7 +530,7 @@ class RuleSetFactory
                 // Reset error handling to previous setting
                 libxml_use_internal_errors($libxml);
 
-                throw new \RuntimeException(trim(libxml_get_last_error()->message));
+                throw new RuntimeException(trim(libxml_get_last_error()->message));
             }
 
             foreach ($xml->children() as $node) {
@@ -564,5 +541,42 @@ class RuleSetFactory
 
             return $excludes;
         }
+
+        return null;
+    }
+
+    /**
+     * Checks if given file path exists, is file (or symlink to file)
+     * and is readable by current user
+     *
+     * @param string $filePath File path to check against
+     * @return bool True if file exists and is readable, false otherwise
+     */
+    private function isReadableFile($filePath)
+    {
+        return is_readable($filePath) && is_file($filePath);
+    }
+
+    /**
+     * Returns list of possible file paths to search against code rules
+     *
+     * @param string $fileName Rule set file name
+     * @return array Array of possible file locations
+     */
+    private function filePaths($fileName)
+    {
+        $filePathParts = array(
+            array($fileName),
+            array($this->location, $fileName),
+            array($this->location, 'rulesets', $fileName . '.xml'),
+            array(getcwd(), 'rulesets', $fileName . '.xml'),
+        );
+
+        foreach (explode(PATH_SEPARATOR, get_include_path()) as $includePath) {
+            $filePathParts[] = array($includePath, $fileName);
+            $filePathParts[] = array($includePath, $fileName . '.xml');
+        }
+
+        return array_map('implode', array_fill(0, count($filePathParts), DIRECTORY_SEPARATOR), $filePathParts);
     }
 }

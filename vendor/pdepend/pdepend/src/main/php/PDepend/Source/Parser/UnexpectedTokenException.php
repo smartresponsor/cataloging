@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,18 +36,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Source\Parser;
 
+use Exception;
 use PDepend\Source\Tokenizer\Token;
 
 /**
  * This type of exception is thrown when the parser detects an unexpected token.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class UnexpectedTokenException extends TokenException
@@ -56,16 +57,18 @@ class UnexpectedTokenException extends TokenException
      * Constructs a new unexpected token exception.
      *
      * @param Token  $token    The last parsed token instance.
-     * @param string $fileName The file where the exception occured.
+     * @param string $fileName The file where the exception occurred.
      */
     public function __construct(Token $token, $fileName)
     {
+        $exception = new Exception();
         $message = sprintf(
-            'Unexpected token: %s, line: %d, col: %d, file: %s.',
+            'Unexpected token: %s, line: %d, col: %d, file: %s.%s',
             $token->image,
             $token->startLine,
             $token->startColumn,
-            $fileName
+            $fileName,
+            "\n".$exception->getTraceAsString()
         );
 
         parent::__construct($message);

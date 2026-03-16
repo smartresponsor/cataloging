@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Source\Tokenizer;
 /**
  * This interface holds the different tokenizer, builder and parser constants.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 interface Tokens
@@ -66,22 +66,22 @@ interface Tokens
     const T_ABSTRACT = 3;
 
     /**
-     * Marks a curly brace open.
+     * Marks a curly brace open '{'.
      */
     const T_CURLY_BRACE_OPEN = 4;
 
     /**
-     * Marks a curly brace close.
+     * Marks a curly brace close '}'.
      */
     const T_CURLY_BRACE_CLOSE = 5;
 
     /**
-     * Marks a parenthesis open.
+     * Marks a parenthesis open '('.
      */
     const T_PARENTHESIS_OPEN = 6;
 
     /**
-     * Marks a parenthesis close.
+     * Marks a parenthesis close ')'.
      */
     const T_PARENTHESIS_CLOSE = 7;
 
@@ -96,7 +96,7 @@ interface Tokens
     const T_FUNCTION = 9;
 
     /**
-     * Marks a double colon.
+     * Marks a double colon ':'.
      */
     const T_DOUBLE_COLON = 10;
 
@@ -111,7 +111,7 @@ interface Tokens
     const T_DOC_COMMENT = 12;
 
     /**
-     * Marks a semicolon.
+     * Marks a semicolon ';'.
      */
     const T_SEMICOLON = 13;
 
@@ -851,11 +851,51 @@ interface Tokens
     const T_FINALLY = 160;
 
     /**
-     * TOken that represents the '...' token
+     * Token that represents the '...' token
      *
      * @since 2.0.7
      */
     const T_ELLIPSIS = 161;
+
+    /**
+     * Token that represents the '<=>' spaceship operator
+     */
+    const T_SPACESHIP = 162;
+
+    /**
+     * Token that represents the '??' null coalescing operator
+     */
+    const T_COALESCE = 163;
+
+    /**
+     * Token that represents the '**' null coalescing operator
+     */
+    const T_POW = 164;
+
+    /**
+     * Token that represents the 'fn' keyword of arrow functions.
+     */
+    const T_FN = 165;
+
+    /**
+     * Token that represents the '??=' null coalescing assignment operator
+     */
+    const T_COALESCE_EQUAL = 166;
+
+    /**
+     * Token that represents the 'readonly' constant modifier
+     */
+    const T_READONLY = 167;
+
+    /**
+     * Token that represents the '?->' nullsafe object operator
+     */
+    const T_NULLSAFE_OBJECT_OPERATOR = 387;
+
+    /**
+     * Marks an enum token.
+     */
+    const T_ENUM = 372;
 
     /**
      * Marks any content not between php tags.

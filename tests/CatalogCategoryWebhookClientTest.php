@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class CatalogtestsWebhookClientTest extends TestCase
+final class CatalogCategoryWebhookClientTest extends TestCase
 {
     public function testDispatch(): void
     {

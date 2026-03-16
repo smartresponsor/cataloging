@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,19 +36,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Source\AST;
 
+use InvalidArgumentException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
+use PDepend\Source\Tokenizer\Token;
 use PDepend\Util\Cache\CacheDriver;
 
 /**
  * This class provides an interface to a single source file.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTCompilationUnit extends AbstractASTArtifact
@@ -56,7 +58,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * The internal used cache instance.
      *
-     * @var   \PDepend\Util\Cache\CacheDriver
+     * @var CacheDriver|null
+     *
      * @since 0.10.0
      */
     protected $cache = null;
@@ -64,28 +67,29 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * The unique identifier for this function.
      *
-     * @var string
+     * @var string|null
      */
     protected $id = null;
 
     /**
      * The source file name/path.
      *
-     * @var string
+     * @var string|null
      */
     protected $fileName = null;
 
     /**
      * The comment for this type.
      *
-     * @var string
+     * @var string|null
      */
-    protected $docComment = null;
+    protected $comment = null;
 
     /**
      * The files start line. This property must always have the value <em>1</em>.
      *
-     * @var   integer
+     * @var int
+     *
      * @since 0.10.0
      */
     protected $startLine = 0;
@@ -93,7 +97,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * The files end line.
      *
-     * @var   integer
+     * @var int
+     *
      * @since 0.10.0
      */
     protected $endLine = 0;
@@ -101,7 +106,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * List of classes, interfaces and functions that parsed from this file.
      *
-     * @var   \PDepend\Source\AST\AbstractASTArtifact[]
+     * @var AbstractASTArtifact[]
+     *
      * @since 0.10.0
      */
     protected $childNodes = array();
@@ -109,7 +115,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Was this file instance restored from the cache?
      *
-     * @var   boolean
+     * @var bool
+     *
      * @since 0.10.0
      */
     protected $cached = false;
@@ -117,26 +124,28 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Normalized code in this file.
      *
-     * @var string
+     * @var string|null
      */
     private $source = null;
 
     /**
      * Constructs a new source file instance.
      *
-     * @param string $fileName The source file name/path.
+     * @param string|null $fileName The source file name/path.
      */
     public function __construct($fileName)
     {
-        if ($fileName !== null) {
-            $this->fileName = realpath($fileName);
+        if ($fileName && strpos($fileName, 'php://') === 0) {
+            $this->fileName = $fileName;
+        } elseif ($fileName !== null) {
+            $this->fileName = realpath($fileName) ?: null;
         }
     }
 
     /**
      * Returns the physical file name for this object.
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -146,7 +155,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Returns the physical file name for this object.
      *
-     * @return string
+     * @return string|null
      */
     public function getFileName()
     {
@@ -156,7 +165,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Returns a id for this code node.
      *
-     * @return string
+     * @return string|null
      */
     public function getId()
     {
@@ -166,8 +175,10 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Sets the unique identifier for this file instance.
      *
-     * @param  string $id Identifier for this file.
+     * @param string $id Identifier for this file.
+     *
      * @return void
+     *
      * @since  0.9.12
      */
     public function setId($id)
@@ -178,8 +189,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Setter method for the used parser and token cache.
      *
-     * @param  \PDepend\Util\Cache\CacheDriver $cache
-     * @return \PDepend\Source\AST\ASTCompilationUnit
+     * @return $this
+     *
      * @since  0.10.0
      */
     public function setCache(CacheDriver $cache)
@@ -191,7 +202,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Returns normalized source code with stripped whitespaces.
      *
-     * @return array(integer=>string)
+     * @return string|null
      */
     public function getSource()
     {
@@ -202,7 +213,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Returns an <b>array</b> with all tokens within this file.
      *
-     * @return array(array)
+     * @return array<Token>
      */
     public function getTokens()
     {
@@ -214,7 +225,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * Sets the tokens for this file.
      *
-     * @param array(array) $tokens The generated tokens.
+     * @param array<Token> $tokens The generated tokens.
      *
      * @return void
      */
@@ -226,32 +237,10 @@ class ASTCompilationUnit extends AbstractASTArtifact
     }
 
     /**
-     * Returns the doc comment for this item or <b>null</b>.
-     *
-     * @return string
-     */
-    public function getDocComment()
-    {
-        return $this->docComment;
-    }
-
-    /**
-     * Sets the doc comment for this item.
-     *
-     * @param string $docComment The doc comment block.
-     *
-     * @return void
-     */
-    public function setDocComment($docComment)
-    {
-        $this->docComment = $docComment;
-    }
-
-    /**
      * Adds a source item that was parsed from this source file.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $artifact
      * @return void
+     *
      * @since  0.10.0
      */
     public function addChild(AbstractASTArtifact $artifact)
@@ -264,7 +253,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * this value must always be <em>1</em>, while it can be <em>0</em> for a
      * not existing dummy file.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.10.0
      */
     public function getStartLine()
@@ -280,7 +270,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * this value must always be greater <em>0</em>, while it can be <em>0</em>
      * for a not existing dummy file.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.10.0
      */
     public function getEndLine()
@@ -296,7 +287,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * from the cache and not currently parsed. Otherwise this method will return
      * <b>false</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.10.0
      */
     public function isCached()
@@ -305,22 +297,12 @@ class ASTCompilationUnit extends AbstractASTArtifact
     }
 
     /**
-     * ASTVisitor method for node tree traversal.
-     *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
-     * @return void
-     */
-    public function accept(ASTVisitor $visitor)
-    {
-        $visitor->visitCompilationUnit($this);
-    }
-
-    /**
      * The magic sleep method will be called by PHP's runtime environment right
      * before it serializes an instance of this class. This method returns an
      * array with those property names that should be serialized.
      *
-     * @return array(string)
+     * @return array<string>
+     *
      * @since  0.10.0
      */
     public function __sleep()
@@ -328,7 +310,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
         return array(
             'cache',
             'childNodes',
-            'docComment',
+            'comment',
             'endLine',
             'fileName',
             'startLine',
@@ -343,8 +325,9 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * in this source file and this file instance.
      *
      * @return void
+     *
      * @since  0.10.0
-     * @see    \PDepend\Source\AST\ASTCompilationUnit::$childNodes
+     * @see    ASTCompilationUnit::$childNodes
      */
     public function __wakeup()
     {
@@ -372,7 +355,11 @@ class ASTCompilationUnit extends AbstractASTArtifact
      */
     protected function readSource()
     {
-        if ($this->source === null && file_exists($this->fileName)) {
+        if (
+            $this->source === null &&
+            $this->fileName &&
+            (strpos($this->fileName, 'php://') === 0 || file_exists($this->fileName))
+        ) {
             $source = file_get_contents($this->fileName);
 
             $this->source = str_replace(array("\r\n", "\r"), "\n", $source);
@@ -381,7 +368,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
             $this->endLine   = substr_count($this->source, "\n") + 1;
         }
     }
-    
+
     // Deprecated methods
     // @codeCoverageIgnoreStart
 
@@ -391,7 +378,8 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * PHP version < 5.3 where cyclic references can not be resolved
      * automatically by PHP's garbage collector.
      *
-     * @return     void
+     * @return void
+     *
      * @since  0.9.12
      * @deprecated Since 0.10.0
      */

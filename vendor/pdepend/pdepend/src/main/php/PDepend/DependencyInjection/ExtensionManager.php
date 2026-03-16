@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,35 +36,42 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\DependencyInjection;
 
+use RuntimeException;
+
 /**
  * Manage activation and registration of extensions for PDepend.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ExtensionManager
 {
+    /**
+     * @var array<Extension>
+     */
     private $extensions = array();
 
     /**
      * Activate an extension based on a class name.
      *
+     * @param class-string<Extension> $className
+     *
      * @throws RuntimeException
-     * @param  string $className
+     *
      * @return void
      */
     public function activateExtension($className)
     {
         if (!class_exists($className)) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
-                    'Cannot find extension class %s" for PDepend. Maybe the plugin is not installed?',
+                    'Cannot find extension class "%s" for PDepend. Maybe the plugin is not installed?',
                     $className
                 )
             );
@@ -73,7 +80,7 @@ class ExtensionManager
         $extension = new $className;
 
         if (!($extension instanceof Extension)) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('Class "%s" is not a valid Extension', $className)
             );
         }
@@ -84,7 +91,7 @@ class ExtensionManager
     /**
      * Return all activated extensions.
      *
-     * @return array(\PDepend\DependencyInjection\Extension)
+     * @return array<Extension>
      */
     public function getActivatedExtensions()
     {

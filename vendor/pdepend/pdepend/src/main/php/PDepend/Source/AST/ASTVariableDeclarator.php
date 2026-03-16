@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,20 +36,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
+
+use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * This node type represents a variable declarator. A variable declarator always
  * contains a variable name and it can optionally provide a variable default
  * value.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 class ASTVariableDeclarator extends ASTExpression
@@ -57,7 +61,7 @@ class ASTVariableDeclarator extends ASTExpression
     /**
      * The initial declaration value for this node or <b>null</b>.
      *
-     * @var \PDepend\Source\AST\ASTValue
+     * @var ASTValue|null
      */
     protected $value = null;
 
@@ -65,7 +69,7 @@ class ASTVariableDeclarator extends ASTExpression
      * Returns the initial declaration value for this node or <b>null</b> when
      * no default value exists.
      *
-     * @return \PDepend\Source\AST\ASTValue
+     * @return ASTValue|null
      */
     public function getValue()
     {
@@ -75,8 +79,6 @@ class ASTVariableDeclarator extends ASTExpression
     /**
      * Sets the declared default value for this variable node.
      *
-     * @param \PDepend\Source\AST\ASTValue $value
-     *
      * @return void
      */
     public function setValue(ASTValue $value)
@@ -85,26 +87,12 @@ class ASTVariableDeclarator extends ASTExpression
     }
 
     /**
-     * Accept method of the visitor design pattern. This method will be called
-     * by a visitor during tree traversal.
-     *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
-     *
-     * @return mixed
-     * @since  0.9.12
-     */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
-    {
-        return $visitor->visitVariableDeclarator($this, $data);
-    }
-
-    /**
      * The magic sleep method will be called by PHP's runtime environment right
      * before an instance of this class gets serialized. It should return an
      * array with those property names that should be serialized for this class.
      *
-     * @return array(string)
+     * @return array<string>
+     *
      * @since  0.10.0
      */
     public function __sleep()

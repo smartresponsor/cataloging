@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -47,7 +47,7 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
 /**
  * This code class represents a class property.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTProperty extends AbstractASTArtifact
@@ -62,7 +62,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * The wrapped field declaration instance.
      *
-     * @var   \PDepend\Source\AST\ASTFieldDeclaration
+     * @var ASTFieldDeclaration
+     *
      * @since 0.9.6
      */
     private $fieldDeclaration = null;
@@ -70,7 +71,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * The wrapped variable declarator instance.
      *
-     * @var   \PDepend\Source\AST\ASTVariableDeclarator
+     * @var ASTVariableDeclarator
+     *
      * @since 0.9.6
      */
     private $variableDeclarator = null;
@@ -79,14 +81,12 @@ class ASTProperty extends AbstractASTArtifact
      * Constructs a new item for the given field declaration and variable
      * declarator.
      *
-     * @param \PDepend\Source\AST\ASTFieldDeclaration   $fieldDeclaration   The context
-     *        field declaration where this property was declared in the source.
-     * @param \PDepend\Source\AST\ASTVariableDeclarator $variableDeclarator The context
-     *        variable declarator for this property instance.
+     * @param ASTFieldDeclaration   $fieldDeclaration   The context field declaration where this property was declared in the source.
+     * @param ASTVariableDeclarator $variableDeclarator The context variable declarator for this property instance.
      */
     public function __construct(
-        \PDepend\Source\AST\ASTFieldDeclaration $fieldDeclaration,
-        \PDepend\Source\AST\ASTVariableDeclarator $variableDeclarator
+        ASTFieldDeclaration $fieldDeclaration,
+        ASTVariableDeclarator $variableDeclarator
     ) {
         $this->fieldDeclaration   = $fieldDeclaration;
         $this->variableDeclarator = $variableDeclarator;
@@ -108,7 +108,8 @@ class ASTProperty extends AbstractASTArtifact
      * This method returns a OR combined integer of the declared modifiers for
      * this property.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.6
      */
     public function getModifiers()
@@ -120,7 +121,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> if this node is marked as public, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -131,7 +132,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> if this node is marked as protected, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -142,7 +143,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> if this node is marked as private, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -153,7 +154,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> when this node is declared as static, otherwise
      * the returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -164,7 +165,8 @@ class ASTProperty extends AbstractASTArtifact
      * This method will return <b>true</b> when this property doc comment
      * contains an array type hint, otherwise the it will return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.9.6
      */
     public function isArray()
@@ -182,7 +184,8 @@ class ASTProperty extends AbstractASTArtifact
      * This method will return <b>true</b> when this property doc comment
      * contains a primitive type hint, otherwise the it will return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.9.6
      */
     public function isScalar()
@@ -200,7 +203,8 @@ class ASTProperty extends AbstractASTArtifact
      * Returns the type of this property. This method will return <b>null</b>
      * for all scalar type, only class properties will have a type.
      *
-     * @return \PDepend\Source\AST\AbstractASTClassOrInterface
+     * @return AbstractASTClassOrInterface|null
+     *
      * @since  0.9.5
      */
     public function getClass()
@@ -219,7 +223,7 @@ class ASTProperty extends AbstractASTArtifact
      *
      * @return string
      */
-    public function getDocComment()
+    public function getComment()
     {
         return $this->fieldDeclaration->getComment();
     }
@@ -227,7 +231,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the line number where the property declaration can be found.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.6
      */
     public function getStartLine()
@@ -238,7 +243,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the column number where the property declaration starts.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.8
      */
     public function getStartColumn()
@@ -249,7 +255,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the line number where the property declaration ends.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.6
      */
     public function getEndLine()
@@ -260,7 +267,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the column number where the property declaration ends.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.8
      */
     public function getEndColumn()
@@ -271,7 +279,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * This method will return the class where this property was declared.
      *
-     * @return \PDepend\Source\AST\AbstractASTClassOrInterface
+     * @return AbstractASTClassOrInterface
+     *
      * @since  0.9.6
      */
     public function getDeclaringClass()
@@ -282,8 +291,8 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Sets the declaring class object.
      *
-     * @param  \PDepend\Source\AST\ASTClass $declaringClass
      * @return void
+     *
      * @since  0.9.6
      */
     public function setDeclaringClass(ASTClass $declaringClass)
@@ -295,7 +304,8 @@ class ASTProperty extends AbstractASTArtifact
      * This method will return <b>true</b> when the parameter declaration
      * contains a default value.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.9.6
      */
     public function isDefaultValueAvailable()
@@ -312,6 +322,7 @@ class ASTProperty extends AbstractASTArtifact
      * <b>null</b> when this property was only declared and not initialized.
      *
      * @return mixed
+     *
      * @since  0.9.6
      */
     public function getDefaultValue()
@@ -324,29 +335,17 @@ class ASTProperty extends AbstractASTArtifact
     }
 
     /**
-     * ASTVisitor method for node tree traversal.
-     *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
-     * @return void
-     */
-    public function accept(ASTVisitor $visitor)
-    {
-        $visitor->visitProperty($this);
-    }
-
-    /**
      * This method returns a string representation of this parameter.
      *
      * @return string
+     *
      * @since  0.9.6
      */
     public function __toString()
     {
-        $default = ($this->isDefault() === true ? ' <default>' : '');
         $static  = '';
 
         if ($this->isStatic() === true) {
-            $default = '';
             $static  = ' static';
         }
 
@@ -358,8 +357,7 @@ class ASTProperty extends AbstractASTArtifact
         }
 
         return sprintf(
-            'Property [%s%s%s %s ]%s',
-            $default,
+            'Property [%s%s %s ]%s',
             $visibility,
             $static,
             $this->getName(),

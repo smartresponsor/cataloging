@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -47,18 +47,11 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
 /**
  * Represents a php namespace node.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTNamespace extends AbstractASTArtifact
 {
-    /**
-     * The namespace name.
-     *
-     * @var string
-     */
-    protected $name = '';
-
     /**
      * The unique identifier for this function.
      *
@@ -67,27 +60,32 @@ class ASTNamespace extends AbstractASTArtifact
     protected $id = null;
 
     /**
-     * List of all {@link \PDepend\Source\AST\AbstractASTClassOrInterface}
+     * List of all {@link AbstractASTClassOrInterface}
      * objects for this namespace.
      *
-     * @var \PDepend\Source\AST\AbstractASTClassOrInterface[]
+     * @var AbstractASTClassOrInterface[]
      */
     protected $types = array();
 
     /**
-     * List of all standalone {@link \PDepend\Source\AST\ASTFunction} objects
+     * List of all standalone {@link ASTFunction} objects
      * in this namespace.
      *
-     * @var \PDepend\Source\AST\ASTFunction[]
+     * @var ASTFunction[]
      */
     protected $functions = array();
 
     /**
      * Does this namespace contain user defined functions, classes or interfaces?
      *
-     * @var boolean
+     * @var bool
      */
     private $userDefined = null;
+
+    /**
+     * @var bool
+     */
+    protected $packageAnnotation = false;
 
     /**
      * Constructs a new namespace for the given <b>$name</b>
@@ -96,18 +94,8 @@ class ASTNamespace extends AbstractASTArtifact
      */
     public function __construct($name)
     {
-        $this->name = $name;
+        parent::__construct($name);
         $this->id = spl_object_hash($this);
-    }
-
-    /**
-     * Returns the namespace name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -125,7 +113,8 @@ class ASTNamespace extends AbstractASTArtifact
      * <b>class/method</b> is user defined. Otherwise this method will return
      * <b>false</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.9.10
      */
     public function isUserDefined()
@@ -141,7 +130,8 @@ class ASTNamespace extends AbstractASTArtifact
      * <b>class/method</b> is user defined. Otherwise this method will return
      * <b>false</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.9.10
      */
     private function checkUserDefined()
@@ -155,10 +145,11 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * Returns an array with all {@link \PDepend\Source\AST\ASTTrait}
+     * Returns an array with all {@link ASTTrait}
      * instances declared in this namespace.
      *
-     * @return array
+     * @return ASTArtifactList<ASTTrait>
+     *
      * @since  1.0.0
      */
     public function getTraits()
@@ -167,10 +158,10 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * Returns an iterator with all {@link \PDepend\Source\AST\ASTClass}
+     * Returns an iterator with all {@link ASTClass}
      * instances within this namespace.
      *
-     * @return \PDepend\Source\AST\ASTClass[]
+     * @return ASTArtifactList<ASTClass>
      */
     public function getClasses()
     {
@@ -178,10 +169,21 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * Returns an iterator with all {@link \PDepend\Source\AST\ASTInterface}
+     * Returns an iterator with all {@link ASTEnum}
      * instances within this namespace.
      *
-     * @return \PDepend\Source\AST\ASTInterface[]
+     * @return ASTArtifactList<ASTEnum>
+     */
+    public function getEnums()
+    {
+        return $this->getTypesOfType('PDepend\\Source\\AST\\ASTEnum');
+    }
+
+    /**
+     * Returns an iterator with all {@link ASTInterface}
+     * instances within this namespace.
+     *
+     * @return ASTArtifactList<ASTInterface>
      */
     public function getInterfaces()
     {
@@ -192,15 +194,19 @@ class ASTNamespace extends AbstractASTArtifact
      * Returns an iterator with all types of the given <b>$className</b> in this
      * namespace.
      *
-     * @param  string $className The class/type we are looking for.
-     * @return \PDepend\Source\AST\ASTArtifactList
+     * @template T of AbstractASTClassOrInterface
+     *
+     * @param class-string<T> $className The class/type we are looking for.
+     *
+     * @return ASTArtifactList<T>
+     *
      * @since  1.0.0
      */
     private function getTypesOfType($className)
     {
         $types = array();
         foreach ($this->types as $type) {
-            if (get_class($type) === $className) {
+            if ($type instanceof $className && get_class($type) === $className) {
                 $types[] = $type;
             }
         }
@@ -208,10 +214,10 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * Returns all {@link \PDepend\Source\AST\AbstractASTType} objects in
+     * Returns all {@link AbstractASTClassOrInterface} objects in
      * this namespace.
      *
-     * @return \PDepend\Source\AST\AbstractASTType[]
+     * @return ASTArtifactList<AbstractASTClassOrInterface>
      */
     public function getTypes()
     {
@@ -221,8 +227,9 @@ class ASTNamespace extends AbstractASTArtifact
     /**
      * Adds the given type to this namespace and returns the input type instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
-     * @return \PDepend\Source\AST\AbstractASTType
+     * @param AbstractASTClassOrInterface $type
+     *
+     * @return AbstractASTClassOrInterface
      */
     public function addType(AbstractASTType $type)
     {
@@ -246,7 +253,8 @@ class ASTNamespace extends AbstractASTArtifact
     /**
      * Removes the given type instance from this namespace.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
+     * @param AbstractASTClassOrInterface $type
+     *
      * @return void
      */
     public function removeType(AbstractASTType $type)
@@ -260,10 +268,10 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * Returns all {@link \PDepend\Source\AST\ASTFunction} objects in this
+     * Returns all {@link ASTFunction} objects in this
      * namespace.
      *
-     * @return \PDepend\Source\AST\ASTFunction[]
+     * @return ASTArtifactList<ASTFunction>
      */
     public function getFunctions()
     {
@@ -273,8 +281,7 @@ class ASTNamespace extends AbstractASTArtifact
     /**
      * Adds the given function to this namespace and returns the input instance.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
-     * @return \PDepend\Source\AST\ASTFunction
+     * @return ASTFunction
      */
     public function addFunction(ASTFunction $function)
     {
@@ -292,7 +299,6 @@ class ASTNamespace extends AbstractASTArtifact
     /**
      * Removes the given function from this namespace.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return void
      */
     public function removeFunction(ASTFunction $function)
@@ -306,13 +312,20 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * ASTVisitor method for node tree traversal.
+     * @return bool
+     */
+    public function isPackageAnnotation()
+    {
+        return $this->packageAnnotation;
+    }
+
+    /**
+     * @param bool $packageAnnotation
      *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
      * @return void
      */
-    public function accept(ASTVisitor $visitor)
+    public function setPackageAnnotation($packageAnnotation)
     {
-        $visitor->visitNamespace($this);
+        $this->packageAnnotation = $packageAnnotation;
     }
 }

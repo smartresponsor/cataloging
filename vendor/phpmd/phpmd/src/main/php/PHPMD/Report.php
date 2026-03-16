@@ -2,59 +2,34 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @author Manuel Pichler <mapi@phpmd.org>
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license https://opensource.org/licenses/bsd-license.php BSD License
+ * @link http://phpmd.org/
  */
 
 namespace PHPMD;
 
+use ArrayIterator;
+use PHPMD\Baseline\BaselineValidator;
+
 /**
  * The report class collects all found violations and further information about
  * a PHPMD run.
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Report
 {
     /**
      * List of rule violations detected in the analyzed source code.
      *
-     * @var \PHPMD\RuleViolation[]
+     * @var array
      */
     private $ruleViolations = array();
 
@@ -80,6 +55,14 @@ class Report
      */
     private $errors = array();
 
+    /** @var BaselineValidator|null */
+    private $baselineValidator;
+
+    public function __construct(BaselineValidator $baselineValidator = null)
+    {
+        $this->baselineValidator = $baselineValidator;
+    }
+
     /**
      * Adds a rule violation to this report.
      *
@@ -88,6 +71,10 @@ class Report
      */
     public function addRuleViolation(RuleViolation $violation)
     {
+        if ($this->baselineValidator !== null && $this->baselineValidator->isBaselined($violation)) {
+            return;
+        }
+
         $fileName = $violation->getFileName();
         if (!isset($this->ruleViolations[$fileName])) {
             $this->ruleViolations[$fileName] = array();
@@ -115,7 +102,7 @@ class Report
     /**
      * Returns an iterator with all occurred rule violations.
      *
-     * @return \Iterator
+     * @return \PHPMD\RuleViolation[]
      */
     public function getRuleViolations()
     {
@@ -132,7 +119,7 @@ class Report
             }
         }
 
-        return new \ArrayIterator($violations);
+        return new ArrayIterator($violations);
     }
 
     /**
@@ -168,7 +155,7 @@ class Report
      */
     public function getErrors()
     {
-        return new \ArrayIterator($this->errors);
+        return new ArrayIterator($this->errors);
     }
 
     /**

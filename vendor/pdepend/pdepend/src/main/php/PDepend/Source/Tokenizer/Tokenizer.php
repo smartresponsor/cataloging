@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,16 +36,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Source\Tokenizer;
 
+use PDepend\Source\AST\ASTCompilationUnit;
+
 /**
  * Base interface for all php code tokenizers.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 interface Tokenizer
@@ -63,7 +65,7 @@ interface Tokenizer
     /**
      * Returns the name of the source file.
      *
-     * @return string
+     * @return ASTCompilationUnit|null
      */
     public function getSourceFile();
 
@@ -77,18 +79,36 @@ interface Tokenizer
     public function setSourceFile($sourceFile);
 
     /**
-     * Returns the next token or {@link \PDepend\Source\Tokenizer\Tokenizer::T_EOF} if
+     * Returns the next token or {@link Tokenizer::T_EOF} if
      * there is no next token.
      *
-     * @return \PDepend\Source\Tokenizer\Token
+     * @return int|Token
      */
     public function next();
 
     /**
-     * Returns the next token type or {@link \PDepend\Source\Tokenizer\Tokenizer::T_EOF} if
+     * Returns the previous token or null if there is no one yet.
+     *
+     * @return Token|null
+     *
+     * @since  2.6.0
+     */
+    public function prevToken();
+
+    /**
+     * Returns the current token or null if there is no more.
+     *
+     * @return Token|null
+     *
+     * @since  2.6.0
+     */
+    public function currentToken();
+
+    /**
+     * Returns the next token type or {@link Tokenizer::T_EOF} if
      * there is no next token.
      *
-     * @return integer
+     * @return int
      */
     public function peek();
     
@@ -96,16 +116,17 @@ interface Tokenizer
      * Returns the type of next token, after the current token. This method
      * ignores all comments between the current and the next token.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.12
      */
     public function peekNext();
 
     /**
-     * Returns the previous token type or {@link \PDepend\Source\Tokenizer\Tokenizer::T_BOF}
+     * Returns the previous token type or {@link Tokenizer::T_BOF}
      * if there is no previous token.
      *
-     * @return integer
+     * @return int
      */
     public function prev();
 }

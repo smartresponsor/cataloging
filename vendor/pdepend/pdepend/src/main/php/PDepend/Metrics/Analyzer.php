@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,18 +36,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Metrics;
 
 use PDepend\Source\AST\ASTArtifactList;
+use PDepend\Source\AST\ASTNamespace;
 
 /**
  * Base interface for all analyzer implementations.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 interface Analyzer
@@ -55,7 +56,7 @@ interface Analyzer
     /**
      * Constructs a new analyzer instance.
      *
-     * @param array(string=>mixed) $options Global option array, every analyzer
+     * @param array<string, mixed> $options Global option array, every analyzer
      *                                      can extract the required options.
      */
     public function __construct(array $options = array());
@@ -63,15 +64,17 @@ interface Analyzer
     /**
      * Adds a listener to this analyzer.
      *
-     * @param  \PDepend\Metrics\AnalyzerListener $listener The listener instance.
+     * @param AnalyzerListener $listener The listener instance.
+     *
      * @return void
      */
     public function addAnalyzeListener(AnalyzerListener $listener);
     
     /**
-     * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
+     * Processes all {@link ASTNamespace} code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
+     * @param ASTArtifactList<ASTNamespace> $namespaces
+     *
      * @return void
      */
     public function analyze($namespaces);
@@ -81,7 +84,8 @@ interface Analyzer
      * pdepend framework, while an analyzer that does not perform any action
      * for any reason should return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since  0.9.10
      */
     public function isEnabled();
@@ -89,7 +93,10 @@ interface Analyzer
     /**
      * Set global options
      *
-     * @param array(string=>mixed) $options
+     * @param array<string, mixed> $options
+     *
+     * @return void
+     *
      * @since 2.0.1
      */
     public function setOptions(array $options = array());
