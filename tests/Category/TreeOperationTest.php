@@ -7,20 +7,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Service\CatalogCategory\TreeOperation;
+use App\Service\TreeOperation;
 use PHPUnit\Framework\TestCase;
 
 final class TreeOperationTest extends TestCase
 {
-    public function testMoveKeepsParent(): void
+    public function testMoveRejectsSelfParenting(): void
     {
         $op = new TreeOperation();
-        $tree = [
-            ['id' => 1, 'parent' => null],
-            ['id' => 2, 'parent' => 1],
-            ['id' => 3, 'parent' => 1],
-        ];
-        $result = $op->move($tree, 3, 2);
-        self::assertSame(2, $result[2]['parent']);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Node cannot be parent of itself');
+
+        $op->move('3', '3');
     }
 }
