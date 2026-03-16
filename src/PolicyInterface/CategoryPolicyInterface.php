@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\PolicyInterface;
 
-interface testsPolicyInterface
+interface CategoryPolicyInterface
 {
     public function canEdit(string $actorId, string $taxonomyId, ?string $categoryId): bool;
 

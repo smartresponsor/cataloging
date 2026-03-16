@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsAdminController extends AbstractController
+final class CategoryAdminController extends AbstractController
 {
     #[Route('/admin/category', name: 'admin_category_index')]
     public function index(): Response

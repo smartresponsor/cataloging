@@ -1,4 +1,4 @@
-# tests Admin API Parity
+# Category Admin API Parity
 
 - /api/admin/category/list → admin list
 - /api/admin/category/bulk → admin bulk

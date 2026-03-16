@@ -10,7 +10,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsSitemapController
+final class CategorySitemapController
 {
     #[Route('/category-sitemap.xml', name: 'category_sitemap')]
     public function __invoke(): Response

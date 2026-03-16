@@ -1,4 +1,4 @@
-# tests integration hints
+# Category integration hints
 
 - Product service: join on category_id
 - Billing service: use tenant + category_id

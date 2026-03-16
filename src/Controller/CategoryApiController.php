@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Request\MovetestsRequest;
-use App\Request\PublishtestsRequest;
+use App\Request\MoveCategoryRequest;
+use App\Request\PublishCategoryRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsApiController
+final class CategoryApiController
 {
     #[Route('/api/category/tree', name: 'api_category_tree', methods: ['GET'])]
     public function tree(): JsonResponse
@@ -24,7 +24,7 @@ final class testsApiController
     #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
     public function move(string $id, Request $request): JsonResponse
     {
-        $dto = MovetestsRequest::fromArray(json_decode($request->getContent(), true) ?? []);
+        $dto = MoveCategoryRequest::fromArray(json_decode($request->getContent(), true) ?? []);
         if (!$dto->isValid()) {
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
@@ -35,7 +35,7 @@ final class testsApiController
     #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
     public function publish(string $id, Request $request): JsonResponse
     {
-        $dto = PublishtestsRequest::fromArray(json_decode($request->getContent(), true) ?? []);
+        $dto = PublishCategoryRequest::fromArray(json_decode($request->getContent(), true) ?? []);
         if (!$dto->isValid()) {
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }

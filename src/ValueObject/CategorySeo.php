@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 /** SEO value object: localized full slug and breadcrumb title. */
-final class testsSeo
+final class CategorySeo
 {
     private string $fullSlug;
     private string $title;

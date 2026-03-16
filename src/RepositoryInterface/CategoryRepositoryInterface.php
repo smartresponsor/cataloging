@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\RepositoryInterface;
 
-interface testsRepositoryInterface
+interface CategoryRepositoryInterface
 {
     public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array;
 

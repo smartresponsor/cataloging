@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cache;
 
-use App\CacheInterface\testsCacheInterface;
+use App\CacheInterface\CategoryCacheInterface;
 
 /** Simple array cache; real impl in infra (Redis/Memcached). */
-final class testsCache implements testsCacheInterface
+final class CategoryCache implements CategoryCacheInterface
 {
     /** @var array<string, array{v:mixed, exp:int}> */
     private array $s = [];

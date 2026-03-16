@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: SmartResponsor tests API
+  title: SmartResponsor Category API
   version: 1.0.0-rc1
 paths:
   /api/category/tree:

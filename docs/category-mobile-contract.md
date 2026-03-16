@@ -1,4 +1,4 @@
-# tests Mobile Contract
+# Category Mobile Contract
 
 - fields: id, name, slug, parent, icon_url
 - read-only

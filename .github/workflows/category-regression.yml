@@ -1,4 +1,4 @@
-name: tests Regression
+name: Category Regression
 on:
   workflow_dispatch: {}
 jobs:

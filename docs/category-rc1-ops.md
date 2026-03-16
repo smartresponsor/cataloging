@@ -1,4 +1,4 @@
-# tests RC1 Ops
+# Category RC1 Ops
 
 Run smoke after deploy:
 

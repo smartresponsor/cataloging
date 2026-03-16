@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsStoreApiController
+final class CategoryStoreApiController
 {
     public function __construct(
         private readonly ChannelFilter $filter,

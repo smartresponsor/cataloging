@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Outbox;
 
-final class testsOutboxRetry
+final class CategoryOutboxRetry
 {
     public function retry(array $event): void
     {

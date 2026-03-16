@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 /** Emitted after category creation. */
-final class testsCreated
+final class CategoryCreated
 {
     /** @var array<string,mixed> */
     private array $payload;

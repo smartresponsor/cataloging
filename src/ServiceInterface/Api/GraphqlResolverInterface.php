@@ -15,7 +15,7 @@ interface GraphqlResolverInterface
 
     public function categoryPath(array $args): array;
 
-    public function publishtests(array $args): ?array;
+    public function publishCategory(array $args): ?array;
 
-    public function movetests(array $args): bool;
+    public function moveCategory(array $args): bool;
 }

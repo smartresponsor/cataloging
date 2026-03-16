@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsMerchantController extends AbstractController
+final class CategoryMerchantController extends AbstractController
 {
     public function __construct(private readonly TenantFilter $tenantFilter)
     {

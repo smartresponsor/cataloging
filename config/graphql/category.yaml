@@ -1,14 +1,14 @@
-tests:
+Category:
   type: object
   config:
     fields:
       id: { type: "ID!" }
       name: { type: "String!" }
-      children: { type: "[tests]", resolve: "@App\\GraphQL\\tests\\testsResolver::children" }
+      children: { type: "[Category]", resolve: "@App\\GraphQL\\Category\\CategoryResolver::children" }
 Query:
   type: object
   config:
     fields:
       categories:
-        type: "[tests]"
-        resolve: "@App\\GraphQL\\tests\\testsQuery"
+        type: "[Category]"
+        resolve: "@App\\GraphQL\\Category\\CategoryQuery"

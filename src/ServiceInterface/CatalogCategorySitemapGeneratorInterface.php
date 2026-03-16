@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-interface CatalogtestsSitemapGeneratorInterface
+interface CatalogCategorySitemapGeneratorInterface
 {
     public function generateIndex(int $batchSize): string;
 }

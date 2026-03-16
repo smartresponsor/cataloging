@@ -1,4 +1,4 @@
-# tests GA (final)
+# Category GA (final)
 
 - f: core/api/graphql/observability
 - g: multi-region/alias/backup

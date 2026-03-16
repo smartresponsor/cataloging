@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\RepositoryInterface\testsRepositoryInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 
 /** Builds breadcrumb chain and SEO meta from repository. */
-final class CatalogtestsBreadcrumbBuilder implements testsBreadcrumbBuilderInterface
+final class CatalogCategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterface
 {
-    private testsRepositoryInterface $repo;
+    private CategoryRepositoryInterface $repo;
 
-    public function __construct(testsRepositoryInterface $repo)
+    public function __construct(CategoryRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }

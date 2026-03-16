@@ -9,7 +9,7 @@ Owner: Marketing America Corp
 
 namespace App\Service\Api;
 
-final class CatalogtestsCacheHeader
+final class CatalogCategoryCacheHeader
 {
     public function make(string $etag, ?\DateTimeImmutable $lastModified = null): array
     {

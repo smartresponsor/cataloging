@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-interface testsTaxonomyInterface
+interface CategoryTaxonomyInterface
 {
     public function id(): string;
 

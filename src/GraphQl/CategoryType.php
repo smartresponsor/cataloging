@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace App\GraphQL;
 
-final class testsType
+final class CategoryType
 {
     public static function config(): array
     {
         return [
-            'name' => 'tests',
+            'name' => 'Category',
             'fields' => [
                 'id' => ['type' => 'ID'],
                 'name' => ['type' => 'String'],

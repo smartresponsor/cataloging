@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\CacheInterface;
 
-interface testsCacheInterface
+interface CategoryCacheInterface
 {
     public function get(string $key): mixed;
 

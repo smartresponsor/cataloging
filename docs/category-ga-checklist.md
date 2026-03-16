@@ -1,4 +1,4 @@
-# tests GA checklist
+# Category GA checklist
 
 - f-pack applied
 - g-pack applied

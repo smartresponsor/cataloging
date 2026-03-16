@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\IdempotencyInterface;
 
-interface testsIdempotencyStoreInterface
+interface CategoryIdempotencyStoreInterface
 {
     /** True if operation with given key has already been applied. */
     public function seen(string $key): bool;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\ValueObject;
 
-/** Immutable breadcrumb view for tests. */
-final class testsBreadcrumb
+/** Immutable breadcrumb view for Category. */
+final class CategoryBreadcrumb
 {
     /** @var list<array{id:string, name:string, slug:string}> */
     private array $chain;

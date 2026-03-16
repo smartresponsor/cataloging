@@ -5,16 +5,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\RepositoryInterface\testsRepositoryInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 
 /**
- * testsSlugGenerator implements conflict policy:
+ * CategorySlugGenerator implements conflict policy:
  * - Do not fail on duplicate; auto-suffix with incremental counter: "-2", "-3", ...
  * - Normalizes to lowercase, trims spaces, replaces spaces with hyphens.
  */
-final class CatalogtestsSlugGenerator implements testsSlugGeneratorInterface
+final class CatalogCategorySlugGenerator implements CategorySlugGeneratorInterface
 {
-    public function __construct(private readonly testsRepositoryInterface $repo)
+    public function __construct(private readonly CategoryRepositoryInterface $repo)
     {
     }
 

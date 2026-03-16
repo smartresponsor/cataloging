@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace App\Message;
 
-final class RecomputeVirtualtestsMessage
+final class RecomputeVirtualCategoryMessage
 {
-    public function __construct(public readonly string $virtualtestsId)
+    public function __construct(public readonly string $virtualCategoryId)
     {
     }
 }

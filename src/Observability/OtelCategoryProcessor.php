@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace App\Observability;
 
-final class OteltestsProcessor
+final class OtelCategoryProcessor
 {
     public function process(array $context): array
     {

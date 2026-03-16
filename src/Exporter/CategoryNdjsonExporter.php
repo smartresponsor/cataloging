@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Exporter;
 
-use App\ExporterInterface\testsNdjsonExporterInterface;
-use App\RepositoryInterface\testsRepositoryInterface;
+use App\ExporterInterface\CategoryNdjsonExporterInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 
-final class testsNdjsonExporter implements testsNdjsonExporterInterface
+final class CategoryNdjsonExporter implements CategoryNdjsonExporterInterface
 {
-    private testsRepositoryInterface $repo;
+    private CategoryRepositoryInterface $repo;
 
-    public function __construct(testsRepositoryInterface $repo)
+    public function __construct(CategoryRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }

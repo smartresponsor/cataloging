@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-interface CatalogtestsBreadcrumbBuilderInterface
+interface CatalogCategoryBreadcrumbBuilderInterface
 {
     /** @return array{breadcrumb: array<int, array{id:string,name:string,slug:string}>, seo: array{fullSlug:string,title:string}} */
     public function build(string $categoryId, string $locale): array;

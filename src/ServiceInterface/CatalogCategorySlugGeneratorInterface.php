@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 /** Generates and normalizes locale-dependent slugs; applies conflict auto-suffix when needed. */
-interface CatalogtestsSlugGeneratorInterface
+interface CatalogCategorySlugGeneratorInterface
 {
     /**
      * @param array<string,string> $input localized slug candidates by locale

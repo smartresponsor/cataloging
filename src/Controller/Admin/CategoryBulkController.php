@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsBulkController
+final class CategoryBulkController
 {
     public function __construct(private readonly BulkOperator $bulk)
     {

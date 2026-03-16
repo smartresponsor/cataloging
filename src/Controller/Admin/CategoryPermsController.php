@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsPermsController extends AbstractController
+final class CategoryPermsController extends AbstractController
 {
     #[Route('/admin/category/perms', name: 'admin_category_perms')]
     public function __invoke(): Response

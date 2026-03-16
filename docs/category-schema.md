@@ -1,4 +1,4 @@
-# tests schema
+# Category schema
 
 - table: category
 - columns: id (uuid), slug, name, parent_id, level, path, locale

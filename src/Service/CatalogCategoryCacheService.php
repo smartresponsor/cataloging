@@ -19,11 +19,9 @@ final class CatalogCategoryCacheService
     {
         $key = 'category_tree_'.$locale;
         $item = $this->pool->getItem($key);
-
         if ($item->isHit()) {
             return $item->get();
         }
-
         $tree = [];
         $item->set($tree);
         $this->pool->save($item);

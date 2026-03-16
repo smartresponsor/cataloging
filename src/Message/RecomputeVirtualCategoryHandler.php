@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace App\Message;
 
-use App\Entity\VirtualtestsEntity;
+use App\Entity\VirtualCategoryEntity;
+use App\Rule\CategoryRule;
 use App\Rule\RuleEvaluator;
-use App\Rule\testsRule;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final class RecomputeVirtualtestsHandler
+final class RecomputeVirtualCategoryHandler
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -24,14 +24,14 @@ final class RecomputeVirtualtestsHandler
     ) {
     }
 
-    public function __invoke(RecomputeVirtualtestsMessage $msg): void
+    public function __invoke(RecomputeVirtualCategoryMessage $msg): void
     {
-        $vc = $this->em->getRepository(VirtualtestsEntity::class)->find($msg->virtualtestsId);
+        $vc = $this->em->getRepository(VirtualCategoryEntity::class)->find($msg->virtualCategoryId);
         if (!$vc) {
             return;
         }
 
-        $rule = new testsRule($vc->getRule());
+        $rule = new CategoryRule($vc->getRule());
         $compiled = $this->evaluator->compile($rule);
 
         // Select matching records from infra index

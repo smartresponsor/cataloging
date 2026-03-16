@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\RepositoryInterface\testsRepositoryInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 
 /**
  * SQL-backed repository. Actual SQL and connections are injected in infrastructure layer.
  * Here we keep contract-level shape and safe defaults.
  */
-final class testsRepository implements testsRepositoryInterface
+final class CategoryRepository implements CategoryRepositoryInterface
 {
     public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array
     {

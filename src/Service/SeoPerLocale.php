@@ -12,7 +12,7 @@ final class SeoPerLocale
     public function build(array $category): array
     {
         $locale = $category['locale'] ?? 'en';
-        $title = 'uk' === $locale ? 'Категорія: '.$category['name'] : 'tests: '.$category['name'];
+        $title = 'uk' === $locale ? 'Категорія: '.$category['name'] : 'Category: '.$category['name'];
         $canonical = 'https://example.com/category/'.$category['slug'].'?lang='.$locale;
         $data = [
             'id' => $category['id'] ?? null,

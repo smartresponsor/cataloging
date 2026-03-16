@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace SmartResponsor\Http;
 
-use App\Service\Catalogtests\Domain\ApproxTotalService;
-use App\Service\Catalogtests\Domain\CollectionService;
+use App\Service\CatalogCategory\ApproxTotalService;
+use App\Service\CatalogCategory\CollectionService;
 
 final class CollectionListHandler
 {

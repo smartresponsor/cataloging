@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ImporterInterface;
 
-interface testsNdjsonImporterInterface
+interface CategoryNdjsonImporterInterface
 {
     /**
      * Import NDJSON file.

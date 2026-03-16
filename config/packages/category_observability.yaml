@@ -1,2 +1,2 @@
 services:
-  App\Observability\OteltestsProcessor: ~
+  App\Observability\OtelCategoryProcessor: ~

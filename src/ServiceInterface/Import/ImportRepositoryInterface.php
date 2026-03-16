@@ -13,7 +13,7 @@ namespace App\ServiceInterface\Import;
 
 interface ImportRepositoryInterface
 {
-    public function upserttests(array $row): void;
+    public function upsertCategory(array $row): void;
 
     public function upsertRule(array $row): void;
 }

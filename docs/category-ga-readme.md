@@ -1,4 +1,4 @@
-# SmartResponsor / tests RC1 → GA
+# SmartResponsor / Category RC1 → GA
 
 Install:
 1. composer install

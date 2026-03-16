@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 /** Redirect record from old full slug to new one (SEO). */
-final class testsRedirect
+final class CategoryRedirect
 {
     private string $id;
     private string $from;

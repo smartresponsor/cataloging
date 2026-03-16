@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-/** Universal link of tests to any target domain entity. */
-final class testsLink
+/** Universal link of Category to any target domain entity. */
+final class CategoryLink
 {
     /** @var string ULID */
     private string $id;

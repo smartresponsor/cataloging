@@ -21,8 +21,8 @@ final class WebhookDispatcher
         $sig = hash_hmac('sha256', $body, $this->secret);
         $this->httpClient->request('POST', $endpoint, [
             'headers' => [
-                'X-tests-Event' => $event,
-                'X-tests-Signature' => $sig,
+                'X-Category-Event' => $event,
+                'X-Category-Signature' => $sig,
                 'Content-Type' => 'application/json',
             ],
             'body' => $body,

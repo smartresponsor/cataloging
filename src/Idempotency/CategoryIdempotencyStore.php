@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Idempotency;
 
-use App\IdempotencyInterface\testsIdempotencyStoreInterface;
+use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 
 /** In-memory placeholder; real implementation in infra (Redis/DB). */
-final class testsIdempotencyStore implements testsIdempotencyStoreInterface
+final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterface
 {
     /** @var array<string,int> */
     private array $state = [];

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 /** Emitted after link detach. */
-final class testsUnlinked
+final class CategoryUnlinked
 {
     /** @var array<string,mixed> */
     private array $payload;

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 OUT=report/category-release-notes.md
-echo '# tests RC1 Release Notes' > "$OUT"
+echo '# Category RC1 Release Notes' > "$OUT"
 for p in m n o p q r s t; do
   FILE="/mnt/data/category-rc1-$p-pack.zip"
   if [ -f "$FILE" ]; then

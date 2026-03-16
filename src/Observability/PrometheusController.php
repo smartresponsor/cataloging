@@ -12,7 +12,7 @@ final class PrometheusController
     {
         // dummy metrics; real values must be wired to storage
         $lines = [];
-        $lines[] = '# HELP category_http_request_ms_bucket tests HTTP request duration';
+        $lines[] = '# HELP category_http_request_ms_bucket Category HTTP request duration';
         $lines[] = '# TYPE category_http_request_ms_bucket histogram';
         $lines[] = 'category_http_request_ms_bucket{le="0.1"} 12';
         $lines[] = 'category_http_request_ms_bucket{le="0.3"} 27';

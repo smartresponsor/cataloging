@@ -1,4 +1,4 @@
-# tests GA release notes
+# Category GA release notes
 
 - API hardened
 - GraphQL enabled

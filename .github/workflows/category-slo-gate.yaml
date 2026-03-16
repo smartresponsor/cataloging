@@ -1,4 +1,4 @@
-name: tests SLO Gate
+name: Category SLO Gate
 on:
   push:
     branches: [ master ]

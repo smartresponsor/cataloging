@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-/** tests taxonomy entity (code: product, project, vendor, report, etc.). */
-final class testsTaxonomy
+/** Category taxonomy entity (code: product, project, vendor, report, etc.). */
+final class CategoryTaxonomy
 {
     /** @var string ULID */
     private string $id;

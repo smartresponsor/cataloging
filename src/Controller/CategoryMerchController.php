@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\testsBanner;
-use App\Entity\testsHtmlBlock;
-use App\Entity\testsPin;
+use App\Entity\CategoryBanner;
+use App\Entity\CategoryHtmlBlock;
+use App\Entity\CategoryPin;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class testsMerchController extends AbstractController
+final class CategoryMerchController extends AbstractController
 {
     public function __construct(private readonly EntityManagerInterface $em, private readonly Connection $infra)
     {
@@ -30,7 +30,7 @@ final class testsMerchController extends AbstractController
     {
         $recordId = (string) $r->request->get('recordId');
         $pos = (int) $r->request->get('position', 0);
-        $pin = new testsPin($id, $recordId, $pos);
+        $pin = new CategoryPin($id, $recordId, $pos);
         $this->em->persist($pin);
         $this->em->flush();
 
@@ -42,7 +42,7 @@ final class testsMerchController extends AbstractController
     public function pinDelete(string $id, Request $r): JsonResponse
     {
         $recordId = (string) $r->query->get('recordId');
-        $pin = $this->em->getRepository(testsPin::class)->findOneBy(['categoryId' => $id, 'recordId' => $recordId]);
+        $pin = $this->em->getRepository(CategoryPin::class)->findOneBy(['categoryId' => $id, 'recordId' => $recordId]);
         if ($pin) {
             $this->em->remove($pin);
             $this->em->flush();
@@ -73,7 +73,7 @@ final class testsMerchController extends AbstractController
     {
         $title = (string) $r->request->get('title');
         $content = (string) $r->request->get('content');
-        $b = new testsBanner($id, $title, $content);
+        $b = new CategoryBanner($id, $title, $content);
         $b->publish();
         $this->em->persist($b);
         $this->em->flush();
@@ -86,7 +86,7 @@ final class testsMerchController extends AbstractController
     public function htmlPublish(string $id, Request $r): JsonResponse
     {
         $html = (string) $r->request->get('html');
-        $h = new testsHtmlBlock($id, $html);
+        $h = new CategoryHtmlBlock($id, $html);
         $h->publish();
         $this->em->persist($h);
         $this->em->flush();

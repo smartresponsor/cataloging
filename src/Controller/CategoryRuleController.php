@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\VirtualtestsEntity;
-use App\Message\RecomputeVirtualtestsMessage;
+use App\Entity\VirtualCategoryEntity;
+use App\Message\RecomputeVirtualCategoryMessage;
+use App\Rule\CategoryRule;
 use App\Rule\RuleEvaluator;
-use App\Rule\testsRule;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +20,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class testsRuleController extends AbstractController
+final class CategoryRuleController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -37,7 +37,7 @@ final class testsRuleController extends AbstractController
         if (!is_array($spec)) {
             return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
         }
-        $rule = new testsRule($spec);
+        $rule = new CategoryRule($spec);
         $compiled = $this->eval->compile($rule);
         $sql = 'SELECT COUNT(*) AS c FROM record_index WHERE '.$compiled['sql'];
         $stmt = $this->infra->prepare($sql);
@@ -57,12 +57,12 @@ final class testsRuleController extends AbstractController
     #[IsGranted('category.rule')]
     public function apply(string $id, MessageBusInterface $bus): JsonResponse
     {
-        /** @var VirtualtestsEntity|null $vc */
-        $vc = $this->em->getRepository(VirtualtestsEntity::class)->find($id);
+        /** @var VirtualCategoryEntity|null $vc */
+        $vc = $this->em->getRepository(VirtualCategoryEntity::class)->find($id);
         if (!$vc) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
-        $bus->dispatch(new RecomputeVirtualtestsMessage($id));
+        $bus->dispatch(new RecomputeVirtualCategoryMessage($id));
 
         return $this->json(['ok' => true]);
     }

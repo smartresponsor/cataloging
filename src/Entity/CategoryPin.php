@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'category_pin')]
 #[ORM\UniqueConstraint(name: 'uniq_category_pin', columns: ['category_id', 'record_id'])]
-class testsPin
+class CategoryPin
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

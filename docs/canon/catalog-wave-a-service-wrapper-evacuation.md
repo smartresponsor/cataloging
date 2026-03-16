@@ -1,9 +1,9 @@
 # Catalog Wave A — Service wrapper evacuation
 
-This wave removes the non-canonical `tests` wrapper directory directly under:
+This wave removes the non-canonical `Category` wrapper directory directly under:
 
-- `src/Service/tests/**`
-- `src/ServiceInterface/tests/**`
+- `src/Service/Category/**`
+- `src/ServiceInterface/Category/**`
 
 Canonical result:
 - files move to `src/Service/**`
@@ -13,5 +13,5 @@ No semantic class renaming is introduced in this wave.
 Only structural evacuation and namespace alignment are applied.
 
 Pre-delete before overlay:
-- `src/Service/tests`
-- `src/ServiceInterface/tests`
+- `src/Service/Category`
+- `src/ServiceInterface/Category`

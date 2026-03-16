@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Runner;
 
-use App\ProjectionInterface\testsProjectionSyncInterface;
-use App\RunnerInterface\testsProjectionRunnerInterface;
+use App\ProjectionInterface\CategoryProjectionSyncInterface;
+use App\RunnerInterface\CategoryProjectionRunnerInterface;
 
-final class testsProjectionRunner implements testsProjectionRunnerInterface
+final class CategoryProjectionRunner implements CategoryProjectionRunnerInterface
 {
-    private testsProjectionSyncInterface $sync;
+    private CategoryProjectionSyncInterface $sync;
 
-    public function __construct(testsProjectionSyncInterface $sync)
+    public function __construct(CategoryProjectionSyncInterface $sync)
     {
         $this->sync = $sync;
     }

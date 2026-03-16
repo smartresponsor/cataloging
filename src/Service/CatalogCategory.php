@@ -5,29 +5,29 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Event\testsCreated;
-use App\Event\testsLinked;
-use App\Event\testsUnlinked;
-use App\PolicyInterface\testsPolicyInterface;
-use App\RepositoryInterface\testsRepositoryInterface;
-use App\ServiceInterface\CatalogtestsInterface as testsServiceInterface;
+use App\Event\CategoryCreated;
+use App\Event\CategoryLinked;
+use App\Event\CategoryUnlinked;
+use App\PolicyInterface\CategoryPolicyInterface;
+use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\ServiceInterface\CatalogCategoryInterface as CategoryServiceInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * tests service — implements create/move/attach/detach using contracts.
+ * Category service — implements create/move/attach/detach using contracts.
  * Storage specifics are delegated to the repository.
  */
-final class Catalogtests implements testsServiceInterface
+final class CatalogCategory implements CategoryServiceInterface
 {
-    private testsRepositoryInterface $repo;
-    private testsPolicyInterface $policy;
-    private testsSlugGeneratorInterface $slugger;
+    private CategoryRepositoryInterface $repo;
+    private CategoryPolicyInterface $policy;
+    private CategorySlugGeneratorInterface $slugger;
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
-        testsRepositoryInterface $repo,
-        testsPolicyInterface $policy,
-        testsSlugGeneratorInterface $slugger,
+        CategoryRepositoryInterface $repo,
+        CategoryPolicyInterface $policy,
+        CategorySlugGeneratorInterface $slugger,
         EventDispatcherInterface $dispatcher,
     ) {
         $this->repo = $repo;
@@ -45,7 +45,7 @@ final class Catalogtests implements testsServiceInterface
         $slug = $this->slugger->generate($slug, $taxonomyId, $parentId);
 
         $view = $this->repo->create($taxonomyId, $parentId, $name, $slug, $meta);
-        $this->dispatcher->dispatch(new testsCreated(['id' => $view['id']]));
+        $this->dispatcher->dispatch(new CategoryCreated(['id' => $view['id']]));
 
         return $view;
     }
@@ -53,7 +53,7 @@ final class Catalogtests implements testsServiceInterface
     public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array
     {
         $view = $this->repo->move($actorId, $categoryId, $newParentId, $newOrder);
-        $this->dispatcher->dispatch(new testsMoved(['id' => $view['id'], 'parentId' => $newParentId, 'order' => $newOrder]));
+        $this->dispatcher->dispatch(new CategoryMoved(['id' => $view['id'], 'parentId' => $newParentId, 'order' => $newOrder]));
 
         return $view;
     }
@@ -61,13 +61,13 @@ final class Catalogtests implements testsServiceInterface
     public function attach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
     {
         $this->repo->attach($actorId, $categoryId, $targetDomain, $targetClass, $targetId);
-        $this->dispatcher->dispatch(new testsLinked(['categoryId' => $categoryId, 'targetDomain' => $targetDomain, 'targetId' => $targetId]));
+        $this->dispatcher->dispatch(new CategoryLinked(['categoryId' => $categoryId, 'targetDomain' => $targetDomain, 'targetId' => $targetId]));
     }
 
     public function detach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
     {
         $this->repo->detach($actorId, $categoryId, $targetDomain, $targetClass, $targetId);
-        $this->dispatcher->dispatch(new testsUnlinked(['categoryId' => $categoryId, 'targetDomain' => $targetDomain, 'targetId' => $targetId]));
+        $this->dispatcher->dispatch(new CategoryUnlinked(['categoryId' => $categoryId, 'targetDomain' => $targetDomain, 'targetId' => $targetId]));
     }
 
     public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array

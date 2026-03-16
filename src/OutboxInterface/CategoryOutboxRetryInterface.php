@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\OutboxInterface;
 
-interface testsOutboxRetryInterface
+interface CategoryOutboxRetryInterface
 {
     /** Schedule retry for failed event with exponential backoff. */
     public function schedule(array $event, int $attempt): void;

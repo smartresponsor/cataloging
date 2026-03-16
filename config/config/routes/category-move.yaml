@@ -1,5 +1,5 @@
 # HTTP route for admin move (framework-agnostic placeholder)
 admin_category_move:
   path: /admin/category/tree/move
-  controller: App\Http\Controller\Admin\testsMoveController::move
+  controller: App\Http\Controller\Admin\CategoryMoveController::move
   methods: [POST]

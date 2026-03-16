@@ -9,7 +9,7 @@ Owner: Marketing America Corp
 
 namespace App\Service;
 
-use App\Service\Catalogtests\FacetSearchAdvanced;
+use App\Service\CatalogCategory\FacetSearchAdvanced;
 
 final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
 {

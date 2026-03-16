@@ -3,28 +3,28 @@
 Base: `cataloging-197-current-repository-wave-b-wrapper-flattened.zip`
 
 This wave resolves the last remaining live wrapper directories:
-- `src/Controller/tests/**`
-- `src/Event/tests/**`
+- `src/Controller/Category/**`
+- `src/Event/Category/**`
 
-It also fixes the known syntax tail in `src/Controller/testsMerchController.php`.
+It also fixes the known syntax tail in `src/Controller/CategoryMerchController.php`.
 
 ## Applied moves
-- `src/Controller/tests/Admin/testsAdminController.php` -> `src/Controller/Admin/testsAdminController.php`
-- `src/Controller/tests/Admin/testsAuditController.php` -> `src/Controller/Admin/testsAuditController.php`
-- `src/Controller/tests/Admin/testsBatchEditController.php` -> `src/Controller/Admin/testsBatchEditController.php`
-- `src/Controller/tests/Admin/testsBulkController.php` -> `src/Controller/Admin/testsBulkController.php`
-- `src/Controller/tests/Admin/testsDlqController.php` -> `src/Controller/Admin/testsDlqController.php`
-- `src/Controller/tests/Admin/testsListController.php` -> `src/Controller/Admin/testsListController.php`
-- `src/Controller/tests/Admin/testsMoveController.php` -> `src/Controller/Admin/testsMoveController.php`
-- `src/Controller/tests/Admin/testsOpsController.php` -> `src/Controller/Admin/testsOpsController.php`
-- `src/Controller/tests/Admin/testsPermsController.php` -> `src/Controller/Admin/testsPermsController.php`
-- `src/Controller/tests/Api/testsAdminApiController.php` -> `src/Controller/Api/testsAdminApiController.php`
-- `src/Controller/tests/Merchant/testsMerchantController.php` -> `src/Controller/Merchant/testsMerchantController.php`
-- `src/Event/tests/testsMoved.php` -> `src/Event/CatalogtestsMoved.php`
+- `src/Controller/Category/Admin/CategoryAdminController.php` -> `src/Controller/Admin/CategoryAdminController.php`
+- `src/Controller/Category/Admin/CategoryAuditController.php` -> `src/Controller/Admin/CategoryAuditController.php`
+- `src/Controller/Category/Admin/CategoryBatchEditController.php` -> `src/Controller/Admin/CategoryBatchEditController.php`
+- `src/Controller/Category/Admin/CategoryBulkController.php` -> `src/Controller/Admin/CategoryBulkController.php`
+- `src/Controller/Category/Admin/CategoryDlqController.php` -> `src/Controller/Admin/CategoryDlqController.php`
+- `src/Controller/Category/Admin/CategoryListController.php` -> `src/Controller/Admin/CategoryListController.php`
+- `src/Controller/Category/Admin/CategoryMoveController.php` -> `src/Controller/Admin/CategoryMoveController.php`
+- `src/Controller/Category/Admin/CategoryOpsController.php` -> `src/Controller/Admin/CategoryOpsController.php`
+- `src/Controller/Category/Admin/CategoryPermsController.php` -> `src/Controller/Admin/CategoryPermsController.php`
+- `src/Controller/Category/Api/CategoryAdminApiController.php` -> `src/Controller/Api/CategoryAdminApiController.php`
+- `src/Controller/Category/Merchant/CategoryMerchantController.php` -> `src/Controller/Merchant/CategoryMerchantController.php`
+- `src/Event/Category/CategoryMoved.php` -> `src/Event/CatalogCategoryMoved.php`
 
 ## Removed wrapper dirs
-- `src/Controller/tests/Admin`
-- `src/Controller/tests/Api`
-- `src/Controller/tests/Merchant`
-- `src/Controller/tests`
-- `src/Event/tests`
+- `src/Controller/Category/Admin`
+- `src/Controller/Category/Api`
+- `src/Controller/Category/Merchant`
+- `src/Controller/Category`
+- `src/Event/Category`

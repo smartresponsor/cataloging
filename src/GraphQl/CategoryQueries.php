@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace App\GraphQl;
 
 use ApiPlatform\GraphQl\Resolver\QueryCollectionResolverInterface;
-use App\Entity\testsEntity;
+use App\Entity\CategoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class testsChildListResolver implements QueryCollectionResolverInterface
+final class CategoryChildListResolver implements QueryCollectionResolverInterface
 {
-    public function __construct(private readonly EntityManagerInterface $em, private readonly testsRepository $repo)
+    public function __construct(private readonly EntityManagerInterface $em, private readonly CategoryRepository $repo)
     {
     }
 
@@ -24,8 +24,8 @@ final class testsChildListResolver implements QueryCollectionResolverInterface
         if ('' === $id) {
             return [];
         }
-        /** @var testsEntity|null $node */
-        $node = $this->em->getRepository(testsEntity::class)->find($id);
+        /** @var CategoryEntity|null $node */
+        $node = $this->em->getRepository(CategoryEntity::class)->find($id);
         if (!$node) {
             return [];
         }
@@ -34,9 +34,9 @@ final class testsChildListResolver implements QueryCollectionResolverInterface
     }
 }
 
-final class testsAncestorListResolver implements QueryCollectionResolverInterface
+final class CategoryAncestorListResolver implements QueryCollectionResolverInterface
 {
-    public function __construct(private readonly EntityManagerInterface $em, private readonly testsRepository $repo)
+    public function __construct(private readonly EntityManagerInterface $em, private readonly CategoryRepository $repo)
     {
     }
 
@@ -47,8 +47,8 @@ final class testsAncestorListResolver implements QueryCollectionResolverInterfac
         if ('' === $id) {
             return [];
         }
-        /** @var testsEntity|null $node */
-        $node = $this->em->getRepository(testsEntity::class)->find($id);
+        /** @var CategoryEntity|null $node */
+        $node = $this->em->getRepository(CategoryEntity::class)->find($id);
         if (!$node) {
             return [];
         }

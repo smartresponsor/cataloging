@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class testsAdminApiController
+final class CategoryAdminApiController
 {
     #[Route('/api/admin/category/list', name: 'api_admin_category_list', methods: ['GET'])]
     public function list(): JsonResponse

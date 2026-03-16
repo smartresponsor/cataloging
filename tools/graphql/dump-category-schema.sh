@@ -2,7 +2,7 @@
 set -e
 OUT=report/category-graphql-schema-v1.graphql
 cat > $OUT <<'GQL'
-type tests {
+type Category {
   id: ID!
   name: String!
   slug: String!
@@ -11,7 +11,7 @@ type tests {
   channel: String
 }
 type Query {
-  categories(locale: String, channel: String): [tests!]!
+  categories(locale: String, channel: String): [Category!]!
 }
 GQL
 echo '{"current":"v1"}' > report/category-graphql-schema-index.json

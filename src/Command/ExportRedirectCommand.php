@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\testsAliasEntity;
-use App\Entity\testsEntity;
+use App\Entity\CategoryAliasEntity;
+use App\Entity\CategoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -25,13 +25,13 @@ final class ExportRedirectCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $aliasRepo = $this->em->getRepository(testsAliasEntity::class);
-        $catRepo = $this->em->getRepository(testsEntity::class);
+        $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
+        $catRepo = $this->em->getRepository(CategoryEntity::class);
         $aliases = $aliasRepo->findAll();
 
         $lines = [];
         foreach ($aliases as $alias) {
-            /** @var testsEntity|null $cat */
+            /** @var CategoryEntity|null $cat */
             $cat = $catRepo->find($alias->categoryId());
             if (!$cat) {
                 continue;

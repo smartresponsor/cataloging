@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\RunnerInterface;
 
-interface testsProjectionRunnerInterface
+interface CategoryProjectionRunnerInterface
 {
     /** Run sync loop with backoff; return when queue is drained or stop requested. */
     public function run(int $maxSec, int $maxBatch): void;

@@ -9,10 +9,10 @@ Owner: Marketing America Corp
 
 namespace App\Service\Api;
 
-use App\Service\Catalogtests\DraftPolicy;
-use App\Service\Catalogtests\PublishOperation;
-use App\Service\Catalogtests\Status;
-use App\Service\Catalogtests\TreeOperation;
+use App\Service\CatalogCategory\DraftPolicy;
+use App\Service\CatalogCategory\PublishOperation;
+use App\Service\CatalogCategory\Status;
+use App\Service\CatalogCategory\TreeOperation;
 
 final class GraphqlResolver implements GraphqlResolverInterface
 {
@@ -62,7 +62,7 @@ final class GraphqlResolver implements GraphqlResolverInterface
         ]];
     }
 
-    public function publishtests(array $args): ?array
+    public function publishCategory(array $args): ?array
     {
         $input = (array) ($args['input'] ?? []);
         $id = (string) ($input['id'] ?? '');
@@ -82,7 +82,7 @@ final class GraphqlResolver implements GraphqlResolverInterface
         ];
     }
 
-    public function movetests(array $args): bool
+    public function moveCategory(array $args): bool
     {
         $input = (array) ($args['input'] ?? []);
         $id = (string) ($input['id'] ?? '');

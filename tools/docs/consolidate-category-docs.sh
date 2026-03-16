@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 OUT=docs/category-all-in-one.md
-echo '# tests docs (f..r)' > $OUT
+echo '# Category docs (f..r)' > $OUT
 for f in docs/*.md; do
   echo "\n## $f" >> $OUT
   cat "$f" >> $OUT
