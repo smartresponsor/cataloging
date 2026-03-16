@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Infrastructure;
 
-use App\Infrastructure\testsAuditLogger;
+use App\Infrastructure\CategoryAuditLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-final class CatalogtestsAuditLoggerTest extends TestCase
+final class CatalogCategoryAuditLoggerTest extends TestCase
 {
     public function testLog(): void
     {
@@ -19,7 +19,7 @@ final class CatalogtestsAuditLoggerTest extends TestCase
                 return ($context['action'] ?? null) === 'category.move' && ($context['id'] ?? null) === 1;
             }));
 
-        $audit = new testsAuditLogger($logger);
+        $audit = new CategoryAuditLogger($logger);
         $audit->log('category.move', ['id' => 1]);
     }
 }

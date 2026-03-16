@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Util;
 /**
  * Simple logging class for debug messages and extended information.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 final class Log
@@ -65,7 +65,7 @@ final class Log
     /**
      * Are debugging messages activated?
      *
-     * @var boolean
+     * @var bool
      */
     private static $debug = false;
 
@@ -73,7 +73,7 @@ final class Log
      * Sets the log severity levels, this can be an OR combined list of valid
      * severities.
      *
-     * @param integer $severity The log severity levels.
+     * @param int $severity The log severity levels.
      *
      * @return void
      */

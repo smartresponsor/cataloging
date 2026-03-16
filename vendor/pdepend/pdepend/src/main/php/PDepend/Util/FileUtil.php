@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Util;
 /**
  * This is a utility class for some file operations.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 final class FileUtil
@@ -55,14 +55,17 @@ final class FileUtil
      * this method will return the system temp directory.
      *
      * @return string
+     *
      * @since  0.10.0
      */
     public static function getUserHomeDirOrSysTempDir()
     {
         $home = self::getUserHomeDir();
+
         if (file_exists($home) && is_writable($home)) {
             return $home;
         }
+
         return self::getSysTempDir();
     }
 
@@ -80,13 +83,18 @@ final class FileUtil
      * Returns the home directory of the current user.
      *
      * @return string
+     *
      * @since  0.10.0
      */
     public static function getUserHomeDir()
     {
-        if ((PHP_OS === 'Darwin') || (false === stripos(PHP_OS, 'win'))) {
-            return getenv('HOME');
+        $userHomeDir = getenv('HOME');
+
+        if (!$userHomeDir) {
+            // The HOME environment isn't always set on Windows, then we do a fallback to the HOMEDRIVE and HOMEPATH
+            $userHomeDir = getenv('HOMEDRIVE') . getenv('HOMEPATH');
         }
-        return getenv('HOMEDRIVE') . getenv('HOMEPATH');
+
+        return $userHomeDir;
     }
 }

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Util;
 /**
  * Registry class for the PDepend configuration class.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ConfigurationInstance
@@ -53,14 +53,14 @@ class ConfigurationInstance
     /**
      * The unique configuration instance.
      *
-     * @var \PDepend\Util\Configuration
+     * @var Configuration|null
      */
     private static $configuration = null;
 
     /**
      * Returns a configured config instance or <b>null</b>.
      *
-     * @return \PDepend\Util\Configuration
+     * @return Configuration|null
      */
     public static function get()
     {
@@ -70,7 +70,8 @@ class ConfigurationInstance
     /**
      * Sets the configuration instance.
      *
-     * @param  \PDepend\Util\Configuration $configuration The config instance.
+     * @param Configuration $configuration The config instance.
+     *
      * @return void
      */
     public static function set(Configuration $configuration = null)

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,13 +36,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
 
+use BadMethodCallException;
+use InvalidArgumentException;
+use OutOfBoundsException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
@@ -52,16 +56,24 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
  * Formal parameters can include a type hint, a by reference identifier and a
  * default value. The only mandatory part is the parameter identifier.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
-class ASTFormalParameter extends ASTNode
+class ASTFormalParameter extends AbstractASTNode
 {
+    /**
+     * Defined modifiers for this property node.
+     *
+     * @var int
+     */
+    protected $modifiers = 0;
+
     /**
      * Checks if this parameter has a type.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasType()
     {
@@ -71,21 +83,24 @@ class ASTFormalParameter extends ASTNode
     /**
      * Returns the type of this parameter.
      *
-     * @return \PDepend\Source\AST\ASTType
+     * @return ASTType
      */
     public function getType()
     {
-        if ($this->hasType()) {
-            return $this->getChild(0);
+        $child = $this->getChild(0);
+        if ($child instanceof ASTType) {
+            return $child;
         }
-        throw new \OutOfBoundsException('The parameter does not has a type specification.');
+
+        throw new OutOfBoundsException('The parameter does not have a type specification.');
     }
 
     /**
      * This method will return <b>true</b> when the parameter is declared as a
      * variable argument list <b>...</b>.
      *
-     * @return boolean
+     * @return bool
+     *
      * @since 2.0.7
      */
     public function isVariableArgList()
@@ -101,14 +116,14 @@ class ASTFormalParameter extends ASTNode
      */
     public function setVariableArgList()
     {
-        return $this->setMetadataBoolean(6, true);
+        $this->setMetadataBoolean(6, true);
     }
 
     /**
      * This method will return <b>true</b> when the parameter is passed by
      * reference.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPassedByReference()
     {
@@ -122,32 +137,124 @@ class ASTFormalParameter extends ASTNode
      */
     public function setPassedByReference()
     {
-        return $this->setMetadataBoolean(5, true);
-    }
-
-    /**
-     * Accept method of the visitor design pattern. This method will be called
-     * by a visitor during tree traversal.
-     *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param  mixed                                 $data
-     * @return mixed
-     * @since  0.9.12
-     */
-    public function accept(ASTVisitor $visitor, $data = null)
-    {
-        return $visitor->visitFormalParameter($this, $data);
+        $this->setMetadataBoolean(5, true);
     }
 
     /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.10.4
-     * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
+     * @see    ASTNode#getMetadataSize()
      */
     protected function getMetadataSize()
     {
         return 7;
+    }
+
+    /**
+     * Returns the declared modifiers for this type.
+     *
+     * @return int
+     *
+     * @since  0.9.4
+     */
+    public function getModifiers()
+    {
+        return $this->modifiers;
+    }
+
+    /**
+     * This method sets a OR combined integer of the declared modifiers for this
+     * node.
+     *
+     * This method will throw an exception when the value of given <b>$modifiers</b>
+     * contains an invalid/unexpected modifier
+     *
+     * @param int $modifiers
+     *
+     * @throws BadMethodCallException
+     * @throws InvalidArgumentException
+     *
+     * @return void
+     *
+     * @since  0.9.4
+     */
+    public function setModifiers($modifiers)
+    {
+        if ($this->modifiers !== 0) {
+            throw new BadMethodCallException(
+                'Cannot overwrite previously set constructor property modifiers.'
+            );
+        }
+
+        $expected = ~State::IS_PUBLIC
+            & ~State::IS_PROTECTED
+            & ~State::IS_PRIVATE
+            & ~State::IS_READONLY;
+
+        if (($expected & $modifiers) !== 0) {
+            throw new InvalidArgumentException('Invalid constructor property modifier given.');
+        }
+
+        $this->modifiers = $modifiers;
+    }
+
+    /**
+     * Returns <b>true</b> if this node is marked as public, protected or private, otherwise the
+     * returned value will be <b>false</b>.
+     *
+     * Can happen only on constructor promotion property.
+     *
+     * @return bool
+     */
+    public function isPromoted()
+    {
+        return ($this->getModifiers() & (State::IS_PUBLIC | State::IS_PROTECTED | State::IS_PRIVATE)) !== 0;
+    }
+
+    /**
+     * Returns <b>true</b> if this node is marked as public, otherwise the
+     * returned value will be <b>false</b>.
+     *
+     * Can happen only on constructor promotion property.
+     *
+     * @return bool
+     */
+    public function isPublic()
+    {
+        return ($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC;
+    }
+
+    /**
+     * Returns <b>true</b> if this node is marked as protected, otherwise the
+     * returned value will be <b>false</b>.
+     *
+     * Can happen only on constructor promotion property.
+     *
+     * @return bool
+     */
+    public function isProtected()
+    {
+        return ($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED;
+    }
+
+    /**
+     * Returns <b>true</b> if this node is marked as private, otherwise the
+     * returned value will be <b>false</b>.
+     *
+     * Can happen only on constructor promotion property.
+     *
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return ($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE;
+    }
+
+    public function __sleep()
+    {
+        return array_merge(array('modifiers'), parent::__sleep());
     }
 }

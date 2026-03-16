@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
+
+use InvalidArgumentException;
+use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * This class represents arguments as they are supplied to functions or
@@ -57,24 +61,57 @@ namespace PDepend\Source\AST;
  * //       ------------
  * </code>
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
-class ASTArguments extends \PDepend\Source\AST\ASTNode
+class ASTArguments extends AbstractASTNode
 {
     /**
-     * Accept method of the visitor design pattern. This method will be called
-     * by a visitor during tree traversal.
+     * This method will return true if the argument list is declared as foo(...)
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
+     * @return bool
      *
-     * @return mixed
-     * @since  0.9.12
+     * @since 2.11.0
      */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
+    public function isVariadicPlaceholder()
     {
-        return $visitor->visitArguments($this, $data);
+        return $this->getMetadataBoolean(4);
+    }
+
+    /**
+     * This method can be used to mark the argument list as variadic placeholder
+     *
+     * @return void
+     * @since 2.11.0
+     */
+    public function setVariadicPlaceholder()
+    {
+        $this->setMetadataBoolean(4, true);
+    }
+
+    /**
+     * Rather the given arguments list can still take one more argument.
+     *
+     * @return bool
+     */
+    public function acceptsMoreArguments()
+    {
+        return true;
+    }
+
+    /**
+     * This method adds a new child node to this node instance.
+     *
+     * @return void
+     */
+    public function addChild(ASTNode $node)
+    {
+        if (!$this->acceptsMoreArguments()) {
+            throw new InvalidArgumentException('No more arguments allowed.');
+        }
+
+        parent::addChild($node);
     }
 }

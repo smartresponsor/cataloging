@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -49,6 +49,7 @@ use PDepend\Metrics\AnalyzerProjectAware;
 use PDepend\Source\AST\ASTArtifact;
 use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
+use PDepend\Source\AST\ASTNamespace;
 
 /**
  * This analyzer provides two project related inheritance metrics.
@@ -60,7 +61,7 @@ use PDepend\Source\AST\ASTClass;
  * <b>AHH - Average Hierarchy Height</b>: The computed average of all inheritance
  * trees within the analyzed system, external classes or interfaces are ignored.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class InheritanceAnalyzer extends AbstractAnalyzer implements
@@ -84,14 +85,21 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      * analyzed system. The array size is equal to the number of analyzed root
      * classes.
      *
-     * @var array(integer)
+     * @var array<integer>
      */
-    private $rootClasses = null;
+    private $rootClasses = array();
+
+    /**
+     * @var array<integer>
+     *
+     * @deprecated 3.0.0 This property will no longer be accessible on the public access level in next major version.
+     */
+    public $derivedClasses = array();
 
     /**
      * The maximum depth of inheritance tree value within the analyzed source code.
      *
-     * @var integer
+     * @var int
      */
     private $maxDIT = 0;
 
@@ -112,21 +120,21 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Total number of classes.
      *
-     * @var integer
+     * @var int
      */
     private $numberOfClasses = 0;
 
     /**
      * Total number of derived classes.
      *
-     * @var integer
+     * @var int
      */
     private $numberOfDerivedClasses = 0;
 
     /**
      * Metrics calculated for a single source node.
      *
-     * @var array(string=>array)
+     * @var array<string, array<string, mixed>>
      */
     private $nodeMetrics = null;
 
@@ -135,8 +143,7 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      * for the given <b>$node</b>. If there are no metrics for the requested
      * node, this method will return an empty <b>array</b>.
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $artifact
-     * @return array(string=>mixed)
+     * @return array<string, mixed>
      */
     public function getNodeMetrics(ASTArtifact $artifact)
     {
@@ -156,7 +163,7 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      * )
      * </code>
      *
-     * @return array(string=>mixed)
+     * @return array<string, mixed>
      */
     public function getProjectMetrics()
     {
@@ -168,9 +175,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     }
 
     /**
-     * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
+     * Processes all {@link ASTNamespace} code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
      * @return void
      */
     public function analyze($namespaces)
@@ -188,8 +194,10 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      * Calculates several inheritance related metrics for the given source
      * namespaces.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
+     * @param ASTArtifactList<ASTNamespace> $namespaces
+     *
      * @return void
+     *
      * @since  0.9.10
      */
     private function doAnalyze($namespaces)
@@ -209,7 +217,6 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Visits a class node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
      */
     public function visitClass(ASTClass $class)
@@ -232,8 +239,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Calculates the number of derived classes.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
+     *
      * @since  0.9.5
      */
     private function calculateNumberOfDerivedClasses(ASTClass $class)
@@ -255,8 +262,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Calculates the maximum HIT for the given class.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
+     *
      * @since  0.9.10
      */
     private function calculateDepthOfInheritanceTree(ASTClass $class)
@@ -286,8 +293,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      * Calculates two metrics. The number of added methods and the number of
      * overwritten methods.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
+     *
      * @since  0.9.10
      */
     private function calculateNumberOfAddedAndOverwrittenMethods(ASTClass $class)
@@ -328,8 +335,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Initializes a empty metric container for the given class node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
+     *
      * @since  0.9.10
      */
     private function initNodeMetricsForClass(ASTClass $class)

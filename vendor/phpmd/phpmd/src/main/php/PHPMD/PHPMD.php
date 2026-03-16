@@ -2,58 +2,41 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Manuel Pichler nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * Licensed under BSD License
+ * For full copyright and license information, please see the LICENSE file.
+ * Redistributions of files must retain the above copyright notice.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @copyright Manuel Pichler. All rights reserved.
+ * @license   https://opensource.org/licenses/bsd-license.php BSD License
+ * @link      http://phpmd.org/
  */
 
 namespace PHPMD;
 
+use PHPMD\Cache\ResultCacheEngine;
+
 /**
  * This is the main facade of the PHP PMD application
- *
- * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class PHPMD
 {
     /**
      * The current PHPMD version.
      */
-    const VERSION = '@project.version@';
+    const VERSION = '@package_version@';
+
+    /**
+     * This property will be set to <b>true</b> when an error
+     * was found in the processed source code.
+     *
+     * @var boolean
+     * @since 2.10.0
+     */
+    private $errors = false;
 
     /**
      * List of valid file extensions for analyzed files.
@@ -75,9 +58,12 @@ class PHPMD
      * @var string
      */
     private $input;
-    
+
+    /** @var ResultCacheEngine|null */
+    private $resultCache;
+
     /**
-     * This property will be set to <b>true</b> when an error or a violation
+     * This property will be set to <b>true</b> when a violation
      * was found in the processed source code.
      *
      * @var boolean
@@ -92,6 +78,18 @@ class PHPMD
      * @since 1.2.0
      */
     private $options = array();
+
+    /**
+     * This method will return <b>true</b> when the processed source code
+     * contains errors.
+     *
+     * @return boolean
+     * @since 2.10.0
+     */
+    public function hasErrors()
+    {
+        return $this->errors;
+    }
 
     /**
      * This method will return <b>true</b> when the processed source code
@@ -118,7 +116,7 @@ class PHPMD
     /**
      * Returns an array with valid php source file extensions.
      *
-     * @return array(string)
+     * @return string[]
      * @since 0.2.0
      */
     public function getFileExtensions()
@@ -129,8 +127,7 @@ class PHPMD
     /**
      * Sets a list of filename extensions for valid php source code files.
      *
-     * @param array(string) $fileExtensions Extensions without leading dot.
-     *
+     * @param array<string> $fileExtensions Extensions without leading dot.
      * @return void
      */
     public function setFileExtensions(array $fileExtensions)
@@ -141,10 +138,22 @@ class PHPMD
     /**
      * Returns an array with string patterns that mark a file path as invalid.
      *
-     * @return array(string)
-     * @since 0.2.0
+     * @return string[]
+     * @since      0.2.0
+     * @deprecated 3.0.0 Use getIgnorePatterns() instead, you always get a list of patterns.
      */
     public function getIgnorePattern()
+    {
+        return $this->getIgnorePatterns();
+    }
+
+    /**
+     * Returns an array with string patterns that mark a file path invalid.
+     *
+     * @return string[]
+     * @since 2.9.0
+     */
+    public function getIgnorePatterns()
     {
         return $this->ignorePatterns;
     }
@@ -153,16 +162,50 @@ class PHPMD
      * Sets a list of ignore patterns that is used to exclude directories from
      * the source analysis.
      *
-     * @param array(string) $ignorePatterns List of ignore patterns.
-     *
+     * @param array<string> $ignorePatterns List of ignore patterns.
      * @return void
+     * @deprecated 3.0.0 Use addIgnorePatterns() instead, both will add an not set the patterns.
      */
     public function setIgnorePattern(array $ignorePatterns)
+    {
+        $this->addIgnorePatterns($ignorePatterns);
+    }
+
+    /**
+     * Add a list of ignore patterns which is used to exclude directories from
+     * the source analysis.
+     *
+     * @param array<string> $ignorePatterns List of ignore patterns.
+     * @return $this
+     * @since 2.9.0
+     */
+    public function addIgnorePatterns(array $ignorePatterns)
     {
         $this->ignorePatterns = array_merge(
             $this->ignorePatterns,
             $ignorePatterns
         );
+
+        return $this;
+    }
+
+    /**
+     * @return ResultCacheEngine|null
+     */
+    public function getResultCache()
+    {
+        return $this->resultCache;
+    }
+
+    /**
+     * @param ResultCacheEngine $resultCache
+     * @return $this;
+     */
+    public function setResultCache($resultCache)
+    {
+        $this->resultCache = $resultCache;
+
+        return $this;
     }
 
     /**
@@ -191,41 +234,45 @@ class PHPMD
      * path. It will apply rules defined in the comma-separated <b>$ruleSets</b>
      * argument. The result will be passed to all given renderer instances.
      *
-     * @param string $inputPath
-     * @param string $ruleSets
+     * @param string                    $inputPath
+     * @param array|null                $ignorePattern
      * @param \PHPMD\AbstractRenderer[] $renderers
-     * @param \PHPMD\RuleSetFactory $ruleSetFactory
+     * @param \PHPMD\RuleSet[]          $ruleSetList
+     * @param \PHPMD\Report             $report
      * @return void
      */
     public function processFiles(
         $inputPath,
-        $ruleSets,
+        $ignorePattern,
         array $renderers,
-        RuleSetFactory $ruleSetFactory
+        array $ruleSetList,
+        Report $report
     ) {
-
         // Merge parsed excludes
-        $this->ignorePatterns = array_merge($this->ignorePatterns, $ruleSetFactory->getIgnorePattern($ruleSets));
+        $this->addIgnorePatterns($ignorePattern);
 
         $this->input = $inputPath;
-
-        $report = new Report();
 
         $factory = new ParserFactory();
         $parser  = $factory->create($this);
 
-        foreach ($ruleSetFactory->createRuleSets($ruleSets) as $ruleSet) {
+        foreach ($ruleSetList as $ruleSet) {
             $parser->addRuleSet($ruleSet);
         }
 
         $report->start();
         $parser->parse($report);
+        if ($this->resultCache !== null) {
+            $state = $this->resultCache->getFileFilter()->getState();
+            $state = $this->resultCache->getUpdater()->update($ruleSetList, $state, $report);
+            $this->resultCache->getWriter()->write($state);
+        }
         $report->end();
 
         foreach ($renderers as $renderer) {
             $renderer->start();
         }
-        
+
         foreach ($renderers as $renderer) {
             $renderer->renderReport($report);
         }
@@ -234,6 +281,7 @@ class PHPMD
             $renderer->end();
         }
 
+        $this->errors     = $report->hasErrors();
         $this->violations = !$report->isEmpty();
     }
 }

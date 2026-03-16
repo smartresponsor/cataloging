@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,19 +36,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
 
+use PDepend\Source\ASTVisitor\ASTVisitor;
+
 /**
  * This class represents primitive types like integer, float, boolean, string
  * etc.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 class ASTScalarType extends ASTType
@@ -57,7 +61,7 @@ class ASTScalarType extends ASTType
      * This method will return <b>true</b> when this type is a php primitive.
      * For this concrete implementation the return value will be always true.
      *
-     * @return boolean
+     * @return bool
      */
     public function isScalar()
     {
@@ -65,16 +69,32 @@ class ASTScalarType extends ASTType
     }
 
     /**
-     * Accept method of the visitor design pattern. This method will be called
-     * by a visitor during tree traversal.
+     * This method will return <b>true</b> when this type is exactly null.
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor
-     * @param mixed $data
-     * @return mixed
-     * @since  0.9.12
+     * @return bool
      */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
+    public function isNull()
     {
-        return $visitor->visitScalarType($this, $data);
+        return $this->getImage() === 'null';
+    }
+
+    /**
+     * This method will return <b>true</b> when this type is exactly false.
+     *
+     * @return bool
+     */
+    public function isFalse()
+    {
+        return $this->getImage() === 'false';
+    }
+
+    /**
+     * This method will return <b>true</b> when this type is exactly false.
+     *
+     * @return bool
+     */
+    public function isTrue()
+    {
+        return $this->getImage() === 'true';
     }
 }

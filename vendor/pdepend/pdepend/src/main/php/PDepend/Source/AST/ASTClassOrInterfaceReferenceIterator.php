@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -44,20 +44,21 @@ namespace PDepend\Source\AST;
 
 /**
  * This is a special implementation of the node iterator that will translate
- * a list of given {@link \PDepend\Source\AST\ASTClassOrInterfaceReference} holders
- * into a list of unique {@link \PDepend\Source\AST\AbstractASTClassOrInterface}
+ * a list of given {@link ASTClassOrInterfaceReference} holders
+ * into a list of unique {@link AbstractASTClassOrInterface}
  * instances.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
+ * @extends ASTArtifactList<AbstractASTClassOrInterface>
  */
 class ASTClassOrInterfaceReferenceIterator extends ASTArtifactList
 {
     /**
      * Constructs a new reference iterator instance.
      *
-     * @param \PDepend\Source\AST\ASTClassOrInterfaceReference[] $references List of
-     *        references to concrete type instances.
+     * @param ASTClassOrInterfaceReference[] $references List of references to concrete type instances.
      */
     public function __construct(array $references)
     {
@@ -65,11 +66,12 @@ class ASTClassOrInterfaceReferenceIterator extends ASTArtifactList
     }
 
     /**
-     * This method creates a set of {@link \PDepend\Source\AST\AbstractASTClassOrInterface}
+     * This method creates a set of {@link AbstractASTClassOrInterface}
      * objects from the given reference array.
      *
-     * @param  \PDepend\Source\AST\ASTClassOrInterfaceReference[] $references
-     * @return \PDepend\Source\AST\AbstractASTClassOrInterface[]
+     * @param ASTClassOrInterfaceReference[] $references
+     *
+     * @return AbstractASTClassOrInterface[]
      */
     protected function createClassesAndInterfaces(array $references)
     {

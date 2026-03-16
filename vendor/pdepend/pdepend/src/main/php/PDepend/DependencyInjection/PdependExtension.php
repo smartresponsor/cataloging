@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\DependencyInjection;
 
+use stdClass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension as SymfonyExtension;
@@ -51,12 +52,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 /**
  * PDepend DependencyInjection Extension for Symfony DIC
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class PdependExtension extends SymfonyExtension
 {
     /**
+     * @param array<array<array<array<string>>>> $configs
+     *
+     * @return void
      * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container)
@@ -102,19 +106,25 @@ class PdependExtension extends SymfonyExtension
         $configurationDefinition->setArguments(array($settings));
     }
 
+    /**
+     * @param array<string, array<string, string>> $config
+     *
+     * @return stdClass
+     */
     private function createSettings($config)
     {
-        $settings = new \stdClass();
+        $settings = new stdClass();
 
-        $settings->cache           = new \stdClass();
+        $settings->cache           = new stdClass();
         $settings->cache->driver = $config['cache']['driver'];
         $settings->cache->location = $config['cache']['location'];
+        $settings->cache->ttl = $config['cache']['ttl'];
 
-        $settings->imageConvert             = new \stdClass();
+        $settings->imageConvert             = new stdClass();
         $settings->imageConvert->fontSize   = $config['image_convert']['font_size'];
         $settings->imageConvert->fontFamily = $config['image_convert']['font_family'];
 
-        $settings->parser          = new \stdClass();
+        $settings->parser          = new stdClass();
         $settings->parser->nesting = $config['parser']['nesting'];
 
         return $settings;

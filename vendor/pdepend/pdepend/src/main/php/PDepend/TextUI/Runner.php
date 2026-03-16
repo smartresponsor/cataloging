@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,23 +36,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\TextUI;
 
+use Exception;
 use PDepend\Engine;
 use PDepend\Input\ExcludePathFilter;
 use PDepend\Input\ExtensionFilter;
 use PDepend\ProcessListener;
 use PDepend\Report\ReportGeneratorFactory;
 use PDepend\Source\AST\ASTArtifactList\PackageArtifactFilter;
+use RuntimeException;
 
 /**
  * The command line runner starts a PDepend process.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Runner
@@ -71,7 +73,7 @@ class Runner
      * List of allowed file extensions. Default file extensions are <b>php</b>
      * and <p>php5</b>.
      *
-     * @var array(string)
+     * @var array<string>
      */
     private $extensions = array('php', 'php5');
 
@@ -79,42 +81,42 @@ class Runner
      * List of exclude directories. Default exclude dirs are <b>.svn</b> and
      * <b>CVS</b>.
      *
-     * @var array(string)
+     * @var array<string>
      */
     private $excludeDirectories = array('.git', '.svn', 'CVS');
 
     /**
      * List of exclude namespaces.
      *
-     * @var array(string)
+     * @var array<string>
      */
     private $excludeNamespaces = array();
 
     /**
      * List of source code directories and files.
      *
-     * @var array(string)
+     * @var array<string>
      */
     private $sourceArguments = array();
 
     /**
      * Should the parse ignore doc comment annotations?
      *
-     * @var boolean
+     * @var bool
      */
     private $withoutAnnotations = false;
 
     /**
      * List of log identifiers and log files.
      *
-     * @var array(string=>string)
+     * @var array<string, string>
      */
     private $loggerMap = array();
 
     /**
      * List of cli options for loggers or analyzers.
      *
-     * @var array(string=>mixed)
+     * @var array<string, mixed>
      */
     private $options = array();
 
@@ -122,24 +124,24 @@ class Runner
      * This of process listeners that will be hooked into PDepend's analyzing
      * process.
      *
-     * @var \PDepend\ProcessListener[]
+     * @var ProcessListener[]
      */
     private $processListeners = array();
 
     /**
      * List of error messages for all parsing errors.
      *
-     * @var array(string)
+     * @var array<string>
      */
     private $parseErrors = array();
 
     /**
-     * @var \PDepend\Report\ReportGeneratorFactory
+     * @var ReportGeneratorFactory
      */
     private $reportGeneratorFactory;
 
     /**
-     * @var \PDepend\Engine
+     * @var Engine
      */
     private $engine;
 
@@ -154,7 +156,8 @@ class Runner
      *
      * NOTE: If you call this method, it will replace the default file extensions.
      *
-     * @param array(string) $extensions
+     * @param array<string> $extensions
+     *
      * @return void
      */
     public function setFileExtensions(array $extensions)
@@ -167,7 +170,8 @@ class Runner
      *
      * NOTE: If this method is called, it will overwrite the default settings.
      *
-     * @param array(string) $excludeDirectories
+     * @param array<string> $excludeDirectories
+     *
      * @return void
      */
     public function setExcludeDirectories(array $excludeDirectories)
@@ -178,7 +182,8 @@ class Runner
     /**
      * Sets a list of exclude packages.
      *
-     * @param array(string) $excludePackages
+     * @param array<string> $excludePackages
+     *
      * @return void
      */
     public function setExcludeNamespaces(array $excludePackages)
@@ -189,7 +194,8 @@ class Runner
     /**
      * Sets a list of source directories and files.
      *
-     * @param array(string) $sourceArguments
+     * @param array<string> $sourceArguments
+     *
      * @return void
      */
     public function setSourceArguments(array $sourceArguments)
@@ -212,6 +218,7 @@ class Runner
      *
      * @param string $generatorId
      * @param string $reportFile
+     *
      * @return void
      */
     public function addReportGenerator($generatorId, $reportFile)
@@ -222,8 +229,9 @@ class Runner
     /**
      * Adds a logger or analyzer option.
      *
-     * @param string $identifier
-     * @param string|array $value
+     * @param string               $identifier
+     * @param array<string>|string $value
+     *
      * @return void
      */
     public function addOption($identifier, $value)
@@ -235,7 +243,6 @@ class Runner
      * Adds a process listener instance that will be hooked into PDepend's
      * analyzing process.
      *
-     * @param \PDepend\ProcessListener $processListener
      * @return void
      */
     public function addProcessListener(ProcessListener $processListener)
@@ -247,9 +254,10 @@ class Runner
      * Starts the main PDepend process and returns <b>true</b> after a successful
      * execution.
      *
-     * @return boolean
-     * @throws \RuntimeException An exception with a readable error message and
-     * an exit code.
+     * @throws RuntimeException An exception with a readable error message and
+     *                          an exit code.
+     *
+     * @return int
      */
     public function run()
     {
@@ -280,18 +288,18 @@ class Runner
         // Try to set all source directories.
         try {
             foreach ($this->sourceArguments as $sourceArgument) {
-                if (is_file($sourceArgument)) {
-                    $engine->addFile($sourceArgument);
-                } else {
+                if (is_dir($sourceArgument)) {
                     $engine->addDirectory($sourceArgument);
+                } else {
+                    $engine->addFile($sourceArgument);
                 }
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
         }
 
         if (count($this->loggerMap) === 0) {
-            throw new \RuntimeException('No output specified.', self::EXCEPTION_EXIT);
+            throw new RuntimeException('No output specified.', self::EXCEPTION_EXIT);
         }
 
         // To append all registered loggers.
@@ -302,8 +310,8 @@ class Runner
 
                 $engine->addReportGenerator($generator);
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
         }
 
         foreach ($this->processListeners as $processListener) {
@@ -316,8 +324,8 @@ class Runner
             foreach ($engine->getExceptions() as $exception) {
                 $this->parseErrors[] = $exception->getMessage();
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), self::EXCEPTION_EXIT, $e);
         }
 
         return self::SUCCESS_EXIT;
@@ -327,7 +335,7 @@ class Runner
      * This method will return <b>true</b> when there were errors during the
      * parse process.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasParseErrors()
     {
@@ -338,7 +346,7 @@ class Runner
      * This method will return an <b>array</b> with error messages for all
      * failures that happened during the parsing process.
      *
-     * @return array(string)
+     * @return array<string>
      */
     public function getParseErrors()
     {

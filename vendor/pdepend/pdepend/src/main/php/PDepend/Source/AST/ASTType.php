@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,26 +36,30 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
 
+use PDepend\Source\ASTVisitor\ASTVisitor;
+
 /**
  * Abstract base class for a type node.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
-class ASTType extends ASTNode
+class ASTType extends AbstractASTNode
 {
     /**
      * This method will return <b>true</b> when the underlying type is an array.
      *
-     * @return boolean
+     * @return bool
      */
     public function isArray()
     {
@@ -66,7 +70,7 @@ class ASTType extends ASTNode
      * This method will return <b>true</b> when the underlying data type is a
      * php primitive.
      *
-     * @return boolean
+     * @return bool
      */
     public function isScalar()
     {
@@ -74,17 +78,22 @@ class ASTType extends ASTNode
     }
 
     /**
-     * Accept method of the visitor design pattern. This method will be called
-     * by a visitor during tree traversal.
+     * This method will return <b>true</b> when this type use union pipe to specify multiple types.
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
-     *
-     * @return mixed
-     * @since  0.9.12
+     * @return bool
      */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
+    public function isUnion()
     {
-        return $visitor->visitType($this, $data);
+        return false;
+    }
+
+    /**
+     * This method will return <b>true</b> when this type uses intersection ampersand to specify multiple types.
+     *
+     * @return bool
+     */
+    public function isIntersection()
+    {
+        return false;
     }
 }

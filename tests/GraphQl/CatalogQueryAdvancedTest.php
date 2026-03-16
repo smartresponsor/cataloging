@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\GraphQl;
 
-use App\GraphQL\testsQuery;
-use GraphQL\Type\Definition\ResolveInfo;
+use App\GraphQl\CategoryQuery;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogQueryAdvancedTest extends TestCase
 {
     public function testLocaleFilter(): void
     {
-        $query = new testsQuery();
-        $info = $this->createMock(ResolveInfo::class);
+        $query = new CategoryQuery();
 
-        $result = $query(null, ['locale' => 'en', 'first' => 5], null, $info);
+        $result = $query(null, ['locale' => 'en', 'first' => 5], null, null);
 
         self::assertNotEmpty($result);
         foreach ($result as $row) {

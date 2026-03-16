@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PDepend\Input;
 /**
  * Whitelist filter that accepts files by their file extension.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ExtensionFilter implements Filter
@@ -53,7 +53,7 @@ class ExtensionFilter implements Filter
     /**
      * Whitelist of accepted file extensions.
      *
-     * @var array(string)
+     * @var array<string>
      */
     protected $extensions = array();
 
@@ -61,7 +61,7 @@ class ExtensionFilter implements Filter
      * Constructs a new file extension filter instance with the given list of
      *  allowed file <b>$extensions</b>.
      *
-     * @param array $extensions List of allowed extension.
+     * @param array<string> $extensions List of allowed extension.
      */
     public function __construct(array $extensions)
     {
@@ -71,12 +71,17 @@ class ExtensionFilter implements Filter
     /**
      * Returns <b>true</b> if this filter accepts the given paths.
      *
-     * @param  string $relative The relative path to the specified root.
-     * @param  string $absolute The absolute path to a source file.
-     * @return boolean
+     * @param string $relative The relative path to the specified root.
+     * @param string $absolute The absolute path to a source file.
+     *
+     * @return bool
      */
     public function accept($relative, $absolute)
     {
+        if (strpos($absolute, 'php://') === 0) {
+            return true;
+        }
+
         $extension = pathinfo($relative, PATHINFO_EXTENSION);
 
         return in_array($extension, $this->extensions);

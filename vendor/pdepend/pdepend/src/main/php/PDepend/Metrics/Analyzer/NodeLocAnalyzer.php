@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -47,12 +47,13 @@ use PDepend\Metrics\AnalyzerFilterAware;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Metrics\AnalyzerProjectAware;
 use PDepend\Source\AST\ASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTCompilationUnit;
 use PDepend\Source\AST\ASTFunction;
 use PDepend\Source\AST\ASTInterface;
 use PDepend\Source\AST\ASTMethod;
+use PDepend\Source\AST\ASTNamespace;
+use PDepend\Source\Tokenizer\Token;
 use PDepend\Source\Tokenizer\Tokens;
 
 /**
@@ -74,7 +75,7 @@ use PDepend\Source\Tokenizer\Tokens;
  *
  * The same rule applies to class methods. mapi, <b>PLEASE, FIX THIS ISSUE.</b>
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
@@ -94,7 +95,7 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     /**
      * Collected project metrics.
      *
-     * @var array(string=>integer)
+     * @var array<string, integer>
      */
     private $projectMetrics = array(
         self::M_LINES_OF_CODE              =>  0,
@@ -108,7 +109,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
      * Executable lines of code in a class. The method calculation increases
      * this property with each method's ELOC value.
      *
-     * @var   integer
+     * @var int
+     *
      * @since 0.9.12
      */
     private $classExecutableLines = 0;
@@ -117,7 +119,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
      * Logical lines of code in a class. The method calculation increases this
      * property with each method's LLOC value.
      *
-     * @var   integer
+     * @var int
+     *
      * @since 0.9.13
      */
     private $classLogicalLines = 0;
@@ -136,8 +139,7 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
      * )
      * </code>
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $artifact
-     * @return array
+     * @return array<string, integer>
      */
     public function getNodeMetrics(ASTArtifact $artifact)
     {
@@ -159,7 +161,7 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
      * )
      * </code>
      *
-     * @return array
+     * @return array<string, integer>
      */
     public function getProjectMetrics()
     {
@@ -167,9 +169,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     }
 
     /**
-     * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
+     * Processes all {@link ASTNamespace} code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
      * @return void
      */
     public function analyze($namespaces)
@@ -191,7 +192,6 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     /**
      * Visits a class node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
      */
     public function visitClass(ASTClass $class)
@@ -208,7 +208,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
         }
 
         if ($this->restoreFromCache($class)) {
-            return $this->fireEndClass($class);
+            $this->fireEndClass($class);
+            return;
         }
 
         list($cloc) = $this->linesOfCode($class->getTokens(), true);
@@ -230,7 +231,6 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     /**
      * Visits a file node.
      *
-     * @param  \PDepend\Source\AST\ASTCompilationUnit $compilationUnit
      * @return void
      */
     public function visitCompilationUnit(ASTCompilationUnit $compilationUnit)
@@ -241,7 +241,7 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
         }
         // Check for initial file
         $id = $compilationUnit->getId();
-        if (isset($this->metrics[$id])) {
+        if (!$id || isset($this->metrics[$id])) {
             return;
         }
 
@@ -249,7 +249,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
 
         if ($this->restoreFromCache($compilationUnit)) {
             $this->updateProjectMetrics($id);
-            return $this->fireEndFile($compilationUnit);
+            $this->fireEndFile($compilationUnit);
+            return;
         }
 
         list($cloc, $eloc, $lloc) = $this->linesOfCode($compilationUnit->getTokens());
@@ -273,7 +274,6 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     /**
      * Visits a function node.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return void
      */
     public function visitFunction(ASTFunction $function)
@@ -283,7 +283,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
         $function->getCompilationUnit()->accept($this);
 
         if ($this->restoreFromCache($function)) {
-            return $this->fireEndFunction($function);
+            $this->fireEndFunction($function);
+            return;
         }
 
         list($cloc, $eloc, $lloc) = $this->linesOfCode(
@@ -308,7 +309,6 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     /**
      * Visits a code interface object.
      *
-     * @param  \PDepend\Source\AST\ASTInterface $interface
      * @return void
      */
     public function visitInterface(ASTInterface $interface)
@@ -322,7 +322,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
         }
 
         if ($this->restoreFromCache($interface)) {
-            return $this->fireEndInterface($interface);
+            $this->fireEndInterface($interface);
+            return;
         }
 
         list($cloc) = $this->linesOfCode($interface->getTokens(), true);
@@ -344,7 +345,6 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
     /**
      * Visits a method node.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
@@ -352,7 +352,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
         $this->fireStartMethod($method);
 
         if ($this->restoreFromCache($method)) {
-            return $this->fireEndMethod($method);
+            $this->fireEndMethod($method);
+            return;
         }
         
         if ($method->isAbstract()) {
@@ -386,7 +387,8 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
      * Updates the project metrics based on the node metrics identifier by the
      * given <b>$id</b>.
      *
-     * @param  string $id The unique identifier of a node.
+     * @param string $id The unique identifier of a node.
+     *
      * @return void
      */
     private function updateProjectMetrics($id)
@@ -409,9 +411,10 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
      * )
      * </code>
      *
-     * @param  array   $tokens The raw token stream.
-     * @param  boolean $search Optional boolean flag, search start.
-     * @return array
+     * @param array<int, Token> $tokens The raw token stream.
+     * @param bool              $search Optional boolean flag, search start.
+     *
+     * @return array<int, integer>
      */
     private function linesOfCode(array $tokens, $search = false)
     {
@@ -444,10 +447,9 @@ class NodeLocAnalyzer extends AbstractCachingAnalyzer implements
             }
 
             switch ($token->type) {
-
                 // These statement are terminated by a semicolon
-                //case \PDepend\Source\Tokenizer\Tokens::T_RETURN:
-                //case \PDepend\Source\Tokenizer\Tokens::T_THROW:
+                //case Tokens::T_RETURN:
+                //case Tokens::T_THROW:
                 case Tokens::T_IF:
                 case Tokens::T_TRY:
                 case Tokens::T_CASE:

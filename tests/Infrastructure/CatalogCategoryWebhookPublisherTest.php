@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class CatalogtestsWebhookPublisherTest extends TestCase
+final class CatalogCategoryWebhookPublisherTest extends TestCase
 {
     public function testCanBeInstantiated(): void
     {

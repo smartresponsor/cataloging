@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,18 +36,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Util\Coverage;
 
 use PDepend\Source\AST\AbstractASTArtifact;
+use SimpleXMLElement;
 
 /**
  * Coverage report implementation for clover formatted xml files.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CloverReport implements Report
@@ -55,16 +56,16 @@ class CloverReport implements Report
     /**
      * Holds the line coverage for all files found in the coverage report.
      *
-     * @var array(string=>array)
+     * @var array<string, array<int, bool>>
      */
     private $fileLineCoverage = array();
 
     /**
      * Constructs a new clover report instance.
      *
-     * @param \SimpleXMLElement $sxml The context simple xml element.
+     * @param SimpleXMLElement $sxml The context simple xml element.
      */
-    public function __construct(\SimpleXMLElement $sxml)
+    public function __construct(SimpleXMLElement $sxml)
     {
         $this->readProjectCoverage($sxml->project);
     }
@@ -72,10 +73,11 @@ class CloverReport implements Report
     /**
      * Reads the coverage information for a project.
      *
-     * @param  \SimpleXMLElement $sxml Element representing the clover project tag.
+     * @param SimpleXMLElement $sxml Element representing the clover project tag.
+     *
      * @return void
      */
-    private function readProjectCoverage(\SimpleXMLElement $sxml)
+    private function readProjectCoverage(SimpleXMLElement $sxml)
     {
         $this->readFileCoverage($sxml);
         foreach ($sxml->package as $package) {
@@ -87,10 +89,11 @@ class CloverReport implements Report
      * Reads the coverage information for all file elements under the given
      * parent.
      *
-     * @param  \SimpleXMLElement $sxml Element representing a file parent element.
+     * @param SimpleXMLElement $sxml Element representing a file parent element.
+     *
      * @return void
      */
-    private function readFileCoverage(\SimpleXMLElement $sxml)
+    private function readFileCoverage(SimpleXMLElement $sxml)
     {
         foreach ($sxml->file as $file) {
             $lines = array();
@@ -104,7 +107,6 @@ class CloverReport implements Report
     /**
      * Returns the percentage code coverage for the given item instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $artifact
      * @return float
      */
     public function getCoverage(AbstractASTArtifact $artifact)
@@ -138,8 +140,9 @@ class CloverReport implements Report
     /**
      * Returns the lines of the covered file.
      *
-     * @param  string $fileName The source file name.
-     * @return array(boolean)
+     * @param string $fileName The source file name.
+     *
+     * @return array<boolean>
      */
     private function getLines($fileName)
     {

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,16 +36,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Source\AST;
 
+use ReflectionClass;
+use ReflectionMethod;
+
 /**
  * Holds constants with internal state constants
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 interface State
@@ -53,40 +56,49 @@ interface State
     /**
      * Marks a class or interface as implicit abstract.
      */
-    const IS_IMPLICIT_ABSTRACT = \ReflectionClass::IS_IMPLICIT_ABSTRACT;
+    const IS_IMPLICIT_ABSTRACT = ReflectionClass::IS_IMPLICIT_ABSTRACT;
 
     /**
      * Marks a class or interface as explicit abstract.
      */
-    const IS_EXPLICIT_ABSTRACT = \ReflectionClass::IS_EXPLICIT_ABSTRACT;
+    const IS_EXPLICIT_ABSTRACT = ReflectionClass::IS_EXPLICIT_ABSTRACT;
 
     /**
      * Marks a node as public.
      */
-    const IS_PUBLIC = \ReflectionMethod::IS_PUBLIC;
+    const IS_PUBLIC = ReflectionMethod::IS_PUBLIC;
 
     /**
      * Marks a node as protected.
      */
-    const IS_PROTECTED = \ReflectionMethod::IS_PROTECTED;
+    const IS_PROTECTED = ReflectionMethod::IS_PROTECTED;
 
     /**
      * Marks a node as private.
      */
-    const IS_PRIVATE = \ReflectionMethod::IS_PRIVATE;
+    const IS_PRIVATE = ReflectionMethod::IS_PRIVATE;
 
     /**
      * Marks a node as abstract.
      */
-    const IS_ABSTRACT = \ReflectionMethod::IS_ABSTRACT;
+    const IS_ABSTRACT = ReflectionMethod::IS_ABSTRACT;
 
     /**
      * Marks a node as final.
      */
-    const IS_FINAL = \ReflectionMethod::IS_FINAL;
+    const IS_FINAL = ReflectionMethod::IS_FINAL;
 
     /**
      * Marks a node as static.
      */
-    const IS_STATIC = \ReflectionMethod::IS_STATIC;
+    const IS_STATIC = ReflectionMethod::IS_STATIC;
+
+    /**
+     * Marks a node as readonly.
+     *
+     * TODO: use \ReflectionProperty::IS_READONLY
+     * Once min PHP version supported >= 5.6,
+     * switch to `defined('ReflectionProperty::IS_READONLY') ? \ReflectionProperty::IS_READONLY : 128`
+     */
+    const IS_READONLY = 128;
 }

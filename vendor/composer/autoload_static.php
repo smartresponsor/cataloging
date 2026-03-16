@@ -26,6 +26,7 @@ class ComposerStaticInit68b29c747b18a89e4690931fe4d80ccd
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
+        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
     );
 
@@ -117,6 +118,7 @@ class ComposerStaticInit68b29c747b18a89e4690931fe4d80ccd
             'PhpParser\\' => 10,
             'PhpCsFixer\\' => 11,
             'PHPStan\\PhpDocParser\\' => 21,
+            'PDepend\\' => 8,
         ),
         'M' => 
         array (
@@ -446,6 +448,10 @@ class ComposerStaticInit68b29c747b18a89e4690931fe4d80ccd
         array (
             0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
         ),
+        'PDepend\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pdepend/pdepend/src/main/php/PDepend',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -554,10 +560,6 @@ class ComposerStaticInit68b29c747b18a89e4690931fe4d80ccd
             'PHPMD\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpmd/phpmd/src/main/php',
-            ),
-            'PDepend\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/pdepend/pdepend/src/main/php',
             ),
         ),
     );

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,18 +36,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Source\AST;
 
+use InvalidArgumentException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * Represents a php method node.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTMethod extends AbstractASTCallable
@@ -55,14 +56,14 @@ class ASTMethod extends AbstractASTCallable
     /**
      * The parent type object.
      *
-     * @var \PDepend\Source\AST\AbstractASTType
+     * @var AbstractASTClassOrInterface
      */
     protected $parent = null;
 
     /**
      * Defined modifiers for this property node.
      *
-     * @var integer
+     * @var int
      */
     protected $modifiers = 0;
 
@@ -70,7 +71,8 @@ class ASTMethod extends AbstractASTCallable
      * This method returns a OR combined integer of the declared modifiers for
      * this method.
      *
-     * @return integer
+     * @return int
+     *
      * @since  1.0.0
      */
     public function getModifiers()
@@ -85,9 +87,12 @@ class ASTMethod extends AbstractASTCallable
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  integer $modifiers
+     * @param int $modifiers
+     *
+     * @throws InvalidArgumentException If the given modifier contains unexpected values.
+     *
      * @return void
-     * @throws \InvalidArgumentException If the given modifier contains unexpected values.
+     *
      * @since  0.9.4
      */
     public function setModifiers($modifiers)
@@ -100,7 +105,7 @@ class ASTMethod extends AbstractASTCallable
                   & ~State::IS_FINAL;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException('Invalid method modifier given.');
+            throw new InvalidArgumentException('Invalid method modifier given.');
         }
 
         $this->modifiers = $modifiers;
@@ -109,7 +114,7 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Returns <b>true</b> if this is an abstract method.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAbstract()
     {
@@ -120,7 +125,7 @@ class ASTMethod extends AbstractASTCallable
      * Returns <b>true</b> if this node is marked as public, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -131,7 +136,7 @@ class ASTMethod extends AbstractASTCallable
      * Returns <b>true</b> if this node is marked as protected, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -142,7 +147,7 @@ class ASTMethod extends AbstractASTCallable
      * Returns <b>true</b> if this node is marked as private, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -153,7 +158,7 @@ class ASTMethod extends AbstractASTCallable
      * Returns <b>true</b> when this node is declared as static, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -164,7 +169,7 @@ class ASTMethod extends AbstractASTCallable
      * Returns <b>true</b> when this node is declared as final, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinal()
     {
@@ -174,7 +179,7 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Returns the parent type object or <b>null</b>
      *
-     * @return \PDepend\Source\AST\AbstractASTType|null
+     * @return AbstractASTClassOrInterface|null
      */
     public function getParent()
     {
@@ -184,7 +189,8 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Sets the parent type object.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $parent
+     * @param AbstractASTClassOrInterface|null $parent
+     *
      * @return void
      */
     public function setParent(AbstractASTType $parent = null)
@@ -195,8 +201,10 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Returns the source file where this method was declared.
      *
-     * @return \PDepend\Source\AST\ASTCompilationUnit
-     * @throws \PDepend\Source\AST\ASTCompilationUnitNotFoundException When no parent was set.
+     * @throws ASTCompilationUnitNotFoundException When no parent was set.
+     *
+     * @return ASTCompilationUnit
+     *
      * @since  0.10.0
      */
     public function getCompilationUnit()
@@ -204,18 +212,8 @@ class ASTMethod extends AbstractASTCallable
         if ($this->parent === null) {
             throw new ASTCompilationUnitNotFoundException($this);
         }
-        return $this->parent->getCompilationUnit();
-    }
 
-    /**
-     * ASTVisitor method for node tree traversal.
-     *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
-     * @return void
-     */
-    public function accept(ASTVisitor $visitor)
-    {
-        $visitor->visitMethod($this);
+        return $this->parent->getCompilationUnit();
     }
 
     /**
@@ -223,7 +221,8 @@ class ASTMethod extends AbstractASTCallable
      * gets serialized. It returns an array with those properties that should be
      * cached for method instances.
      *
-     * @return array(string)
+     * @return array<string>
+     *
      * @since  0.10.0
      */
     public function __sleep()

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,21 +36,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\TextUI;
 
+use Exception;
 use PDepend\Application;
+use PDepend\DbusUI\ResultPrinter as DbusResultPrinter;
 use PDepend\Util\ConfigurationInstance;
 use PDepend\Util\Log;
 use PDepend\Util\Workarounds;
+use RuntimeException;
 
 /**
  * Handles the command line stuff and starts the text ui runner.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Command
@@ -68,33 +71,33 @@ class Command
     /**
      * The recieved cli options
      *
-     * @var array(string=>mixed)
+     * @var array<string, mixed>
      */
     private $options = array();
 
     /**
      * The directories/files to be analyzed
      *
-     * @var string
+     * @var array<int, string>
      */
-    private $source;
+    private $source = array();
 
     /**
      * The used text ui runner.
      *
-     * @var \PDepend\TextUI\Runner
+     * @var Runner
      */
     private $runner = null;
 
     /**
-     * @var \PDepend\Application
+     * @var Application
      */
     private $application;
 
     /**
      * Performs the main cli process and returns the exit code.
      *
-     * @return integer
+     * @return int
      */
     public function run()
     {
@@ -105,7 +108,7 @@ class Command
                 $this->printHelp();
                 return self::CLI_ERROR;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage(), PHP_EOL, PHP_EOL;
 
             $this->printHelp();
@@ -147,7 +150,7 @@ class Command
         if ($configurationFile) {
             try {
                 $this->application->setConfigurationFile($configurationFile);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 echo $e->getMessage(), PHP_EOL, PHP_EOL;
 
                 $this->printHelp();
@@ -171,12 +174,12 @@ class Command
 
         foreach ($options as $option => $value) {
             if (isset($logOptions[$option])) {
-                // Reduce recieved option list
+                // Reduce received option list
                 unset($options[$option]);
                 // Register logger
                 $this->runner->addReportGenerator(substr($option, 2), $value);
             } elseif (isset($analyzerOptions[$option])) {
-                // Reduce recieved option list
+                // Reduce received option list
                 unset($options[$option]);
 
                 if (isset($analyzerOptions[$option]['value']) && is_bool($value)) {
@@ -210,9 +213,17 @@ class Command
             unset($options['--optimization']);
         }
 
+        if (isset($options['--quiet'])) {
+            $runSilent = true;
+            unset($options['--quiet']);
+        } else {
+            $runSilent = false;
+            $this->runner->addProcessListener(new ResultPrinter());
+        }
+
         if (isset($options['--notify-me'])) {
             $this->runner->addProcessListener(
-                new \PDepend\DbusUI\ResultPrinter()
+                new DbusResultPrinter()
             );
             unset($options['--notify-me']);
         }
@@ -225,8 +236,10 @@ class Command
 
         try {
             // Output current pdepend version and author
-            $this->printVersion();
-            $this->printWorkarounds();
+            if ($runSilent === false) {
+                $this->printVersion();
+                $this->printWorkarounds();
+            }
 
             $startTime = time();
 
@@ -236,7 +249,7 @@ class Command
                 $errors = $this->runner->getParseErrors();
 
                 printf(
-                    '%sThe following error%s occured:%s',
+                    '%sThe following error%s occurred:%s',
                     PHP_EOL,
                     count($errors) > 1 ? 's' : '',
                     PHP_EOL
@@ -247,26 +260,22 @@ class Command
                 }
                 echo PHP_EOL;
             }
-
-            $duration = time() - $startTime;
-            $hours = intval($duration / 3600);
-            $minutes = intval(($duration - $hours * 3600) / 60);
-            $seconds = $duration % 60;
-            echo PHP_EOL, 'Time: ', sprintf('%d:%02d:%02d', $hours, $minutes, $seconds);
-            if (function_exists('memory_get_peak_usage')) {
-                $memory = (memory_get_peak_usage(true) / (1024 * 1024));
-                printf('; Memory: %4.2fMb', $memory);
+            if ($runSilent === false) {
+                $this->printStatistics($startTime);
             }
-            echo PHP_EOL;
 
             return $result;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             echo PHP_EOL, PHP_EOL,
-                 'Critical error: ', PHP_EOL,
-                 '=============== ', PHP_EOL,
-                  $e->getMessage(),  PHP_EOL;
+                 'Critical error:', PHP_EOL,
+                 '===============', PHP_EOL,
+                  $e->getMessage(), PHP_EOL;
 
-            Log::debug($e->getTraceAsString());
+            Log::debug($this->getErrorTrace($e));
+
+            for ($previous = $e->getPrevious(); $previous; $previous = $previous->getPrevious()) {
+                Log::debug(PHP_EOL . 'Caused by:' . PHP_EOL . $this->getErrorTrace($previous));
+            }
 
             return $e->getCode();
         }
@@ -275,7 +284,7 @@ class Command
     /**
      * Parses the cli arguments.
      *
-     * @return boolean
+     * @return bool
      */
     protected function parseArguments()
     {
@@ -307,18 +316,20 @@ class Command
 
         for ($i = 0, $c = count($argv); $i < $c; ++$i) {
             // Is it an ini_set option?
-            if ($argv[$i] === '-d' && isset($argv[$i + 1])) {
-                if (strpos($argv[++$i], '=') === false) {
-                    ini_set($argv[$i], 'on');
+            $arg = (string)$argv[$i];
+            if ($arg === '-d' && isset($argv[$i + 1])) {
+                $arg = (string)$argv[++$i];
+                if (strpos($arg, '=') === false) {
+                    ini_set($arg, 'on');
                 } else {
-                    list($key, $value) = explode('=', $argv[$i]);
+                    list($key, $value) = explode('=', $arg);
 
                     ini_set($key, $value);
                 }
-            } elseif (strpos($argv[$i], '=') === false) {
-                $this->options[$argv[$i]] = true;
+            } elseif (strpos($arg, '=') === false) {
+                $this->options[$arg] = true;
             } else {
-                list($key, $value) = explode('=', $argv[$i]);
+                list($key, $value) = explode('=', $arg);
 
                 $this->options[$key] = $value;
             }
@@ -330,7 +341,7 @@ class Command
     /**
      * Assign CLI arguments to current runner instance
      *
-     * @return bool
+     * @return void
      */
     protected function assignArguments()
     {
@@ -396,11 +407,12 @@ class Command
     {
         $build = __DIR__ . '/../../../../../build.properties';
 
+        $version = '@package_version@';
         if (file_exists($build)) {
             $data = @parse_ini_file($build);
-            $version = $data['project.version'];
-        } else {
-            $version = '@package_version@';
+            if (is_array($data)) {
+                $version = $data['project.version'];
+            }
         }
 
         echo 'PDepend ', $version, PHP_EOL, PHP_EOL;
@@ -481,6 +493,7 @@ class Command
         );
         echo PHP_EOL;
 
+        $this->printOption('--quiet', 'Prints errors only.', $length);
         $this->printOption('--debug', 'Prints debugging information.', $length);
         $this->printOption('--help', 'Print this help text.', $length);
         $this->printOption('--version', 'Print the current version.', $length);
@@ -495,7 +508,7 @@ class Command
      * Prints all available log options and returns the length of the longest
      * option.
      *
-     * @return integer
+     * @return int
      */
     protected function printLogOptions()
     {
@@ -518,7 +531,8 @@ class Command
 
         $last = null;
         foreach ($options as $option => $message) {
-            $current = substr($option, 0, strrpos($option, '-'));
+            $pos = strrpos($option, '-');
+            $current = substr($option, 0, $pos === false ? null : $pos);
             if ($last !== null && $last !== $current) {
                 echo PHP_EOL;
             }
@@ -534,9 +548,9 @@ class Command
     /**
      * Prints the analyzer options.
      *
-     * @param integer $length Length of the longest option.
+     * @param int $length Length of the longest option.
      *
-     * @return integer
+     * @return int
      */
     protected function printAnalyzerOptions($length)
     {
@@ -565,9 +579,9 @@ class Command
     /**
      * Prints a single option.
      *
-     * @param string  $option  The option identifier.
-     * @param string  $message The option help message.
-     * @param integer $length  The length of the longest option.
+     * @param string $option  The option identifier.
+     * @param string $message The option help message.
+     * @param int    $length  The length of the longest option.
      *
      * @return void
      */
@@ -597,7 +611,7 @@ class Command
      * Optionally outputs the dbus option when the required extension
      * is loaded.
      *
-     * @param integer $length Padding length for the option.
+     * @param int $length Padding length for the option.
      *
      * @return void
      */
@@ -616,11 +630,43 @@ class Command
     /**
      * Main method that starts the command line runner.
      *
-     * @return integer The exit code.
+     * @return int The exit code.
      */
     public static function main()
     {
-        $command = new Command();
+        $command = new self();
+
         return $command->run();
+    }
+
+    /**
+     * @param int $startTime
+     *
+     * @return void
+     */
+    private function printStatistics($startTime)
+    {
+        $duration = time() - $startTime;
+        $hours = intval($duration / 3600);
+        $minutes = intval(($duration - $hours * 3600) / 60);
+        $seconds = $duration % 60;
+        echo PHP_EOL, 'Time: ', sprintf('%d:%02d:%02d', $hours, $minutes, $seconds);
+        if (function_exists('memory_get_peak_usage')) {
+            $memory = (memory_get_peak_usage(true) / (1024 * 1024));
+            printf('; Memory: %4.2fMb', $memory);
+        }
+        echo PHP_EOL;
+    }
+
+    /**
+     * @param Exception|\Throwable $exception
+     *
+     * @return string
+     */
+    private function getErrorTrace($exception)
+    {
+        return get_class($exception) . '(' . $exception->getMessage() . ')' . PHP_EOL .
+            '## ' . $exception->getFile() .'(' . $exception->getLine() . ')' . PHP_EOL .
+            $exception->getTraceAsString();
     }
 }

@@ -7,7 +7,7 @@ namespace App\Tests;
 use App\Service\TreeOperation;
 use PHPUnit\Framework\TestCase;
 
-final class CatalogtestsTreeOperationTest extends TestCase
+final class CatalogCategoryTreeOperationTest extends TestCase
 {
     public function testMoveRejectsSelfParenting(): void
     {

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,18 +36,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Source\AST;
 
+use BadMethodCallException;
+use InvalidArgumentException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * Represents a php class node.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTClass extends AbstractASTClassOrInterface
@@ -55,14 +57,14 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * List of associated properties.
      *
-     * @var \PDepend\Source\AST\ASTProperty[]
+     * @var ASTProperty[]
      */
     private $properties = null;
 
     /**
      * Returns <b>true</b> if this is an abstract class or an interface.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAbstract()
     {
@@ -72,7 +74,7 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * This method will return <b>true</b> when this class is declared as final.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinal()
     {
@@ -80,9 +82,30 @@ class ASTClass extends AbstractASTClassOrInterface
     }
 
     /**
+     * This method will return <b>true</b> when this class is declared as readonly.
+     *
+     * @return bool
+     */
+    public function isReadonly()
+    {
+        return (($this->modifiers & State::IS_READONLY) === State::IS_READONLY);
+    }
+
+    /**
+     * Will return <b>true</b> if this class was declared anonymous in an
+     * allocation expression.
+     *
+     * @return bool
+     */
+    public function isAnonymous()
+    {
+        return false;
+    }
+
+    /**
      * Returns all properties for this class.
      *
-     * @return \PDepend\Source\AST\ASTProperty[]
+     * @return ASTArtifactList<ASTProperty>
      */
     public function getProperties()
     {
@@ -109,8 +132,7 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * Checks that this user type is a subtype of the given <b>$type</b> instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
-     * @return boolean
+     * @return bool
      */
     public function isSubtypeOf(AbstractASTType $type)
     {
@@ -134,7 +156,8 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * Returns the declared modifiers for this type.
      *
-     * @return integer
+     * @return int
+     *
      * @since  0.9.4
      */
     public function getModifiers()
@@ -149,41 +172,35 @@ class ASTClass extends AbstractASTClassOrInterface
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  integer $modifiers
+     * @param int $modifiers
+     *
+     * @throws BadMethodCallException
+     * @throws InvalidArgumentException
+     *
      * @return void
-     * @throws \BadMethodCallException
-     * @throws \InvalidArgumentException
+     *
      * @since  0.9.4
      */
     public function setModifiers($modifiers)
     {
         if ($this->modifiers !== 0) {
-            throw new \BadMethodCallException(
+            throw new BadMethodCallException(
                 'Cannot overwrite previously set class modifiers.'
             );
         }
 
         $expected = ~State::IS_EXPLICIT_ABSTRACT
                   & ~State::IS_IMPLICIT_ABSTRACT
-                  & ~State::IS_FINAL;
+                  & ~State::IS_FINAL
+                  & ~State::IS_READONLY;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException('Invalid class modifier given.');
+            throw new InvalidArgumentException('Invalid class modifier given.');
         }
 
         $this->modifiers = $modifiers;
     }
 
-    /**
-     * ASTVisitor method for node tree traversal.
-     *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
-     * @return void
-     */
-    public function accept(ASTVisitor $visitor)
-    {
-        $visitor->visitClass($this);
-    }
 
     /**
      * The magic wakeup method will be called by PHP's runtime environment when
@@ -192,6 +209,7 @@ class ASTClass extends AbstractASTClassOrInterface
      * context.
      *
      * @return void
+     *
      * @since  0.10.0
      */
     public function __wakeup()

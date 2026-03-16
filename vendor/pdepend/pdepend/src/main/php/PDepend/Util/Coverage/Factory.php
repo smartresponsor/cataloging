@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,17 +36,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PDepend\Util\Coverage;
 
+use RuntimeException;
+use SimpleXMLElement;
+
 /**
  * Factory used to abstract concrete coverage report formats from the pdepend
  * application.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Factory
@@ -55,28 +58,32 @@ class Factory
      * Factory method that tries to create coverage report instance for a given
      * path name.
      *
-     * @param  string $pathName Qualified path name of a coverage report file.
-     * @return \PDepend\Util\Coverage\CloverReport
-     * @throws \RuntimeException When the given path name does not point to a
-     *         valid coverage file or onto an unsupported coverage format.
+     * @param string $pathName Qualified path name of a coverage report file.
+     *
+     * @throws RuntimeException When the given path name does not point to a
+     *                          valid coverage file or onto an unsupported coverage format.
+     *
+     * @return CloverReport
      */
     public function create($pathName)
     {
         $sxml = $this->loadXml($pathName);
-        if ($sxml->project) {
+        if (isset($sxml->project)) {
             return new CloverReport($sxml);
         }
-        throw new \RuntimeException('Unsupported coverage report format.');
+        throw new RuntimeException('Unsupported coverage report format.');
     }
 
     /**
      * Creates a simple xml instance for the xml contents that are located under
      * the given path name.
      *
-     * @param  string $pathName Qualified path name of a coverage report file.
-     * @return \SimpleXMLElement
-     * @throws \RuntimeException When the given path name does not point to a
-     *         valid xml file.
+     * @param string $pathName Qualified path name of a coverage report file.
+     *
+     * @throws RuntimeException When the given path name does not point to a
+     *                          valid xml file.
+     *
+     * @return SimpleXMLElement
      */
     private function loadXml($pathName)
     {
@@ -85,7 +92,8 @@ class Factory
         libxml_use_internal_errors($mode);
 
         if ($sxml === false) {
-            throw new \RuntimeException(trim(libxml_get_last_error()->message));
+            $xmlError = libxml_get_last_error();
+            throw new RuntimeException($xmlError ? trim($xmlError->message) : 'Unknown error');
         }
         return $sxml;
     }

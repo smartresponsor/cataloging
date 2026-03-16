@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -48,7 +48,7 @@ use PDepend\Source\AST\ASTArtifact;
  * Static composite filter for code nodes. This class is used for an overall
  * filtering.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
  * @fixme Never ever use a singleton!!!
@@ -58,14 +58,14 @@ final class CollectionArtifactFilter implements ArtifactFilter
     /**
      * Singleton instance of this filter.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList\CollectionArtifactFilter
+     * @var CollectionArtifactFilter
      */
     private static $instance = null;
 
     /**
      * Singleton method for this filter class.
      *
-     * @return \PDepend\Source\AST\ASTArtifactList\CollectionArtifactFilter
+     * @return CollectionArtifactFilter
      */
     public static function getInstance()
     {
@@ -87,15 +87,17 @@ final class CollectionArtifactFilter implements ArtifactFilter
     /**
      * An optional configured filter instance.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList\ArtifactFilter
+     * @var ArtifactFilter
      */
     private $filter = null;
 
     /**
      * Sets the used filter instance.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList\ArtifactFilter $filter
+     * @param ArtifactFilter $filter
+     *
      * @return void
+     *
      * @since  0.9.12
      */
     public function setFilter(ArtifactFilter $filter = null)
@@ -107,8 +109,7 @@ final class CollectionArtifactFilter implements ArtifactFilter
      * Returns <b>true</b> if the given node should be part of the node iterator,
      * otherwise this method will return <b>false</b>.
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $node
-     * @return boolean
+     * @return bool
      */
     public function accept(ASTArtifact $node)
     {
