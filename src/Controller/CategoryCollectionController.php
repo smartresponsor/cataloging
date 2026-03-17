@@ -28,17 +28,7 @@ final class CategoryCollectionController
             ['id' => 3, 'slug' => 'ropa', 'locale' => 'es', 'merchant' => 'default'],
         ];
         $result = $this->builder->build($all, $rules);
-        $locale = is_string($rules['locale'] ?? null) ? $rules['locale'] : null;
-        if (null !== $locale) {
-            $result = array_values(array_filter($result, static fn (array $row): bool => ($row['locale'] ?? null) === $locale));
-        }
 
-        return new JsonResponse([
-            'ok' => true,
-            'data' => array_values($result),
-            'count' => count($result),
-            'rulesCount' => count($rules),
-            'locale' => $locale ?? 'all',
-        ]);
+        return new JsonResponse(['data' => $result]);
     }
 }

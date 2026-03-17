@@ -8,11 +8,21 @@ declare(strict_types=1);
 
 namespace App\Worker;
 
+use App\RunnerInterface\CategoryProjectionRunnerInterface;
+
 final class ProjectionSyncWorker
 {
+    public function __construct(
+        private readonly ?CategoryProjectionRunnerInterface $runner = null,
+    ) {
+    }
+
     public function run(): void
     {
-        // Consume outbox and update MySQL projections; placeholder for framework integration.
-        // Keep methods singular; ensure idempotency by message key.
+        if (null === $this->runner) {
+            return;
+        }
+
+        $this->runner->run(1, 10);
     }
 }

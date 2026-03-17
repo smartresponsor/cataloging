@@ -9,8 +9,6 @@ Owner: Marketing America Corp
 
 namespace App\Service\Security;
 
-use App\ServiceInterface\Security\TenantRolePolicyInterface;
-
 final class TenantRolePolicy implements TenantRolePolicyInterface
 {
     /**
@@ -19,19 +17,19 @@ final class TenantRolePolicy implements TenantRolePolicyInterface
     public function allow(array $ctx, string $action): bool
     {
         $role = $ctx['role'] ?? '';
-        if (CatalogCategoryRole::OWNER === $role) {
+        if (CategoryRole::OWNER === $role) {
             return true;
         }
-        if (CatalogCategoryRole::PUBLISHER === $role) {
+        if (CategoryRole::PUBLISHER === $role) {
             return in_array($action, ['publish', 'read'], true);
         }
-        if (CatalogCategoryRole::EDITOR === $role) {
+        if (CategoryRole::EDITOR === $role) {
             return in_array($action, ['edit', 'read'], true);
         }
-        if (CatalogCategoryRole::READER === $role) {
+        if (CategoryRole::READER === $role) {
             return 'read' === $action;
         }
-        if (CatalogCategoryRole::AUDITOR === $role) {
+        if (CategoryRole::AUDITOR === $role) {
             return in_array($action, ['read', 'audit'], true);
         }
 

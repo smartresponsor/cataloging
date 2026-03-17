@@ -10,8 +10,11 @@ use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
 
 final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 {
-    public function __construct(private readonly CategoryService $service)
+    private CategoryService $service;
+
+    public function __construct(CategoryService $service)
     {
+        $this->service = $service;
     }
 
     public function import(string $path, bool $dryRun = true): array
@@ -20,69 +23,54 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
         $fail = 0;
         $warnings = 0;
         $report = [];
-        $handle = fopen($path, 'r');
-        if (false === $handle) {
+        $h = fopen($path, 'r');
+        if (false === $h) {
             throw new \RuntimeException('Cannot open NDJSON: '.$path);
         }
-
-        try {
-            while (($line = fgets($handle)) !== false) {
-                $line = trim($line);
-                if ('' === $line) {
-                    continue;
-                }
-
-                $data = json_decode($line, true);
-                if (!is_array($data) || empty($data['type'])) {
-                    ++$fail;
-                    $report[] = 'Invalid row';
-                    continue;
-                }
-
-                try {
-                    switch ($data['type']) {
-                        case 'taxonomy':
-                            ++$warnings;
-                            $report[] = 'Taxonomy rows are metadata-only in importer';
-                            break;
-
-                        case 'category':
-                            if (!$dryRun) {
-                                $this->service->create(
-                                    (string) $data['taxonomyId'],
-                                    isset($data['parentId']) ? (string) $data['parentId'] : null,
-                                    (array) ($data['name'] ?? []),
-                                    (array) ($data['slug'] ?? []),
-                                    (array) ($data['meta'] ?? []),
-                                );
-                            }
-                            ++$ok;
-                            break;
-
-                        case 'link':
-                            if (!$dryRun) {
-                                $this->service->attach(
-                                    (string) $data['categoryId'],
-                                    (string) $data['targetDomain'],
-                                    (string) $data['targetClass'],
-                                    (string) $data['targetId'],
-                                );
-                            }
-                            ++$ok;
-                            break;
-
-                        default:
-                            ++$fail;
-                            $report[] = 'Unknown type: '.$data['type'];
-                    }
-                } catch (\Throwable $e) {
-                    ++$fail;
-                    $report[] = 'Error: '.$e->getMessage();
-                }
+        while (($line = fgets($h)) !== false) {
+            $line = trim($line);
+            if ('' === $line) {
+                continue;
             }
-        } finally {
-            fclose($handle);
+            $data = json_decode($line, true);
+            if (!is_array($data) || empty($data['type'])) {
+                ++$fail;
+                $report[] = 'Invalid row';
+                continue;
+            }
+            try {
+                if ('taxonomy' === $data['type']) {
+                    // taxonomy create handled elsewhere; assume exists for now
+                    ++$warnings;
+                } elseif ('category' === $data['type']) {
+                    if (!$dryRun) {
+                        $actorId = $data['actorId'] ?? 'system';
+                        $this->service->create(
+                            $actorId,
+                            (string) $data['taxonomyId'],
+                            $data['parentId'] ?? null,
+                            (array) $data['name'],
+                            (array) $data['slug'],
+                            (array) ($data['meta'] ?? [])
+                        );
+                    }
+                    ++$ok;
+                } elseif ('link' === $data['type']) {
+                    if (!$dryRun) {
+                        $actorId = $data['actorId'] ?? 'system';
+                        $this->service->attach($actorId, (string) $data['categoryId'], (string) $data['targetDomain'], (string) $data['targetClass'], (string) $data['targetId']);
+                    }
+                    ++$ok;
+                } else {
+                    ++$fail;
+                    $report[] = 'Unknown type: '.$data['type'];
+                }
+            } catch (\Throwable $e) {
+                ++$fail;
+                $report[] = 'Error: '.$e->getMessage();
+            }
         }
+        fclose($h);
 
         return ['ok' => $ok, 'fail' => $fail, 'warnings' => $warnings, 'report' => $report];
     }

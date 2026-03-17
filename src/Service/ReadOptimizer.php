@@ -21,13 +21,10 @@ final class ReadOptimizer
 
             return $this->cache['tree'];
         }
-
         ++$this->miss;
         $tree = [
-            ['id' => '1', 'name' => 'Root', 'slug' => 'root', 'locale' => 'en', 'channel' => 'default', 'published' => true],
-            ['id' => '2', 'name' => 'Electronics', 'slug' => 'electronics', 'locale' => 'en', 'channel' => 'default', 'published' => true],
-            ['id' => '3', 'name' => 'Phones', 'slug' => 'phones', 'locale' => 'uk', 'channel' => 'default', 'published' => true],
-            ['id' => '4', 'name' => 'Hidden', 'slug' => 'hidden', 'locale' => 'en', 'channel' => 'beta', 'published' => false],
+            ['id' => '1', 'name' => 'Root', 'slug' => 'root', 'locale' => 'en', 'published' => true],
+            ['id' => '2', 'name' => 'Electronics', 'slug' => 'electronics', 'locale' => 'en', 'published' => true],
         ];
         $this->cache['tree'] = $tree;
         $this->flushMetrics();
@@ -37,7 +34,6 @@ final class ReadOptimizer
 
     private function flushMetrics(): void
     {
-        @mkdir('report', 0777, true);
         file_put_contents(
             'report/category-perf-read.json',
             json_encode([

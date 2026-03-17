@@ -1,10 +1,8 @@
 <?php
-
 declare(strict_types=1);
 /*
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
  */
-
 namespace App\Rule;
 
 final class CategoryRule
@@ -23,10 +21,7 @@ final class CategoryRule
     }
 
     /** @return array<string,mixed> */
-    public function spec(): array
-    {
-        return $this->spec;
-    }
+    public function spec(): array { return $this->spec; }
 
     private function assertValid(array $spec): void
     {
@@ -38,42 +33,40 @@ final class CategoryRule
         if (!isset($spec['all']) || !is_array($spec['all'])) {
             throw new \InvalidArgumentException('Rule must contain "all" as an array.');
         }
-
-        if (count($spec['all']) > CategoryRulePolicy::MAX_CONDITIONS) {
-            throw new \InvalidArgumentException('Too many conditions.');
-        }
-
         foreach ($spec['all'] as $cond) {
             if (!is_array($cond)) {
                 throw new \InvalidArgumentException('Condition must be an object.');
             }
-
             if (isset($cond['attr'])) {
-                if (!isset($cond['op'])) {
-                    throw new \InvalidArgumentException('Missing op for attr condition.');
-                }
-                if (!array_key_exists('value', $cond)) {
-                    throw new \InvalidArgumentException('Missing value for attr condition.');
-                }
-                if (!in_array($cond['attr'], CategoryRulePolicy::$allowedAttrs, true)) {
-                    throw new \InvalidArgumentException('Attr not allowed: '.$cond['attr']);
-                }
-                if (!in_array($cond['op'], CategoryRulePolicy::$allowedOps, true)) {
-                    throw new \InvalidArgumentException('Op not allowed: '.$cond['op']);
-                }
-                if (
-                    'price' === $cond['attr']
-                    && 'between' === $cond['op']
-                    && is_array($cond['value'])
-                    && 2 === count($cond['value'])
-                ) {
-                    [$a, $b] = $cond['value'];
-                    if ($a < CategoryRulePolicy::PRICE_MIN || $b > CategoryRulePolicy::PRICE_MAX) {
-                        throw new \InvalidArgumentException('Price range out of bounds.');
-                    }
-                }
-            } elseif (!isset($cond['tag'])) {
+                if (!isset($cond['op'])) { throw new \InvalidArgumentException('Missing op for attr condition.'); }
+                if (!array_key_exists('value', $cond)) { throw new \InvalidArgumentException('Missing value for attr condition.'); }
+            } elseif (isset($cond['tag'])) {
+                // ok
+            } else {
                 throw new \InvalidArgumentException('Unsupported condition object.');
+            }
+        }
+    }
+}
+
+private function assertByPolicy(array $spec): void
+{
+    if (count($spec['all']) > \App\Rule\CategoryRulePolicy::MAX_CONDITIONS) {
+        throw new \InvalidArgumentException('Too many conditions.');
+    }
+    foreach ($spec['all'] as $cond) {
+        if (isset($cond['attr'])) {
+            if (!in_array($cond['attr'], \App\Rule\CategoryRulePolicy::$allowedAttrs, true)) {
+                throw new \InvalidArgumentException('Attr not allowed: '.$cond['attr']);
+            }
+            if (!in_array($cond['op'], \App\Rule\CategoryRulePolicy::$allowedOps, true)) {
+                throw new \InvalidArgumentException('Op not allowed: '.$cond['op']);
+            }
+            if ($cond['attr'] === 'price' && $cond['op'] === 'between' && is_array($cond['value']) && count($cond['value'])===2) {
+                [$a,$b] = $cond['value'];
+                if ($a < \App\Rule\CategoryRulePolicy::PRICE_MIN || $b > \App\Rule\CategoryRulePolicy::PRICE_MAX) {
+                    throw new \InvalidArgumentException('Price range out of bounds.');
+                }
             }
         }
     }

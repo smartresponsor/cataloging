@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\ServiceInterface\CatalogCategorySerializerInterface as CategorySerializerInterface;
-
 final class CatalogCategorySerializer implements CategorySerializerInterface
 {
     public function serialize(array $source, array $includeFieldList, array $excludeFieldList): array

@@ -9,21 +9,16 @@ Owner: Marketing America Corp
 
 namespace App\Service\Api;
 
-/**
- * Thin API wrapper kept for backward compatibility.
- * Canonical implementation lives in App\Service\EtagMiddleware.
- */
 final class EtagMiddleware
 {
-    private \App\Service\EtagMiddleware $inner;
-
-    public function __construct(?\App\Service\EtagMiddleware $inner = null)
-    {
-        $this->inner = $inner ?? new \App\Service\EtagMiddleware();
-    }
-
     public function handle(array $request, array $response, callable $next): array
     {
-        return $this->inner->handle($request, $response, $next);
+        $etag = $response['headers']['ETag'] ?? null;
+        $ifNone = $request['headers']['If-None-Match'] ?? null;
+        if ($etag && $ifNone && $etag === $ifNone) {
+            return ['status' => 304, 'headers' => ['ETag' => $etag], 'body' => ''];
+        }
+
+        return $next($request, $response);
     }
 }

@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace App\Projection;
 
-use App\Observability\CatalogProjectionMetrics;
-
 final class CategoryProjectionRunner
 {
-    public function __construct(private readonly CatalogProjectionMetrics $metrics)
+    public function __construct(private readonly CategoryProjectionMetrics $metrics)
     {
     }
 

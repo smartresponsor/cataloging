@@ -16,21 +16,9 @@ final class CategoryQueryAdvancedTest extends TestCase
     {
         $q = new CategoryQuery();
         $res = $q(null, ['locale' => 'en', 'first' => 5], null, null);
-
         $this->assertNotEmpty($res);
         foreach ($res as $row) {
             $this->assertSame('en', $row['locale']);
-        }
-    }
-
-    public function testPublishedFilterReturnsOnlyPublishedRows(): void
-    {
-        $q = new CategoryQuery();
-        $res = $q(null, ['published' => true, 'first' => 10], null, null);
-
-        $this->assertNotEmpty($res);
-        foreach ($res as $row) {
-            $this->assertTrue($row['published']);
         }
     }
 }

@@ -9,8 +9,6 @@ Owner: Marketing America Corp
 
 namespace App\Service;
 
-use App\ServiceInterface\WebhookClientInterface;
-
 final class WebhookClient implements WebhookClientInterface
 {
     private string $secret;

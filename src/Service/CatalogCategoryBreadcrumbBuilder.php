@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CatalogCategoryBreadcrumbBuilderInterface as CategoryBreadcrumbBuilderInterface;
 
 /** Builds breadcrumb chain and SEO meta from repository. */
 final class CatalogCategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterface
@@ -21,8 +20,8 @@ final class CatalogCategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilde
     public function build(string $categoryId, string $locale): array
     {
         $chain = $this->repo->breadcrumb($categoryId, $locale);
-        $fullSlug = implode('/', array_map(fn (array $n): string => (string) $n['slug'], $chain));
-        $title = implode(' / ', array_map(fn (array $n): string => (string) $n['name'], $chain));
+        $fullSlug = implode('/', array_map(fn ($n) => $n['slug'], $chain));
+        $title = implode(' / ', array_map(fn ($n) => $n['name'], $chain));
 
         return ['breadcrumb' => $chain, 'seo' => ['fullSlug' => $fullSlug, 'title' => $title]];
     }

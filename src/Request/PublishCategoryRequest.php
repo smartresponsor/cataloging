@@ -20,13 +20,9 @@ final class PublishCategoryRequest
         $errors = [];
         if (!array_key_exists('published', $data)) {
             $errors[] = 'published is required';
-        } elseif (!is_bool($data['published'])) {
-            $errors[] = 'published must be boolean';
         }
 
-        $published = array_key_exists('published', $data) && is_bool($data['published']) ? $data['published'] : null;
-
-        return new self($published, $errors);
+        return new self($data['published'] ?? null, $errors);
     }
 
     public function isValid(): bool

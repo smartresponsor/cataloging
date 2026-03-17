@@ -21,11 +21,14 @@ final class CategoryProjectionRunner implements CategoryProjectionRunnerInterfac
     {
         $start = time();
         $processed = 0;
+
         while ((time() - $start) < $maxSec && $processed < $maxBatch) {
-            // Infra should provide event fetch; here we call apply on sample structure.
-            $this->sync->apply(['type' => 'noop']);
+            $this->sync->apply([
+                'type' => 'projection.tick',
+                'sequence' => $processed + 1,
+            ]);
             ++$processed;
-            usleep(100000); // 100ms backoff
+            usleep(100000);
         }
     }
 }

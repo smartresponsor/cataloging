@@ -9,21 +9,16 @@ Owner: Marketing America Corp
 
 namespace App\Service\Api;
 
-/**
- * Thin API wrapper kept for backward compatibility.
- * Canonical implementation lives in App\Service\CatalogCategoryCacheHeader.
- */
 final class CatalogCategoryCacheHeader
 {
-    private \App\Service\CatalogCategoryCacheHeader $inner;
-
-    public function __construct(?\App\Service\CatalogCategoryCacheHeader $inner = null)
-    {
-        $this->inner = $inner ?? new \App\Service\CatalogCategoryCacheHeader();
-    }
-
     public function make(string $etag, ?\DateTimeImmutable $lastModified = null): array
     {
-        return $this->inner->make($etag, $lastModified);
+        $headers = ['ETag' => $etag];
+        if ($lastModified) {
+            $headers['Last-Modified'] = $lastModified->format('D, d M Y H:i:s').' GMT';
+        }
+        $headers['Cache-Control'] = 'public, max-age=60';
+
+        return $headers;
     }
 }

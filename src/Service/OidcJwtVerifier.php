@@ -9,8 +9,6 @@ Owner: Marketing America Corp
 
 namespace App\Service;
 
-use App\ServiceInterface\OidcJwtVerifierInterface;
-
 final class OidcJwtVerifier implements OidcJwtVerifierInterface
 {
     private string $issuer;
@@ -24,8 +22,8 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
         $this->audience = $audience;
         $conv = new JwkConverter();
         foreach (($jwkSet['keys'] ?? []) as $jwk) {
-            if (($jwk['kty'] ?? '') === 'RSA' && isset($jwk['kid'], $jwk['n'], $jwk['e'])) {
-                $this->pemByKid[(string) $jwk['kid']] = $conv->rsaToPem((string) $jwk['n'], (string) $jwk['e']);
+            if (($jwk['kty'] ?? '') === 'RSA' && isset($jwk['kid'],$jwk['n'],$jwk['e'])) {
+                $this->pemByKid[$jwk['kid']] = $conv->rsaToPem($jwk['n'], $jwk['e']);
             }
         }
         if ([] === $this->pemByKid) {
@@ -35,7 +33,7 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
 
     public function verify(string $jwt): array
     {
-        [$h64, $p64, $s64] = explode('.', $jwt);
+        [$h64,$p64,$s64] = explode('.', $jwt);
         $header = json_decode($this->b64u($h64), true, 512, JSON_THROW_ON_ERROR);
         $payload = json_decode($this->b64u($p64), true, 512, JSON_THROW_ON_ERROR);
         $sig = $this->b64u($s64);

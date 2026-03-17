@@ -9,9 +9,6 @@ Owner: Marketing America Corp
 
 namespace App\Service;
 
-use App\Service\Security\CatalogCategoryRole as CategoryRole;
-use App\ServiceInterface\TenantRolePolicyInterface;
-
 final class TenantRolePolicy implements TenantRolePolicyInterface
 {
     /**

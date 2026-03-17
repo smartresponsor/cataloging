@@ -11,7 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 final class CategoryQuery
 {
-    public function __invoke($rootValue, array $args, $context, ?ResolveInfo $info = null): array
+    public function __invoke($rootValue, array $args, $context, ResolveInfo $info): array
     {
         $all = [
             ['id' => 1, 'name' => 'Root', 'slug' => 'root', 'locale' => 'en', 'published' => true],

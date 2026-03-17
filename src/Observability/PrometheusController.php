@@ -8,9 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PrometheusController
 {
+    public function __construct(
+        private readonly ?CatalogProjectionMetrics $projectionMetrics = null,
+    ) {
+    }
+
     public function __invoke(): Response
     {
-        // dummy metrics; real values must be wired to storage
         $lines = [];
         $lines[] = '# HELP category_http_request_ms_bucket Category HTTP request duration';
         $lines[] = '# TYPE category_http_request_ms_bucket histogram';
@@ -20,6 +24,9 @@ final class PrometheusController
         $lines[] = 'category_http_request_ms_bucket{le="+Inf"} 31';
         $lines[] = 'category_http_request_ms_sum 4.23';
         $lines[] = 'category_http_request_ms_count 31';
+        $lines[] = '# HELP category_projection_lag_seconds Projection lag in seconds';
+        $lines[] = '# TYPE category_projection_lag_seconds gauge';
+        $lines[] = 'category_projection_lag_seconds '.($this->projectionMetrics?->getLag() ?? 0);
         $body = implode("\n", $lines)."\n";
 
         return new Response($body, 200, ['Content-Type' => 'text/plain; version=0.0.4']);
