@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
+use App\Service\CatalogCategoryCacheService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -15,7 +16,7 @@ final class CategoryCacheServiceTest extends TestCase
     public function testGetTreeCaches(): void
     {
         $cache = new ArrayAdapter();
-        $svc = new CategoryCacheService($cache);
+        $svc = new CatalogCategoryCacheService($cache);
         $first = $svc->getTree('en');
         $second = $svc->getTree('en');
         self::assertSame($first, $second);

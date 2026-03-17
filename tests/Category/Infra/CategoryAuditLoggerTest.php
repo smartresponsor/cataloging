@@ -9,17 +9,18 @@ namespace App\Tests\Category\Infra;
 
 use App\Infrastructure\CategoryAuditLogger;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\AbstractLogger;
 
 final class CategoryAuditLoggerTest extends TestCase
 {
     public function testLog(): void
     {
-        $logger = new class {
+        $logger = new class extends AbstractLogger {
             public array $records = [];
 
-            public function info(string $msg, array $context = []): void
+            public function log($level, string|\Stringable $message, array $context = []): void
             {
-                $this->records[] = [$msg, $context];
+                $this->records[] = [(string) $level, (string) $message, $context];
             }
         };
         $audit = new CategoryAuditLogger($logger);

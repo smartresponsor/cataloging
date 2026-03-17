@@ -9,16 +9,14 @@ namespace App\Tests\Category\Infra;
 
 use App\Infrastructure\ProductWebhookPublisher;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class WebhookPublisherTest extends TestCase
 {
     public function testCanBeInstantiated(): void
     {
-        $client = new class {
-            public function request($m, $u, $o = [])
-            {
-            }
-        };
+        $client = new MockHttpClient([new MockResponse('{}', ['http_code' => 200])]);
         $pub = new ProductWebhookPublisher($client, 'http://example');
         $pub->publish(['event' => 'category.changed']);
         $this->assertTrue(true);
