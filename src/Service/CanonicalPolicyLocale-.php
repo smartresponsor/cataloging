@@ -1,16 +1,7 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+/*
+ * Legacy residue intentionally left as a no-op stub.
+ * Canonical implementation lives in App\Service\CanonicalPolicyLocale.
  */
-
-namespace App\Service;
-
-final class CanonicalPolicyLocale
-{
-    public function getCanonical(string $slug, string $locale): string
-    {
-        return sprintf('/%s/category/%s', $locale, $slug);
-    }
-}

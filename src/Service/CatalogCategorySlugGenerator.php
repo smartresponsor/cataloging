@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\ServiceInterface\CatalogCategorySlugGeneratorInterface as CategorySlugGeneratorInterface;
 
 /**
  * CategorySlugGenerator implements conflict policy:
@@ -23,8 +24,8 @@ final class CatalogCategorySlugGenerator implements CategorySlugGeneratorInterfa
         $out = [];
 
         foreach ($input as $locale => $slug) {
-            $norm = $this->normalize($slug);
-            $out[$locale] = $this->uniqueForLocale($norm, $taxonomyId, $parentId, (string) $locale);
+            $norm = $this->normalize((string) $slug);
+            $out[(string) $locale] = $this->uniqueForLocale($norm, $taxonomyId, $parentId, (string) $locale);
         }
 
         return $out;
@@ -34,8 +35,8 @@ final class CatalogCategorySlugGenerator implements CategorySlugGeneratorInterfa
     {
         $s = strtolower(trim($slug));
         $s = preg_replace('/\s+/', '-', $s);
-        $s = preg_replace('/[^a-z0-9\-]/', '', $s);
-        $s = preg_replace('/\-+/', '-', $s);
+        $s = preg_replace('/[^a-z0-9\-]/', '', (string) $s);
+        $s = preg_replace('/\-+/', '-', (string) $s);
 
         return trim((string) $s, '-');
     }

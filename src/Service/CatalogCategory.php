@@ -7,10 +7,12 @@ namespace App\Service;
 
 use App\Event\CategoryCreated;
 use App\Event\CategoryLinked;
+use App\Event\CategoryMoved;
 use App\Event\CategoryUnlinked;
 use App\PolicyInterface\CategoryPolicyInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CatalogCategoryInterface as CategoryServiceInterface;
+use App\ServiceInterface\CatalogCategorySlugGeneratorInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -21,13 +23,13 @@ final class CatalogCategory implements CategoryServiceInterface
 {
     private CategoryRepositoryInterface $repo;
     private CategoryPolicyInterface $policy;
-    private CategorySlugGeneratorInterface $slugger;
+    private CatalogCategorySlugGeneratorInterface $slugger;
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
         CategoryRepositoryInterface $repo,
         CategoryPolicyInterface $policy,
-        CategorySlugGeneratorInterface $slugger,
+        CatalogCategorySlugGeneratorInterface $slugger,
         EventDispatcherInterface $dispatcher,
     ) {
         $this->repo = $repo;

@@ -11,87 +11,40 @@ namespace App\Service\Api;
 
 use App\Service\CatalogCategory\DraftPolicy;
 use App\Service\CatalogCategory\PublishOperation;
-use App\Service\CatalogCategory\Status;
 use App\Service\CatalogCategory\TreeOperation;
+use App\ServiceInterface\Api\GraphqlResolverInterface;
 
+/**
+ * API namespace compatibility wrapper. Canonical behavior lives in App\Service\GraphqlResolver.
+ */
 final class GraphqlResolver implements GraphqlResolverInterface
 {
-    private PublishOperation $publish;
-    private TreeOperation $tree;
+    private \App\Service\GraphqlResolver $inner;
 
     public function __construct(?PublishOperation $publish = null, ?TreeOperation $tree = null)
     {
-        $this->publish = $publish ?? new PublishOperation(new DraftPolicy());
-        $this->tree = $tree ?? new TreeOperation();
+        $publish ??= new PublishOperation(new DraftPolicy());
+        $tree ??= new TreeOperation();
+        $this->inner = new \App\Service\GraphqlResolver($publish, $tree);
     }
 
     public function category(array $args): ?array
     {
-        // Application layer should fetch by ID from read model.
-        // Placeholder shape: return null when not found.
-        $id = (string) ($args['id'] ?? '');
-        if ('' === $id) {
-            return null;
-        }
-
-        return [
-            'id' => $id,
-            'parentId' => null,
-            'slug' => 'demo',
-            'name' => 'Demo',
-            'locale' => 'en',
-            'status' => 'published',
-        ];
+        return $this->inner->category($args);
     }
 
     public function categoryPath(array $args): array
     {
-        $id = (string) ($args['id'] ?? '');
-        if ('' === $id) {
-            return [];
-        }
-
-        // Application layer should resolve path from projection (breadcrumb).
-        return [[
-            'id' => $id,
-            'parentId' => null,
-            'slug' => 'demo',
-            'name' => 'Demo',
-            'locale' => 'en',
-            'status' => 'published',
-        ]];
+        return $this->inner->categoryPath($args);
     }
 
     public function publishCategory(array $args): ?array
     {
-        $input = (array) ($args['input'] ?? []);
-        $id = (string) ($input['id'] ?? '');
-        if ('' === $id) {
-            return null;
-        }
-        $status = new Status(Status::DRAFT);
-        $new = $this->publish->publish($status);
-
-        return [
-            'id' => $id,
-            'parentId' => null,
-            'slug' => 'demo',
-            'name' => 'Demo',
-            'locale' => 'en',
-            'status' => $new->value(),
-        ];
+        return $this->inner->publishCategory($args);
     }
 
     public function moveCategory(array $args): bool
     {
-        $input = (array) ($args['input'] ?? []);
-        $id = (string) ($input['id'] ?? '');
-        $parentId = isset($input['parentId']) ? (string) $input['parentId'] : null;
-        if ('' === $id) {
-            return false;
-        }
-        $this->tree->move($id, $parentId);
-
-        return true;
+        return $this->inner->moveCategory($args);
     }
 }

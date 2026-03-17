@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ServiceInterface\CatalogCategoryBulkInterface as CategoryBulkInterface;
 use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
 
 final class CatalogCategoryBulk implements CategoryBulkInterface
@@ -45,7 +46,7 @@ final class CatalogCategoryBulk implements CategoryBulkInterface
                         ++$accepted;
                         break;
                     default:
-                        $rejected++;
+                        ++$rejected;
                         $results[] = ['error' => 'Unknown op'];
                 }
             } catch (\Throwable $e) {

@@ -9,13 +9,6 @@ Owner: Marketing America Corp
 
 namespace App\ServiceInterface\Api;
 
-interface GraphqlResolverInterface
+interface GraphqlResolverInterface extends \App\ServiceInterface\GraphqlResolverInterface
 {
-    public function category(array $args): ?array;
-
-    public function categoryPath(array $args): array;
-
-    public function publishCategory(array $args): ?array;
-
-    public function moveCategory(array $args): bool;
 }

@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class CategoryBulkController
 {
+    private const ALLOWED_ACTIONS = ['publish', 'unpublish', 'archive', 'reindex'];
+
     public function __construct(private readonly BulkOperator $bulk)
     {
     }
@@ -23,9 +25,23 @@ final class CategoryBulkController
     {
         $payload = json_decode($request->getContent(), true) ?? [];
         $ids = $payload['ids'] ?? [];
-        $action = $payload['action'] ?? 'publish';
+        $action = (string) ($payload['action'] ?? 'publish');
+
+        if (!is_array($ids)) {
+            return new JsonResponse(['ok' => false, 'error' => ['ids must be an array']], 400);
+        }
+        if (!in_array($action, self::ALLOWED_ACTIONS, true)) {
+            return new JsonResponse(['ok' => false, 'error' => ['action is invalid']], 400);
+        }
+
         $res = $this->bulk->run($ids, $action);
 
-        return new JsonResponse($res);
+        return new JsonResponse([
+            'ok' => true,
+            'action' => $action,
+            'successCount' => count($res['success']),
+            'failedCount' => count($res['failed']),
+            'result' => $res,
+        ]);
     }
 }

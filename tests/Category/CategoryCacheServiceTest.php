@@ -17,8 +17,14 @@ final class CategoryCacheServiceTest extends TestCase
     {
         $cache = new ArrayAdapter();
         $svc = new CatalogCategoryCacheService($cache);
+
         $first = $svc->getTree('en');
         $second = $svc->getTree('en');
+        $third = $svc->getTree('es');
+
         self::assertSame($first, $second);
+        self::assertSame([], $first);
+        self::assertSame([], $third);
+        self::assertCount(2, iterator_to_array($cache->getItems(['category_tree_en', 'category_tree_es'])));
     }
 }

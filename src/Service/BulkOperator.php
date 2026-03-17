@@ -7,10 +7,20 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Repository\CategoryRepository;
+
 final class BulkOperator
 {
+    public function __construct(private readonly ?CategoryRepository $repository = null)
+    {
+    }
+
     public function run(array $items, string $action): array
     {
+        if (null !== $this->repository && in_array($action, ['publish', 'unpublish'], true)) {
+            return $this->repository->bulkSetPublished($items, 'publish' === $action, 'bulk-operator');
+        }
+
         $result = ['success' => [], 'failed' => []];
         foreach ($items as $id) {
             if (!is_numeric($id)) {

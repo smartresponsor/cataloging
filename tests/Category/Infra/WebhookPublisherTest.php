@@ -14,15 +14,25 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class WebhookPublisherTest extends TestCase
 {
-    public function testCanBeInstantiated(): void
+    public function testPublishSendsJsonPayloadToConfiguredEndpoint(): void
     {
-        $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => 200]),
-        ]);
+        $capturedMethod = null;
+        $capturedUrl = null;
+        $capturedOptions = [];
 
-        $pub = new ProductWebhookPublisher($client, 'http://example');
-        $pub->publish(['event' => 'category.changed']);
+        $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$capturedMethod, &$capturedUrl, &$capturedOptions) {
+            $capturedMethod = $method;
+            $capturedUrl = $url;
+            $capturedOptions = $options;
 
-        $this->assertTrue(true);
+            return new MockResponse('{"ok":true}', ['http_code' => 202]);
+        });
+
+        $pub = new ProductWebhookPublisher($client, 'https://example.test/webhooks/category');
+        $pub->publish(['event' => 'category.changed', 'id' => 'cat-1']);
+
+        self::assertSame('POST', $capturedMethod);
+        self::assertSame('https://example.test/webhooks/category', $capturedUrl);
+        self::assertSame(['event' => 'category.changed', 'id' => 'cat-1'], $capturedOptions['json']);
     }
 }

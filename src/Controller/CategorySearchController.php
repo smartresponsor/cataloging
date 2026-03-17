@@ -24,6 +24,11 @@ final class CategorySearchController
         $q = (string) $request->query->get('q', '');
         $res = $this->search->search($q);
 
-        return new JsonResponse($res);
+        return new JsonResponse([
+            'query' => $q,
+            'count' => count($res['items'] ?? []),
+            'items' => $res['items'] ?? [],
+            'facets' => $res['facets'] ?? [],
+        ]);
     }
 }

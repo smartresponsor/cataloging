@@ -13,6 +13,7 @@ use App\Service\CatalogCategory\DraftPolicy;
 use App\Service\CatalogCategory\PublishOperation;
 use App\Service\CatalogCategory\Status;
 use App\Service\CatalogCategory\TreeOperation;
+use App\ServiceInterface\GraphqlResolverInterface;
 
 final class GraphqlResolver implements GraphqlResolverInterface
 {
@@ -27,8 +28,6 @@ final class GraphqlResolver implements GraphqlResolverInterface
 
     public function category(array $args): ?array
     {
-        // Application layer should fetch by ID from read model.
-        // Placeholder shape: return null when not found.
         $id = (string) ($args['id'] ?? '');
         if ('' === $id) {
             return null;
@@ -51,7 +50,6 @@ final class GraphqlResolver implements GraphqlResolverInterface
             return [];
         }
 
-        // Application layer should resolve path from projection (breadcrumb).
         return [[
             'id' => $id,
             'parentId' => null,

@@ -26,8 +26,10 @@ final class CategoryAuditLoggerTest extends TestCase
 
         $audit = new CategoryAuditLogger($logger);
         $audit->log('category.move', ['id' => 1]);
+
         $this->assertCount(1, $logger->records);
         $this->assertSame('category.audit', $logger->records[0][1]);
         $this->assertSame('category.move', $logger->records[0][2]['action']);
+        $this->assertSame(1, $logger->records[0][2]['id']);
     }
 }

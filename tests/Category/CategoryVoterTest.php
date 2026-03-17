@@ -18,9 +18,20 @@ final class CategoryVoterTest extends TestCase
     public function testAdminCanPublish(): void
     {
         $voter = new CategoryVoter();
-        $user = new InMemoryUser('admin', null, ['ROLE_ADMIN']);
-        $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
+        $token = new UsernamePasswordToken(new InMemoryUser('admin', null, ['ROLE_ADMIN']), 'main');
+
         $res = $voter->vote($token, null, [CategoryVoter::PUBLISH]);
+
         self::assertSame(VoterInterface::ACCESS_GRANTED, $res);
+    }
+
+    public function testEditorCannotPublishWithoutPublisherCapability(): void
+    {
+        $voter = new CategoryVoter();
+        $token = new UsernamePasswordToken(new InMemoryUser('editor', null, ['category.editor']), 'main');
+
+        $res = $voter->vote($token, null, [CategoryVoter::PUBLISH]);
+
+        self::assertSame(VoterInterface::ACCESS_DENIED, $res);
     }
 }

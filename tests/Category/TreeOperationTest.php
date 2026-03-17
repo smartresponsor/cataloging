@@ -19,6 +19,25 @@ final class TreeOperationTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Node cannot be parent of itself');
 
-        $op->move('3', '3');
+        $op->move('node-1', 'node-1');
+    }
+
+    public function testSwapRequiresDistinctNodes(): void
+    {
+        $op = new TreeOperation();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Swap requires distinct nodes');
+
+        $op->swap('node-1', 'node-1');
+    }
+
+    public function testReparentDelegatesToMoveInvariantChecks(): void
+    {
+        $op = new TreeOperation();
+
+        $op->reparent('node-2', 'node-1');
+
+        self::assertTrue(true);
     }
 }

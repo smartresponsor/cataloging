@@ -13,6 +13,9 @@ final class CategoryGraphQLTest extends TestCase
 {
     public function testSchemaPresent(): void
     {
-        $this->assertTrue(true);
+        $path = __DIR__.'/../../../config/graphql/category.yaml';
+
+        $this->assertFileExists($path);
+        $this->assertStringContainsString('Category', (string) file_get_contents($path));
     }
 }
