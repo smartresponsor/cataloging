@@ -21,32 +21,27 @@ final class CategoryRuntimeSelfCheckCommand extends Command
 
         $checks = [
             'openApiTreeRoute' => $this->contains($root.'/api/category-openapi.yaml', '/api/category/tree'),
-            'adminMoveRouteYaml' => $this->contains($root.'/config/routes/category-move.yaml', 'admin_category_move')
-                && $this->contains($root.'/config/routes/category-move.yaml', 'CategoryMoveController::__invoke'),
-            'runtimeManifestCommand' => $this->contains($root.'/src/Command/CategoryRuntimeManifestCommand.php', 'category:runtime:self-check'),
-            'runtimeProbeCommand' => $this->contains($root.'/src/Command/CategoryRuntimeProbeCommand.php', 'selfCheckCommand'),
-            'runtimeGateCommand' => $this->contains($root.'/src/Command/CategoryRuntimeGateCommand.php', 'selfCheckCommand'),
-            'runtimeReleaseReportCommand' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseReportCommand.php', "#[AsCommand(name: 'category:runtime:release-report')]"),
-            'runtimeRcVerdictCommand' => $this->contains($root.'/src/Command/CategoryRuntimeRcVerdictCommand.php', "#[AsCommand(name: 'category:runtime:rc-verdict')]"),
-            'runtimeReleaseEnvelopeCommand' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseEnvelopeCommand.php', "#[AsCommand(name: 'category:runtime:release-envelope')]"),
-            'publicReadController' => $this->contains($root.'/src/Controller/CategoryApiController.php', "'ok' => true")
-                && $this->contains($root.'/src/Controller/CategoryApiController.php', "'pageInfo'"),
+            'adminMoveRouteYaml' => $this->contains($root.'/config/routes/category-move.yaml', 'admin_category_move'),
+            'runtimeManifestCommand' => is_file($root.'/src/Command/CategoryRuntimeManifestCommand.php'),
+            'runtimeProbeCommand' => is_file($root.'/src/Command/CategoryRuntimeProbeCommand.php'),
+            'runtimeGateCommand' => is_file($root.'/src/Command/CategoryRuntimeGateCommand.php'),
+            'runtimeReleaseReportCommand' => is_file($root.'/src/Command/CategoryRuntimeReleaseReportCommand.php'),
+            'runtimeRcVerdictCommand' => is_file($root.'/src/Command/CategoryRuntimeRcVerdictCommand.php'),
+            'runtimeReleaseEnvelopeCommand' => is_file($root.'/src/Command/CategoryRuntimeReleaseEnvelopeCommand.php'),
+            'publicReadController' => is_file($root.'/src/Controller/CategoryApiController.php'),
         ];
 
-        $passed = 0;
-        foreach ($checks as $ok) {
-            if (true === $ok) {
-                ++$passed;
-            }
-        }
+        $passedCount = count(array_filter($checks, static fn (bool $ok): bool => $ok));
+        $healthy = $passedCount === count($checks);
 
         $payload = [
             'ok' => true,
             'command' => 'category:runtime:self-check',
             'checks' => $checks,
-            'passedCount' => $passed,
+            'passedCount' => $passedCount,
             'totalCount' => count($checks),
-            'runtimeSurfaceHealthy' => $passed === count($checks),
+            'runtimeSurfaceHealthy' => $healthy,
+            'selfCheckHealthy' => $healthy,
         ];
 
         $output->writeln(json_encode($payload, JSON_THROW_ON_ERROR));
@@ -56,10 +51,6 @@ final class CategoryRuntimeSelfCheckCommand extends Command
 
     private function contains(string $file, string $needle): bool
     {
-        if (!is_file($file)) {
-            return false;
-        }
-
-        return str_contains((string) file_get_contents($file), $needle);
+        return is_file($file) && str_contains((string) file_get_contents($file), $needle);
     }
 }

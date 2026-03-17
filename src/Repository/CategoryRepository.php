@@ -105,7 +105,7 @@ final class CategoryRepository implements CategoryRepositoryInterface
             $rows[] = $this->normalizeLocalizedRow($item, $locale);
         }
 
-        usort($rows, static fn (array $a, array $b): int => [$a['order'], $a['id']] <=> [$b['order'], $b['id']]);
+        usort($rows, [$this, 'compareRows']);
 
         return array_values($rows);
     }
@@ -117,10 +117,14 @@ final class CategoryRepository implements CategoryRepositoryInterface
 
     public function publishedTree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array
     {
-        return array_values(array_filter(
+        $rows = array_values(array_filter(
             $this->tree($taxonomyCode, $parentId, $depth, $locale),
-            fn (array $row): bool => (bool) (($row['meta']['published'] ?? true) === true)
+            static fn (array $row): bool => (bool) (($row['meta']['published'] ?? true) === true)
         ));
+
+        usort($rows, [$this, 'compareRows']);
+
+        return array_values($rows);
     }
 
     public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array
@@ -144,7 +148,7 @@ final class CategoryRepository implements CategoryRepositoryInterface
             }
         }
 
-        usort($rows, static fn (array $a, array $b): int => [$a['order'], $a['id']] <=> [$b['order'], $b['id']]);
+        usort($rows, [$this, 'compareRows']);
 
         return array_values($rows);
     }
@@ -342,6 +346,17 @@ final class CategoryRepository implements CategoryRepositoryInterface
         $parentPath = $this->buildPath($this->items[$parentId]['parentId'], $this->items[$parentId]['slug'], $locale);
 
         return rtrim($parentPath, '/').'/'.$selfSlug;
+    }
+
+    private function compareRows(array $a, array $b): int
+    {
+        $aPath = (string) ($a['path'] ?? '');
+        $bPath = (string) ($b['path'] ?? '');
+        $aDepth = '' === $aPath ? 0 : substr_count($aPath, '/');
+        $bDepth = '' === $bPath ? 0 : substr_count($bPath, '/');
+
+        return [$aDepth, (int) ($a['order'] ?? 0), $aPath, (string) ($a['id'] ?? '')]
+            <=> [$bDepth, (int) ($b['order'] ?? 0), $bPath, (string) ($b['id'] ?? '')];
     }
 
     private function isPublished(array $item): bool

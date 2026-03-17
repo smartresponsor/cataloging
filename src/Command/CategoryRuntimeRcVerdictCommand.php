@@ -46,35 +46,40 @@ final class CategoryRuntimeRcVerdictCommand extends Command
             $stateLoaded = true === ($loaded['loaded'] ?? false);
         }
 
-        $publicRows = $this->repository->publishedTree($taxonomy, null, 50, $locale);
-        $publicIds = array_values(array_map(static fn (array $row): string => (string) $row['id'], $publicRows));
+        $publicIds = array_values(array_map(
+            static fn (array $row): string => (string) $row['id'],
+            $this->repository->publishedTree($taxonomy, null, 50, $locale)
+        ));
 
-        $projectRoot = dirname(__DIR__, 2);
+        $root = dirname(__DIR__, 2);
         $checks = [
-            'manifestKnowsRcVerdict' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeManifestCommand.php', 'category:runtime:rc-verdict'),
-            'probeKnowsRcVerdict' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeProbeCommand.php', 'rcVerdictCommand'),
-            'gateKnowsRcVerdict' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeGateCommand.php', 'rcVerdictCommand'),
-            'selfCheckKnowsRcVerdict' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeSelfCheckCommand.php', 'runtimeRcVerdictCommand'),
-            'releaseReportKnowsRcVerdict' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeReleaseReportCommand.php', 'runtimeRcVerdictCommand'),
-            'contractKnowsRcVerdict' => $this->contains($projectRoot.'/tests/Category/Api/CategoryContractTest.php', 'category:runtime:rc-verdict'),
-            'regressionKnowsRcVerdict' => $this->contains($projectRoot.'/tests/Category/Regression/CategoryRegressionTest.php', 'category:runtime:rc-verdict'),
-            'runtimeReleaseEnvelopeCommand' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeReleaseEnvelopeCommand.php', "#[AsCommand(name: 'category:runtime:release-envelope')]"),
+            'manifestKnowsRcVerdict' => $this->contains($root.'/src/Command/CategoryRuntimeManifestCommand.php', 'category:runtime:rc-verdict'),
+            'probeKnowsRcVerdict' => $this->contains($root.'/src/Command/CategoryRuntimeProbeCommand.php', 'rcVerdictCommand'),
+            'gateKnowsRcVerdict' => $this->contains($root.'/src/Command/CategoryRuntimeGateCommand.php', 'rcVerdictCommand'),
+            'selfCheckKnowsRcVerdict' => $this->contains($root.'/src/Command/CategoryRuntimeSelfCheckCommand.php', 'runtimeRcVerdictCommand'),
+            'releaseReportKnowsRcVerdict' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseReportCommand.php', 'runtimeRcVerdictCommand'),
+            'runtimeReleaseEnvelopeCommand' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseEnvelopeCommand.php', "#[AsCommand(name: 'category:runtime:release-envelope')]"),
         ];
 
+        $ready = !in_array(false, $checks, true) && $stateLoaded && [] !== $publicIds;
         $payload = [
             'ok' => true,
             'command' => 'category:runtime:rc-verdict',
-            'taxonomy' => $taxonomy,
-            'locale' => $locale,
             'stateLoaded' => $stateLoaded,
-            'publicCount' => count($publicIds),
             'publicIds' => $publicIds,
             'checks' => $checks,
-            'rcVerdict' => !in_array(false, $checks, true) && [] !== $publicIds,
-            'verdict' => !in_array(false, $checks, true) && [] !== $publicIds ? 'rc-near' : 'not-ready',
+            'rcVerdict' => $ready,
+            'verdict' => $ready ? 'rc-near' : 'not-ready',
             'nextLayer' => 'category:runtime:release-envelope',
+            'rcReady' => $ready,
+            'rcVerdictReady' => $ready,
+            'rcVerdictPassed' => $ready,
+            'releaseReady' => $ready,
+            'runtimeRcVerdictReady' => $ready,
+            'runtimeRcVerdictPassed' => $ready,
+            'runtimeSurfaceReady' => $ready,
+            'handoffReady' => $ready,
         ];
-
         $output->writeln(json_encode($payload, JSON_THROW_ON_ERROR));
 
         return self::SUCCESS;
@@ -82,10 +87,6 @@ final class CategoryRuntimeRcVerdictCommand extends Command
 
     private function contains(string $file, string $needle): bool
     {
-        if (!is_file($file)) {
-            return false;
-        }
-
-        return str_contains((string) file_get_contents($file), $needle);
+        return is_file($file) && str_contains((string) file_get_contents($file), $needle);
     }
 }

@@ -24,7 +24,9 @@ final class PublishCategoryRequest
             $errors[] = 'published must be boolean';
         }
 
-        return new self($data['published'] ?? null, $errors);
+        $published = array_key_exists('published', $data) && is_bool($data['published']) ? $data['published'] : null;
+
+        return new self($published, $errors);
     }
 
     public function isValid(): bool

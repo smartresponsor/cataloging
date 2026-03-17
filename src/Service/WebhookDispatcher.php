@@ -17,9 +17,11 @@ final class WebhookDispatcher
 
     public function dispatch(string $event, array $payload, string $endpoint): void
     {
-        $body = json_encode(['event' => $event, 'payload' => $payload], JSON_THROW_ON_ERROR);
+        $json = ['event' => $event, 'payload' => $payload];
+        $body = json_encode($json, JSON_THROW_ON_ERROR);
         $sig = hash_hmac('sha256', $body, $this->secret);
-        $this->httpClient->request('POST', $endpoint, [
+
+        $response = $this->httpClient->request('POST', $endpoint, [
             'headers' => [
                 'X-Category-Event' => $event,
                 'X-Category-Signature' => $sig,
@@ -27,5 +29,7 @@ final class WebhookDispatcher
             ],
             'body' => $body,
         ]);
+
+        $response->getStatusCode();
     }
 }

@@ -80,7 +80,7 @@ final class CategoryReadController
 
         $slice = array_slice($rows, 0, $first);
         $next = '';
-        if (count($rows) > $first && [] !== $slice) {
+        if ([] !== $slice) {
             $last = end($slice);
             $next = base64_encode((string) $last['path']);
         }

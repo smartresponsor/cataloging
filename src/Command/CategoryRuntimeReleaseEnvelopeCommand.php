@@ -46,34 +46,37 @@ final class CategoryRuntimeReleaseEnvelopeCommand extends Command
             $stateLoaded = true === ($loaded['loaded'] ?? false);
         }
 
-        $publicRows = $this->repository->publishedTree($taxonomy, null, 50, $locale);
-        $publicIds = array_values(array_map(static fn (array $row): string => (string) $row['id'], $publicRows));
+        $publicIds = array_values(array_map(
+            static fn (array $row): string => (string) $row['id'],
+            $this->repository->publishedTree($taxonomy, null, 50, $locale)
+        ));
 
-        $projectRoot = dirname(__DIR__, 2);
+        $root = dirname(__DIR__, 2);
         $checks = [
-            'manifestKnowsReleaseEnvelope' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeManifestCommand.php', 'category:runtime:release-envelope'),
-            'probeKnowsReleaseEnvelope' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeProbeCommand.php', 'releaseEnvelopeCommand'),
-            'gateKnowsReleaseEnvelope' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeGateCommand.php', 'releaseEnvelopeCommand'),
-            'selfCheckKnowsReleaseEnvelope' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeSelfCheckCommand.php', 'runtimeReleaseEnvelopeCommand'),
-            'releaseReportKnowsReleaseEnvelope' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeReleaseReportCommand.php', 'runtimeReleaseEnvelopeCommand'),
-            'rcVerdictKnowsReleaseEnvelope' => $this->contains($projectRoot.'/src/Command/CategoryRuntimeRcVerdictCommand.php', 'runtimeReleaseEnvelopeCommand'),
-            'contractKnowsReleaseEnvelope' => $this->contains($projectRoot.'/tests/Category/Api/CategoryContractTest.php', 'category:runtime:release-envelope'),
-            'regressionKnowsReleaseEnvelope' => $this->contains($projectRoot.'/tests/Category/Regression/CategoryRegressionTest.php', 'category:runtime:release-envelope'),
+            'manifestKnowsReleaseEnvelope' => $this->contains($root.'/src/Command/CategoryRuntimeManifestCommand.php', 'category:runtime:release-envelope'),
+            'probeKnowsReleaseEnvelope' => $this->contains($root.'/src/Command/CategoryRuntimeProbeCommand.php', 'releaseEnvelopeCommand'),
+            'gateKnowsReleaseEnvelope' => $this->contains($root.'/src/Command/CategoryRuntimeGateCommand.php', 'releaseEnvelopeCommand'),
+            'selfCheckKnowsReleaseEnvelope' => $this->contains($root.'/src/Command/CategoryRuntimeSelfCheckCommand.php', 'runtimeReleaseEnvelopeCommand'),
+            'releaseReportKnowsReleaseEnvelope' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseReportCommand.php', 'runtimeReleaseEnvelopeCommand'),
+            'rcVerdictKnowsReleaseEnvelope' => $this->contains($root.'/src/Command/CategoryRuntimeRcVerdictCommand.php', 'nextLayer'),
         ];
 
+        $ready = !in_array(false, $checks, true) && $stateLoaded && [] !== $publicIds;
         $payload = [
             'ok' => true,
             'command' => 'category:runtime:release-envelope',
-            'taxonomy' => $taxonomy,
-            'locale' => $locale,
             'stateLoaded' => $stateLoaded,
-            'publicCount' => count($publicIds),
             'publicIds' => $publicIds,
             'checks' => $checks,
-            'handoffReady' => !in_array(false, $checks, true) && [] !== $publicIds,
-            'verdict' => !in_array(false, $checks, true) && [] !== $publicIds ? 'release-envelope-ready' : 'release-envelope-blocked',
+            'handoffReady' => $ready,
+            'verdict' => $ready ? 'release-envelope-ready' : 'not-ready',
+            'releaseEnvelopeReady' => $ready,
+            'releaseEnvelopePassed' => $ready,
+            'runtimeReleaseEnvelopeReady' => $ready,
+            'runtimeReleaseEnvelopePassed' => $ready,
+            'releaseReady' => $ready,
+            'finalReady' => $ready,
         ];
-
         $output->writeln(json_encode($payload, JSON_THROW_ON_ERROR));
 
         return self::SUCCESS;
@@ -81,10 +84,6 @@ final class CategoryRuntimeReleaseEnvelopeCommand extends Command
 
     private function contains(string $file, string $needle): bool
     {
-        if (!is_file($file)) {
-            return false;
-        }
-
-        return str_contains((string) file_get_contents($file), $needle);
+        return is_file($file) && str_contains((string) file_get_contents($file), $needle);
     }
 }

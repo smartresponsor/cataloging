@@ -41,6 +41,7 @@ final class CategoryReleaseWorkflow
         $moved = $this->repository->move($actorId, (string) $created['id'], $newParentId, $newOrder);
 
         $publishedStatus = $this->publishOperation->publish(new Status(Status::DRAFT));
+        $published = $this->repository->setPublished((string) $created['id'], true, $actorId);
 
         $this->outboxDispatcher->dispatch([
             'id' => (string) $created['id'],
@@ -64,12 +65,12 @@ final class CategoryReleaseWorkflow
         $this->projectionRunner->runOnce();
 
         return [
-            'category' => $moved + [
+            'category' => array_replace($moved, [
                 'taxonomyId' => $taxonomyId,
                 'name' => $name,
                 'slug' => $slug,
-                'meta' => $meta + ['published' => true],
-            ],
+                'meta' => array_replace($meta, ['published' => true]),
+            ], [] !== $published ? ['meta' => $published['meta'] ?? ['published' => true], 'state' => $published['state'] ?? 'published', 'updatedAt' => $published['updatedAt'] ?? null, 'updatedBy' => $published['updatedBy'] ?? $actorId] : []),
             'status' => $publishedStatus->value(),
         ];
     }

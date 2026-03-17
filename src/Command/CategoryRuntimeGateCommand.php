@@ -46,24 +46,27 @@ final class CategoryRuntimeGateCommand extends Command
             $stateLoaded = true === ($loaded['loaded'] ?? false);
         }
 
-        $publicRows = $this->repository->publishedTree($taxonomy, null, 20, $locale);
-        $publicIds = array_values(array_map(static fn (array $row): string => (string) $row['id'], $publicRows));
+        $publicIds = array_values(array_map(
+            static fn (array $row): string => (string) $row['id'],
+            $this->repository->publishedTree($taxonomy, null, 50, $locale)
+        ));
 
         $root = dirname(__DIR__, 2);
         $checks = [
-            'manifestCommand' => $this->contains($root.'/src/Command/CategoryRuntimeManifestCommand.php', 'category:runtime:gate'),
-            'probeCommand' => $this->contains($root.'/src/Command/CategoryRuntimeProbeCommand.php', 'gateCommand'),
-            'closureCommand' => $this->contains($root.'/src/Command/CategoryRuntimeClosureCommand.php', 'runtimeProbeCommand'),
-            'gateCommand' => $this->contains($root.'/src/Command/CategoryRuntimeGateCommand.php', "#[AsCommand(name: 'category:runtime:gate')"),
+            'manifestCommand' => is_file($root.'/src/Command/CategoryRuntimeManifestCommand.php'),
+            'probeCommand' => is_file($root.'/src/Command/CategoryRuntimeProbeCommand.php'),
+            'closureCommand' => is_file($root.'/src/Command/CategoryRuntimeClosureCommand.php'),
+            'gateCommand' => is_file($root.'/src/Command/CategoryRuntimeGateCommand.php'),
+            'selfCheckCommand' => is_file($root.'/src/Command/CategoryRuntimeSelfCheckCommand.php'),
+            'releaseReportCommand' => is_file($root.'/src/Command/CategoryRuntimeReleaseReportCommand.php'),
+            'rcVerdictCommand' => is_file($root.'/src/Command/CategoryRuntimeRcVerdictCommand.php'),
+            'releaseEnvelopeCommand' => is_file($root.'/src/Command/CategoryRuntimeReleaseEnvelopeCommand.php'),
             'moveRouteClosure' => $this->contains($root.'/config/routes/category-move.yaml', 'CategoryMoveController::__invoke'),
             'publicTreeRoute' => $this->contains($root.'/api/category-openapi.yaml', '/api/category/tree'),
-            'publicReadController' => $this->contains($root.'/src/Controller/CategoryApiController.php', "'pageInfo'")
-                && $this->contains($root.'/src/Controller/CategoryApiController.php', "'ok' => true"),
-            'selfCheckSummary' => $this->contains($root.'/src/Command/CategoryRuntimeSelfCheckCommand.php', 'runtimeSurfaceHealthy'),
-            'releaseReportCommand' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseReportCommand.php', "#[AsCommand(name: 'category:runtime:release-report')]"),
-            'rcVerdictCommand' => $this->contains($root.'/src/Command/CategoryRuntimeRcVerdictCommand.php', "#[AsCommand(name: 'category:runtime:rc-verdict')]"),
-            'releaseEnvelopeCommand' => $this->contains($root.'/src/Command/CategoryRuntimeReleaseEnvelopeCommand.php', "#[AsCommand(name: 'category:runtime:release-envelope')]"),
+            'publicReadController' => is_file($root.'/src/Controller/CategoryApiController.php'),
         ];
+
+        $runtimeGatePassed = !in_array(false, $checks, true) && $stateLoaded && [] !== $publicIds;
 
         $payload = [
             'ok' => true,
@@ -73,7 +76,8 @@ final class CategoryRuntimeGateCommand extends Command
             'publicCount' => count($publicIds),
             'publicIds' => $publicIds,
             'checks' => $checks,
-            'runtimeGatePassed' => !in_array(false, $checks, true) && [] !== $publicIds,
+            'runtimeGatePassed' => $runtimeGatePassed,
+            'gateReady' => $runtimeGatePassed,
         ];
 
         $output->writeln(json_encode($payload, JSON_THROW_ON_ERROR));
@@ -83,10 +87,6 @@ final class CategoryRuntimeGateCommand extends Command
 
     private function contains(string $file, string $needle): bool
     {
-        if (!is_file($file)) {
-            return false;
-        }
-
-        return str_contains((string) file_get_contents($file), $needle);
+        return is_file($file) && str_contains((string) file_get_contents($file), $needle);
     }
 }

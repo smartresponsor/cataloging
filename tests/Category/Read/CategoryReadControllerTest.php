@@ -128,7 +128,7 @@ final class CategoryReadControllerTest extends TestCase
                         return $this;
                     }
 
-                    public function metadata(): array
+                    public function getMetadata(): array
                     {
                         return [];
                     }

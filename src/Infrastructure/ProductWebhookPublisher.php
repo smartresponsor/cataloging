@@ -17,6 +17,13 @@ final class ProductWebhookPublisher
 
     public function publish(array $event): void
     {
-        $this->client->request('POST', $this->url, ['json' => $event]);
+        $response = $this->client->request('POST', $this->url, [
+            'json' => $event,
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+        ]);
+
+        $response->getStatusCode();
     }
 }
