@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+ */
+
+namespace App\PolicyInterface;
+
+use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
+
+interface CategoryMediaApplicabilityPolicyInterface
+{
+    /**
+     * @param array<string,mixed>                                      $payload
+     * @param list<\App\EntityInterface\CategoryMediaBindingInterface> $bindings
+     */
+    public function buildReport(array $payload, array $bindings): CategoryMediaApplicabilityReportInterface;
+}

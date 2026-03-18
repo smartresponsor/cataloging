@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+ */
+
+namespace App\PolicyInterface;
+
+use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
+
+interface CategoryDestinationMediaFallbackPolicyInterface
+{
+    /**
+     * @param array<string,mixed> $destinationSettings
+     * @param list<mixed>         $bindings
+     */
+    public function buildReport(string $destinationId, string $categoryId, array $destinationSettings, array $bindings): CategoryDestinationMediaFallbackReportInterface;
+}

@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+ */
+
+namespace App\ValueObjectInterface;
+
+interface CategoryMediaCoverageReportInterface
+{
+    /** @return array<string,bool> */
+    public function checks(): array;
+
+    /** @return list<string> */
+    public function requiredMissing(): array;
+
+    /** @return list<string> */
+    public function warnings(): array;
+
+    public function mediaReady(): bool;
+
+    public function bannerReady(): bool;
+
+    public function requiredCoverageReady(): bool;
+}
