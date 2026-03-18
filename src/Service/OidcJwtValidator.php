@@ -9,13 +9,21 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\OidcJwtValidatorInterface;
+use App\ServiceInterface\OidcJwtVerifierInterface;
 
 final class OidcJwtValidator implements OidcJwtValidatorInterface
 {
+    public function __construct(
+        private readonly ?OidcJwtVerifierInterface $verifier = null,
+    ) {
+    }
+
     public function validate(string $jwt): array
     {
-        // Wire to JWKS cache and perform signature and claim validation.
-        // Return claim set if valid, otherwise throw an exception in real implementation.
-        return ['sub' => 'example'];
+        if (null === $this->verifier) {
+            throw new \LogicException('OIDC JWT verifier is not configured.');
+        }
+
+        return $this->verifier->verify($jwt);
     }
 }

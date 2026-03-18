@@ -38,8 +38,20 @@ final class MetricsSubscriber implements EventSubscriberInterface
             'ms' => round($elapsed, 2),
             'status' => $status,
         ];
-        @mkdir(sys_get_temp_dir().'/sr_metrics', 0o755, true);
-        $writer = new \App\Util\RotatingFileWriter(sys_get_temp_dir().'/sr_metrics/category_http.jsonl');
+        $metricsDir = sys_get_temp_dir().'/sr_metrics';
+        $this->ensureDirectory($metricsDir);
+        $writer = new \App\Util\RotatingFileWriter($metricsDir.'/category_http.jsonl');
         $writer->write(json_encode($rec)."\n");
+    }
+
+    private function ensureDirectory(string $path): void
+    {
+        if (is_dir($path)) {
+            return;
+        }
+
+        if (!mkdir($path, 0o755, true) && !is_dir($path)) {
+            throw new \RuntimeException(sprintf('Unable to create directory: %s', $path));
+        }
     }
 }

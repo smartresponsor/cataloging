@@ -7,33 +7,43 @@ namespace App\Cache;
 
 use App\CacheInterface\CategoryCacheInterface;
 
-/** Simple array cache; real impl in infra (Redis/Memcached). */
 final class CategoryCache implements CategoryCacheInterface
 {
     /** @var array<string, array{v:mixed, exp:int}> */
-    private array $s = [];
+    private array $entries = [];
 
     public function get(string $key): mixed
     {
-        if (!isset($this->s[$key])) {
-            return null;
-        }
-        if ($this->s[$key]['exp'] < time()) {
-            unset($this->s[$key]);
+        $this->pruneExpired();
 
+        if (!isset($this->entries[$key])) {
             return null;
         }
 
-        return $this->s[$key]['v'];
+        return $this->entries[$key]['v'];
     }
 
     public function set(string $key, mixed $value, int $ttl): void
     {
-        $this->s[$key] = ['v' => $value, 'exp' => time() + $ttl];
+        $effectiveTtl = max(1, $ttl);
+        $this->entries[$key] = [
+            'v' => $value,
+            'exp' => time() + $effectiveTtl,
+        ];
     }
 
     public function del(string $key): void
     {
-        unset($this->s[$key]);
+        unset($this->entries[$key]);
+    }
+
+    private function pruneExpired(): void
+    {
+        $now = time();
+        foreach ($this->entries as $key => $entry) {
+            if ($entry['exp'] < $now) {
+                unset($this->entries[$key]);
+            }
+        }
     }
 }

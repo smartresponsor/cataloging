@@ -81,7 +81,7 @@ final class ImportService
     {
         foreach (['id', 'name', 'slug'] as $k) {
             if (!isset($row[$k]) || !is_string($row[$k]) || '' === $row[$k]) {
-                throw new \InvalidArgumentException('category field ' + $k + ' required');
+                throw new \InvalidArgumentException('category field '.$k.' required');
             }
         }
     }
@@ -91,7 +91,7 @@ final class ImportService
     {
         foreach (['id', 'name', 'definition'] as $k) {
             if (!array_key_exists($k, $row)) {
-                throw new \InvalidArgumentException('rule field ' + $k + ' required');
+                throw new \InvalidArgumentException('rule field '.$k.' required');
             }
         }
         if (!is_array($row['definition'])) {

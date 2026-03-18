@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface\Integration;
 
-interface WebhookClientInterface
+interface WebhookClientInterface extends \App\ServiceInterface\WebhookClientInterface
 {
-    public function send(string $endpoint, string $event, array $payload): bool;
 }

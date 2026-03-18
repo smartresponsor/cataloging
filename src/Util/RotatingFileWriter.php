@@ -26,10 +26,14 @@ final class RotatingFileWriter
                 $old = $this->path.'.'.$i;
                 $new = $this->path.'.'.($i + 1);
                 if (file_exists($old)) {
-                    @rename($old, $new);
+                    if (file_exists($old) && !rename($old, $new)) {
+                        throw new \RuntimeException(sprintf('Unable to rotate log segment from %s to %s.', $old, $new));
+                    }
                 }
             }
-            @rename($this->path, $this->path.'.1');
+            if (!rename($this->path, $this->path.'.1')) {
+                throw new \RuntimeException(sprintf('Unable to rotate active log file %s.', $this->path));
+            }
         }
     }
 }

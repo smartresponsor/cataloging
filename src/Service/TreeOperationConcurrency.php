@@ -30,8 +30,10 @@ final class TreeOperationConcurrency
         try {
             $this->pdo->beginTransaction();
 
-            // Cycle detection (simplified): prevent moving under its own subtree path.
             $p = $this->pdo->prepare('SELECT path FROM category_entity WHERE id = :id FOR UPDATE');
+            if (false === $p) {
+                throw new \RuntimeException('Failed to prepare node-path query');
+            }
             $p->bindValue(':id', $nodeId);
             $p->execute();
             $rowNode = $p->fetch(\PDO::FETCH_ASSOC);
@@ -39,24 +41,24 @@ final class TreeOperationConcurrency
 
             if (null !== $newParentId) {
                 $pp = $this->pdo->prepare('SELECT path FROM category_entity WHERE id = :pid FOR UPDATE');
+                if (false === $pp) {
+                    throw new \RuntimeException('Failed to prepare parent-path query');
+                }
                 $pp->bindValue(':pid', $newParentId);
                 $pp->execute();
                 $rowParent = $pp->fetch(\PDO::FETCH_ASSOC);
                 $pPath = (string) ($rowParent['path'] ?? '');
-                if ('' !== $pPath && str_starts_with($pPath, $path)) {
+                if ('' !== $pPath && '' !== $path && str_starts_with($pPath, $path)) {
                     throw new \InvalidArgumentException('Cycle detected');
                 }
             }
 
-            // Apply move — application layer should update parent_id and path.
-            // ...
-
             $this->pdo->commit();
-        } catch (\Throwable $e) {
+        } catch (\PDOException $e) {
             if ($this->pdo->inTransaction()) {
                 $this->pdo->rollBack();
             }
-            throw $e;
+            throw new \RuntimeException('Tree move failed: '.$e->getMessage(), 0, $e);
         } finally {
             $this->lock->release('category_tree');
         }

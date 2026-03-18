@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-final class CatalogCategoryMoveService implements CategoryMoveInterface
+final class CatalogCategoryMoveService implements CatalogCategoryMoveInterface
 {
     private \PDO $pg;
 
@@ -26,14 +26,18 @@ final class CatalogCategoryMoveService implements CategoryMoveInterface
             $redirects = [];
 
             if ($dryRun) {
-                $this->pg->rollBack();
+                if ($this->pg->inTransaction()) {
+                    $this->pg->rollBack();
+                }
             } else {
                 $this->pg->commit();
             }
 
             return [$changed, $redirects];
-        } catch (\Throwable $e) {
-            $this->pg->rollBack();
+        } catch (\PDOException|\RuntimeException $e) {
+            if ($this->pg->inTransaction()) {
+                $this->pg->rollBack();
+            }
 
             throw new \RuntimeException('Move failed: '.$e->getMessage(), 0, $e);
         }

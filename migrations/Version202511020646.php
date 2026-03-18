@@ -14,10 +14,12 @@ final class Version202511020646 extends AbstractMigration
     {
         return 'Create category tables';
     }
+
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE category (id UUID PRIMARY KEY, slug VARCHAR(255) NOT NULL, parent_id UUID DEFAULT NULL, locale VARCHAR(8) NOT NULL, tenant VARCHAR(64) DEFAULT ''default'')');
+        $this->addSql("CREATE TABLE category (id UUID PRIMARY KEY, slug VARCHAR(255) NOT NULL, parent_id UUID DEFAULT NULL, locale VARCHAR(8) NOT NULL, tenant VARCHAR(64) DEFAULT 'default')");
     }
+
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE category');

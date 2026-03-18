@@ -8,26 +8,34 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace SmartResponsor\Http;
+namespace App\Controller;
 
 use App\Service\CatalogCategory\ApproxTotalService;
 use App\Service\CatalogCategory\CollectionService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-final class CollectionListHandler
+final class CollectionListHandler extends AbstractController
 {
-    public function handle(): void
+    #[Route('/collection/list', name: 'collection_list_handler', methods: ['GET'])]
+    public function __invoke(Request $request): JsonResponse
     {
-        $rule = $_GET['rule'] ?? 'tag:winter AND price<100';
-        $withTotal = isset($_GET['withTotal']) && 'true' === $_GET['withTotal'];
-        $svc = new CollectionService();
+        $rule = (string) $request->query->get('rule', 'tag:winter AND price<100');
+        $withTotal = $request->query->getBoolean('withTotal');
+        $service = new CollectionService();
         $products = [
             ['id' => 'p1', 'price' => 79, 'tags' => ['winter', 'sale'], 'categoryIds' => ['catA']],
             ['id' => 'p2', 'price' => 129, 'tags' => ['summer'], 'categoryIds' => ['catB']],
             ['id' => 'p3', 'price' => 59, 'tags' => ['winter'], 'categoryIds' => ['catA', 'catC']],
         ];
-        $filtered = $svc->filter($products, $rule);
+        $filtered = $service->filter($products, $rule);
         $approx = new ApproxTotalService(__DIR__.'/../../var/counters.json');
-        header('Content-Type: application/json');
-        echo json_encode(['items' => $filtered, 'total' => $approx->get('collectionList', $withTotal)]);
+
+        return $this->json([
+            'items' => $filtered,
+            'total' => $approx->get('collectionList', $withTotal),
+        ]);
     }
 }

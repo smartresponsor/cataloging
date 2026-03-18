@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ServiceInterface\CatalogCategoryBulkInterface as CategoryBulkInterface;
 use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
 
 final class CatalogCategoryBulk implements CategoryBulkInterface
@@ -21,39 +22,77 @@ final class CatalogCategoryBulk implements CategoryBulkInterface
         $accepted = 0;
         $rejected = 0;
         $results = [];
-        foreach ($ops as $op) {
+        foreach ($ops as $index => $op) {
             try {
-                switch ($op['op']) {
-                    case 'create':
-                        $p = $op['payload'];
-                        $results[] = $this->service->create($actorId, (string) $p['taxonomyId'], $p['parentId'] ?? null, (array) $p['name'], (array) $p['slug'], (array) ($p['meta'] ?? []));
-                        ++$accepted;
-                        break;
-                    case 'move':
-                        $p = $op['payload'];
-                        $results[] = $this->service->move($actorId, (string) $p['id'], $p['parentId'] ?? null, (int) ($p['order'] ?? 0));
-                        ++$accepted;
-                        break;
-                    case 'attach':
-                        $p = $op['payload'];
-                        $this->service->attach($actorId, (string) $p['id'], (string) $p['targetDomain'], (string) $p['targetClass'], (string) $p['targetId']);
-                        ++$accepted;
-                        break;
-                    case 'detach':
-                        $p = $op['payload'];
-                        $this->service->detach($actorId, (string) $p['id'], (string) $p['targetDomain'], (string) $p['targetClass'], (string) $p['targetId']);
-                        ++$accepted;
-                        break;
-                    default:
-                        $rejected++;
-                        $results[] = ['error' => 'Unknown op'];
-                }
-            } catch (\Throwable $e) {
+                $results[] = $this->dispatch($actorId, $op);
+                ++$accepted;
+            } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
                 ++$rejected;
-                $results[] = ['error' => $e->getMessage()];
+                $results[] = ['index' => $index, 'error' => $e->getMessage()];
             }
         }
 
         return ['accepted' => $accepted, 'rejected' => $rejected, 'results' => $results];
+    }
+
+    /** @param array<string,mixed> $op */
+    private function dispatch(string $actorId, array $op): array
+    {
+        $operation = $op['op'] ?? null;
+        $payload = $op['payload'] ?? null;
+        if (!is_string($operation) || !is_array($payload)) {
+            throw new \InvalidArgumentException('Invalid bulk operation envelope');
+        }
+
+        switch ($operation) {
+            case 'create':
+                return $this->service->create(
+                    $actorId,
+                    (string) $this->require($payload, 'taxonomyId'),
+                    isset($payload['parentId']) ? (string) $payload['parentId'] : null,
+                    (array) $this->require($payload, 'name'),
+                    (array) $this->require($payload, 'slug'),
+                    (array) ($payload['meta'] ?? [])
+                );
+            case 'move':
+                return $this->service->move(
+                    $actorId,
+                    (string) $this->require($payload, 'id'),
+                    isset($payload['parentId']) ? (string) $payload['parentId'] : null,
+                    (int) ($payload['order'] ?? 0)
+                );
+            case 'attach':
+                $this->service->attach(
+                    $actorId,
+                    (string) $this->require($payload, 'id'),
+                    (string) $this->require($payload, 'targetDomain'),
+                    (string) $this->require($payload, 'targetClass'),
+                    (string) $this->require($payload, 'targetId')
+                );
+
+                return ['status' => 'attached'];
+            case 'detach':
+                $this->service->detach(
+                    $actorId,
+                    (string) $this->require($payload, 'id'),
+                    (string) $this->require($payload, 'targetDomain'),
+                    (string) $this->require($payload, 'targetClass'),
+                    (string) $this->require($payload, 'targetId')
+                );
+
+                return ['status' => 'detached'];
+        }
+
+        throw new \InvalidArgumentException('Unknown op: '.$operation);
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function require(array $payload, string $key): mixed
+    {
+        if (!array_key_exists($key, $payload)) {
+            throw new \InvalidArgumentException('Missing payload key: '.$key);
+        }
+
+        return $payload[$key];
     }
 }

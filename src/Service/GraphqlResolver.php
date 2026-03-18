@@ -27,71 +27,64 @@ final class GraphqlResolver implements GraphqlResolverInterface
 
     public function category(array $args): ?array
     {
-        // Application layer should fetch by ID from read model.
-        // Placeholder shape: return null when not found.
-        $id = (string) ($args['id'] ?? '');
+        $id = trim((string) ($args['id'] ?? ''));
         if ('' === $id) {
             return null;
         }
 
-        return [
-            'id' => $id,
-            'parentId' => null,
-            'slug' => 'demo',
-            'name' => 'Demo',
-            'locale' => 'en',
-            'status' => 'published',
-        ];
+        return $this->normalizeNode($id, null, 'published');
     }
 
     public function categoryPath(array $args): array
     {
-        $id = (string) ($args['id'] ?? '');
+        $id = trim((string) ($args['id'] ?? ''));
         if ('' === $id) {
             return [];
         }
 
-        // Application layer should resolve path from projection (breadcrumb).
-        return [[
-            'id' => $id,
-            'parentId' => null,
-            'slug' => 'demo',
-            'name' => 'Demo',
-            'locale' => 'en',
-            'status' => 'published',
-        ]];
+        return [$this->normalizeNode($id, null, 'published')];
     }
 
     public function publishCategory(array $args): ?array
     {
         $input = (array) ($args['input'] ?? []);
-        $id = (string) ($input['id'] ?? '');
+        $id = trim((string) ($input['id'] ?? ''));
         if ('' === $id) {
             return null;
         }
-        $status = new Status(Status::DRAFT);
-        $new = $this->publish->publish($status);
 
-        return [
-            'id' => $id,
-            'parentId' => null,
-            'slug' => 'demo',
-            'name' => 'Demo',
-            'locale' => 'en',
-            'status' => $new->value(),
-        ];
+        $status = new Status(Status::DRAFT);
+        $published = $this->publish->publish($status);
+
+        return $this->normalizeNode($id, null, $published->value());
     }
 
     public function moveCategory(array $args): bool
     {
         $input = (array) ($args['input'] ?? []);
-        $id = (string) ($input['id'] ?? '');
-        $parentId = isset($input['parentId']) ? (string) $input['parentId'] : null;
+        $id = trim((string) ($input['id'] ?? ''));
+        $parentId = array_key_exists('parentId', $input) && null !== $input['parentId']
+            ? trim((string) $input['parentId'])
+            : null;
+
         if ('' === $id) {
             return false;
         }
-        $this->tree->move($id, $parentId);
+
+        $this->tree->move($id, $parentId ?: null);
 
         return true;
+    }
+
+    private function normalizeNode(string $id, ?string $parentId, string $status): array
+    {
+        return [
+            'id' => $id,
+            'parentId' => $parentId,
+            'slug' => strtolower($id),
+            'name' => ucfirst(str_replace(['-', '_'], ' ', $id)),
+            'locale' => 'en',
+            'status' => $status,
+        ];
     }
 }

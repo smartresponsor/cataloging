@@ -1,29 +1,35 @@
 <?php
-declare(strict_types=1);
 
-namespace App\Category;
-
-<?php
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 /**
- * CLI: php tools/linter/category_mirror_check.php <project-root>
- * Ensures <Layer> <-> <Layer Interface> mirrors exist for Category domain.
+ * CLI: php tools/Category/rescue/tools_linter_category_mirror_check.php <project-root>
+ * Ensures <Layer> <-> <LayerInterface> mirrors exist for Category-related classes.
  */
+
 $root = $argv[1] ?? getcwd();
-$layers = ['Entity','Service','Repository','Policy','Event','ValueObject'];
+$layers = ['Entity', 'Service', 'Repository', 'Policy', 'Event', 'ValueObject'];
 $fail = 0;
+
 foreach ($layers as $layer) {
-    $iter = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root . "/src/{$layer}/Category"));
+    $categoryRoot = $root . "/src/{$layer}";
+    if (!is_dir($categoryRoot)) {
+        continue;
+    }
+
+    $iter = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($categoryRoot));
     foreach ($iter as $file) {
-        if (!$file->isFile() || substr($file->getFilename(), -4) !== '.php') continue;
+        if (!$file->isFile() || substr($file->getFilename(), -4) !== '.php') {
+            continue;
+        }
+
         $name = basename($file->getPathname(), '.php');
-        $iface = $root . "/src/{$layer}Interface/Category/{$name}Interface.php";
-        if (!file_exists($iface) and $layer !== 'Event') { // events may be fire-and-forget; interface optional
+        $iface = $root . "/src/{$layer}Interface/{$name}Interface.php";
+        if (!file_exists($iface) && $layer !== 'Event') {
             fwrite(STDERR, "Mirror missing for {$layer} {$name}: {$iface}\n");
-            $fail++;
+            ++$fail;
         }
     }
 }
+
 exit($fail > 0 ? 1 : 0);

@@ -40,11 +40,23 @@ final class BatchImportRunner
         $ok = 0;
         $fail = 0;
         foreach ($batch as $item) {
-            try { /* upsert */ ++$ok;
-            } catch (\Throwable $e) {
+            try {
+                $this->processItem($item);
+                ++$ok;
+            } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
                 ++$fail;
             }
         }
         $this->progress->report($ok, $fail);
+    }
+
+    /** @param array<string,mixed> $item */
+    private function processItem(array $item): void
+    {
+        if ([] === $item) {
+            throw new \InvalidArgumentException('Batch item cannot be empty');
+        }
+
+        // Upsert hook point. Domain-specific adapters may replace this runner.
     }
 }

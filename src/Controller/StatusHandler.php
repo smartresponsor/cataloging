@@ -8,18 +8,36 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace SmartResponsor\Http;
+namespace App\Controller;
 
-final class StatusHandler
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
+
+final class StatusHandler extends AbstractController
 {
-    public function handle(): void
+    #[Route('/status', name: 'category_status_handler', methods: ['GET'])]
+    public function __invoke(): JsonResponse
     {
-        header('Content-Type: application/json');
-        echo json_encode([
+        return $this->json([
             'service' => 'category',
             'status' => 'ok',
             'version' => 'rc8',
-            'uptime' => @file_get_contents('/proc/uptime') ?: null,
+            'uptime' => $this->readUptime(),
         ]);
+    }
+
+    private function readUptime(): ?string
+    {
+        if (!is_readable('/proc/uptime')) {
+            return null;
+        }
+
+        $uptime = file('/proc/uptime', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (false === $uptime || [] === $uptime) {
+            return null;
+        }
+
+        return $uptime[0];
     }
 }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use SmartResponsor\Category\Layer\Domain\Category;
+use App\Entity\Category;
 
 interface CatalogCategoryRepository
 {

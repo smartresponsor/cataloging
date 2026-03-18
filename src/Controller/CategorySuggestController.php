@@ -27,10 +27,22 @@ final class CategorySuggestController extends AbstractController
         $tags = $r->request->all('tag'); // tag[]=
         $res = $this->svc->suggest($name, $desc, is_array($tags) ? $tags : []);
         // simple audit log
-        @mkdir(getcwd().'/var/log', 0o755, true);
-        $writer = new \App\Util\RotatingFileWriter(getcwd().'/var/log/category_suggest.log');
+        $logDir = getcwd().'/var/log';
+        $this->ensureDirectory($logDir);
+        $writer = new \App\Util\RotatingFileWriter($logDir.'/category_suggest.log');
         $writer->write(json_encode(['name' => $name, 'desc' => $desc, 'tags' => $tags, 'res' => $res])."\n");
 
         return $this->json(['ok' => true, 'item' => $res]);
+    }
+
+    private function ensureDirectory(string $path): void
+    {
+        if (is_dir($path)) {
+            return;
+        }
+
+        if (!mkdir($path, 0o755, true) && !is_dir($path)) {
+            throw new \RuntimeException(sprintf('Unable to create directory: %s', $path));
+        }
     }
 }

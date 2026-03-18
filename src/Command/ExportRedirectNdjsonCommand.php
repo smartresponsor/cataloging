@@ -30,7 +30,7 @@ final class ExportRedirectNdjsonCommand extends Command
         $aliases = $aliasRepo->findAll();
 
         $path = getcwd().'/var/export/category_redirects_301.ndjson';
-        @mkdir(dirname($path), 0o755, true);
+        $this->ensureDirectory(dirname($path));
         $fh = fopen($path, 'w');
 
         foreach ($aliases as $alias) {
@@ -49,5 +49,16 @@ final class ExportRedirectNdjsonCommand extends Command
         $output->writeln('Exported NDJSON: '.$path);
 
         return Command::SUCCESS;
+    }
+
+    private function ensureDirectory(string $path): void
+    {
+        if (is_dir($path)) {
+            return;
+        }
+
+        if (!mkdir($path, 0o755, true) && !is_dir($path)) {
+            throw new \RuntimeException(sprintf('Unable to create directory: %s', $path));
+        }
     }
 }
