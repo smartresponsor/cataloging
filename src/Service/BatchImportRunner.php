@@ -57,6 +57,6 @@ final class BatchImportRunner
             throw new \InvalidArgumentException('Batch item cannot be empty');
         }
 
-        // Upsert hook point. Domain-specific adapters may replace this runner.
+        // Upsert hook point. Component-specific services may replace this runner.
     }
 }

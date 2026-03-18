@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/linter/category_prefix_check.php <project-root>
- * Ensures classes under Category domain start with 'Category'.
+ * Ensures classes under Category responsibility paths start with 'Category'.
  */
 $root = $argv[1] ?? getcwd();
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root));

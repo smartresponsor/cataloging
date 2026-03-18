@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/Category/rescue/tools_linter_category_prefix_check.php <project-root>
- * Ensures classes under Category domain start with 'Category'.
+ * Ensures classes under Category responsibility paths start with 'Category'.
  */
 
 $root = $argv[1] ?? getcwd();

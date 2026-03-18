@@ -8,7 +8,7 @@ Applied against the latest current slice as the only base.
 - repaired PSR-4/file-integrity defects in CategoryMoveController, CategoryMoved, CategoryPathRebased
 - repaired broken Rule classes (CategoryRule, RuleEvaluator)
 - normalized GraphQl namespace usage to App\GraphQl for files physically under src/GraphQl
-- aligned CatalogCategory service namespaces with their physical paths
+- aligned Category service namespaces with their physical paths
 - removed report backup artifacts from the repository snapshot
 
 ## Notes

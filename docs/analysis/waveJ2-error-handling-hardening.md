@@ -6,8 +6,8 @@ Base: cumulative active snapshot after I2.
 Focused only on narrow error-handling remediation targets from the audit baseline:
 - `src/Importer/CategoryNdjsonImporter.php`
 - `src/Service/BatchImportRunner.php`
-- `src/Service/CatalogCategoryBulk.php`
-- `src/Service/CatalogCategoryMoveService.php`
+- `src/Service/CategoryBulk.php`
+- `src/Service/CategoryMoveService.php`
 - `src/Service/ImportPipeline.php`
 - `src/Service/TreeOperationConcurrency.php`
 

@@ -20,7 +20,7 @@ It also fixes the known syntax tail in `src/Controller/CategoryMerchController.p
 - `src/Controller/Category/Admin/CategoryPermsController.php` -> `src/Controller/Admin/CategoryPermsController.php`
 - `src/Controller/Category/Api/CategoryAdminApiController.php` -> `src/Controller/Api/CategoryAdminApiController.php`
 - `src/Controller/Category/Merchant/CategoryMerchantController.php` -> `src/Controller/Merchant/CategoryMerchantController.php`
-- `src/Event/Category/CategoryMoved.php` -> `src/Event/CatalogCategoryMoved.php`
+- `src/Event/Category/CategoryMoved.php` -> `src/Event/CategoryReordered.php`
 
 ## Removed wrapper dirs
 - `src/Controller/Category/Admin`

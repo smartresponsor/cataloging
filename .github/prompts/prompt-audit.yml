@@ -64,7 +64,6 @@ filesystem_policy:
       - bin
       - var
       - vendor
-      - domain
       - .github
       - composer.json
       - composer.lock
@@ -240,7 +239,7 @@ ci_cd_audit:
     - manifest_updated
 
 ai_domain_audit:
-  folder: domain
+  folder: src
   role:
     - ai_automation
     - workflow_support
@@ -324,9 +323,8 @@ layer_policy:
   mirror_interfaces:
     mandatory: true
     symmetry_rule:
-      - src/Domain -> src/DomainInterface
       - src/Service -> src/ServiceInterface
-      - src/Infra -> src/InfraInterface
+      - src/Infrastructure -> src/InfrastructureInterface
     missing_interface: canon_violation
   interface_rules:
     - no_logic
@@ -334,13 +332,13 @@ layer_policy:
 
 dependency_direction:
   allowed:
-    Domain: [ ]
-    DomainInterface: [ ]
-    Service: [ Domain, DomainInterface ]
-    ServiceInterface: [ DomainInterface ]
-    Http: [ Service, ServiceInterface ]
-    Console: [ Service, ServiceInterface ]
-    Infra: [ Domain, Service, DomainInterface ]
+    Entity: [ ]
+    EntityInterface: [ ]
+    Service: [ Entity, EntityInterface, ServiceInterface ]
+    ServiceInterface: [ EntityInterface ]
+    Controller: [ Service, ServiceInterface ]
+    Infrastructure: [ Service, ServiceInterface, RepositoryInterface, InfrastructureInterface ]
+    Repository: [ Entity, EntityInterface, RepositoryInterface ]
   forbidden_inversion: canon_violation
 
 contract_policy:

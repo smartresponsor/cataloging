@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/linter/category_mirror_check.php <project-root>
- * Ensures <Layer> <-> <Layer Interface> mirrors exist for Category domain.
+ * Ensures <Layer> <-> <Layer Interface> mirrors exist for Category responsibility paths.
  */
 $root = $argv[1] ?? getcwd();
 $layers = ['Entity','Service','Repository','Policy','Event','ValueObject'];

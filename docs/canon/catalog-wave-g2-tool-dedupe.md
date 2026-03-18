@@ -1,6 +1,6 @@
 # Catalog Wave G2 — tool archive dedupe (minimal scope)
 
-Base: current user slice `Cataloging.zip`
+Base: current user slice `cataloging-waveK10-step04-cumulative-snapshot.zip`
 
 Authoritative location kept:
 - `tools/ops-doc/*.zip`

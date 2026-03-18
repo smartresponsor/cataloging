@@ -7,7 +7,7 @@ namespace App\Controller;
 
 use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CatalogCategoryInterface as CategoryService;
+use App\ServiceInterface\CategoryInterface as CategoryService;
 
 final class CategoryController implements CategoryControllerInterface
 {

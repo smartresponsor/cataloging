@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Service\CatalogCategoryMoveInterface as CategoryMoveInterface;
+use App\Service\CategoryMoveInterface;
 
 final class CategoryMoveController
 {

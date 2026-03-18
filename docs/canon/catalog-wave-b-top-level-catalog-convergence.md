@@ -6,7 +6,7 @@ Scope:
 - do not yet touch nested `src/*/Category/**` component subtrees outside the selected root files
 
 Applied renames:
-- `src/Repository/CatalogCategoryRepository.php` -> `src/Repository/CatalogRepository.php`
+- `src/Repository/CategoryRepository.php` -> `src/Repository/CatalogRepository.php`
 - `src/Security/CategoryVoter.php` -> `src/Security/CatalogVoter.php`
 - `src/Observability/CategoryProjectionMetrics.php` -> `src/Observability/CatalogProjectionMetrics.php`
 - `src/Command/CategorySeedCommand.php` -> `src/Command/CatalogSeedCommand.php`

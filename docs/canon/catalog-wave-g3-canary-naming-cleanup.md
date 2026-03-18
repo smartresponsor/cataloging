@@ -1,6 +1,6 @@
 # Catalog Wave G3 — canary naming cleanup (minimal scope)
 
-Base: current user slice `Cataloging.zip`
+Base: current user slice `cataloging-waveK10-step04-cumulative-snapshot.zip`
 
 This wave renames the canary runner path only:
 

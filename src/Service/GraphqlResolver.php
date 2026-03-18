@@ -9,10 +9,10 @@ Owner: Marketing America Corp
 
 namespace App\Service;
 
-use App\Service\CatalogCategory\DraftPolicy;
-use App\Service\CatalogCategory\PublishOperation;
-use App\Service\CatalogCategory\Status;
-use App\Service\CatalogCategory\TreeOperation;
+use App\Service\Category\DraftPolicy;
+use App\Service\Category\PublishOperation;
+use App\Service\Category\Status;
+use App\Service\Category\TreeOperation;
 
 final class GraphqlResolver implements GraphqlResolverInterface
 {
