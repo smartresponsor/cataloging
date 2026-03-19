@@ -1,0 +1,2 @@
+src/Service/CategoryRepository.php
+src/Service/CanonicalPolicyLocale-.php (deleted)

@@ -25,7 +25,6 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
 
         $matched = [];
         $matchedRoles = [];
-        $exactMatches = [];
         foreach ($bindings as $binding) {
             if (!$binding instanceof CategoryMediaBindingInterface || !$binding->active()) {
                 continue;
@@ -38,16 +37,13 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
             }
             $matched[] = $binding;
             $matchedRoles[$binding->role()->value()] = true;
-            if ($this->isExactChannelMatch($binding, $channel) && $this->isExactLocaleMatch($binding, $locale)) {
-                $exactMatches[] = $binding;
-            }
         }
 
         $checks = [
             'channelScopedMediaReady' => [] !== $matched || '' === $channel,
             'localeScopedMediaReady' => [] !== $matched || '' === $locale,
             'requiredRoleCoverageReady' => true,
-            'exactChannelLocaleMatchReady' => [] !== $exactMatches || ('' === $channel && '' === $locale),
+            'exactChannelLocaleMatchReady' => [] !== $matched,
         ];
 
         $requiredMissing = [];
@@ -101,27 +97,5 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
         $locales = $binding->locales();
 
         return [] === $locales || in_array($locale, $locales, true);
-    }
-
-    private function isExactChannelMatch(CategoryMediaBindingInterface $binding, string $channel): bool
-    {
-        if ('' === $channel) {
-            return true;
-        }
-
-        $channels = $binding->channels();
-
-        return [] !== $channels && in_array($channel, $channels, true);
-    }
-
-    private function isExactLocaleMatch(CategoryMediaBindingInterface $binding, string $locale): bool
-    {
-        if ('' === $locale) {
-            return true;
-        }
-
-        $locales = $binding->locales();
-
-        return [] !== $locales && in_array($locale, $locales, true);
     }
 }

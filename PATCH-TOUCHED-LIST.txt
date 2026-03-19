@@ -1,0 +1,13 @@
+src/ValueObject/CategoryDestinationMediaFallbackReport.php
+src/ValueObjectInterface/CategoryDestinationMediaFallbackReportInterface.php
+src/Policy/CategoryDestinationMediaFallbackPolicy.php
+src/PolicyInterface/CategoryDestinationMediaFallbackPolicyInterface.php
+src/Service/CategoryDestinationMediaFallbackService.php
+src/ServiceInterface/CategoryDestinationMediaFallbackServiceInterface.php
+src/Event/CategoryDestinationMediaFallbackEvaluated.php
+src/EventInterface/CategoryDestinationMediaFallbackEvaluatedInterface.php
+tests/Category/CategoryDestinationMediaFallbackPolicyTest.php
+tests/Category/CategoryDestinationMediaFallbackServiceTest.php
+docs/category-destination-media-fallback-backend.md
+docs/canon/catalog-wave-k12-step06-destination-media-fallback-policy.md
+MANIFEST.txt

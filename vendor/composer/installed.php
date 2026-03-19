@@ -3,7 +3,7 @@
         'name' => 'cataloging/catalog',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'ff12105f5cead0e3bc245d7b7b4b07dbf200f02d',
+        'reference' => 'a7daa78f8ce627b3a419a6b8f71eb2d501489287',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'cataloging/catalog' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'ff12105f5cead0e3bc245d7b7b4b07dbf200f02d',
+            'reference' => 'a7daa78f8ce627b3a419a6b8f71eb2d501489287',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

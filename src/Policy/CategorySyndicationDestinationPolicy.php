@@ -34,15 +34,11 @@ final class CategorySyndicationDestinationPolicy implements CategorySyndicationD
         foreach ($settings as $key => $value) {
             $normalizedKey = trim((string) $key);
             if (is_array($value)) {
-                $normalized[$normalizedKey] = array_values(array_filter(
-                    array_map(static fn (mixed $item): string => trim((string) $item), $value),
-                    static fn (string $item): bool => '' !== $item,
-                ));
-                continue;
-            }
+                $normalized[$normalizedKey] = array_values(array_filter(array_map(
+                    static fn ($item): string => trim((string) $item),
+                    $value,
+                ), static fn (string $item): bool => '' !== $item));
 
-            if (is_bool($value)) {
-                $normalized[$normalizedKey] = $value ? 'true' : 'false';
                 continue;
             }
 

@@ -32,17 +32,15 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
             static fn (CategoryMediaBindingInterface $binding): bool => $binding->requiredForPublish(),
         ));
 
-        $hasInlinePrimary = '' !== trim((string) ($media['primaryAssetId'] ?? ''));
-        $hasInlineBanner = '' !== trim((string) ($presentation['bannerId'] ?? ''));
-        $hasInlineManagedMedia = $hasInlinePrimary || $hasInlineBanner;
+        $inlinePrimaryReady = '' !== trim((string) ($media['primaryAssetId'] ?? ''));
 
         $checks = [
-            'mediaReady' => $hasPrimaryBinding || $hasInlinePrimary,
-            'bannerReady' => $hasBannerBinding || $hasInlineBanner,
+            'mediaReady' => $hasPrimaryBinding || $inlinePrimaryReady,
+            'bannerReady' => $hasBannerBinding || '' !== trim((string) ($presentation['bannerId'] ?? '')),
             'heroReady' => $hasHeroBinding,
             'requiredMediaCoverageReady' => [] !== $requiredBindings
                 ? $this->allRequiredBindingsCovered($requiredBindings)
-                : !$hasInlineManagedMedia,
+                : !$inlinePrimaryReady,
         ];
 
         $requiredMissing = [];

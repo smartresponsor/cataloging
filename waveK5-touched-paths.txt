@@ -1,0 +1,5 @@
+tools/Category/rescue/tools_linter_category_prefix_check.php
+src/Command/ExportRedirectCommand.php
+src/Command/ExportRedirectNdjsonCommand.php
+src/Controller/CategorySuggestController.php
+src/Observability/MetricsSubscriber.php
