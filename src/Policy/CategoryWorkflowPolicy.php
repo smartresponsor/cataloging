@@ -16,31 +16,26 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
     /** @var array<string,list<string>> */
     private const TRANSITIONS = [
         CategoryWorkflowState::DRAFT => [
-            CategoryWorkflowState::DRAFT,
             CategoryWorkflowState::IN_REVIEW,
             CategoryWorkflowState::APPROVED,
             CategoryWorkflowState::ARCHIVED,
         ],
         CategoryWorkflowState::IN_REVIEW => [
             CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::IN_REVIEW,
             CategoryWorkflowState::APPROVED,
             CategoryWorkflowState::ARCHIVED,
         ],
         CategoryWorkflowState::APPROVED => [
             CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::APPROVED,
             CategoryWorkflowState::PUBLISHED,
             CategoryWorkflowState::ARCHIVED,
         ],
         CategoryWorkflowState::PUBLISHED => [
             CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::PUBLISHED,
             CategoryWorkflowState::ARCHIVED,
         ],
         CategoryWorkflowState::ARCHIVED => [
             CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::ARCHIVED,
         ],
     ];
 
@@ -51,6 +46,10 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
 
         if ('' === $actorId || '' === $reason) {
             return false;
+        }
+
+        if ($from->value() === $to->value()) {
+            return true;
         }
 
         $allowedTargets = self::TRANSITIONS[$from->value()] ?? [];

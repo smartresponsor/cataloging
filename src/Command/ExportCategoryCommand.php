@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'category:export')]
 final class ExportCategoryCommand extends Command
 {
+    use CategoryCliOutputTrait;
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $rows = [

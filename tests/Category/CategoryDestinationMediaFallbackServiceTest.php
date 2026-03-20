@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Entity\CategoryMediaBinding;
 use App\Policy\CategoryDestinationMediaFallbackPolicy;
 use App\Policy\CategorySyndicationDestinationPolicy;
 use App\Repository\CategoryMediaBindingRepository;
 use App\Repository\CategorySyndicationDestinationRepository;
 use App\Service\CategoryDestinationMediaFallbackService;
 use App\Service\CategorySyndicationDestinationService;
-use App\ValueObject\CategoryMediaRole;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryDestinationMediaFallbackServiceTest extends TestCase
@@ -27,18 +25,18 @@ final class CategoryDestinationMediaFallbackServiceTest extends TestCase
         $destinationService = new CategorySyndicationDestinationService(new CategorySyndicationDestinationPolicy(), $destinationRepository);
         $service = new CategoryDestinationMediaFallbackService($destinationRepository, $bindingRepository, new CategoryDestinationMediaFallbackPolicy());
 
-        $bindingRepository->save(new CategoryMediaBinding(
+        $bindingRepository->save(new \App\Entity\CategoryMediaBinding(
             'bind-global-primary',
             'category-1802',
             'asset-primary',
-            CategoryMediaRole::primary(),
+            \App\ValueObject\CategoryMediaRole::primary(),
             [],
             [],
             true,
             true,
             [],
             'operator-1',
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable('now'),
         ));
 
         $destinationService->register(

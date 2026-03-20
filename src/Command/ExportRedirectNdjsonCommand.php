@@ -18,6 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'category:export:redirects:ndjson')]
 final class ExportRedirectNdjsonCommand extends Command
 {
+    use CategoryCliOutputTrait;
+
     public function __construct(private readonly EntityManagerInterface $em)
     {
         parent::__construct();

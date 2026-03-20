@@ -27,7 +27,7 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
 
         $hardBlockers = [];
         foreach (['slugReady', 'seoReady', 'contentReady', 'localeReady', 'requiredMediaCoverageReady'] as $name) {
-            if (array_key_exists($name, $normalizedPublicationChecks) && true !== $normalizedPublicationChecks[$name]) {
+            if (($normalizedPublicationChecks[$name] ?? true) !== true) {
                 $hardBlockers[] = $name;
             }
         }
@@ -38,7 +38,7 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
 
         $softWarnings = [];
         foreach (['mediaReady', 'aliasReady'] as $name) {
-            if (array_key_exists($name, $normalizedPublicationChecks) && true !== $normalizedPublicationChecks[$name]) {
+            if (($normalizedPublicationChecks[$name] ?? true) !== true) {
                 $softWarnings[] = $name;
             }
         }
@@ -49,7 +49,7 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
 
         $advisoryWarnings = [];
         foreach (['bannerReady', 'htmlBlockReady', 'heroReady'] as $name) {
-            if (array_key_exists($name, $normalizedChecks) && true !== $normalizedChecks[$name]) {
+            if (($normalizedChecks[$name] ?? true) !== true) {
                 $advisoryWarnings[] = $name;
             }
         }

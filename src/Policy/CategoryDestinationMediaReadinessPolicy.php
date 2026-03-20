@@ -29,7 +29,8 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
         $checks['destinationMediaPublishable'] =
             (bool) $checks['destinationChannelMediaReady']
             && (bool) $checks['destinationLocaleMediaReady']
-            && (bool) $checks['destinationRequiredRolesReady'];
+            && (bool) $checks['destinationRequiredRolesReady']
+            && (bool) $checks['destinationScopedExactMatchReady'];
 
         if (!$checks['destinationChannelMediaReady']) {
             $requiredMissing[] = 'destination_channel_media';

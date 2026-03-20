@@ -16,6 +16,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'category:import')]
 final class ImportCategoryCommand extends Command
 {
+    use CategoryCliOutputTrait;
+
     protected function configure(): void
     {
         $this->addArgument('file', InputArgument::REQUIRED, 'NDJSON file');

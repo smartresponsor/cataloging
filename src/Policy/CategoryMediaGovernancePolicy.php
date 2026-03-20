@@ -32,11 +32,18 @@ final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePoli
             throw new \InvalidArgumentException('Category media assetId must be provided.');
         }
         CategoryMediaRole::fromString($role);
-        if ([] === array_values(array_filter($channels, static fn ($value): bool => '' !== trim((string) $value)))) {
+        if ([] === $channels) {
             throw new \InvalidArgumentException('Category media channels must contain at least one channel.');
         }
-        if ([] === array_values(array_filter($locales, static fn ($value): bool => '' !== trim((string) $value)))) {
-            throw new \InvalidArgumentException('Category media locales must contain at least one locale.');
+        foreach ($channels as $channel) {
+            if (!is_scalar($channel) && null !== $channel) {
+                throw new \InvalidArgumentException('Category media channels must contain only scalar values.');
+            }
+        }
+        foreach ($locales as $locale) {
+            if (!is_scalar($locale) && null !== $locale) {
+                throw new \InvalidArgumentException('Category media locales must contain only scalar values.');
+            }
         }
         if ('' === trim($actorId)) {
             throw new \InvalidArgumentException('Category media actorId must be provided.');

@@ -16,6 +16,8 @@ use Symfony\Component\Filesystem\Filesystem;
 #[AsCommand(name: 'category:backup')]
 final class BackupCategoryCommand extends Command
 {
+    use CategoryCliOutputTrait;
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();
