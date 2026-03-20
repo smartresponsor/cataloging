@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  * Owner: Marketing America Corp
  */
 
@@ -12,6 +12,7 @@ namespace App\Controller;
 
 use App\Service\Category\ApproxTotalService;
 use App\Service\Category\CollectionService;
+use App\ServiceInterface\Category\CollectionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,12 +20,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class CollectionListHandler extends AbstractController
 {
+    public function __construct(
+        private readonly ?CollectionServiceInterface $service = null,
+    ) {
+    }
+
     #[Route('/collection/list', name: 'collection_list_handler', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {
         $rule = (string) $request->query->get('rule', 'tag:winter AND price<100');
         $withTotal = $request->query->getBoolean('withTotal');
-        $service = new CollectionService();
+        $service = $this->service ?? new CollectionService();
         $products = [
             ['id' => 'p1', 'price' => 79, 'tags' => ['winter', 'sale'], 'categoryIds' => ['catA']],
             ['id' => 'p2', 'price' => 129, 'tags' => ['summer'], 'categoryIds' => ['catB']],

@@ -3,10 +3,12 @@
 declare(strict_types=1);
 /*
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
 
 namespace App\Service;
+
+use App\ServiceInterface\CategoryMoveInterface;
 
 final class CategoryMoveService implements CategoryMoveInterface
 {
@@ -35,6 +37,8 @@ final class CategoryMoveService implements CategoryMoveInterface
 
             return [$changed, $redirects];
         } catch (\PDOException|\RuntimeException $e) {
+            error_log('[CategoryMoveService] '.$e->getMessage());
+
             if ($this->pg->inTransaction()) {
                 $this->pg->rollBack();
             }

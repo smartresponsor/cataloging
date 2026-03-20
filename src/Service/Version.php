@@ -3,13 +3,15 @@
 declare(strict_types=1);
 /*
 Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
 Owner: Marketing America Corp
 */
 
 namespace App\Service;
 
-final class Version
+use App\ServiceInterface\VersionInterface;
+
+final class Version implements VersionInterface
 {
     private string $id;
     private string $categoryId;

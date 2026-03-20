@@ -3,13 +3,15 @@
 declare(strict_types=1);
 /*
 Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
 Owner: Marketing America Corp
 */
 
 namespace App\Service;
 
-final class AtomicMove
+use App\ServiceInterface\AtomicMoveInterface;
+
+final class AtomicMove implements AtomicMoveInterface
 {
     public function move(string $nodeId, ?string $newParentId): void
     {

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /*
 Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
 Owner: Marketing America Corp
 */
 
@@ -55,6 +55,8 @@ final class TreeOperationConcurrency
 
             $this->pdo->commit();
         } catch (\PDOException $e) {
+            error_log('[TreeOperationConcurrency] '.$e->getMessage());
+
             if ($this->pdo->inTransaction()) {
                 $this->pdo->rollBack();
             }

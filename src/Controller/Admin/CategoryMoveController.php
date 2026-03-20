@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 /*
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
 
 namespace App\Controller\Admin;
 
-use App\Service\CategoryMoveInterface;
+use App\ServiceInterface\CategoryMoveInterface;
 
 final class CategoryMoveController
 {

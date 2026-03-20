@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /*
 Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
 Owner: Marketing America Corp
 */
 
@@ -33,6 +33,7 @@ final class ImportPipeline
 
             return ['status' => 'ok', 'key' => $key, 'reason' => null];
         } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
+            error_log('[ImportPipeline] '.$e->getMessage());
             $this->toDlq($item, $e->getMessage());
 
             return ['status' => 'failed', 'key' => $key, 'reason' => $e->getMessage()];

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /*
 Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@smartresponsor.com>
+Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
 Owner: Marketing America Corp
 */
 
@@ -45,6 +45,7 @@ final class BatchImportRunner
                 ++$ok;
             } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
                 ++$fail;
+                error_log('[BatchImportRunner] '.$e->getMessage());
             }
         }
         $this->progress->report($ok, $fail);

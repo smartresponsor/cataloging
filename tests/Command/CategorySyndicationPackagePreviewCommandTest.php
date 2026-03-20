@@ -1,6 +1,11 @@
 <?php
 
 declare(strict_types=1);
+/*
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
+ * Owner: Marketing America Corp
+ */
 
 namespace App\Tests\Command;
 
@@ -118,7 +123,8 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
             '--destination' => '{"destinationId":"dest-1","channel":"web","locale":"en_US"}',
         ]);
 
-        self::assertStringContainsString('"packageId":"pkg-1"', str_replace(['', '
+        self::assertStringContainsString('"packageId":"pkg-1"', str_replace(['
+', '
 ', ' '], '', $tester->getDisplay()));
     }
 }

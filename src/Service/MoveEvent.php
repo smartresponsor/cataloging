@@ -4,7 +4,7 @@ declare(strict_types=1);
 /*
 Copyright (c) 2025 Oleksandr Tishченко / Marketing America Corp
 Owner: Marketing America Corp
-Author: Oleksandr Tishchenко <dev@smartresponsor.com>
+Author: Oleksandr Tishchenко <dev@highhopesamerica.com>
 */
 
 namespace App\Service;

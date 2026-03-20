@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
+ */
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
@@ -80,6 +84,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
                     $report[] = 'Unknown type: '.$type;
                 } catch (\JsonException|\InvalidArgumentException|\RuntimeException|\TypeError $e) {
                     ++$fail;
+                    error_log('[CategoryNdjsonImporter] '.$e->getMessage());
                     $report[] = 'Error: '.$e->getMessage();
                 }
             }

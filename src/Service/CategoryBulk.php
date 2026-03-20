@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
+ */
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
@@ -28,6 +32,7 @@ final class CategoryBulk implements CategoryBulkInterface
                 ++$accepted;
             } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
                 ++$rejected;
+                error_log('[CategoryBulk] '.$e->getMessage());
                 $results[] = ['index' => $index, 'error' => $e->getMessage()];
             }
         }

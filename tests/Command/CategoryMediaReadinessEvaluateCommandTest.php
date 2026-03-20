@@ -1,6 +1,11 @@
 <?php
 
 declare(strict_types=1);
+/*
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
+ * Owner: Marketing America Corp
+ */
 
 namespace App\Tests\Command;
 
@@ -94,7 +99,8 @@ final class CategoryMediaReadinessEvaluateCommandTest extends TestCase
             '--destination' => '{"channel":"web","locale":"en_US"}',
         ]);
 
-        self::assertStringContainsString('"publishable":true', str_replace(['', '
+        self::assertStringContainsString('"publishable":true', str_replace(['
+', '
 ', ' '], '', $tester->getDisplay()));
     }
 }

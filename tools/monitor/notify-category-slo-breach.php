@@ -2,6 +2,7 @@
 declare(strict_types=1);
 /**
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
 $file = __DIR__ . '/../../report/category-slo-breach.json';
 $list = is_file($file) ? json_decode(file_get_contents($file), true) : [];
