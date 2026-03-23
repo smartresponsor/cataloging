@@ -1,10 +1,6 @@
 <?php
-
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service\Ops;
 
@@ -28,6 +24,10 @@ final class CategoryRuntimeStatusViewBuilder implements CategoryRuntimeStatusVie
     public function build(string $categoryId): CategoryRuntimeStatusView
     {
         $categoryId = trim($categoryId);
+        if ('' === $categoryId) {
+            throw new \InvalidArgumentException('Category id must not be empty.');
+        }
+
         $governance = $this->governanceViewBuilder->build($categoryId)->toArray();
         $traceability = $this->traceabilityViewBuilder->build($categoryId)->toArray();
         $workflow = $this->buildWorkflowSummary($categoryId);
