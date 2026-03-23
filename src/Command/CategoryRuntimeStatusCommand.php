@@ -1,14 +1,10 @@
 <?php
-
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\Service\Ops\CategoryRuntimeStatusViewBuilder;
+use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'category:runtime:status', description: 'Build category runtime status contour.')]
 final class CategoryRuntimeStatusCommand extends Command
 {
-    public function __construct(private readonly CategoryRuntimeStatusViewBuilder $viewBuilder)
+    public function __construct(private readonly CategoryRuntimeStatusViewBuilderInterface $viewBuilder)
     {
         parent::__construct();
     }
