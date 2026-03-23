@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\CategoryBanner;
-use App\Entity\CategoryHtmlBlock;
-use App\Entity\CategoryPin;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CategoryMerchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,77 +13,59 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryMerchController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $em, private readonly Connection $infra)
+    public function __construct(private readonly CategoryMerchService $categoryMerchService)
     {
     }
 
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_create', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function pinCreate(string $id, Request $r): JsonResponse
+    public function pinCreate(string $id, Request $request): JsonResponse
     {
-        $recordId = (string) $r->request->get('recordId');
-        $pos = (int) $r->request->get('position', 0);
-        $pin = new CategoryPin($id, $recordId, $pos);
-        $this->em->persist($pin);
-        $this->em->flush();
+        $recordId = (string) $request->request->get('recordId');
+        $position = (int) $request->request->get('position', 0);
+        $this->categoryMerchService->pinCreate($id, $recordId, $position);
 
         return $this->json(['ok' => true]);
     }
 
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_delete', methods: ['DELETE'])]
     #[IsGranted('category.merch')]
-    public function pinDelete(string $id, Request $r): JsonResponse
+    public function pinDelete(string $id, Request $request): JsonResponse
     {
-        $recordId = (string) $r->query->get('recordId');
-        $pin = $this->em->getRepository(CategoryPin::class)->findOneBy(['categoryId' => $id, 'recordId' => $recordId]);
-        if ($pin) {
-            $this->em->remove($pin);
-            $this->em->flush();
-        }
+        $recordId = (string) $request->query->get('recordId');
+        $this->categoryMerchService->pinDelete($id, $recordId);
 
         return $this->json(['ok' => true]);
     }
 
     #[Route('/api/category/{id}/order', name: 'api_category_order_set', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function orderSet(string $id, Request $r): JsonResponse
+    public function orderSet(string $id, Request $request): JsonResponse
     {
-        $list = $r->request->all('recordId'); // expect recordId[]=A&recordId[]=B ...
-        $pos = 0;
-        foreach ($list as $rid) {
-            $this->em->getConnection()->executeStatement(
-                'UPDATE category_pin SET position = ? WHERE category_id = ? AND record_id = ?',
-                [$pos++, $id, $rid]
-            );
-        }
+        $recordIds = $request->request->all('recordId');
+        $this->categoryMerchService->orderSet($id, $recordIds);
 
         return $this->json(['ok' => true]);
     }
 
     #[Route('/api/category/{id}/banner/publish', name: 'api_category_banner_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function bannerPublish(string $id, Request $r): JsonResponse
+    public function bannerPublish(string $id, Request $request): JsonResponse
     {
-        $title = (string) $r->request->get('title');
-        $content = (string) $r->request->get('content');
-        $b = new CategoryBanner($id, $title, $content);
-        $b->publish();
-        $this->em->persist($b);
-        $this->em->flush();
+        $title = (string) $request->request->get('title');
+        $content = (string) $request->request->get('content');
+        $bannerId = $this->categoryMerchService->bannerPublish($id, $title, $content);
 
-        return $this->json(['ok' => true, 'id' => $b->id()]);
+        return $this->json(['ok' => true, 'id' => $bannerId]);
     }
 
     #[Route('/api/category/{id}/html/publish', name: 'api_category_html_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function htmlPublish(string $id, Request $r): JsonResponse
+    public function htmlPublish(string $id, Request $request): JsonResponse
     {
-        $html = (string) $r->request->get('html');
-        $h = new CategoryHtmlBlock($id, $html);
-        $h->publish();
-        $this->em->persist($h);
-        $this->em->flush();
+        $html = (string) $request->request->get('html');
+        $htmlBlockId = $this->categoryMerchService->htmlPublish($id, $html);
 
-        return $this->json(['ok' => true, 'id' => $h->id()]);
+        return $this->json(['ok' => true, 'id' => $htmlBlockId]);
     }
 }

@@ -4,67 +4,51 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\CategoryEntity;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CategoryReadService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Cache\CacheInterface;
 
 final class CategoryReadController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $em, private readonly CategoryRepository $repo, private readonly CacheInterface $cache)
+    public function __construct(private readonly CategoryReadService $categoryReadService)
     {
     }
 
     #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
     public function childList(string $id): JsonResponse
     {
-        /** @var CategoryEntity|null $node */
-        $node = $this->em->getRepository(CategoryEntity::class)->find($id);
-        if (!$node) {
+        $children = $this->categoryReadService->childList($id);
+        if (null === $children) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
-        $child = $this->cache->get('cat_child_'.$node->getId(), fn () => $this->repo->findChildrenLtree($node));
-        $out = array_map(fn (CategoryEntity $c) => ['id' => $c->getId(), 'name' => $c->getName(), 'slug' => $c->getSlug(), 'path' => $c->getPath(), 'depth' => $c->getDepth()], $child);
 
-        return $this->json(['ok' => true, 'item' => $out]);
+        return $this->json(['ok' => true, 'item' => $children]);
     }
 
     #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
     public function ancestorList(string $id): JsonResponse
     {
-        /** @var CategoryEntity|null $node */
-        $node = $this->em->getRepository(CategoryEntity::class)->find($id);
-        if (!$node) {
+        $ancestors = $this->categoryReadService->ancestorList($id);
+        if (null === $ancestors) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
-        $anc = $this->cache->get('cat_anc_'.$node->getId(), fn () => $this->repo->findAncestorsLtree($node));
-        $out = array_map(fn (CategoryEntity $c) => ['id' => $c->getId(), 'name' => $c->getName(), 'slug' => $c->getSlug(), 'path' => $c->getPath(), 'depth' => $c->getDepth()], $anc);
 
-        return $this->json(['ok' => true, 'item' => $out]);
+        return $this->json(['ok' => true, 'item' => $ancestors]);
     }
 
     #[Route('/api/category/list', name: 'api_category_list', methods: ['GET'])]
-    public function list(Request $req): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        $first = max(1, min(100, (int) $req->query->get('first', 20)));
-        $after = (string) $req->query->get('after', '');
-        $qb = $this->em->getRepository(CategoryEntity::class)->createQueryBuilder('c')->orderBy('c.path', 'ASC')->setMaxResults($first);
-        if ('' !== $after) {
-            $cursor = base64_decode($after, true) ?: '';
-            if ($cursor) {
-                $qb->andWhere('c.path > :cursor')->setParameter('cursor', $cursor);
-            }
-        }
-        $list = $qb->getQuery()->getArrayResult();
-        $next = '';
-        if (count($list) === $first) {
-            $last = end($list);
-            $next = base64_encode($last['path']);
-        }
+        $first = max(1, min(100, (int) $request->query->get('first', 20)));
+        $after = (string) $request->query->get('after', '');
+        $result = $this->categoryReadService->list($first, $after);
 
-        return $this->json(['ok' => true, 'item' => $list, 'pageInfo' => ['after' => $next]]);
+        return $this->json([
+            'ok' => true,
+            'item' => $result['item'],
+            'pageInfo' => ['after' => $result['after']],
+        ]);
     }
 }
