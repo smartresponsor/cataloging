@@ -25,6 +25,31 @@ final class CategoryLinterScriptsTest extends TestCase
         self::assertSame(1, $this->runScript('tools/linter/category_prefix_check.php', $projectRoot));
     }
 
+
+    public function testCanonicalRootsCheckPassesForCanonicalStructure(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        mkdir($projectRoot . '/src/Entity/Catalog', 0777, true);
+
+        self::assertSame(0, $this->runScript('tools/linter/category_canonical_roots_check.php', $projectRoot));
+    }
+
+    public function testCanonicalRootsCheckDetectsForbiddenRoot(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        mkdir($projectRoot . '/src/Catalog', 0777, true);
+
+        self::assertSame(1, $this->runScript('tools/linter/category_canonical_roots_check.php', $projectRoot));
+    }
+
+    public function testCanonicalRootsCheckDetectsForbiddenNestedTestsPath(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        mkdir($projectRoot . '/tests/Feature/Catalog', 0777, true);
+
+        self::assertSame(1, $this->runScript('tools/linter/category_canonical_roots_check.php', $projectRoot));
+    }
+
     private function runScript(string $scriptPath, string $projectRoot): int
     {
         $command = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($scriptPath) . ' ' . escapeshellarg($projectRoot);
