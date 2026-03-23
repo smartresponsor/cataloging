@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Request\CategoryRulePreviewRequest;
 use App\Service\CategoryRuleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,12 +22,12 @@ final class CategoryRuleController extends AbstractController
     #[IsGranted('category.rule')]
     public function preview(Request $request): JsonResponse
     {
-        $spec = json_decode((string) $request->getContent(), true);
-        if (!is_array($spec)) {
+        $input = CategoryRulePreviewRequest::fromJson((string) $request->getContent());
+        if (!$input->isValid()) {
             return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
         }
 
-        $preview = $this->categoryRuleService->preview($spec);
+        $preview = $this->categoryRuleService->preview($input->spec ?? []);
         if (null === $preview) {
             return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
         }

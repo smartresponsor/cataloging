@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Request\CategoryAttachmentAddRequest;
 use App\Service\AttachmentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +25,12 @@ final class CategoryAttachmentController
     #[Route('/api/category/attachment', name: 'api_category_attachment_add', methods: ['POST'])]
     public function add(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
-        $this->service->add((string) ($data['category_id'] ?? ''), (string) ($data['type'] ?? 'icon'), (string) ($data['path'] ?? ''));
+        $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
+        if (!$input->isValid()) {
+            return new JsonResponse(['errors' => $input->getErrors()], 400);
+        }
+
+        $this->service->add($input->categoryId ?? '', $input->type, $input->path ?? '');
 
         return new JsonResponse(['ok' => true]);
     }
