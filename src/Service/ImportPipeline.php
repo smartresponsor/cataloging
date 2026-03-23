@@ -29,17 +29,35 @@ final class ImportPipeline
             return ['status' => 'ok', 'key' => $key, 'reason' => null];
         } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
             error_log('[ImportPipeline] '.$e->getMessage());
-            $this->toDlq($item, $e->getMessage());
+            $reason = $e->getMessage();
 
-            return ['status' => 'failed', 'key' => $key, 'reason' => $e->getMessage()];
+            try {
+                $this->toDlq($item, $reason);
+            } catch (\RuntimeException $dlqException) {
+                error_log('[ImportPipeline][DLQ] '.$dlqException->getMessage());
+                $reason .= ' | DLQ write failed: '.$dlqException->getMessage();
+            }
+
+            return ['status' => 'failed', 'key' => $key, 'reason' => $reason];
         }
     }
 
     private function toDlq(array $item, string $reason): void
     {
-        $line = json_encode(['ts' => time(), 'reason' => $reason, 'item' => $item], JSON_UNESCAPED_SLASHES);
-        file_put_contents($this->dlqPath.'/dlq.ndjson', $line.'
-', FILE_APPEND);
+        if (!is_dir($this->dlqPath)) {
+            throw new \RuntimeException('DLQ path does not exist: '.$this->dlqPath);
+        }
+
+        if (!is_writable($this->dlqPath)) {
+            throw new \RuntimeException('DLQ path is not writable: '.$this->dlqPath);
+        }
+
+        $line = json_encode(['ts' => time(), 'reason' => $reason, 'item' => $item], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
+        $target = $this->dlqPath.'/dlq.ndjson';
+        $written = @file_put_contents($target, $line."\n", FILE_APPEND);
+        if (false === $written) {
+            throw new \RuntimeException('Failed to append to DLQ file: '.$target);
+        }
     }
 
     private function key(array $item): string
