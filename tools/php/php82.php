@@ -1,15 +1,48 @@
 <?php
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 
 declare(strict_types=1);
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- * Owner: Marketing America Corp
+
+/**
+ * @param list<string> $candidates
  */
+function resolveBinary(array $candidates): string
+{
+    foreach ($candidates as $candidate) {
+        if ($candidate === '') {
+            continue;
+        }
+
+        if (str_contains($candidate, DIRECTORY_SEPARATOR) || str_contains($candidate, ':\\')) {
+            if (is_file($candidate) && is_executable($candidate)) {
+                return $candidate;
+            }
+
+            continue;
+        }
+
+        $resolved = trim((string) shell_exec(sprintf('command -v %s 2>/dev/null', escapeshellarg($candidate))));
+        if ($resolved !== '') {
+            return $resolved;
+        }
+    }
+
+    fwrite(STDERR, "Unable to locate a PHP 8.2 binary.\n");
+    exit(127);
+}
 
 $binary = match (PHP_OS_FAMILY) {
-    'Windows' => 'C:\\PHP\\php-8.2.30-nts-Win32-vs16-x64\\php.exe',
-    default => '/usr/bin/php8.2',
+    'Windows' => resolveBinary([
+        (string) getenv('PHP82_BINARY'),
+        'C:\\PHP\\php-8.2.30-nts-Win32-vs16-x64\\php.exe',
+        'php',
+    ]),
+    default => resolveBinary([
+        (string) getenv('PHP82_BINARY'),
+        '/usr/bin/php8.2',
+        'php8.2',
+        'php',
+    ]),
 };
 
 $args = $argv;
