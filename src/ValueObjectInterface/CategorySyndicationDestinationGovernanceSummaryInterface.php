@@ -22,11 +22,15 @@ interface CategorySyndicationDestinationGovernanceSummaryInterface
 
     public function deliveredTrailCount(): int;
 
+    /** @return array<string,int> */
     public function statusCounts(): array;
 
+    /** @return array<string,int> */
     public function policyModeCounts(): array;
 
+    /** @return list<string> */
     public function warningCodes(): array;
 
+    /** @return array<string,bool> */
     public function checks(): array;
 }

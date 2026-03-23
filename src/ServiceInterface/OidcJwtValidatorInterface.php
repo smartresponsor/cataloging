@@ -6,5 +6,6 @@ namespace App\ServiceInterface;
 
 interface OidcJwtValidatorInterface
 {
+    /** @return array<string,mixed> */
     public function validate(string $jwt): array;
 }

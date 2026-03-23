@@ -10,6 +10,7 @@ final class WebhookV2Signer
     {
     }
 
+    /** @return array{timestamp:int,signature:string} */
     public function sign(string $payload): array
     {
         $ts = time();

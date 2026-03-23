@@ -49,12 +49,17 @@ final class TreeOperationConcurrency
             }
 
             $this->pdo->commit();
-        } catch (\PDOException $e) {
+        } catch (\Throwable $e) {
             error_log('[TreeOperationConcurrency] '.$e->getMessage());
 
             if ($this->pdo->inTransaction()) {
                 $this->pdo->rollBack();
             }
+
+            if ($e instanceof \InvalidArgumentException || $e instanceof \RuntimeException) {
+                throw $e;
+            }
+
             throw new \RuntimeException('Tree move failed: '.$e->getMessage(), 0, $e);
         } finally {
             $this->lock->release('category_tree');

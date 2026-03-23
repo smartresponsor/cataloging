@@ -6,8 +6,10 @@ namespace App\ServiceInterface;
 
 interface WebhookAdminServiceInterface
 {
+    /** @return array{kid:string,secret:string} */
     public function registerKey(string $name): array;
 
+    /** @param array<string,mixed> $payload */
     public function scheduleDelivery(string $target, array $payload): int;
 
     public function requeue(int $limit): int;

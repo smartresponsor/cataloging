@@ -15,6 +15,7 @@ final class CategoryMoveService implements CategoryMoveInterface
         $this->pg = $pg;
     }
 
+    /** @return array{0:int,1:array<int,mixed>} */
     public function move(string $nodeId, string $newParentId, string $treeId, string $policy, bool $dryRun = false, ?string $locale = null): array
     {
         $this->pg->beginTransaction();
@@ -32,11 +33,15 @@ final class CategoryMoveService implements CategoryMoveInterface
             }
 
             return [$changed, $redirects];
-        } catch (\PDOException|\RuntimeException $e) {
+        } catch (\Throwable $e) {
             error_log('[CategoryMoveService] '.$e->getMessage());
 
             if ($this->pg->inTransaction()) {
                 $this->pg->rollBack();
+            }
+
+            if ($e instanceof \InvalidArgumentException || $e instanceof \RuntimeException) {
+                throw $e;
             }
 
             throw new \RuntimeException('Move failed: '.$e->getMessage(), 0, $e);

@@ -8,5 +8,6 @@ interface RedirectStoreInterface
 {
     public function put(string $from, string $to, int $status = 301): void;
 
+    /** @return array{to:string,status:int}|null */
     public function get(string $from): ?array;
 }
