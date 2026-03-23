@@ -1,0 +1,3 @@
+services:
+  App\Service\RegionResolver: ~
+  App\Service\AliasRouter: ~

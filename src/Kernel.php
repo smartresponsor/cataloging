@@ -23,7 +23,7 @@ final class Kernel extends BaseKernel
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../config/{packages}/*.yaml');
-        $container->import('../config/catalog*.yaml');
+        $container->import('../config/catalog_services*.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
