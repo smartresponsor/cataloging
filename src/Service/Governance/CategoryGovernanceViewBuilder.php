@@ -1,0 +1,60 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
+ * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
+ */
+
+namespace App\Service\Governance;
+
+use App\Projection\CategoryGovernanceView;
+use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Service\Security\CategoryRole;
+use App\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
+
+final class CategoryGovernanceViewBuilder implements CategoryGovernanceViewBuilderInterface
+{
+    public function __construct(private readonly CategoryAccessAssignmentRepositoryInterface $assignmentRepository)
+    {
+    }
+
+    public function build(string $categoryId): CategoryGovernanceView
+    {
+        $primary = $this->assignmentRepository->findPrimaryForCategoryId($categoryId);
+        $assignments = [];
+
+        foreach ($this->assignmentRepository->findActiveByCategoryId($categoryId) as $assignment) {
+            $assignments[] = [
+                'assignmentId' => $assignment->assignmentId(),
+                'actorUserId' => $assignment->actorUserId(),
+                'role' => $assignment->role(),
+                'status' => $assignment->status(),
+                'isPrimary' => $assignment->isPrimary(),
+                'grantedAt' => $assignment->grantedAt()->format(DATE_ATOM),
+                'revokedAt' => $assignment->revokedAt()?->format(DATE_ATOM),
+            ];
+        }
+
+        return new CategoryGovernanceView(
+            categoryId: trim($categoryId),
+            primaryActorUserId: $primary?->actorUserId(),
+            activeAssignments: $assignments,
+            roleCapabilities: [
+                'owner' => true,
+                'editor' => true,
+                'publisher' => true,
+                'reviewer' => true,
+                'admin' => true,
+                'globalRoles' => [
+                    'ROLE_ADMIN' => true,
+                    'ROLE_SUPER_ADMIN' => true,
+                    CategoryRole::OWNER => true,
+                    CategoryRole::EDITOR => true,
+                    CategoryRole::PUBLISHER => true,
+                ],
+            ],
+            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
+        );
+    }
+}

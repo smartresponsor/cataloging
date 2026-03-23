@@ -1,0 +1,7 @@
+src/Projection/CategoryGovernanceView.php
+src/ServiceInterface/Governance/CategoryGovernanceViewBuilderInterface.php
+src/Service/Governance/CategoryGovernanceViewBuilder.php
+src/Controller/Admin/CategoryGovernanceController.php
+docs/internal/CATEGORY_GOVERNANCE_RUNTIME_CANON.md
+CATALOGING-W02-NOTES.md
+delivery/02-change-manifest.json

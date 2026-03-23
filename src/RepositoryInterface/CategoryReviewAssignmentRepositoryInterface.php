@@ -18,4 +18,7 @@ interface CategoryReviewAssignmentRepositoryInterface
 
     /** @return list<CategoryReviewAssignmentInterface> */
     public function findByReviewer(string $reviewer): array;
+
+    /** @return list<CategoryReviewAssignmentInterface> */
+    public function findByCategoryId(string $categoryId): array;
 }

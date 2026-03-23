@@ -8,12 +8,19 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Entity\Category;
+use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Service\Security\CategoryRole;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class CategoryVoter extends Voter
 {
+    public function __construct(private readonly ?CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository = null)
+    {
+    }
+
     public const VIEW = 'category.view';
     public const EDIT = 'category.edit';
     public const OWN = 'category.own';
@@ -32,10 +39,45 @@ final class CategoryVoter extends Voter
             return true;
         }
 
+        $grantedByRole = match ($attribute) {
+            self::OWN => in_array(CategoryRole::OWNER, $roles, true),
+            self::EDIT => in_array(CategoryRole::EDITOR, $roles, true) || in_array(CategoryRole::OWNER, $roles, true),
+            self::PUBLISH => in_array(CategoryRole::PUBLISHER, $roles, true) || in_array(CategoryRole::OWNER, $roles, true),
+            self::VIEW => true,
+            default => false,
+        };
+
+        if ($grantedByRole) {
+            return true;
+        }
+
+        if (!$subject instanceof Category || null === $this->accessAssignmentRepository) {
+            return self::VIEW === $attribute;
+        }
+
+        $user = $token->getUser();
+        $actorUserId = null;
+
+        if (is_object($user) && method_exists($user, 'getUserIdentifier')) {
+            $actorUserId = (string) $user->getUserIdentifier();
+        } elseif (is_string($user)) {
+            $actorUserId = $user;
+        }
+
+        if (null === $actorUserId || '' === trim($actorUserId)) {
+            return self::VIEW === $attribute;
+        }
+
+        $assignment = $this->accessAssignmentRepository->findOneByCategoryIdAndActorUserId($subject->id, $actorUserId);
+
+        if (null === $assignment || 'active' !== $assignment->status()) {
+            return self::VIEW === $attribute;
+        }
+
         return match ($attribute) {
-            self::OWN => in_array('category.owner', $roles, true),
-            self::EDIT => in_array('category.editor', $roles, true) || in_array('category.owner', $roles, true),
-            self::PUBLISH => in_array('category.publisher', $roles, true) || in_array('category.owner', $roles, true),
+            self::OWN => 'owner' === $assignment->role(),
+            self::EDIT => in_array($assignment->role(), ['owner', 'editor'], true),
+            self::PUBLISH => in_array($assignment->role(), ['owner', 'publisher'], true),
             self::VIEW => true,
             default => false,
         };

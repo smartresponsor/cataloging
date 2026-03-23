@@ -33,4 +33,12 @@ final class CategoryReviewAssignmentRepository implements CategoryReviewAssignme
             static fn (CategoryReviewAssignmentInterface $assignment): bool => $assignment->assignedReviewer() === $reviewer,
         ));
     }
+
+    public function findByCategoryId(string $categoryId): array
+    {
+        return array_values(array_filter(
+            $this->assignments,
+            static fn (CategoryReviewAssignmentInterface $assignment): bool => $assignment->categoryId() === $categoryId,
+        ));
+    }
 }
