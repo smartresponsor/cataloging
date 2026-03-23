@@ -1,13 +1,6 @@
 <?php
-
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Entity;
 
@@ -101,5 +94,28 @@ class CategoryEntity
     public function setDepth(int $depth): void
     {
         $this->depth = $depth;
+    }
+
+    public function getParentPath(): ?string
+    {
+        if ($this->depth <= 0) {
+            return null;
+        }
+
+        $separatorPosition = strrpos($this->path, '.');
+        if ($separatorPosition === false) {
+            return null;
+        }
+
+        return substr($this->path, 0, $separatorPosition);
+    }
+
+    public function isDirectChildOf(self $parent): bool
+    {
+        if ($this->depth !== $parent->depth + 1) {
+            return false;
+        }
+
+        return $this->getParentPath() === $parent->path;
     }
 }
