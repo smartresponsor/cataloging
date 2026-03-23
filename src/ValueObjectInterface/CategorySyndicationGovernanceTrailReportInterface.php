@@ -26,9 +26,12 @@ interface CategorySyndicationGovernanceTrailReportInterface
 
     public function retryScheduled(): bool;
 
+    /** @return array<string,int> */
     public function historyCounts(): array;
 
+    /** @return list<string> */
     public function warnings(): array;
 
+    /** @return array<string,bool> */
     public function checks(): array;
 }

@@ -6,5 +6,6 @@ namespace App\ServiceInterface;
 
 interface WebhookClientInterface
 {
+    /** @param array<string,mixed> $payload */
     public function send(string $endpoint, string $event, array $payload): bool;
 }

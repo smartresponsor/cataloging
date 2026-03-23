@@ -52,7 +52,5 @@ final class BatchImportRunner
         if ([] === $item) {
             throw new \InvalidArgumentException('Batch item cannot be empty');
         }
-
-        // Upsert hook point. Component-specific services may replace this runner.
     }
 }

@@ -6,5 +6,10 @@ namespace App\ServiceInterface;
 
 interface ShopifyMapperInterface
 {
+    /**
+     * @param array<string,mixed> $shopify
+     *
+     * @return array<string,mixed>
+     */
     public function map(array $shopify): array;
 }

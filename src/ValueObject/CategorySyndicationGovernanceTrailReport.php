@@ -80,16 +80,19 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
         return $this->retryScheduled;
     }
 
+    /** @return array<string,int> */
     public function historyCounts(): array
     {
         return $this->historyCounts;
     }
 
+    /** @return list<string> */
     public function warnings(): array
     {
         return $this->warnings;
     }
 
+    /** @return array<string,bool> */
     public function checks(): array
     {
         return $this->checks;
