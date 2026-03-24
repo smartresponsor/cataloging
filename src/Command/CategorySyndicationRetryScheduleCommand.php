@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ServiceInterface\CategorySyndicationRetryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,7 +20,7 @@ final class CategorySyndicationRetryScheduleCommand extends Command
 
     public function __construct(
         private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
-        private readonly CategorySyndicationRetryServiceInterface $service,
+        private readonly CatalogSyndicationRetryServiceInterface $service,
     ) {
         parent::__construct();
     }

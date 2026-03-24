@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\CategorySyndicationPackagePreviewCommand;
-use App\ServiceInterface\CategorySyndicationPackageGateServiceInterface;
+use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -18,7 +18,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
 {
     public function testExecutePrintsPreviewPackage(): void
     {
-        $service = $this->createMock(CategorySyndicationPackageGateServiceInterface::class);
+        $service = $this->createMock(CatalogSyndicationPackageGateServiceInterface::class);
         $service->method('buildGatedPublishPackage')->willReturn(new class implements \App\EventInterface\CategorySyndicationPackageGatedInterface {
             public function __construct(private readonly array $payload = ['publishable' => true, 'packageId' => 'pkg-1'])
             {

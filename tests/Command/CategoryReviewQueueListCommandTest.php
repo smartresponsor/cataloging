@@ -14,9 +14,9 @@ use App\Policy\CategoryChangeRequestPolicy;
 use App\Policy\CategoryReviewAssignmentPolicy;
 use App\Repository\CategoryChangeRequestRepository;
 use App\Repository\CategoryReviewAssignmentRepository;
-use App\Service\CategoryChangeRequestService;
-use App\Service\CategoryReviewAssignmentService;
-use App\Service\CategoryReviewQueueService;
+use App\Service\CatalogChangeRequestService;
+use App\Service\CatalogReviewAssignmentService;
+use App\Service\CatalogReviewQueueService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -27,13 +27,13 @@ final class CategoryReviewQueueListCommandTest extends TestCase
         $changeRequestRepository = new CategoryChangeRequestRepository();
         $assignmentRepository = new CategoryReviewAssignmentRepository();
 
-        $changeRequestService = new CategoryChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
-        $assignmentService = new CategoryReviewAssignmentService(
+        $changeRequestService = new CatalogChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
+        $assignmentService = new CatalogReviewAssignmentService(
             $changeRequestRepository,
             $assignmentRepository,
             new CategoryReviewAssignmentPolicy(),
         );
-        $queueService = new CategoryReviewQueueService($changeRequestRepository, $assignmentRepository);
+        $queueService = new CatalogReviewQueueService($changeRequestRepository, $assignmentRepository);
 
         $changeRequestService->submit('req-urgent', 'cat-urgent', 'submitter.1', 'Urgent category change', ['slug' => 'urgent']);
         $changeRequestService->submit('req-normal', 'cat-normal', 'submitter.2', 'Normal category change', ['slug' => 'normal']);

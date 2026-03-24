@@ -22,17 +22,17 @@ use App\Command\CategorySyndicationPackagePreviewCommand;
 use App\Command\CategorySyndicationRetryScheduleCommand;
 use App\Command\CategoryWorkflowTransitionCommand;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ServiceInterface\CategoryCompletenessServiceInterface;
-use App\ServiceInterface\CategoryDestinationMediaReadinessServiceInterface;
-use App\ServiceInterface\CategoryPublicationQualityServiceInterface;
-use App\ServiceInterface\CategoryReviewAssignmentServiceInterface;
-use App\ServiceInterface\CategoryReviewQueueServiceInterface;
-use App\ServiceInterface\CategorySyndicationCategoryGovernanceSummaryServiceInterface;
-use App\ServiceInterface\CategorySyndicationDestinationGovernanceSummaryServiceInterface;
-use App\ServiceInterface\CategorySyndicationHistoryServiceInterface;
-use App\ServiceInterface\CategorySyndicationPackageGateServiceInterface;
-use App\ServiceInterface\CategorySyndicationRetryServiceInterface;
-use App\ServiceInterface\CategoryWorkflowTransitionServiceInterface;
+use App\ServiceInterface\CatalogCompletenessServiceInterface;
+use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
+use App\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\ServiceInterface\CatalogSyndicationCategoryGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
+use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryCliDiscoverabilityTest extends TestCase
@@ -40,21 +40,21 @@ final class CategoryCliDiscoverabilityTest extends TestCase
     public function testK13CommandsExposeDescriptionAndHelp(): void
     {
         $commands = [
-            new CategoryWorkflowTransitionCommand($this->createMock(CategoryWorkflowTransitionServiceInterface::class)),
-            new CategoryReviewQueueListCommand($this->createMock(CategoryReviewQueueServiceInterface::class)),
-            new CategoryReviewAssignCommand($this->createMock(CategoryReviewAssignmentServiceInterface::class)),
-            new CategoryCompletenessEvaluateCommand($this->createMock(CategoryCompletenessServiceInterface::class)),
-            new CategoryPublicationQualityEvaluateCommand($this->createMock(CategoryPublicationQualityServiceInterface::class)),
-            new CategoryMediaReadinessEvaluateCommand($this->createMock(CategoryDestinationMediaReadinessServiceInterface::class)),
-            new CategorySyndicationPackagePreviewCommand($this->createMock(CategorySyndicationPackageGateServiceInterface::class)),
+            new CategoryWorkflowTransitionCommand($this->createMock(CatalogWorkflowTransitionServiceInterface::class)),
+            new CategoryReviewQueueListCommand($this->createMock(CatalogReviewQueueServiceInterface::class)),
+            new CategoryReviewAssignCommand($this->createMock(CatalogReviewAssignmentServiceInterface::class)),
+            new CategoryCompletenessEvaluateCommand($this->createMock(CatalogCompletenessServiceInterface::class)),
+            new CategoryPublicationQualityEvaluateCommand($this->createMock(CatalogPublicationQualityServiceInterface::class)),
+            new CategoryMediaReadinessEvaluateCommand($this->createMock(CatalogDestinationMediaReadinessServiceInterface::class)),
+            new CategorySyndicationPackagePreviewCommand($this->createMock(CatalogSyndicationPackageGateServiceInterface::class)),
             new CategorySyndicationDeliveryFailedListCommand($this->createMock(CategorySyndicationDeliveryRecordRepositoryInterface::class)),
             new CategorySyndicationRetryScheduleCommand(
                 $this->createMock(CategorySyndicationDeliveryRecordRepositoryInterface::class),
-                $this->createMock(CategorySyndicationRetryServiceInterface::class),
+                $this->createMock(CatalogSyndicationRetryServiceInterface::class),
             ),
-            new CategorySyndicationDestinationHistoryCommand($this->createMock(CategorySyndicationHistoryServiceInterface::class)),
-            new CategorySyndicationDestinationGovernanceSummaryCommand($this->createMock(CategorySyndicationDestinationGovernanceSummaryServiceInterface::class)),
-            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CategorySyndicationCategoryGovernanceSummaryServiceInterface::class)),
+            new CategorySyndicationDestinationHistoryCommand($this->createMock(CatalogSyndicationHistoryServiceInterface::class)),
+            new CategorySyndicationDestinationGovernanceSummaryCommand($this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class)),
+            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationCategoryGovernanceSummaryServiceInterface::class)),
         ];
 
         foreach ($commands as $command) {

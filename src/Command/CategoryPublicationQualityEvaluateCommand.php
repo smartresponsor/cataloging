@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryPublicationQualityServiceInterface;
+use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategoryPublicationQualityServiceInterface $qualityService)
+    public function __construct(private readonly CatalogPublicationQualityServiceInterface $qualityService)
     {
         parent::__construct();
     }

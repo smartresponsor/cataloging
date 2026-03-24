@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryDestinationMediaReadinessServiceInterface;
+use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategoryDestinationMediaReadinessServiceInterface $service)
+    public function __construct(private readonly CatalogDestinationMediaReadinessServiceInterface $service)
     {
         parent::__construct();
     }

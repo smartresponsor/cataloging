@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\CategorySyndicationDeliveryRecord;
-use App\ServiceInterface\CategorySyndicationHistoryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +19,7 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategorySyndicationHistoryServiceInterface $service)
+    public function __construct(private readonly CatalogSyndicationHistoryServiceInterface $service)
     {
         parent::__construct();
     }

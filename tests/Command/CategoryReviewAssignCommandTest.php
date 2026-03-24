@@ -14,7 +14,7 @@ use App\Entity\CategoryChangeRequest;
 use App\Policy\CategoryReviewAssignmentPolicy;
 use App\Repository\CategoryChangeRequestRepository;
 use App\Repository\CategoryReviewAssignmentRepository;
-use App\Service\CategoryReviewAssignmentService;
+use App\Service\CatalogReviewAssignmentService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -25,7 +25,7 @@ final class CategoryReviewAssignCommandTest extends TestCase
         $requestRepository = new CategoryChangeRequestRepository();
         $requestRepository->save(CategoryChangeRequest::open('req-100', 'cat-100', 'submitter-1', 'Promote category', ['title' => 'Garden']));
 
-        $service = new CategoryReviewAssignmentService(
+        $service = new CatalogReviewAssignmentService(
             $requestRepository,
             new CategoryReviewAssignmentRepository(),
             new CategoryReviewAssignmentPolicy(),

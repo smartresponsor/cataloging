@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Importer;
 
 use App\ImporterInterface\CategoryNdjsonImporterInterface;
-use App\ServiceInterface\CategoryInterface as CategoryService;
+use App\ServiceInterface\CategoryInterface as CatalogCategoryService;
 
 final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 {
-    private CategoryService $service;
+    private CatalogCategoryService $service;
 
-    public function __construct(CategoryService $service)
+    public function __construct(CatalogCategoryService $service)
     {
         $this->service = $service;
     }
