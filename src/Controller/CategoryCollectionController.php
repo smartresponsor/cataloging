@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Request\CategoryCollectionRequest;
 use App\Service\CollectionBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +19,17 @@ final class CategoryCollectionController
     #[Route('/api/category/collection', name: 'api_category_collection', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
-        $rules = json_decode($request->getContent(), true) ?? [];
+        $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
+        if (!$input->isValid()) {
+            return new JsonResponse(['errors' => $input->getErrors()], 400);
+        }
+
         $all = [
             ['id' => 1, 'slug' => 'root', 'locale' => 'en', 'merchant' => 'default'],
             ['id' => 2, 'slug' => 'electronics', 'locale' => 'en', 'merchant' => 'default', 'tag' => 'featured'],
             ['id' => 3, 'slug' => 'ropa', 'locale' => 'es', 'merchant' => 'default'],
         ];
-        $result = $this->builder->build($all, $rules);
+        $result = $this->builder->build($all, $input->rules);
 
         return new JsonResponse(['data' => $result]);
     }
