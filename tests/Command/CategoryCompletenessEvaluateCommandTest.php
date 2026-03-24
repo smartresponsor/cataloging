@@ -11,7 +11,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategoryCompletenessEvaluateCommand;
 use App\Policy\CategoryCompletenessPolicy;
-use App\Service\CategoryCompletenessService;
+use App\Service\CatalogCompletenessService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +19,7 @@ final class CategoryCompletenessEvaluateCommandTest extends TestCase
 {
     public function testExecutePrintsCompletenessPayload(): void
     {
-        $service = new CategoryCompletenessService(new CategoryCompletenessPolicy());
+        $service = new CatalogCompletenessService(new CategoryCompletenessPolicy());
         $command = new CategoryCompletenessEvaluateCommand($service);
 
         $tester = new CommandTester($command);

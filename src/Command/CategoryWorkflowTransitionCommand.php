@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryWorkflowTransitionServiceInterface;
+use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,7 +16,7 @@ final class CategoryWorkflowTransitionCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategoryWorkflowTransitionServiceInterface $transitionService)
+    public function __construct(private readonly CatalogWorkflowTransitionServiceInterface $transitionService)
     {
         parent::__construct();
     }

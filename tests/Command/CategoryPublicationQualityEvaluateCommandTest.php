@@ -11,7 +11,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategoryPublicationQualityEvaluateCommand;
 use App\Policy\CategoryPublicationQualityPolicy;
-use App\Service\CategoryPublicationQualityService;
+use App\Service\CatalogPublicationQualityService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +19,7 @@ final class CategoryPublicationQualityEvaluateCommandTest extends TestCase
 {
     public function testExecutePrintsQualityPayload(): void
     {
-        $service = new CategoryPublicationQualityService(new CategoryPublicationQualityPolicy());
+        $service = new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy());
         $command = new CategoryPublicationQualityEvaluateCommand($service);
 
         $tester = new CommandTester($command);

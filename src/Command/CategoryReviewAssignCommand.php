@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryReviewAssignmentServiceInterface;
+use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ final class CategoryReviewAssignCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategoryReviewAssignmentServiceInterface $assignmentService)
+    public function __construct(private readonly CatalogReviewAssignmentServiceInterface $assignmentService)
     {
         parent::__construct();
     }

@@ -7,15 +7,15 @@ namespace App\Controller;
 use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
-use App\ServiceInterface\CategoryInterface as CategoryService;
+use App\ServiceInterface\CategoryInterface as CatalogCategoryService;
 
 final class CategoryController implements CategoryControllerInterface
 {
-    private CategoryService $service;
+    private CatalogCategoryService $service;
     private CategoryRepositoryInterface $repo;
     private CategoryBreadcrumbBuilderInterface $breadcrumb;
 
-    public function __construct(CategoryService $service, CategoryRepositoryInterface $repo, CategoryBreadcrumbBuilderInterface $breadcrumb)
+    public function __construct(CatalogCategoryService $service, CategoryRepositoryInterface $repo, CategoryBreadcrumbBuilderInterface $breadcrumb)
     {
         $this->service = $service;
         $this->repo = $repo;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategorySyndicationCategoryGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationCategoryGovernanceSummaryServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategorySyndicationCategoryGovernanceSummaryServiceInterface $service)
+    public function __construct(private readonly CatalogSyndicationCategoryGovernanceSummaryServiceInterface $service)
     {
         parent::__construct();
     }

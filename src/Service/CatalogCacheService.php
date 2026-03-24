@@ -1,0 +1,28 @@
+<?php
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+declare(strict_types=1);
+
+namespace App\Service;
+
+use Psr\Cache\CacheItemPoolInterface;
+
+final class CatalogCacheService
+{
+    public function __construct(private readonly CacheItemPoolInterface $pool)
+    {
+    }
+
+    public function getTree(string $locale): array
+    {
+        $key = 'category_tree_'.$locale;
+        $item = $this->pool->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
+        }
+        $tree = [];
+        $item->set($tree);
+        $this->pool->save($item);
+
+        return $tree;
+    }
+}

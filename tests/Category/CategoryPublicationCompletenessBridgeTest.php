@@ -10,8 +10,8 @@ namespace App\Tests\Category;
 
 use App\Policy\CategoryCompletenessPolicy;
 use App\Policy\CategoryPublicationGatePolicy;
-use App\Service\CategoryCompletenessService;
-use App\Service\CategoryPublicationGateService;
+use App\Service\CatalogCompletenessService;
+use App\Service\CatalogPublicationGateService;
 use App\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
@@ -19,8 +19,8 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
 {
     public function testCompletenessPublicationChecksCanDrivePublicationGateEvaluation(): void
     {
-        $completeness = new CategoryCompletenessService(new CategoryCompletenessPolicy());
-        $gate = new CategoryPublicationGateService(new CategoryPublicationGatePolicy());
+        $completeness = new CatalogCompletenessService(new CategoryCompletenessPolicy());
+        $gate = new CatalogPublicationGateService(new CategoryPublicationGatePolicy());
 
         $completenessEvent = $completeness->evaluate('category-603', [
             'slug' => 'chairs',

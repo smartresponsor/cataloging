@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryCompletenessServiceInterface;
+use App\ServiceInterface\CatalogCompletenessServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ final class CategoryCompletenessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategoryCompletenessServiceInterface $completenessService)
+    public function __construct(private readonly CatalogCompletenessServiceInterface $completenessService)
     {
         parent::__construct();
     }

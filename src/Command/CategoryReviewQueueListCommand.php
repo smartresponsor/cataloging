@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryReviewQueueServiceInterface;
+use App\ServiceInterface\CatalogReviewQueueServiceInterface;
 use App\ValueObject\CategoryReviewQueueItem;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,7 @@ final class CategoryReviewQueueListCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategoryReviewQueueServiceInterface $queueService)
+    public function __construct(private readonly CatalogReviewQueueServiceInterface $queueService)
     {
         parent::__construct();
     }

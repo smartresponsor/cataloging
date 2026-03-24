@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ServiceInterface\CategorySyndicationPackageGateServiceInterface;
+use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ final class CategorySyndicationPackagePreviewCommand extends Command
 {
     use CategoryCliOutputTrait;
 
-    public function __construct(private readonly CategorySyndicationPackageGateServiceInterface $service)
+    public function __construct(private readonly CatalogSyndicationPackageGateServiceInterface $service)
     {
         parent::__construct();
     }
