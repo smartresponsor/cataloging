@@ -3,7 +3,7 @@
         'name' => 'cataloging/catalog',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'd3d104926fae8a3b4592a67936b94e1f2c2b6d27',
+        'reference' => 'c2a7e99e3fa02e4bbe8efce5d6ca3d5a72f3bf00',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'cataloging/catalog' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'd3d104926fae8a3b4592a67936b94e1f2c2b6d27',
+            'reference' => 'c2a7e99e3fa02e4bbe8efce5d6ca3d5a72f3bf00',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -199,6 +199,12 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'facebook/webdriver' => array(
+            'dev_requirement' => true,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
         'fidry/cpu-core-counter' => array(
             'pretty_version' => '1.3.0',
             'version' => '1.3.0.0',
@@ -282,6 +288,15 @@
             'provided' => array(
                 0 => '*',
             ),
+        ),
+        'php-webdriver/webdriver' => array(
+            'pretty_version' => '1.16.0',
+            'version' => '1.16.0.0',
+            'reference' => 'ac0662863aa120b4f645869f584013e4c4dba46a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-webdriver/webdriver',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'phpdocumentor/reflection-common' => array(
             'pretty_version' => '2.2.0',
@@ -677,6 +692,15 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'symfony/browser-kit' => array(
+            'pretty_version' => 'v8.0.4',
+            'version' => '8.0.4.0',
+            'reference' => '0d998c101e1920fc68572209d1316fec0db728ef',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/browser-kit',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
         'symfony/cache' => array(
             'pretty_version' => 'v7.4.7',
             'version' => '7.4.7.0',
@@ -754,6 +778,15 @@
             'install_path' => __DIR__ . '/../symfony/doctrine-bridge',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'symfony/dom-crawler' => array(
+            'pretty_version' => 'v8.0.6',
+            'version' => '8.0.6.0',
+            'reference' => '7f504fe7fb7fa5fee40a653104842cf6f851a6d8',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/dom-crawler',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'symfony/error-handler' => array(
             'pretty_version' => 'v8.0.4',
@@ -890,6 +923,15 @@
             'reference' => 'd2b592535ffa6600c265a3893a7f7fd2bad82dd7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/options-resolver',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'symfony/panther' => array(
+            'pretty_version' => 'v2.4.0',
+            'version' => '2.4.0.0',
+            'reference' => '2d810395942e71aea2f7ea8e8b5f82326bb4b8b4',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/panther',
             'aliases' => array(),
             'dev_requirement' => true,
         ),

@@ -15,6 +15,9 @@
         <testsuite name="Catalog">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="e2e">
+            <directory>tests/Category/E2E</directory>
+        </testsuite>
     </testsuites>
 
     <source>
