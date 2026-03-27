@@ -1,6 +1,5 @@
 <?php
-
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Tests\Tools;
@@ -48,6 +47,66 @@ final class CategoryLinterScriptsTest extends TestCase
         mkdir($projectRoot.'/tests/Feature/Catalog', 0777, true);
 
         self::assertSame(1, $this->runScript('tools/linter/category_canonical_roots_check.php', $projectRoot));
+    }
+
+    public function testConfigPrefixCheckPassesForCatalogPrefixedYamlFiles(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        $okFile = $projectRoot.'/config/packages/catalog_ok.yaml';
+        mkdir(dirname($okFile), 0777, true);
+        file_put_contents($okFile, "parameters: {}\n");
+
+        self::assertSame(0, $this->runScript('tools/linter/catalog_config_prefix_check.php', $projectRoot));
+    }
+
+    public function testConfigPrefixCheckDetectsNonCatalogYamlFiles(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        $badFile = $projectRoot.'/config/routes/category_move.yaml';
+        mkdir(dirname($badFile), 0777, true);
+        file_put_contents($badFile, "routes: {}\n");
+
+        self::assertSame(1, $this->runScript('tools/linter/catalog_config_prefix_check.php', $projectRoot));
+    }
+
+    public function testConfigDirectoryInRepositoryHasNoPrefixViolations(): void
+    {
+        $projectRoot = dirname(__DIR__, 2);
+
+        self::assertSame(0, $this->runScript('tools/linter/catalog_config_prefix_check.php', $projectRoot));
+    }
+
+    public function testAppNamespaceCheckPassesForCanonicalAppRoot(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        mkdir($projectRoot.'/src', 0777, true);
+        mkdir($projectRoot.'/tests', 0777, true);
+        file_put_contents($projectRoot.'/composer.json', json_encode([
+            'autoload' => ['psr-4' => ['App\\' => 'src/']],
+            'autoload-dev' => ['psr-4' => ['App\\Tests\\' => 'tests/']],
+        ], JSON_THROW_ON_ERROR));
+
+        self::assertSame(0, $this->runScript('tools/linter/app_namespace_check.php', $projectRoot));
+    }
+
+    public function testAppNamespaceCheckDetectsForbiddenNamespaceRoot(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        mkdir($projectRoot.'/src', 0777, true);
+        mkdir($projectRoot.'/tests', 0777, true);
+        file_put_contents($projectRoot.'/composer.json', json_encode([
+            'autoload' => ['psr-4' => ['App\\' => 'src/', 'Smartresponsor\\' => 'src/']],
+            'autoload-dev' => ['psr-4' => ['App\\Tests\\' => 'tests/']],
+        ], JSON_THROW_ON_ERROR));
+
+        self::assertSame(1, $this->runScript('tools/linter/app_namespace_check.php', $projectRoot));
+    }
+
+    public function testRepositoryHasCanonicalAppNamespaceRoot(): void
+    {
+        $projectRoot = dirname(__DIR__, 2);
+
+        self::assertSame(0, $this->runScript('tools/linter/app_namespace_check.php', $projectRoot));
     }
 
     private function runScript(string $scriptPath, string $projectRoot): int

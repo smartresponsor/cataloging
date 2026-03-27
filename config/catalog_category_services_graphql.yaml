@@ -1,4 +1,9 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
   App\GraphQl\CategoryChildListResolver:
     tags: ['api_platform.graphql.resolver']
   App\GraphQl\CategoryAncestorListResolver:

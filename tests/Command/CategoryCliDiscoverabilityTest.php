@@ -1,15 +1,11 @@
 <?php
-
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- * Owner: Marketing America Corp
- */
 
 namespace App\Tests\Command;
 
 use App\Command\CategoryCompletenessEvaluateCommand;
+use App\Command\CategoryMoveCommand;
 use App\Command\CategoryMediaReadinessEvaluateCommand;
 use App\Command\CategoryPublicationQualityEvaluateCommand;
 use App\Command\CategoryReviewAssignCommand;
@@ -23,6 +19,7 @@ use App\Command\CategorySyndicationRetryScheduleCommand;
 use App\Command\CategoryWorkflowTransitionCommand;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
 use App\ServiceInterface\CatalogCompletenessServiceInterface;
+use App\ServiceInterface\CategoryMoveInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
@@ -37,10 +34,11 @@ use PHPUnit\Framework\TestCase;
 
 final class CategoryCliDiscoverabilityTest extends TestCase
 {
-    public function testK13CommandsExposeDescriptionAndHelp(): void
+    public function testK14CommandsExposeDescriptionAndHelp(): void
     {
         $commands = [
             new CategoryWorkflowTransitionCommand($this->createMock(CatalogWorkflowTransitionServiceInterface::class)),
+            new CategoryMoveCommand($this->createMock(CategoryMoveInterface::class)),
             new CategoryReviewQueueListCommand($this->createMock(CatalogReviewQueueServiceInterface::class)),
             new CategoryReviewAssignCommand($this->createMock(CatalogReviewAssignmentServiceInterface::class)),
             new CategoryCompletenessEvaluateCommand($this->createMock(CatalogCompletenessServiceInterface::class)),

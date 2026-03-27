@@ -4,6 +4,7 @@ param(
     [string]$ReportRoot = '',
     [switch]$IncludeSmokes,
     [switch]$IncludeReports,
+    [switch]$IncludeSecurity,
     [switch]$FailOnErrors,
     [switch]$Quiet
 )
@@ -62,6 +63,12 @@ function Classify-StepResult {
         return 'missing-artifact'
     }
     if ($joined -match 'requires php >=|your php version') {
+        return 'environment'
+    }
+    if ($joined -match 'is not recognized as an internal or external command') {
+        return 'environment'
+    }
+    if ($joined -match 'CommandNotFoundException|command not found|not installed') {
         return 'environment'
     }
     if ($joined -match 'Mandatory arguments:|Cannot find specified rule-set') {
@@ -138,6 +145,8 @@ $steps.Add((New-Step 'phpunit-tools' 'php tools/php/php84.php vendor/bin/phpunit
 $steps.Add((New-Step 'prefix-check' 'php tools/php/php84.php tools/linter/category_prefix_check.php' 'canon'))
 $steps.Add((New-Step 'canonical-roots-check' 'php tools/php/php84.php tools/linter/category_canonical_roots_check.php' 'canon'))
 $steps.Add((New-Step 'mirror-check' 'php tools/php/php84.php tools/linter/category_mirror_check.php' 'canon'))
+$steps.Add((New-Step 'app-namespace-check' 'php tools/php/php84.php tools/linter/app_namespace_check.php' 'canon'))
+$steps.Add((New-Step 'config-prefix-check' 'php tools/php/php84.php tools/linter/catalog_config_prefix_check.php' 'canon'))
 
 if ($IncludeSmokes) {
     $steps.Add((New-Step 'smoke-runtime' 'composer smoke:runtime' 'smoke'))
@@ -146,6 +155,7 @@ if ($IncludeSmokes) {
     $steps.Add((New-Step 'smoke-doctrine' 'composer smoke:doctrine' 'smoke'))
     $steps.Add((New-Step 'smoke-fixture-load' 'composer smoke:fixture-load' 'smoke'))
     $steps.Add((New-Step 'smoke-graphql' 'composer smoke:graphql' 'smoke'))
+    $steps.Add((New-Step 'smoke-postgres-matrix' 'composer smoke:postgres-matrix' 'smoke'))
 }
 
 if ($IncludeReports) {
@@ -153,6 +163,14 @@ if ($IncludeReports) {
     $steps.Add((New-Step 'report-route-inventory' 'composer report:route-inventory' 'report'))
     $steps.Add((New-Step 'report-class-alias' 'composer report:class-alias' 'report'))
     $steps.Add((New-Step 'report-runtime-proof' 'composer report:runtime-proof' 'report'))
+}
+
+if ($IncludeSecurity) {
+    $steps.Add((New-Step 'security-composer-audit' 'composer audit --no-interaction --format=plain' 'security'))
+    $steps.Add((New-Step 'security-importmap-audit' 'php tools/php/php84.php bin/console importmap:audit --no-interaction' 'security'))
+    $steps.Add((New-Step 'security-gitleaks' 'gitleaks detect --no-banner --redact --source .' 'security'))
+    $steps.Add((New-Step 'security-semgrep-ce' 'semgrep scan --config auto --error' 'security'))
+    $steps.Add((New-Step 'security-symfony-tests' 'if exist tests\\Security (php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist tests/Security) else (echo Security tests directory not found: tests\\Security & exit /b 0)' 'security'))
 }
 
 Push-Location $rootPath
