@@ -1,4 +1,5 @@
 <?php
+
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
@@ -13,7 +14,7 @@ final class CategoryMoveCommandTest extends TestCase
 {
     public function testExecutePrintsMovePayloadWithDryRunAndLocale(): void
     {
-        $service = new class() implements CategoryMoveInterface {
+        $service = new class implements CategoryMoveInterface {
             /** @var array<string,mixed> */
             public array $seen = [];
 

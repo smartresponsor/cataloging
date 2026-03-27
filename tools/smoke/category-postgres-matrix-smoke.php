@@ -22,6 +22,29 @@ $targets = [
 $executed = 0;
 $failed = 0;
 
+/**
+ * @param array<string, string> $extraEnv
+ */
+function runCommand(string $command, array $extraEnv = []): int
+{
+    $descriptors = [
+        0 => STDIN,
+        1 => STDOUT,
+        2 => STDERR,
+    ];
+
+    $environment = array_merge($_ENV, array_map(static fn (mixed $value): string => (string) $value, $_SERVER), $extraEnv);
+    $process = proc_open($command, $descriptors, $pipes, null, $environment);
+
+    if (!is_resource($process)) {
+        fwrite(STDERR, sprintf("[category-postgres-matrix-smoke] Unable to start command: %s\n", $command));
+
+        return 1;
+    }
+
+    return proc_close($process);
+}
+
 foreach ($targets as $target => $dsn) {
     if (!is_string($dsn) || trim($dsn) === '') {
         fwrite(STDOUT, sprintf("[category-postgres-matrix-smoke] SKIP %s: DSN env var is not set.\n", $target));
@@ -39,7 +62,7 @@ foreach ($targets as $target => $dsn) {
     );
 
     fwrite(STDOUT, sprintf("[category-postgres-matrix-smoke] RUN %s\n", $target));
-    passthru($command, $exitCode);
+    $exitCode = runCommand($command, ['DATABASE_URL' => $dsn]);
     $executed++;
 
     if ($exitCode !== 0) {

@@ -64,7 +64,7 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
             }
         }
 
-return array_values($r);
+        return array_values($r);
     }
 
     /** @return array<string,bool> */
@@ -79,6 +79,6 @@ return array_values($r);
             }
         }
 
-return $r;
+        return $r;
     }
 }

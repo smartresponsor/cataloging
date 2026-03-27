@@ -73,7 +73,7 @@ final class CatalogDestinationMediaReadinessService implements CatalogDestinatio
             }
         }
 
-return array_values($result);
+        return array_values($result);
     }
 
     /** @return array<string,bool> */
@@ -88,6 +88,6 @@ return array_values($result);
             }
         }
 
-return $result;
+        return $result;
     }
 }
