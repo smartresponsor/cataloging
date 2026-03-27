@@ -1,6 +1,6 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Rule;
@@ -13,9 +13,7 @@ final class CategoryRule
     /** @param array<string,mixed> $spec */
     public function __construct(array $spec)
     {
-        $this->assertValid($spec);
-        /* @var array{all:list<array<string,mixed>>} $spec */
-        $this->spec = $spec;
+        $this->spec = $this->normalize($spec);
     }
 
     /** @return array{all:list<array<string,mixed>>} */
@@ -24,16 +22,20 @@ final class CategoryRule
         return $this->spec;
     }
 
-    /** @param array<string,mixed> $spec */
-    private function assertValid(array $spec): void
+    /** @param array<string,mixed> $spec
+     * @return array{all:list<array<string,mixed>>}
+     */
+    private function normalize(array $spec): array
     {
-        if (!isset($spec['all']) || !is_array($spec['all'])) {
+        $all = $spec['all'] ?? null;
+        if (!is_array($all)) {
             throw new \InvalidArgumentException('Rule must contain "all" as an array.');
         }
-        if (count($spec['all']) > CategoryRulePolicy::MAX_CONDITIONS) {
+        if (count($all) > CategoryRulePolicy::MAX_CONDITIONS) {
             throw new \InvalidArgumentException('Too many conditions.');
         }
-        foreach ($spec['all'] as $cond) {
+        $normalized = [];
+        foreach ($all as $cond) {
             if (!is_array($cond)) {
                 throw new \InvalidArgumentException('Condition must be an object.');
             }
@@ -52,6 +54,10 @@ final class CategoryRule
             } elseif (!isset($cond['tag'])) {
                 throw new \InvalidArgumentException('Unsupported condition object.');
             }
+
+            $normalized[] = $cond;
         }
+
+        return ['all' => $normalized];
     }
 }

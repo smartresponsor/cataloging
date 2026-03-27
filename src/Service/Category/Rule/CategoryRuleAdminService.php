@@ -1,6 +1,6 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service\Category\Rule;
@@ -28,14 +28,17 @@ final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterfac
      */
     public function save(array $input): string
     {
-        if (!isset($input['name']) || !is_string($input['name'])) {
+        $name = $input['name'];
+        if (!is_string($name)) {
             throw new \InvalidArgumentException('name is required');
         }
-        if (!isset($input['definition']) || !is_array($input['definition'])) {
+
+        $definition = $input['definition'];
+        if (!is_array($definition)) {
             throw new \InvalidArgumentException('definition is required');
         }
 
-        return $this->repo->save(['name' => $input['name'], 'definition' => $input['definition']]);
+        return $this->repo->save(['name' => $name, 'definition' => $definition]);
     }
 
     /**

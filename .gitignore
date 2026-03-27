@@ -17,6 +17,7 @@ Thumbs.db
 # Consumer runtime
 .automation/lock/
 
-var/
-report/
-docs/site/
+/var/
+/report/
+/docs/site/
+
