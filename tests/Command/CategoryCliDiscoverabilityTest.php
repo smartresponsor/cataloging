@@ -24,8 +24,8 @@ use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
 use App\ServiceInterface\CatalogReviewQueueServiceInterface;
-use App\ServiceInterface\CatalogSyndicationCategoryGovernanceSummaryServiceInterface;
 use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
 use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
@@ -53,7 +53,7 @@ final class CategoryCliDiscoverabilityTest extends TestCase
             ),
             new CategorySyndicationDestinationHistoryCommand($this->createMock(CatalogSyndicationHistoryServiceInterface::class)),
             new CategorySyndicationDestinationGovernanceSummaryCommand($this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class)),
-            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationCategoryGovernanceSummaryServiceInterface::class)),
+            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class)),
         ];
 
         foreach ($commands as $command) {

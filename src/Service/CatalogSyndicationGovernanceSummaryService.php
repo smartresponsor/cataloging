@@ -8,9 +8,9 @@ namespace App\Service;
 use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationCategoryGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 
-final class CatalogSyndicationCategoryGovernanceSummaryService implements CatalogSyndicationCategoryGovernanceSummaryServiceInterface
+final class CatalogSyndicationGovernanceSummaryService implements CatalogSyndicationGovernanceSummaryServiceInterface
 {
     public function __construct(
         private readonly CategorySyndicationCategoryGovernanceSummaryPolicyInterface $policy,

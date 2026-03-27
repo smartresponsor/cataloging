@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace App\Tests\Category;
 
 use App\Policy\CategorySyndicationCategoryGovernanceSummaryPolicy;
-use App\Service\CatalogSyndicationCategoryGovernanceSummaryService;
+use App\Service\CatalogSyndicationGovernanceSummaryService;
 use PHPUnit\Framework\TestCase;
 
-final class CatalogSyndicationCategoryGovernanceSummaryServiceTest extends TestCase
+final class CatalogSyndicationGovernanceSummaryServiceTest extends TestCase
 {
     public function testBuildSummaryAggregatesTrailPayloadsAcrossDestinationsForCategory(): void
     {
-        $service = new CatalogSyndicationCategoryGovernanceSummaryService(new CategorySyndicationCategoryGovernanceSummaryPolicy());
+        $service = new CatalogSyndicationGovernanceSummaryService(new CategorySyndicationCategoryGovernanceSummaryPolicy());
 
         $event = $service->buildSummary('cat-1', [
             [

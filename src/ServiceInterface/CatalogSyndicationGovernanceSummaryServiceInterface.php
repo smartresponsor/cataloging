@@ -7,7 +7,7 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 
-interface CatalogSyndicationCategoryGovernanceSummaryServiceInterface
+interface CatalogSyndicationGovernanceSummaryServiceInterface
 {
     /** @param list<array<string, mixed>> $trailPayloads */
     public function buildSummary(string $categoryId, array $trailPayloads, string $actorId, string $reason): CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
