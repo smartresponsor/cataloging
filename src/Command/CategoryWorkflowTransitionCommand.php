@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -15,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryWorkflowTransitionCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly CatalogWorkflowTransitionServiceInterface $transitionService)
     {
@@ -35,10 +37,10 @@ final class CategoryWorkflowTransitionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->transitionService->transition(
-            (string) $input->getArgument('categoryId'),
-            (string) $input->getArgument('targetState'),
-            (string) $input->getArgument('actorId'),
-            (string) $input->getArgument('reason'),
+            $this->argumentString($input, 'categoryId'),
+            $this->argumentString($input, 'targetState'),
+            $this->argumentString($input, 'actorId'),
+            $this->argumentString($input, 'reason'),
         );
 
         return $this->writeJson($output, $event->payload());

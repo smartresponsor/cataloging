@@ -50,7 +50,7 @@ final class CatalogSyndicationCategoryGovernanceSummaryServiceTest extends TestC
             ],
         ], 'actor-1', 'test');
 
-        $payload = $event->payload();
+        $payload = $this->normalizeSummaryPayload($event->payload());
 
         self::assertSame('cat-1', $payload['categoryId']);
         self::assertSame(2, $payload['totalTrails']);
@@ -64,5 +64,79 @@ final class CatalogSyndicationCategoryGovernanceSummaryServiceTest extends TestC
         self::assertContains('governance_trail_fallback_used', $payload['warningCodes']);
         self::assertTrue($payload['checks']['categoryGovernanceSummaryHasDestinations']);
         self::assertTrue($payload['checks']['categoryGovernanceSummaryHasFailures']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{
+     *     categoryId: string,
+     *     totalTrails: int,
+     *     resolvedPublishableCount: int,
+     *     fallbackUsedCount: int,
+     *     retryScheduledCount: int,
+     *     statusCounts: array<string, int>,
+     *     policyModeCounts: array<string, int>,
+     *     destinationIds: list<string>,
+     *     warningCodes: list<string>,
+     *     checks: array{categoryGovernanceSummaryHasDestinations: bool, categoryGovernanceSummaryHasFailures: bool}
+     * }
+     */
+    private function normalizeSummaryPayload(array $payload): array
+    {
+        return [
+            'categoryId' => $this->scalarString($payload['categoryId'] ?? ''),
+            'totalTrails' => $this->scalarInt($payload['totalTrails'] ?? 0),
+            'resolvedPublishableCount' => $this->scalarInt($payload['resolvedPublishableCount'] ?? 0),
+            'fallbackUsedCount' => $this->scalarInt($payload['fallbackUsedCount'] ?? 0),
+            'retryScheduledCount' => $this->scalarInt($payload['retryScheduledCount'] ?? 0),
+            'statusCounts' => $this->intMap($payload['statusCounts'] ?? []),
+            'policyModeCounts' => $this->intMap($payload['policyModeCounts'] ?? []),
+            'destinationIds' => $this->stringList($payload['destinationIds'] ?? []),
+            'warningCodes' => $this->stringList($payload['warningCodes'] ?? []),
+            'checks' => [
+                'categoryGovernanceSummaryHasDestinations' => (bool) ((is_array($payload['checks'] ?? null) ? $payload['checks'] : [])['categoryGovernanceSummaryHasDestinations'] ?? false),
+                'categoryGovernanceSummaryHasFailures' => (bool) ((is_array($payload['checks'] ?? null) ? $payload['checks'] : [])['categoryGovernanceSummaryHasFailures'] ?? false),
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function intMap(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $key => $item) {
+            $normalized[$this->scalarString($key)] = $this->scalarInt($item);
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarInt(mixed $value): int
+    {
+        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

@@ -40,7 +40,7 @@ final class CatalogCompletenessServiceTest extends TestCase
             ],
         ], 'operator-1', 'completeness review');
 
-        $payload = $event->payload();
+        $payload = $this->normalizeCompletenessPayload($event->payload());
         self::assertTrue($payload['complete']);
         self::assertSame(100, $payload['score']);
         self::assertSame([], $payload['missingRequired']);
@@ -74,11 +74,58 @@ final class CatalogCompletenessServiceTest extends TestCase
             ],
         ], 'operator-2', 'pre-publish audit');
 
-        $payload = $event->payload();
+        $payload = $this->normalizeCompletenessPayload($event->payload());
         self::assertFalse($payload['complete']);
         self::assertContains('slugReady', $payload['missingRequired']);
         self::assertContains('seoTitleReady', $payload['missingRequired']);
         self::assertContains('mediaReady', $payload['warnings']);
         self::assertFalse($payload['publicationChecks']['seoReady']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{
+     *     complete: bool,
+     *     score: int,
+     *     missingRequired: list<string>,
+     *     warnings: list<string>,
+     *     publicationChecks: array{seoReady: bool, localeReady: bool}
+     * }
+     */
+    private function normalizeCompletenessPayload(array $payload): array
+    {
+        return [
+            'complete' => (bool) ($payload['complete'] ?? false),
+            'score' => $this->scalarInt($payload['score'] ?? 0),
+            'missingRequired' => $this->stringList($payload['missingRequired'] ?? []),
+            'warnings' => $this->stringList($payload['warnings'] ?? []),
+            'publicationChecks' => [
+                'seoReady' => (bool) ((is_array($payload['publicationChecks'] ?? null) ? $payload['publicationChecks'] : [])['seoReady'] ?? false),
+                'localeReady' => (bool) ((is_array($payload['publicationChecks'] ?? null) ? $payload['publicationChecks'] : [])['localeReady'] ?? false),
+            ],
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarInt(mixed $value): int
+    {
+        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

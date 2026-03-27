@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -19,17 +20,47 @@ final class CategorySuggestController extends AbstractController
     #[Route('/api/category/suggest', name: 'api_category_suggest', methods: ['POST'])]
     public function suggest(Request $r): JsonResponse
     {
-        $name = (string) $r->request->get('name', '');
-        $desc = (string) $r->request->get('desc', '');
-        $tags = $r->request->all('tag'); // tag[]=
-        $res = $this->svc->suggest($name, $desc, is_array($tags) ? $tags : []);
+        $name = $this->requestString($r, 'name');
+        $desc = $this->requestString($r, 'desc');
+        $tags = $this->requestStringList($r, 'tag');
+        $res = $this->svc->suggest($name, $desc, $tags);
         // simple audit log
         $logDir = getcwd().'/var/log';
         $this->ensureDirectory($logDir);
         $writer = new \App\Util\RotatingFileWriter($logDir.'/category_suggest.log');
-        $writer->write(json_encode(['name' => $name, 'desc' => $desc, 'tags' => $tags, 'res' => $res])."\n");
+        $writer->write(json_encode(['name' => $name, 'desc' => $desc, 'tags' => $tags, 'res' => $res], JSON_THROW_ON_ERROR)."\n");
 
         return $this->json(['ok' => true, 'item' => $res]);
+    }
+
+    private function requestString(Request $request, string $key): string
+    {
+        $value = $request->request->get($key, '');
+
+        return is_scalar($value) ? trim((string) $value) : '';
+    }
+
+    /** @return list<string> */
+    private function requestStringList(Request $request, string $key): array
+    {
+        $values = $request->request->all($key);
+        if (!is_array($values)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($values as $value) {
+            if (!is_scalar($value)) {
+                continue;
+            }
+
+            $normalized = trim((string) $value);
+            if ('' !== $normalized) {
+                $result[] = $normalized;
+            }
+        }
+
+        return array_values($result);
     }
 
     private function ensureDirectory(string $path): void

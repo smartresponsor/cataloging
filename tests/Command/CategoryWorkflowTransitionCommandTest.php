@@ -34,6 +34,7 @@ final class CategoryWorkflowTransitionCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
 
+        /** @var array{categoryId:string,fromState:string,toState:string,actorId:string,reason:string} $payload */
         $payload = json_decode(trim($tester->getDisplay()), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame('cat-100', $payload['categoryId']);

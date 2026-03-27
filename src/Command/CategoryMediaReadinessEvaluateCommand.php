@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryMediaReadinessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly CatalogDestinationMediaReadinessServiceInterface $service)
     {
@@ -37,13 +39,14 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $categoryId = (string) $input->getArgument('categoryId');
-        $actorId = (string) $input->getArgument('actorId');
-        $reason = (string) $input->getArgument('reason');
+        $categoryId = $this->argumentString($input, 'categoryId');
+        $actorId = $this->argumentString($input, 'actorId');
+        $reason = $this->argumentString($input, 'reason');
         $destinationJson = $input->getOption('destination');
-        $destinationId = (string) $input->getOption('destination-id');
-        $format = (string) $input->getOption('format');
+        $destinationId = $this->optionString($input, 'destination-id', 'cli-preview-destination');
+        $format = $this->optionString($input, 'format', 'json');
 
+        /** @var array<string, mixed> $settings */
         $settings = [];
         if (is_string($destinationJson) && '' !== $destinationJson) {
             $decoded = json_decode($destinationJson, true, 512, JSON_THROW_ON_ERROR);

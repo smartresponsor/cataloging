@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller\Admin;
@@ -21,6 +22,8 @@ final class CategoryOpsController extends AbstractController
     }
 
     /**
+     * @param array<mixed> $default
+     *
      * @return array<mixed>
      */
     private function readJsonFile(string $path, array $default): array

@@ -1,10 +1,13 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service\Category\Graphql;
 
-final class CategoryLoader
+use App\ServiceInterface\Category\CategoryLoaderInterface;
+
+final class CategoryLoader implements CategoryLoaderInterface
 {
     /** @var callable(string[]): array<int, array{id: string, name: string, slug: string}> */
     private $batch;

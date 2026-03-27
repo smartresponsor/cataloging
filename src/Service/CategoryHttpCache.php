@@ -1,11 +1,15 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ServiceInterface\CategoryHttpCacheInterface;
+
 final class CategoryHttpCache implements CategoryHttpCacheInterface
 {
+    /** @param list<string> $fieldList */
     public function eTagFor(string $resourceId, array $fieldList): string
     {
         $key = $resourceId.'|'.implode(',', $fieldList);

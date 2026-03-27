@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -18,6 +19,11 @@ final class CatalogSyndicationMappingService implements CatalogSyndicationMappin
     ) {
     }
 
+    /**
+     * @param array<string,mixed> $categoryData
+     * @param array<string,mixed> $fieldMap
+     * @param list<string>        $requiredFields
+     */
     public function buildPublishPackage(
         string $packageId,
         string $destinationId,
@@ -31,7 +37,7 @@ final class CatalogSyndicationMappingService implements CatalogSyndicationMappin
         string $reason,
     ): CategorySyndicationPublishPackageBuiltInterface {
         $this->policy->assertLocaleMode($localeMode);
-        $normalizedFieldMap = $this->policy->normalizeFieldMap($fieldMap);
+        $normalizedFieldMap = $this->policy->normalizeFieldMap($this->normalizeFieldMap($fieldMap));
         $normalizedRequiredFields = $this->policy->normalizeRequiredFields($requiredFields);
 
         $profile = new CategorySyndicationMappingProfile(
@@ -50,7 +56,7 @@ final class CatalogSyndicationMappingService implements CatalogSyndicationMappin
         $missingRequiredFields = [];
         foreach ($profile->requiredFields() as $requiredField) {
             $mappedValue = $payload[$requiredField] ?? null;
-            if (null === $mappedValue || '' === trim((string) $mappedValue)) {
+            if (null === $mappedValue || '' === $this->stringOrEmpty($mappedValue)) {
                 $missingRequiredFields[] = $requiredField;
             }
         }
@@ -83,5 +89,28 @@ final class CatalogSyndicationMappingService implements CatalogSyndicationMappin
             ],
             new \DateTimeImmutable('now'),
         );
+    }
+
+    private function stringOrEmpty(mixed $value): string
+    {
+        return is_scalar($value) ? trim((string) $value) : '';
+    }
+
+    /**
+     * @param array<string,mixed> $fieldMap
+     *
+     * @return array<string,string>
+     */
+    private function normalizeFieldMap(array $fieldMap): array
+    {
+        $normalized = [];
+        foreach ($fieldMap as $sourceField => $targetField) {
+            if (!is_string($sourceField) || !is_scalar($targetField)) {
+                continue;
+            }
+            $normalized[$sourceField] = (string) $targetField;
+        }
+
+        return $normalized;
     }
 }

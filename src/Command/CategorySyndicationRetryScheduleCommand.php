@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategorySyndicationRetryScheduleCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(
         private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
@@ -38,14 +40,14 @@ final class CategorySyndicationRetryScheduleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $deliveryId = (string) $input->getArgument('deliveryId');
-        $actorId = (string) $input->getArgument('actorId');
-        $reason = (string) $input->getArgument('reason');
-        $format = (string) $input->getOption('format');
+        $deliveryId = $this->argumentString($input, 'deliveryId');
+        $actorId = $this->argumentString($input, 'actorId');
+        $reason = $this->argumentString($input, 'reason');
+        $format = $this->optionString($input, 'format', 'json');
 
         $record = $this->repository->find($deliveryId);
         if (null === $record) {
-            $output->writeln(json_encode(['error' => 'delivery_not_found', 'deliveryId' => $deliveryId], JSON_THROW_ON_ERROR));
+            $output->writeln($this->encodeJson(['error' => 'delivery_not_found', 'deliveryId' => $deliveryId], 0));
 
             return Command::FAILURE;
         }

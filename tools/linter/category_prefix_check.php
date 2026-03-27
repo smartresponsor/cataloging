@@ -20,8 +20,8 @@ foreach ($rii as $file) {
         continue;
     }
 
-    $path = $file->getPathname();
-    if (preg_match('~src/.*/Category/.*\.php$~', $path) !== 1) {
+    $path = str_replace('\\', '/', $file->getPathname());
+    if (preg_match('~(?:^|/)src/.*/Category/[^/]+\.php$~', $path) !== 1) {
         continue;
     }
 

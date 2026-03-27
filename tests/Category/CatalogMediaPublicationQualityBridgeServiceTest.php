@@ -27,7 +27,7 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
         $completenessBridge = new CatalogMediaCompletenessBridgeService(new CategoryCompletenessPolicy(), $coverage);
         $qualityBridge = new CatalogMediaPublicationQualityBridgeService($completenessBridge, new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy()));
 
-        $event = $qualityBridge->evaluate('category-903', [
+        $payload = $this->normalizePayload($qualityBridge->evaluate('category-903', [
             'slug' => 'clearance',
             'seo' => ['title' => 'Clearance', 'description' => 'Clearance offers'],
             'content' => ['body' => 'Discounted products'],
@@ -35,11 +35,39 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
             'media' => ['primaryAssetId' => 'asset-inline'],
             'aliases' => ['sale'],
             'presentation' => ['bannerId' => '', 'htmlBlockId' => 'html-9'],
-        ], 'operator-3', 'quality with missing governed required media');
+        ], 'operator-3', 'quality with missing governed required media')->payload());
 
-        $payload = $event->payload();
         self::assertFalse($payload['publishableQuality']);
         self::assertContains('requiredMediaCoverageReady', $payload['hardBlockers']);
         self::assertContains('bannerReady', $payload['advisoryWarnings']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{publishableQuality: bool, hardBlockers: list<string>, advisoryWarnings: list<string>}
+     */
+    private function normalizePayload(array $payload): array
+    {
+        return [
+            'publishableQuality' => (bool) ($payload['publishableQuality'] ?? false),
+            'hardBlockers' => $this->stringList($payload['hardBlockers'] ?? []),
+            'advisoryWarnings' => $this->stringList($payload['advisoryWarnings'] ?? []),
+        ];
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

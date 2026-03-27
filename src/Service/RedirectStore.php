@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -22,13 +23,38 @@ final class RedirectStore
         $q->execute();
     }
 
+    /** @return array{from:string,to:string,status:int}|null */
     public function get(string $from): ?array
     {
         $q = $this->pdo->prepare('SELECT from_path, to_path, status FROM seo_redirect WHERE from_path = :f LIMIT 1');
         $q->bindValue(':f', $from);
         $q->execute();
+        /** @var array<string, mixed>|false $r */
         $r = $q->fetch(\PDO::FETCH_ASSOC);
+        if (false === $r) {
+            return null;
+        }
 
-        return $r ? ['from' => (string) $r['from_path'], 'to' => (string) $r['to_path'], 'status' => (int) $r['status']] : null;
+        return [
+            'from' => $this->stringValue($r, 'from_path'),
+            'to' => $this->stringValue($r, 'to_path'),
+            'status' => $this->intValue($r, 'status'),
+        ];
+    }
+
+    /** @param array<string, mixed> $row */
+    private function stringValue(array $row, string $key): string
+    {
+        $value = $row[$key] ?? '';
+
+        return is_scalar($value) ? (string) $value : '';
+    }
+
+    /** @param array<string, mixed> $row */
+    private function intValue(array $row, string $key): int
+    {
+        $value = $row[$key] ?? 0;
+
+        return is_numeric($value) ? (int) $value : 0;
     }
 }

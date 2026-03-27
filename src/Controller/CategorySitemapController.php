@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -12,7 +13,13 @@ final class CategorySitemapController
     #[Route('/category-sitemap.xml', name: 'category_sitemap')]
     public function __invoke(): Response
     {
-        $xml = file_exists('public/category-sitemap.xml') ? file_get_contents('public/category-sitemap.xml') : '<urlset />';
+        $xml = '<urlset />';
+        if (file_exists('public/category-sitemap.xml')) {
+            $loaded = file_get_contents('public/category-sitemap.xml');
+            if (false !== $loaded) {
+                $xml = $loaded;
+            }
+        }
 
         return new Response($xml, 200, ['Content-Type' => 'application/xml']);
     }

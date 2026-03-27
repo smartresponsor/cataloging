@@ -1,1 +1,0 @@
-category-release.zip  <to-be-generated-by-script>

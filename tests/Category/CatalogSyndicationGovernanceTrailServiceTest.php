@@ -53,13 +53,22 @@ final class CatalogSyndicationGovernanceTrailServiceTest extends TestCase
         );
 
         $payload = $event->payload();
+        self::assertIsArray($payload['historyCounts'] ?? null);
+        self::assertIsArray($payload['warnings'] ?? null);
+        self::assertIsArray($payload['checks'] ?? null);
+        /** @var array<string,int> $historyCounts */
+        $historyCounts = $payload['historyCounts'];
+        /** @var list<string> $warnings */
+        $warnings = $payload['warnings'];
+        /** @var array<string,bool> $checks */
+        $checks = $payload['checks'];
 
         self::assertSame('prefer_exact_warn', $payload['mediaPolicyMode']);
         self::assertTrue($payload['resolvedPublishable']);
         self::assertTrue($payload['fallbackUsed']);
         self::assertTrue($payload['retryScheduled']);
-        self::assertSame(2, $payload['historyCounts']['failedCount']);
-        self::assertContains('governance_trail_fallback_used', $payload['warnings']);
-        self::assertTrue($payload['checks']['governanceTrailHasFailures']);
+        self::assertSame(2, $historyCounts['failedCount']);
+        self::assertContains('governance_trail_fallback_used', $warnings);
+        self::assertTrue($checks['governanceTrailHasFailures']);
     }
 }

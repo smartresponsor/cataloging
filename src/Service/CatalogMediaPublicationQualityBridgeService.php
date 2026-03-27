@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -23,11 +24,16 @@ final class CatalogMediaPublicationQualityBridgeService implements CatalogMediaP
 
         return $this->publicationQualityService->evaluate(
             $categoryId,
-            (int) ($completenessPayload['score'] ?? 0),
+            $this->scalarInt($completenessPayload['score'] ?? 0),
             is_array($completenessPayload['publicationChecks'] ?? null) ? $completenessPayload['publicationChecks'] : [],
             is_array($completenessPayload['checks'] ?? null) ? $completenessPayload['checks'] : [],
             $actorId,
             $reason,
         );
+    }
+
+    private function scalarInt(mixed $value): int
+    {
+        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
     }
 }

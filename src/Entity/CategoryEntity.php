@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -103,7 +104,7 @@ class CategoryEntity
         }
 
         $separatorPosition = strrpos($this->path, '.');
-        if ($separatorPosition === false) {
+        if (false === $separatorPosition) {
             return null;
         }
 

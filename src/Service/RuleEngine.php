@@ -1,11 +1,16 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
-final class RuleEngine
+final class CategoryRuleEngine
 {
+    /**
+     * @param array<string, scalar|null>         $category
+     * @param array<string, scalar|list<scalar>> $rules
+     */
     public function match(array $category, array $rules): bool
     {
         foreach ($rules as $rule => $value) {

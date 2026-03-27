@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller\Admin;
@@ -16,8 +17,15 @@ final class CategoryAuditController extends AbstractController
         $file = 'report/category-telemetry.ndjson';
         $rows = [];
         if (is_file($file)) {
-            foreach (file($file, FILE_IGNORE_NEW_LINES) as $line) {
-                $rows[] = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+            $lines = file($file, FILE_IGNORE_NEW_LINES);
+            foreach (is_array($lines) ? $lines : [] as $line) {
+                if (!is_string($line) || '' === trim($line)) {
+                    continue;
+                }
+                $decoded = json_decode($line, true, 512, JSON_THROW_ON_ERROR);
+                if (is_array($decoded)) {
+                    $rows[] = $decoded;
+                }
             }
         }
 

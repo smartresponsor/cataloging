@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryCompletenessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly CatalogCompletenessServiceInterface $completenessService)
     {
@@ -35,13 +37,13 @@ final class CategoryCompletenessEvaluateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $payload = json_decode((string) $input->getOption('payload'), true, 512, JSON_THROW_ON_ERROR);
+        $payload = $this->jsonOptionMap($input, 'payload');
 
         $event = $this->completenessService->evaluate(
-            (string) $input->getArgument('categoryId'),
-            is_array($payload) ? $payload : [],
-            (string) $input->getArgument('actorId'),
-            (string) $input->getArgument('reason'),
+            $this->argumentString($input, 'categoryId'),
+            $payload,
+            $this->argumentString($input, 'actorId'),
+            $this->argumentString($input, 'reason'),
         );
 
         return $this->writeJson($output, $event->payload());

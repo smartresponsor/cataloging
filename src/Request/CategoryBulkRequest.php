@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Request;
@@ -7,8 +8,8 @@ namespace App\Request;
 final class CategoryBulkRequest
 {
     /**
-     * @param list<mixed> $ids
-     * @param list<string> $errors
+     * @param list<int|string> $ids
+     * @param list<string>     $errors
      */
     public function __construct(
         public readonly array $ids,
@@ -41,7 +42,31 @@ final class CategoryBulkRequest
             $action = 'publish';
         }
 
-        return new self($ids, $action, $errors);
+        return new self(self::normalizeIds($ids), $action, $errors);
+    }
+
+    /**
+     * @return list<int|string>
+     */
+    private static function normalizeIds(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $item) {
+            if (is_int($item) || is_string($item)) {
+                $normalized[] = $item;
+                continue;
+            }
+
+            if (is_float($item) || is_bool($item)) {
+                $normalized[] = (string) $item;
+            }
+        }
+
+        return $normalized;
     }
 
     public function isValid(): bool

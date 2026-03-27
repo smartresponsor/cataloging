@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -15,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategorySyndicationDeliveryFailedListCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository)
     {
@@ -31,7 +33,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $format = (string) $input->getOption('format');
+        $format = $this->optionString($input, 'format', 'json');
         $payload = array_map(static fn ($record): array => [
             'deliveryId' => $record->deliveryId(),
             'packageId' => $record->packageId(),

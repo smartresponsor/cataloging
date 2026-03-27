@@ -20,6 +20,11 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
     public function testBuildGatedPublishPackageResolvesPublishabilityViaPolicy(): void
     {
         $fallbackAwareGateService = new class implements CatalogSyndicationFallbackAwarePackageGateServiceInterface {
+            /**
+             * @param array<string,mixed>  $categoryData
+             * @param array<string,string> $fieldMap
+             * @param list<string>         $requiredFields
+             */
             public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): \App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
             {
                 return new \App\Event\CategorySyndicationFallbackAwarePackageGated([
@@ -68,10 +73,13 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
 
         $event = $service->buildGatedPublishPackage('pkg-1', 'dst-1', 'cat-1', 'v1', 'per_locale', ['slug' => 'chairs'], ['slug' => 'slug'], ['slug'], 'actor-1', 'test');
         $payload = $event->payload();
+        self::assertIsArray($payload['warnings'] ?? null);
+        /** @var list<string> $warnings */
+        $warnings = $payload['warnings'];
 
         self::assertSame('allow_fallback', $payload['mediaPolicyMode']);
         self::assertTrue($payload['resolvedPublishable']);
         self::assertTrue($payload['fallbackUsed']);
-        self::assertContains('package_publishable_by_destination_media_policy_fallback', $payload['warnings']);
+        self::assertContains('package_publishable_by_destination_media_policy_fallback', $warnings);
     }
 }

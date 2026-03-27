@@ -64,12 +64,36 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
             new CategoryDestinationMediaPolicyPreferencePolicy(),
         );
 
-        $payload = $service->evaluate('destination-1901', 'category-1901', 'operator-1', 'step08')->payload();
-
+        $payload = $this->normalizePayload($service->evaluate('destination-1901', 'category-1901', 'operator-1', 'step08')->payload());
         self::assertSame('allow_fallback', $payload['mediaPolicyMode']);
         self::assertFalse($payload['strictPublishable']);
         self::assertTrue($payload['fallbackPublishable']);
         self::assertTrue($payload['resolvedPublishable']);
         self::assertTrue($payload['checks']['fallbackAcceptedByPolicy']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{mediaPolicyMode: string, strictPublishable: bool, fallbackPublishable: bool, resolvedPublishable: bool, checks: array{fallbackAcceptedByPolicy: bool}}
+     */
+    private function normalizePayload(array $payload): array
+    {
+        $checks = is_array($payload['checks'] ?? null) ? $payload['checks'] : [];
+
+        return [
+            'mediaPolicyMode' => $this->scalarString($payload['mediaPolicyMode'] ?? ''),
+            'strictPublishable' => (bool) ($payload['strictPublishable'] ?? false),
+            'fallbackPublishable' => (bool) ($payload['fallbackPublishable'] ?? false),
+            'resolvedPublishable' => (bool) ($payload['resolvedPublishable'] ?? false),
+            'checks' => [
+                'fallbackAcceptedByPolicy' => (bool) ($checks['fallbackAcceptedByPolicy'] ?? false),
+            ],
+        ];
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

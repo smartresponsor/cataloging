@@ -47,7 +47,7 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
             'storefront',
             'push',
             true,
-            ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => ['primary', 'hero']],
+            ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => '["primary","hero"]'],
             'operator-1',
             'register destination'
         );
@@ -65,6 +65,7 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
             'build gated package',
         );
 
+        /** @var array{publishable:bool,checks:array{packageGatePublishable:bool},matchedBindingIds:list<string>,packageMissingRequiredFields:list<string>,mediaRequiredMissing:list<string>} $payload */
         $payload = $event->payload();
         self::assertTrue($payload['publishable']);
         self::assertTrue($payload['checks']['packageGatePublishable']);

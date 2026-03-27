@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -16,6 +17,7 @@ final class CatalogSyndicationCategoryGovernanceSummaryService implements Catalo
     ) {
     }
 
+    /** @param list<array<string, mixed>> $trailPayloads */
     public function buildSummary(string $categoryId, array $trailPayloads, string $actorId, string $reason): CategorySyndicationCategoryGovernanceSummaryBuiltInterface
     {
         $summary = $this->policy->buildSummary($categoryId, $trailPayloads);
