@@ -1,0 +1,12 @@
+{
+  "name": "cataloging-playwright-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Playwright browser tests for UI coverage not exercised by Panther",
+  "scripts": {
+    "test:playwright": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}

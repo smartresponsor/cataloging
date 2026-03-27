@@ -50,6 +50,8 @@
     },
     "scripts": {
         "lint": "@php tools/php/php84.php tools/qa/CatalogPhpLint.php",
+        "lint:app-namespace": "@php tools/php/php84.php tools/linter/app_namespace_check.php",
+        "lint:config-prefix": "@php tools/php/php84.php tools/linter/catalog_config_prefix_check.php",
         "cs:fix": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
         "cs:check": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
         "cs:check-quiet": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
@@ -62,8 +64,11 @@
         "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
         "test:integration": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
         "test:e2e": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite e2e",
+        "test:playwright": "npm run test:playwright",
         "qa:style": [
             "@lint",
+            "@lint:app-namespace",
+            "@lint:config-prefix",
             "@cs:check"
         ],
         "qa:static": [
@@ -88,12 +93,13 @@
         "smoke:doctrine": "@php tools/php/php84.php tools/smoke/category-doctrine-mapping-smoke.php",
         "smoke:fixture-load": "@php tools/php/php84.php tools/smoke/category-fixture-load-smoke.php",
         "smoke:graphql": "@php tools/php/php84.php tools/smoke/category-graphql-smoke.php",
+        "smoke:postgres-matrix": "@php tools/php/php84.php tools/smoke/category-postgres-matrix-smoke.php",
         "report:owner-overlap": "@php tools/php/php84.php tools/inspection/CatalogOwnerOverlapReport.php",
         "report:route-inventory": "@php tools/php/php84.php tools/inspection/CatalogRouteInventoryReport.php",
         "report:class-alias": "@php tools/php/php84.php tools/inspection/CatalogClassAliasReport.php",
         "report:runtime-proof": "@php tools/php/php84.php tools/inspection/CatalogRuntimeProofReport.php",
         "pipeline:local": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1",
-        "pipeline:local:full": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -IncludeSmokes -IncludeReports",
+        "pipeline:local:full": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -IncludeSmokes -IncludeReports -IncludeSecurity",
         "pipeline:local:strict": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -FailOnErrors"
     },
     "minimum-stability": "stable",
