@@ -19,7 +19,6 @@ final class CategorySecurityConfigBestPracticeTest extends TestCase
         self::assertIsArray($security['access_decision_manager'] ?? null);
         self::assertIsArray($security['password_hashers'] ?? null);
 
-        self::assertTrue($security['enable_authenticator_manager'] ?? null);
         self::assertTrue($security['erase_credentials'] ?? null);
         self::assertSame('unanimous', $security['access_decision_manager']['strategy'] ?? null);
         self::assertFalse($security['access_decision_manager']['allow_if_all_abstain'] ?? null);

@@ -38,7 +38,9 @@ final class Kernel extends BaseKernel
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import('../config/{routes}/*.yaml');
-        $routes->import('../config/{routes}.yaml');
+        $routes->import('../src/Controller/StatusHandler.php', 'attribute');
+        $routes->import('../src/Controller/CategoryListHandler.php', 'attribute');
+        $routes->import('../src/Controller/CollectionListHandler.php', 'attribute');
+        $routes->import('../config/routes/*.yaml');
     }
 }

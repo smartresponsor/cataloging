@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\Controller\StatusHandler:
+    tags: ['controller.service_arguments']
+
+  App\Controller\CategoryListHandler:
+    tags: ['controller.service_arguments']
+
+  App\Controller\CollectionListHandler:
+    tags: ['controller.service_arguments']
+
+  App\Security\:
+    resource: '../src/Security/'
