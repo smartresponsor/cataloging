@@ -8,24 +8,34 @@ namespace App\Service;
 final class CategoryRuleEngine
 {
     /**
-     * @param array<string, scalar|null>         $category
-     * @param array<string, scalar|list<scalar>> $rules
+     * @param array<string, scalar|null>              $category
+     * @param array<string, scalar|list<scalar>|null> $rules
      */
     public function match(array $category, array $rules): bool
     {
-        foreach ($rules as $rule => $value) {
-            if (!isset($category[$rule])) {
+        foreach ($rules as $attribute => $expectedValue) {
+            if (!array_key_exists($attribute, $category)) {
                 return false;
             }
-            if (is_array($value)) {
-                if (!in_array($category[$rule], $value, true)) {
-                    return false;
-                }
-            } elseif ($category[$rule] !== $value) {
+
+            if (!$this->matchesRule($category[$attribute], $expectedValue)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * @param scalar|null              $actualValue
+     * @param scalar|list<scalar>|null $expectedValue
+     */
+    private function matchesRule(bool|float|int|string|null $actualValue, array|bool|float|int|string|null $expectedValue): bool
+    {
+        if (is_array($expectedValue)) {
+            return in_array($actualValue, $expectedValue, true);
+        }
+
+        return $actualValue === $expectedValue;
     }
 }

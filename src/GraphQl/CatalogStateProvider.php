@@ -17,8 +17,7 @@ final class CatalogStateProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed> $context
-     */
-    /**
+     *
      * @return object|array<int|string, mixed>|null
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
