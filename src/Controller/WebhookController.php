@@ -1,13 +1,15 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Request\WebhookDispatchRequest;
 use App\Service\WebhookDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class WebhookController
 {
@@ -18,11 +20,12 @@ final class WebhookController
     #[Route('/api/category/webhook/test', name: 'api_category_webhook_test', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
-        $event = $data['event'] ?? 'category.updated';
-        $endpoint = $data['endpoint'] ?? 'http://localhost:8081/hook';
-        $payload = $data['payload'] ?? ['id' => 1];
-        $this->dispatcher->dispatch($event, $payload, $endpoint);
+        $input = WebhookDispatchRequest::fromJson((string) $request->getContent());
+        if (!$input->isValid()) {
+            return new JsonResponse(['errors' => $input->getErrors()], 400);
+        }
+
+        $this->dispatcher->dispatch($input->event, $input->payload, $input->endpoint);
 
         return new JsonResponse(['status' => 'sent']);
     }

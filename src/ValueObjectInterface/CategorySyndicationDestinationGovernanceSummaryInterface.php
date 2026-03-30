@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
@@ -22,11 +23,15 @@ interface CategorySyndicationDestinationGovernanceSummaryInterface
 
     public function deliveredTrailCount(): int;
 
+    /** @return array<string,int> */
     public function statusCounts(): array;
 
+    /** @return array<string,int> */
     public function policyModeCounts(): array;
 
+    /** @return list<string> */
     public function warningCodes(): array;
 
+    /** @return array<string,bool> */
     public function checks(): array;
 }

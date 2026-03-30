@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -17,6 +18,10 @@ final class CategoryTaxonomy
     private \DateTimeImmutable $createdAt;
     private \DateTimeImmutable $updatedAt;
 
+    /**
+     * @param array<string,string> $name
+     * @param array<string,mixed>  $rule
+     */
     public function __construct(
         string $id,
         string $code,

@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -25,29 +26,53 @@ final class CategorySyndicationDestinationPolicy implements CategorySyndicationD
         }
     }
 
+    /**
+     * @param array<string,mixed> $settings
+     *
+     * @return array<string,string>
+     */
     public function normalizeSettings(array $settings): array
     {
         $normalized = [];
         foreach ($settings as $key => $value) {
             $normalizedKey = trim((string) $key);
-            if (is_array($value)) {
-                $normalized[$normalizedKey] = array_values(array_filter(
-                    array_map(static fn (mixed $item): string => trim((string) $item), $value),
-                    static fn (string $item): bool => '' !== $item,
-                ));
+            if ('' === $normalizedKey) {
                 continue;
             }
-
+            if (is_array($value)) {
+                $normalized[$normalizedKey] = implode(',', $this->stringList($value));
+                continue;
+            }
             if (is_bool($value)) {
                 $normalized[$normalizedKey] = $value ? 'true' : 'false';
                 continue;
             }
-
-            $normalized[$normalizedKey] = trim((string) $value);
+            $normalized[$normalizedKey] = is_scalar($value) ? trim((string) $value) : '';
         }
-
         ksort($normalized);
 
         return $normalized;
+    }
+
+    /**
+     * @param array<mixed> $value
+     *
+     * @return list<string>
+     */
+    private function stringList(array $value): array
+    {
+        $result = [];
+        foreach ($value as $item) {
+            if (!is_scalar($item)) {
+                continue;
+            }
+            $normalized = trim((string) $item);
+            if ('' === $normalized) {
+                continue;
+            }
+            $result[] = $normalized;
+        }
+
+        return array_values($result);
     }
 }

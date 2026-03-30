@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Webhook;
@@ -10,6 +11,7 @@ final class WebhookV2Signer
     {
     }
 
+    /** @return array{timestamp:int,signature:string} */
     public function sign(string $payload): array
     {
         $ts = time();

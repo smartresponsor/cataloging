@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Projection;
@@ -12,9 +13,9 @@ use App\ProjectionInterface\CategoryProjectionSyncInterface;
  */
 final class CategoryProjectionSync implements CategoryProjectionSyncInterface
 {
+    /** @param array<string,mixed> $event */
     public function apply(array $event): void
     {
         // Upsert into category_flat / category_link_flat based on event type.
-        // Implement SQL in infra; here we keep contract and method signature.
     }
 }

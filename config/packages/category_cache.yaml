@@ -1,3 +1,0 @@
-services:
-  App\Service\CategoryCacheService: ~
-  App\Service\CategoryInvalidator: ~
