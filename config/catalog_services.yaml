@@ -15,8 +15,16 @@ services:
   App\Controller\CategoryAttachmentController:
     tags: ['controller.service_arguments']
 
+  App\Controller\CategoryCollectionController:
+    tags: ['controller.service_arguments']
+
   App\Repository\CatalogAttachmentRepository: ~
   App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
+
+  App\Repository\CatalogCollectionProjectionRepository: ~
+  App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface: '@App\Repository\CatalogCollectionProjectionRepository'
+
+  App\Service\CatalogCollectionService: ~
 
   App\Security\:
     resource: '../src/Security/'
