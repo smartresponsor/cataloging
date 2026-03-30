@@ -1,34 +1,12 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Consistency\Role;
 
 if (!interface_exists(\PolicyInterface\Role\PdpV2Interface::class, false)) {
     eval('namespace PolicyInterface\\Role; interface PdpV2Interface {}');
-}
-
-if (!class_exists('src\\Entity\\Role\\SubjectId', false)) {
-    eval(<<<'PHP'
-namespace src\Entity\Role;
-
-final class SubjectId
-{
-    public function __construct(private readonly mixed $value)
-    {
-    }
-
-    public function value(): mixed
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return is_scalar($this->value) || $this->value instanceof \Stringable ? (string) $this->value : '';
-    }
-}
-PHP);
 }
 
 /**

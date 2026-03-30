@@ -1,11 +1,13 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 final class SynonymProvider
 {
+    /** @var array<string,array<string,list<string>>> */
     private array $synonyms = [
         'en' => [
             'tv' => ['television', 'smart tv'],
@@ -16,6 +18,7 @@ final class SynonymProvider
         ],
     ];
 
+    /** @return list<string> */
     public function get(string $locale, string $term): array
     {
         return $this->synonyms[$locale][$term] ?? [];

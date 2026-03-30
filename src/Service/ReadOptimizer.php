@@ -1,22 +1,26 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 final class ReadOptimizer
 {
+    /** @var array{tree?:list<array{id:string,name:string,slug:string,locale:string,published:bool}>} */
     private array $cache = [];
     private int $hit = 0;
     private int $miss = 0;
 
+    /** @return list<array{id:string,name:string,slug:string,locale:string,published:bool}> */
     public function getTree(): array
     {
-        if (isset($this->cache['tree'])) {
+        $cachedTree = $this->cache['tree'] ?? null;
+        if (is_array($cachedTree)) {
             ++$this->hit;
             $this->flushMetrics();
 
-            return $this->cache['tree'];
+            return $cachedTree;
         }
         ++$this->miss;
         $tree = [
@@ -37,7 +41,7 @@ final class ReadOptimizer
                 'hit' => $this->hit,
                 'miss' => $this->miss,
                 'ts' => date(DATE_ATOM),
-            ], JSON_PRETTY_PRINT)
+            ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)
         );
     }
 

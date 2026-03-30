@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -13,7 +14,7 @@ class CategoryBanner
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private int $id = 0;
 
     #[ORM\Column(type: 'string', length: 26)]
     private string $categoryId;
@@ -60,6 +61,11 @@ class CategoryBanner
     public function isDraft(): bool
     {
         return $this->isDraft;
+    }
+
+    public function publishedAt(): ?\DateTimeImmutable
+    {
+        return $this->publishedAt;
     }
 
     public function publish(): void
