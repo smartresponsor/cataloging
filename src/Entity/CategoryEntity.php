@@ -5,25 +5,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GraphQl\Query;
-use ApiPlatform\Metadata\GraphQl\QueryCollection;
-use App\GraphQl\CategoryAncestorListResolver;
-use App\GraphQl\CategoryChildListResolver;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'category')]
 #[ORM\Index(columns: ['path'], name: 'idx_category_path')]
-#[ApiResource(
-    graphQlOperations: [
-        new Query(name: 'item'),
-        new QueryCollection(name: 'collection'),
-        new QueryCollection(name: 'childList', resolver: CategoryChildListResolver::class),
-        new QueryCollection(name: 'ancestorList', resolver: CategoryAncestorListResolver::class),
-    ]
-)]
 class CategoryEntity
 {
     #[ORM\Id]

@@ -46,4 +46,22 @@ final class CategoryRuleEngineTest extends TestCase
             ['locale' => ['de', 'en']],
         ));
     }
+
+    public function testMatchSupportsArrayValuedProjectionFields(): void
+    {
+        $engine = new CategoryRuleEngine();
+
+        self::assertTrue($engine->match(
+            ['tag_set' => ['winter', 'sale'], 'brand' => 'acme'],
+            ['tag_set' => 'winter'],
+        ));
+        self::assertTrue($engine->match(
+            ['tag_set' => ['winter', 'sale'], 'brand' => 'acme'],
+            ['tag_set' => ['summer', 'sale']],
+        ));
+        self::assertFalse($engine->match(
+            ['tag_set' => ['winter', 'sale'], 'brand' => 'acme'],
+            ['tag_set' => ['summer', 'spring']],
+        ));
+    }
 }

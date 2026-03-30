@@ -12,10 +12,10 @@ final class CollectionBuilder
     }
 
     /**
-     * @param list<array<string,bool|float|int|string|null>>                       $all
-     * @param array<string,array<int,bool|float|int|string>|bool|float|int|string> $rules
+     * @param list<array<string, list<bool|float|int|string>|bool|float|int|string|null>> $all
+     * @param array<string,array<int,bool|float|int|string>|bool|float|int|string>         $rules
      *
-     * @return list<array<string,bool|float|int|string|null>>
+     * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
      */
     public function build(array $all, array $rules): array
     {
