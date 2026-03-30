@@ -18,9 +18,15 @@ final class CategoryAttachmentController
     }
 
     #[Route('/api/category/attachment', name: 'api_category_attachment_list', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        return new JsonResponse($this->service->list());
+        $categoryId = $request->query->get('category_id');
+        $normalizedCategoryId = is_string($categoryId) ? trim($categoryId) : '';
+
+        return new JsonResponse([
+            'ok' => true,
+            'items' => $this->service->list('' !== $normalizedCategoryId ? $normalizedCategoryId : null),
+        ]);
     }
 
     #[Route('/api/category/attachment', name: 'api_category_attachment_add', methods: ['POST'])]
@@ -28,11 +34,18 @@ final class CategoryAttachmentController
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['errors' => $input->getErrors()], 400);
+            return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
         }
 
-        $this->service->add($input->categoryId ?? '', $input->type, $input->path ?? '');
+        try {
+            $item = $this->service->add($input->categoryId ?? '', $input->type, $input->path ?? '');
+        } catch (\InvalidArgumentException $exception) {
+            return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
+        }
 
-        return new JsonResponse(['ok' => true]);
+        return new JsonResponse([
+            'ok' => true,
+            'item' => $item,
+        ], 201);
     }
 }

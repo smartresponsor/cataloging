@@ -5,37 +5,49 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+
 final class AttachmentService
 {
-    private string $file = 'report/category-attachments.json';
-
-    /** @return list<array{category_id:string,type:string,path:string}> */
-    public function list(): array
+    public function __construct(private readonly CatalogAttachmentRepositoryInterface $repository)
     {
-        if (!is_file($this->file)) {
-            return [];
-        }
-        $json = file_get_contents($this->file);
-        if (!is_string($json) || '' === $json) {
-            return [];
-        }
-        $decoded = json_decode($json, true);
-        if (!is_array($decoded)) {
-            return [];
-        }
-
-        return array_values(array_filter($decoded, static function (mixed $row): bool {
-            return is_array($row)
-                && is_string($row['category_id'] ?? null)
-                && is_string($row['type'] ?? null)
-                && is_string($row['path'] ?? null);
-        }));
     }
 
-    public function add(string $categoryId, string $type, string $path): void
+    /**
+     * @return list<array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}>
+     */
+    public function list(?string $categoryId = null): array
     {
-        $all = $this->list();
-        $all[] = ['category_id' => $categoryId, 'type' => $type, 'path' => $path];
-        file_put_contents($this->file, json_encode($all, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
+        $normalizedCategoryId = null;
+        if (is_string($categoryId)) {
+            $trimmedCategoryId = trim($categoryId);
+            if ('' !== $trimmedCategoryId) {
+                $normalizedCategoryId = $trimmedCategoryId;
+            }
+        }
+
+        return $this->repository->list($normalizedCategoryId);
+    }
+
+    /**
+     * @return array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}
+     */
+    public function add(string $categoryId, string $type, string $path): array
+    {
+        $normalizedCategoryId = trim($categoryId);
+        $normalizedType = trim($type);
+        $normalizedPath = trim($path);
+
+        if ('' === $normalizedCategoryId) {
+            throw new \InvalidArgumentException('category_id is required');
+        }
+        if ('' === $normalizedType) {
+            throw new \InvalidArgumentException('type is required');
+        }
+        if ('' === $normalizedPath) {
+            throw new \InvalidArgumentException('path is required');
+        }
+
+        return $this->repository->add($normalizedCategoryId, $normalizedType, $normalizedPath);
     }
 }
