@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -14,6 +15,18 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
+    }
+
+    /** @param list<string> $recordIds */
+    public function orderSet(string $categoryId, array $recordIds): void
+    {
+        $position = 0;
+        foreach ($recordIds as $recordId) {
+            $this->entityManager->getConnection()->executeStatement(
+                'UPDATE category_pin SET position = ? WHERE category_id = ? AND record_id = ?',
+                [$position++, $categoryId, $recordId],
+            );
+        }
     }
 
     public function pinCreate(string $categoryId, string $recordId, int $position): void
@@ -38,17 +51,6 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
         $this->entityManager->flush();
     }
 
-    public function orderSet(string $categoryId, array $recordIds): void
-    {
-        $position = 0;
-        foreach ($recordIds as $recordId) {
-            $this->entityManager->getConnection()->executeStatement(
-                'UPDATE category_pin SET position = ? WHERE category_id = ? AND record_id = ?',
-                [$position++, $categoryId, $recordId],
-            );
-        }
-    }
-
     public function bannerPublish(string $categoryId, string $title, string $content): string
     {
         $banner = new CategoryBanner($categoryId, $title, $content);
@@ -56,7 +58,7 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
         $this->entityManager->persist($banner);
         $this->entityManager->flush();
 
-        return $banner->id();
+        return (string) $banner->id();
     }
 
     public function htmlPublish(string $categoryId, string $html): string
@@ -66,6 +68,6 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
         $this->entityManager->persist($htmlBlock);
         $this->entityManager->flush();
 
-        return $htmlBlock->id();
+        return (string) $htmlBlock->id();
     }
 }

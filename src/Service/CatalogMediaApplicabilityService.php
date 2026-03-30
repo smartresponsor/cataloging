@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -24,8 +25,8 @@ final class CatalogMediaApplicabilityService implements CatalogMediaApplicabilit
 
         return new CategoryMediaApplicabilityEvaluated(
             trim($categoryId),
-            trim((string) ($payload['channel'] ?? '')),
-            trim((string) ($payload['locale'] ?? '')),
+            trim($this->scalarString($payload['channel'] ?? '')),
+            trim($this->scalarString($payload['locale'] ?? '')),
             $report->requiredMissing(),
             $report->warnings(),
             $report->checks(),
@@ -34,5 +35,10 @@ final class CatalogMediaApplicabilityService implements CatalogMediaApplicabilit
             trim($reason),
             new \DateTimeImmutable('now'),
         );
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

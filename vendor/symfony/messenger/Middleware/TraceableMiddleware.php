@@ -24,13 +24,13 @@ class TraceableMiddleware implements MiddlewareInterface
     public function __construct(
         private Stopwatch $stopwatch,
         private string $busName,
-        private string $eventtests = 'messenger.middleware',
+        private string $eventCategory = 'messenger.middleware',
     ) {
     }
 
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        $stack = new TraceableStack($stack, $this->stopwatch, $this->busName, $this->eventtests);
+        $stack = new TraceableStack($stack, $this->stopwatch, $this->busName, $this->eventCategory);
 
         try {
             return $stack->next()->handle($envelope, $stack);
@@ -51,7 +51,7 @@ class TraceableStack implements StackInterface
         private StackInterface $stack,
         private Stopwatch $stopwatch,
         private string $busName,
-        private string $eventtests,
+        private string $eventCategory,
     ) {
     }
 
@@ -68,7 +68,7 @@ class TraceableStack implements StackInterface
         }
         $this->currentEvent .= \sprintf(' on "%s"', $this->busName);
 
-        $this->stopwatch->start($this->currentEvent, $this->eventtests);
+        $this->stopwatch->start($this->currentEvent, $this->eventCategory);
 
         return $nextMiddleware;
     }

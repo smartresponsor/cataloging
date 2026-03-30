@@ -1,34 +1,24 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-declare(strict_types=1);
 
-/*
-Copyright (c) 2025 Oleksandr Tishченко / Marketing America Corp
-Owner: Marketing America Corp
-Author: Oleksandr Тishchenko <dev@highhopesamerica.com>
-*/
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Service\Category\WarmupPlan;
-
 final class WarmupDispatcher
 {
-    private WarmupPlan $plan;
-    private CloudflarePurger $cf;
-    private FastlyPurger $fastly;
-
-    public function __construct(WarmupPlan $plan, CloudflarePurger $cf, FastlyPurger $fastly)
-    {
-        $this->plan = $plan;
-        $this->cf = $cf;
-        $this->fastly = $fastly;
+    public function __construct(
+        private readonly WarmupPlan $plan,
+        private readonly CloudflarePurger $cf,
+        private readonly FastlyPurger $fastly,
+    ) {
     }
 
+    /** @return array{urls:list<string>,cloudflare:array<string,mixed>,fastly:string} */
     public function dispatchPublish(string $categoryId): array
     {
         $urls = $this->plan->planForPublish($categoryId);
-        $keys = array_map(fn (string $u) => 'url:'.$u, $urls);
+        $keys = array_map(static fn (string $url): string => 'url:'.$url, $urls);
 
         return [
             'urls' => $urls,

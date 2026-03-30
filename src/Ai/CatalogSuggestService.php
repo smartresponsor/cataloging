@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Ai;
@@ -20,50 +21,64 @@ final class CatalogSuggestService
     /**
      * Suggest top-k categories with simple token match and explain.
      *
-     * @param array<string> $tags
+     * @param list<string> $tags
      *
-     * @return array<int,array<string,mixed>>
+     * @return list<array{category:string,score:int,explain:list<string>}>
      */
     public function suggest(string $name, string $desc = '', array $tags = [], int $k = 5): array
     {
-        $tokens = $this->tokenize($name.' ' + $desc.' ' + implode(' ', $tags));
+        $tokens = $this->tokenize($name.' '.$desc.' '.implode(' ', $tags));
+        /** @var array<string,array{score:int,explain:list<string>}> $scores */
         $scores = [];
-        foreach ($this->dict as $cat => $kw) {
-            $hit = 0;
+
+        foreach ($this->dict as $category => $keywords) {
+            $hits = 0;
             $explain = [];
-            foreach ($kw as $w) {
-                if (isset($tokens[$w])) {
-                    ++$hit;
-                    $explain[] = $w;
+            foreach ($keywords as $keyword) {
+                if (!isset($tokens[$keyword])) {
+                    continue;
                 }
+
+                ++$hits;
+                $explain[] = $keyword;
             }
-            if ($hit > 0) {
-                $scores[$cat] = ['score' => $hit, 'explain' => $explain];
+
+            if ($hits > 0) {
+                $scores[$category] = ['score' => $hits, 'explain' => $explain];
             }
-        }
-        arsort($scores);
-        $out = [];
-        foreach (array_slice($scores, 0, $k, true) as $cat => $data) {
-            $out[] = ['category' => $cat, 'score' => $data['score'], 'explain' => $data['explain']];
         }
 
-        return $out;
+        uasort(
+            $scores,
+            static fn (array $left, array $right): int => $right['score'] <=> $left['score'],
+        );
+
+        $result = [];
+        foreach (array_slice($scores, 0, $k, true) as $category => $data) {
+            $result[] = [
+                'category' => $category,
+                'score' => $data['score'],
+                'explain' => $data['explain'],
+            ];
+        }
+
+        return $result;
     }
 
     /** @return array<string,int> */
-    private function tokenize(string $s): array
+    private function tokenize(string $value): array
     {
-        $s = strtolower($s);
-        $s = preg_replace('/[^a-z0-9 ]+/', ' ', $s) ?? $s;
-        $out = [];
-        foreach (explode(' ', $s) as $t) {
-            $t = trim($t);
-            if ('' === $t) {
+        $value = strtolower($value);
+        $value = preg_replace('/[^a-z0-9 ]+/', ' ', $value) ?? $value;
+        $result = [];
+        foreach (explode(' ', $value) as $token) {
+            $token = trim($token);
+            if ('' === $token) {
                 continue;
             }
-            $out[$t] = ($out[$t] ?? 0) + 1;
+            $result[$token] = ($result[$token] ?? 0) + 1;
         }
 
-        return $out;
+        return $result;
     }
 }

@@ -39,8 +39,8 @@ final class CatalogSyndicationMappingServiceTest extends TestCase
             'build destination package',
         );
 
+        /** @var array{payload:array{title:string,handle:string},publishable:bool,missingRequiredFields:list<string>} $payload */
         $payload = $event->payload();
-        self::assertTrue(isset($payload['payload']['title']));
         self::assertSame('Summer Shoes', $payload['payload']['title']);
         self::assertSame('summer-shoes', $payload['payload']['handle']);
         self::assertFalse($payload['publishable']);

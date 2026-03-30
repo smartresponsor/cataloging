@@ -20,7 +20,7 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
         $repository = new CategoryMediaBindingRepository();
         $service = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
 
-        $event = $service->bind(
+        $payload = $this->normalizePayload($service->bind(
             'binding-201',
             'category-701',
             'asset-501',
@@ -32,9 +32,8 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
             ['format' => 'webp'],
             'operator-1',
             'bind category banner asset',
-        );
+        )->payload());
 
-        $payload = $event->payload();
         self::assertSame('binding-201', $payload['bindingId']);
         self::assertSame('banner', $payload['role']);
         self::assertSame(['storefront', 'mobile'], $payload['channels']);
@@ -43,5 +42,41 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
         self::assertSame('webp', $payload['metadata']['format']);
         self::assertCount(1, $repository->bindingsForCategory('category-701'));
         self::assertCount(1, $repository->history());
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{bindingId: string, role: string, channels: list<string>, locales: list<string>, requiredForPublish: bool, metadata: array{format: string}}
+     */
+    private function normalizePayload(array $payload): array
+    {
+        $metadata = is_array($payload['metadata'] ?? null) ? $payload['metadata'] : [];
+
+        return [
+            'bindingId' => $this->scalarString($payload['bindingId'] ?? ''),
+            'role' => $this->scalarString($payload['role'] ?? ''),
+            'channels' => $this->stringList($payload['channels'] ?? []),
+            'locales' => $this->stringList($payload['locales'] ?? []),
+            'requiredForPublish' => (bool) ($payload['requiredForPublish'] ?? false),
+            'metadata' => [
+                'format' => $this->scalarString($metadata['format'] ?? ''),
+            ],
+        ];
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

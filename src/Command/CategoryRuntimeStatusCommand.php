@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -28,9 +29,11 @@ final class CategoryRuntimeStatusCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $view = $this->viewBuilder->build((string) $input->getArgument('categoryId'))->toArray();
-
-        $io->writeln(json_encode($view, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) ?: '{}');
+        $arg = $input->getArgument('categoryId');
+        $categoryId = is_scalar($arg) ? (string) $arg : '';
+        $view = $this->viewBuilder->build($categoryId)->toArray();
+        $json = json_encode($view, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $io->writeln(false !== $json ? $json : '{}');
 
         return Command::SUCCESS;
     }
