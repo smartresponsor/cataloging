@@ -11,7 +11,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategorySyndicationDestinationGovernanceSummaryCommand;
 use App\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
-use App\ServiceInterface\CategorySyndicationDestinationGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +19,7 @@ final class CategorySyndicationDestinationGovernanceSummaryCommandTest extends T
 {
     public function testExecutePrintsDestinationGovernanceSummary(): void
     {
-        $service = $this->createMock(CategorySyndicationDestinationGovernanceSummaryServiceInterface::class);
+        $service = $this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class);
         $service->method('buildSummary')->willReturn(new CategorySyndicationDestinationGovernanceSummaryBuilt([
             'destinationId' => 'dest-1',
             'totalTrails' => 2,

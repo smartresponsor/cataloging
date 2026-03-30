@@ -1,29 +1,26 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\ServiceInterface\CategorySlugGeneratorInterface;
 
-/**
- * CategorySlugGenerator implements conflict policy:
- * - Do not fail on duplicate; auto-suffix with incremental counter: "-2", "-3", ...
- * - Normalizes to lowercase, trims spaces, replaces spaces with hyphens.
- */
 final class CategorySlugGenerator implements CategorySlugGeneratorInterface
 {
     public function __construct(private readonly CategoryRepositoryInterface $repo)
     {
     }
 
+    /** @param array<string,string> $input @return array<string,string> */
     public function generate(array $input, string $taxonomyId, ?string $parentId): array
     {
         $out = [];
-
         foreach ($input as $locale => $slug) {
             $norm = $this->normalize($slug);
-            $out[$locale] = $this->uniqueForLocale($norm, $taxonomyId, $parentId, (string) $locale);
+            $out[$locale] = $this->uniqueForLocale($norm, $taxonomyId, $parentId, $locale);
         }
 
         return $out;
@@ -31,22 +28,21 @@ final class CategorySlugGenerator implements CategorySlugGeneratorInterface
 
     private function normalize(string $slug): string
     {
-        $s = strtolower(trim($slug));
-        $s = preg_replace('/\s+/', '-', $s);
-        $s = preg_replace('/[^a-z0-9\-]/', '', $s);
-        $s = preg_replace('/\-+/', '-', $s);
+        $normalized = strtolower(trim($slug));
+        $normalized = preg_replace('/\s+/', '-', $normalized) ?? $normalized;
+        $normalized = preg_replace('/[^a-z0-9\-]/', '', $normalized) ?? $normalized;
+        $normalized = preg_replace('/\-+/', '-', $normalized) ?? $normalized;
 
-        return trim((string) $s, '-');
+        return trim($normalized, '-');
     }
 
     private function uniqueForLocale(string $base, string $taxonomyId, ?string $parentId, string $locale): string
     {
         $candidate = '' !== $base ? $base : 'item';
-        $n = 1;
-
+        $suffix = 1;
         while ($this->repo->slugExists($candidate, $taxonomyId, $parentId, $locale)) {
-            ++$n;
-            $candidate = ('' !== $base ? $base : 'item').'-'.$n;
+            ++$suffix;
+            $candidate = ('' !== $base ? $base : 'item').'-'.$suffix;
         }
 
         return $candidate;

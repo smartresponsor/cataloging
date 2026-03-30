@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -30,21 +31,34 @@ final class ExportRedirectNdjsonCommand extends Command
 
         $path = getcwd().'/var/export/category_redirects_301.ndjson';
         $this->ensureDirectory(dirname($path));
-        $fh = fopen($path, 'w');
+        $stream = fopen($path, 'w');
+        if (false === $stream) {
+            throw new \RuntimeException(sprintf('Unable to open file for writing: %s', $path));
+        }
 
         foreach ($aliases as $alias) {
-            $cat = $catRepo->find($alias->categoryId());
-            if (!$cat) {
+            if (!$alias instanceof CategoryAliasEntity) {
+                continue;
+            }
+
+            $category = $catRepo->find($alias->categoryId());
+            if (!$category instanceof CategoryEntity) {
                 continue;
             }
             $row = [
-                'from' => (string) $alias->oldSlug(),
-                'to' => (string) $cat->getSlug(),
+                'from' => $alias->oldSlug(),
+                'to' => $category->getSlug(),
                 'ts' => $alias->createdAt()->format(DATE_ATOM),
             ];
-            fwrite($fh, json_encode($row, JSON_UNESCAPED_UNICODE)."\n");
+            $written = fwrite($stream, json_encode($row, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE).'
+');
+            if (false === $written) {
+                fclose($stream);
+
+                throw new \RuntimeException(sprintf('Unable to write export row to file: %s', $path));
+            }
         }
-        fclose($fh);
+        fclose($stream);
         $output->writeln('Exported NDJSON: '.$path);
 
         return Command::SUCCESS;

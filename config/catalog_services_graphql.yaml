@@ -1,5 +1,1 @@
-services:
-  App\GraphQl\CategoryChildListResolver:
-    tags: ['api_platform.graphql.resolver']
-  App\GraphQl\CategoryAncestorListResolver:
-    tags: ['api_platform.graphql.resolver']
+# Canonical GraphQL resolver DI lives in catalog_category_services_graphql.yaml.

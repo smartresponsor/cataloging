@@ -1,11 +1,17 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 final class BulkOperator
 {
+    /**
+     * @param list<int|string> $items
+     *
+     * @return array{success:list<array{id:int,action:string}>,failed:list<array{id:int|string,reason:string}>}
+     */
     public function run(array $items, string $action): array
     {
         $result = ['success' => [], 'failed' => []];

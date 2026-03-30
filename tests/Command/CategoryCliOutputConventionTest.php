@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\CategoryReviewQueueListCommand;
-use App\ServiceInterface\CategoryReviewQueueServiceInterface;
+use App\ServiceInterface\CatalogReviewQueueServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -19,8 +19,8 @@ final class CategoryCliOutputConventionTest extends TestCase
 {
     public function testRejectsUnsupportedFormatWithMachineReadablePayload(): void
     {
-        /** @var CategoryReviewQueueServiceInterface&MockObject $service */
-        $service = $this->createMock(CategoryReviewQueueServiceInterface::class);
+        /** @var CatalogReviewQueueServiceInterface&MockObject $service */
+        $service = $this->createMock(CatalogReviewQueueServiceInterface::class);
         $service->method('queueForReviewer')->willReturn([]);
 
         $command = new CategoryReviewQueueListCommand($service);

@@ -1,3 +1,2 @@
-category:
-  ab:
-    storefront_v2: false
+parameters:
+  category.ab.storefront_v2: false
