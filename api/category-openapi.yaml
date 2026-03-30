@@ -1,22 +1,82 @@
 openapi: 3.0.3
 info:
-  title: App Category API
+  title: Category API Compatibility Contract
   version: 1.0.0-rc1
+  description: Legacy compatibility document retained for category-named consumers; canonical truth lives in api/catalog-openapi.yaml.
 paths:
-  /api/category/tree:
+  /api/category/list:
     get:
-      summary: Get category tree
+      summary: List catalog categories
       responses:
-        '200': { description: OK }
-  /api/category/{id}/move:
+        '200':
+          description: Category list returned
+  /api/category/{id}/child:
+    get:
+      summary: List direct children for a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Child category list returned
+        '404':
+          description: Category not found
+  /api/category/{id}/ancestor:
+    get:
+      summary: List ancestors for a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Ancestor category list returned
+        '404':
+          description: Category not found
+  /api/category/attachment:
+    get:
+      summary: List category attachments
+      responses:
+        '200':
+          description: Attachment list returned
     post:
-      summary: Move category
+      summary: Register a category attachment
       responses:
-        '200': { description: OK }
-        '400': { description: Bad Request }
-  /api/category/{id}/publish:
+        '201':
+          description: Attachment created
+        '400':
+          description: Validation failure
+  /api/category/collection:
     post:
-      summary: Publish category
+      summary: Build a rule-based collection from projection records
       responses:
-        '200': { description: OK }
-        '400': { description: Bad Request }
+        '200':
+          description: Collection build result returned
+        '400':
+          description: Invalid rules payload
+  /api/category/virtual/preview:
+    post:
+      summary: Preview a virtual category rule
+      responses:
+        '200':
+          description: Rule preview returned
+        '400':
+          description: Invalid rule specification
+        '413':
+          description: Cardinality exceeds configured limit
+  /api/category/virtual/apply/{id}:
+    post:
+      summary: Apply a virtual category rule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Rule applied
+        '404':
+          description: Virtual category not found

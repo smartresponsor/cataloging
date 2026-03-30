@@ -2,6 +2,7 @@ openapi: 3.0.3
 info:
   title: Catalog API
   version: 1.0.0-rc1
+  description: Canonical HTTP API contract for the Catalog component.
 paths:
   /api/category/list:
     get:
@@ -79,3 +80,15 @@ paths:
           description: Rule applied
         '404':
           description: Virtual category not found
+  /api/doc:
+    get:
+      summary: OpenAPI documentation UI
+      responses:
+        '200':
+          description: Swagger UI page returned
+  /api/doc.json:
+    get:
+      summary: OpenAPI JSON document
+      responses:
+        '200':
+          description: OpenAPI JSON returned
