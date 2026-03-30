@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -22,6 +23,11 @@ final class CatalogSyndicationFallbackAwarePackageGateService implements Catalog
     ) {
     }
 
+    /**
+     * @param array<string,mixed>  $categoryData
+     * @param array<string,string> $fieldMap
+     * @param list<string>         $requiredFields
+     */
     public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): CategorySyndicationFallbackAwarePackageGatedInterface
     {
         $packageBuilt = $this->mappingService->buildPublishPackage($packageId, $destinationId, $categoryId, $version, $localeMode, $categoryData, $fieldMap, $requiredFields, $actorId, $reason);
@@ -55,8 +61,7 @@ final class CatalogSyndicationFallbackAwarePackageGateService implements Catalog
                 'fieldMap' => is_array($packagePayload['fieldMap'] ?? null) ? $packagePayload['fieldMap'] : [],
                 'requiredFields' => is_array($packagePayload['requiredFields'] ?? null) ? $packagePayload['requiredFields'] : [],
                 'packageMissingRequiredFields' => $report->packageMissingRequiredFields(),
-                'strictMediaRequiredMissing' => $report->strictMediaRequiredMissing(),
-                'fallbackMediaRequiredMissing' => $report->fallbackMediaRequiredMissing(),
+                'requiredMissing' => array_values(array_unique(array_merge($report->strictMediaRequiredMissing(), $report->fallbackMediaRequiredMissing()))),
                 'warnings' => $report->warnings(),
                 'checks' => $report->checks(),
                 'exactMatchedBindingIds' => $report->exactMatchedBindingIds(),

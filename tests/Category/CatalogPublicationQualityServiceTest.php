@@ -18,7 +18,7 @@ final class CatalogPublicationQualityServiceTest extends TestCase
     {
         $service = new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy());
 
-        $event = $service->evaluate(
+        $payload = $this->normalizePayload($service->evaluate(
             'category-701',
             78,
             [
@@ -35,14 +35,43 @@ final class CatalogPublicationQualityServiceTest extends TestCase
             ],
             'operator-1',
             'pre-publish quality evaluation',
-        );
+        )->payload());
 
-        $payload = $event->payload();
         self::assertTrue($payload['publishableQuality']);
         self::assertSame('attention', $payload['riskLevel']);
         self::assertContains('mediaReady', $payload['softWarnings']);
         self::assertContains('aliasReady', $payload['softWarnings']);
         self::assertContains('qualityScoreBelowTarget', $payload['softWarnings']);
         self::assertContains('bannerReady', $payload['advisoryWarnings']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{publishableQuality: bool, riskLevel: string, softWarnings: list<string>, advisoryWarnings: list<string>}
+     */
+    private function normalizePayload(array $payload): array
+    {
+        return [
+            'publishableQuality' => (bool) ($payload['publishableQuality'] ?? false),
+            'riskLevel' => $this->scalarString($payload['riskLevel'] ?? ''),
+            'softWarnings' => $this->stringList($payload['softWarnings'] ?? []),
+            'advisoryWarnings' => $this->stringList($payload['advisoryWarnings'] ?? []),
+        ];
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

@@ -1,30 +1,53 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
+use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+
 final class AttachmentService
 {
-    private string $file = 'report/category-attachments.json';
-
-    public function list(): array
+    public function __construct(private readonly CatalogAttachmentRepositoryInterface $repository)
     {
-        if (!is_file($this->file)) {
-            return [];
-        }
-
-        return json_decode(file_get_contents($this->file), true) ?? [];
     }
 
-    public function add(string $categoryId, string $type, string $path): void
+    /**
+     * @return list<array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}>
+     */
+    public function list(?string $categoryId = null): array
     {
-        $all = $this->list();
-        $all[] = [
-            'category_id' => $categoryId,
-            'type' => $type,
-            'path' => $path,
-        ];
-        file_put_contents($this->file, json_encode($all, JSON_PRETTY_PRINT));
+        $normalizedCategoryId = null;
+        if (is_string($categoryId)) {
+            $trimmedCategoryId = trim($categoryId);
+            if ('' !== $trimmedCategoryId) {
+                $normalizedCategoryId = $trimmedCategoryId;
+            }
+        }
+
+        return $this->repository->list($normalizedCategoryId);
+    }
+
+    /**
+     * @return array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}
+     */
+    public function add(string $categoryId, string $type, string $path): array
+    {
+        $normalizedCategoryId = trim($categoryId);
+        $normalizedType = trim($type);
+        $normalizedPath = trim($path);
+
+        if ('' === $normalizedCategoryId) {
+            throw new \InvalidArgumentException('category_id is required');
+        }
+        if ('' === $normalizedType) {
+            throw new \InvalidArgumentException('type is required');
+        }
+        if ('' === $normalizedPath) {
+            throw new \InvalidArgumentException('path is required');
+        }
+
+        return $this->repository->add($normalizedCategoryId, $normalizedType, $normalizedPath);
     }
 }

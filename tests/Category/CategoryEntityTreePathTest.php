@@ -1,12 +1,12 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Tests\Category;
 
 use App\Entity\CategoryEntity;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 final class CategoryEntityTreePathTest extends TestCase
 {
@@ -38,7 +38,7 @@ final class CategoryEntityTreePathTest extends TestCase
 
     private function createCategoryEntity(string $path, int $depth): CategoryEntity
     {
-        $reflection = new ReflectionClass(CategoryEntity::class);
+        $reflection = new \ReflectionClass(CategoryEntity::class);
         $entity = $reflection->newInstanceWithoutConstructor();
 
         $pathProperty = $reflection->getProperty('path');

@@ -44,14 +44,17 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
             ],
         ], 'operator-3', 'approval handoff');
 
+        /** @var array{publicationChecks:array<string,bool>} $completenessPayload */
+        $completenessPayload = $completenessEvent->payload();
         $gateEvent = $gate->evaluate(
             'category-603',
             CategoryWorkflowState::APPROVED,
-            $completenessEvent->payload()['publicationChecks'],
+            $completenessPayload['publicationChecks'],
             'operator-3',
             'approval handoff',
         );
 
+        /** @var array{publishable:bool,warnings:list<string>} $payload */
         $payload = $gateEvent->payload();
         self::assertTrue($payload['publishable']);
         self::assertSame(['mediaReady', 'aliasReady'], $payload['warnings']);

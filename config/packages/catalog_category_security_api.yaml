@@ -4,7 +4,6 @@ security:
       pattern: ^/api/category
       stateless: true
       provider: category_jwt
-      jwt: ~
   providers:
     category_jwt:
       id: App\Security\JwtUserProvider

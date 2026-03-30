@@ -46,13 +46,47 @@ final class CatalogDestinationMediaReadinessServiceTest extends TestCase
             'register destination'
         );
 
-        $event = $service->evaluate('destination-1301', 'category-1301', 'operator-9', 'destination media readiness');
-        $payload = $event->payload();
+        $payload = $this->normalizePayload($service->evaluate('destination-1301', 'category-1301', 'operator-9', 'destination media readiness')->payload());
 
         self::assertTrue($payload['publishable']);
         self::assertTrue($payload['checks']['destinationMediaPublishable']);
         self::assertSame('storefront', $payload['channel']);
         self::assertSame('en_US', $payload['locale']);
         self::assertSame(['bind-primary', 'bind-hero'], $payload['matchedBindingIds']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{publishable: bool, channel: string, locale: string, matchedBindingIds: list<string>, checks: array{destinationMediaPublishable: bool}}
+     */
+    private function normalizePayload(array $payload): array
+    {
+        $checks = is_array($payload['checks'] ?? null) ? $payload['checks'] : [];
+
+        return [
+            'publishable' => (bool) ($payload['publishable'] ?? false),
+            'channel' => $this->scalarString($payload['channel'] ?? ''),
+            'locale' => $this->scalarString($payload['locale'] ?? ''),
+            'matchedBindingIds' => $this->stringList($payload['matchedBindingIds'] ?? []),
+            'checks' => [
+                'destinationMediaPublishable' => (bool) ($checks['destinationMediaPublishable'] ?? false),
+            ],
+        ];
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

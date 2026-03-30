@@ -33,6 +33,7 @@ final class CatalogMediaApplicabilityServiceTest extends TestCase
             'requiredRoles' => ['primary', 'banner'],
         ], 'operator-2', 'evaluate scoped media');
 
+        /** @var array{requiredMissing:list<mixed>, warnings:list<string>, checks:array<string,bool>, matchedBindingIds:list<string>} $payload */
         $payload = $event->payload();
         self::assertSame([], $payload['requiredMissing']);
         self::assertTrue($payload['checks']['channelScopedMediaReady']);
@@ -55,6 +56,7 @@ final class CatalogMediaApplicabilityServiceTest extends TestCase
             'requiredRoles' => ['primary'],
         ], 'operator-2', 'evaluate missing scoped role');
 
+        /** @var array{requiredMissing:list<mixed>, warnings:list<string>, checks:array<string,bool>, matchedBindingIds:list<string>} $payload */
         $payload = $event->payload();
         self::assertContains('role:primary', $payload['requiredMissing']);
         self::assertContains('channelScopedMediaReady', $payload['requiredMissing']);

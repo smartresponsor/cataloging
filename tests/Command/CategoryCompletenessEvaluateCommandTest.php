@@ -40,6 +40,7 @@ final class CategoryCompletenessEvaluateCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
         $payload = json_decode(trim($tester->getDisplay()), true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($payload);
 
         self::assertSame('cat-200', $payload['categoryId']);
         self::assertTrue($payload['complete']);

@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -15,47 +16,44 @@ final class CatalogSyndicationPolicyAwarePackageGateService implements CatalogSy
 {
     public function __construct(
         private readonly CatalogSyndicationFallbackAwarePackageGateServiceInterface $fallbackAwareGateService,
-        private readonly CatalogDestinationMediaPolicyPreferenceServiceInterface $destinationMediaPolicyPreferenceService,
+        private readonly CatalogDestinationMediaPolicyPreferenceServiceInterface $preferenceService,
         private readonly CategorySyndicationPolicyAwarePackageGatePolicyInterface $policy,
     ) {
     }
 
+    /**
+     * @param array<string,mixed>  $categoryData
+     * @param array<string,string> $fieldMap
+     * @param list<string>         $requiredFields
+     */
     public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): CategorySyndicationPolicyAwarePackageGatedInterface
     {
-        $fallbackGatePayload = $this->fallbackAwareGateService->buildGatedPublishPackage($packageId, $destinationId, $categoryId, $version, $localeMode, $categoryData, $fieldMap, $requiredFields, $actorId, $reason)->payload();
-        $policyPayload = $this->destinationMediaPolicyPreferenceService->evaluate($destinationId, $categoryId, $actorId, $reason)->payload();
-
+        $fallbackAware = $this->fallbackAwareGateService->buildGatedPublishPackage($packageId, $destinationId, $categoryId, $version, $localeMode, $categoryData, $fieldMap, $requiredFields, $actorId, $reason)->payload();
+        $preference = $this->preferenceService->evaluate($destinationId, $categoryId, $actorId, $reason)->payload();
         $report = $this->policy->buildReport(
-            is_array($fallbackGatePayload['packageMissingRequiredFields'] ?? null) ? $fallbackGatePayload['packageMissingRequiredFields'] : [],
-            $policyPayload,
-            $fallbackGatePayload,
+            is_array($fallbackAware['packageMissingRequiredFields'] ?? null) ? $fallbackAware['packageMissingRequiredFields'] : [],
+            $preference,
+            $fallbackAware,
         );
 
-        return new CategorySyndicationPolicyAwarePackageGated(
-            [
-                'packageId' => trim($packageId),
-                'destinationId' => trim($destinationId),
-                'categoryId' => trim($categoryId),
-                'version' => trim($version),
-                'localeMode' => trim($localeMode),
-                'payload' => is_array($fallbackGatePayload['payload'] ?? null) ? $fallbackGatePayload['payload'] : [],
-                'fieldMap' => is_array($fallbackGatePayload['fieldMap'] ?? null) ? $fallbackGatePayload['fieldMap'] : [],
-                'requiredFields' => is_array($fallbackGatePayload['requiredFields'] ?? null) ? $fallbackGatePayload['requiredFields'] : [],
-                'mediaPolicyMode' => $report->mediaPolicyMode(),
-                'packageMissingRequiredFields' => $report->packageMissingRequiredFields(),
-                'requiredMissing' => $report->requiredMissing(),
-                'warnings' => $report->warnings(),
-                'checks' => $report->checks(),
-                'exactMatchedBindingIds' => $report->exactMatchedBindingIds(),
-                'fallbackMatchedBindingIds' => $report->fallbackMatchedBindingIds(),
-                'strictPublishable' => $report->strictPublishable(),
-                'fallbackPublishable' => $report->fallbackPublishable(),
-                'resolvedPublishable' => $report->resolvedPublishable(),
-                'fallbackUsed' => $report->fallbackUsed(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
-            ],
-            new \DateTimeImmutable(),
-        );
+        return new CategorySyndicationPolicyAwarePackageGated([
+            'packageId' => trim($packageId),
+            'destinationId' => trim($destinationId),
+            'categoryId' => trim($categoryId),
+            'version' => trim($version),
+            'localeMode' => trim($localeMode),
+            'payload' => is_array($fallbackAware['payload'] ?? null) ? $fallbackAware['payload'] : [],
+            'fieldMap' => is_array($fallbackAware['fieldMap'] ?? null) ? $fallbackAware['fieldMap'] : [],
+            'requiredFields' => is_array($fallbackAware['requiredFields'] ?? null) ? $fallbackAware['requiredFields'] : [],
+            'mediaPolicyMode' => $report->mediaPolicyMode(),
+            'resolvedPublishable' => $report->resolvedPublishable(),
+            'fallbackUsed' => $report->fallbackUsed(),
+            'warnings' => $report->warnings(),
+            'checks' => $report->checks(),
+            'exactMatchedBindingIds' => $report->exactMatchedBindingIds(),
+            'fallbackMatchedBindingIds' => $report->fallbackMatchedBindingIds(),
+            'actorId' => trim($actorId),
+            'reason' => trim($reason),
+        ], new \DateTimeImmutable());
     }
 }

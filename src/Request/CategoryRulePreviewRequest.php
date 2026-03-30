@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Request;
@@ -8,7 +9,7 @@ final class CategoryRulePreviewRequest
 {
     /**
      * @param array<mixed>|null $spec
-     * @param list<string> $errors
+     * @param list<string>      $errors
      */
     public function __construct(
         public readonly ?array $spec,

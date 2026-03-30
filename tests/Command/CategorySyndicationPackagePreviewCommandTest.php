@@ -20,6 +20,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
     {
         $service = $this->createMock(CatalogSyndicationPackageGateServiceInterface::class);
         $service->method('buildGatedPublishPackage')->willReturn(new class implements \App\EventInterface\CategorySyndicationPackageGatedInterface {
+            /** @param array<string, mixed> $payload */
             public function __construct(private readonly array $payload = ['publishable' => true, 'packageId' => 'pkg-1'])
             {
             }
@@ -49,41 +50,49 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
                 return 'per_locale';
             }
 
+            /** @return array<string, mixed> */
             public function payloadData(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function fieldMap(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function requiredFields(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function packageMissingRequiredFields(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function mediaRequiredMissing(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function warnings(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function checks(): array
             {
                 return [];
             }
 
+            /** @return array<string, mixed> */
             public function matchedBindingIds(): array
             {
                 return [];

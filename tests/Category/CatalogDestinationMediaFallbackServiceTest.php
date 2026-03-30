@@ -51,13 +51,42 @@ final class CatalogDestinationMediaFallbackServiceTest extends TestCase
             'register destination'
         );
 
-        $event = $service->evaluate('destination-1802', 'category-1802', 'operator-9', 'evaluate fallback');
-        $payload = $event->payload();
-
+        $payload = $this->normalizePayload($service->evaluate('destination-1802', 'category-1802', 'operator-9', 'evaluate fallback')->payload());
         self::assertFalse($payload['publishable']);
         self::assertTrue($payload['publishableWithFallback']);
         self::assertSame(['bind-global-primary'], $payload['fallbackMatchedBindingIds']);
         self::assertSame([], $payload['requiredMissing']);
         self::assertContains('sharedFallbackUsed', $payload['warnings']);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{publishable: bool, publishableWithFallback: bool, fallbackMatchedBindingIds: list<string>, requiredMissing: list<string>, warnings: list<string>}
+     */
+    private function normalizePayload(array $payload): array
+    {
+        return [
+            'publishable' => (bool) ($payload['publishable'] ?? false),
+            'publishableWithFallback' => (bool) ($payload['publishableWithFallback'] ?? false),
+            'fallbackMatchedBindingIds' => $this->stringList($payload['fallbackMatchedBindingIds'] ?? []),
+            'requiredMissing' => $this->stringList($payload['requiredMissing'] ?? []),
+            'warnings' => $this->stringList($payload['warnings'] ?? []),
+        ];
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_map(fn (mixed $item): string => $this->scalarString($item), $value));
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

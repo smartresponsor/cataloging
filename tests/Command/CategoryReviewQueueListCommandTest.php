@@ -53,8 +53,8 @@ final class CategoryReviewQueueListCommandTest extends TestCase
         $lines = array_values(array_filter(array_map('trim', explode(PHP_EOL, trim($tester->getDisplay())))));
         self::assertCount(2, $lines);
 
-        $first = json_decode($lines[0], true, 512, JSON_THROW_ON_ERROR);
-        $second = json_decode($lines[1], true, 512, JSON_THROW_ON_ERROR);
+        $first = $this->decodeQueueEntry($lines[0]);
+        $second = $this->decodeQueueEntry($lines[1]);
 
         self::assertSame('req-urgent', $first['requestId']);
         self::assertSame('urgent', $first['priority']);
@@ -62,5 +62,29 @@ final class CategoryReviewQueueListCommandTest extends TestCase
         self::assertSame('normal', $second['priority']);
         self::assertFalse($first['readyForReview']);
         self::assertContains('request_not_started', $first['readinessWarnings']);
+    }
+
+    /**
+     * @return array{requestId: string, priority: string, readyForReview: bool, readinessWarnings: list<string>}
+     */
+    private function decodeQueueEntry(string $json): array
+    {
+        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($decoded);
+
+        return [
+            'requestId' => $this->scalarString($decoded['requestId'] ?? ''),
+            'priority' => $this->scalarString($decoded['priority'] ?? ''),
+            'readyForReview' => (bool) ($decoded['readyForReview'] ?? false),
+            'readinessWarnings' => array_values(array_map(
+                fn (mixed $warning): string => $this->scalarString($warning),
+                is_array($decoded['readinessWarnings'] ?? null) ? $decoded['readinessWarnings'] : [],
+            )),
+        ];
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

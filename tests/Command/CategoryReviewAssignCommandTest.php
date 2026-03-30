@@ -43,6 +43,8 @@ final class CategoryReviewAssignCommandTest extends TestCase
         self::assertSame(0, $exitCode);
 
         $payload = json_decode(trim($tester->getDisplay()), true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($payload);
+        /* @var array<string,mixed> $payload */
         self::assertSame('req-100', $payload['requestId']);
         self::assertSame('cat-100', $payload['categoryId']);
         self::assertSame('reviewer-1', $payload['assignedReviewer']);

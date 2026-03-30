@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategorySyndicationPackagePreviewCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly CatalogSyndicationPackageGateServiceInterface $service)
     {
@@ -37,26 +39,18 @@ final class CategorySyndicationPackagePreviewCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $categoryId = (string) $input->getArgument('categoryId');
-        $actorId = (string) $input->getOption('actor-id');
-        $reason = (string) $input->getOption('reason');
-        $format = (string) $input->getOption('format');
+        $categoryId = $this->argumentString($input, 'categoryId');
+        $actorId = $this->optionString($input, 'actor-id', 'cli');
+        $reason = $this->optionString($input, 'reason', 'preview');
+        $format = $this->optionString($input, 'format', 'json');
 
-        $mapping = json_decode((string) ($input->getOption('mapping') ?? '{}'), true, 512, JSON_THROW_ON_ERROR);
-        $destinationSettings = json_decode((string) ($input->getOption('destination') ?? '{}'), true, 512, JSON_THROW_ON_ERROR);
+        $mapping = $this->jsonOptionMap($input, 'mapping');
+        $destinationSettings = $this->jsonOptionMap($input, 'destination');
 
-        $destinationId = is_string($destinationSettings['destinationId'] ?? null) && '' !== trim((string) $destinationSettings['destinationId'])
-            ? trim((string) $destinationSettings['destinationId'])
-            : 'cli-preview-destination';
-
-        $packageId = is_string($mapping['packageId'] ?? null) && '' !== trim((string) $mapping['packageId'])
-            ? trim((string) $mapping['packageId'])
-            : 'cli-preview-package';
-
-        $version = is_scalar($mapping['version'] ?? null) ? trim((string) $mapping['version']) : '1';
-        $localeMode = is_string($mapping['localeMode'] ?? null) && '' !== trim((string) $mapping['localeMode'])
-            ? trim((string) $mapping['localeMode'])
-            : 'per_locale';
+        $destinationId = $this->nonEmptyString($mapping['destinationId'] ?? $destinationSettings['destinationId'] ?? null, 'cli-preview-destination');
+        $packageId = $this->nonEmptyString($mapping['packageId'] ?? null, 'cli-preview-package');
+        $version = $this->nonEmptyString($mapping['version'] ?? null, '1');
+        $localeMode = $this->nonEmptyString($mapping['localeMode'] ?? null, 'per_locale');
 
         $event = $this->service->buildGatedPublishPackage(
             $packageId,
@@ -64,9 +58,9 @@ final class CategorySyndicationPackagePreviewCommand extends Command
             $categoryId,
             $version,
             $localeMode,
-            is_array($mapping['payload'] ?? null) ? $mapping['payload'] : [],
-            is_array($mapping['fieldMap'] ?? null) ? $mapping['fieldMap'] : [],
-            is_array($mapping['requiredFields'] ?? null) ? $mapping['requiredFields'] : [],
+            $this->nestedMap($mapping['payload'] ?? null),
+            $this->stringMap($mapping['fieldMap'] ?? null),
+            $this->stringList($mapping['requiredFields'] ?? null),
             $actorId,
             $reason,
         );

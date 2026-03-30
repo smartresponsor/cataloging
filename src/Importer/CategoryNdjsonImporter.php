@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Importer;
@@ -16,6 +17,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
         $this->service = $service;
     }
 
+    /** @return array{ok:int,fail:int,warnings:int,report:list<string>} */
     public function import(string $path, bool $dryRun = true): array
     {
         $ok = 0;
@@ -46,15 +48,13 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 
                     if ('category' === $type) {
                         if (!$dryRun) {
-                            $actorId = isset($data['actorId']) ? (string) $data['actorId'] : 'system';
-                            $this->service->create(
-                                $actorId,
-                                (string) $data['taxonomyId'],
-                                isset($data['parentId']) ? (string) $data['parentId'] : null,
-                                (array) $data['name'],
-                                (array) $data['slug'],
-                                (array) ($data['meta'] ?? [])
-                            );
+                            $actorId = $this->optionalStringValue($data, 'actorId') ?? 'system';
+                            $taxonomyId = $this->requiredStringValue($data, 'taxonomyId');
+                            $parentId = $this->optionalStringValue($data, 'parentId');
+                            $name = $this->stringMapValue($data, 'name');
+                            $slug = $this->stringMapValue($data, 'slug');
+                            $meta = $this->metaMapValue($data, 'meta');
+                            $this->service->create($actorId, $taxonomyId, $parentId, $name, $slug, $meta);
                         }
                         ++$ok;
                         continue;
@@ -62,13 +62,13 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 
                     if ('link' === $type) {
                         if (!$dryRun) {
-                            $actorId = isset($data['actorId']) ? (string) $data['actorId'] : 'system';
+                            $actorId = $this->optionalStringValue($data, 'actorId') ?? 'system';
                             $this->service->attach(
                                 $actorId,
-                                (string) $data['categoryId'],
-                                (string) $data['targetDomain'],
-                                (string) $data['targetClass'],
-                                (string) $data['targetId']
+                                $this->requiredStringValue($data, 'categoryId'),
+                                $this->requiredStringValue($data, 'targetDomain'),
+                                $this->requiredStringValue($data, 'targetClass'),
+                                $this->requiredStringValue($data, 'targetId')
                             );
                         }
                         ++$ok;
@@ -104,11 +104,96 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
     /** @param array<string,mixed> $data */
     private function requireType(array $data): string
     {
-        $type = $data['type'] ?? null;
-        if (!is_string($type) || '' === trim($type)) {
+        $type = $this->requiredStringValue($data, 'type');
+        if ('' === trim($type)) {
             throw new \InvalidArgumentException('Invalid row');
         }
 
         return $type;
+    }
+
+    /** @param array<string,mixed> $data */
+    private function requiredStringValue(array $data, string $key): string
+    {
+        $value = $this->optionalStringValue($data, $key);
+        if (null === $value) {
+            throw new \InvalidArgumentException(sprintf('Missing required string key: %s', $key));
+        }
+
+        return $value;
+    }
+
+    /** @param array<string,mixed> $data */
+    private function optionalStringValue(array $data, string $key): ?string
+    {
+        if (!array_key_exists($key, $data)) {
+            return null;
+        }
+        $value = $data[$key];
+        if (!is_scalar($value)) {
+            return null;
+        }
+        $normalized = trim((string) $value);
+
+        return '' === $normalized ? null : $normalized;
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     *
+     * @return array<string,string>
+     */
+    private function stringMapValue(array $data, string $key): array
+    {
+        $value = $data[$key] ?? null;
+        if (!is_array($value)) {
+            throw new \InvalidArgumentException(sprintf('Missing required map key: %s', $key));
+        }
+        $normalized = [];
+        foreach ($value as $entryKey => $entryValue) {
+            if (!is_string($entryKey) || !is_scalar($entryValue)) {
+                continue;
+            }
+            $normalized[$entryKey] = (string) $entryValue;
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     *
+     * @return array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null>
+     */
+    private function metaMapValue(array $data, string $key): array
+    {
+        $value = $data[$key] ?? [];
+        if (!is_array($value)) {
+            return [];
+        }
+        $normalized = [];
+        foreach ($value as $entryKey => $entryValue) {
+            if (!is_string($entryKey)) {
+                continue;
+            }
+            if (is_array($entryValue)) {
+                $nested = [];
+                foreach ($entryValue as $nestedKey => $nestedValue) {
+                    if (!is_string($nestedKey)) {
+                        continue;
+                    }
+                    if (is_bool($nestedValue) || is_float($nestedValue) || is_int($nestedValue) || is_string($nestedValue) || null === $nestedValue) {
+                        $nested[$nestedKey] = $nestedValue;
+                    }
+                }
+                $normalized[$entryKey] = $nested;
+                continue;
+            }
+            if (is_bool($entryValue) || is_float($entryValue) || is_int($entryValue) || is_string($entryValue) || null === $entryValue) {
+                $normalized[$entryKey] = $entryValue;
+            }
+        }
+
+        return $normalized;
     }
 }

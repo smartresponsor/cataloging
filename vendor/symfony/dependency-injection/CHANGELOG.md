@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+8.0
+---
+
+ * Remove support for using `$this` or the loader's internal scope from PHP config files; use the `$loader` variable instead
+ * Remove `ExtensionInterface::getXsdValidationBasePath()` and `getNamespace()` without alternatives, the XML configuration format is no longer supported
+ * Add argument `$throwOnAbstract` to `ContainerBuilder::findTaggedResourceIds()`
+ * Registering a service without a class when its id is a non-existing FQCN throws an error
+ * Remove `#[TaggedIterator]` and `#[TaggedLocator]` attributes, replaced by `#[AutowireLocator]` and `#[AutowireIterator]`
+ * Remove `ContainerBuilder::getAutoconfiguredAttributes()`, replaced by `ContainerBuilder::getAttributeAutoconfigurators()`
+ * Remove `!tagged` tag, use `!tagged_iterator` instead
+ * Add argument `$target` to `ContainerBuilder::registerAliasForArgument()`
+ * Remove support for the XML configuration format
+ * Remove the fluent PHP format for semantic configuration, instantiate builders inline with the config array as argument and return them instead
+
 7.4
 ---
 

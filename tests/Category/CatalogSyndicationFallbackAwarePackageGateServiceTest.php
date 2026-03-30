@@ -40,7 +40,7 @@ final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCa
             [
                 'channel' => 'web',
                 'locale' => 'en_US',
-                'requiredMediaRoles' => ['banner'],
+                'requiredMediaRoles' => '["banner"]',
             ],
             'operator-1',
         ));
@@ -87,6 +87,7 @@ final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCa
             'test',
         );
 
+        /** @var array{strictPublishable:bool,fallbackPublishable:bool,warnings:list<string>,fallbackMatchedBindingIds:list<string>} $payload */
         $payload = $event->payload();
         self::assertFalse($payload['strictPublishable']);
         self::assertTrue($payload['fallbackPublishable']);

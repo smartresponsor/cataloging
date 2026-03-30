@@ -20,6 +20,9 @@ final class CategoryMediaReadinessEvaluateCommandTest extends TestCase
     {
         $service = $this->createMock(CatalogDestinationMediaReadinessServiceInterface::class);
         $service->method('evaluate')->willReturn(new class implements \App\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface {
+            /**
+             * @param array{publishable: bool, checks: array{destinationMediaPublishable: bool}} $payload
+             */
             public function __construct(private readonly array $payload = ['publishable' => true, 'checks' => ['destinationMediaPublishable' => true]])
             {
             }
@@ -49,21 +52,25 @@ final class CategoryMediaReadinessEvaluateCommandTest extends TestCase
                 return true;
             }
 
+            /** @return list<string> */
             public function requiredMissing(): array
             {
                 return [];
             }
 
+            /** @return list<string> */
             public function warnings(): array
             {
                 return [];
             }
 
+            /** @return array{destinationMediaPublishable: bool} */
             public function checks(): array
             {
                 return ['destinationMediaPublishable' => true];
             }
 
+            /** @return list<string> */
             public function matchedBindingIds(): array
             {
                 return [];

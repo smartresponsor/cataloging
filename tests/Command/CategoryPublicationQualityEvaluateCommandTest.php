@@ -44,9 +44,10 @@ final class CategoryPublicationQualityEvaluateCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
         $payload = json_decode(trim($tester->getDisplay()), true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($payload);
 
-        self::assertSame('cat-300', $payload['categoryId']);
-        self::assertTrue($payload['publishableQuality']);
-        self::assertSame('attention', $payload['riskLevel']);
+        self::assertSame('cat-300', $payload['categoryId'] ?? null);
+        self::assertTrue((bool) ($payload['publishableQuality'] ?? false));
+        self::assertSame('attention', $payload['riskLevel'] ?? null);
     }
 }
