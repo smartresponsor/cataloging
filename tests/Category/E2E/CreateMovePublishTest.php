@@ -9,12 +9,47 @@ declare(strict_types=1);
 namespace App\Tests\Category\E2E;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Panther\PantherTestCaseTrait;
 
 final class CreateMovePublishTest extends TestCase
 {
-    public function testFlow(): void
+    use PantherTestCaseTrait;
+
+    public function testStatusEndpointIsReachableThroughBrowser(): void
     {
-        // here we would call HTTP client in real environment
-        $this->assertTrue(true, 'E2E flow placeholder');
+        $webServerPort = $this->freeLocalPort();
+        $browserDriverPort = $this->freeLocalPort();
+
+        $client = self::createPantherClient([
+            'browser' => 'firefox',
+            'webServerDir' => dirname(__DIR__, 3).'/public',
+            'router' => dirname(__DIR__, 3).'/public/index.php',
+            'hostname' => '127.0.0.1',
+            'port' => $webServerPort,
+            'readinessPath' => '/status',
+        ], [], [
+            'port' => $browserDriverPort,
+        ]);
+
+        $client->request('GET', '/status');
+        $currentUrl = $client->getCurrentURL();
+
+        self::assertSame(200, $client->getInternalResponse()->getStatusCode());
+        self::assertIsString($currentUrl);
+        self::assertStringContainsString('/status', $currentUrl);
+    }
+
+    private function freeLocalPort(): int
+    {
+        $socket = stream_socket_server('tcp://127.0.0.1:0', $errorCode, $errorMessage);
+        self::assertNotFalse($socket, sprintf('Failed to reserve local test port: %d %s', $errorCode, $errorMessage));
+
+        $address = stream_socket_get_name($socket, false);
+        fclose($socket);
+
+        self::assertIsString($address);
+        $parts = explode(':', $address);
+
+        return (int) end($parts);
     }
 }

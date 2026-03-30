@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Tests\Command;
@@ -16,6 +17,8 @@ final class CategoryRuntimeStatusCommandSignatureTest extends TestCase
         $parameters = $reflection->getParameters();
 
         self::assertCount(1, $parameters);
-        self::assertSame(CategoryRuntimeStatusViewBuilderInterface::class, $parameters[0]->getType()?->getName());
+        $type = $parameters[0]->getType();
+        self::assertInstanceOf(\ReflectionNamedType::class, $type);
+        self::assertSame(CategoryRuntimeStatusViewBuilderInterface::class, $type->getName());
     }
 }
