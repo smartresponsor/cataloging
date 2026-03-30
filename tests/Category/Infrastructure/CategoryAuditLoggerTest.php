@@ -17,11 +17,14 @@ final class CategoryAuditLoggerTest extends TestCase
     public function testLog(): void
     {
         $logger = new class extends AbstractLogger {
+            /** @var list<array{0:string,1:string,2:array<string,mixed>}> */
             public array $records = [];
 
+            /** @param array<string,mixed> $context */
             public function log($level, string|\Stringable $message, array $context = []): void
             {
-                $this->records[] = [(string) $level, (string) $message, $context];
+                $normalizedLevel = is_scalar($level) || null === $level ? (string) $level : get_debug_type($level);
+                $this->records[] = [$normalizedLevel, (string) $message, $context];
             }
         };
         $audit = new CategoryAuditLogger($logger);

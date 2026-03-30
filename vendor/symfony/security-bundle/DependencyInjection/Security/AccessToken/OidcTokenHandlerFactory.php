@@ -13,7 +13,6 @@ namespace Symfony\Bundle\SecurityBundle\DependencyInjection\Security\AccessToken
 
 use Jose\Component\Core\Algorithm;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
@@ -122,39 +121,8 @@ class OidcTokenHandlerFactory implements TokenHandlerFactoryInterface
         $node
             ->arrayNode($this->getKey())
                 ->validate()
-                    ->ifTrue(static fn ($v) => !isset($v['algorithm']) && !isset($v['algorithms']))
-                    ->thenInvalid('You must set either "algorithm" or "algorithms".')
-                ->end()
-                ->validate()
-                    ->ifTrue(static fn ($v) => !isset($v['discovery']) && !isset($v['key']) && !isset($v['keyset']))
-                    ->thenInvalid('You must set either "discovery" or "key" or "keyset".')
-                ->end()
-                ->beforeNormalization()
-                    ->ifArray()
-                    ->then(static function ($v) {
-                        if (isset($v['algorithms']) && isset($v['algorithm'])) {
-                            throw new InvalidConfigurationException('You cannot use both "algorithm" and "algorithms" at the same time.');
-                        }
-                        if (\is_string($v['algorithm'] ?? null)) {
-                            $v['algorithms'] = [$v['algorithm']];
-                            unset($v['algorithm']);
-                        }
-
-                        return $v;
-                    })
-                ->end()
-                ->beforeNormalization()
-                    ->ifArray()
-                    ->then(static function ($v) {
-                        if (isset($v['keyset']) && isset($v['key'])) {
-                            throw new InvalidConfigurationException('You cannot use both "key" and "keyset" at the same time.');
-                        }
-                        if (\is_string($v['key'] ?? null)) {
-                            $v['keyset'] = \sprintf('{"keys":[%s]}', $v['key']);
-                        }
-
-                        return $v;
-                    })
+                    ->ifTrue(static fn ($v) => !isset($v['discovery']) && !isset($v['keyset']))
+                    ->thenInvalid('You must set either "discovery" or "keyset".')
                 ->end()
                 ->children()
                     ->arrayNode('discovery')
@@ -190,18 +158,10 @@ class OidcTokenHandlerFactory implements TokenHandlerFactoryInterface
                         ->isRequired()
                         ->scalarPrototype()->end()
                     ->end()
-                    ->arrayNode('algorithm')
-                        ->info('Algorithm used to sign the token.')
-                        ->setDeprecated('symfony/security-bundle', '7.1', 'The "%node%" option is deprecated and will be removed in 8.0. Use the "algorithms" option instead.')
-                    ->end()
                     ->arrayNode('algorithms', 'algorithm')
                         ->info('Algorithms used to sign the token.')
                         ->isRequired()
                         ->scalarPrototype()->end()
-                    ->end()
-                    ->scalarNode('key')
-                        ->info('JSON-encoded JWK used to sign the token (must contain a "kty" key).')
-                        ->setDeprecated('symfony/security-bundle', '7.1', 'The "%node%" option is deprecated and will be removed in 8.0. Use the "keyset" option instead.')
                     ->end()
                     ->scalarNode('keyset')
                         ->info('JSON-encoded JWKSet used to sign the token (must contain a list of valid public keys).')

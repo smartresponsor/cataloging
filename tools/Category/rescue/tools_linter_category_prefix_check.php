@@ -22,11 +22,12 @@ foreach ($rii as $file) {
         continue;
     }
 
-    if (!preg_match('~src/.*/Category/.*\.php$~', $file->getPathname())) {
+    $path = str_replace('\\', '/', $file->getPathname());
+    if (!preg_match('~(?:^|/)src/.*/Category/[^/]+\.php$~', $path)) {
         continue;
     }
 
-    $name = basename($file->getPathname(), '.php');
+    $name = basename($path, '.php');
     if (!preg_match('/^Category([A-Z].*)?$|^Category$/', $name)) {
         fwrite(STDERR, "Prefix violation: {$file->getPathname()}\n");
         ++$fail;

@@ -1,18 +1,19 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Service\CategoryMovePreviewService;
+use App\Service\CatalogMovePreviewService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class AdminCategoryController extends AbstractController
 {
-    public function __construct(private readonly CategoryMovePreviewService $categoryMovePreviewService)
+    public function __construct(private readonly CatalogMovePreviewService $categoryMovePreviewService)
     {
     }
 

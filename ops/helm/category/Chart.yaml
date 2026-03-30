@@ -1,6 +1,6 @@
 apiVersion: v2
 name: category
-description: SmartResponsor Category service
+description: App Category service
 type: application
 version: 0.1.0
 appVersion: "1.0.0"

@@ -1,11 +1,14 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\EventInterface;
 
 interface CategoryWorkflowTransitionedInterface
 {
+    public function eventName(): string;
+
     /** @return array<string,mixed> */
     public function payload(): array;
 }

@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Infrastructure;
@@ -12,6 +13,7 @@ final class CategoryAuditLogger
     {
     }
 
+    /** @param array<string, mixed> $context */
     public function log(string $action, array $context = []): void
     {
         $this->logger->info('category.audit', ['action' => $action] + $context);

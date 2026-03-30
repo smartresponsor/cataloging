@@ -58,6 +58,7 @@ $config
         'no_php4_constructor' => false,
         'ordered_traits' => false,
         'no_homoglyph_names' => false,
+        'single_line_comment_style' => false,
     ])
     ->setFinder($finder);
 

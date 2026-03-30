@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Infrastructure;
@@ -12,6 +13,7 @@ final class ProductWebhookPublisher
     {
     }
 
+    /** @param array<string, mixed> $event */
     public function publish(array $event): void
     {
         $this->client->request('POST', $this->url, ['json' => $event]);

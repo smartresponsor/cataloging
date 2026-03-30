@@ -60,7 +60,6 @@ use Symfony\Component\Security\Core\User\ChainUserChecker;
 use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Http\Authentication\ExposeSecurityLevel;
 use Symfony\Component\Security\Http\Authenticator\Debug\TraceableAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Debug\TraceableAuthenticatorManagerListener;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
@@ -155,9 +154,6 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
                     $config['access_decision_manager']['allow_if_equal_granted_denied']
                 ));
         }
-
-        $container->setParameter('security.authentication.hide_user_not_found', ExposeSecurityLevel::All !== $config['expose_security_errors']);
-        $container->deprecateParameter('security.authentication.hide_user_not_found', 'symfony/security-bundle', '7.4');
 
         $container->setParameter('.security.authentication.expose_security_errors', $config['expose_security_errors']);
 
@@ -715,7 +711,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
             $hasherMap[$class] = $this->createHasher($hasher);
             // The key is not a class, so we register an alias for argument to
             // ease getting the hasher
-            if (!class_exists($class) && !interface_exists($class)) {
+            if (!class_exists($class) && !interface_exists($class, false)) {
                 $id = 'security.password_hasher.'.$class;
                 $container
                     ->register($id, PasswordHasherInterface::class)
@@ -1039,22 +1035,6 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
     public function addUserProviderFactory(UserProviderFactoryInterface $factory): void
     {
         $this->userProviderFactories[] = $factory;
-    }
-
-    /**
-     * @deprecated since Symfony 7.4, to be removed in Symfony 8.0 together with XML support.
-     */
-    public function getXsdValidationBasePath(): string|false
-    {
-        return __DIR__.'/../Resources/config/schema';
-    }
-
-    /**
-     * @deprecated since Symfony 7.4, to be removed in Symfony 8.0 together with XML support.
-     */
-    public function getNamespace(): string
-    {
-        return 'http://symfony.com/schema/dic/security';
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface

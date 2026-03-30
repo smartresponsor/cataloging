@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -10,6 +11,7 @@ use App\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInte
 
 final class CategorySyndicationDestinationGovernanceSummaryPolicy implements CategorySyndicationDestinationGovernanceSummaryPolicyInterface
 {
+    /** @param list<array<string,mixed>> $trailPayloads */
     public function buildSummary(string $destinationId, array $trailPayloads): CategorySyndicationDestinationGovernanceSummaryInterface
     {
         $statusCounts = [
@@ -33,16 +35,12 @@ final class CategorySyndicationDestinationGovernanceSummaryPolicy implements Cat
         $deliveredTrailCount = 0;
 
         foreach ($trailPayloads as $payload) {
-            if (!is_array($payload)) {
-                continue;
-            }
-
-            $status = trim((string) ($payload['deliveryStatus'] ?? 'pending'));
+            $status = $this->scalarString($payload['deliveryStatus'] ?? 'pending');
             if ('' !== $status) {
                 $statusCounts[$status] = (int) ($statusCounts[$status] ?? 0) + 1;
             }
 
-            $mode = trim((string) ($payload['mediaPolicyMode'] ?? 'strict_exact'));
+            $mode = $this->scalarString($payload['mediaPolicyMode'] ?? 'strict_exact');
             if ('' !== $mode) {
                 $policyModeCounts[$mode] = (int) ($policyModeCounts[$mode] ?? 0) + 1;
             }
@@ -59,16 +57,17 @@ final class CategorySyndicationDestinationGovernanceSummaryPolicy implements Cat
             if ((bool) ($payload['retryScheduled'] ?? false)) {
                 ++$retryScheduledCount;
             }
-            if ((bool) ($payload['checks']['governanceTrailHasFailures'] ?? false)) {
+
+            $checks = is_array($payload['checks'] ?? null) ? $payload['checks'] : [];
+            if ((bool) ($checks['governanceTrailHasFailures'] ?? false)) {
                 ++$failureTrailCount;
             }
-            if ((bool) ($payload['checks']['governanceTrailHasDelivered'] ?? false)) {
+            if ((bool) ($checks['governanceTrailHasDelivered'] ?? false)) {
                 ++$deliveredTrailCount;
             }
 
-            foreach (($payload['warnings'] ?? []) as $warning) {
-                $warning = trim((string) $warning);
-                if ('' !== $warning && !in_array($warning, $warningCodes, true)) {
+            foreach ($this->stringList($payload['warnings'] ?? null) as $warning) {
+                if (!in_array($warning, $warningCodes, true)) {
                     $warningCodes[] = $warning;
                 }
             }
@@ -76,7 +75,7 @@ final class CategorySyndicationDestinationGovernanceSummaryPolicy implements Cat
 
         sort($warningCodes);
 
-        $totalTrails = count(array_filter($trailPayloads, 'is_array'));
+        $totalTrails = count($trailPayloads);
         $checks = [
             'destinationGovernanceSummaryHasTrails' => $totalTrails > 0,
             'destinationGovernanceSummaryHasResolvedPublishable' => $resolvedPublishableCount > 0,
@@ -100,5 +99,31 @@ final class CategorySyndicationDestinationGovernanceSummaryPolicy implements Cat
             $warningCodes,
             $checks,
         );
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? trim((string) $value) : '';
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($value as $item) {
+            if (!is_scalar($item)) {
+                continue;
+            }
+            $normalized = trim((string) $item);
+            if ('' !== $normalized) {
+                $result[] = $normalized;
+            }
+        }
+
+        return array_values($result);
     }
 }

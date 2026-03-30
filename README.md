@@ -39,3 +39,13 @@ Typical local checks:
 - `composer report:owner-overlap`
 - `composer report:route-inventory`
 - `composer report:runtime-proof`
+
+## Chrome MCP
+
+The repository now includes a project-local MCP config in `.mcp.json` for the official `chrome-devtools-mcp` server.
+
+Local commands:
+- `npm run mcp:chrome` starts Chrome MCP in headless isolated mode.
+- `npm run mcp:chrome:check` validates that the CLI is available and prints the current option surface.
+
+The committed config disables usage statistics and CrUX field lookups for local test runs.

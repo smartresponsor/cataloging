@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -13,12 +14,17 @@ final class ImportPipeline
         $this->dlqPath = $dlqPath;
     }
 
+    /** @param array<string, mixed> $item */
     public function process(array $item): bool
     {
         return 'ok' === $this->processResult($item)['status'];
     }
 
-    /** @return array{status:'ok'|'failed', key:string, reason:?string} */
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return array{status:'ok'|'failed', key:string, reason:?string}
+     */
     public function processResult(array $item): array
     {
         $key = $this->key($item);
@@ -42,6 +48,7 @@ final class ImportPipeline
         }
     }
 
+    /** @param array<string, mixed> $item */
     private function toDlq(array $item, string $reason): void
     {
         if (!is_dir($this->dlqPath)) {
@@ -60,16 +67,31 @@ final class ImportPipeline
         }
     }
 
+    /** @param array<string, mixed> $item */
     private function key(array $item): string
     {
-        return sha1(json_encode([$item['slug'] ?? '', $item['locale'] ?? 'en'], JSON_UNESCAPED_SLASHES));
+        $encoded = json_encode([
+            $this->scalarString($item['slug'] ?? ''),
+            $this->scalarString($item['locale'] ?? 'en'),
+        ], JSON_UNESCAPED_SLASHES);
+        if (false === $encoded) {
+            throw new \RuntimeException('Failed to encode import item key');
+        }
+
+        return sha1($encoded);
     }
 
+    /** @param array<string, mixed> $item */
     private function assertProcessable(array $item): void
     {
         $slug = $item['slug'] ?? null;
         if (!is_string($slug) || '' === trim($slug)) {
             throw new \InvalidArgumentException('Import item slug is required');
         }
+    }
+
+    private function scalarString(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? trim((string) $value) : $default;
     }
 }
