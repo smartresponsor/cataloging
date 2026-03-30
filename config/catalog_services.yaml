@@ -25,6 +25,7 @@ services:
   App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface: '@App\Repository\CatalogCollectionProjectionRepository'
 
   App\Service\CatalogCollectionService: ~
+  App\Service\CatalogLegacyCollectionFilterService: ~
   App\Service\CatalogMoveService: ~
 
   App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'
