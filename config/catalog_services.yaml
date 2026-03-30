@@ -27,9 +27,11 @@ services:
   App\Service\CatalogCollectionService: ~
   App\Service\CatalogLegacyCollectionFilterService: ~
   App\Service\CatalogMoveService: ~
+  App\Service\CatalogReadService: ~
 
   App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'
   App\ServiceInterface\CategoryMoveInterface: '@App\Service\CatalogMoveService'
+  App\ServiceInterface\CatalogReadServiceInterface: '@App\Service\CatalogReadService'
 
   App\Security\:
     resource: '../src/Security/'
