@@ -3,11 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category;
+namespace App\Service;
 
-use App\ServiceInterface\Category\CategoryCollectionServiceInterface;
-
-final class CategoryCollectionService implements CategoryCollectionServiceInterface
+final class CatalogLegacyCollectionFilterService
 {
     /**
      * @param list<array<string,mixed>> $products
