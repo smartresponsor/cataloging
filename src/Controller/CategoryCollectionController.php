@@ -6,14 +6,14 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Request\CategoryCollectionRequest;
-use App\Service\CollectionBuilder;
+use App\Service\CatalogCollectionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryCollectionController
 {
-    public function __construct(private readonly CollectionBuilder $builder)
+    public function __construct(private readonly CatalogCollectionService $service)
     {
     }
 
@@ -22,17 +22,16 @@ final class CategoryCollectionController
     {
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['errors' => $input->getErrors()], 400);
+            return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
         }
 
-        $all = [
-            ['id' => 1, 'slug' => 'root', 'locale' => 'en', 'merchant' => 'default'],
-            ['id' => 2, 'slug' => 'electronics', 'locale' => 'en', 'merchant' => 'default', 'tag' => 'featured'],
-            ['id' => 3, 'slug' => 'ropa', 'locale' => 'es', 'merchant' => 'default'],
-        ];
-        $result = $this->builder->build($all, $this->normalizeRules($input->rules));
+        $result = $this->service->build($this->normalizeRules($input->rules));
 
-        return new JsonResponse(['data' => $result]);
+        return new JsonResponse([
+            'ok' => true,
+            'data' => $result,
+            'total' => count($result),
+        ]);
     }
 
     /**
