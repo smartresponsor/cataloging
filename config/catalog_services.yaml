@@ -25,6 +25,10 @@ services:
   App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface: '@App\Repository\CatalogCollectionProjectionRepository'
 
   App\Service\CatalogCollectionService: ~
+  App\Service\CatalogMoveService: ~
+
+  App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'
+  App\ServiceInterface\CategoryMoveInterface: '@App\Service\CatalogMoveService'
 
   App\Security\:
     resource: '../src/Security/'
