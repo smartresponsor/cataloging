@@ -5,16 +5,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\CategoryEntity;
 use App\Repository\CatalogRepository;
 use App\ServiceInterface\CatalogReadServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 final class CatalogReadService implements CatalogReadServiceInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
         private readonly CacheInterface $cache,
         private readonly CatalogRepository $catalogRepository,
     ) {
@@ -23,12 +20,7 @@ final class CatalogReadService implements CatalogReadServiceInterface
     /** @return array{id:string,name:string,slug:string,path:string,depth:int}|null */
     public function byId(string $id): ?array
     {
-        $category = $this->findCategory($id);
-        if (null === $category) {
-            return null;
-        }
-
-        return $this->normalizeCategory($category);
+        return $this->findCategory($id);
     }
 
     /** @return array{id:string,name:string,slug:string,path:string,depth:int,children:list<array{id:string,name:string,slug:string,path:string,depth:int}>}|null */
@@ -40,12 +32,12 @@ final class CatalogReadService implements CatalogReadServiceInterface
         }
 
         $descendants = $this->cache->get(
-            'cat_tree_'.$node->getId(),
-            fn (): array => $this->catalogRepository->findDescendantsLtree($node),
+            'cat_tree_'.$node['id'],
+            fn (): array => $this->catalogRepository->findDescendantRowsByPath($node['path']),
         );
 
         return [
-            ...$this->normalizeCategory($node),
+            ...$node,
             'children' => $this->normalizeCategories($descendants),
         ];
     }
@@ -59,8 +51,8 @@ final class CatalogReadService implements CatalogReadServiceInterface
         }
 
         $children = $this->cache->get(
-            'cat_children_'.$node->getId(),
-            fn (): array => $this->catalogRepository->findChildrenLtree($node),
+            'cat_children_'.$node['id'],
+            fn (): array => $this->catalogRepository->findChildrenRowsByPath($node['path']),
         );
 
         return $this->normalizeCategories($children);
@@ -81,8 +73,8 @@ final class CatalogReadService implements CatalogReadServiceInterface
         }
 
         $ancestors = $this->cache->get(
-            'cat_anc_'.$node->getId(),
-            fn (): array => $this->catalogRepository->findAncestorsLtree($node),
+            'cat_anc_'.$node['id'],
+            fn (): array => $this->catalogRepository->findAncestorRowsByPath($node['path']),
         );
 
         return $this->normalizeCategories($ancestors);
@@ -91,75 +83,48 @@ final class CatalogReadService implements CatalogReadServiceInterface
     /** @return array{item:list<array{id:string,name:string,slug:string,path:string,depth:int}>,after:string} */
     public function list(int $first, string $after): array
     {
-        $qb = $this->entityManager
-            ->getRepository(CategoryEntity::class)
-            ->createQueryBuilder('c')
-            ->orderBy('c.path', 'ASC')
-            ->setMaxResults($first);
-
-        if ('' !== $after) {
-            $cursor = base64_decode($after, true) ?: '';
-            if ('' !== $cursor) {
-                $qb->andWhere('c.path > :cursor')->setParameter('cursor', $cursor);
-            }
-        }
-
-        $list = $qb->getQuery()->getArrayResult();
-        $normalized = [];
-        foreach ($list as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
-            $normalized[] = [
-                'id' => is_scalar($row['id'] ?? null) ? (string) $row['id'] : '',
-                'name' => is_scalar($row['name'] ?? null) ? (string) $row['name'] : '',
-                'slug' => is_scalar($row['slug'] ?? null) ? (string) $row['slug'] : '',
-                'path' => is_scalar($row['path'] ?? null) ? (string) $row['path'] : '',
-                'depth' => is_numeric($row['depth'] ?? null) ? (int) $row['depth'] : 0,
-            ];
-        }
+        $rows = $this->catalogRepository->findPageRows($first, $after);
+        $normalized = $this->normalizeCategories($rows);
 
         $next = '';
         if (count($normalized) === $first) {
             $last = end($normalized);
-            $path = is_array($last) ? $last['path'] : '';
+            $path = is_array($last) ? ($last['path'] ?? '') : '';
             $next = is_string($path) && '' !== $path ? base64_encode($path) : '';
         }
 
         return ['item' => $normalized, 'after' => $next];
     }
 
-    private function findCategory(string $id): ?CategoryEntity
+    /** @return array{id:string,name:string,slug:string,path:string,depth:int}|null */
+    private function findCategory(string $id): ?array
     {
-        $category = $this->entityManager->getRepository(CategoryEntity::class)->find($id);
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
 
-        return $category instanceof CategoryEntity ? $category : null;
+        return $this->catalogRepository->findNodeRowById($normalizedId);
     }
 
-    /** @return array{id:string,name:string,slug:string,path:string,depth:int} */
-    private function normalizeCategory(CategoryEntity $category): array
-    {
-        return [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'slug' => $category->getSlug(),
-            'path' => $category->getPath(),
-            'depth' => $category->getDepth(),
-        ];
-    }
-
-    /** @param iterable<CategoryEntity> $categories
+    /** @param iterable<array<string,mixed>> $categories
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
      */
     private function normalizeCategories(iterable $categories): array
     {
         $result = [];
         foreach ($categories as $category) {
-            if (!$category instanceof CategoryEntity) {
+            if (!is_array($category)) {
                 continue;
             }
-            $result[] = $this->normalizeCategory($category);
+
+            $result[] = [
+                'id' => is_scalar($category['id'] ?? null) ? (string) $category['id'] : '',
+                'name' => is_scalar($category['name'] ?? null) ? (string) $category['name'] : '',
+                'slug' => is_scalar($category['slug'] ?? null) ? (string) $category['slug'] : '',
+                'path' => is_scalar($category['path'] ?? null) ? (string) $category['path'] : '',
+                'depth' => is_numeric($category['depth'] ?? null) ? (int) $category['depth'] : 0,
+            ];
         }
 
         return $result;

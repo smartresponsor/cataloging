@@ -48,4 +48,23 @@ final class CategoryAttachmentController
             'item' => $item,
         ], 201);
     }
+
+    #[Route('/api/category/attachment/{attachmentId}', name: 'api_category_attachment_delete', methods: ['DELETE'])]
+    public function delete(string $attachmentId): JsonResponse
+    {
+        try {
+            $deleted = $this->service->remove($attachmentId);
+        } catch (\InvalidArgumentException $exception) {
+            return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
+        }
+
+        if (!$deleted) {
+            return new JsonResponse(['ok' => false, 'errors' => ['attachment was not found']], 404);
+        }
+
+        return new JsonResponse([
+            'ok' => true,
+            'attachment_id' => trim($attachmentId),
+        ]);
+    }
 }
