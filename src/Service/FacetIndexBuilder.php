@@ -1,25 +1,33 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
 final class FacetIndexBuilder
 {
+    /**
+     * @param array{id?:mixed,slug?:mixed,path?:mixed,locale?:mixed,name?:mixed} $category
+     *
+     * @return array{id:string,slug:string,path:string,locale:string,name:string}
+     */
     public function build(array $category): array
     {
-        // Normalize a category into a facet-friendly representation.
         return [
-            'id' => $category['id'] ?? '',
-            'slug' => $category['slug'] ?? '',
-            'path' => $category['path'] ?? '',
-            'locale' => $category['locale'] ?? 'en',
-            'name' => $category['name'] ?? '',
+            'id' => $this->stringValue($category, 'id'),
+            'slug' => $this->stringValue($category, 'slug'),
+            'path' => $this->stringValue($category, 'path'),
+            'locale' => $this->stringValue($category, 'locale', 'en'),
+            'name' => $this->stringValue($category, 'name'),
         ];
+    }
+
+    /** @param array<string,mixed> $input */
+    private function stringValue(array $input, string $key, string $default = ''): string
+    {
+        $value = $input[$key] ?? $default;
+
+        return is_scalar($value) ? (string) $value : $default;
     }
 }

@@ -1,26 +1,24 @@
 <?php
 
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 use App\ServiceInterface\CategoryBulkInterface;
-use App\ServiceInterface\CategoryInterface as CategoryService;
+use App\ServiceInterface\CategoryInterface as CategoryCategoryService;
 
 final class CategoryBulk implements CategoryBulkInterface
 {
-    private CategoryService $service;
-
-    public function __construct(CategoryService $service)
+    public function __construct(private CategoryCategoryService $service)
     {
-        $this->service = $service;
     }
 
+    /**
+     * @param list<array<string,mixed>> $ops
+     *
+     * @return array{accepted:int,rejected:int,results:list<array<string,mixed>>}
+     */
     public function execute(string $actorId, string $batchKey, array $ops): array
     {
         $accepted = 0;
@@ -40,64 +38,167 @@ final class CategoryBulk implements CategoryBulkInterface
         return ['accepted' => $accepted, 'rejected' => $rejected, 'results' => $results];
     }
 
-    /** @param array<string,mixed> $op */
+    /**
+     * @param array<string,mixed> $op
+     *
+     * @return array<string,mixed>
+     */
     private function dispatch(string $actorId, array $op): array
     {
-        $operation = $op['op'] ?? null;
-        $payload = $op['payload'] ?? null;
-        if (!is_string($operation) || !is_array($payload)) {
-            throw new \InvalidArgumentException('Invalid bulk operation envelope');
-        }
+        $operation = $this->requiredString($op, 'op');
+        $payload = $this->requiredMap($op, 'payload');
 
-        switch ($operation) {
-            case 'create':
-                return $this->service->create(
-                    $actorId,
-                    (string) $this->require($payload, 'taxonomyId'),
-                    isset($payload['parentId']) ? (string) $payload['parentId'] : null,
-                    (array) $this->require($payload, 'name'),
-                    (array) $this->require($payload, 'slug'),
-                    (array) ($payload['meta'] ?? [])
-                );
-            case 'move':
-                return $this->service->move(
-                    $actorId,
-                    (string) $this->require($payload, 'id'),
-                    isset($payload['parentId']) ? (string) $payload['parentId'] : null,
-                    (int) ($payload['order'] ?? 0)
-                );
-            case 'attach':
-                $this->service->attach(
-                    $actorId,
-                    (string) $this->require($payload, 'id'),
-                    (string) $this->require($payload, 'targetDomain'),
-                    (string) $this->require($payload, 'targetClass'),
-                    (string) $this->require($payload, 'targetId')
-                );
+        return match ($operation) {
+            'create' => $this->service->create(
+                $actorId,
+                $this->requiredString($payload, 'taxonomyId'),
+                $this->optionalString($payload, 'parentId'),
+                $this->requiredStringMap($payload, 'name'),
+                $this->requiredStringMap($payload, 'slug'),
+                $this->optionalMetaMap($payload, 'meta'),
+            ),
+            'move' => $this->service->move(
+                $actorId,
+                $this->requiredString($payload, 'id'),
+                $this->optionalString($payload, 'parentId'),
+                $this->intValue($payload, 'order'),
+            ),
+            'attach' => $this->attachOperation($actorId, $payload),
+            'detach' => $this->detachOperation($actorId, $payload),
+            default => throw new \InvalidArgumentException('Unknown op: '.$operation),
+        };
+    }
 
-                return ['status' => 'attached'];
-            case 'detach':
-                $this->service->detach(
-                    $actorId,
-                    (string) $this->require($payload, 'id'),
-                    (string) $this->require($payload, 'targetDomain'),
-                    (string) $this->require($payload, 'targetClass'),
-                    (string) $this->require($payload, 'targetId')
-                );
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @return array<string,mixed>
+     */
+    private function attachOperation(string $actorId, array $payload): array
+    {
+        $this->service->attach(
+            $actorId,
+            $this->requiredString($payload, 'id'),
+            $this->requiredString($payload, 'targetDomain'),
+            $this->requiredString($payload, 'targetClass'),
+            $this->requiredString($payload, 'targetId'),
+        );
 
-                return ['status' => 'detached'];
-        }
+        return ['status' => 'attached'];
+    }
 
-        throw new \InvalidArgumentException('Unknown op: '.$operation);
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @return array<string,mixed>
+     */
+    private function detachOperation(string $actorId, array $payload): array
+    {
+        $this->service->detach(
+            $actorId,
+            $this->requiredString($payload, 'id'),
+            $this->requiredString($payload, 'targetDomain'),
+            $this->requiredString($payload, 'targetClass'),
+            $this->requiredString($payload, 'targetId'),
+        );
+
+        return ['status' => 'detached'];
     }
 
     /** @param array<string,mixed> $payload */
-    private function require(array $payload, string $key): mixed
+    private function requiredString(array $payload, string $key): string
     {
-        if (!array_key_exists($key, $payload)) {
+        if (!array_key_exists($key, $payload) || !is_scalar($payload[$key])) {
             throw new \InvalidArgumentException('Missing payload key: '.$key);
         }
 
-        return $payload[$key];
+        return (string) $payload[$key];
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function optionalString(array $payload, string $key): ?string
+    {
+        if (!array_key_exists($key, $payload)) {
+            return null;
+        }
+        $value = $payload[$key];
+
+        return is_scalar($value) ? (string) $value : null;
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function intValue(array $payload, string $key): int
+    {
+        $value = $payload[$key] ?? 0;
+
+        return is_numeric($value) ? (int) $value : 0;
+    }
+
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @return array<string,mixed>
+     */
+    private function requiredMap(array $payload, string $key): array
+    {
+        $value = $payload[$key] ?? null;
+        if (!is_array($value)) {
+            throw new \InvalidArgumentException('Missing payload key: '.$key);
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @return array<string,string>
+     */
+    private function requiredStringMap(array $payload, string $key): array
+    {
+        $map = $this->requiredMap($payload, $key);
+        $normalized = [];
+        foreach ($map as $entryKey => $entryValue) {
+            if (!is_string($entryKey) || !is_scalar($entryValue)) {
+                continue;
+            }
+            $normalized[$entryKey] = (string) $entryValue;
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @return array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null>
+     */
+    private function optionalMetaMap(array $payload, string $key): array
+    {
+        $value = $payload[$key] ?? [];
+        if (!is_array($value)) {
+            return [];
+        }
+        $normalized = [];
+        foreach ($value as $entryKey => $entryValue) {
+            if (!is_string($entryKey)) {
+                continue;
+            }
+            if (is_array($entryValue)) {
+                $nested = [];
+                foreach ($entryValue as $nestedKey => $nestedValue) {
+                    if (is_string($nestedKey) && (is_bool($nestedValue) || is_float($nestedValue) || is_int($nestedValue) || is_string($nestedValue) || null === $nestedValue)) {
+                        $nested[$nestedKey] = $nestedValue;
+                    }
+                }
+                $normalized[$entryKey] = $nested;
+                continue;
+            }
+            if (is_bool($entryValue) || is_float($entryValue) || is_int($entryValue) || is_string($entryValue) || null === $entryValue) {
+                $normalized[$entryKey] = $entryValue;
+            }
+        }
+
+        return $normalized;
     }
 }

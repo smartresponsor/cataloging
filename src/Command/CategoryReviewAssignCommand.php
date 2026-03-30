@@ -1,14 +1,11 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryReviewAssignmentServiceInterface;
+use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,8 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryReviewAssignCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
-    public function __construct(private readonly CategoryReviewAssignmentServiceInterface $assignmentService)
+    public function __construct(private readonly CatalogReviewAssignmentServiceInterface $assignmentService)
     {
         parent::__construct();
     }
@@ -40,13 +38,13 @@ final class CategoryReviewAssignCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $dueAt = $input->getOption('due-at');
+        $dueAt = $this->optionString($input, 'due-at');
         $event = $this->assignmentService->assign(
-            (string) $input->getArgument('requestId'),
-            (string) $input->getArgument('reviewer'),
-            (string) $input->getArgument('assignedBy'),
-            (string) $input->getOption('priority'),
-            is_string($dueAt) && '' !== $dueAt ? new \DateTimeImmutable($dueAt) : null,
+            $this->argumentString($input, 'requestId'),
+            $this->argumentString($input, 'reviewer'),
+            $this->argumentString($input, 'assignedBy'),
+            $this->optionString($input, 'priority', 'normal'),
+            '' !== $dueAt ? new \DateTimeImmutable($dueAt) : null,
         );
 
         return $this->writeJson($output, $event->payload());

@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
@@ -16,7 +13,7 @@ trait CategoryCliOutputTrait
     /** @param array<string,mixed>|list<array<string,mixed>> $payload */
     private function writeJson(OutputInterface $output, array $payload): int
     {
-        $output->writeln((string) json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $output->writeln($this->encodeJson($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
         return Command::SUCCESS;
     }
@@ -29,7 +26,7 @@ trait CategoryCliOutputTrait
         }
 
         if ('ndjson' !== $format) {
-            $output->writeln((string) json_encode([
+            $output->writeln($this->encodeJson([
                 'error' => 'invalid_format',
                 'allowed' => ['json', 'ndjson'],
                 'received' => $format,
@@ -39,9 +36,15 @@ trait CategoryCliOutputTrait
         }
 
         foreach ($rows as $row) {
-            $output->writeln((string) json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $output->writeln($this->encodeJson($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         }
 
         return Command::SUCCESS;
+    }
+
+    /** @param array<string,mixed>|list<array<string,mixed>> $payload */
+    private function encodeJson(array $payload, int $flags): string
+    {
+        return json_encode($payload, $flags | JSON_THROW_ON_ERROR);
     }
 }

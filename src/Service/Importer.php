@@ -1,11 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
@@ -18,13 +14,18 @@ final class Importer
         if (false === $fh) {
             throw new \RuntimeException('Cannot open CSV');
         }
+        /** @var list<string>|null $header */
         $header = null;
         while (($row = fgetcsv($fh)) !== false) {
             if (null === $header) {
-                $header = $row;
+                $header = array_values(array_map([$this, 'stringValue'], $row));
                 continue;
             }
+            /** @var array<string, scalar|null>|false $item */
             $item = array_combine($header, $row);
+            if (!is_array($item)) {
+                continue;
+            }
             $this->upsert($item);
             ++$count;
         }
@@ -39,9 +40,18 @@ final class Importer
         if (false === $raw) {
             throw new \RuntimeException('Cannot read JSON');
         }
-        $list = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+        $decoded = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($decoded)) {
+            return 0;
+        }
+
         $count = 0;
-        foreach ($list as $item) {
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            /** @var array<string, scalar|null> $item */
+            $item = $item;
             $this->upsert($item);
             ++$count;
         }
@@ -49,12 +59,17 @@ final class Importer
         return $count;
     }
 
+    /** @param array<string, scalar|null> $item */
     private function upsert(array $item): void
     {
-        // Application layer should map and persist.
-        // Invariant checks occur before write.
-        if (empty($item['slug'] ?? '')) {
+        $slug = $item['slug'] ?? '';
+        if (!is_string($slug) || '' === $slug) {
             throw new \InvalidArgumentException('Slug is required');
         }
+    }
+
+    private function stringValue(mixed $value): string
+    {
+        return is_scalar($value) || null === $value ? (string) $value : '';
     }
 }

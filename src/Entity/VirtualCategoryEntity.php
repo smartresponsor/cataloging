@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Entity;
 
@@ -24,9 +18,11 @@ class VirtualCategoryEntity
     #[ORM\Column(type: 'string', length: 160)]
     private string $name;
 
+    /** @var array<string,mixed> */
     #[ORM\Column(type: 'json')]
     private array $rule;
 
+    /** @param array<string,mixed> $rule */
     public function __construct(string $id, string $name, array $rule)
     {
         $this->id = $id;
@@ -44,11 +40,13 @@ class VirtualCategoryEntity
         return $this->name;
     }
 
+    /** @return array<string,mixed> */
     public function getRule(): array
     {
         return $this->rule;
     }
 
+    /** @param array<string,mixed> $rule */
     public function setRule(array $rule): void
     {
         $this->rule = $rule;

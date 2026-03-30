@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
@@ -17,11 +13,13 @@ use App\RepositoryInterface\CategoryRepositoryInterface;
  */
 final class CategoryRepository implements CategoryRepositoryInterface
 {
+    /** @return list<array<string,mixed>> */
     public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array
     {
         return [];
     }
 
+    /** @return list<array<string,mixed>> */
     public function breadcrumb(string $categoryId, string $locale): array
     {
         return [];
@@ -32,6 +30,13 @@ final class CategoryRepository implements CategoryRepositoryInterface
         return false;
     }
 
+    /**
+     * @param array<string,mixed> $name
+     * @param array<string,mixed> $slug
+     * @param array<string,mixed> $meta
+     *
+     * @return array<string,mixed>
+     */
     public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta): array
     {
         return [
@@ -46,6 +51,7 @@ final class CategoryRepository implements CategoryRepositoryInterface
         ];
     }
 
+    /** @return array<string,mixed> */
     public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array
     {
         return ['id' => $categoryId, 'parentId' => $newParentId, 'order' => $newOrder];
@@ -59,8 +65,20 @@ final class CategoryRepository implements CategoryRepositoryInterface
     {
     }
 
+    /** @return list<array<string,mixed>> */
     public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array
     {
         return [];
+    }
+
+    /** @return array<string,mixed> */
+    public function bySlug(string $taxonomyCode, string $slug, string $locale): array
+    {
+        return ['id' => '', 'taxonomyCode' => $taxonomyCode, 'slug' => $slug, 'locale' => $locale];
+    }
+
+    public function fullSlug(string $categoryId, string $locale): string
+    {
+        return '';
     }
 }

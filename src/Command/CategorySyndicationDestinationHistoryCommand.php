@@ -1,16 +1,12 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- * Owner: Marketing America Corp
- */
 
 namespace App\Command;
 
 use App\Entity\CategorySyndicationDeliveryRecord;
-use App\ServiceInterface\CategorySyndicationHistoryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -23,8 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategorySyndicationDestinationHistoryCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
-    public function __construct(private readonly CategorySyndicationHistoryServiceInterface $service)
+    public function __construct(private readonly CatalogSyndicationHistoryServiceInterface $service)
     {
         parent::__construct();
     }
@@ -43,25 +40,25 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $destinationId = (string) $input->getArgument('destinationId');
-        $actorId = (string) $input->getArgument('actorId');
-        $reason = (string) $input->getArgument('reason');
-        $format = (string) $input->getOption('format');
-        $decoded = json_decode((string) $input->getOption('records'), true, 512, JSON_THROW_ON_ERROR);
+        $destinationId = $this->argumentString($input, 'destinationId');
+        $actorId = $this->argumentString($input, 'actorId');
+        $reason = $this->argumentString($input, 'reason');
+        $format = $this->optionString($input, 'format', 'json');
+        $decoded = json_decode($this->optionString($input, 'records', '[]'), true, 512, JSON_THROW_ON_ERROR);
         $records = [];
         foreach (is_array($decoded) ? $decoded : [] as $row) {
             if (!is_array($row)) {
                 continue;
             }
             $records[] = new CategorySyndicationDeliveryRecord(
-                (string) ($row['deliveryId'] ?? ''),
-                (string) ($row['packageId'] ?? ''),
-                (string) ($row['destinationId'] ?? ''),
-                (string) ($row['categoryId'] ?? ''),
-                new CategorySyndicationDeliveryStatus((string) ($row['status'] ?? 'pending')),
-                (int) ($row['attempt'] ?? 1),
-                isset($row['responseCode']) ? (int) $row['responseCode'] : null,
-                (string) ($row['responseMessage'] ?? ''),
+                $this->nonEmptyString($row['deliveryId'] ?? null),
+                $this->nonEmptyString($row['packageId'] ?? null),
+                $this->nonEmptyString($row['destinationId'] ?? null),
+                $this->nonEmptyString($row['categoryId'] ?? null),
+                new CategorySyndicationDeliveryStatus($this->nonEmptyString($row['status'] ?? 'pending', 'pending')),
+                is_numeric($row['attempt'] ?? null) ? (int) $row['attempt'] : 1,
+                isset($row['responseCode']) && is_numeric($row['responseCode']) ? (int) $row['responseCode'] : null,
+                $this->nonEmptyString($row['responseMessage'] ?? null),
                 isset($row['deliveredAt']) && is_string($row['deliveredAt']) && '' !== $row['deliveredAt'] ? new \DateTimeImmutable($row['deliveredAt']) : null,
             );
         }

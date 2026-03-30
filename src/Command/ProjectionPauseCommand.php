@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Command;
 
@@ -23,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ProjectionPauseCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly EntityManagerInterface $em)
     {
@@ -36,7 +31,7 @@ final class ProjectionPauseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $state = (string) $input->getArgument('state');
+        $state = $this->argumentString($input, 'state');
         $repo = $this->em->getRepository(ProjectionControlEntity::class);
         $ctrl = $repo->find('category') ?? new ProjectionControlEntity();
         $ctrl->setPaused('on' === $state);

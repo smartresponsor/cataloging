@@ -1,11 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
@@ -37,7 +33,7 @@ final class TreeOperationConcurrency
             $p->bindValue(':id', $nodeId);
             $p->execute();
             $rowNode = $p->fetch(\PDO::FETCH_ASSOC);
-            $path = (string) ($rowNode['path'] ?? '');
+            $path = $this->pathFromFetch($rowNode);
 
             if (null !== $newParentId) {
                 $pp = $this->pdo->prepare('SELECT path FROM category_entity WHERE id = :pid FOR UPDATE');
@@ -47,22 +43,38 @@ final class TreeOperationConcurrency
                 $pp->bindValue(':pid', $newParentId);
                 $pp->execute();
                 $rowParent = $pp->fetch(\PDO::FETCH_ASSOC);
-                $pPath = (string) ($rowParent['path'] ?? '');
+                $pPath = $this->pathFromFetch($rowParent);
                 if ('' !== $pPath && '' !== $path && str_starts_with($pPath, $path)) {
                     throw new \InvalidArgumentException('Cycle detected');
                 }
             }
 
             $this->pdo->commit();
-        } catch (\PDOException $e) {
+        } catch (\Throwable $e) {
             error_log('[TreeOperationConcurrency] '.$e->getMessage());
 
             if ($this->pdo->inTransaction()) {
                 $this->pdo->rollBack();
             }
+
+            if ($e instanceof \InvalidArgumentException || $e instanceof \RuntimeException) {
+                throw $e;
+            }
+
             throw new \RuntimeException('Tree move failed: '.$e->getMessage(), 0, $e);
         } finally {
             $this->lock->release('category_tree');
         }
+    }
+
+    private function pathFromFetch(mixed $row): string
+    {
+        if (!is_array($row)) {
+            return '';
+        }
+
+        $path = $row['path'] ?? '';
+
+        return is_string($path) ? $path : '';
     }
 }

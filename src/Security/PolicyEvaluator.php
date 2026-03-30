@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Security;
 
@@ -16,6 +13,7 @@ final class PolicyEvaluator
     {
     }
 
+    /** @param array<string,mixed> $context */
     public function evaluate(string $action, array $context): bool
     {
         $allowed = ($context['role'] ?? null) === 'ROLE_ADMIN' || 'view' === $action;

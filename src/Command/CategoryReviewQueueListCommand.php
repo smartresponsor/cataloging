@@ -1,15 +1,12 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryReviewQueueServiceInterface;
-use App\ValueObject\CategoryReviewQueueItem;
+use App\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\ValueObjectInterface\CategoryReviewQueueItemInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,8 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryReviewQueueListCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
-    public function __construct(private readonly CategoryReviewQueueServiceInterface $queueService)
+    public function __construct(private readonly CatalogReviewQueueServiceInterface $queueService)
     {
         parent::__construct();
     }
@@ -38,17 +36,17 @@ final class CategoryReviewQueueListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $reviewer = (string) $input->getArgument('reviewer');
-        $format = (string) $input->getOption('format');
+        $reviewer = $this->argumentString($input, 'reviewer');
+        $format = $this->optionString($input, 'format', 'json');
         $items = $this->queueService->queueForReviewer($reviewer);
 
-        $payload = array_map(static fn (CategoryReviewQueueItem $item): array => self::normalizeItem($item), $items);
+        $payload = array_map(static fn (CategoryReviewQueueItemInterface $item): array => self::normalizeItem($item), $items);
 
         return $this->writeStructuredRows($output, $payload, $format);
     }
 
     /** @return array<string,mixed> */
-    private static function normalizeItem(CategoryReviewQueueItem $item): array
+    private static function normalizeItem(CategoryReviewQueueItemInterface $item): array
     {
         return [
             'requestId' => $item->requestId(),

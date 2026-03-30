@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\PolicyInterface;
 
@@ -12,5 +9,6 @@ use App\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterfa
 
 interface CategorySyndicationCategoryGovernanceSummaryPolicyInterface
 {
+    /** @param list<array<string,mixed>> $trailPayloads */
     public function buildSummary(string $categoryId, array $trailPayloads): CategorySyndicationCategoryGovernanceSummaryInterface;
 }

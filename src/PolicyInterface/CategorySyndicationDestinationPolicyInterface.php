@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\PolicyInterface;
 
@@ -15,7 +12,9 @@ interface CategorySyndicationDestinationPolicyInterface
     public function assertDeliveryMode(string $deliveryMode): void;
 
     /**
-     * @param array<string,string> $settings
+     * @param array<string,mixed> $settings
+     *
+     * @return array<string,string>
      */
     public function normalizeSettings(array $settings): array;
 }

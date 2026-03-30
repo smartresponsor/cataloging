@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Outbox;
 
@@ -12,9 +9,10 @@ use App\OutboxInterface\CategoryOutboxRetryInterface;
 
 final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
 {
-    /** @var list<array{event:array,attempt:int,runAt:int}> */
+    /** @var list<array{event:array<string, mixed>,attempt:int,runAt:int}> */
     private array $scheduled = [];
 
+    /** @param array<string, mixed> $event */
     public function schedule(array $event, int $attempt): void
     {
         $normalizedAttempt = max(1, $attempt);
@@ -27,7 +25,7 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
         ];
     }
 
-    /** @return list<array{event:array,attempt:int,runAt:int}> */
+    /** @return list<array{event:array<string, mixed>,attempt:int,runAt:int}> */
     public function scheduled(): array
     {
         return $this->scheduled;

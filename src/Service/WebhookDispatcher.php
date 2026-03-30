@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service;
 
@@ -16,6 +13,7 @@ final class WebhookDispatcher
     {
     }
 
+    /** @param array<string,mixed> $payload */
     public function dispatch(string $event, array $payload, string $endpoint): void
     {
         $body = json_encode(['event' => $event, 'payload' => $payload], JSON_THROW_ON_ERROR);

@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Policy;
 
@@ -16,6 +13,10 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
 {
     private const MODES = ['strict_exact', 'allow_fallback', 'prefer_exact_warn'];
 
+    /**
+     * @param array<string,mixed> $strictPayload
+     * @param array<string,mixed> $fallbackPayload
+     */
     public function buildReport(string $mediaPolicyMode, array $strictPayload, array $fallbackPayload): CategoryDestinationMediaPolicyPreferenceInterface
     {
         $mode = trim($mediaPolicyMode);
@@ -25,13 +26,14 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
 
         $strictPublishable = (bool) ($strictPayload['publishable'] ?? false);
         $fallbackPublishable = (bool) (($fallbackPayload['publishableWithFallback'] ?? false) ?: ($fallbackPayload['publishable'] ?? false));
-        $strictMissing = $this->normalizeList($strictPayload['requiredMissing'] ?? []);
-        $fallbackMissing = $this->normalizeList($fallbackPayload['requiredMissing'] ?? []);
+        $strictMissing = $this->normalizeList($strictPayload['requiredMissing'] ?? null);
+        $fallbackMissing = $this->normalizeList($fallbackPayload['requiredMissing'] ?? null);
         $warnings = $this->normalizeList(array_merge(
-            $this->normalizeList($strictPayload['warnings'] ?? []),
-            $this->normalizeList($fallbackPayload['warnings'] ?? []),
+            $this->normalizeList($strictPayload['warnings'] ?? null),
+            $this->normalizeList($fallbackPayload['warnings'] ?? null),
         ));
-        $fallbackUsed = (bool) ($fallbackPayload['checks']['fallbackUsed'] ?? false);
+        $fallbackChecks = is_array($fallbackPayload['checks'] ?? null) ? $fallbackPayload['checks'] : [];
+        $fallbackUsed = (bool) ($fallbackChecks['fallbackUsed'] ?? false);
 
         $checks = [
             'destinationMediaPolicyStrictExact' => 'strict_exact' === $mode,
@@ -89,6 +91,9 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
 
         $normalized = [];
         foreach ($values as $value) {
+            if (!is_scalar($value)) {
+                continue;
+            }
             $item = trim((string) $value);
             if ('' !== $item) {
                 $normalized[] = $item;

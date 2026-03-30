@@ -1,5 +1,0 @@
-category:
-  flags:
-    webhook_v2: true
-    dlq_ui: true
-    ops_dashboard: true

@@ -1,44 +1,73 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
-use App\Service\Category\FacetSearchAdvanced;
+use App\ServiceInterface\GraphqlFacetResolverInterface;
 
 final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
 {
     private FacetSearchAdvanced $search;
 
-    public function __construct(\PDO $pdo)
+    public function __construct(?\PDO $pdo = null)
     {
-        $this->search = new FacetSearchAdvanced($pdo, new FacetFilter(), new FacetRank());
+        $this->search = new FacetSearchAdvanced($pdo ?? new \PDO('sqlite::memory:'), new FacetFilter(), new FacetRank());
     }
 
+    /**
+     * @param array<string,mixed> $args
+     *
+     * @return array{items:list<array{id:string,slug:string,name:string,path:string,locale:string,score:null}>,total:int}
+     */
     public function categoryFacet(array $args): array
     {
-        $term = (string) ($args['term'] ?? '');
-        $locale = (string) ($args['locale'] ?? 'en');
-        $pathPrefix = isset($args['pathPrefix']) ? (string) $args['pathPrefix'] : null;
-        $limit = (int) ($args['limit'] ?? 20);
-        $offset = (int) ($args['offset'] ?? 0);
+        $term = $this->stringValue($args, 'term');
+        $locale = $this->stringValue($args, 'locale', 'en');
+        $pathPrefix = $this->nullableStringValue($args, 'pathPrefix');
+        $limit = $this->intValue($args, 'limit', 20);
+        $offset = $this->intValue($args, 'offset', 0);
+        /** @var list<array<string,mixed>> $rows */
         $rows = $this->search->search($term, $locale, $pathPrefix, $limit, $offset);
-        $items = array_map(static function (array $r): array {
+        $items = array_map(function (array $row): array {
             return [
-                'id' => (string) $r['id'],
-                'slug' => (string) $r['slug'],
-                'name' => (string) ($r['name'] ?? ''),
-                'path' => (string) ($r['path'] ?? ''),
-                'locale' => (string) ($r['locale'] ?? 'en'),
+                'id' => $this->stringValue($row, 'id'),
+                'slug' => $this->stringValue($row, 'slug'),
+                'name' => $this->stringValue($row, 'name'),
+                'path' => $this->stringValue($row, 'path'),
+                'locale' => $this->stringValue($row, 'locale', 'en'),
                 'score' => null,
             ];
         }, $rows);
 
         return ['items' => $items, 'total' => count($items)];
+    }
+
+    /** @param array<string,mixed> $input */
+    private function stringValue(array $input, string $key, string $default = ''): string
+    {
+        $value = $input[$key] ?? $default;
+
+        return is_scalar($value) ? trim((string) $value) : $default;
+    }
+
+    /** @param array<string,mixed> $input */
+    private function nullableStringValue(array $input, string $key): ?string
+    {
+        if (!array_key_exists($key, $input) || null === $input[$key]) {
+            return null;
+        }
+        $value = $input[$key];
+
+        return is_scalar($value) ? trim((string) $value) : null;
+    }
+
+    /** @param array<string,mixed> $input */
+    private function intValue(array $input, string $key, int $default): int
+    {
+        $value = $input[$key] ?? $default;
+
+        return is_numeric($value) ? (int) $value : $default;
     }
 }

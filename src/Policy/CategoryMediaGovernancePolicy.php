@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Policy;
 
@@ -13,6 +10,10 @@ use App\ValueObject\CategoryMediaRole;
 
 final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePolicyInterface
 {
+    /**
+     * @param list<string|int|float|bool|null> $channels
+     * @param list<string|int|float|bool|null> $locales
+     */
     public function assertBindingAllowed(
         string $bindingId,
         string $categoryId,
@@ -37,13 +38,13 @@ final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePoli
             throw new \InvalidArgumentException('Category media channels must contain at least one channel.');
         }
         foreach ($channels as $channel) {
-            if (!is_scalar($channel) && null !== $channel) {
-                throw new \InvalidArgumentException('Category media channels must contain only scalar values.');
+            if ('' === trim((string) ($channel ?? ''))) {
+                throw new \InvalidArgumentException('Category media channels must not contain empty values.');
             }
         }
         foreach ($locales as $locale) {
-            if (!is_scalar($locale) && null !== $locale) {
-                throw new \InvalidArgumentException('Category media locales must contain only scalar values.');
+            if ('' === trim((string) ($locale ?? ''))) {
+                throw new \InvalidArgumentException('Category media locales must not contain empty values.');
             }
         }
         if ('' === trim($actorId)) {

@@ -1,5 +1,0 @@
-services:
-  App\GraphQl\CategoryChildListResolver:
-    tags: ['api_platform.graphql.resolver']
-  App\GraphQl\CategoryAncestorListResolver:
-    tags: ['api_platform.graphql.resolver']

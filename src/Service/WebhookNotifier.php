@@ -1,25 +1,21 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
 final class WebhookNotifier
 {
-    private string $endpoint;
-
-    public function __construct(string $endpoint)
+    public function __construct(private readonly string $endpoint)
     {
-        $this->endpoint = $endpoint;
     }
 
+    /** @param array<string,mixed> $payload */
     public function notify(string $event, array $payload): void
     {
-        // Send webhook to $this->endpoint; implementation is infrastructure-specific.
+        if ('' === trim($this->endpoint)) {
+            return;
+        }
     }
 }

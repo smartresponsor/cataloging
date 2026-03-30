@@ -1,14 +1,11 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryPublicationQualityServiceInterface;
+use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,8 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryPublicationQualityEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
-    public function __construct(private readonly CategoryPublicationQualityServiceInterface $qualityService)
+    public function __construct(private readonly CatalogPublicationQualityServiceInterface $qualityService)
     {
         parent::__construct();
     }
@@ -41,18 +39,38 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $publicationChecks = json_decode((string) $input->getOption('publication-checks'), true, 512, JSON_THROW_ON_ERROR);
-        $checks = json_decode((string) $input->getOption('checks'), true, 512, JSON_THROW_ON_ERROR);
+        $publicationChecks = $this->decodeJsonMapOption($input, 'publication-checks');
+        $checks = $this->decodeJsonMapOption($input, 'checks');
 
         $event = $this->qualityService->evaluate(
-            (string) $input->getArgument('categoryId'),
-            (int) $input->getArgument('score'),
-            is_array($publicationChecks) ? $publicationChecks : [],
-            is_array($checks) ? $checks : [],
-            (string) $input->getArgument('actorId'),
-            (string) $input->getArgument('reason'),
+            $this->argumentString($input, 'categoryId'),
+            $this->argumentInt($input, 'score'),
+            $publicationChecks,
+            $checks,
+            $this->argumentString($input, 'actorId'),
+            $this->argumentString($input, 'reason'),
         );
 
         return $this->writeJson($output, $event->payload());
+    }
+
+    /** @return array<string,bool> */
+    private function decodeJsonMapOption(InputInterface $input, string $name): array
+    {
+        $decoded = json_decode($this->optionString($input, $name, '{}'), true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($decoded as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+
+            $result[$key] = (bool) $value;
+        }
+
+        return $result;
     }
 }

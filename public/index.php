@@ -1,34 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- * Owner: Marketing America Corp
- */
+use App\Kernel;
 
-use function FastRoute\simpleDispatcher;
+require dirname(__DIR__).'/vendor/autoload.php';
 
-require __DIR__ . '/../vendor/autoload.php';
-
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/status', ['SmartResponsor\Http\StatusHandler','handle']);
-    $r->addRoute('GET', '/category', ['SmartResponsor\Http\CategoryListHandler','handle']);
-    $r->addRoute('GET', '/collection', ['SmartResponsor\Http\CollectionListHandler','handle']);
-});
-
-$httpMethod = $_SERVER['REQUEST_METHOD'];
-$uri = $_SERVER['REQUEST_URI'];
-if (false !== $pos = strpos($uri, '?')) $uri = substr($uri, 0, $pos);
-$uri = rawurldecode($uri);
-
-$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
-        http_response_code(404); echo json_encode(['error'=>'not_found']); break;
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        http_response_code(405); echo json_encode(['error'=>'method_not_allowed']); break;
-    case FastRoute\Dispatcher::FOUND:
-        [$class,$method] = $routeInfo[1];
-        (new $class())->$method(); break;
-}
+$kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', (bool) ($_SERVER['APP_DEBUG'] ?? true));
+$request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();
+$kernel->terminate($request, $response);

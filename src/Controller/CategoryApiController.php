@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Controller;
 
@@ -12,7 +9,7 @@ use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryApiController
 {
@@ -25,7 +22,7 @@ final class CategoryApiController
     #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
     public function move(string $id, Request $request): JsonResponse
     {
-        $dto = MoveCategoryRequest::fromArray(json_decode($request->getContent(), true) ?? []);
+        $dto = MoveCategoryRequest::fromArray($this->decodeMap($request));
         if (!$dto->isValid()) {
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
@@ -36,11 +33,19 @@ final class CategoryApiController
     #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
     public function publish(string $id, Request $request): JsonResponse
     {
-        $dto = PublishCategoryRequest::fromArray(json_decode($request->getContent(), true) ?? []);
+        $dto = PublishCategoryRequest::fromArray($this->decodeMap($request));
         if (!$dto->isValid()) {
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
 
         return new JsonResponse(['status' => 'ok']);
+    }
+
+    /** @return array<string,mixed> */
+    private function decodeMap(Request $request): array
+    {
+        $decoded = json_decode($request->getContent(), true);
+
+        return is_array($decoded) ? $decoded : [];
     }
 }

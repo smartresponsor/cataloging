@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Repository;
 
@@ -33,7 +30,10 @@ final class CategoryWorkflowRepository implements CategoryWorkflowRepositoryInte
     public function appendHistory(CategoryWorkflowTransitionedInterface $event): void
     {
         $payload = $event->payload();
-        $categoryId = (string) ($payload['categoryId'] ?? '');
+        $categoryId = isset($payload['categoryId']) && is_scalar($payload['categoryId'])
+            ? trim((string) $payload['categoryId'])
+            : '';
+
         $this->history[$categoryId] ??= [];
         $this->history[$categoryId][] = $event;
     }

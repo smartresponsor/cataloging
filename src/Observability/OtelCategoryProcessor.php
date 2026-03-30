@@ -1,25 +1,30 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Observability;
 
 final class OtelCategoryProcessor
 {
+    /**
+     * @param array<string, scalar|null> $context
+     *
+     * @return array{trace_id:string,span_id:string,ts:string}
+     */
     public function process(array $context): array
     {
-        $traceId = $context['trace_id'] ?? bin2hex(random_bytes(8));
-        $spanId = $context['span_id'] ?? bin2hex(random_bytes(4));
+        $traceIdValue = $context['trace_id'] ?? null;
+        $spanIdValue = $context['span_id'] ?? null;
+
+        $traceId = null !== $traceIdValue ? (string) $traceIdValue : bin2hex(random_bytes(8));
+        $spanId = null !== $spanIdValue ? (string) $spanIdValue : bin2hex(random_bytes(4));
         $row = [
             'trace_id' => $traceId,
             'span_id' => $spanId,
             'ts' => date(DATE_ATOM),
         ];
-        file_put_contents('report/category-observability-probe.json', json_encode($row, JSON_PRETTY_PRINT));
+        file_put_contents('report/category-observability-probe.json', json_encode($row, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
 
         return $row;
     }

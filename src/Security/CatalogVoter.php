@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Security;
 
@@ -15,6 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/** @extends Voter<string, mixed> */
 final class CatalogVoter extends Voter
 {
     public const OWNER = 'category.owner';
@@ -30,11 +25,12 @@ final class CatalogVoter extends Voter
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
-        if (!is_object($user) && !method_exists($user, 'getRoles')) {
-            // allow only if token has direct ROLE grants
-            $roles = method_exists($token, 'getRoleNames') ? $token->getRoleNames() : [];
-        } else {
+        if (is_object($user) && method_exists($user, 'getRoles')) {
+            /** @var list<string> $roles */
             $roles = $user->getRoles();
+        } else {
+            /** @var list<string> $roles */
+            $roles = method_exists($token, 'getRoleNames') ? $token->getRoleNames() : [];
         }
 
         return match ($attribute) {
