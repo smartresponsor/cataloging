@@ -1,14 +1,20 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 final class VersionCompare
 {
+    /**
+     * @param array<string, scalar|null> $a
+     * @param array<string, scalar|null> $b
+     *
+     * @return array<string, array{from: scalar|null, to: scalar|null}>
+     */
     public function diff(array $a, array $b): array
     {
-        // Minimal deterministic diff (keys only); real compare can be extended later.
         $result = [];
         foreach ($a as $k => $v) {
             if (!array_key_exists($k, $b) || $b[$k] !== $v) {

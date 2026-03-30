@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Command;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ExportCategoryCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -20,7 +22,8 @@ final class ExportCategoryCommand extends Command
             ['id' => '1', 'slug' => 'root'],
         ];
         foreach ($rows as $row) {
-            $output->writeln(json_encode($row, JSON_UNESCAPED_UNICODE));
+            $json = json_encode($row, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            $output->writeln($json);
         }
 
         return self::SUCCESS;

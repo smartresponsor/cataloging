@@ -1,12 +1,7 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-declare(strict_types=1);
 
-/*
-Copyright (c) 2025 Oleksandr Tishченко / Marketing America Corp
-Owner: Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-*/
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -15,6 +10,7 @@ final class CanonicalPolicyLocale
     /** @var array<string,string> */
     private array $hostByLocale;
 
+    /** @param array<string,string> $hostByLocale */
     public function __construct(array $hostByLocale)
     {
         $this->hostByLocale = $hostByLocale;

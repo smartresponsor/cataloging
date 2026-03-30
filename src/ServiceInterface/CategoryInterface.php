@@ -1,27 +1,28 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-/**
- * Public contract for Category service.
- * Methods return lightweight array views to keep UI/BFF decoupled from entities.
- */
 interface CategoryInterface
 {
-    /** Create category under parent within taxonomy. */
-    public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta = []): array;
+    /**
+     * @param array<string,string>                                                              $name
+     * @param array<string,string>                                                              $slug
+     * @param array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null> $meta
+     *
+     * @return array<string,mixed>
+     */
+    public function create(string $actorId, string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta = []): array;
 
-    /** Move category to a new parent with explicit order. */
-    public function move(string $categoryId, ?string $newParentId, int $newOrder): array;
+    /** @return array<string,mixed> */
+    public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array;
 
-    /** Attach an existing target entity to category. */
-    public function attach(string $categoryId, string $targetDomain, string $targetClass, string $targetId): void;
+    public function attach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void;
 
-    /** Detach target entity from category. */
-    public function detach(string $categoryId, string $targetDomain, string $targetClass, string $targetId): void;
+    public function detach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void;
 
-    /** Resolve categories for a target entity in taxonomy. */
+    /** @return list<array<string,mixed>> */
     public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array;
 }

@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Security;
@@ -10,13 +11,14 @@ use App\Service\Security\CategoryRole;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
+/** @extends Voter<string, mixed> */
 final class CategoryVoter extends Voter
 {
     public function __construct(private readonly ?CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository = null)
     {
     }
-
     public const VIEW = 'category.view';
     public const EDIT = 'category.edit';
     public const OWN = 'category.own';
@@ -30,11 +32,9 @@ final class CategoryVoter extends Voter
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $roles = $token->getRoleNames();
-
         if (in_array('ROLE_SUPER_ADMIN', $roles, true) || in_array('ROLE_ADMIN', $roles, true)) {
             return true;
         }
-
         $grantedByRole = match ($attribute) {
             self::OWN => in_array(CategoryRole::OWNER, $roles, true),
             self::EDIT => in_array(CategoryRole::EDITOR, $roles, true) || in_array(CategoryRole::OWNER, $roles, true),
@@ -42,30 +42,18 @@ final class CategoryVoter extends Voter
             self::VIEW => true,
             default => false,
         };
-
         if ($grantedByRole) {
             return true;
         }
-
         if (!$subject instanceof Category || null === $this->accessAssignmentRepository) {
             return self::VIEW === $attribute;
         }
-
         $user = $token->getUser();
-        $actorUserId = null;
-
-        if (is_object($user) && method_exists($user, 'getUserIdentifier')) {
-            $actorUserId = (string) $user->getUserIdentifier();
-        } elseif (is_string($user)) {
-            $actorUserId = $user;
-        }
-
-        if (null === $actorUserId || '' === trim($actorUserId)) {
+        $actorUserId = $user instanceof UserInterface ? trim($user->getUserIdentifier()) : null;
+        if (null === $actorUserId || '' === $actorUserId) {
             return self::VIEW === $attribute;
         }
-
         $assignment = $this->accessAssignmentRepository->findOneByCategoryIdAndActorUserId($subject->id, $actorUserId);
-
         if (null === $assignment || 'active' !== $assignment->status()) {
             return self::VIEW === $attribute;
         }

@@ -1,9 +1,11 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Service\Security\CategoryRole;
 use App\ServiceInterface\TenantRolePolicyInterface;
 
 final class TenantRolePolicy implements TenantRolePolicyInterface
@@ -13,7 +15,7 @@ final class TenantRolePolicy implements TenantRolePolicyInterface
      */
     public function allow(array $ctx, string $action): bool
     {
-        $role = $ctx['role'] ?? '';
+        $role = $ctx['role'];
         if (CategoryRole::OWNER === $role) {
             return true;
         }

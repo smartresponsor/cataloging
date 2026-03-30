@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service\Governance;
@@ -36,21 +37,25 @@ final class CategoryGovernanceViewBuilder implements CategoryGovernanceViewBuild
             categoryId: trim($categoryId),
             primaryActorUserId: $primary?->actorUserId(),
             activeAssignments: $assignments,
-            roleCapabilities: [
-                'owner' => true,
-                'editor' => true,
-                'publisher' => true,
-                'reviewer' => true,
-                'admin' => true,
-                'globalRoles' => [
-                    'ROLE_ADMIN' => true,
-                    'ROLE_SUPER_ADMIN' => true,
-                    CategoryRole::OWNER => true,
-                    CategoryRole::EDITOR => true,
-                    CategoryRole::PUBLISHER => true,
-                ],
-            ],
+            roleCapabilities: $this->roleCapabilities(),
             generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
         );
+    }
+
+    /** @return array<string,bool> */
+    private function roleCapabilities(): array
+    {
+        return [
+            'owner' => true,
+            'editor' => true,
+            'publisher' => true,
+            'reviewer' => true,
+            'admin' => true,
+            'ROLE_ADMIN' => true,
+            'ROLE_SUPER_ADMIN' => true,
+            CategoryRole::OWNER => true,
+            CategoryRole::EDITOR => true,
+            CategoryRole::PUBLISHER => true,
+        ];
     }
 }
