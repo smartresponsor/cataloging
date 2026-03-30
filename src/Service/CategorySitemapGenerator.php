@@ -1,12 +1,11 @@
 <?php
 
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ServiceInterface\CategorySitemapGeneratorInterface;
 
 final class CategorySitemapGenerator implements CategorySitemapGeneratorInterface
 {

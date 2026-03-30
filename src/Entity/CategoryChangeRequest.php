@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Entity;
 
@@ -14,6 +11,9 @@ use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
 
 final class CategoryChangeRequest implements CategoryChangeRequestInterface
 {
+    /**
+     * @param array<string,mixed> $changes
+     */
     public function __construct(
         private readonly string $requestId,
         private readonly string $categoryId,
@@ -28,6 +28,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     ) {
     }
 
+    /** @param array<string,mixed> $changes */
     public static function open(string $requestId, string $categoryId, string $submittedBy, string $summary, array $changes): self
     {
         return new self(
@@ -80,6 +81,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
         return $this->summary;
     }
 
+    /** @return array<string,mixed> */
     public function changes(): array
     {
         return $this->changes;

@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Repository;
 
@@ -16,6 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 
+/** @extends ServiceEntityRepository<CategoryEntity> */
 final class CatalogRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -26,57 +21,78 @@ final class CatalogRepository extends ServiceEntityRepository
     /**
      * Direct children using Postgres ltree: path ~ (parentPath || '.*{1}').
      *
-     * @return CategoryEntity[]
+     * @return list<CategoryEntity>
      */
     public function findChildrenLtree(CategoryEntity $node): array
     {
-        /** @var Connection $conn */
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT * FROM category WHERE path ~ ($1 || '.*{1}') ORDER BY slug ASC";
-        $stmt = $conn->prepare($sql);
-        $res = $stmt->executeQuery([$node->getPath()]);
+        $conn = $this->getConnection();
+        $sql = "SELECT * FROM category WHERE path ~ (? || '.*{1}') ORDER BY slug ASC";
+        $res = $conn->executeQuery($sql, [$node->getPath()]);
         $rows = $res->fetchAllAssociative();
 
-        return $rows ? $this->hydrate($rows) : [];
+        return [] !== $rows ? $this->hydrate($rows) : [];
     }
 
     /**
      * Ancestors using Postgres ltree: path @> :childPath.
      *
-     * @return CategoryEntity[]
+     * @return list<CategoryEntity>
      */
     public function findAncestorsLtree(CategoryEntity $node): array
     {
-        /** @var Connection $conn */
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT * FROM category WHERE path @> $1 ORDER BY depth ASC';
-        $stmt = $conn->prepare($sql);
-        $res = $stmt->executeQuery([$node->getPath()]);
+        $conn = $this->getConnection();
+        $sql = 'SELECT * FROM category WHERE path @> ? ORDER BY depth ASC';
+        $res = $conn->executeQuery($sql, [$node->getPath()]);
         $rows = $res->fetchAllAssociative();
 
-        return $rows ? $this->hydrate($rows) : [];
+        return [] !== $rows ? $this->hydrate($rows) : [];
+    }
+
+    /**
+     * Descendants using Postgres ltree: path <@ parentPath and skip the node itself.
+     *
+     * @return list<CategoryEntity>
+     */
+    public function findDescendantsLtree(CategoryEntity $node): array
+    {
+        $conn = $this->getConnection();
+        $sql = 'SELECT * FROM category WHERE path <@ ? AND path <> ? ORDER BY depth ASC, slug ASC';
+        $res = $conn->executeQuery($sql, [$node->getPath(), $node->getPath()]);
+        $rows = $res->fetchAllAssociative();
+
+        return [] !== $rows ? $this->hydrate($rows) : [];
     }
 
     /**
      * Minimal manual hydration (attributes mapping).
      *
-     * @param array<int,array<string,mixed>> $rows
+     * @param list<array<string,mixed>> $rows
      *
-     * @return CategoryEntity[]
+     * @return list<CategoryEntity>
      */
     private function hydrate(array $rows): array
     {
-        $out = [];
-        foreach ($rows as $r) {
-            $e = new CategoryEntity($r['name'], $r['slug'], $r['path'], (int) $r['depth']);
-            // set id via reflection (since ctor generates new one) — keep simple: assign property directly.
-            $ref = new \ReflectionClass($e);
+        $result = [];
+        foreach ($rows as $row) {
+            $entity = new CategoryEntity(
+                is_scalar($row['name'] ?? null) ? (string) $row['name'] : '',
+                is_scalar($row['slug'] ?? null) ? (string) $row['slug'] : '',
+                is_scalar($row['path'] ?? null) ? (string) $row['path'] : '',
+                is_numeric($row['depth'] ?? null) ? (int) $row['depth'] : 0,
+            );
+
+            $ref = new \ReflectionClass($entity);
             $prop = $ref->getProperty('id');
             $prop->setAccessible(true);
-            $prop->setValue($e, $r['id']);
-            $out[] = $e;
+            $prop->setValue($entity, is_scalar($row['id'] ?? null) ? (string) $row['id'] : '');
+            $result[] = $entity;
         }
 
-        return $out;
+        return $result;
+    }
+
+    private function getConnection(): Connection
+    {
+        return $this->getEntityManager()->getConnection();
     }
 }

@@ -1,11 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Cache\Role;
 
@@ -27,14 +23,9 @@ final class ConsistentCachePdpV2
     private readonly mixed $tokenInvalidatorFn;
     private readonly mixed $composeFn;
 
-    /**
-     * @var array<string,mixed>
-     */
+    /** @var list<mixed> */
     private readonly array $extraCallbacks;
 
-    /**
-     * @param array<string,mixed> $extraCallbacks
-     */
     public function __construct(
         mixed $inner = null,
         mixed $cacheKeyFn = null,
@@ -56,7 +47,7 @@ final class ConsistentCachePdpV2
         $this->rebacTokenFn = $rebacTokenFn;
         $this->tokenInvalidatorFn = $tokenInvalidatorFn;
         $this->composeFn = $composeFn;
-        $this->extraCallbacks = $extraCallbacks;
+        $this->extraCallbacks = array_values($extraCallbacks);
     }
 
     public function __invoke(mixed ...$arguments): mixed
@@ -95,7 +86,7 @@ final class ConsistentCachePdpV2
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array{tokenEvents:list<string>,cacheKeys:list<string>}
      */
     public function invalidate(mixed ...$arguments): array
     {
@@ -128,7 +119,7 @@ final class ConsistentCachePdpV2
 
         return [
             'tokenEvents' => array_values(array_unique($tokens)),
-            'cacheKeys' => array_values(array_filter([$this->resolveCacheKey(...$arguments)], static fn (mixed $v): bool => null !== $v && '' !== (string) $v)),
+            'cacheKeys' => $this->stringCacheKeys($this->resolveCacheKey(...$arguments)),
         ];
     }
 
@@ -141,6 +132,18 @@ final class ConsistentCachePdpV2
         $value = ($this->cacheKeyFn)(...$arguments);
 
         return is_scalar($value) ? $value : ($value instanceof \Stringable ? (string) $value : null);
+    }
+
+    /** @return list<string> */
+    private function stringCacheKeys(string|int|float|bool|null $cacheKey): array
+    {
+        if (null === $cacheKey) {
+            return [];
+        }
+
+        $normalized = (string) $cacheKey;
+
+        return '' === $normalized ? [] : [$normalized];
     }
 
     private function delegate(mixed ...$arguments): mixed
@@ -158,6 +161,12 @@ final class ConsistentCachePdpV2
                 if (method_exists($this->inner, $method)) {
                     return $this->inner->{$method}(...$arguments);
                 }
+            }
+        }
+
+        foreach ($this->extraCallbacks as $callback) {
+            if (is_callable($callback)) {
+                return $callback(...$arguments);
             }
         }
 

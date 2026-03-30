@@ -1,37 +1,41 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service;
 
 final class ImportValidator
 {
+    /**
+     * @param list<array<string,mixed>> $rows
+     *
+     * @return list<array{row:int,errors:list<string>}>
+     */
     public function validate(array $rows): array
     {
         $errors = [];
-        $seen = [];
-        foreach ($rows as $idx => $row) {
-            $slug = $row['slug'] ?? null;
-            if (null === $slug || '' === $slug) {
-                $errors[] = ['row' => $idx, 'error' => 'empty-slug'];
-            } elseif (in_array($slug, $seen, true)) {
-                $errors[] = ['row' => $idx, 'error' => 'duplicate-slug', 'slug' => $slug];
-            } else {
-                $seen[] = $slug;
+        foreach ($rows as $index => $row) {
+            $rowErrors = [];
+            if ('' === $this->stringValue($row, 'id')) {
+                $rowErrors[] = 'missing id';
             }
-            if (($row['parent'] ?? null) === 'missing') {
-                $errors[] = ['row' => $idx, 'error' => 'parent-not-found'];
+            if ('' === $this->stringValue($row, 'name')) {
+                $rowErrors[] = 'missing name';
             }
-            $locale = $row['locale'] ?? 'en';
-            if (!in_array($locale, ['en', 'uk', 'es', 'fr'], true)) {
-                $errors[] = ['row' => $idx, 'error' => 'invalid-locale', 'value' => $locale];
+            if ([] !== $rowErrors) {
+                $errors[] = ['row' => $index, 'errors' => $rowErrors];
             }
         }
 
         return $errors;
+    }
+
+    /** @param array<string,mixed> $row */
+    private function stringValue(array $row, string $key): string
+    {
+        $value = $row[$key] ?? '';
+
+        return is_scalar($value) ? trim((string) $value) : '';
     }
 }

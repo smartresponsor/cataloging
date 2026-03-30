@@ -1,100 +1,115 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Controller;
 
-use App\Entity\CategoryBanner;
-use App\Entity\CategoryHtmlBlock;
-use App\Entity\CategoryPin;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CatalogMerchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryMerchController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $em, private readonly Connection $infra)
+    public function __construct(private readonly CatalogMerchService $categoryMerchService)
     {
     }
 
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_create', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function pinCreate(string $id, Request $r): JsonResponse
+    public function pinCreate(string $id, Request $request): JsonResponse
     {
-        $recordId = (string) $r->request->get('recordId');
-        $pos = (int) $r->request->get('position', 0);
-        $pin = new CategoryPin($id, $recordId, $pos);
-        $this->em->persist($pin);
-        $this->em->flush();
+        $recordId = $this->bagString($request->request, 'recordId');
+        $position = $this->bagInt($request->request, 'position');
+        $this->categoryMerchService->pinCreate($id, $recordId, $position);
 
         return $this->json(['ok' => true]);
     }
 
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_delete', methods: ['DELETE'])]
     #[IsGranted('category.merch')]
-    public function pinDelete(string $id, Request $r): JsonResponse
+    public function pinDelete(string $id, Request $request): JsonResponse
     {
-        $recordId = (string) $r->query->get('recordId');
-        $pin = $this->em->getRepository(CategoryPin::class)->findOneBy(['categoryId' => $id, 'recordId' => $recordId]);
-        if ($pin) {
-            $this->em->remove($pin);
-            $this->em->flush();
-        }
+        $recordId = $this->bagString($request->query, 'recordId');
+        $this->categoryMerchService->pinDelete($id, $recordId);
 
         return $this->json(['ok' => true]);
     }
 
     #[Route('/api/category/{id}/order', name: 'api_category_order_set', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function orderSet(string $id, Request $r): JsonResponse
+    public function orderSet(string $id, Request $request): JsonResponse
     {
-        $list = $r->request->all('recordId'); // expect recordId[]=A&recordId[]=B ...
-        $pos = 0;
-        foreach ($list as $rid) {
-            $this->em->getConnection()->executeStatement(
-                'UPDATE category_pin SET position = ? WHERE category_id = ? AND record_id = ?',
-                [$pos++, $id, $rid]
-            );
-        }
+        $recordIds = $this->bagStringList($request->request, 'recordId');
+        $this->categoryMerchService->orderSet($id, $recordIds);
 
         return $this->json(['ok' => true]);
     }
 
     #[Route('/api/category/{id}/banner/publish', name: 'api_category_banner_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function bannerPublish(string $id, Request $r): JsonResponse
+    public function bannerPublish(string $id, Request $request): JsonResponse
     {
-        $title = (string) $r->request->get('title');
-        $content = (string) $r->request->get('content');
-        $b = new CategoryBanner($id, $title, $content);
-        $b->publish();
-        $this->em->persist($b);
-        $this->em->flush();
+        $title = $this->bagString($request->request, 'title');
+        $content = $this->bagString($request->request, 'content');
+        $bannerId = $this->categoryMerchService->bannerPublish($id, $title, $content);
 
-        return $this->json(['ok' => true, 'id' => $b->id()]);
+        return $this->json(['ok' => true, 'id' => $bannerId]);
     }
 
     #[Route('/api/category/{id}/html/publish', name: 'api_category_html_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
-    public function htmlPublish(string $id, Request $r): JsonResponse
+    public function htmlPublish(string $id, Request $request): JsonResponse
     {
-        $html = (string) $r->request->get('html');
-        $h = new CategoryHtmlBlock($id, $html);
-        $h->publish();
-        $this->em->persist($h);
-        $this->em->flush();
+        $html = $this->bagString($request->request, 'html');
+        $htmlBlockId = $this->categoryMerchService->htmlPublish($id, $html);
 
-        return $this->json(['ok' => true, 'id' => $h->id()]);
+        return $this->json(['ok' => true, 'id' => $htmlBlockId]);
+    }
+
+    private function bagString(InputBag|ParameterBag $bag, string $key, string $default = ''): string
+    {
+        return $this->scalarString($bag->get($key, $default), $default);
+    }
+
+    private function bagInt(InputBag|ParameterBag $bag, string $key, int $default = 0): int
+    {
+        $value = $bag->get($key, $default);
+
+        return is_numeric($value) ? (int) $value : $default;
+    }
+
+    /**
+     * @param InputBag<array-key, mixed>|ParameterBag $bag
+     *
+     * @return list<string>
+     */
+    private function bagStringList(InputBag|ParameterBag $bag, string $key): array
+    {
+        $raw = $bag instanceof InputBag ? $bag->all($key) : $bag->all()[$key] ?? [];
+        if (!is_array($raw)) {
+            return [];
+        }
+
+        $items = [];
+
+        foreach ($raw as $value) {
+            $item = $this->scalarString($value);
+            if ('' !== $item) {
+                $items[] = $item;
+            }
+        }
+
+        return array_values($items);
+    }
+
+    private function scalarString(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string) $value : $default;
     }
 }

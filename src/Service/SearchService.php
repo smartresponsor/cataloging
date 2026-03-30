@@ -1,21 +1,25 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service;
 
 final class SearchService
 {
+    /** @var list<array{id:int,name:string,slug:string,locale:string,channel:string}> */
     private array $data = [
         ['id' => 1, 'name' => 'Root', 'slug' => 'root', 'locale' => 'en', 'channel' => 'default'],
         ['id' => 2, 'name' => 'Electronics', 'slug' => 'electronics', 'locale' => 'en', 'channel' => 'default'],
         ['id' => 3, 'name' => 'Phones', 'slug' => 'phones', 'locale' => 'uk', 'channel' => 'default'],
     ];
 
+    /**
+     * @return array{
+     *   items:list<array{id:int,name:string,slug:string,locale:string,channel:string}>,
+     *   facets:array{locale:array<string,int>,channel:array<string,int>}
+     * }
+     */
     public function search(string $q = ''): array
     {
         $q = strtolower($q);
@@ -33,7 +37,7 @@ final class SearchService
             $facets['locale'][$row['locale']] = ($facets['locale'][$row['locale']] ?? 0) + 1;
             $facets['channel'][$row['channel']] = ($facets['channel'][$row['channel']] ?? 0) + 1;
         }
-        file_put_contents('report/category-search-stats.json', json_encode($facets, JSON_PRETTY_PRINT));
+        file_put_contents('report/category-search-stats.json', json_encode($facets, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
 
         return ['items' => $out, 'facets' => $facets];
     }

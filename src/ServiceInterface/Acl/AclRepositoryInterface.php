@@ -1,21 +1,26 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- * Owner: Marketing America Corp
- * Canon: single-hyphen names, no plurals in Class/Method, Postgres=Data, MySQL=Infrastructure
- * Tag Signin: <17111337+taa0662621456@users.noreply.github.com>
- */
 
 namespace App\ServiceInterface\Acl;
 
 interface AclRepositoryInterface
 {
+    /**
+     * @param array<string,mixed> $rule
+     */
     public function put(array $rule): void;
 
+    /**
+     * @param array<string,mixed> $filter
+     *
+     * @return list<array<string,mixed>>
+     */
     public function list(array $filter): array;
 
+    /**
+     * @param array<string,mixed> $input
+     */
     public function decide(array $input): bool;
 }

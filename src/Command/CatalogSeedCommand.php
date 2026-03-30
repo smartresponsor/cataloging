@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Command;
 
@@ -23,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CatalogSeedCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
     public function __construct(private readonly EntityManagerInterface $em)
     {
@@ -37,8 +32,8 @@ final class CatalogSeedCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $n = max(1, (int) $input->getArgument('count'));
-        $b = max(2, (int) $input->getArgument('branching'));
+        $n = max(1, $this->argumentInt($input, 'count', 1));
+        $b = max(2, $this->argumentInt($input, 'branching', 5));
 
         $root = new CategoryEntity('Root', 'root', 'root', 0);
         $this->em->persist($root);

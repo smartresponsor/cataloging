@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Entity;
 
@@ -28,7 +25,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     }
 
     /**
-     * @param array<string,string> $settings
+     * @param array<string,mixed> $settings
      */
     public static function register(
         string $destinationId,
@@ -45,10 +42,52 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
             trim($destinationType),
             trim($deliveryMode),
             $enabled,
-            $settings,
+            self::normalizeSettings($settings),
             trim($createdBy),
             new \DateTimeImmutable('now'),
         );
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     *
+     * @return array<string,string>
+     */
+    private static function normalizeSettings(array $settings): array
+    {
+        $normalized = [];
+        foreach ($settings as $key => $value) {
+            if (!is_scalar($key)) {
+                continue;
+            }
+
+            $normalizedKey = trim((string) $key);
+            if ('' === $normalizedKey) {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $parts = [];
+                foreach ($value as $item) {
+                    if (is_scalar($item)) {
+                        $parts[] = trim((string) $item);
+                    }
+                }
+                $normalized[$normalizedKey] = implode(',', array_values(array_filter($parts, static fn (string $part): bool => '' !== $part)));
+                continue;
+            }
+
+            if (is_bool($value)) {
+                $normalized[$normalizedKey] = $value ? 'true' : 'false';
+                continue;
+            }
+
+            $normalized[$normalizedKey] = is_scalar($value) ? trim((string) $value) : '';
+        }
+
+        ksort($normalized);
+
+        return $normalized;
     }
 
     public function destinationId(): string

@@ -1,28 +1,46 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service;
 
 final class AbVariantResolver
 {
-    public function __construct(private readonly array $flags = [])
+    /** @var array<string,bool> */
+    private array $flags;
+
+    /** @param array<string,bool> $flags */
+    public function __construct(array $flags = [])
     {
+        $this->flags = $flags;
     }
 
     public function variant(string $feature): string
     {
-        $enabled = (bool) ($this->flags[$feature] ?? false);
+        $enabled = $this->flags[$feature] ?? false;
         $variant = $enabled ? 'v2' : 'v1';
         $logFile = 'report/category-ab-usage.json';
-        $log = is_file($logFile) ? json_decode(file_get_contents($logFile), true) : [];
+        /** @var list<array<string,string>> $log */
+        $log = $this->readJsonList($logFile);
         $log[] = ['feature' => $feature, 'variant' => $variant, 'ts' => date(DATE_ATOM)];
-        file_put_contents($logFile, json_encode($log, JSON_PRETTY_PRINT));
+        file_put_contents($logFile, json_encode($log, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
 
         return $variant;
+    }
+
+    /** @return list<array<string,string>> */
+    private function readJsonList(string $path): array
+    {
+        if (!is_file($path)) {
+            return [];
+        }
+        $json = file_get_contents($path);
+        if (!is_string($json) || '' === $json) {
+            return [];
+        }
+        $decoded = json_decode($json, true);
+
+        return is_array($decoded) ? array_values(array_filter($decoded, 'is_array')) : [];
     }
 }

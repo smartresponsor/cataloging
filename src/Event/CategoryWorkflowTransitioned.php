@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Event;
 
@@ -20,6 +17,11 @@ final class CategoryWorkflowTransitioned implements CategoryWorkflowTransitioned
         private readonly string $reason,
         private readonly \DateTimeImmutable $occurredAt,
     ) {
+    }
+
+    public function eventName(): string
+    {
+        return 'category.workflow_transitioned';
     }
 
     /** @return array<string,mixed> */

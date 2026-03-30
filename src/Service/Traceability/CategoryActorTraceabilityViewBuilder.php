@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service\Traceability;
 
@@ -96,7 +93,7 @@ final class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceab
 
         foreach ($this->workflowRepository->historyForCategoryId($categoryId) as $event) {
             $payload = $event->payload();
-            $actorId = (string) ($payload['actorId'] ?? '');
+            $actorId = $this->payloadString($payload, 'actorId');
             $row = [
                 'eventName' => $event->eventName(),
                 'actorId' => $actorId,
@@ -143,5 +140,13 @@ final class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceab
 
         ++$actorSummary[$actorId]['count'];
         $actorSummary[$actorId]['roles'][] = $role;
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function payloadString(array $payload, string $key): string
+    {
+        $value = $payload[$key] ?? '';
+
+        return is_scalar($value) ? (string) $value : '';
     }
 }

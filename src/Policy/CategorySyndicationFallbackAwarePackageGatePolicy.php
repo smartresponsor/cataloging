@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Policy;
 
@@ -14,16 +11,24 @@ use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportIn
 
 final class CategorySyndicationFallbackAwarePackageGatePolicy implements CategorySyndicationFallbackAwarePackageGatePolicyInterface
 {
+    /**
+     * @param list<string>       $packageMissingRequiredFields
+     * @param list<string>       $strictMediaRequiredMissing
+     * @param list<string>       $fallbackMediaRequiredMissing
+     * @param list<string>       $warnings
+     * @param array<string,bool> $strictChecks
+     * @param array<string,bool> $fallbackChecks
+     * @param list<string>       $exactMatchedBindingIds
+     * @param list<string>       $fallbackMatchedBindingIds
+     */
     public function buildReport(array $packageMissingRequiredFields, array $strictMediaRequiredMissing, array $fallbackMediaRequiredMissing, array $warnings, array $strictChecks, array $fallbackChecks, array $exactMatchedBindingIds, array $fallbackMatchedBindingIds): CategorySyndicationFallbackAwarePackageGateReportInterface
     {
-        $normalize = static fn (array $values): array => array_values(array_unique(array_filter(array_map(static fn (mixed $value): string => trim((string) $value), $values), static fn (string $value): bool => '' !== $value)));
-
-        $packageMissingRequiredFields = $normalize($packageMissingRequiredFields);
-        $strictMediaRequiredMissing = $normalize($strictMediaRequiredMissing);
-        $fallbackMediaRequiredMissing = $normalize($fallbackMediaRequiredMissing);
-        $warnings = $normalize($warnings);
-        $exactMatchedBindingIds = $normalize($exactMatchedBindingIds);
-        $fallbackMatchedBindingIds = $normalize($fallbackMatchedBindingIds);
+        $packageMissingRequiredFields = $this->normalizeList($packageMissingRequiredFields);
+        $strictMediaRequiredMissing = $this->normalizeList($strictMediaRequiredMissing);
+        $fallbackMediaRequiredMissing = $this->normalizeList($fallbackMediaRequiredMissing);
+        $warnings = $this->normalizeList($warnings);
+        $exactMatchedBindingIds = $this->normalizeList($exactMatchedBindingIds);
+        $fallbackMatchedBindingIds = $this->normalizeList($fallbackMatchedBindingIds);
         sort($packageMissingRequiredFields);
         sort($strictMediaRequiredMissing);
         sort($fallbackMediaRequiredMissing);
@@ -41,10 +46,10 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy implements Categor
         ];
 
         foreach ($strictChecks as $key => $value) {
-            $checks['strict:'.(string) $key] = (bool) $value;
+            $checks['strict:'.$key] = $value;
         }
         foreach ($fallbackChecks as $key => $value) {
-            $checks['fallback:'.(string) $key] = (bool) $value;
+            $checks['fallback:'.$key] = $value;
         }
 
         if (!$checks['packageFieldsReady']) {
@@ -76,5 +81,23 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy implements Categor
             $checks['strictPackageGatePublishable'],
             $checks['fallbackPackageGatePublishable'],
         );
+    }
+
+    /**
+     * @param list<string> $values
+     *
+     * @return list<string>
+     */
+    private function normalizeList(array $values): array
+    {
+        $normalized = [];
+        foreach ($values as $value) {
+            $item = trim($value);
+            if ('' !== $item) {
+                $normalized[] = $item;
+            }
+        }
+
+        return array_values(array_unique($normalized));
     }
 }

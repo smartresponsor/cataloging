@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Subscriber;
 
@@ -37,8 +31,8 @@ final class CategorySlugSubscriber implements EventSubscriber
         }
 
         if ($args->hasChangedField('slug')) {
-            $old = (string) $args->getOldValue('slug');
-            $new = (string) $args->getNewValue('slug');
+            $old = $this->scalarString($args->getOldValue('slug'));
+            $new = $this->scalarString($args->getNewValue('slug'));
             if ($old === $new) {
                 return;
             }
@@ -49,5 +43,10 @@ final class CategorySlugSubscriber implements EventSubscriber
             $alias = new CategoryAliasEntity($old, $entity->getId());
             $this->em->persist($alias);
         }
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

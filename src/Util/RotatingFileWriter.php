@@ -1,13 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Util;
 
@@ -29,10 +23,8 @@ final class RotatingFileWriter
             for ($i = $this->maxFiles - 1; $i >= 1; --$i) {
                 $old = $this->path.'.'.$i;
                 $new = $this->path.'.'.($i + 1);
-                if (file_exists($old)) {
-                    if (file_exists($old) && !rename($old, $new)) {
-                        throw new \RuntimeException(sprintf('Unable to rotate log segment from %s to %s.', $old, $new));
-                    }
+                if (file_exists($old) && !rename($old, $new)) {
+                    throw new \RuntimeException(sprintf('Unable to rotate log segment from %s to %s.', $old, $new));
                 }
             }
             if (!rename($this->path, $this->path.'.1')) {

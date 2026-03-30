@@ -1,17 +1,16 @@
 <?php
 
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Controller\Admin;
 
+use App\Dto\CategoryAdminCategoryData;
+use App\Form\CategoryAdminCategoryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryAdminController extends AbstractController
 {
@@ -31,12 +30,19 @@ final class CategoryAdminController extends AbstractController
     #[Route('/admin/category/new', name: 'admin_category_new')]
     public function new(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
+        $data = new CategoryAdminCategoryData();
+        $form = $this->createForm(CategoryAdminCategoryType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', sprintf('Category "%s" prepared for demo save.', $data->name));
+
             return $this->redirectToRoute('admin_category_index');
         }
 
         return $this->render('category/form.html.twig', [
-            'category' => null,
+            'form' => $form->createView(),
+            'is_edit' => false,
         ]);
     }
 
@@ -44,12 +50,19 @@ final class CategoryAdminController extends AbstractController
     public function edit(int $id, Request $request): Response
     {
         $category = ['id' => $id, 'name' => 'Electronics', 'slug' => 'electronics'];
-        if ($request->isMethod('POST')) {
+        $data = CategoryAdminCategoryData::fromArray($category);
+        $form = $this->createForm(CategoryAdminCategoryType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', sprintf('Category #%d updated in demo flow.', $id));
+
             return $this->redirectToRoute('admin_category_index');
         }
 
         return $this->render('category/form.html.twig', [
-            'category' => $category,
+            'form' => $form->createView(),
+            'is_edit' => true,
         ]);
     }
 

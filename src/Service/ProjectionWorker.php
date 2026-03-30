@@ -1,11 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
@@ -25,7 +21,8 @@ final class ProjectionWorker
         $stmt->execute();
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
         foreach ($rows as $row) {
-            $this->apply((string) $row['type'], json_decode((string) $row['payload'], true));
+            $payload = $this->decodePayload($row['payload'] ?? null);
+            $this->apply((string) $row['type'], $payload);
             $u = $this->pdo->prepare('UPDATE outbox SET processed_at = NOW() WHERE id = :id AND processed_at IS NULL');
             $u->bindValue(':id', (string) $row['id']);
             $u->execute();
@@ -34,8 +31,19 @@ final class ProjectionWorker
         return count($rows);
     }
 
+    /** @param array<string,mixed> $payload */
     private function apply(string $type, array $payload): void
     {
-        // Apply to MySQL projection or cache (infrastructure layer).
+    }
+
+    /** @return array<string,mixed> */
+    private function decodePayload(mixed $payload): array
+    {
+        if (!is_string($payload) || '' === $payload) {
+            return [];
+        }
+        $decoded = json_decode($payload, true);
+
+        return is_array($decoded) ? $decoded : [];
     }
 }

@@ -1,14 +1,11 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\ServiceInterface\CategoryWorkflowTransitionServiceInterface;
+use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,8 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategoryWorkflowTransitionCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
-    public function __construct(private readonly CategoryWorkflowTransitionServiceInterface $transitionService)
+    public function __construct(private readonly CatalogWorkflowTransitionServiceInterface $transitionService)
     {
         parent::__construct();
     }
@@ -39,10 +37,10 @@ final class CategoryWorkflowTransitionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->transitionService->transition(
-            (string) $input->getArgument('categoryId'),
-            (string) $input->getArgument('targetState'),
-            (string) $input->getArgument('actorId'),
-            (string) $input->getArgument('reason'),
+            $this->argumentString($input, 'categoryId'),
+            $this->argumentString($input, 'targetState'),
+            $this->argumentString($input, 'actorId'),
+            $this->argumentString($input, 'reason'),
         );
 
         return $this->writeJson($output, $event->payload());

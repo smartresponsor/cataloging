@@ -1,14 +1,11 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\Service\Ops\CategoryRuntimeStatusViewBuilder;
+use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'category:runtime:status', description: 'Build category runtime status contour.')]
 final class CategoryRuntimeStatusCommand extends Command
 {
-    public function __construct(private readonly CategoryRuntimeStatusViewBuilder $viewBuilder)
+    public function __construct(private readonly CategoryRuntimeStatusViewBuilderInterface $viewBuilder)
     {
         parent::__construct();
     }
@@ -32,9 +29,11 @@ final class CategoryRuntimeStatusCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $view = $this->viewBuilder->build((string) $input->getArgument('categoryId'))->toArray();
-
-        $io->writeln(json_encode($view, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) ?: '{}');
+        $arg = $input->getArgument('categoryId');
+        $categoryId = is_scalar($arg) ? (string) $arg : '';
+        $view = $this->viewBuilder->build($categoryId)->toArray();
+        $json = json_encode($view, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $io->writeln(false !== $json ? $json : '{}');
 
         return Command::SUCCESS;
     }

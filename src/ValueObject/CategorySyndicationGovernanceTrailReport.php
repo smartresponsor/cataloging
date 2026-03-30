@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\ValueObject;
 
@@ -84,16 +81,19 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
         return $this->retryScheduled;
     }
 
+    /** @return array<string,int> */
     public function historyCounts(): array
     {
         return $this->historyCounts;
     }
 
+    /** @return list<string> */
     public function warnings(): array
     {
         return $this->warnings;
     }
 
+    /** @return array<string,bool> */
     public function checks(): array
     {
         return $this->checks;

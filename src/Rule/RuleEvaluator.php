@@ -1,34 +1,25 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Rule;
 
 final class RuleEvaluator
 {
-    /**
-     * @return array{sql:string,params:array<string,mixed>}
-     */
+    /** @return array{sql:string,params:array<string,mixed>} */
     public function compile(CategoryRule $rule): array
     {
         $where = [];
         $params = [];
         $i = 0;
-
         foreach ($rule->spec()['all'] as $cond) {
-            if (isset($cond['attr'])) {
-                $attr = (string) $cond['attr'];
-                $op = (string) $cond['op'];
-                $val = $cond['value'];
-
+            $attrRaw = $cond['attr'] ?? null;
+            if (is_scalar($attrRaw) && '' !== trim((string) $attrRaw)) {
+                $attr = trim((string) $attrRaw);
+                $opRaw = $cond['op'] ?? null;
+                $op = is_scalar($opRaw) ? trim((string) $opRaw) : '';
+                $val = $cond['value'] ?? null;
                 if ('in' === $op && is_array($val)) {
                     $marks = [];
                     foreach ($val as $v) {
@@ -50,16 +41,16 @@ final class RuleEvaluator
                 } else {
                     throw new \InvalidArgumentException('Unsupported operator: '.$op);
                 }
-            } elseif (isset($cond['tag'])) {
+                continue;
+            }
+            $tagRaw = $cond['tag'] ?? null;
+            if (is_scalar($tagRaw)) {
                 $a = ':p'.$i++;
                 $where[] = 'JSON_CONTAINS(tag_set, '.$a.')';
-                $params[$a] = json_encode($cond['tag'], JSON_THROW_ON_ERROR);
+                $params[$a] = json_encode((string) $tagRaw, JSON_THROW_ON_ERROR);
             }
         }
 
-        return [
-            'sql' => [] !== $where ? '('.implode(' AND ', $where).')' : '1=1',
-            'params' => $params,
-        ];
+        return ['sql' => [] !== $where ? '('.implode(' AND ', $where).')' : '1=1', 'params' => $params];
     }
 }

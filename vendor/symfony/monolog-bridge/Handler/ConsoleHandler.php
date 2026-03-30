@@ -192,7 +192,7 @@ final class ConsoleHandler extends AbstractProcessingHandler implements EventSub
         $verbosity = $this->output->getVerbosity();
         if (isset($this->verbosityLevelMap[$verbosity])) {
             $this->setLevel($this->verbosityLevelMap[$verbosity]);
-        } elseif (\defined('\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_SILENT') && OutputInterface::VERBOSITY_SILENT === $verbosity) {
+        } elseif (OutputInterface::VERBOSITY_SILENT === $verbosity) {
             return false;
         } else {
             $this->setLevel(Level::Debug);

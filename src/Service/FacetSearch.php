@@ -1,11 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-Owner: Marketing America Corp
-*/
 
 namespace App\Service;
 
@@ -18,6 +14,7 @@ final class FacetSearch
         $this->pdo = $pdo;
     }
 
+    /** @return list<array{id:string,slug:string,name:string,path:string,locale:string}> */
     public function search(string $term, string $locale = 'en', int $limit = 20, int $offset = 0): array
     {
         $sql = 'SELECT id, slug, name, path, locale FROM category_projection 
@@ -32,12 +29,15 @@ final class FacetSearch
         $stmt->execute();
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        return array_map(fn (array $r) => [
-            'id' => (string) $r['id'],
-            'slug' => (string) $r['slug'],
-            'name' => (string) $r['name'],
-            'path' => (string) ($r['path'] ?? ''),
-            'locale' => (string) $r['locale'],
-        ], $rows ?: []);
+        return array_map(
+            fn (array $r): array => [
+                'id' => (string) $r['id'],
+                'slug' => (string) $r['slug'],
+                'name' => (string) $r['name'],
+                'path' => (string) ($r['path'] ?? ''),
+                'locale' => (string) $r['locale'],
+            ],
+            $rows ?: []
+        );
     }
 }

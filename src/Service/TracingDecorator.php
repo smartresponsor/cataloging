@@ -1,29 +1,36 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Service;
 
-use OpenTelemetry\API\Trace\TracerProviderInterface;
-
 final class TracingDecorator
 {
-    public function __construct(private readonly TracerProviderInterface $tracerProvider)
+    public function __construct(private readonly ?object $tracerProvider = null)
     {
     }
 
     public function trace(string $name, callable $fn): mixed
     {
-        $tracer = $this->tracerProvider->getTracer('category');
-        $span = $tracer->spanBuilder($name)->startSpan();
+        $span = null;
+        $provider = $this->tracerProvider;
+        if (is_object($provider) && method_exists($provider, 'getTracer')) {
+            $tracer = $provider->getTracer('category');
+            if (is_object($tracer) && method_exists($tracer, 'spanBuilder')) {
+                $builder = $tracer->spanBuilder($name);
+                if (is_object($builder) && method_exists($builder, 'startSpan')) {
+                    $span = $builder->startSpan();
+                }
+            }
+        }
+
         try {
             return $fn();
         } finally {
-            $span->end();
+            if (is_object($span) && method_exists($span, 'end')) {
+                $span->end();
+            }
         }
     }
 }

@@ -1,16 +1,17 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/*
-Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-Owner: Marketing America Corp
-Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
-*/
 
 namespace App\Service;
 
 final class CloudflarePurger
 {
+    /**
+     * @param list<string> $keys
+     *
+     * @return array{files:list<never>,tags:list<string>}
+     */
     public function payloadForKeys(array $keys): array
     {
         return ['files' => [], 'tags' => array_values(array_unique($keys))];

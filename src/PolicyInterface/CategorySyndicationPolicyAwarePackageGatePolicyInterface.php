@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\PolicyInterface;
 
@@ -12,5 +9,10 @@ use App\ValueObjectInterface\CategorySyndicationPolicyAwarePackageGateReportInte
 
 interface CategorySyndicationPolicyAwarePackageGatePolicyInterface
 {
+    /**
+     * @param list<string>        $packageMissingRequiredFields
+     * @param array<string,mixed> $policyPayload
+     * @param array<string,mixed> $fallbackGatePayload
+     */
     public function buildReport(array $packageMissingRequiredFields, array $policyPayload, array $fallbackGatePayload): CategorySyndicationPolicyAwarePackageGateReportInterface;
 }

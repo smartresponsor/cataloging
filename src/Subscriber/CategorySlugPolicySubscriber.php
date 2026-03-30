@@ -1,20 +1,14 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
-/*
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- */
 
 namespace App\Subscriber;
 
 use App\Entity\CategoryEntity;
 use App\Service\SlugService;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
@@ -29,7 +23,7 @@ final class CategorySlugPolicySubscriber implements EventSubscriber
         return [Events::prePersist, Events::preUpdate];
     }
 
-    public function prePersist(LifecycleEventArgs $args): void
+    public function prePersist(PrePersistEventArgs $args): void
     {
         $e = $args->getObject();
         if (!$e instanceof CategoryEntity) {
@@ -45,7 +39,8 @@ final class CategorySlugPolicySubscriber implements EventSubscriber
             return;
         }
         if ($args->hasChangedField('slug')) {
-            $e->setSlug($this->svc->ensureUnique($e->getNewValue('slug')));
+            $newSlug = $args->getNewValue('slug');
+            $e->setSlug($this->svc->ensureUnique(is_string($newSlug) ? $newSlug : $e->getSlug()));
         }
     }
 }

@@ -1,14 +1,11 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Command;
 
-use App\ServiceInterface\CategorySyndicationCategoryGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,8 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
 {
     use CategoryCliOutputTrait;
+    use CategoryCliInputTrait;
 
-    public function __construct(private readonly CategorySyndicationCategoryGovernanceSummaryServiceInterface $service)
+    public function __construct(private readonly CatalogSyndicationGovernanceSummaryServiceInterface $service)
     {
         parent::__construct();
     }
@@ -41,26 +39,26 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->service->buildSummary(
-            (string) $input->getArgument('categoryId'),
-            $this->decodeTrails((string) $input->getOption('trails')),
-            (string) $input->getArgument('actorId'),
-            (string) $input->getArgument('reason'),
+            $this->argumentString($input, 'categoryId'),
+            $this->decodeTrails($this->optionString($input, 'trails', '[]')),
+            $this->argumentString($input, 'actorId'),
+            $this->argumentString($input, 'reason'),
         );
 
         $payload = $event->payload();
-        $format = (string) $input->getOption('format');
+        $format = $this->optionString($input, 'format', 'json');
         if ('ndjson' === $format) {
-            $output->writeln(json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $output->writeln($this->encodeJson($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
             return self::SUCCESS;
         }
 
-        $output->writeln(json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $output->writeln($this->encodeJson($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
         return self::SUCCESS;
     }
 
-    /** @return array<int,array<string,mixed>> */
+    /** @return list<array<string,mixed>> */
     private function decodeTrails(string $json): array
     {
         $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);

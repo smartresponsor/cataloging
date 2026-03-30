@@ -1,14 +1,12 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Infrastructure;
 
 use App\InfrastructureInterface\OutboxDispatcherInterface;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class MessengerOutboxDispatcher implements OutboxDispatcherInterface
@@ -17,8 +15,9 @@ final class MessengerOutboxDispatcher implements OutboxDispatcherInterface
     {
     }
 
+    /** @param array<string,mixed> $event */
     public function dispatch(array $event): void
     {
-        $this->bus->dispatch($event);
+        $this->bus->dispatch(new Envelope(new OutboxMessage($event)));
     }
 }

@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Policy;
 
@@ -15,6 +12,10 @@ use App\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 
 final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyInterface
 {
+    /**
+     * @param array<string,mixed>                      $payload
+     * @param array<int,CategoryMediaBindingInterface> $bindings
+     */
     public function buildReport(array $payload, array $bindings): CategoryMediaCoverageReportInterface
     {
         $media = is_array($payload['media'] ?? null) ? $payload['media'] : [];
@@ -33,27 +34,28 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
             static fn (CategoryMediaBindingInterface $binding): bool => $binding->requiredForPublish(),
         ));
 
-        $hasInlinePrimary = '' !== trim((string) ($media['primaryAssetId'] ?? ''));
-        $hasInlineBanner = '' !== trim((string) ($presentation['bannerId'] ?? ''));
+        $hasInlinePrimary = '' !== $this->scalarString($media['primaryAssetId'] ?? null);
+        $hasInlineBanner = '' !== $this->scalarString($presentation['bannerId'] ?? null);
         $hasInlineManagedMedia = $hasInlinePrimary || $hasInlineBanner;
+        $requiredMediaCoverageReady = [] !== $requiredBindings
+            ? $this->allRequiredBindingsCovered($requiredBindings)
+            : !$hasInlineManagedMedia;
 
         $checks = [
             'mediaReady' => $hasPrimaryBinding || $hasInlinePrimary,
             'bannerReady' => $hasBannerBinding || $hasInlineBanner,
             'heroReady' => $hasHeroBinding,
-            'requiredMediaCoverageReady' => [] !== $requiredBindings
-                ? $this->allRequiredBindingsCovered($requiredBindings)
-                : !$hasInlineManagedMedia,
+            'requiredMediaCoverageReady' => $requiredMediaCoverageReady,
         ];
 
         $requiredMissing = [];
-        if (($checks['requiredMediaCoverageReady'] ?? false) !== true) {
+        if (!$requiredMediaCoverageReady) {
             $requiredMissing[] = 'requiredMediaCoverageReady';
         }
 
         $warnings = [];
         foreach (['mediaReady', 'bannerReady', 'heroReady'] as $name) {
-            if (($checks[$name] ?? false) !== true) {
+            if (true !== $checks[$name]) {
                 $warnings[] = $name;
             }
         }
@@ -83,5 +85,10 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
         }
 
         return true;
+    }
+
+    private function scalarString(mixed $value): string
+    {
+        return is_scalar($value) ? trim((string) $value) : '';
     }
 }

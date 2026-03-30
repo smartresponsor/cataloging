@@ -1,10 +1,7 @@
 <?php
 
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp.
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
- */
 
 namespace App\Policy;
 
@@ -15,14 +12,15 @@ use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
 
 final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinationMediaFallbackPolicyInterface
 {
+    /**
+     * @param array<string,mixed>                      $destinationSettings
+     * @param array<int,CategoryMediaBindingInterface> $bindings
+     */
     public function buildReport(string $destinationId, string $categoryId, array $destinationSettings, array $bindings): CategoryDestinationMediaFallbackReportInterface
     {
-        $channel = trim((string) ($destinationSettings['channel'] ?? ''));
-        $locale = trim((string) ($destinationSettings['locale'] ?? ''));
-        $requiredRoles = array_values(array_filter(
-            array_map(static fn (mixed $role): string => trim((string) $role), is_array($destinationSettings['requiredMediaRoles'] ?? null) ? $destinationSettings['requiredMediaRoles'] : []),
-            static fn (string $role): bool => '' !== $role,
-        ));
+        $channel = $this->stringValue($destinationSettings['channel'] ?? null);
+        $locale = $this->stringValue($destinationSettings['locale'] ?? null);
+        $requiredRoles = $this->stringList($destinationSettings['requiredMediaRoles'] ?? null);
 
         $exactByRole = [];
         $fallbackByRole = [];
@@ -42,28 +40,23 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
             if (!$binding instanceof CategoryMediaBindingInterface || !$binding->active()) {
                 continue;
             }
-
             $role = $binding->role()->value();
             if ([] !== $requiredRoles && !in_array($role, $requiredRoles, true)) {
                 continue;
             }
-
             $channelKind = $this->channelKind($binding, $channel);
             $localeKind = $this->localeKind($binding, $locale);
             if (null === $channelKind || null === $localeKind) {
                 continue;
             }
-
             $bindingId = $binding->bindingId();
             if ('exact' === $channelKind && 'exact' === $localeKind) {
                 $exactByRole[$role] = $bindingId;
                 $exactMatchedBindingIds[] = $bindingId;
                 continue;
             }
-
             $fallbackByRole[$role] ??= $bindingId;
             $fallbackMatchedBindingIds[] = $bindingId;
-
             if ('shared' === $channelKind && 'exact' === $localeKind) {
                 $checks['sharedChannelFallbackReady'] = true;
             }
@@ -77,11 +70,9 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
 
         $requiredMissing = [];
         $warnings = [];
-
         foreach ($requiredRoles as $role) {
             $hasExact = isset($exactByRole[$role]);
             $hasFallback = isset($fallbackByRole[$role]);
-
             if (!$hasExact) {
                 $checks['exactDestinationMediaReady'] = false;
             }
@@ -95,18 +86,15 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
                 $warnings[] = sprintf('fallback_used_for_role:%s', $role);
             }
         }
-
         if ([] === $requiredRoles) {
             $warnings[] = 'requiredMediaRolesNotSpecified';
         }
-
         if (!$checks['exactDestinationMediaReady']) {
             $warnings[] = 'exactDestinationMediaMissing';
         }
         if ($checks['fallbackUsed']) {
             $warnings[] = 'sharedFallbackUsed';
         }
-
         $requiredMissing = array_values(array_unique($requiredMissing));
         $warnings = array_values(array_unique($warnings));
         sort($requiredMissing);
@@ -132,7 +120,6 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
         if ('' === $channel) {
             return 'exact';
         }
-
         $channels = $binding->channels();
         if ([] === $channels) {
             return 'shared';
@@ -146,12 +133,50 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
         if ('' === $locale) {
             return 'exact';
         }
-
         $locales = $binding->locales();
         if ([] === $locales) {
             return 'shared';
         }
 
         return in_array($locale, $locales, true) ? 'exact' : null;
+    }
+
+    private function stringValue(mixed $value): string
+    {
+        return is_scalar($value) ? trim((string) $value) : '';
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        $items = [];
+        if (is_array($value)) {
+            $items = $value;
+        } elseif (is_string($value)) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                $items = $decoded;
+            } else {
+                $items = preg_split('/\s*,\s*/', $value) ?: [];
+            }
+        } elseif (is_scalar($value)) {
+            $items = [(string) $value];
+        } else {
+            return [];
+        }
+
+        $result = [];
+        foreach ($items as $item) {
+            if (!is_scalar($item)) {
+                continue;
+            }
+            $normalized = trim((string) $item);
+            if ('' === $normalized) {
+                continue;
+            }
+            $result[] = $normalized;
+        }
+
+        return array_values(array_unique($result));
     }
 }
