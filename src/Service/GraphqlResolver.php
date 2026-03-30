@@ -1,13 +1,11 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Service\Category\DraftPolicy;
-use App\Service\Category\PublishOperation;
-use App\Service\Category\Status;
-use App\Service\Category\TreeOperation;
+use App\ServiceInterface\GraphqlResolverInterface;
 
 final class GraphqlResolver implements GraphqlResolverInterface
 {
@@ -20,9 +18,10 @@ final class GraphqlResolver implements GraphqlResolverInterface
         $this->tree = $tree ?? new TreeOperation();
     }
 
+    /** @param array<string,mixed> $args @return array<string,mixed>|null */
     public function category(array $args): ?array
     {
-        $id = trim((string) ($args['id'] ?? ''));
+        $id = $this->stringValue($args, 'id');
         if ('' === $id) {
             return null;
         }
@@ -30,9 +29,10 @@ final class GraphqlResolver implements GraphqlResolverInterface
         return $this->normalizeNode($id, null, 'published');
     }
 
+    /** @param array<string,mixed> $args @return list<array<string,mixed>> */
     public function categoryPath(array $args): array
     {
-        $id = trim((string) ($args['id'] ?? ''));
+        $id = $this->stringValue($args, 'id');
         if ('' === $id) {
             return [];
         }
@@ -40,10 +40,11 @@ final class GraphqlResolver implements GraphqlResolverInterface
         return [$this->normalizeNode($id, null, 'published')];
     }
 
+    /** @param array<string,mixed> $args @return array<string,mixed>|null */
     public function publishCategory(array $args): ?array
     {
-        $input = (array) ($args['input'] ?? []);
-        $id = trim((string) ($input['id'] ?? ''));
+        $input = $this->arrayValue($args, 'input');
+        $id = $this->stringValue($input, 'id');
         if ('' === $id) {
             return null;
         }
@@ -54,23 +55,23 @@ final class GraphqlResolver implements GraphqlResolverInterface
         return $this->normalizeNode($id, null, $published->value());
     }
 
+    /** @param array<string,mixed> $args */
     public function moveCategory(array $args): bool
     {
-        $input = (array) ($args['input'] ?? []);
-        $id = trim((string) ($input['id'] ?? ''));
-        $parentId = array_key_exists('parentId', $input) && null !== $input['parentId']
-            ? trim((string) $input['parentId'])
-            : null;
+        $input = $this->arrayValue($args, 'input');
+        $id = $this->stringValue($input, 'id');
+        $parentId = $this->nullableStringValue($input, 'parentId');
 
         if ('' === $id) {
             return false;
         }
 
-        $this->tree->move($id, $parentId ?: null);
+        $this->tree->move($id, $parentId);
 
         return true;
     }
 
+    /** @return array<string,mixed> */
     private function normalizeNode(string $id, ?string $parentId, string $status): array
     {
         return [
@@ -81,5 +82,36 @@ final class GraphqlResolver implements GraphqlResolverInterface
             'locale' => 'en',
             'status' => $status,
         ];
+    }
+
+    /** @param array<string,mixed> $input */
+    private function stringValue(array $input, string $key, string $default = ''): string
+    {
+        $value = $input[$key] ?? $default;
+
+        return is_scalar($value) ? trim((string) $value) : $default;
+    }
+
+    /** @param array<string,mixed> $input */
+    private function nullableStringValue(array $input, string $key): ?string
+    {
+        if (!array_key_exists($key, $input) || null === $input[$key]) {
+            return null;
+        }
+        $value = $input[$key];
+
+        return is_scalar($value) ? trim((string) $value) : null;
+    }
+
+    /**
+     * @param array<string,mixed> $input
+     *
+     * @return array<string,mixed>
+     */
+    private function arrayValue(array $input, string $key): array
+    {
+        $value = $input[$key] ?? [];
+
+        return is_array($value) ? $value : [];
     }
 }

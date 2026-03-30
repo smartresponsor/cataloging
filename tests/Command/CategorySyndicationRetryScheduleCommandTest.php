@@ -13,7 +13,7 @@ use App\Command\CategorySyndicationRetryScheduleCommand;
 use App\Entity\CategorySyndicationDeliveryRecord;
 use App\Event\CategorySyndicationRetryScheduled;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ServiceInterface\CategorySyndicationRetryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -27,7 +27,7 @@ final class CategorySyndicationRetryScheduleCommandTest extends TestCase
         $repo = $this->createMock(CategorySyndicationDeliveryRecordRepositoryInterface::class);
         $repo->method('find')->with('d-1')->willReturn($record);
 
-        $service = $this->createMock(CategorySyndicationRetryServiceInterface::class);
+        $service = $this->createMock(CatalogSyndicationRetryServiceInterface::class);
         $service->method('scheduleRetry')->willReturn(new CategorySyndicationRetryScheduled([
             'deliveryId' => 'd-1', 'nextAttempt' => 2, 'delaySeconds' => 300,
         ], new \DateTimeImmutable()));

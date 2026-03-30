@@ -1,11 +1,18 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Infrastructure;
 
 final class ProjectionSync
 {
+    /**
+     * @param array<int|string, array<string, scalar|null>> $pg
+     * @param array<int|string, array<string, scalar|null>> $mysql
+     *
+     * @return list<array<string, scalar|int|string|null>>
+     */
     public function diff(array $pg, array $mysql): array
     {
         $diff = [];
@@ -25,10 +32,16 @@ final class ProjectionSync
         return $diff;
     }
 
+    /**
+     * @param array<int|string, array<string, scalar|null>> $pg
+     * @param array<int|string, array<string, scalar|null>> $mysql
+     *
+     * @return list<array<string, scalar|int|string|null>>
+     */
     public function sync(array $pg, array $mysql): array
     {
         $diff = $this->diff($pg, $mysql);
-        file_put_contents('report/category-projection-diff.json', json_encode($diff, JSON_PRETTY_PRINT));
+        file_put_contents('report/category-projection-diff.json', json_encode($diff, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
 
         return $diff;
     }

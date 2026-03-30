@@ -1,5 +1,6 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
@@ -8,20 +9,22 @@ use App\ServiceInterface\WebhookAdminServiceInterface;
 
 final class WebhookAdminService implements WebhookAdminServiceInterface
 {
-    /** @var array<string, array{name:string, token:string}> */
+    /** @var array<string, array{kid:string, secret:non-empty-string}> */
     private static array $keys = [];
-    /** @var array<int, array{id:int, target:string, payload:array, state:string}> */
+    /** @var array<int, array{id:int, target:string, payload:array<string,mixed>, state:string}> */
     private static array $deliveries = [];
     private static int $deliverySequence = 1;
 
+    /** @return array{kid:string,secret:non-empty-string} */
     public function registerKey(string $name): array
     {
         $token = bin2hex(random_bytes(16));
-        self::$keys[$name] = ['name' => $name, 'token' => $token];
+        self::$keys[$name] = ['kid' => $name, 'secret' => $token];
 
         return self::$keys[$name];
     }
 
+    /** @param array<string,mixed> $payload */
     public function scheduleDelivery(string $target, array $payload): int
     {
         $id = self::$deliverySequence++;

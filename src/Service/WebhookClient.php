@@ -1,4 +1,5 @@
 <?php
+
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
@@ -54,7 +55,8 @@ final class WebhookClient implements WebhookClientInterface
         ]);
 
         $response = file_get_contents($endpoint, false, $context);
-        $headers = isset($http_response_header) && is_array($http_response_header) ? $http_response_header : [];
+        /** @var list<string> $headers */
+        $headers = $http_response_header;
         $statusLine = isset($headers[0]) ? (string) $headers[0] : '';
 
         if (preg_match('/\s(\d{3})\s?/', $statusLine, $matches)) {

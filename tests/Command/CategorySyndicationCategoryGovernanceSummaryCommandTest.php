@@ -11,7 +11,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
 use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
-use App\ServiceInterface\CategorySyndicationCategoryGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +19,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommandTest extends Test
 {
     public function testExecutePrintsCategoryGovernanceSummary(): void
     {
-        $service = $this->createMock(CategorySyndicationCategoryGovernanceSummaryServiceInterface::class);
+        $service = $this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class);
         $service->method('buildSummary')->willReturn(new CategorySyndicationCategoryGovernanceSummaryBuilt([
             'categoryId' => 'cat-1',
             'totalTrails' => 3,
