@@ -33,6 +33,11 @@ final class AttachmentServiceTest extends TestCase
                     'created_at' => '2026-03-29T00:00:00+00:00',
                 ];
             }
+
+            public function delete(string $attachmentId): bool
+            {
+                return false;
+            }
         };
 
         $service = new AttachmentService($repository);
@@ -67,6 +72,11 @@ final class AttachmentServiceTest extends TestCase
                     'created_at' => '2026-03-29T00:00:00+00:00',
                 ];
             }
+
+            public function delete(string $attachmentId): bool
+            {
+                return false;
+            }
         };
 
         $service = new AttachmentService($repository);
@@ -91,5 +101,51 @@ final class AttachmentServiceTest extends TestCase
         $this->expectExceptionMessage('category_id is required');
 
         $service->add('   ', 'icon', '/assets/icon.png');
+    }
+
+    public function testRemoveTrimsAndDelegatesToRepository(): void
+    {
+        $repository = new class implements CatalogAttachmentRepositoryInterface {
+            public ?string $attachmentId = null;
+
+            public function list(?string $categoryId = null): array
+            {
+                return [];
+            }
+
+            public function add(string $categoryId, string $type, string $path): array
+            {
+                return [
+                    'attachment_id' => '01HZZZZZZZZZZZZZZZZZZZZZZZ',
+                    'category_id' => $categoryId,
+                    'type' => $type,
+                    'path' => $path,
+                    'created_at' => '2026-03-29T00:00:00+00:00',
+                ];
+            }
+
+            public function delete(string $attachmentId): bool
+            {
+                $this->attachmentId = $attachmentId;
+
+                return true;
+            }
+        };
+
+        $service = new AttachmentService($repository);
+
+        self::assertTrue($service->remove(' 01HREMOVE '));
+        self::assertSame('01HREMOVE', $repository->attachmentId);
+    }
+
+    public function testRemoveRejectsBlankAttachmentId(): void
+    {
+        $repository = $this->createMock(CatalogAttachmentRepositoryInterface::class);
+        $service = new AttachmentService($repository);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('attachment_id is required');
+
+        $service->remove('   ');
     }
 }

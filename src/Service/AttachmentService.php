@@ -50,4 +50,14 @@ final class AttachmentService
 
         return $this->repository->add($normalizedCategoryId, $normalizedType, $normalizedPath);
     }
+
+    public function remove(string $attachmentId): bool
+    {
+        $normalizedAttachmentId = trim($attachmentId);
+        if ('' === $normalizedAttachmentId) {
+            throw new \InvalidArgumentException('attachment_id is required');
+        }
+
+        return $this->repository->delete($normalizedAttachmentId);
+    }
 }
