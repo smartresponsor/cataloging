@@ -16,4 +16,6 @@ interface CatalogAttachmentRepositoryInterface
      * @return array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}
      */
     public function add(string $categoryId, string $type, string $path): array;
+
+    public function delete(string $attachmentId): bool;
 }

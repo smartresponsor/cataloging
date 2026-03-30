@@ -89,6 +89,15 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         return $item;
     }
 
+    public function delete(string $attachmentId): bool
+    {
+        $this->ensureSchema();
+
+        return 0 < $this->connection->delete('category_attachment', [
+            'attachment_id' => $attachmentId,
+        ]);
+    }
+
     private function ensureSchema(): void
     {
         if ($this->schemaEnsured) {

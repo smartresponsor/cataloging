@@ -49,6 +49,21 @@ paths:
           description: Attachment created
         '400':
           description: Validation failure
+  /api/category/attachment/{attachmentId}:
+    delete:
+      summary: Delete a category attachment
+      parameters:
+        - in: path
+          name: attachmentId
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Attachment deleted
+        '400':
+          description: Invalid attachment identifier
+        '404':
+          description: Attachment not found
   /api/category/collection:
     post:
       summary: Build a rule-based collection from projection records
