@@ -12,5 +12,11 @@ services:
   App\Controller\CollectionListHandler:
     tags: ['controller.service_arguments']
 
+  App\Controller\CategoryAttachmentController:
+    tags: ['controller.service_arguments']
+
+  App\Repository\CatalogAttachmentRepository: ~
+  App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
+
   App\Security\:
     resource: '../src/Security/'
