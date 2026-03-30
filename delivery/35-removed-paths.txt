@@ -1,0 +1,16 @@
+src/Service/Category/CatalogApproxTotalService.php
+src/Service/Category/CatalogCollectionService.php
+src/ServiceInterface/Category/CatalogCollectionServiceInterface.php
+src/Service/Category/Acl/CatalogAclPolicyService.php
+src/Service/Category/CatalogCategoryService.php
+src/Service/Category/CatalogCollectionImportService.php
+src/Service/Category/Graphql/GraphqlGuard.php
+src/Service/Category/Import/CatalogImportService.php
+src/Service/Category/Quota/CatalogQuotaService.php
+src/Service/Category/Quota/TokenBucket.php
+src/Service/Category/Rule/CatalogRuleAdminService.php
+src/Service/Category/Rule/RuleEngine.php
+src/Service/Category/Suggest/CatalogRuleSuggestService.php
+src/ServiceInterface/Category/CatalogCategoryServiceInterface.php
+src/ServiceInterface/Category/CatalogCollectionImportServiceInterface.php
+src/ServiceInterface/Category/Quota/TokenBucketInterface.php

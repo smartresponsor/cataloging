@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Catalog API
+  version: 1.0.0-rc1
+  description: Canonical HTTP API contract for the Catalog component.
+paths:
+  /api/category/list:
+    get:
+      summary: List catalog categories
+      responses:
+        '200':
+          description: Category list returned
+  /api/category/{id}/child:
+    get:
+      summary: List direct children for a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Child category list returned
+        '404':
+          description: Category not found
+  /api/category/{id}/ancestor:
+    get:
+      summary: List ancestors for a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Ancestor category list returned
+        '404':
+          description: Category not found
+  /api/category/attachment:
+    get:
+      summary: List category attachments
+      responses:
+        '200':
+          description: Attachment list returned
+    post:
+      summary: Register a category attachment
+      responses:
+        '201':
+          description: Attachment created
+        '400':
+          description: Validation failure
+  /api/category/collection:
+    post:
+      summary: Build a rule-based collection from projection records
+      responses:
+        '200':
+          description: Collection build result returned
+        '400':
+          description: Invalid rules payload
+  /api/category/virtual/preview:
+    post:
+      summary: Preview a virtual category rule
+      responses:
+        '200':
+          description: Rule preview returned
+        '400':
+          description: Invalid rule specification
+        '413':
+          description: Cardinality exceeds configured limit
+  /api/category/virtual/apply/{id}:
+    post:
+      summary: Apply a virtual category rule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Rule applied
+        '404':
+          description: Virtual category not found
+  /api/doc:
+    get:
+      summary: OpenAPI documentation UI
+      responses:
+        '200':
+          description: Swagger UI page returned
+  /api/doc.json:
+    get:
+      summary: OpenAPI JSON document
+      responses:
+        '200':
+          description: OpenAPI JSON returned

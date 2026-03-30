@@ -1,8 +1,1 @@
-framework:
-  messenger:
-    transports:
-      async_low: '%env(RABBITMQ_DSN)%/category?queues[category_low]=1'
-      async_high: '%env(RABBITMQ_DSN)%/category?queues[category_high]=1'
-      sync: 'sync://'
-    routing:
-      'App\Message\RecomputeVirtualCategoryMessage': async_high
+# Canonical messenger configuration lives in catalog_category_messenger.yaml.

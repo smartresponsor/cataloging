@@ -1,19 +1,21 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Service\CategoryRuleService;
+use App\Request\CategoryRulePreviewRequest;
+use App\Service\CatalogRuleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryRuleController extends AbstractController
 {
-    public function __construct(private readonly CategoryRuleService $categoryRuleService)
+    public function __construct(private readonly CatalogRuleService $categoryRuleService)
     {
     }
 
@@ -21,12 +23,12 @@ final class CategoryRuleController extends AbstractController
     #[IsGranted('category.rule')]
     public function preview(Request $request): JsonResponse
     {
-        $spec = json_decode((string) $request->getContent(), true);
-        if (!is_array($spec)) {
+        $input = CategoryRulePreviewRequest::fromJson((string) $request->getContent());
+        if (!$input->isValid()) {
             return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
         }
 
-        $preview = $this->categoryRuleService->preview($spec);
+        $preview = $this->categoryRuleService->preview($input->spec ?? []);
         if (null === $preview) {
             return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
         }

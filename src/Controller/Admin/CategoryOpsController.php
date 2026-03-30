@@ -1,12 +1,13 @@
 <?php
-# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryOpsController extends AbstractController
 {
@@ -21,6 +22,8 @@ final class CategoryOpsController extends AbstractController
     }
 
     /**
+     * @param array<mixed> $default
+     *
      * @return array<mixed>
      */
     private function readJsonFile(string $path, array $default): array

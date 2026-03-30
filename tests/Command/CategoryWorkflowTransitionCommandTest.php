@@ -12,7 +12,7 @@ namespace App\Tests\Command;
 use App\Command\CategoryWorkflowTransitionCommand;
 use App\Policy\CategoryWorkflowPolicy;
 use App\Repository\CategoryWorkflowRepository;
-use App\Service\CategoryWorkflowTransitionService;
+use App\Service\CatalogWorkflowTransitionService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -21,7 +21,7 @@ final class CategoryWorkflowTransitionCommandTest extends TestCase
     public function testExecutePrintsTransitionPayload(): void
     {
         $repository = new CategoryWorkflowRepository();
-        $service = new CategoryWorkflowTransitionService($repository, new CategoryWorkflowPolicy());
+        $service = new CatalogWorkflowTransitionService($repository, new CategoryWorkflowPolicy());
         $command = new CategoryWorkflowTransitionCommand($service);
 
         $tester = new CommandTester($command);
@@ -34,6 +34,7 @@ final class CategoryWorkflowTransitionCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
 
+        /** @var array{categoryId:string,fromState:string,toState:string,actorId:string,reason:string} $payload */
         $payload = json_decode(trim($tester->getDisplay()), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame('cat-100', $payload['categoryId']);

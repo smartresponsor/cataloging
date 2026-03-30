@@ -1,5 +1,4 @@
-category:
-  flags:
-    webhook_v2: true
-    dlq_ui: true
-    ops_dashboard: true
+parameters:
+  category.flags.webhook_v2: true
+  category.flags.dlq_ui: true
+  category.flags.ops_dashboard: true
