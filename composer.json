@@ -92,6 +92,7 @@
         "smoke:runtime": "@php tools/php/php84.php tools/smoke/category-runtime-smoke.php",
         "smoke:fixtures": "@php tools/php/php84.php tools/smoke/category-fixture-sanity.php",
         "smoke:container": "@php tools/php/php84.php tools/smoke/category-container-boot-smoke.php",
+        "smoke:routes": "@php tools/php/php84.php tools/smoke/category-route-discovery-smoke.php",
         "smoke:doctrine": "@php tools/php/php84.php tools/smoke/category-doctrine-mapping-smoke.php",
         "smoke:fixture-load": "@php tools/php/php84.php tools/smoke/category-fixture-load-smoke.php",
         "smoke:postgres-matrix": "@php tools/php/php84.php tools/smoke/category-postgres-matrix-smoke.php",

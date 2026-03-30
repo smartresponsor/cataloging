@@ -5,7 +5,9 @@ $root = dirname(__DIR__, 2);
 $checks = [
     'kernel' => $root . '/src/Kernel.php',
     'bundles-config' => $root . '/config/catalog_bundles.php',
-    'service-graph-config' => $root . '/config/catalog_services_graphql.yaml',
+    'api-doc-config' => $root . '/config/packages/nelmio_api_doc.yaml',
+    'api-doc-routes' => $root . '/config/routes/nelmio_api_doc.yaml',
+    'canonical-openapi' => $root . '/api/catalog-openapi.yaml',
     'package-dir' => $root . '/config/packages',
 ];
 $missing = [];
