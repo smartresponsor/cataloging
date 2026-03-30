@@ -3,7 +3,7 @@
 Install:
 1. composer install
 2. php bin/console doctrine:migrations:migrate
-3. symfony server:start -d
+3. php -S 127.0.0.1:8080 -t public public/index.php
 
 Smoke:
 - curl http://localhost:8080/api/category/storefront

@@ -1,6 +1,6 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service\Category\Rule;
@@ -10,13 +10,12 @@ use App\ServiceInterface\Rule\RuleRepositoryInterface;
 
 final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterface
 {
-    private RuleRepositoryInterface $repo;
-    private CategoryRuleEngine $engine;
+    private const PREVIEW_SAMPLE_LIMIT = 50;
 
-    public function __construct(RuleRepositoryInterface $repo, CategoryRuleEngine $engine)
-    {
-        $this->repo = $repo;
-        $this->engine = $engine;
+    public function __construct(
+        private readonly RuleRepositoryInterface $repo,
+        private readonly CategoryRuleEngine $engine,
+    ) {
     }
 
     /**
@@ -28,14 +27,10 @@ final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterfac
      */
     public function save(array $input): string
     {
-        if (!isset($input['name']) || !is_string($input['name'])) {
-            throw new \InvalidArgumentException('name is required');
-        }
-        if (!isset($input['definition']) || !is_array($input['definition'])) {
-            throw new \InvalidArgumentException('definition is required');
-        }
+        $name = $this->requireName($input);
+        $definition = $this->requireDefinition($input);
 
-        return $this->repo->save(['name' => $input['name'], 'definition' => $input['definition']]);
+        return $this->repo->save(['name' => $name, 'definition' => $definition]);
     }
 
     /**
@@ -47,22 +42,60 @@ final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterfac
      */
     public function preview(string $id, array $payloadList): array
     {
-        $rule = $this->repo->find($id);
-        if (!$rule) {
-            throw new \RuntimeException('rule not found');
-        }
+        $rule = $this->requireRule($id);
         $matched = [];
-        $definition = $rule['definition'] ?? null;
-        if (!is_array($definition)) {
-            throw new \RuntimeException('rule definition is invalid');
-        }
+        $definition = $this->requireDefinition($rule);
 
-        foreach ($payloadList as $p) {
-            if ($this->engine->match($definition, $p)) {
-                $matched[] = $p;
+        foreach ($payloadList as $payload) {
+            if ($this->engine->match($definition, $payload)) {
+                $matched[] = $payload;
             }
         }
 
-        return ['matched' => count($matched), 'sample' => array_slice($matched, 0, 50)];
+        return [
+            'matched' => count($matched),
+            'sample' => array_slice($matched, 0, self::PREVIEW_SAMPLE_LIMIT),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $input
+     */
+    private function requireName(array $input): string
+    {
+        $name = $input['name'] ?? null;
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('name is required');
+        }
+
+        return $name;
+    }
+
+    /**
+     * @param array<string, mixed> $input
+     *
+     * @return array<string, mixed>
+     */
+    private function requireDefinition(array $input): array
+    {
+        $definition = $input['definition'] ?? null;
+        if (!is_array($definition)) {
+            throw new \InvalidArgumentException('definition is required');
+        }
+
+        return $definition;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function requireRule(string $id): array
+    {
+        $rule = $this->repo->find($id);
+        if (!is_array($rule)) {
+            throw new \RuntimeException('rule not found');
+        }
+
+        return $rule;
     }
 }

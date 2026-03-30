@@ -1,4 +1,5 @@
 <?php
+
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
@@ -46,10 +47,11 @@ final class CategoryMoveCommand extends Command
             (bool) $input->getOption('dry-run'),
             $this->nonEmptyString($this->optionString($input, 'locale'), '') ?: null,
         );
+        [$changed, $redirects] = $result;
 
         return $this->writeJson($output, [
-            'changed' => $result[0] ?? 0,
-            'redirects' => is_array($result[1] ?? null) ? $result[1] : [],
+            'changed' => $changed,
+            'redirects' => $redirects,
         ]);
     }
 }

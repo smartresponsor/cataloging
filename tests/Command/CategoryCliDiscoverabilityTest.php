@@ -1,12 +1,13 @@
 <?php
+
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Tests\Command;
 
 use App\Command\CategoryCompletenessEvaluateCommand;
-use App\Command\CategoryMoveCommand;
 use App\Command\CategoryMediaReadinessEvaluateCommand;
+use App\Command\CategoryMoveCommand;
 use App\Command\CategoryPublicationQualityEvaluateCommand;
 use App\Command\CategoryReviewAssignCommand;
 use App\Command\CategoryReviewQueueListCommand;
@@ -19,17 +20,17 @@ use App\Command\CategorySyndicationRetryScheduleCommand;
 use App\Command\CategoryWorkflowTransitionCommand;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
 use App\ServiceInterface\CatalogCompletenessServiceInterface;
-use App\ServiceInterface\CategoryMoveInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
 use App\ServiceInterface\CatalogReviewQueueServiceInterface;
-use App\ServiceInterface\CatalogSyndicationCategoryGovernanceSummaryServiceInterface;
 use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
 use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\ServiceInterface\CategoryMoveInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryCliDiscoverabilityTest extends TestCase
@@ -52,7 +53,7 @@ final class CategoryCliDiscoverabilityTest extends TestCase
             ),
             new CategorySyndicationDestinationHistoryCommand($this->createMock(CatalogSyndicationHistoryServiceInterface::class)),
             new CategorySyndicationDestinationGovernanceSummaryCommand($this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class)),
-            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationCategoryGovernanceSummaryServiceInterface::class)),
+            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class)),
         ];
 
         foreach ($commands as $command) {

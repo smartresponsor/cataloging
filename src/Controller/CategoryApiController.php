@@ -9,7 +9,7 @@ use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryApiController
 {

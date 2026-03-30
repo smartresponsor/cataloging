@@ -1,12 +1,14 @@
-version: '3.9'
 services:
   app:
-    build: ./
+    build:
+      context: ..
+      dockerfile: docker/category.Dockerfile
     ports:
       - '8080:8080'
     depends_on:
       - pg
       - mysql
+
   pg:
     image: postgres:16
     environment:
@@ -14,7 +16,8 @@ services:
       POSTGRES_USER: category
       POSTGRES_DB: category
     volumes:
-      - ./tools/docker/init-pg-ltree.sql:/docker-entrypoint-initdb.d/10-init-ltree.sql
+      - ../tools/docker/init-pg-ltree.sql:/docker-entrypoint-initdb.d/10-init-ltree.sql
+
   mysql:
     image: mysql:8.4
     environment:
