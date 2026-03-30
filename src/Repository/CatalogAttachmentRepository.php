@@ -7,6 +7,7 @@ namespace App\Repository;
 
 use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Index;
 use Symfony\Component\Uid\Ulid;
 
 final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryInterface
@@ -94,28 +95,54 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             return;
         }
 
-        $platformName = $this->connection->getDatabasePlatform()->getName();
-        $timestampType = str_contains($platformName, 'postgres') ? 'TIMESTAMPTZ' : 'DATETIME';
+        $schemaManager = $this->connection->createSchemaManager();
+        if (!$schemaManager->tablesExist(['category_attachment'])) {
+            $this->connection->executeStatement(sprintf(
+                'CREATE TABLE category_attachment (
+                    attachment_id VARCHAR(26) PRIMARY KEY,
+                    category_id VARCHAR(160) NOT NULL,
+                    type VARCHAR(64) NOT NULL,
+                    path VARCHAR(2048) NOT NULL,
+                    created_at %s NOT NULL
+                )',
+                $this->createdAtColumnType(),
+            ));
+        }
 
-        $this->connection->executeStatement(sprintf(
-            'CREATE TABLE IF NOT EXISTS category_attachment (
-                attachment_id VARCHAR(26) PRIMARY KEY,
-                category_id VARCHAR(160) NOT NULL,
-                type VARCHAR(64) NOT NULL,
-                path VARCHAR(2048) NOT NULL,
-                created_at %s NOT NULL
-            )',
-            $timestampType,
-        ));
-        $this->connection->executeStatement(
-            'CREATE UNIQUE INDEX IF NOT EXISTS ux_category_attachment_identity
-             ON category_attachment (category_id, type, path)',
-        );
-        $this->connection->executeStatement(
-            'CREATE INDEX IF NOT EXISTS idx_category_attachment_category
-             ON category_attachment (category_id)',
-        );
+        $indexes = [];
+        if ($schemaManager->tablesExist(['category_attachment'])) {
+            foreach ($schemaManager->listTableIndexes('category_attachment') as $index) {
+                if ($index instanceof Index) {
+                    $indexes[strtolower($index->getName())] = true;
+                }
+            }
+        }
+
+        if (!isset($indexes['ux_category_attachment_identity'])) {
+            $this->connection->executeStatement(
+                'CREATE UNIQUE INDEX ux_category_attachment_identity
+                 ON category_attachment (category_id, type, path)',
+            );
+        }
+        if (!isset($indexes['idx_category_attachment_category'])) {
+            $this->connection->executeStatement(
+                'CREATE INDEX idx_category_attachment_category
+                 ON category_attachment (category_id)',
+            );
+        }
 
         $this->schemaEnsured = true;
+    }
+
+    private function createdAtColumnType(): string
+    {
+        $platformName = $this->connection->getDatabasePlatform()->getName();
+
+        return match (true) {
+            str_contains($platformName, 'postgres') => 'TIMESTAMPTZ',
+            str_contains($platformName, 'mysql') => 'DATETIME',
+            str_contains($platformName, 'sqlite') => 'TEXT',
+            default => 'TIMESTAMP',
+        };
     }
 }
