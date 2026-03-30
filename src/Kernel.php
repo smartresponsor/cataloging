@@ -19,12 +19,7 @@ final class Kernel extends BaseKernel
     private const PACKAGES_CONFIG_GLOB = '../config/{packages}/*.yaml';
     private const SERVICES_CONFIG_GLOB = '../config/catalog_services*.yaml';
     private const ROUTES_CONFIG_GLOB = '../config/routes/*.yaml';
-
-    private const ATTRIBUTE_ROUTE_RESOURCES = [
-        '../src/Controller/StatusHandler.php',
-        '../src/Controller/CategoryListHandler.php',
-        '../src/Controller/CollectionListHandler.php',
-    ];
+    private const ATTRIBUTE_ROUTE_RESOURCE = '../src/Controller/';
 
     public function registerBundles(): iterable
     {
@@ -46,10 +41,7 @@ final class Kernel extends BaseKernel
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        foreach (self::ATTRIBUTE_ROUTE_RESOURCES as $resource) {
-            $routes->import($resource, 'attribute');
-        }
-
+        $routes->import(self::ATTRIBUTE_ROUTE_RESOURCE, 'attribute');
         $routes->import(self::ROUTES_CONFIG_GLOB);
     }
 
