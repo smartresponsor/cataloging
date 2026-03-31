@@ -10,6 +10,32 @@ paths:
       responses:
         '200':
           description: Category list returned
+  /api/category/{id}:
+    get:
+      summary: Read a catalog category by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Category returned
+        '404':
+          description: Category not found
+  /api/category/{id}/descendants:
+    get:
+      summary: Read a catalog category with descendant tree
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Category tree returned
+        '404':
+          description: Category not found
   /api/category/{id}/child:
     get:
       summary: List direct children for a category
