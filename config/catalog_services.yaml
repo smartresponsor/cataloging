@@ -21,18 +21,24 @@ services:
   App\Controller\CategoryReadController:
     tags: ['controller.service_arguments']
 
+  App\Controller\CategoryVirtualController:
+    tags: ['controller.service_arguments']
+
   App\Repository\CatalogAttachmentRepository: ~
   App\Repository\CatalogCollectionProjectionRepository: ~
   App\Repository\CatalogRepository: ~
+  App\Repository\VirtualCategoryRepository: ~
 
   App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
   App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface: '@App\Repository\CatalogCollectionProjectionRepository'
+  App\RepositoryInterface\VirtualCategoryRepositoryInterface: '@App\Repository\VirtualCategoryRepository'
 
   App\Service\AttachmentService: ~
   App\Service\CatalogCollectionService: ~
   App\Service\CatalogLegacyCollectionFilterService: ~
   App\Service\CatalogMoveService: ~
   App\Service\CatalogReadService: ~
+  App\Service\CatalogVirtualCategoryService: ~
   App\Service\CategoryRuleEngine: ~
   App\Service\CollectionBuilder: ~
 
