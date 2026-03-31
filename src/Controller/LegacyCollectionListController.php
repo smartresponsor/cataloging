@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CollectionListHandler extends AbstractController
+final class LegacyCollectionListController extends AbstractController
 {
     public function __construct(
         private readonly CatalogLegacyCollectionFilterService $service,
