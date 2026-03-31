@@ -26,6 +26,7 @@ final class CategoryReadController extends AbstractController
 
         return $this->json([
             'ok' => true,
+            'items' => $result['item'],
             'item' => $result['item'],
             'pageInfo' => ['after' => $result['after']],
         ]);
@@ -61,7 +62,11 @@ final class CategoryReadController extends AbstractController
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
 
-        return $this->json(['ok' => true, 'item' => $children]);
+        return $this->json([
+            'ok' => true,
+            'items' => $children,
+            'item' => $children,
+        ]);
     }
 
     #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
@@ -72,6 +77,10 @@ final class CategoryReadController extends AbstractController
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
 
-        return $this->json(['ok' => true, 'item' => $ancestors]);
+        return $this->json([
+            'ok' => true,
+            'items' => $ancestors,
+            'item' => $ancestors,
+        ]);
     }
 }

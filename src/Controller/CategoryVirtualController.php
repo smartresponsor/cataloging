@@ -29,6 +29,7 @@ final class CategoryVirtualController
 
         return new JsonResponse([
             'ok' => true,
+            'items' => $result,
             'data' => $result,
             'total' => count($result),
         ]);
