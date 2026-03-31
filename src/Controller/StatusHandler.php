@@ -11,11 +11,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class StatusHandler extends AbstractController
 {
-    #[Route('/status', name: 'category_status_handler', methods: ['GET'])]
+    #[Route('/status', name: 'catalog_status_handler', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         return $this->json([
-            'service' => 'category',
+            'service' => 'catalog',
             'status' => 'ok',
             'version' => 'rc8',
             'uptime' => $this->readUptime(),
