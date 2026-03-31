@@ -1,20 +1,18 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
 interface CatalogReadServiceInterface
 {
-    /** @return list<array<string,mixed>>|null */
+    public function byId(string $id): ?array;
+
     public function childList(string $id): ?array;
 
-    /** @return list<array<string,mixed>>|null */
     public function ancestorList(string $id): ?array;
 
-    /**
-     * @return array{item:list<array<string,mixed>>, after:string}
-     */
+    public function descendantsTree(string $id): ?array;
+
     public function list(int $first, string $after): array;
 }
