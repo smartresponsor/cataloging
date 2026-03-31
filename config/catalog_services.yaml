@@ -18,16 +18,23 @@ services:
   App\Controller\CategoryCollectionController:
     tags: ['controller.service_arguments']
 
-  App\Repository\CatalogAttachmentRepository: ~
-  App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
+  App\Controller\CategoryReadController:
+    tags: ['controller.service_arguments']
 
+  App\Repository\CatalogAttachmentRepository: ~
   App\Repository\CatalogCollectionProjectionRepository: ~
+  App\Repository\CatalogRepository: ~
+
+  App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
   App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface: '@App\Repository\CatalogCollectionProjectionRepository'
 
+  App\Service\AttachmentService: ~
   App\Service\CatalogCollectionService: ~
   App\Service\CatalogLegacyCollectionFilterService: ~
   App\Service\CatalogMoveService: ~
   App\Service\CatalogReadService: ~
+  App\Service\CategoryRuleEngine: ~
+  App\Service\CollectionBuilder: ~
 
   App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'
   App\ServiceInterface\CategoryMoveInterface: '@App\Service\CatalogMoveService'
