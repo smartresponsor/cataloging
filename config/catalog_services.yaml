@@ -3,13 +3,13 @@ services:
     autowire: true
     autoconfigure: true
 
-  App\Controller\StatusHandler:
+  App\Controller\StatusController:
     tags: ['controller.service_arguments']
 
-  App\Controller\CategoryListHandler:
+  App\Controller\LegacyCategoryListController:
     tags: ['controller.service_arguments']
 
-  App\Controller\CollectionListHandler:
+  App\Controller\LegacyCollectionListController:
     tags: ['controller.service_arguments']
 
   App\Controller\CategoryAttachmentController:
