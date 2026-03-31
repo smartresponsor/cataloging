@@ -17,6 +17,42 @@ final class CategoryReadController extends AbstractController
     {
     }
 
+    #[Route('/api/category/list', name: 'api_category_list', methods: ['GET'])]
+    public function list(Request $request): JsonResponse
+    {
+        $first = max(1, min(100, (int) $request->query->get('first', 20)));
+        $after = (string) $request->query->get('after', '');
+        $result = $this->categoryReadService->list($first, $after);
+
+        return $this->json([
+            'ok' => true,
+            'item' => $result['item'],
+            'pageInfo' => ['after' => $result['after']],
+        ]);
+    }
+
+    #[Route('/api/category/{id}', name: 'api_category_by_id', methods: ['GET'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
+    public function byId(string $id): JsonResponse
+    {
+        $item = $this->categoryReadService->byId($id);
+        if (null === $item) {
+            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+        }
+
+        return $this->json(['ok' => true, 'item' => $item]);
+    }
+
+    #[Route('/api/category/{id}/descendants', name: 'api_category_descendants_tree', methods: ['GET'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
+    public function descendantsTree(string $id): JsonResponse
+    {
+        $tree = $this->categoryReadService->descendantsTree($id);
+        if (null === $tree) {
+            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+        }
+
+        return $this->json(['ok' => true, 'item' => $tree]);
+    }
+
     #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
     public function childList(string $id): JsonResponse
     {
@@ -37,19 +73,5 @@ final class CategoryReadController extends AbstractController
         }
 
         return $this->json(['ok' => true, 'item' => $ancestors]);
-    }
-
-    #[Route('/api/category/list', name: 'api_category_list', methods: ['GET'])]
-    public function list(Request $request): JsonResponse
-    {
-        $first = max(1, min(100, (int) $request->query->get('first', 20)));
-        $after = (string) $request->query->get('after', '');
-        $result = $this->categoryReadService->list($first, $after);
-
-        return $this->json([
-            'ok' => true,
-            'item' => $result['item'],
-            'pageInfo' => ['after' => $result['after']],
-        ]);
     }
 }
