@@ -106,8 +106,6 @@ paths:
           description: Rule preview returned
         '400':
           description: Invalid rule specification
-        '413':
-          description: Cardinality exceeds configured limit
   /api/category/virtual/apply/{id}:
     post:
       summary: Apply a virtual category rule
