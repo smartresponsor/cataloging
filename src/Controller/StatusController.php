@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class StatusHandler extends AbstractController
+final class StatusController extends AbstractController
 {
     #[Route('/status', name: 'catalog_status_handler', methods: ['GET'])]
     public function __invoke(): JsonResponse
