@@ -9,7 +9,7 @@ paths:
       summary: List catalog categories
       responses:
         '200':
-          description: Category list returned
+          description: Category list returned. Runtime exposes canonical `items` and compatibility alias `item`.
   /api/category/{id}:
     get:
       summary: Read a catalog category by id
@@ -22,7 +22,7 @@ paths:
         '200':
           description: Category returned
         '404':
-          description: Category not found
+          description: Category not found. Runtime exposes `error` and compatibility `errors`.
   /api/category/{id}/descendants:
     get:
       summary: Read a catalog category with descendant tree
@@ -35,7 +35,7 @@ paths:
         '200':
           description: Category tree returned
         '404':
-          description: Category not found
+          description: Category not found. Runtime exposes `error` and compatibility `errors`.
   /api/category/{id}/child:
     get:
       summary: List direct children for a category
@@ -46,9 +46,9 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: Child category list returned
+          description: Child category list returned. Runtime exposes canonical `items` and compatibility alias `item`.
         '404':
-          description: Category not found
+          description: Category not found. Runtime exposes `error` and compatibility `errors`.
   /api/category/{id}/ancestor:
     get:
       summary: List ancestors for a category
@@ -59,9 +59,9 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: Ancestor category list returned
+          description: Ancestor category list returned. Runtime exposes canonical `items` and compatibility alias `item`.
         '404':
-          description: Category not found
+          description: Category not found. Runtime exposes `error` and compatibility `errors`.
   /api/category/attachment:
     get:
       summary: List category attachments
@@ -74,7 +74,7 @@ paths:
         '201':
           description: Attachment created
         '400':
-          description: Validation failure
+          description: Validation failure. Runtime exposes `error=validation_failed` and detailed `errors`.
   /api/category/attachment/{attachmentId}:
     delete:
       summary: Delete a category attachment
@@ -87,25 +87,25 @@ paths:
         '200':
           description: Attachment deleted
         '400':
-          description: Invalid attachment identifier
+          description: Invalid attachment identifier. Runtime exposes `error=validation_failed` and detailed `errors`.
         '404':
-          description: Attachment not found
+          description: Attachment not found. Runtime exposes `error=not_found` and detailed `errors`.
   /api/category/collection:
     post:
       summary: Build a rule-based collection from projection records
       responses:
         '200':
-          description: Collection build result returned
+          description: Collection build result returned. Runtime exposes canonical `items` and compatibility alias `data`.
         '400':
-          description: Invalid rules payload
+          description: Invalid rules payload. Runtime exposes `error=validation_failed` and detailed `errors`.
   /api/category/virtual/preview:
     post:
       summary: Preview a virtual category rule
       responses:
         '200':
-          description: Rule preview returned
+          description: Rule preview returned. Runtime exposes canonical `items` and compatibility alias `data`.
         '400':
-          description: Invalid rule specification
+          description: Invalid rule specification. Runtime exposes `error=validation_failed` and detailed `errors`.
   /api/category/virtual/apply/{id}:
     post:
       summary: Apply a virtual category rule
@@ -118,7 +118,7 @@ paths:
         '200':
           description: Rule applied
         '404':
-          description: Virtual category not found
+          description: Virtual category not found. Runtime exposes `error=not_found` and compatibility `errors`.
   /api/doc:
     get:
       summary: OpenAPI documentation UI
