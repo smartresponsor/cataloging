@@ -22,7 +22,7 @@ final class CategoryVirtualController
     {
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
+            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => $input->getErrors()], 400);
         }
 
         $result = $this->service->preview($input->rules);
@@ -40,7 +40,7 @@ final class CategoryVirtualController
     {
         $result = $this->service->apply($id);
         if (null === $result) {
-            return new JsonResponse(['ok' => false, 'error' => 'not_found'], 404);
+            return new JsonResponse(['ok' => false, 'error' => 'not_found', 'errors' => ['not_found']], 404);
         }
 
         return new JsonResponse([

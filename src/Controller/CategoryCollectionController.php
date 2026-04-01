@@ -22,7 +22,7 @@ final class CategoryCollectionController
     {
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
+            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => $input->getErrors()], 400);
         }
 
         $result = $this->service->build($this->normalizeRules($input->rules));
