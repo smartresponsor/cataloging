@@ -1,11 +1,11 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use App\Request\CategoryAttachmentAddRequest;
+use App\Response\ApiResponseBuilder;
 use App\Service\AttachmentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,8 +13,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryAttachmentController
 {
-    public function __construct(private readonly AttachmentService $service)
-    {
+    public function __construct(
+        private readonly AttachmentService $service,
+        private readonly ApiResponseBuilder $responseBuilder,
+    ) {
     }
 
     #[Route('/api/category/attachment', name: 'api_category_attachment_list', methods: ['GET'])]
@@ -23,10 +25,11 @@ final class CategoryAttachmentController
         $categoryId = $request->query->get('category_id');
         $normalizedCategoryId = is_string($categoryId) ? trim($categoryId) : '';
 
-        return new JsonResponse([
-            'ok' => true,
+        $payload = $this->responseBuilder->success([
             'items' => $this->service->list('' !== $normalizedCategoryId ? $normalizedCategoryId : null),
         ]);
+
+        return new JsonResponse($payload);
     }
 
     #[Route('/api/category/attachment', name: 'api_category_attachment_add', methods: ['POST'])]
@@ -34,19 +37,22 @@ final class CategoryAttachmentController
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => $input->getErrors()], 400);
+            $payload = $this->responseBuilder->error('validation_failed', $input->getErrors(), 400);
+
+            return new JsonResponse($payload, 400);
         }
 
         try {
             $item = $this->service->add($input->categoryId ?? '', $input->type, $input->path ?? '');
         } catch (\InvalidArgumentException $exception) {
-            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => [$exception->getMessage()]], 400);
+            $payload = $this->responseBuilder->error('validation_failed', [$exception->getMessage()], 400);
+
+            return new JsonResponse($payload, 400);
         }
 
-        return new JsonResponse([
-            'ok' => true,
-            'item' => $item,
-        ], 201);
+        $payload = $this->responseBuilder->success(['item' => $item], 201);
+
+        return new JsonResponse($payload, 201);
     }
 
     #[Route('/api/category/attachment/{attachmentId}', name: 'api_category_attachment_delete', methods: ['DELETE'], requirements: ['attachmentId' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
@@ -55,16 +61,21 @@ final class CategoryAttachmentController
         try {
             $deleted = $this->service->remove($attachmentId);
         } catch (\InvalidArgumentException $exception) {
-            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => [$exception->getMessage()]], 400);
+            $payload = $this->responseBuilder->error('validation_failed', [$exception->getMessage()], 400);
+
+            return new JsonResponse($payload, 400);
         }
 
         if (!$deleted) {
-            return new JsonResponse(['ok' => false, 'error' => 'not_found', 'errors' => ['attachment was not found']], 404);
+            $payload = $this->responseBuilder->error('not_found', ['attachment was not found'], 404);
+
+            return new JsonResponse($payload, 404);
         }
 
-        return new JsonResponse([
-            'ok' => true,
+        $payload = $this->responseBuilder->success([
             'attachment_id' => trim($attachmentId),
         ]);
+
+        return new JsonResponse($payload);
     }
 }
