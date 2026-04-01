@@ -37,7 +37,7 @@ final class CategoryReadController extends AbstractController
     {
         $item = $this->categoryReadService->byId($id);
         if (null === $item) {
-            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+            return $this->json(['ok' => false, 'error' => 'not_found', 'errors' => ['not_found']], 404);
         }
 
         return $this->json(['ok' => true, 'item' => $item]);
@@ -48,7 +48,7 @@ final class CategoryReadController extends AbstractController
     {
         $tree = $this->categoryReadService->descendantsTree($id);
         if (null === $tree) {
-            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+            return $this->json(['ok' => false, 'error' => 'not_found', 'errors' => ['not_found']], 404);
         }
 
         return $this->json(['ok' => true, 'item' => $tree]);
@@ -59,7 +59,7 @@ final class CategoryReadController extends AbstractController
     {
         $children = $this->categoryReadService->childList($id);
         if (null === $children) {
-            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+            return $this->json(['ok' => false, 'error' => 'not_found', 'errors' => ['not_found']], 404);
         }
 
         return $this->json([
@@ -74,7 +74,7 @@ final class CategoryReadController extends AbstractController
     {
         $ancestors = $this->categoryReadService->ancestorList($id);
         if (null === $ancestors) {
-            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+            return $this->json(['ok' => false, 'error' => 'not_found', 'errors' => ['not_found']], 404);
         }
 
         return $this->json([

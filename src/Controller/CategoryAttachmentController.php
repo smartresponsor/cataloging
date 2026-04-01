@@ -34,13 +34,13 @@ final class CategoryAttachmentController
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
+            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => $input->getErrors()], 400);
         }
 
         try {
             $item = $this->service->add($input->categoryId ?? '', $input->type, $input->path ?? '');
         } catch (\InvalidArgumentException $exception) {
-            return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
+            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => [$exception->getMessage()]], 400);
         }
 
         return new JsonResponse([
@@ -55,11 +55,11 @@ final class CategoryAttachmentController
         try {
             $deleted = $this->service->remove($attachmentId);
         } catch (\InvalidArgumentException $exception) {
-            return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
+            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => [$exception->getMessage()]], 400);
         }
 
         if (!$deleted) {
-            return new JsonResponse(['ok' => false, 'errors' => ['attachment was not found']], 404);
+            return new JsonResponse(['ok' => false, 'error' => 'not_found', 'errors' => ['attachment was not found']], 404);
         }
 
         return new JsonResponse([
