@@ -49,7 +49,7 @@ final class CategoryAttachmentController
         ], 201);
     }
 
-    #[Route('/api/category/attachment/{attachmentId}', name: 'api_category_attachment_delete', methods: ['DELETE'])]
+    #[Route('/api/category/attachment/{attachmentId}', name: 'api_category_attachment_delete', methods: ['DELETE'], requirements: ['attachmentId' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
     public function delete(string $attachmentId): JsonResponse
     {
         try {

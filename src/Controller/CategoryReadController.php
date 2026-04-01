@@ -54,7 +54,7 @@ final class CategoryReadController extends AbstractController
         return $this->json(['ok' => true, 'item' => $tree]);
     }
 
-    #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
+    #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
     public function childList(string $id): JsonResponse
     {
         $children = $this->categoryReadService->childList($id);
@@ -69,7 +69,7 @@ final class CategoryReadController extends AbstractController
         ]);
     }
 
-    #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
+    #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
     public function ancestorList(string $id): JsonResponse
     {
         $ancestors = $this->categoryReadService->ancestorList($id);

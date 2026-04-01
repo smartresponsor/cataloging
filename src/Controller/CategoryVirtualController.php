@@ -35,7 +35,7 @@ final class CategoryVirtualController
         ]);
     }
 
-    #[Route('/api/category/virtual/apply/{id}', name: 'api_category_virtual_apply', methods: ['POST'])]
+    #[Route('/api/category/virtual/apply/{id}', name: 'api_category_virtual_apply', methods: ['POST'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
     public function apply(string $id): JsonResponse
     {
         $result = $this->service->apply($id);
