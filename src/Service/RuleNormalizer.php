@@ -9,7 +9,7 @@ final class RuleNormalizer
     /**
      * @param array<mixed> $rules
      *
-     * @return array<string, array<int, bool|float|int|string>|bool|float|int|string>
+     * @return array<string, array<string, array<int, bool|float|int|string>|bool|float|int|string>|array<int, bool|float|int|string>|bool|float|int|string>
      */
     public function normalize(array $rules): array
     {
@@ -25,6 +25,33 @@ final class RuleNormalizer
             if (!is_array($value)) {
                 continue;
             }
+            if ($this->isOperatorMap($value)) {
+                $normalizedOperatorMap = [];
+                foreach ($value as $operator => $operatorValue) {
+                    if (!is_string($operator) || !$this->isSupportedOperator($operator)) {
+                        continue;
+                    }
+                    if (is_bool($operatorValue) || is_float($operatorValue) || is_int($operatorValue) || is_string($operatorValue)) {
+                        $normalizedOperatorMap[$operator] = $operatorValue;
+                        continue;
+                    }
+                    if (!is_array($operatorValue)) {
+                        continue;
+                    }
+                    $items = [];
+                    foreach ($operatorValue as $item) {
+                        if (is_bool($item) || is_float($item) || is_int($item) || is_string($item)) {
+                            $items[] = $item;
+                        }
+                    }
+                    $normalizedOperatorMap[$operator] = $items;
+                }
+                if ([] !== $normalizedOperatorMap) {
+                    $normalized[$key] = $normalizedOperatorMap;
+                }
+                continue;
+            }
+
             $items = [];
             foreach ($value as $item) {
                 if (is_bool($item) || is_float($item) || is_int($item) || is_string($item)) {
@@ -35,5 +62,22 @@ final class RuleNormalizer
         }
 
         return $normalized;
+    }
+
+    /** @param array<mixed> $value */
+    private function isOperatorMap(array $value): bool
+    {
+        foreach (array_keys($value) as $key) {
+            if (!is_string($key)) {
+                return false;
+            }
+        }
+
+        return [] !== $value;
+    }
+
+    private function isSupportedOperator(string $operator): bool
+    {
+        return in_array($operator, ['eq', 'in', 'gt', 'gte', 'lt', 'lte'], true);
     }
 }

@@ -1,16 +1,11 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Service;
 
 final class CategoryRuleEngine
 {
-    /**
-     * @param array<string, list<scalar>|scalar|null> $category
-     * @param array<string, scalar|list<scalar>|null> $rules
-     */
     public function match(array $category, array $rules): bool
     {
         foreach ($rules as $attribute => $expectedValue) {
@@ -26,12 +21,12 @@ final class CategoryRuleEngine
         return true;
     }
 
-    /**
-     * @param list<scalar>|scalar|null $actualValue
-     * @param scalar|list<scalar>|null $expectedValue
-     */
-    private function matchesRule(array|bool|float|int|string|null $actualValue, array|bool|float|int|string|null $expectedValue): bool
+    private function matchesRule(mixed $actualValue, mixed $expectedValue): bool
     {
+        if (is_array($expectedValue) && $this->isOperatorMap($expectedValue)) {
+            return $this->matchOperators($actualValue, $expectedValue);
+        }
+
         if (is_array($actualValue)) {
             if (is_array($expectedValue)) {
                 foreach ($expectedValue as $expectedItem) {
@@ -39,10 +34,8 @@ final class CategoryRuleEngine
                         return true;
                     }
                 }
-
                 return false;
             }
-
             return in_array($expectedValue, $actualValue, true);
         }
 
@@ -51,5 +44,56 @@ final class CategoryRuleEngine
         }
 
         return $actualValue === $expectedValue;
+    }
+
+    private function matchOperators(mixed $actualValue, array $operators): bool
+    {
+        foreach ($operators as $op => $value) {
+            switch ($op) {
+                case 'eq':
+                    if ($actualValue !== $value) {
+                        return false;
+                    }
+                    break;
+                case 'in':
+                    if (!is_array($value) || !in_array($actualValue, $value, true)) {
+                        return false;
+                    }
+                    break;
+                case 'gt':
+                    if (!is_numeric($actualValue) || $actualValue <= $value) {
+                        return false;
+                    }
+                    break;
+                case 'gte':
+                    if (!is_numeric($actualValue) || $actualValue < $value) {
+                        return false;
+                    }
+                    break;
+                case 'lt':
+                    if (!is_numeric($actualValue) || $actualValue >= $value) {
+                        return false;
+                    }
+                    break;
+                case 'lte':
+                    if (!is_numeric($actualValue) || $actualValue > $value) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+
+        return true;
+    }
+
+    private function isOperatorMap(array $value): bool
+    {
+        foreach (array_keys($value) as $key) {
+            if (!is_string($key)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
