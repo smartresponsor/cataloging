@@ -1,2 +1,2 @@
 services:
-  App\Service\RuleNormalizer: ~
+  App\Service\RuleValidator: ~

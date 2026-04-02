@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Request\CategoryCollectionRequest;
 use App\Response\ApiResponseBuilder;
 use App\Service\CatalogVirtualCategoryService;
+use App\Service\RuleValidator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,6 +18,7 @@ final class CategoryVirtualController
     public function __construct(
         private readonly CatalogVirtualCategoryService $service,
         private readonly ApiResponseBuilder $responseBuilder,
+        private readonly RuleValidator $ruleValidator,
     ) {
     }
 
@@ -26,6 +28,13 @@ final class CategoryVirtualController
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
             $payload = $this->responseBuilder->error('validation_failed', $input->getErrors(), 400);
+
+            return new JsonResponse($payload, 400);
+        }
+
+        $ruleErrors = $this->ruleValidator->validate($input->rules);
+        if ([] !== $ruleErrors) {
+            $payload = $this->responseBuilder->error('validation_failed', $ruleErrors, 400);
 
             return new JsonResponse($payload, 400);
         }
