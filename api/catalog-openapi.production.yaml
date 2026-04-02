@@ -1,0 +1,445 @@
+openapi: 3.0.3
+info:
+  title: Catalog API
+  version: 1.0.0-rc2
+  description: Production-grade canonical HTTP API contract for the Catalog component.
+servers:
+  - url: /
+tags:
+  - name: Catalog Read
+  - name: Catalog Attachment
+  - name: Catalog Collection
+  - name: Catalog Virtual
+  - name: Catalog Documentation
+paths:
+  /api/category/list:
+    get:
+      tags: [Catalog Read]
+      summary: List catalog categories
+      operationId: listCatalogCategories
+      parameters:
+        - $ref: '#/components/parameters/FirstParam'
+        - $ref: '#/components/parameters/AfterParam'
+      responses:
+        '200':
+          description: Category list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryListResponse'
+  /api/category/{id}:
+    get:
+      tags: [Catalog Read]
+      summary: Read a catalog category by id
+      operationId: readCatalogCategoryById
+      parameters:
+        - $ref: '#/components/parameters/CategoryIdParam'
+      responses:
+        '200':
+          description: Category returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryItemResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /api/category/{id}/descendants:
+    get:
+      tags: [Catalog Read]
+      summary: Read a catalog category with descendant tree
+      operationId: readCatalogCategoryDescendantsTree
+      parameters:
+        - $ref: '#/components/parameters/CategoryIdParam'
+      responses:
+        '200':
+          description: Category tree returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryTreeResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /api/category/{id}/child:
+    get:
+      tags: [Catalog Read]
+      summary: List direct children for a category
+      operationId: listCatalogCategoryChildren
+      parameters:
+        - $ref: '#/components/parameters/CategoryIdParam'
+      responses:
+        '200':
+          description: Child category list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryCollectionResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /api/category/{id}/ancestor:
+    get:
+      tags: [Catalog Read]
+      summary: List ancestors for a category
+      operationId: listCatalogCategoryAncestors
+      parameters:
+        - $ref: '#/components/parameters/CategoryIdParam'
+      responses:
+        '200':
+          description: Ancestor category list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryCollectionResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /api/category/attachment:
+    get:
+      tags: [Catalog Attachment]
+      summary: List category attachments
+      operationId: listCatalogAttachments
+      responses:
+        '200':
+          description: Attachment list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentListResponse'
+    post:
+      tags: [Catalog Attachment]
+      summary: Register a category attachment
+      operationId: createCatalogAttachment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachmentCreateRequest'
+      responses:
+        '201':
+          description: Attachment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentMutationResponse'
+        '400':
+          $ref: '#/components/responses/ValidationFailureResponse'
+  /api/category/attachment/{attachmentId}:
+    delete:
+      tags: [Catalog Attachment]
+      summary: Delete a category attachment
+      operationId: deleteCatalogAttachment
+      parameters:
+        - $ref: '#/components/parameters/AttachmentIdParam'
+      responses:
+        '200':
+          description: Attachment deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentMutationResponse'
+        '400':
+          $ref: '#/components/responses/ValidationFailureResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /api/category/collection:
+    post:
+      tags: [Catalog Collection]
+      summary: Build a rule-based collection from projection records
+      operationId: buildCatalogCollection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionBuildRequest'
+      responses:
+        '200':
+          description: Collection build result returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionBuildResponse'
+        '400':
+          $ref: '#/components/responses/ValidationFailureResponse'
+  /api/category/virtual/preview:
+    post:
+      tags: [Catalog Virtual]
+      summary: Preview a virtual category rule
+      operationId: previewCatalogVirtualCategoryRule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualCategoryPreviewRequest'
+      responses:
+        '200':
+          description: Rule preview returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionBuildResponse'
+        '400':
+          $ref: '#/components/responses/ValidationFailureResponse'
+  /api/category/virtual/apply/{id}:
+    post:
+      tags: [Catalog Virtual]
+      summary: Apply a virtual category rule
+      operationId: applyCatalogVirtualCategoryRule
+      parameters:
+        - $ref: '#/components/parameters/CategoryIdParam'
+      responses:
+        '200':
+          description: Rule applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionBuildResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+  /api/doc:
+    get:
+      tags: [Catalog Documentation]
+      summary: OpenAPI documentation UI
+      operationId: readCatalogDocumentationUi
+      responses:
+        '200':
+          description: Swagger UI page returned
+  /api/doc.json:
+    get:
+      tags: [Catalog Documentation]
+      summary: OpenAPI JSON document
+      operationId: readCatalogOpenApiJson
+      responses:
+        '200':
+          description: OpenAPI JSON returned
+components:
+  parameters:
+    CategoryIdParam:
+      in: path
+      name: id
+      required: true
+      description: Catalog category identifier in ULID-like canonical form.
+      schema:
+        type: string
+        pattern: '^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$'
+        example: 01JQ8S3E2Z8D2B6YJ9V4P7M1NX
+    AttachmentIdParam:
+      in: path
+      name: attachmentId
+      required: true
+      description: Category attachment identifier.
+      schema:
+        type: string
+        minLength: 1
+        example: attachment-01JQ8S3E2Z8D2B6YJ9V4P7M1NX
+    FirstParam:
+      in: query
+      name: first
+      required: false
+      description: Page size for list traversal. Runtime clamps values to the inclusive range 1..100.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    AfterParam:
+      in: query
+      name: after
+      required: false
+      description: Base64-encoded catalog path cursor returned by the previous page.
+      schema:
+        type: string
+        default: ''
+  responses:
+    NotFoundResponse:
+      description: Requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notFound:
+              value:
+                ok: false
+                error: not_found
+    ValidationFailureResponse:
+      description: Request payload or identifier failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validationFailure:
+              value:
+                ok: false
+                error: validation_failure
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+          enum: [false]
+        error:
+          type: string
+          example: not_found
+    PageInfo:
+      type: object
+      required: [after]
+      properties:
+        after:
+          type: string
+          description: Empty string when there is no next page.
+          example: ''
+    CategoryNode:
+      type: object
+      required: [id, name, slug, path, depth]
+      properties:
+        id:
+          type: string
+          example: 01JQ8S3E2Z8D2B6YJ9V4P7M1NX
+        name:
+          type: string
+          example: Electronics
+        slug:
+          type: string
+          example: electronics
+        path:
+          type: string
+          example: catalog.electronics
+        depth:
+          type: integer
+          example: 1
+    CategoryTreeNode:
+      allOf:
+        - $ref: '#/components/schemas/CategoryNode'
+        - type: object
+          required: [children]
+          properties:
+            children:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryNode'
+    CategoryItemResponse:
+      type: object
+      required: [ok, item]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        item:
+          $ref: '#/components/schemas/CategoryNode'
+    CategoryTreeResponse:
+      type: object
+      required: [ok, item]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        item:
+          $ref: '#/components/schemas/CategoryTreeNode'
+    CategoryCollectionResponse:
+      type: object
+      required: [ok, items, item]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryNode'
+        item:
+          type: array
+          description: Legacy compatibility alias preserved by runtime.
+          items:
+            $ref: '#/components/schemas/CategoryNode'
+    CategoryListResponse:
+      type: object
+      required: [ok, items, item, pageInfo]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryNode'
+        item:
+          type: array
+          description: Legacy compatibility alias preserved by runtime.
+          items:
+            $ref: '#/components/schemas/CategoryNode'
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+    AttachmentRecord:
+      type: object
+      additionalProperties: true
+      description: Attachment record returned by runtime. Shape is implementation-defined and may include category linkage and file metadata.
+    AttachmentListResponse:
+      type: object
+      required: [ok, items, data, total]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentRecord'
+        data:
+          type: array
+          description: Legacy compatibility alias preserved by runtime.
+          items:
+            $ref: '#/components/schemas/AttachmentRecord'
+        total:
+          type: integer
+          minimum: 0
+    AttachmentCreateRequest:
+      type: object
+      additionalProperties: true
+      description: Attachment creation payload forwarded to the attachment runtime surface.
+    AttachmentMutationResponse:
+      type: object
+      additionalProperties: true
+      description: Attachment mutation response returned by runtime after create or delete operations.
+      properties:
+        ok:
+          type: boolean
+    CollectionRuleCondition:
+      type: object
+      additionalProperties: true
+      description: Rule condition forwarded to the collection builder.
+    CollectionBuildRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRuleCondition'
+      description: Rule-based collection build request accepted by runtime.
+    CollectionBuildResponse:
+      type: object
+      required: [ok, items, data, total]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryNode'
+        data:
+          type: array
+          description: Legacy compatibility alias preserved by runtime.
+          items:
+            $ref: '#/components/schemas/CategoryNode'
+        total:
+          type: integer
+          minimum: 0
+    VirtualCategoryPreviewRequest:
+      allOf:
+        - $ref: '#/components/schemas/CollectionBuildRequest'
+      description: Virtual category preview request reusing collection rule payload semantics.
