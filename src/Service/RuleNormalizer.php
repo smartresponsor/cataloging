@@ -9,7 +9,7 @@ final class RuleNormalizer
     /**
      * @param array<mixed> $rules
      *
-     * @return array<string, array<string, array<int, bool|float|int|string>|bool|float|int|string>|array<int, bool|float|int|string>|bool|float|int|string>
+     * @return array<string, mixed>
      */
     public function normalize(array $rules): array
     {
@@ -18,6 +18,23 @@ final class RuleNormalizer
             if (!is_string($key)) {
                 continue;
             }
+
+            if ('and' === $key || 'or' === $key) {
+                if (!is_array($value)) {
+                    continue;
+                }
+                $groups = [];
+                foreach ($value as $group) {
+                    if (is_array($group)) {
+                        $groups[] = $this->normalize($group);
+                    }
+                }
+                if ([] !== $groups) {
+                    $normalized[$key] = $groups;
+                }
+                continue;
+            }
+
             if (is_bool($value) || is_float($value) || is_int($value) || is_string($value)) {
                 $normalized[$key] = $value;
                 continue;

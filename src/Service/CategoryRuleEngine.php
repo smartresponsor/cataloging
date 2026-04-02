@@ -8,7 +8,31 @@ final class CategoryRuleEngine
 {
     public function match(array $category, array $rules): bool
     {
+        if (isset($rules['and']) && is_array($rules['and'])) {
+            foreach ($rules['and'] as $group) {
+                if (!is_array($group) || !$this->match($category, $group)) {
+                    return false;
+                }
+            }
+        }
+
+        if (isset($rules['or']) && is_array($rules['or'])) {
+            $matched = false;
+            foreach ($rules['or'] as $group) {
+                if (is_array($group) && $this->match($category, $group)) {
+                    $matched = true;
+                    break;
+                }
+            }
+            if (!$matched) {
+                return false;
+            }
+        }
+
         foreach ($rules as $attribute => $expectedValue) {
+            if ('and' === $attribute || 'or' === $attribute) {
+                continue;
+            }
             if (!array_key_exists($attribute, $category)) {
                 return false;
             }
@@ -56,6 +80,22 @@ final class CategoryRuleEngine
                     }
                     break;
                 case 'in':
+                    if (is_array($actualValue)) {
+                        if (!is_array($value)) {
+                            return false;
+                        }
+                        $matched = false;
+                        foreach ($value as $candidate) {
+                            if (in_array($candidate, $actualValue, true)) {
+                                $matched = true;
+                                break;
+                            }
+                        }
+                        if (!$matched) {
+                            return false;
+                        }
+                        break;
+                    }
                     if (!is_array($value) || !in_array($actualValue, $value, true)) {
                         return false;
                     }
@@ -92,8 +132,11 @@ final class CategoryRuleEngine
             if (!is_string($key)) {
                 return false;
             }
+            if (!in_array($key, ['eq', 'in', 'gt', 'gte', 'lt', 'lte'], true)) {
+                return false;
+            }
         }
 
-        return true;
+        return [] !== $value;
     }
 }
