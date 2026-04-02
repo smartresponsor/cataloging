@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Request\CategoryCollectionRequest;
+use App\Response\ApiResponseBuilder;
 use App\Service\CatalogCollectionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,8 +14,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryCollectionController
 {
-    public function __construct(private readonly CatalogCollectionService $service)
-    {
+    public function __construct(
+        private readonly CatalogCollectionService $service,
+        private readonly ApiResponseBuilder $responseBuilder,
+    ) {
     }
 
     #[Route('/api/category/collection', name: 'api_category_collection', methods: ['POST'])]
@@ -22,17 +25,19 @@ final class CategoryCollectionController
     {
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
-            return new JsonResponse(['ok' => false, 'error' => 'validation_failed', 'errors' => $input->getErrors()], 400);
+            $payload = $this->responseBuilder->error('validation_failed', $input->getErrors(), 400);
+
+            return new JsonResponse($payload, 400);
         }
 
         $result = $this->service->build($this->normalizeRules($input->rules));
-
-        return new JsonResponse([
-            'ok' => true,
+        $payload = $this->responseBuilder->success([
             'items' => $result,
             'data' => $result,
             'total' => count($result),
         ]);
+
+        return new JsonResponse($payload);
     }
 
     /**
