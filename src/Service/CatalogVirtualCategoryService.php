@@ -12,20 +12,16 @@ final class CatalogVirtualCategoryService
     public function __construct(
         private readonly CatalogCollectionService $collectionService,
         private readonly VirtualCategoryRepositoryInterface $repository,
+        private readonly RuleNormalizer $ruleNormalizer,
     ) {
     }
 
-    /**
-     * @param array<mixed> $rules
-     *
-     * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
-     */
+    /** @param array<mixed> $rules */
     public function preview(array $rules): array
     {
-        return $this->collectionService->build($this->normalizeRules($rules));
+        return $this->collectionService->build($this->ruleNormalizer->normalize($rules));
     }
 
-    /** @return array{id:string,name:string,rule:array<string,mixed>,data:list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>,total:int}|null */
     public function apply(string $id): ?array
     {
         $virtualCategory = $this->repository->findById($id);
@@ -33,7 +29,9 @@ final class CatalogVirtualCategoryService
             return null;
         }
 
-        $data = $this->collectionService->build($this->normalizeRules($virtualCategory['rule']));
+        $data = $this->collectionService->build(
+            $this->ruleNormalizer->normalize($virtualCategory['rule'])
+        );
 
         return [
             'id' => $virtualCategory['id'],
@@ -42,36 +40,5 @@ final class CatalogVirtualCategoryService
             'data' => $data,
             'total' => count($data),
         ];
-    }
-
-    /**
-     * @param array<mixed> $rules
-     *
-     * @return array<string, array<int, bool|float|int|string>|bool|float|int|string>
-     */
-    private function normalizeRules(array $rules): array
-    {
-        $normalized = [];
-        foreach ($rules as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-            if (is_bool($value) || is_float($value) || is_int($value) || is_string($value)) {
-                $normalized[$key] = $value;
-                continue;
-            }
-            if (!is_array($value)) {
-                continue;
-            }
-            $items = [];
-            foreach ($value as $item) {
-                if (is_bool($item) || is_float($item) || is_int($item) || is_string($item)) {
-                    $items[] = $item;
-                }
-            }
-            $normalized[$key] = $items;
-        }
-
-        return $normalized;
     }
 }
