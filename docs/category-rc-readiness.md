@@ -9,6 +9,7 @@ php tools/inspection/CatalogRuntimeProofReport.php
 php tools/inspection/CatalogSmokeProofReport.php
 php tools/inspection/CatalogRouteInventoryReport.php
 php tools/inspection/CatalogDependencyBaselineReport.php
+php tools/inspection/CatalogApiContractReadinessReport.php
 php tools/inspection/CatalogOwnerOverlapReport.php
 php tools/inspection/CatalogClassAliasReport.php
 php tools/inspection/CatalogRcReadinessReport.php
@@ -21,6 +22,7 @@ composer report:runtime-proof
 composer report:smoke-proof
 composer report:route-inventory
 composer report:dependency-baseline
+composer report:api-contract-readiness
 composer report:owner-overlap
 composer report:class-alias
 composer report:rc-readiness
@@ -42,6 +44,7 @@ The readiness report currently evaluates these RC-facing gates:
 - PHPUnit extension readiness
 - owner-overlap signals
 - duplicate class-basename signals
+- API contract readiness (OpenAPI + router + Nelmio + version alignment)
 
 ## Status meanings
 

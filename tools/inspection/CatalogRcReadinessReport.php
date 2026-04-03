@@ -55,6 +55,7 @@ $dependencyBaseline = readJsonOrEmpty($reportDir . '/catalog-dependency-baseline
 $ownerOverlap = readJsonOrEmpty($reportDir . '/catalog-owner-overlap-report.json');
 $classAlias = readJsonOrEmpty($reportDir . '/catalog-class-alias-report.json');
 $migrationReadiness = readJsonOrEmpty($reportDir . '/catalog-migration-readiness-report.json');
+$apiContractReadiness = readJsonOrEmpty($reportDir . '/catalog-api-contract-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -133,6 +134,14 @@ $items = [
             'duplicateCreateCount' => $migrationReadiness['summary']['duplicateCreateCount'] ?? null,
             'nonCanonicalVersionCount' => $migrationReadiness['summary']['nonCanonicalVersionCount'] ?? null,
             'zeroDowntimeReady' => $migrationReadiness['summary']['zeroDowntimeReady'] ?? null,
+        ],
+    ],
+    [
+        'check' => 'api-contract-readiness',
+        'status' => (($apiContractReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'documentedPathCount' => $apiContractReadiness['openapi']['canonical']['pathCount'] ?? null,
+            'apiContractSummary' => $apiContractReadiness['summary'] ?? [],
         ],
     ],
 ];

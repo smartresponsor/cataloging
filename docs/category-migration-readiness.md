@@ -14,23 +14,21 @@ Artifact:
 
 ## Current findings on the working RC baseline
 
-The current migration layer is **boot-compatible** but **not yet zero-downtime clean**.
+The current migration layer is **boot-compatible** and now **zero-downtime ready for the forward path**.
 
-The report currently flags:
+The report now distinguishes between two different concerns:
 
-- duplicate category table creation in two migrations
-- one non-canonical migration version token
-- destructive rollback statements in `down()` methods
+- **forward migration readiness**: duplicate creates, non-canonical version tokens, destructive SQL in `up()`
+- **rollback destructiveness**: destructive SQL in `down()` that is still useful diagnostic context, but is not by itself a forward-path RC blocker
 
 ## Why this matters
 
-This is not a runtime bootstrap blocker, but it is a release-discipline risk.
+This keeps the migration signal architecture-first.
 
-The main concern is not that the application cannot boot. The concern is that repeated schema creation for the same table and non-canonical migration naming make migration ordering and rollback reasoning weaker than the rest of the repository baseline.
+The repository should warn when the live rollout path is unsafe or contradictory. It should not stay red just because rollback SQL contains `DROP TABLE` or `DROP COLUMN`, which can be normal for `down()` logic.
 
-## Recommended next wave
+## Current readiness semantics
 
-1. Decide which `category` table creation migration is canonical.
-2. Retire or archive the duplicate migration instead of leaving both live.
-3. Normalize migration version naming to one canonical format.
-4. Move future migration work to explicit expand-contract discipline for zero-downtime readiness.
+- `overallStatus = pass` means the migration lineage is coherent enough for RC conditioning
+- `zeroDowntimeReady = true` means forward-path migration discipline is acceptable
+- `rollbackDestructiveOnly = true` means rollback SQL is still destructive, but that fact is exposed as diagnostics instead of incorrectly degrading the RC gate

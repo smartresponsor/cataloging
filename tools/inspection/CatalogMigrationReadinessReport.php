@@ -160,11 +160,11 @@ foreach ($dropMap as $table => $sources) {
     }
 }
 
+$zeroDowntimeReady = $duplicateCreates === [] && $nonCanonicalVersions === [] && $destructiveUpStatements === [];
+$rollbackDestructiveOnly = $destructiveDownStatements !== [] && $duplicateCreates === [] && $duplicateDrops === [] && $nonCanonicalVersions === [] && $destructiveUpStatements === [];
+
 $status = 'pass';
-if ($duplicateCreates !== [] || $destructiveUpStatements !== []) {
-    $status = 'warn';
-}
-if ($nonCanonicalVersions !== [] || $duplicateDrops !== [] || $destructiveDownStatements !== []) {
+if (!$zeroDowntimeReady || $duplicateDrops !== []) {
     $status = 'warn';
 }
 
@@ -175,7 +175,8 @@ $summary = [
     'duplicateDropCount' => count($duplicateDrops),
     'destructiveUpStatementCount' => count($destructiveUpStatements),
     'destructiveDownStatementCount' => count($destructiveDownStatements),
-    'zeroDowntimeReady' => $duplicateCreates === [] && $nonCanonicalVersions === [] && $destructiveUpStatements === [],
+    'zeroDowntimeReady' => $zeroDowntimeReady,
+    'rollbackDestructiveOnly' => $rollbackDestructiveOnly,
 ];
 
 $report = [
