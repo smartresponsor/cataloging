@@ -7,9 +7,15 @@ namespace App\IdempotencyInterface;
 
 interface CategoryIdempotencyStoreInterface
 {
-    /** True if operation with given key has already been applied. */
-    public function seen(string $key): bool;
+    /**
+     * Attempts to reserve a command key for the given retention window.
+     *
+     * Returns false when the key is still active and the operation should be
+     * treated as a duplicate. Implementations must reject re-use of the same
+     * idempotency key for a different payload hash.
+     */
+    public function acquire(string $key, string $operation, string $requestHash, int $ttlSec, ?string $correlationId = null): bool;
 
-    /** Mark operation as applied with retention window. */
-    public function mark(string $key, int $ttlSec): void;
+    /** Removes expired keys and returns the number of purged rows. */
+    public function purgeExpired(): int;
 }

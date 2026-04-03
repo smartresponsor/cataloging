@@ -21,3 +21,5 @@ services:
       $adminIdentifiers: '%env(csv:CATEGORY_API_ADMIN_IDENTIFIERS)%'
 
   App\ServiceInterface\CategoryMutationServiceInterface: '@App\Service\CategoryMutationService'
+
+  App\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Idempotency\CategoryIdempotencyStore'

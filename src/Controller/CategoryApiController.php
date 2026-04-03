@@ -47,11 +47,15 @@ final class CategoryApiController
                 $dto->policy,
                 $dto->dryRun,
                 $dto->locale,
+                $this->resolveIdempotencyKey($request),
+                $this->resolveCorrelationId($request),
             );
 
             return new JsonResponse(['data' => $result], 200);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 400);
+        } catch (\DomainException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 409);
         } catch (\RuntimeException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], str_contains($exception->getMessage(), 'was not found') ? 404 : 409);
         }
@@ -73,6 +77,8 @@ final class CategoryApiController
                 $dto->checks,
                 $this->resolveActorId($request),
                 $dto->reason,
+                $this->resolveIdempotencyKey($request),
+                $this->resolveCorrelationId($request),
             );
 
             return new JsonResponse(['data' => $result], 200);
@@ -91,6 +97,20 @@ final class CategoryApiController
         $decoded = json_decode($request->getContent(), true);
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    private function resolveIdempotencyKey(Request $request): ?string
+    {
+        $headerValue = trim((string) $request->headers->get('X-Idempotency-Key', ''));
+
+        return '' !== $headerValue ? $headerValue : null;
+    }
+
+    private function resolveCorrelationId(Request $request): ?string
+    {
+        $headerValue = trim((string) $request->headers->get('X-Correlation-ID', ''));
+
+        return '' !== $headerValue ? $headerValue : null;
     }
 
     private function resolveActorId(Request $request): string

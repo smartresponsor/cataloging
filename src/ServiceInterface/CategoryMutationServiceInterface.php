@@ -15,10 +15,11 @@ interface CategoryMutationServiceInterface
      *   policy:string,
      *   changedCount:int,
      *   dryRun:bool,
-     *   redirects:list<array{id:string,from:string,to:string}>
+     *   redirects:list<array{id:string,from:string,to:string}>,
+     *   duplicate:bool
      * }
      */
-    public function move(string $categoryId, string $newParentId, string $actorId, string $treeId = 'catalog', string $policy = 'strict', bool $dryRun = false, ?string $locale = null): array;
+    public function move(string $categoryId, string $newParentId, string $actorId, string $treeId = 'catalog', string $policy = 'strict', bool $dryRun = false, ?string $locale = null, ?string $idempotencyKey = null, ?string $correlationId = null): array;
 
     /**
      * @param array<string,bool> $checks
@@ -32,8 +33,9 @@ interface CategoryMutationServiceInterface
      *   warnings:list<string>,
      *   checks:array<string,bool>,
      *   publishedAt:?string,
-     *   reason:string
+     *   reason:string,
+     *   duplicate:bool
      * }
      */
-    public function publish(string $categoryId, bool $published, array $checks, string $actorId, string $reason): array;
+    public function publish(string $categoryId, bool $published, array $checks, string $actorId, string $reason, ?string $idempotencyKey = null, ?string $correlationId = null): array;
 }

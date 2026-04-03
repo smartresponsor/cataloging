@@ -98,6 +98,7 @@ $apiContractReadiness = readJsonOrEmpty($reportDir . '/catalog-api-contract-read
 $securityReadiness = readJsonOrEmpty($reportDir . '/catalog-security-readiness-report.json');
 $oidcRuntimeProof = readJsonOrEmpty($reportDir . '/catalog-oidc-runtime-proof-report.json');
 $outboxProjectionReadiness = readJsonOrEmpty($reportDir . '/catalog-outbox-projection-readiness-report.json');
+$idempotencyReadiness = readJsonOrEmpty($reportDir . '/catalog-idempotency-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -205,6 +206,13 @@ $items = [
         'status' => (($outboxProjectionReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
             'outboxProjectionSummary' => mapValue($outboxProjectionReadiness, 'summary'),
+        ],
+    ],
+    [
+        'check' => 'idempotency-readiness',
+        'status' => (($idempotencyReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'idempotencySummary' => mapValue($idempotencyReadiness, 'summary'),
         ],
     ],
 ];
