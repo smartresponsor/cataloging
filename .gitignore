@@ -11,9 +11,11 @@ composer.lock
 /coverage/
 /allure-results/
 /allure-report/
+/var/
 
 # PHPUnit
 .phpunit.result.cache
+.phpunit.cache/
 
 # IDE and editors
 /.idea/
@@ -28,24 +30,14 @@ Thumbs.db
 /.docker/
 /docker-compose.override.yml
 
-<<<<<<< HEAD
-/var/
-/report/
+# Docs and frontend output
 /docs/site/
 /node_modules/
+**/node_modules/
 /test-results/
 /playwright-report/
-/vendor/
-=======
-# Node
-node_modules/
-**/node_modules/
 
 # AI
 /Domain/Ai/agent-trigger/worker/.dev.vars
 /Domain/Ai/agent-trigger/worker/.dev.vars.*
 !/Domain/Ai/agent-trigger/worker/.dev.vars.example
-
-docs/site/
-var/
->>>>>>> 8c31da49 (inspection)

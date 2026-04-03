@@ -4,13 +4,10 @@ security:
       pattern: ^/api/category
       lazy: true
       stateless: true
-<<<<<<< HEAD
       provider: category_jwt
   providers:
     category_jwt:
       id: App\Security\JwtUserProvider
-=======
->>>>>>> 8c31da49 (inspection)
   access_control:
     - { path: ^/api/category/tree, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/category/.+/move, roles: ROLE_ADMIN }

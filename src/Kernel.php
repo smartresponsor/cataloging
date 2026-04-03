@@ -15,15 +15,11 @@ final class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    private const BUNDLES_CONFIG_PATH = '/../config/catalog_bundles.php';
-    private const PACKAGES_CONFIG_GLOB = '../config/{packages}/*.yaml';
-    private const SERVICES_CONFIG_GLOB = '../config/catalog_services*.yaml';
-    private const ROUTES_CONFIG_GLOB = '../config/routes/*.yaml';
-    private const ATTRIBUTE_ROUTE_RESOURCE = '../src/Controller/';
+    private const BUNDLES_CONFIG_PATH = __DIR__.'/../config/catalog_bundles.php';
 
     public function registerBundles(): iterable
     {
-        $contents = require dirname(__DIR__).self::BUNDLES_CONFIG_PATH;
+        $contents = require self::BUNDLES_CONFIG_PATH;
         foreach ($contents as $class => $envs) {
             if (!($envs[$this->getEnvironment()] ?? $envs['all'] ?? false)) {
                 continue;
@@ -35,23 +31,18 @@ final class Kernel extends BaseKernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-<<<<<<< HEAD
-        $container->import(self::PACKAGES_CONFIG_GLOB);
-        $container->import(self::SERVICES_CONFIG_GLOB);
-=======
         $container->import('../config/{packages}/*.yaml');
-        $container->import('../config/{packages}/'.$this->environment.'/*.yaml');
+        $container->import('../config/{packages}/'.$this->environment.'/*.yaml', null, true);
         $container->import('../config/services.yaml');
         $container->import('../config/services_'.$this->environment.'.yaml', null, true);
         $container->import('../config/catalog_services*.yaml');
->>>>>>> 8c31da49 (inspection)
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-<<<<<<< HEAD
-        $routes->import(self::ATTRIBUTE_ROUTE_RESOURCE, 'attribute');
-        $routes->import(self::ROUTES_CONFIG_GLOB);
+        $routes->import('../config/{routes}/*.yaml');
+        $routes->import('../config/{routes}.yaml');
+        $routes->import('../config/{routes}/'.$this->environment.'/*.yaml', null, true);
     }
 
     private function instantiateBundle(string $class): BundleInterface
@@ -62,10 +53,5 @@ final class Kernel extends BaseKernel
         }
 
         return $bundle;
-=======
-        $routes->import('../config/{routes}/*.yaml');
-        $routes->import('../config/{routes}.yaml');
-        $routes->import('../config/{routes}/'.$this->environment.'/*.yaml', null, true);
->>>>>>> 8c31da49 (inspection)
     }
 }

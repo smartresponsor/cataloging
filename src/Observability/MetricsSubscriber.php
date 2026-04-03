@@ -13,6 +13,10 @@ final class MetricsSubscriber implements EventSubscriberInterface
 {
     private float $start = 0.0;
 
+    public function __construct(private RequestCorrelationIdProvider $requestCorrelationIdProvider)
+    {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -35,6 +39,7 @@ final class MetricsSubscriber implements EventSubscriberInterface
             'path' => $e->getRequest()->getPathInfo(),
             'ms' => round($elapsed, 2),
             'status' => $status,
+            'correlation_id' => $this->requestCorrelationIdProvider->current(),
         ];
         $metricsDir = sys_get_temp_dir().'/sr_metrics';
         $this->ensureDirectory($metricsDir);

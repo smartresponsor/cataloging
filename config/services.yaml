@@ -6,7 +6,7 @@ services:
   App\Form\:
     resource: '../src/Form/'
 
-  App\Controller\StatusHandler:
+  App\Controller\StatusController:
     tags: ['controller.service_arguments']
 
   App\Controller\Admin\CategoryAdminController:
@@ -14,3 +14,8 @@ services:
 
   App\Controller\CategorySitemapController:
     tags: ['controller.service_arguments']
+
+  App\Security\JwtUserProvider:
+    arguments:
+      $defaultRoles: ['ROLE_USER']
+      $adminIdentifiers: '%env(csv:CATEGORY_API_ADMIN_IDENTIFIERS)%'
