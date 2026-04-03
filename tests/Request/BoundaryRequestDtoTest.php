@@ -50,11 +50,19 @@ final class BoundaryRequestDtoTest extends TestCase
         self::assertSame(['id' => 1], $input->payload);
     }
 
-    public function testAttachmentRequestValidatesRequiredFields(): void
+    public function testAttachmentRequestValidatesExternalReferenceFields(): void
     {
         $input = CategoryAttachmentAddRequest::fromJson('{"type":"banner"}');
 
         self::assertFalse($input->isValid());
-        self::assertSame(['category_id is required', 'path is required'], $input->getErrors());
+        self::assertSame(['category_id is required', 'provider is required', 'external_attachment_id is required'], $input->getErrors());
+    }
+
+    public function testAttachmentRequestAcceptsReferenceUriAliasFromPath(): void
+    {
+        $input = CategoryAttachmentAddRequest::fromJson('{"category_id":"cat-1","type":"banner","provider":"media","external_attachment_id":"asset-1","path":"https://cdn.example.test/a.png"}');
+
+        self::assertTrue($input->isValid());
+        self::assertSame('https://cdn.example.test/a.png', $input->referenceUri);
     }
 }

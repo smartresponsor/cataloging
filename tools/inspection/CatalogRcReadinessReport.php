@@ -100,6 +100,7 @@ $oidcRuntimeProof = readJsonOrEmpty($reportDir . '/catalog-oidc-runtime-proof-re
 $outboxProjectionReadiness = readJsonOrEmpty($reportDir . '/catalog-outbox-projection-readiness-report.json');
 $idempotencyReadiness = readJsonOrEmpty($reportDir . '/catalog-idempotency-readiness-report.json');
 $searchReadiness = readJsonOrEmpty($reportDir . '/catalog-search-readiness-report.json');
+$externalBoundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-external-boundary-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -221,6 +222,14 @@ $items = [
         'status' => (($searchReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
             'searchSummary' => mapValue($searchReadiness, 'summary'),
+        ],
+    ],
+
+    [
+        'check' => 'external-boundary-readiness',
+        'status' => (($externalBoundaryReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'externalBoundarySummary' => mapValue($externalBoundaryReadiness, 'summary'),
         ],
     ],
 ];

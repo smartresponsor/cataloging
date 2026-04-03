@@ -8,14 +8,14 @@ namespace App\RepositoryInterface;
 interface CatalogAttachmentRepositoryInterface
 {
     /**
-     * @return list<array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}>
+     * @return list<array{attachment_id:string,category_id:string,type:string,provider:string,external_attachment_id:string,reference_uri:?string,path:?string,created_at:string}>
      */
     public function list(?string $categoryId = null): array;
 
     /**
-     * @return array{attachment_id:string,category_id:string,type:string,path:string,created_at:string}
+     * @return array{attachment_id:string,category_id:string,type:string,provider:string,external_attachment_id:string,reference_uri:?string,path:?string,created_at:string}
      */
-    public function add(string $categoryId, string $type, string $path): array;
+    public function add(string $categoryId, string $type, string $provider, string $externalAttachmentId, ?string $referenceUri = null): array;
 
     public function delete(string $attachmentId): bool;
 }

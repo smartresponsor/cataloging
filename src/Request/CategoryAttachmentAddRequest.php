@@ -13,7 +13,9 @@ final class CategoryAttachmentAddRequest
     public function __construct(
         public readonly ?string $categoryId,
         public readonly string $type,
-        public readonly ?string $path,
+        public readonly ?string $provider,
+        public readonly ?string $externalAttachmentId,
+        public readonly ?string $referenceUri,
         private array $errors = [],
     ) {
     }
@@ -22,7 +24,7 @@ final class CategoryAttachmentAddRequest
     {
         $decoded = json_decode($json, true);
         if (!is_array($decoded)) {
-            return new self(null, 'icon', null, ['payload must be a JSON object']);
+            return new self(null, 'icon', null, null, null, ['payload must be a JSON object']);
         }
 
         $errors = [];
@@ -32,13 +34,17 @@ final class CategoryAttachmentAddRequest
         }
 
         $type = self::normalizeString($decoded['type'] ?? null) ?? 'icon';
-
-        $path = self::normalizeString($decoded['path'] ?? null);
-        if (null === $path) {
-            $errors[] = 'path is required';
+        $provider = self::normalizeString($decoded['provider'] ?? null);
+        if (null === $provider) {
+            $errors[] = 'provider is required';
         }
+        $externalAttachmentId = self::normalizeString($decoded['external_attachment_id'] ?? null);
+        if (null === $externalAttachmentId) {
+            $errors[] = 'external_attachment_id is required';
+        }
+        $referenceUri = self::normalizeString($decoded['reference_uri'] ?? $decoded['path'] ?? null);
 
-        return new self($categoryId, $type, $path, $errors);
+        return new self($categoryId, $type, $provider, $externalAttachmentId, $referenceUri, $errors);
     }
 
     public function isValid(): bool

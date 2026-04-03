@@ -40,7 +40,13 @@ final class CategoryAttachmentController
         }
 
         try {
-            $item = $this->service->add($input->categoryId ?? '', $input->type, $input->path ?? '');
+            $item = $this->service->add(
+                $input->categoryId ?? '',
+                $input->type,
+                $input->provider ?? '',
+                $input->externalAttachmentId ?? '',
+                $input->referenceUri,
+            );
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
         }

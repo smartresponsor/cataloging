@@ -162,10 +162,23 @@ paths:
         '200':
           description: Attachment list returned
     post:
-      summary: Register a category attachment
+      summary: Register a category attachment reference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [category_id, type, provider, external_attachment_id]
+              properties:
+                category_id: { type: string }
+                type: { type: string }
+                provider: { type: string }
+                external_attachment_id: { type: string }
+                reference_uri: { type: string }
       responses:
         '201':
-          description: Attachment created
+          description: Attachment reference bound to category
         '400':
           description: Validation failure
   /api/category/collection:

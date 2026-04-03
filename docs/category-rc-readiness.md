@@ -71,3 +71,5 @@ These items are now explicit and machine-readable instead of remaining implicit 
 - idempotency readiness should stay at `pass` before RC is treated as production-candidate clean.
 
 - search-readiness
+
+php tools/inspection/CatalogExternalBoundaryReadinessReport.php

@@ -22,7 +22,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
     {
         $this->ensureSchema();
 
-        $sql = 'SELECT attachment_id, category_id, type, path, created_at FROM category_attachment';
+        $sql = 'SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at FROM category_attachment';
         $params = [];
         if (null !== $categoryId && '' !== $categoryId) {
             $sql .= ' WHERE category_id = :category_id';
@@ -38,17 +38,23 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
                     !is_string($row['attachment_id'] ?? null)
                     || !is_string($row['category_id'] ?? null)
                     || !is_string($row['type'] ?? null)
-                    || !is_string($row['path'] ?? null)
+                    || !is_string($row['provider'] ?? null)
+                    || !is_string($row['external_attachment_id'] ?? null)
                     || !is_string($row['created_at'] ?? null)
                 ) {
                     return null;
                 }
 
+                $referenceUri = isset($row['path']) && is_string($row['path']) && '' !== trim($row['path']) ? trim($row['path']) : null;
+
                 return [
                     'attachment_id' => $row['attachment_id'],
                     'category_id' => $row['category_id'],
                     'type' => $row['type'],
-                    'path' => $row['path'],
+                    'provider' => $row['provider'],
+                    'external_attachment_id' => $row['external_attachment_id'],
+                    'reference_uri' => $referenceUri,
+                    'path' => $referenceUri,
                     'created_at' => $row['created_at'],
                 ];
             },
@@ -56,37 +62,60 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         )));
     }
 
-    public function add(string $categoryId, string $type, string $path): array
+    public function add(string $categoryId, string $type, string $provider, string $externalAttachmentId, ?string $referenceUri = null): array
     {
         $this->ensureSchema();
 
         $existing = $this->connection->fetchAssociative(
-            'SELECT attachment_id, category_id, type, path, created_at
+            'SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at
              FROM category_attachment
-             WHERE category_id = :category_id AND type = :type AND path = :path
+             WHERE category_id = :category_id AND type = :type AND provider = :provider AND external_attachment_id = :external_attachment_id
              LIMIT 1',
             [
                 'category_id' => $categoryId,
                 'type' => $type,
-                'path' => $path,
+                'provider' => $provider,
+                'external_attachment_id' => $externalAttachmentId,
             ],
         );
         if (is_array($existing)) {
-            /** @var array{attachment_id:string,category_id:string,type:string,path:string,created_at:string} $existing */
-            return $existing;
+            $path = isset($existing['path']) && is_string($existing['path']) && '' !== trim($existing['path']) ? trim($existing['path']) : null;
+
+            /** @var array{attachment_id:string,category_id:string,type:string,provider:string,external_attachment_id:string,created_at:string} $existing */
+            return [
+                'attachment_id' => $existing['attachment_id'],
+                'category_id' => $existing['category_id'],
+                'type' => $existing['type'],
+                'provider' => $existing['provider'],
+                'external_attachment_id' => $existing['external_attachment_id'],
+                'reference_uri' => $path,
+                'path' => $path,
+                'created_at' => $existing['created_at'],
+            ];
         }
 
         $item = [
             'attachment_id' => (string) new Ulid(),
             'category_id' => $categoryId,
             'type' => $type,
-            'path' => $path,
+            'provider' => $provider,
+            'external_attachment_id' => $externalAttachmentId,
+            'path' => null !== $referenceUri ? $referenceUri : '',
             'created_at' => (new \DateTimeImmutable())->format(DATE_ATOM),
         ];
 
         $this->connection->insert('category_attachment', $item);
 
-        return $item;
+        return [
+            'attachment_id' => $item['attachment_id'],
+            'category_id' => $item['category_id'],
+            'type' => $item['type'],
+            'provider' => $item['provider'],
+            'external_attachment_id' => $item['external_attachment_id'],
+            'reference_uri' => '' !== $item['path'] ? $item['path'] : null,
+            'path' => '' !== $item['path'] ? $item['path'] : null,
+            'created_at' => $item['created_at'],
+        ];
     }
 
     public function delete(string $attachmentId): bool
@@ -111,11 +140,26 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
                     attachment_id VARCHAR(26) PRIMARY KEY,
                     category_id VARCHAR(160) NOT NULL,
                     type VARCHAR(64) NOT NULL,
+                    provider VARCHAR(64) NOT NULL,
+                    external_attachment_id VARCHAR(255) NOT NULL,
                     path VARCHAR(2048) NOT NULL,
                     created_at %s NOT NULL
                 )',
                 $this->createdAtColumnType(),
             ));
+        }
+
+        $columns = [];
+        if ($schemaManager->tablesExist(['category_attachment'])) {
+            $columns = array_change_key_case($schemaManager->listTableColumns('category_attachment'), CASE_LOWER);
+        }
+
+        if (!isset($columns['provider'])) {
+            $this->connection->executeStatement('ALTER TABLE category_attachment ADD provider VARCHAR(64) NOT NULL DEFAULT \'attachment\'');
+        }
+        if (!isset($columns['external_attachment_id'])) {
+            $this->connection->executeStatement('ALTER TABLE category_attachment ADD external_attachment_id VARCHAR(255) NOT NULL DEFAULT \'\'');
+            $this->connection->executeStatement('UPDATE category_attachment SET external_attachment_id = path WHERE external_attachment_id = \'\'');
         }
 
         $indexes = [];
@@ -127,16 +171,22 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             }
         }
 
-        if (!isset($indexes['ux_category_attachment_identity'])) {
+        if (!isset($indexes['ux_category_attachment_external_binding'])) {
             $this->connection->executeStatement(
-                'CREATE UNIQUE INDEX ux_category_attachment_identity
-                 ON category_attachment (category_id, type, path)',
+                'CREATE UNIQUE INDEX ux_category_attachment_external_binding
+                 ON category_attachment (category_id, type, provider, external_attachment_id)',
             );
         }
         if (!isset($indexes['idx_category_attachment_category'])) {
             $this->connection->executeStatement(
                 'CREATE INDEX idx_category_attachment_category
                  ON category_attachment (category_id)',
+            );
+        }
+        if (!isset($indexes['idx_category_attachment_provider'])) {
+            $this->connection->executeStatement(
+                'CREATE INDEX idx_category_attachment_provider
+                 ON category_attachment (provider)',
             );
         }
 

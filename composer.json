@@ -115,7 +115,8 @@
     "report:oidc-runtime-proof": "@php tools/php/php84.php tools/inspection/CatalogOidcRuntimeProofReport.php",
     "report:outbox-projection-readiness": "@php tools/php/php84.php tools/inspection/CatalogOutboxProjectionReadinessReport.php",
     "report:idempotency-readiness": "@php tools/php/php84.php tools/inspection/CatalogIdempotencyReadinessReport.php",
-    "report:search-readiness": "@php tools/php/php84.php tools/inspection/CatalogSearchReadinessReport.php"
+    "report:search-readiness": "@php tools/php/php84.php tools/inspection/CatalogSearchReadinessReport.php",
+    "report:external-boundary-readiness": "@php tools/php/php84.php tools/inspection/CatalogExternalBoundaryReadinessReport.php"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,
