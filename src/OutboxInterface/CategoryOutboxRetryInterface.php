@@ -13,4 +13,11 @@ interface CategoryOutboxRetryInterface
      * @param array<string, mixed> $event
      */
     public function schedule(array $event, int $attempt): void;
+
+    public function nextDelaySeconds(int $attempt): int;
+
+    public function nextRunAt(\DateTimeImmutable $now, int $attempt): \DateTimeImmutable;
+
+    /** @return list<array{event:array<string, mixed>,attempt:int,runAt:int}> */
+    public function scheduled(): array;
 }

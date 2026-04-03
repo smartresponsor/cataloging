@@ -64,3 +64,6 @@ The readiness report currently evaluates these RC-facing gates:
 - remaining owner-overlap/class-alias signals during catalog/category convergence
 
 These items are now explicit and machine-readable instead of remaining implicit tribal knowledge.
+
+## Additional RC gate
+- outbox / projection readiness must pass before declaring write/read pipeline ready.

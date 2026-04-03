@@ -5,30 +5,34 @@ declare(strict_types=1);
 
 namespace App\Runner;
 
-use App\ProjectionInterface\CategoryProjectionSyncInterface;
 use App\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Service\ProjectionWorker;
 
 final class CategoryProjectionRunner implements CategoryProjectionRunnerInterface
 {
-    private CategoryProjectionSyncInterface $sync;
-
-    public function __construct(CategoryProjectionSyncInterface $sync)
+    public function __construct(private readonly ProjectionWorker $worker)
     {
-        $this->sync = $sync;
     }
 
     public function run(int $maxSec, int $maxBatch): void
     {
-        $start = time();
+        $startedAt = new \DateTimeImmutable('now');
         $processed = 0;
+        $budgetSeconds = max(1, $maxSec);
+        $batchLimit = max(1, $maxBatch);
 
-        while ((time() - $start) < $maxSec && $processed < $maxBatch) {
-            $this->sync->apply([
-                'type' => 'projection.tick',
-                'sequence' => $processed + 1,
-            ]);
-            ++$processed;
-            usleep(100000);
+        while ((new \DateTimeImmutable('now'))->getTimestamp() - $startedAt->getTimestamp() < $budgetSeconds && $processed < $batchLimit) {
+            $remaining = $batchLimit - $processed;
+            $stepLimit = min(50, $remaining);
+            $handled = $this->worker->runOnce($stepLimit);
+            if ($handled <= 0) {
+                break;
+            }
+
+            $processed += $handled;
+            if ($handled < $stepLimit) {
+                break;
+            }
         }
     }
 }
