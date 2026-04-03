@@ -7,18 +7,19 @@ namespace App\Controller;
 
 use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
+use App\Service\CategoryMutationAuthorizationService;
 use App\ServiceInterface\CategoryMutationServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryApiController
 {
     public function __construct(
         private readonly CategoryMutationServiceInterface $categoryMutationService,
+        private readonly CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
         private readonly Security $security,
     ) {
     }
@@ -30,7 +31,6 @@ final class CategoryApiController
     }
 
     #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function move(string $id, Request $request): JsonResponse
     {
         $dto = MoveCategoryRequest::fromArray($this->decodeMap($request));
@@ -39,6 +39,8 @@ final class CategoryApiController
         }
 
         try {
+            $this->categoryMutationAuthorizationService->assertCanMove($id);
+
             $result = $this->categoryMutationService->move(
                 $id,
                 (string) $dto->parentId,
@@ -52,6 +54,8 @@ final class CategoryApiController
             );
 
             return new JsonResponse(['data' => $result], 200);
+        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 400);
         } catch (\DomainException $exception) {
@@ -62,7 +66,6 @@ final class CategoryApiController
     }
 
     #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function publish(string $id, Request $request): JsonResponse
     {
         $dto = PublishCategoryRequest::fromArray($this->decodeMap($request));
@@ -71,6 +74,8 @@ final class CategoryApiController
         }
 
         try {
+            $this->categoryMutationAuthorizationService->assertCanPublish($id);
+
             $result = $this->categoryMutationService->publish(
                 $id,
                 (bool) $dto->published,
@@ -82,6 +87,8 @@ final class CategoryApiController
             );
 
             return new JsonResponse(['data' => $result], 200);
+        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 400);
         } catch (\DomainException $exception) {

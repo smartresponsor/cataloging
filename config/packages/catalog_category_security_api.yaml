@@ -10,4 +10,4 @@ security:
       id: App\Security\JwtUserProvider
   access_control:
     - { path: ^/api/category/tree, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api/category/.+/move, roles: ROLE_ADMIN }
+    - { path: ^/api/category/.+/move, roles: IS_AUTHENTICATED_FULLY }

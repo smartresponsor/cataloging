@@ -8,6 +8,8 @@ It is intentionally not a full threat model. It focuses on the surfaces most lik
 - explicit admin allowlist wiring;
 - API firewall presence;
 - protection of admin, publish, move, attachment-write, and webhook-test routes;
+- policy-based authorization on mutation routes, not only coarse route-level RBAC;
+- durable access-assignment storage backing category-level authorization decisions;
 - baseline OIDC/JWKS readiness artifacts.
 
 ## Report

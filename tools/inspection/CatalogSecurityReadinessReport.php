@@ -117,6 +117,11 @@ function fileContains(string $path, string $needle): bool
     return is_file($path) && str_contains((string) file_get_contents($path), $needle);
 }
 
+function policyAuthorizedMutationRoute(string $controllerSource, string $serviceNeedle, string $voterNeedle): bool
+{
+    return fileContains($controllerSource, $serviceNeedle) || fileContains($controllerSource, $voterNeedle);
+}
+
 $generatedArtifacts = ['config/reference.php'];
 $router = routerPaths($root);
 restoreGeneratedArtifacts($root, $generatedArtifacts);
@@ -131,6 +136,8 @@ $rules = accessControlRules([
 $providerSource = $root . '/src/Security/JwtUserProvider.php';
 $servicesSource = $root . '/config/services.yaml';
 $securityApiSource = $root . '/config/packages/catalog_category_security_api.yaml';
+$accessAssignmentRepository = $root . '/src/Repository/CategoryAccessAssignmentRepository.php';
+$mutationAuthorizationService = $root . '/src/Service/CategoryMutationAuthorizationService.php';
 $adminController = $root . '/src/Controller/Admin/CategoryAdminController.php';
 $adminApiController = $root . '/src/Controller/Api/CategoryAdminApiController.php';
 $categoryApiController = $root . '/src/Controller/CategoryApiController.php';
@@ -199,6 +206,22 @@ $items = [
             'routes' => ['/api/category/attachment', '/api/category/attachment/{attachmentId}'],
         ],
     ],
+    [
+        'check' => 'access-assignment-repository-durable',
+        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\\RepositoryInterface\\CategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
+        'details' => [
+            'file' => 'src/Repository/CategoryAccessAssignmentRepository.php',
+        ],
+    ],
+    [
+        'check' => 'mutation-routes-policy-authorized',
+        'status' => policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanMove', 'CategoryVoter::EDIT')
+            && policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanPublish', 'CategoryVoter::PUBLISH') ? 'pass' : 'warn',
+        'details' => [
+            'controller' => 'src/Controller/CategoryApiController.php',
+        ],
+    ],
+
     [
         'check' => 'webhook-test-route-protected',
         'status' => fileContains($webhookController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/webhook/test', $rules) ? 'pass' : 'fail',

@@ -23,3 +23,6 @@ services:
   App\ServiceInterface\CategoryMutationServiceInterface: '@App\Service\CategoryMutationService'
 
   App\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Idempotency\CategoryIdempotencyStore'
+
+  App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface: '@App\Repository\CategoryAccessAssignmentRepository'
+
