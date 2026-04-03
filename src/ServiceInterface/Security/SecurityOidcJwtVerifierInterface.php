@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface\Security;
 
-interface OidcJwtVerifierInterface
+interface SecurityOidcJwtVerifierInterface
 {
     /** @return array<string,mixed> */
     public function verify(string $jwt): array;

@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Service\Category\Quota;
 
-use App\ServiceInterface\Category\CategoryTokenBucketInterface;
+use App\ServiceInterface\Category\CategoryQuotaTokenBucketInterface;
 use App\ServiceInterface\Quota\CacheStoreInterface;
 
-final class CategoryTokenBucket implements CategoryTokenBucketInterface
+final class CategoryTokenBucket implements CategoryQuotaTokenBucketInterface
 {
     private string $key;
     private int $capacity;

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryBulkInterface;
-use App\ServiceInterface\CategoryInterface as CategoryCategoryService;
+use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
 
 final class CategoryBulk implements CategoryBulkInterface
 {

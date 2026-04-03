@@ -5,6 +5,6 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface\Api;
 
-interface GraphqlResolverInterface extends \App\ServiceInterface\GraphqlResolverInterface
+interface ApiGraphqlResolverInterface extends \App\ServiceInterface\GraphqlResolverInterface
 {
 }

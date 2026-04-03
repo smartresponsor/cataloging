@@ -7,7 +7,7 @@ namespace App\Tests\Category;
 
 use App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
 use App\Service\CatalogCollectionService;
-use App\Service\CategoryRuleEngine;
+use App\Service\CollectionRuleEngine;
 use App\Service\CollectionBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +37,7 @@ final class CatalogCollectionServiceTest extends TestCase
             }
         };
 
-        $service = new CatalogCollectionService($repository, new CollectionBuilder(new CategoryRuleEngine()));
+        $service = new CatalogCollectionService($repository, new CollectionBuilder(new CollectionRuleEngine()));
         $result = $service->build(['tag_set' => 'winter']);
 
         self::assertCount(1, $result);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-interface CategoryInterface
+interface CategoryServiceInterface
 {
     /**
      * @param array<string,string>                                                              $name

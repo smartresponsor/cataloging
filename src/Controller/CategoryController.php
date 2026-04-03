@@ -8,7 +8,7 @@ namespace App\Controller;
 use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
-use App\ServiceInterface\CategoryInterface as CatalogCategoryService;
+use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
 
 final class CategoryController implements CategoryControllerInterface
 {

@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Service\CategoryRuleEngine;
+use App\Service\CollectionRuleEngine;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryRuleEngineTest extends TestCase
 {
     public function testMatchSupportsNullAsAnExplicitValue(): void
     {
-        $engine = new CategoryRuleEngine();
+        $engine = new CollectionRuleEngine();
 
         self::assertTrue($engine->match(
             ['slug' => null, 'locale' => 'en'],
@@ -25,7 +25,7 @@ final class CategoryRuleEngineTest extends TestCase
 
     public function testMatchRejectsMissingAttributes(): void
     {
-        $engine = new CategoryRuleEngine();
+        $engine = new CollectionRuleEngine();
 
         self::assertFalse($engine->match(
             ['locale' => 'en'],
@@ -35,7 +35,7 @@ final class CategoryRuleEngineTest extends TestCase
 
     public function testMatchSupportsAllowedValueLists(): void
     {
-        $engine = new CategoryRuleEngine();
+        $engine = new CollectionRuleEngine();
 
         self::assertTrue($engine->match(
             ['locale' => 'en', 'channel' => 'storefront'],
@@ -49,7 +49,7 @@ final class CategoryRuleEngineTest extends TestCase
 
     public function testMatchSupportsArrayValuedProjectionFields(): void
     {
-        $engine = new CategoryRuleEngine();
+        $engine = new CollectionRuleEngine();
 
         self::assertTrue($engine->match(
             ['tag_set' => ['winter', 'sale'], 'brand' => 'acme'],

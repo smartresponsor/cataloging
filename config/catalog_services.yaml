@@ -38,8 +38,8 @@ services:
   App\Service\CatalogLegacyCollectionFilterService: ~
   App\Service\CatalogMoveService: ~
   App\Service\CatalogReadService: ~
-  App\Service\CatalogVirtualCategoryService: ~
-  App\Service\CategoryRuleEngine: ~
+  App\Service\CatalogVirtualCollectionService: ~
+  App\Service\CollectionRuleEngine: ~
   App\Service\CollectionBuilder: ~
 
   App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'

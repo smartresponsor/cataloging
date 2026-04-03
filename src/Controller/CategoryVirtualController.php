@@ -6,14 +6,14 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Request\CategoryCollectionRequest;
-use App\Service\CatalogVirtualCategoryService;
+use App\Service\CatalogVirtualCollectionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryVirtualController
 {
-    public function __construct(private readonly CatalogVirtualCategoryService $service)
+    public function __construct(private readonly CatalogVirtualCollectionService $service)
     {
     }
 

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 /** LayerInterface mirror (canon) */
-interface CategoryRepositoryInterface
+interface CategoryReadRepositoryInterface
 {
     /**
      * @param array<string, mixed> $opt

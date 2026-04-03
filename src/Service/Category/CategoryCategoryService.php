@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Service\Category;
 
-use App\ServiceInterface\CategoryRepositoryInterface;
+use App\ServiceInterface\CategoryReadRepositoryInterface;
 
 final class CategoryCategoryService
 {
-    private CategoryRepositoryInterface $repo;
+    private CategoryReadRepositoryInterface $repo;
 
-    public function __construct(CategoryRepositoryInterface $repo)
+    public function __construct(CategoryReadRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }

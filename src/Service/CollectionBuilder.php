@@ -7,7 +7,7 @@ namespace App\Service;
 
 final class CollectionBuilder
 {
-    public function __construct(private readonly CategoryRuleEngine $engine)
+    public function __construct(private readonly CollectionRuleEngine $engine)
     {
     }
 

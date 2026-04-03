@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-final class CacheInvalidator
+final class CacheInvalidationRecorder
 {
     public function invalidate(int|string $id): void
     {

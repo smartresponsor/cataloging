@@ -18,6 +18,6 @@ final class MessengerOutboxDispatcher implements OutboxDispatcherInterface
     /** @param array<string,mixed> $event */
     public function dispatch(array $event): void
     {
-        $this->bus->dispatch(new Envelope(new OutboxMessage($event)));
+        $this->bus->dispatch(new Envelope(new MessengerOutboxMessage($event)));
     }
 }

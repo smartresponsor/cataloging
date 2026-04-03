@@ -7,7 +7,7 @@ namespace App\Service;
 
 use App\RepositoryInterface\VirtualCategoryRepositoryInterface;
 
-final class CatalogVirtualCategoryService
+final class CatalogVirtualCollectionService
 {
     public function __construct(
         private readonly CatalogCollectionService $collectionService,

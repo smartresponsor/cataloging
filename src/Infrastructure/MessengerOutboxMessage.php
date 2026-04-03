@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-final class OutboxMessage
+final class MessengerOutboxMessage
 {
     /** @param array<string,mixed> $payload */
     public function __construct(private readonly array $payload)

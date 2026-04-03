@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
 
-interface CategoryTokenBucketInterface
+interface CategoryQuotaTokenBucketInterface
 {
     public function take(int $n = 1): bool;
 }

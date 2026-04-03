@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-final class CategoryRuleEngine
+final class CollectionRuleEngine
 {
     /**
      * @param array<string, list<scalar>|scalar|null> $category

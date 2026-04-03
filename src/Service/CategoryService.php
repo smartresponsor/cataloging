@@ -11,7 +11,7 @@ use App\Event\CategoryMoved;
 use App\Event\CategoryUnlinked;
 use App\PolicyInterface\CategoryPolicyInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CategoryInterface as CategoryCategoryServiceInterface;
+use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryServiceInterface;
 use App\ServiceInterface\CategorySlugGeneratorInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -19,7 +19,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * Category service — implements create/move/attach/detach using contracts.
  * Storage specifics are delegated to the repository.
  */
-final class Category implements CategoryCategoryServiceInterface
+final class CategoryService implements CategoryCategoryServiceInterface
 {
     private CategoryRepositoryInterface $repo;
     private CategoryPolicyInterface $policy;
