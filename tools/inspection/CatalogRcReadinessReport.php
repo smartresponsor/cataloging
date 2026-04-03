@@ -102,6 +102,7 @@ $idempotencyReadiness = readJsonOrEmpty($reportDir . '/catalog-idempotency-readi
 $searchReadiness = readJsonOrEmpty($reportDir . '/catalog-search-readiness-report.json');
 $externalBoundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-external-boundary-readiness-report.json');
 $tenantPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-tenant-policy-readiness-report.json');
+$attachmentPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-attachment-policy-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -231,6 +232,20 @@ $items = [
         'status' => (($externalBoundaryReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
             'externalBoundarySummary' => mapValue($externalBoundaryReadiness, 'summary'),
+        ],
+    ],
+    [
+        'check' => 'tenant-policy-readiness',
+        'status' => (($tenantPolicyReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'tenantPolicySummary' => mapValue($tenantPolicyReadiness, 'summary'),
+        ],
+    ],
+    [
+        'check' => 'attachment-policy-readiness',
+        'status' => (($attachmentPolicyReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'attachmentPolicySummary' => mapValue($attachmentPolicyReadiness, 'summary'),
         ],
     ],
 ];

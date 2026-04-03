@@ -201,7 +201,9 @@ $items = [
     ],
     [
         'check' => 'attachment-write-protected',
-        'status' => fileContains($attachmentController, "#[IsGranted('ROLE_ADMIN')]") ? 'pass' : 'warn',
+        'status' => (pathProtectedByAccessControl('/api/category/attachment', $rules)
+            && fileContains($attachmentController, 'authorizationService->assertCanAttach')
+            && fileContains($attachmentController, 'authorizationService->assertCanDetach')) ? 'pass' : 'warn',
         'details' => [
             'routes' => ['/api/category/attachment', '/api/category/attachment/{attachmentId}'],
         ],

@@ -11,3 +11,4 @@ security:
   access_control:
     - { path: ^/api/category/tree, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/category/.+/move, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/category/attachment, roles: IS_AUTHENTICATED_FULLY }

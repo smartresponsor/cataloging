@@ -117,7 +117,8 @@
     "report:idempotency-readiness": "@php tools/php/php84.php tools/inspection/CatalogIdempotencyReadinessReport.php",
     "report:search-readiness": "@php tools/php/php84.php tools/inspection/CatalogSearchReadinessReport.php",
     "report:external-boundary-readiness": "@php tools/php/php84.php tools/inspection/CatalogExternalBoundaryReadinessReport.php",
-    "report:tenant-policy-readiness": "@php tools/php/php84.php tools/inspection/CatalogTenantPolicyReadinessReport.php"
+    "report:tenant-policy-readiness": "@php tools/php/php84.php tools/inspection/CatalogTenantPolicyReadinessReport.php",
+    "report:attachment-policy-readiness": "@php tools/php/php84.php tools/inspection/CatalogAttachmentPolicyReadinessReport.php"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,

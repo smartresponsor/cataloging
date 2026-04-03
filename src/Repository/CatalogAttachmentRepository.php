@@ -118,6 +118,42 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         ];
     }
 
+    public function findOne(string $attachmentId): ?array
+    {
+        $this->ensureSchema();
+
+        $row = $this->connection->fetchAssociative(
+            'SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at FROM category_attachment WHERE attachment_id = :attachment_id LIMIT 1',
+            ['attachment_id' => $attachmentId],
+        );
+        if (!is_array($row)) {
+            return null;
+        }
+        if (
+            !is_string($row['attachment_id'] ?? null)
+            || !is_string($row['category_id'] ?? null)
+            || !is_string($row['type'] ?? null)
+            || !is_string($row['provider'] ?? null)
+            || !is_string($row['external_attachment_id'] ?? null)
+            || !is_string($row['created_at'] ?? null)
+        ) {
+            return null;
+        }
+
+        $referenceUri = isset($row['path']) && is_string($row['path']) && '' !== trim($row['path']) ? trim($row['path']) : null;
+
+        return [
+            'attachment_id' => $row['attachment_id'],
+            'category_id' => $row['category_id'],
+            'type' => $row['type'],
+            'provider' => $row['provider'],
+            'external_attachment_id' => $row['external_attachment_id'],
+            'reference_uri' => $referenceUri,
+            'path' => $referenceUri,
+            'created_at' => $row['created_at'],
+        ];
+    }
+
     public function delete(string $attachmentId): bool
     {
         $this->ensureSchema();
