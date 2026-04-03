@@ -7,8 +7,16 @@ namespace App\Request;
 
 final class PublishCategoryRequest
 {
-    /** @param list<string> $errors */
-    public function __construct(public readonly ?bool $published, private array $errors = [])
+    /**
+     * @param array<string,bool> $checks
+     * @param list<string> $errors
+     */
+    public function __construct(
+        public readonly ?bool $published,
+        public readonly array $checks = [],
+        public readonly string $reason = 'api publish request',
+        private array $errors = [],
+    )
     {
     }
 
@@ -17,7 +25,7 @@ final class PublishCategoryRequest
     {
         $errors = [];
         if (!array_key_exists('published', $data)) {
-            return new self(null, ['published is required']);
+            return new self(null, [], 'api publish request', ['published is required']);
         }
         $raw = $data['published'];
         $published = match (true) {
@@ -30,7 +38,26 @@ final class PublishCategoryRequest
             $errors[] = 'published must be boolean';
         }
 
-        return new self($published, $errors);
+        $checks = [];
+        if (is_array($data['checks'] ?? null)) {
+            foreach ($data['checks'] as $name => $value) {
+                if (!is_string($name)) {
+                    continue;
+                }
+                $checks[$name] = (bool) $value;
+            }
+        }
+
+        $reason = is_scalar($data['reason'] ?? null) ? trim((string) $data['reason']) : 'api publish request';
+        if ('' === $reason) {
+            $reason = 'api publish request';
+        }
+
+        if (true === $published && [] === $checks) {
+            $errors[] = 'checks are required when published is true';
+        }
+
+        return new self($published, $checks, $reason, $errors);
     }
 
     public function isValid(): bool

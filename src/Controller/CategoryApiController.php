@@ -7,13 +7,22 @@ namespace App\Controller;
 
 use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
+use App\ServiceInterface\CategoryMutationServiceInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryApiController
 {
+    public function __construct(
+        private readonly CategoryMutationServiceInterface $categoryMutationService,
+        private readonly Security $security,
+    ) {
+    }
+
     #[Route('/api/category/tree', name: 'api_category_tree', methods: ['GET'])]
     public function tree(): JsonResponse
     {
@@ -29,7 +38,23 @@ final class CategoryApiController
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
 
-        return new JsonResponse(['status' => 'ok']);
+        try {
+            $result = $this->categoryMutationService->move(
+                $id,
+                (string) $dto->parentId,
+                $this->resolveActorId($request),
+                $dto->treeId,
+                $dto->policy,
+                $dto->dryRun,
+                $dto->locale,
+            );
+
+            return new JsonResponse(['data' => $result], 200);
+        } catch (\InvalidArgumentException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 400);
+        } catch (\RuntimeException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], str_contains($exception->getMessage(), 'was not found') ? 404 : 409);
+        }
     }
 
     #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
@@ -41,7 +66,23 @@ final class CategoryApiController
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
 
-        return new JsonResponse(['status' => 'ok']);
+        try {
+            $result = $this->categoryMutationService->publish(
+                $id,
+                (bool) $dto->published,
+                $dto->checks,
+                $this->resolveActorId($request),
+                $dto->reason,
+            );
+
+            return new JsonResponse(['data' => $result], 200);
+        } catch (\InvalidArgumentException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 400);
+        } catch (\DomainException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 409);
+        } catch (\RuntimeException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], str_contains($exception->getMessage(), 'was not found') ? 404 : 409);
+        }
     }
 
     /** @return array<string,mixed> */
@@ -50,5 +91,23 @@ final class CategoryApiController
         $decoded = json_decode($request->getContent(), true);
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    private function resolveActorId(Request $request): string
+    {
+        $user = $this->security->getUser();
+        if ($user instanceof UserInterface) {
+            $identifier = trim($user->getUserIdentifier());
+            if ('' !== $identifier) {
+                return $identifier;
+            }
+        }
+
+        $headerActorId = trim((string) $request->headers->get('X-Actor-Id', ''));
+        if ('' !== $headerActorId) {
+            return $headerActorId;
+        }
+
+        return 'category-api';
     }
 }

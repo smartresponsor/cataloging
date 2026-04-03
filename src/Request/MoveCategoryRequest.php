@@ -8,7 +8,14 @@ namespace App\Request;
 final class MoveCategoryRequest
 {
     /** @param list<string> $errors */
-    public function __construct(public readonly ?string $parentId, private array $errors = [])
+    public function __construct(
+        public readonly ?string $parentId,
+        public readonly string $treeId = 'catalog',
+        public readonly string $policy = 'strict',
+        public readonly bool $dryRun = false,
+        public readonly ?string $locale = null,
+        private array $errors = [],
+    )
     {
     }
 
@@ -26,7 +33,29 @@ final class MoveCategoryRequest
             $parentId = null;
         }
 
-        return new self($parentId, $errors);
+        $treeId = is_scalar($data['tree_id'] ?? null) ? trim((string) $data['tree_id']) : 'catalog';
+        if ('' === $treeId) {
+            $treeId = 'catalog';
+        }
+
+        $policy = is_scalar($data['policy'] ?? null) ? trim((string) $data['policy']) : 'strict';
+        if ('' === $policy) {
+            $policy = 'strict';
+        }
+
+        $dryRun = match (true) {
+            is_bool($data['dry_run'] ?? null) => (bool) $data['dry_run'],
+            is_int($data['dry_run'] ?? null) => 0 !== $data['dry_run'],
+            is_string($data['dry_run'] ?? null) => filter_var($data['dry_run'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? false,
+            default => false,
+        };
+
+        $locale = is_scalar($data['locale'] ?? null) ? trim((string) $data['locale']) : null;
+        if ('' === $locale) {
+            $locale = null;
+        }
+
+        return new self($parentId, $treeId, $policy, $dryRun, $locale, $errors);
     }
 
     public function isValid(): bool

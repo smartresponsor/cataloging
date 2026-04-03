@@ -5,22 +5,35 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Symfony\Component\Uid\Uuid;
+
 final class OutboxWriter
 {
-    private \PDO $pdo;
-
-    public function __construct(\PDO $pdo)
+    public function __construct(private readonly Connection $connection)
     {
-        $this->pdo = $pdo;
     }
 
     /** @param array<string,mixed> $payload */
     public function append(string $type, array $payload, string $key): void
     {
-        $stmt = $this->pdo->prepare('INSERT INTO outbox(id, type, payload, key, created_at) VALUES (gen_random_uuid(), :t, :p, :k, NOW()) ON CONFLICT (key) DO NOTHING');
-        $stmt->bindValue(':t', $type);
-        $stmt->bindValue(':p', json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
-        $stmt->bindValue(':k', $key);
-        $stmt->execute();
+        $this->connection->executeStatement(
+            'INSERT INTO outbox (id, type, payload, "key", created_at) VALUES (:id, :type, :payload, :key, :createdAt) ON CONFLICT ("key") DO NOTHING',
+            [
+                'id' => Uuid::v7()->toRfc4122(),
+                'type' => $type,
+                'payload' => json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
+                'key' => $key,
+                'createdAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+            ],
+            [
+                'id' => ParameterType::STRING,
+                'type' => ParameterType::STRING,
+                'payload' => ParameterType::STRING,
+                'key' => ParameterType::STRING,
+                'createdAt' => ParameterType::STRING,
+            ],
+        );
     }
 }

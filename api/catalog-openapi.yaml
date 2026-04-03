@@ -62,6 +62,66 @@ paths:
           description: Ancestor category list returned
         '404':
           description: Category not found
+  /api/category/{id}/move:
+    post:
+      summary: Move a category under a new parent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [parent_id]
+              properties:
+                parent_id: { type: string }
+                tree_id: { type: string, default: catalog }
+                policy: { type: string, default: strict }
+                dry_run: { type: boolean, default: false }
+                locale: { type: string, nullable: true }
+      responses:
+        '200':
+          description: Category move executed
+        '400':
+          description: Invalid move payload
+        '404':
+          description: Category or new parent not found
+        '409':
+          description: Move conflict or domain violation
+  /api/category/{id}/publish:
+    post:
+      summary: Publish or unpublish a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [published]
+              properties:
+                published: { type: boolean }
+                reason: { type: string, default: api publish request }
+                checks:
+                  type: object
+                  additionalProperties: { type: boolean }
+      responses:
+        '200':
+          description: Category publication state changed
+        '400':
+          description: Invalid publish payload
+        '404':
+          description: Category not found
+        '409':
+          description: Publication gate failed or transition not allowed
   /api/category/attachment:
     get:
       summary: List category attachments
