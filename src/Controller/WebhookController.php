@@ -10,6 +10,7 @@ use App\Service\WebhookDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class WebhookController
 {
@@ -18,6 +19,7 @@ final class WebhookController
     }
 
     #[Route('/api/category/webhook/test', name: 'api_category_webhook_test', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function __invoke(Request $request): JsonResponse
     {
         $input = WebhookDispatchRequest::fromJson((string) $request->getContent());

@@ -10,6 +10,7 @@ use App\Request\PublishCategoryRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryApiController
 {
@@ -20,6 +21,7 @@ final class CategoryApiController
     }
 
     #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function move(string $id, Request $request): JsonResponse
     {
         $dto = MoveCategoryRequest::fromArray($this->decodeMap($request));
@@ -31,6 +33,7 @@ final class CategoryApiController
     }
 
     #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function publish(string $id, Request $request): JsonResponse
     {
         $dto = PublishCategoryRequest::fromArray($this->decodeMap($request));

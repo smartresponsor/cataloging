@@ -19,6 +19,6 @@ final class HttpWebhookSender implements WebhookSenderInterface
     /** @param array<string, mixed> $payload */
     public function send(array $payload): void
     {
-        $this->client->request('POST', $this->endpoint, ['json' => $payload]);
+        $this->client->request('POST', $this->endpoint, ['json' => $payload, 'timeout' => 5.0]);
     }
 }

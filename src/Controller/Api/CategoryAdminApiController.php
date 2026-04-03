@@ -8,7 +8,9 @@ namespace App\Controller\Api;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 final class CategoryAdminApiController
 {
     #[Route('/api/admin/category/list', name: 'api_admin_category_list', methods: ['GET'])]

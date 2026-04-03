@@ -8,18 +8,58 @@ declare(strict_types=1);
 
 namespace App\Tests\Category\Infrastructure;
 
+use App\Infrastructure\HttpWebhookSender;
+use App\Infrastructure\OrderWebhookPublisher;
 use App\Infrastructure\ProductWebhookPublisher;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class WebhookPublisherTest extends TestCase
 {
-    public function testCanBeInstantiated(): void
+    public function testProductPublisherUsesTimeout(): void
     {
-        $client = new MockHttpClient([new MockResponse('{}', ['http_code' => 200])]);
-        $pub = new ProductWebhookPublisher($client, 'http://example');
-        $pub->publish(['event' => 'category.changed']);
-        $this->assertTrue(true);
+        $capturedOptions = null;
+        $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$capturedOptions): ResponseInterface {
+            $capturedOptions = $options;
+
+            return new MockResponse('{}', ['http_code' => 200]);
+        });
+
+        $publisher = new ProductWebhookPublisher($client, 'http://example');
+        $publisher->publish(['event' => 'category.changed']);
+
+        self::assertSame(5.0, $capturedOptions['timeout'] ?? null);
+    }
+
+    public function testOrderPublisherUsesTimeout(): void
+    {
+        $capturedOptions = null;
+        $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$capturedOptions): ResponseInterface {
+            $capturedOptions = $options;
+
+            return new MockResponse('{}', ['http_code' => 200]);
+        });
+
+        $publisher = new OrderWebhookPublisher($client, 'http://example');
+        $publisher->publish(['event' => 'category.changed']);
+
+        self::assertSame(5.0, $capturedOptions['timeout'] ?? null);
+    }
+
+    public function testGenericWebhookSenderUsesTimeout(): void
+    {
+        $capturedOptions = null;
+        $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$capturedOptions): ResponseInterface {
+            $capturedOptions = $options;
+
+            return new MockResponse('{}', ['http_code' => 200]);
+        });
+
+        $sender = new HttpWebhookSender($client, 'http://example');
+        $sender->send(['event' => 'category.changed']);
+
+        self::assertSame(5.0, $capturedOptions['timeout'] ?? null);
     }
 }

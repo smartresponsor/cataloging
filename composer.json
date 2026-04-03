@@ -1,122 +1,123 @@
 {
-    "name": "cataloging/catalog",
-    "description": "Cataloging component",
-    "type": "project",
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "Oleksandr Tishchenko / Marketing America Corp",
-            "email": "17111337+taa0662621456@users.noreply.github.com"
-        }
-    ],
-    "require": {
-        "php": "^8.4",
-        "ext-json": "*",
-        "ext-pdo": "*",
-        "api-platform/doctrine-orm": "^4.3",
-        "api-platform/graphql": "^4.3",
-        "api-platform/symfony": "^4.3",
-        "doctrine/dbal": "^4.2",
-        "doctrine/doctrine-bundle": "^3.2",
-        "doctrine/orm": "^3.3",
-        "nelmio/api-doc-bundle": "^5.0",
-        "symfony/dependency-injection": "^8.0",
-        "symfony/doctrine-bridge": "^8.0",
-        "symfony/framework-bundle": "^8.0",
-        "symfony/http-client": "^8.0",
-        "symfony/http-foundation": "^8.0",
-        "symfony/messenger": "^8.0",
-        "symfony/monolog-bundle": "^4.0",
-        "symfony/rate-limiter": "^8.0",
-        "symfony/routing": "^8.0",
-        "symfony/runtime": "^8.0",
-        "symfony/security-bundle": "^8.0",
-        "symfony/serializer-pack": "^1.0",
-        "symfony/twig-bundle": "^8.0",
-        "symfony/yaml": "^8.0"
-    },
-    "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^4.3",
-        "doctrine/doctrine-migrations-bundle": "^3.4",
-        "friendsofphp/php-cs-fixer": "^3.94",
-        "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^10.5",
-        "symfony/panther": "^2.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "lint": "@php tools/php/php84.php tools/qa/CatalogPhpLint.php",
-        "lint:app-namespace": "@php tools/php/php84.php tools/linter/app_namespace_check.php",
-        "lint:config-prefix": "@php tools/php/php84.php tools/linter/catalog_config_prefix_check.php",
-        "cs:fix": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
-        "cs:check": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
-        "cs:check-quiet": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
-        "stan": "@stan:runtime-target",
-        "stan:conservative": "@php tools/php/php82.php vendor/bin/phpstan analyse",
-        "stan:runtime-target": "@php tools/php/php84.php vendor/bin/phpstan analyse",
-        "md": "@php tools/php/php84.php vendor/bin/phpmd src text phpmd.xml.dist",
-        "md:tests": "@php tools/php/php84.php vendor/bin/phpmd tests text phpmd.xml.dist",
-        "test": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist",
-        "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
-        "test:integration": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
-        "test:e2e": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite e2e",
-        "test:playwright": "npm run test:playwright",
-        "qa:style": [
-            "@lint",
-            "@lint:app-namespace",
-            "@lint:config-prefix",
-            "@cs:check"
-        ],
-        "qa:static": [
-            "@stan"
-        ],
-        "qa:smell": [
-            "@md",
-            "@md:tests"
-        ],
-        "qa:test": [
-            "@test"
-        ],
-        "qa:full": [
-            "@qa:style",
-            "@qa:static",
-            "@qa:smell",
-            "@qa:test"
-        ],
-        "smoke:runtime": "@php tools/php/php84.php tools/smoke/category-runtime-smoke.php",
-        "smoke:fixtures": "@php tools/php/php84.php tools/smoke/category-fixture-sanity.php",
-        "smoke:container": "@php tools/php/php84.php tools/smoke/category-container-boot-smoke.php",
-        "smoke:routes": "@php tools/php/php84.php tools/smoke/category-route-discovery-smoke.php",
-        "smoke:doctrine": "@php tools/php/php84.php tools/smoke/category-doctrine-mapping-smoke.php",
-        "smoke:fixture-load": "@php tools/php/php84.php tools/smoke/category-fixture-load-smoke.php",
-        "smoke:postgres-matrix": "@php tools/php/php84.php tools/smoke/category-postgres-matrix-smoke.php",
-        "report:owner-overlap": "@php tools/php/php84.php tools/inspection/CatalogOwnerOverlapReport.php",
-        "report:route-inventory": "@php tools/php/php84.php tools/inspection/CatalogRouteInventoryReport.php",
-        "report:class-alias": "@php tools/php/php84.php tools/inspection/CatalogClassAliasReport.php",
-        "report:runtime-proof": "@php tools/php/php84.php tools/inspection/CatalogRuntimeProofReport.php",
-        "report:smoke-proof": "@php tools/php/php84.php tools/inspection/CatalogSmokeProofReport.php",
-        "report:dependency-baseline": "@php tools/php/php84.php tools/inspection/CatalogDependencyBaselineReport.php",
-        "report:rc-readiness": "@php tools/php/php84.php tools/inspection/CatalogRcReadinessReport.php",
-        "pipeline:local": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1",
-        "pipeline:local:full": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -IncludeSmokes -IncludeReports -IncludeSecurity",
-        "pipeline:local:strict": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -FailOnErrors",
-        "report:migration-readiness": "@php tools/php/php84.php tools/inspection/CatalogMigrationReadinessReport.php"
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "config": {
-        "allow-plugins": {
-            "symfony/runtime": true
-        },
-        "sort-packages": true
+  "name": "cataloging/catalog",
+  "description": "Cataloging component",
+  "type": "project",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Oleksandr Tishchenko / Marketing America Corp",
+      "email": "17111337+taa0662621456@users.noreply.github.com"
     }
+  ],
+  "require": {
+    "php": "^8.4",
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "api-platform/doctrine-orm": "^4.3",
+    "api-platform/graphql": "^4.3",
+    "api-platform/symfony": "^4.3",
+    "doctrine/dbal": "^4.2",
+    "doctrine/doctrine-bundle": "^3.2",
+    "doctrine/orm": "^3.3",
+    "nelmio/api-doc-bundle": "^5.0",
+    "symfony/dependency-injection": "^8.0",
+    "symfony/doctrine-bridge": "^8.0",
+    "symfony/framework-bundle": "^8.0",
+    "symfony/http-client": "^8.0",
+    "symfony/http-foundation": "^8.0",
+    "symfony/messenger": "^8.0",
+    "symfony/monolog-bundle": "^4.0",
+    "symfony/rate-limiter": "^8.0",
+    "symfony/routing": "^8.0",
+    "symfony/runtime": "^8.0",
+    "symfony/security-bundle": "^8.0",
+    "symfony/serializer-pack": "^1.0",
+    "symfony/twig-bundle": "^8.0",
+    "symfony/yaml": "^8.0"
+  },
+  "require-dev": {
+    "doctrine/doctrine-fixtures-bundle": "^4.3",
+    "doctrine/doctrine-migrations-bundle": "^3.4",
+    "friendsofphp/php-cs-fixer": "^3.94",
+    "phpstan/phpstan": "^1.12",
+    "phpunit/phpunit": "^10.5",
+    "symfony/panther": "^2.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "lint": "@php tools/php/php84.php tools/qa/CatalogPhpLint.php",
+    "lint:app-namespace": "@php tools/php/php84.php tools/linter/app_namespace_check.php",
+    "lint:config-prefix": "@php tools/php/php84.php tools/linter/catalog_config_prefix_check.php",
+    "cs:fix": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
+    "cs:check": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff",
+    "cs:check-quiet": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run",
+    "stan": "@stan:runtime-target",
+    "stan:conservative": "@php tools/php/php82.php vendor/bin/phpstan analyse",
+    "stan:runtime-target": "@php tools/php/php84.php vendor/bin/phpstan analyse",
+    "md": "@php tools/php/php84.php vendor/bin/phpmd src text phpmd.xml.dist",
+    "md:tests": "@php tools/php/php84.php vendor/bin/phpmd tests text phpmd.xml.dist",
+    "test": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist",
+    "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
+    "test:integration": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
+    "test:e2e": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite e2e",
+    "test:playwright": "npm run test:playwright",
+    "qa:style": [
+      "@lint",
+      "@lint:app-namespace",
+      "@lint:config-prefix",
+      "@cs:check"
+    ],
+    "qa:static": [
+      "@stan"
+    ],
+    "qa:smell": [
+      "@md",
+      "@md:tests"
+    ],
+    "qa:test": [
+      "@test"
+    ],
+    "qa:full": [
+      "@qa:style",
+      "@qa:static",
+      "@qa:smell",
+      "@qa:test"
+    ],
+    "smoke:runtime": "@php tools/php/php84.php tools/smoke/category-runtime-smoke.php",
+    "smoke:fixtures": "@php tools/php/php84.php tools/smoke/category-fixture-sanity.php",
+    "smoke:container": "@php tools/php/php84.php tools/smoke/category-container-boot-smoke.php",
+    "smoke:routes": "@php tools/php/php84.php tools/smoke/category-route-discovery-smoke.php",
+    "smoke:doctrine": "@php tools/php/php84.php tools/smoke/category-doctrine-mapping-smoke.php",
+    "smoke:fixture-load": "@php tools/php/php84.php tools/smoke/category-fixture-load-smoke.php",
+    "smoke:postgres-matrix": "@php tools/php/php84.php tools/smoke/category-postgres-matrix-smoke.php",
+    "report:owner-overlap": "@php tools/php/php84.php tools/inspection/CatalogOwnerOverlapReport.php",
+    "report:route-inventory": "@php tools/php/php84.php tools/inspection/CatalogRouteInventoryReport.php",
+    "report:class-alias": "@php tools/php/php84.php tools/inspection/CatalogClassAliasReport.php",
+    "report:runtime-proof": "@php tools/php/php84.php tools/inspection/CatalogRuntimeProofReport.php",
+    "report:smoke-proof": "@php tools/php/php84.php tools/inspection/CatalogSmokeProofReport.php",
+    "report:dependency-baseline": "@php tools/php/php84.php tools/inspection/CatalogDependencyBaselineReport.php",
+    "report:rc-readiness": "@php tools/php/php84.php tools/inspection/CatalogRcReadinessReport.php",
+    "pipeline:local": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1",
+    "pipeline:local:full": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -IncludeSmokes -IncludeReports -IncludeSecurity",
+    "pipeline:local:strict": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -FailOnErrors",
+    "report:migration-readiness": "@php tools/php/php84.php tools/inspection/CatalogMigrationReadinessReport.php",
+    "report:security-readiness": "@php tools/php/php84.php tools/inspection/CatalogSecurityReadinessReport.php"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "symfony/runtime": true
+    },
+    "sort-packages": true
+  }
 }

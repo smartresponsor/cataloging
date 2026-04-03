@@ -10,6 +10,7 @@ use App\Service\AttachmentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryAttachmentController
 {
@@ -30,6 +31,7 @@ final class CategoryAttachmentController
     }
 
     #[Route('/api/category/attachment', name: 'api_category_attachment_add', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function add(Request $request): JsonResponse
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
@@ -50,6 +52,7 @@ final class CategoryAttachmentController
     }
 
     #[Route('/api/category/attachment/{attachmentId}', name: 'api_category_attachment_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(string $attachmentId): JsonResponse
     {
         try {

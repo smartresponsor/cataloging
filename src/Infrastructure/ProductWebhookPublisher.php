@@ -16,6 +16,6 @@ final class ProductWebhookPublisher
     /** @param array<string, mixed> $event */
     public function publish(array $event): void
     {
-        $this->client->request('POST', $this->url, ['json' => $event]);
+        $this->client->request('POST', $this->url, ['json' => $event, 'timeout' => 5.0]);
     }
 }
