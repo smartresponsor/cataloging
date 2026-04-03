@@ -73,3 +73,8 @@ These items are now explicit and machine-readable instead of remaining implicit 
 - search-readiness
 
 php tools/inspection/CatalogExternalBoundaryReadinessReport.php
+
+
+## Additional gates
+
+- tenant policy readiness

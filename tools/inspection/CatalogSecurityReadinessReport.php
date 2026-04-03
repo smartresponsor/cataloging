@@ -214,6 +214,13 @@ $items = [
         ],
     ],
     [
+        'check' => 'tenant-aware-mutation-policy',
+        'status' => fileContains($mutationAuthorizationService, 'Cross-tenant category mutation is not allowed') ? 'pass' : 'warn',
+        'details' => [
+            'service' => 'src/Service/CategoryMutationAuthorizationService.php',
+        ],
+    ],
+    [
         'check' => 'mutation-routes-policy-authorized',
         'status' => policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanMove', 'CategoryVoter::EDIT')
             && policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanPublish', 'CategoryVoter::PUBLISH') ? 'pass' : 'warn',

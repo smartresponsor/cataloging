@@ -29,6 +29,8 @@ services:
 
   App\AttachmentInterface\AttachmentReferenceGatewayInterface: '@App\Attachment\NullAttachmentReferenceGateway'
   App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface: '@App\Service\Security\ExternalIdentityContextMapper'
+  App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface: '@App\Service\Security\ExternalIdentityContextResolver'
 
   App\Attachment\NullAttachmentReferenceGateway: ~
   App\Service\Security\ExternalIdentityContextMapper: ~
+  App\Service\Security\ExternalIdentityContextResolver: ~

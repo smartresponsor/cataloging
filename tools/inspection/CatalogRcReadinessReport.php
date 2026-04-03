@@ -101,6 +101,7 @@ $outboxProjectionReadiness = readJsonOrEmpty($reportDir . '/catalog-outbox-proje
 $idempotencyReadiness = readJsonOrEmpty($reportDir . '/catalog-idempotency-readiness-report.json');
 $searchReadiness = readJsonOrEmpty($reportDir . '/catalog-search-readiness-report.json');
 $externalBoundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-external-boundary-readiness-report.json');
+$tenantPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-tenant-policy-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
