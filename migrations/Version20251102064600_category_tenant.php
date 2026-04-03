@@ -9,20 +9,20 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version202511020646 extends AbstractMigration
+final class Version20251102064600_category_tenant extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create category tables';
+        return 'Add tenant column to category table';
     }
 
     public function up(Schema $schema): void
     {
-        $this->addSql("CREATE TABLE category (id UUID PRIMARY KEY, slug VARCHAR(255) NOT NULL, parent_id UUID DEFAULT NULL, locale VARCHAR(8) NOT NULL, tenant VARCHAR(64) DEFAULT 'default')");
+        $this->addSql("ALTER TABLE category ADD COLUMN tenant VARCHAR(64) DEFAULT 'default'");
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE category');
+        $this->addSql('ALTER TABLE category DROP COLUMN tenant');
     }
 }
