@@ -10,6 +10,8 @@ php tools/inspection/CatalogSmokeProofReport.php
 php tools/inspection/CatalogRouteInventoryReport.php
 php tools/inspection/CatalogDependencyBaselineReport.php
 php tools/inspection/CatalogApiContractReadinessReport.php
+php tools/inspection/CatalogSecurityReadinessReport.php
+php tools/inspection/CatalogOidcRuntimeProofReport.php
 php tools/inspection/CatalogOwnerOverlapReport.php
 php tools/inspection/CatalogClassAliasReport.php
 php tools/inspection/CatalogRcReadinessReport.php
@@ -23,6 +25,8 @@ composer report:smoke-proof
 composer report:route-inventory
 composer report:dependency-baseline
 composer report:api-contract-readiness
+composer report:security-readiness
+composer report:oidc-runtime-proof
 composer report:owner-overlap
 composer report:class-alias
 composer report:rc-readiness
@@ -45,6 +49,8 @@ The readiness report currently evaluates these RC-facing gates:
 - owner-overlap signals
 - duplicate class-basename signals
 - API contract readiness (OpenAPI + router + Nelmio + version alignment)
+- security readiness (firewall + protected write/admin surfaces + OIDC/JWKS artifacts)
+- OIDC runtime proof (JWKS-backed signature, issuer/audience, fail-closed validator behavior)
 
 ## Status meanings
 

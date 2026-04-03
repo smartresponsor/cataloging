@@ -48,6 +48,45 @@ function restoreGeneratedArtifacts(string $root, array $paths): void
     }
 }
 
+/**
+ * @param array<string,mixed> $source
+ * @return list<mixed>
+ */
+function listValue(array $source, string $key): array
+{
+    $value = $source[$key] ?? null;
+
+    return is_array($value) ? array_values($value) : [];
+}
+
+/**
+ * @param array<string,mixed> $source
+ * @return array<string,mixed>
+ */
+function mapValue(array $source, string $key): array
+{
+    $value = $source[$key] ?? null;
+
+    return is_array($value) ? $value : [];
+}
+
+/** @param array<string,mixed> $source */
+function intValue(array $source, string $key, int $default = 0): int
+{
+    $value = $source[$key] ?? null;
+
+    return is_int($value) ? $value : (is_numeric($value) ? (int) $value : $default);
+}
+
+/** @param array<string,mixed> $source */
+function boolValue(array $source, string $key, bool $default = false): bool
+{
+    $value = $source[$key] ?? null;
+
+    return is_bool($value) ? $value : $default;
+}
+
+
 $runtimeProof = readJsonOrEmpty($reportDir . '/catalog-runtime-proof-report.json');
 $smokeProof = readJsonOrEmpty($reportDir . '/catalog-smoke-proof-report.json');
 $routeInventory = readJsonOrEmpty($reportDir . '/catalog-route-inventory-report.json');
@@ -57,6 +96,7 @@ $classAlias = readJsonOrEmpty($reportDir . '/catalog-class-alias-report.json');
 $migrationReadiness = readJsonOrEmpty($reportDir . '/catalog-migration-readiness-report.json');
 $apiContractReadiness = readJsonOrEmpty($reportDir . '/catalog-api-contract-readiness-report.json');
 $securityReadiness = readJsonOrEmpty($reportDir . '/catalog-security-readiness-report.json');
+$oidcRuntimeProof = readJsonOrEmpty($reportDir . '/catalog-oidc-runtime-proof-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -85,8 +125,8 @@ $items = [
     ],
     [
         'check' => 'runtime-proof-report',
-        'status' => count($runtimeProof['items'] ?? []) >= 6 ? 'pass' : 'warn',
-        'details' => ['itemCount' => count($runtimeProof['items'] ?? [])],
+        'status' => count(listValue($runtimeProof, 'items')) >= 6 ? 'pass' : 'warn',
+        'details' => ['itemCount' => count(listValue($runtimeProof, 'items'))],
     ],
     [
         'check' => 'smoke-proof-report',
@@ -97,20 +137,20 @@ $items = [
     ],
     [
         'check' => 'route-inventory-report',
-        'status' => (($routeInventory['count'] ?? 0) >= 10) ? 'pass' : 'warn',
-        'details' => ['routeCount' => $routeInventory['count'] ?? 0],
+        'status' => (intValue($routeInventory, 'count') >= 10) ? 'pass' : 'warn',
+        'details' => ['routeCount' => intValue($routeInventory, 'count')],
     ],
     [
         'check' => 'bundle-loadability',
-        'status' => (($dependencyBaseline['summary']['allBundlesLoadable'] ?? false) === true) ? 'pass' : 'fail',
-        'details' => ['bundleLoadability' => $dependencyBaseline['bundleLoadability'] ?? []],
+        'status' => (boolValue(mapValue($dependencyBaseline, 'summary'), 'allBundlesLoadable') === true) ? 'pass' : 'fail',
+        'details' => ['bundleLoadability' => listValue($dependencyBaseline, 'bundleLoadability')],
     ],
     [
         'check' => 'dependency-baseline-clean',
-        'status' => (($dependencyBaseline['summary']['vendorDirty'] ?? true) === false && ($dependencyBaseline['lockedPackages']['missingDirectoriesCount'] ?? 1) === 0) ? 'pass' : 'warn',
+        'status' => (boolValue(mapValue($dependencyBaseline, 'summary'), 'vendorDirty', true) === false && intValue(mapValue($dependencyBaseline, 'lockedPackages'), 'missingDirectoriesCount', 1) === 0) ? 'pass' : 'warn',
         'details' => [
-            'vendorDirty' => $dependencyBaseline['summary']['vendorDirty'] ?? null,
-            'missingLockedDirectoriesCount' => $dependencyBaseline['lockedPackages']['missingDirectoriesCount'] ?? null,
+            'vendorDirty' => boolValue(mapValue($dependencyBaseline, 'summary'), 'vendorDirty', true),
+            'missingLockedDirectoriesCount' => intValue(mapValue($dependencyBaseline, 'lockedPackages'), 'missingDirectoriesCount', 1),
         ],
     ],
     [
@@ -120,36 +160,43 @@ $items = [
     ],
     [
         'check' => 'owner-overlap-signals',
-        'status' => (($ownerOverlap['count'] ?? 0) === 0) ? 'pass' : 'warn',
-        'details' => ['count' => $ownerOverlap['count'] ?? 0],
+        'status' => (intValue($ownerOverlap, 'count') === 0) ? 'pass' : 'warn',
+        'details' => ['count' => intValue($ownerOverlap, 'count')],
     ],
     [
         'check' => 'class-alias-signals',
-        'status' => (($classAlias['count'] ?? 0) === 0) ? 'pass' : 'warn',
-        'details' => ['count' => $classAlias['count'] ?? 0],
+        'status' => (intValue($classAlias, 'count') === 0) ? 'pass' : 'warn',
+        'details' => ['count' => intValue($classAlias, 'count')],
     ],
     [
         'check' => 'migration-readiness',
         'status' => (($migrationReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
-            'duplicateCreateCount' => $migrationReadiness['summary']['duplicateCreateCount'] ?? null,
-            'nonCanonicalVersionCount' => $migrationReadiness['summary']['nonCanonicalVersionCount'] ?? null,
-            'zeroDowntimeReady' => $migrationReadiness['summary']['zeroDowntimeReady'] ?? null,
+            'duplicateCreateCount' => intValue(mapValue($migrationReadiness, 'summary'), 'duplicateCreateCount'),
+            'nonCanonicalVersionCount' => intValue(mapValue($migrationReadiness, 'summary'), 'nonCanonicalVersionCount'),
+            'zeroDowntimeReady' => boolValue(mapValue($migrationReadiness, 'summary'), 'zeroDowntimeReady'),
         ],
     ],
     [
         'check' => 'api-contract-readiness',
         'status' => (($apiContractReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
-            'documentedPathCount' => $apiContractReadiness['openapi']['canonical']['pathCount'] ?? null,
-            'apiContractSummary' => $apiContractReadiness['summary'] ?? [],
+            'documentedPathCount' => intValue(mapValue(mapValue($apiContractReadiness, 'openapi'), 'canonical'), 'pathCount'),
+            'apiContractSummary' => mapValue($apiContractReadiness, 'summary'),
         ],
     ],
     [
         'check' => 'security-readiness',
         'status' => (($securityReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
-            'securitySummary' => $securityReadiness['summary'] ?? [],
+            'securitySummary' => mapValue($securityReadiness, 'summary'),
+        ],
+    ],
+    [
+        'check' => 'oidc-runtime-proof',
+        'status' => (($oidcRuntimeProof['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'oidcSummary' => mapValue($oidcRuntimeProof, 'summary'),
         ],
     ],
 ];

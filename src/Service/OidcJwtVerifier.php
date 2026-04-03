@@ -66,12 +66,18 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
         $this->assertTimeClaim($payload, 'exp', static fn (int $claim, int $current): bool => $current < $claim, 'Token expired', $now);
         $this->assertTimeClaim($payload, 'nbf', static fn (int $claim, int $current): bool => $current >= $claim, 'Token not yet valid', $now);
         $iss = $this->scalarString($payload['iss'] ?? null);
-        if ('' !== $iss && $iss !== $this->issuer) {
+        if ('' === $iss) {
+            throw new \RuntimeException('Missing issuer');
+        }
+        if ($iss !== $this->issuer) {
             throw new \RuntimeException('Invalid issuer');
         }
         $aud = $payload['aud'] ?? null;
         $audiences = is_array($aud) ? array_values(array_filter(array_map(fn ($v) => is_scalar($v) ? (string) $v : null, $aud))) : (null !== $aud ? [$this->scalarString($aud)] : []);
-        if ([] !== $audiences && !in_array($this->audience, $audiences, true)) {
+        if ([] === $audiences) {
+            throw new \RuntimeException('Missing audience');
+        }
+        if (!in_array($this->audience, $audiences, true)) {
             throw new \RuntimeException('Invalid audience');
         }
 
