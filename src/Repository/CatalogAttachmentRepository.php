@@ -145,12 +145,12 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
     private function createdAtColumnType(): string
     {
-        $platformName = $this->connection->getDatabasePlatform()->getName();
+        $platformClass = $this->connection->getDatabasePlatform()::class;
 
         return match (true) {
-            str_contains($platformName, 'postgres') => 'TIMESTAMPTZ',
-            str_contains($platformName, 'mysql') => 'DATETIME',
-            str_contains($platformName, 'sqlite') => 'TEXT',
+            str_contains($platformClass, 'Postgre') => 'TIMESTAMPTZ',
+            str_contains($platformClass, 'MySQL') => 'DATETIME',
+            str_contains($platformClass, 'SQLite') => 'TEXT',
             default => 'TIMESTAMP',
         };
     }

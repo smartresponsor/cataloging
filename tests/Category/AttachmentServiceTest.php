@@ -49,6 +49,7 @@ final class AttachmentServiceTest extends TestCase
     public function testAddTrimsAndDelegatesToRepository(): void
     {
         $repository = new class implements CatalogAttachmentRepositoryInterface {
+            /** @var array{categoryId?:string,type?:string,path?:string} */
             public array $payload = [];
 
             public function list(?string $categoryId = null): array

@@ -29,7 +29,7 @@ final class WebhookDispatcherTest extends TestCase
         $request->attributes->set(RequestCorrelationIdProvider::ATTRIBUTE, 'corr-dispatcher');
         $stack->push($request);
 
-        $dispatcher = new WebhookDispatcher($client, new RequestCorrelationIdProvider($stack), 'secret');
+        $dispatcher = new WebhookDispatcher($client, 'secret', new RequestCorrelationIdProvider($stack));
         $dispatcher->dispatch('catalog.changed', ['id' => 'c-1'], 'http://example/webhook');
 
         self::assertSame('POST', $capturedOptions['method']);

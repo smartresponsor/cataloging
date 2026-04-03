@@ -79,20 +79,19 @@ final class CatalogMoveService implements CategoryMoveInterface
                     continue;
                 }
 
-                $this->updateRow((string) ($row['id'] ?? ''), $rebasedPath, $this->depthFromPath($rebasedPath));
+                $this->updateRow($this->idValue($row['id'] ?? null), $rebasedPath, $this->depthFromPath($rebasedPath));
                 ++$changed;
                 $redirects[] = [
-                    'id' => (string) ($row['id'] ?? ''),
+                    'id' => $this->idValue($row['id'] ?? null),
                     'from' => $currentPath,
                     'to' => $rebasedPath,
                 ];
             }
 
-            if ($dryRun) {
-                if ($this->pg->inTransaction()) {
-                    $this->pg->rollBack();
-                }
-            } else {
+            if ($dryRun && $this->pg->inTransaction()) {
+                $this->pg->rollBack();
+            }
+            if (!$dryRun) {
                 $this->pg->commit();
             }
 
@@ -138,7 +137,7 @@ final class CatalogMoveService implements CategoryMoveInterface
 
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return is_array($rows) ? array_values(array_filter($rows, 'is_array')) : [];
+        return array_values(array_filter($rows, 'is_array'));
     }
 
     private function updateRow(string $id, string $path, int $depth): void
@@ -165,7 +164,7 @@ final class CatalogMoveService implements CategoryMoveInterface
         $segments = explode('.', $path);
         $segment = end($segments);
 
-        return is_string($segment) ? $segment : '';
+        return (string) $segment;
     }
 
     private function rebasePath(string $path, string $oldPrefix, string $newPrefix): string
@@ -198,6 +197,20 @@ final class CatalogMoveService implements CategoryMoveInterface
         $normalized = trim((string) $path);
         if ('' === $normalized) {
             throw new \RuntimeException('Category path cannot be empty.');
+        }
+
+        return $normalized;
+    }
+
+    private function idValue(mixed $id): string
+    {
+        if (!is_scalar($id)) {
+            throw new \RuntimeException('Category id must be a scalar value.');
+        }
+
+        $normalized = trim((string) $id);
+        if ('' === $normalized) {
+            throw new \RuntimeException('Category id cannot be empty.');
         }
 
         return $normalized;

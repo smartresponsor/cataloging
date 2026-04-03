@@ -89,8 +89,10 @@ final class CatalogReadService implements CatalogReadServiceInterface
         $next = '';
         if (count($normalized) === $first) {
             $last = end($normalized);
-            $path = is_array($last) ? ($last['path'] ?? '') : '';
-            $next = is_string($path) && '' !== $path ? base64_encode($path) : '';
+            if (is_array($last)) {
+                $path = $last['path'];
+                $next = '' !== $path ? base64_encode($path) : '';
+            }
         }
 
         return ['item' => $normalized, 'after' => $next];

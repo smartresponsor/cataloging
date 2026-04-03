@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CatalogCollectionProjectionRepository implements CatalogCollectionProjectionRepositoryInterface
@@ -17,7 +18,9 @@ final class CatalogCollectionProjectionRepository implements CatalogCollectionPr
     public function list(): array
     {
         try {
-            $rows = $this->registry->getConnection('infra')->fetchAllAssociative(
+            /** @var Connection $connection */
+            $connection = $this->registry->getConnection('infra');
+            $rows = $connection->fetchAllAssociative(
                 'SELECT id, brand, price, stock, tag_set FROM record_index ORDER BY id ASC'
             );
         } catch (\Throwable) {

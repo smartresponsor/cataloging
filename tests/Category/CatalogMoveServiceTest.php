@@ -15,7 +15,9 @@ final class CatalogMoveServiceTest extends TestCase
         $pdo = $this->createPdo();
         $service = new CatalogMoveService($pdo);
 
-        [$changed, $redirects] = $service->move('electronics', 'fashion', 'main-tree', 'strict');
+        /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
+        $result = $service->move('electronics', 'fashion', 'main-tree', 'strict');
+        [$changed, $redirects] = $result;
 
         self::assertSame(2, $changed);
         self::assertCount(2, $redirects);
@@ -24,10 +26,21 @@ final class CatalogMoveServiceTest extends TestCase
         self::assertSame('root.electronics.phones', $redirects[1]['from']);
         self::assertSame('root.fashion.electronics.phones', $redirects[1]['to']);
 
-        $rows = $pdo->query('SELECT id, path, depth FROM category ORDER BY id ASC')->fetchAll(\PDO::FETCH_ASSOC);
+        $statement = $pdo->query('SELECT id, path, depth FROM category ORDER BY id ASC');
+        self::assertInstanceOf(\PDOStatement::class, $statement);
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $indexed = [];
         foreach ($rows as $row) {
-            $indexed[(string) $row['id']] = $row;
+            if (!is_array($row)) {
+                continue;
+            }
+            $fromId = $row['id'] ?? null;
+            $fromPath = $row['path'] ?? null;
+            $fromDepth = $row['depth'] ?? null;
+            if (!is_scalar($fromId) || !is_scalar($fromPath) || !is_scalar($fromDepth)) {
+                continue;
+            }
+            $indexed[(string) $fromId] = ['id' => (string) $fromId, 'path' => (string) $fromPath, 'depth' => (string) $fromDepth];
         }
 
         self::assertSame('root.fashion.electronics', $indexed['electronics']['path']);
@@ -41,12 +54,16 @@ final class CatalogMoveServiceTest extends TestCase
         $pdo = $this->createPdo();
         $service = new CatalogMoveService($pdo);
 
-        [$changed, $redirects] = $service->move('electronics', 'fashion', 'main-tree', 'strict', true, 'en_US');
+        /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
+        $result = $service->move('electronics', 'fashion', 'main-tree', 'strict', true, 'en_US');
+        [$changed, $redirects] = $result;
 
         self::assertSame(2, $changed);
         self::assertCount(2, $redirects);
 
-        $path = $pdo->query("SELECT path FROM category WHERE id = 'electronics'")->fetchColumn();
+        $statement = $pdo->query("SELECT path FROM category WHERE id = 'electronics'");
+        self::assertInstanceOf(\PDOStatement::class, $statement);
+        $path = $statement->fetchColumn();
         self::assertSame('root.electronics', $path);
     }
 
