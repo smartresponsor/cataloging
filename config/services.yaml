@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\Form\:
+    resource: '../src/Form/'
+
+  App\Controller\StatusHandler:
+    tags: ['controller.service_arguments']
+
+  App\Controller\Admin\CategoryAdminController:
+    tags: ['controller.service_arguments']
+
+  App\Controller\CategorySitemapController:
+    tags: ['controller.service_arguments']

@@ -35,12 +35,21 @@ final class Kernel extends BaseKernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
+<<<<<<< HEAD
         $container->import(self::PACKAGES_CONFIG_GLOB);
         $container->import(self::SERVICES_CONFIG_GLOB);
+=======
+        $container->import('../config/{packages}/*.yaml');
+        $container->import('../config/{packages}/'.$this->environment.'/*.yaml');
+        $container->import('../config/services.yaml');
+        $container->import('../config/services_'.$this->environment.'.yaml', null, true);
+        $container->import('../config/catalog_services*.yaml');
+>>>>>>> 8c31da49 (inspection)
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
+<<<<<<< HEAD
         $routes->import(self::ATTRIBUTE_ROUTE_RESOURCE, 'attribute');
         $routes->import(self::ROUTES_CONFIG_GLOB);
     }
@@ -53,5 +62,10 @@ final class Kernel extends BaseKernel
         }
 
         return $bundle;
+=======
+        $routes->import('../config/{routes}/*.yaml');
+        $routes->import('../config/{routes}.yaml');
+        $routes->import('../config/{routes}/'.$this->environment.'/*.yaml', null, true);
+>>>>>>> 8c31da49 (inspection)
     }
 }

@@ -13,9 +13,13 @@
         "php": "^8.4",
         "ext-json": "*",
         "ext-pdo": "*",
+        "api-platform/doctrine-orm": "^4.3",
+        "api-platform/graphql": "^4.3",
+        "api-platform/symfony": "^4.3",
         "doctrine/dbal": "^4.2",
         "doctrine/doctrine-bundle": "^3.2",
         "doctrine/orm": "^3.3",
+<<<<<<< HEAD
         "nelmio/api-doc-bundle": "^5.0",
         "symfony/dependency-injection": "^8.0",
         "symfony/doctrine-bridge": "^8.0",
@@ -31,6 +35,25 @@
         "symfony/serializer-pack": "^1.0",
         "symfony/twig-bundle": "^8.0",
         "symfony/yaml": "^8.0"
+=======
+        "symfony/dependency-injection": "^7.1",
+        "symfony/doctrine-bridge": "^7.1",
+        "symfony/dotenv": "^7.4",
+        "symfony/form": "^7.4",
+        "symfony/framework-bundle": "^7.1",
+        "symfony/http-client": "^7.1",
+        "symfony/http-foundation": "^7.1",
+        "symfony/messenger": "^7.1",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/rate-limiter": "^7.4",
+        "symfony/routing": "^7.1",
+        "symfony/runtime": "^7.1",
+        "symfony/security-bundle": "^7.1",
+        "symfony/serializer-pack": "^1.0",
+        "symfony/twig-bundle": "^7.1",
+        "symfony/var-exporter": "^7.4",
+        "symfony/yaml": "^7.1"
+>>>>>>> 8c31da49 (inspection)
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.3",
@@ -38,7 +61,12 @@
         "friendsofphp/php-cs-fixer": "^3.94",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^10.5",
+<<<<<<< HEAD
         "symfony/panther": "^2.4"
+=======
+        "symfony/debug-bundle": "^7.4",
+        "symfony/web-profiler-bundle": "^7.4"
+>>>>>>> 8c31da49 (inspection)
     },
     "autoload": {
         "psr-4": {
