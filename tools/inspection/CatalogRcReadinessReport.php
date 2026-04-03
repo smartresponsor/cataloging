@@ -54,6 +54,7 @@ $routeInventory = readJsonOrEmpty($reportDir . '/catalog-route-inventory-report.
 $dependencyBaseline = readJsonOrEmpty($reportDir . '/catalog-dependency-baseline-report.json');
 $ownerOverlap = readJsonOrEmpty($reportDir . '/catalog-owner-overlap-report.json');
 $classAlias = readJsonOrEmpty($reportDir . '/catalog-class-alias-report.json');
+$migrationReadiness = readJsonOrEmpty($reportDir . '/catalog-migration-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -124,6 +125,15 @@ $items = [
         'check' => 'class-alias-signals',
         'status' => (($classAlias['count'] ?? 0) === 0) ? 'pass' : 'warn',
         'details' => ['count' => $classAlias['count'] ?? 0],
+    ],
+    [
+        'check' => 'migration-readiness',
+        'status' => (($migrationReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'duplicateCreateCount' => $migrationReadiness['summary']['duplicateCreateCount'] ?? null,
+            'nonCanonicalVersionCount' => $migrationReadiness['summary']['nonCanonicalVersionCount'] ?? null,
+            'zeroDowntimeReady' => $migrationReadiness['summary']['zeroDowntimeReady'] ?? null,
+        ],
     ],
 ];
 

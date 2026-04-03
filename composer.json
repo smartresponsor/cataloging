@@ -108,7 +108,8 @@
         "report:rc-readiness": "@php tools/php/php84.php tools/inspection/CatalogRcReadinessReport.php",
         "pipeline:local": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1",
         "pipeline:local:full": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -IncludeSmokes -IncludeReports -IncludeSecurity",
-        "pipeline:local:strict": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -FailOnErrors"
+        "pipeline:local:strict": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1 -FailOnErrors",
+        "report:migration-readiness": "@php tools/php/php84.php tools/inspection/CatalogMigrationReadinessReport.php"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
