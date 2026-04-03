@@ -32,6 +32,22 @@ function commandResult(string $command): array
     return ['exitCode' => $exitCode, 'output' => $output];
 }
 
+
+/**
+ * @param list<string> $paths
+ */
+function restoreGeneratedArtifacts(string $root, array $paths): void
+{
+    foreach ($paths as $path) {
+        $fullPath = $root . '/' . ltrim($path, '/');
+        if (!file_exists($fullPath)) {
+            continue;
+        }
+
+        exec('git -C ' . escapeshellarg($root) . ' checkout -- ' . escapeshellarg($path));
+    }
+}
+
 $runtimeProof = readJsonOrEmpty($reportDir . '/catalog-runtime-proof-report.json');
 $smokeProof = readJsonOrEmpty($reportDir . '/catalog-smoke-proof-report.json');
 $routeInventory = readJsonOrEmpty($reportDir . '/catalog-route-inventory-report.json');
@@ -39,8 +55,11 @@ $dependencyBaseline = readJsonOrEmpty($reportDir . '/catalog-dependency-baseline
 $ownerOverlap = readJsonOrEmpty($reportDir . '/catalog-owner-overlap-report.json');
 $classAlias = readJsonOrEmpty($reportDir . '/catalog-class-alias-report.json');
 
+$generatedArtifacts = ['config/reference.php'];
+
 $gitStatus = commandResult('git -C ' . escapeshellarg($root) . ' status --porcelain');
 $consoleAbout = commandResult('cd ' . escapeshellarg($root) . ' && APP_ENV=prod APP_DEBUG=0 php bin/console about --no-ansi');
+restoreGeneratedArtifacts($root, $generatedArtifacts);
 
 $requiredPhpUnitExtensions = ['dom', 'json', 'libxml', 'mbstring', 'tokenizer', 'xml', 'xmlwriter'];
 $missingPhpUnitExtensions = [];

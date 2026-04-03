@@ -34,8 +34,26 @@ function smokeCheck(string $label, string $command): array
     ];
 }
 
+
+/**
+ * @param list<string> $paths
+ */
+function restoreGeneratedArtifacts(string $root, array $paths): void
+{
+    foreach ($paths as $path) {
+        $fullPath = $root . '/' . ltrim($path, '/');
+        if (!file_exists($fullPath)) {
+            continue;
+        }
+
+        exec('git -C ' . escapeshellarg($root) . ' checkout -- ' . escapeshellarg($path));
+    }
+}
+
 $php = escapeshellarg(PHP_BINARY);
 $runner = escapeshellarg($root . '/tools/php/php84.php');
+
+$generatedArtifacts = ['config/reference.php'];
 
 $checks = [
     'container-boot-smoke' => sprintf('%s %s %s', $php, $runner, escapeshellarg($root . '/tools/smoke/category-container-boot-smoke.php')),
@@ -54,6 +72,8 @@ foreach ($checks as $label => $command) {
     $items[] = $item;
     ++$summary[$item['status']];
 }
+
+restoreGeneratedArtifacts($root, $generatedArtifacts);
 
 $report = [
     'generatedAt' => date(DATE_ATOM),
