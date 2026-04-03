@@ -6,6 +6,7 @@ This repository exposes a machine-readable RC readiness snapshot.
 
 ```bash
 php tools/inspection/CatalogRuntimeProofReport.php
+php tools/inspection/CatalogSmokeProofReport.php
 php tools/inspection/CatalogRouteInventoryReport.php
 php tools/inspection/CatalogDependencyBaselineReport.php
 php tools/inspection/CatalogOwnerOverlapReport.php
@@ -17,6 +18,7 @@ Or through Composer:
 
 ```bash
 composer report:runtime-proof
+composer report:smoke-proof
 composer report:route-inventory
 composer report:dependency-baseline
 composer report:owner-overlap
@@ -33,6 +35,7 @@ The readiness report currently evaluates these RC-facing gates:
 - git working tree cleanliness
 - `APP_ENV=prod APP_DEBUG=0 php bin/console about`
 - runtime proof artifact presence
+- smoke proof report (container/runtime/routes/doctrine/fixtures/prod console)
 - route inventory availability
 - bundle loadability from `config/catalog_bundles.php`
 - dependency baseline cleanliness

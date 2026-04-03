@@ -33,6 +33,7 @@ function commandResult(string $command): array
 }
 
 $runtimeProof = readJsonOrEmpty($reportDir . '/catalog-runtime-proof-report.json');
+$smokeProof = readJsonOrEmpty($reportDir . '/catalog-smoke-proof-report.json');
 $routeInventory = readJsonOrEmpty($reportDir . '/catalog-route-inventory-report.json');
 $dependencyBaseline = readJsonOrEmpty($reportDir . '/catalog-dependency-baseline-report.json');
 $ownerOverlap = readJsonOrEmpty($reportDir . '/catalog-owner-overlap-report.json');
@@ -64,6 +65,13 @@ $items = [
         'check' => 'runtime-proof-report',
         'status' => count($runtimeProof['items'] ?? []) >= 6 ? 'pass' : 'warn',
         'details' => ['itemCount' => count($runtimeProof['items'] ?? [])],
+    ],
+    [
+        'check' => 'smoke-proof-report',
+        'status' => (($smokeProof['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'summary' => $smokeProof['summary'] ?? [],
+        ],
     ],
     [
         'check' => 'route-inventory-report',

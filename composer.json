@@ -103,6 +103,7 @@
         "report:route-inventory": "@php tools/php/php84.php tools/inspection/CatalogRouteInventoryReport.php",
         "report:class-alias": "@php tools/php/php84.php tools/inspection/CatalogClassAliasReport.php",
         "report:runtime-proof": "@php tools/php/php84.php tools/inspection/CatalogRuntimeProofReport.php",
+        "report:smoke-proof": "@php tools/php/php84.php tools/inspection/CatalogSmokeProofReport.php",
         "report:dependency-baseline": "@php tools/php/php84.php tools/inspection/CatalogDependencyBaselineReport.php",
         "report:rc-readiness": "@php tools/php/php84.php tools/inspection/CatalogRcReadinessReport.php",
         "pipeline:local": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1",
