@@ -9,11 +9,8 @@ use App\ServiceInterface\GraphqlFacetResolverInterface;
 
 final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
 {
-    private FacetSearchAdvanced $search;
-
-    public function __construct(?\PDO $pdo = null)
+    public function __construct(private readonly SearchService $searchService)
     {
-        $this->search = new FacetSearchAdvanced($pdo ?? new \PDO('sqlite::memory:'), new FacetFilter(), new FacetRank());
     }
 
     /**
@@ -25,21 +22,37 @@ final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
     {
         $term = $this->stringValue($args, 'term');
         $locale = $this->stringValue($args, 'locale', 'en');
+        $tenant = $this->nullableStringValue($args, 'tenant');
         $pathPrefix = $this->nullableStringValue($args, 'pathPrefix');
         $limit = $this->intValue($args, 'limit', 20);
         $offset = $this->intValue($args, 'offset', 0);
-        /** @var list<array<string,mixed>> $rows */
-        $rows = $this->search->search($term, $locale, $pathPrefix, $limit, $offset);
-        $items = array_map(function (array $row): array {
-            return [
+        $search = $this->searchService->search([
+            'q' => $term,
+            'locale' => $locale,
+            'tenant' => $tenant,
+            'published' => true,
+            'limit' => $limit,
+            'offset' => $offset,
+            'order' => 'name',
+            'direction' => 'asc',
+        ]);
+
+        $items = [];
+        foreach ($search['items'] as $row) {
+            $path = $this->stringValue($row, 'path');
+            if (null !== $pathPrefix && '' !== $pathPrefix && !str_starts_with($path, $pathPrefix)) {
+                continue;
+            }
+
+            $items[] = [
                 'id' => $this->stringValue($row, 'id'),
                 'slug' => $this->stringValue($row, 'slug'),
                 'name' => $this->stringValue($row, 'name'),
-                'path' => $this->stringValue($row, 'path'),
+                'path' => $path,
                 'locale' => $this->stringValue($row, 'locale', 'en'),
                 'score' => null,
             ];
-        }, $rows);
+        }
 
         return ['items' => $items, 'total' => count($items)];
     }

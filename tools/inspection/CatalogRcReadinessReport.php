@@ -104,6 +104,7 @@ $externalBoundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-external-bou
 $tenantPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-tenant-policy-readiness-report.json');
 $attachmentPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-attachment-policy-readiness-report.json');
 $readSurfaceReadiness = readJsonOrEmpty($reportDir . '/catalog-read-surface-readiness-report.json');
+$graphqlStoreReadiness = readJsonOrEmpty($reportDir . '/catalog-graphql-store-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -254,6 +255,13 @@ $items = [
         'status' => (($readSurfaceReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
             'readSurfaceSummary' => mapValue($readSurfaceReadiness, 'summary'),
+        ],
+    ],
+    [
+        'check' => 'graphql-store-readiness',
+        'status' => (($graphqlStoreReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'graphqlStoreSummary' => mapValue($graphqlStoreReadiness, 'summary'),
         ],
     ],
 ];

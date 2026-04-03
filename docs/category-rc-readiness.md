@@ -80,3 +80,5 @@ php tools/inspection/CatalogExternalBoundaryReadinessReport.php
 - tenant policy readiness
 
 - read surface readiness
+
+- `graphql-store-readiness` verifies that the remaining store/GraphQL read surfaces no longer depend on hardcoded arrays, file-based optimizer metrics, or sqlite-memory fallbacks.

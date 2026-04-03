@@ -5,48 +5,70 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+
 final class ReadOptimizer
 {
-    /** @var array{tree?:list<array{id:string,name:string,slug:string,locale:string,published:bool}>} */
+    /** @var array<string,list<array<string,mixed>>> */
     private array $cache = [];
     private int $hit = 0;
     private int $miss = 0;
 
-    /** @return list<array{id:string,name:string,slug:string,locale:string,published:bool}> */
-    public function getTree(): array
+    public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
-        $cachedTree = $this->cache['tree'] ?? null;
+    }
+
+    /**
+     * @param array<string,mixed> $criteria
+     *
+     * @return list<array<string,mixed>>
+     */
+    public function getTree(array $criteria = []): array
+    {
+        $cacheKey = $this->cacheKey($criteria);
+        $cachedTree = $this->cache[$cacheKey] ?? null;
         if (is_array($cachedTree)) {
             ++$this->hit;
-            $this->flushMetrics();
 
             return $cachedTree;
         }
+
         ++$this->miss;
-        $tree = [
-            ['id' => '1', 'name' => 'Root', 'slug' => 'root', 'locale' => 'en', 'published' => true],
-            ['id' => '2', 'name' => 'Electronics', 'slug' => 'electronics', 'locale' => 'en', 'published' => true],
-        ];
-        $this->cache['tree'] = $tree;
-        $this->flushMetrics();
+        $tree = array_map(
+            static function (array $row): array {
+                if (!array_key_exists('channel', $row)) {
+                    $row['channel'] = 'default';
+                }
+
+                return $row;
+            },
+            $this->categoryProjectionReadService->tree($criteria),
+        );
+        $this->cache[$cacheKey] = $tree;
 
         return $tree;
     }
 
-    private function flushMetrics(): void
+    /** @return array{hit:int,miss:int,size:int} */
+    public function stats(): array
     {
-        file_put_contents(
-            'report/category-perf-read.json',
-            json_encode([
-                'hit' => $this->hit,
-                'miss' => $this->miss,
-                'ts' => date(DATE_ATOM),
-            ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)
-        );
+        return [
+            'hit' => $this->hit,
+            'miss' => $this->miss,
+            'size' => count($this->cache),
+        ];
     }
 
     public function clear(): void
     {
         $this->cache = [];
+    }
+
+    /** @param array<string,mixed> $criteria */
+    private function cacheKey(array $criteria): string
+    {
+        ksort($criteria);
+
+        return sha1(json_encode($criteria, JSON_THROW_ON_ERROR));
     }
 }
