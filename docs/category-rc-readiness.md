@@ -69,3 +69,5 @@ These items are now explicit and machine-readable instead of remaining implicit 
 - outbox / projection readiness must pass before declaring write/read pipeline ready.
 
 - idempotency readiness should stay at `pass` before RC is treated as production-candidate clean.
+
+- search-readiness

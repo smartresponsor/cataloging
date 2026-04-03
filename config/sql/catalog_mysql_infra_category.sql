@@ -13,5 +13,10 @@ CREATE TABLE IF NOT EXISTS category_projection (
   key idx_category_projection_parent (parent_id),
   key idx_category_projection_locale (locale),
   key idx_category_projection_tenant (tenant),
-  key idx_category_projection_published (published)
+  key idx_category_projection_published (published),
+  key idx_category_projection_name (name),
+  key idx_category_projection_slug (slug),
+  key idx_category_projection_tenant_locale (tenant, locale),
+  key idx_category_projection_workflow_state (workflow_state),
+  key idx_category_projection_updated_at (updated_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

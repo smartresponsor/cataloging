@@ -138,6 +138,49 @@ paths:
           description: Category not found
         '409':
           description: Publication gate failed or transition not allowed
+  /api/category/search:
+    get:
+      summary: Search category projection records
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema: { type: string }
+        - in: query
+          name: tenant
+          required: false
+          schema: { type: string }
+        - in: query
+          name: locale
+          required: false
+          schema: { type: string }
+        - in: query
+          name: workflow_state
+          required: false
+          schema: { type: string }
+        - in: query
+          name: published
+          required: false
+          schema: { type: boolean }
+        - in: query
+          name: limit
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: offset
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: order
+          required: false
+          schema: { type: string, enum: [updated_at, name, published_at], default: updated_at }
+        - in: query
+          name: direction
+          required: false
+          schema: { type: string, enum: [asc, desc], default: desc }
+      responses:
+        '200':
+          description: Projection-backed category search result returned
   /api/category/attachment:
     get:
       summary: List category attachments
