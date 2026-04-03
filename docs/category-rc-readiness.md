@@ -1,0 +1,54 @@
+# Category RC readiness
+
+This repository exposes a machine-readable RC readiness snapshot.
+
+## Refresh sequence
+
+```bash
+php tools/inspection/CatalogRuntimeProofReport.php
+php tools/inspection/CatalogRouteInventoryReport.php
+php tools/inspection/CatalogDependencyBaselineReport.php
+php tools/inspection/CatalogOwnerOverlapReport.php
+php tools/inspection/CatalogClassAliasReport.php
+php tools/inspection/CatalogRcReadinessReport.php
+```
+
+Or through Composer:
+
+```bash
+composer report:runtime-proof
+composer report:route-inventory
+composer report:dependency-baseline
+composer report:owner-overlap
+composer report:class-alias
+composer report:rc-readiness
+```
+
+Generated artifacts are written to `report/inspection/`.
+
+## RC gate model
+
+The readiness report currently evaluates these RC-facing gates:
+
+- git working tree cleanliness
+- `APP_ENV=prod APP_DEBUG=0 php bin/console about`
+- runtime proof artifact presence
+- route inventory availability
+- bundle loadability from `config/catalog_bundles.php`
+- dependency baseline cleanliness
+- PHPUnit extension readiness
+- owner-overlap signals
+- duplicate class-basename signals
+
+## Status meanings
+
+- `pass`: acceptable for RC conditioning
+- `warn`: not a hard runtime blocker, but still below release confidence
+- `fail`: immediate RC blocker
+
+## Typical warning-class items
+
+- missing local PHPUnit extensions in stripped environments (`dom`, `mbstring`, `xml`, `xmlwriter`)
+- remaining owner-overlap/class-alias signals during catalog/category convergence
+
+These items are now explicit and machine-readable instead of remaining implicit tribal knowledge.
