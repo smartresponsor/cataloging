@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,12 +14,24 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 final class CategoryAdminApiController
 {
+    public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
+    {
+    }
+
     #[Route('/api/admin/category/list', name: 'api_admin_category_list', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         return new JsonResponse([
-            ['id' => 1, 'name' => 'Root'],
-            ['id' => 2, 'name' => 'Electronics'],
+            'data' => $this->categoryProjectionReadService->list([
+                'tenant' => $request->query->get('tenant'),
+                'locale' => $request->query->get('locale'),
+                'workflow_state' => $request->query->get('workflow_state'),
+                'published' => $request->query->get('published'),
+                'limit' => $request->query->get('limit') ?? 100,
+                'offset' => $request->query->get('offset') ?? 0,
+                'order' => $request->query->get('order') ?? 'updated_at',
+                'direction' => $request->query->get('direction') ?? 'desc',
+            ]),
         ]);
     }
 

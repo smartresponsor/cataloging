@@ -5,28 +5,38 @@ declare(strict_types=1);
 
 namespace App\Controller\Merchant;
 
-use App\Service\TenantFilter;
+use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class CategoryMerchantController extends AbstractController
 {
-    public function __construct(private readonly TenantFilter $tenantFilter)
-    {
+    public function __construct(
+        private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private readonly SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
+    ) {
     }
 
     #[Route('/merchant/category', name: 'merchant_category_index')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $all = [
-            ['id' => 1, 'name' => 'Root', 'tenant' => 'default'],
-            ['id' => 2, 'name' => 'Merchant Only', 'tenant' => 'merchant'],
-        ];
-        $filtered = $this->tenantFilter->filter($all, 'merchant');
+        $context = $this->externalIdentityContextResolver->resolveFromRequest($request);
+        $tenant = $context?->tenant ?? 'merchant';
+        $categories = $this->categoryProjectionReadService->list([
+            'tenant' => $tenant,
+            'limit' => 100,
+            'offset' => 0,
+            'order' => 'name',
+            'direction' => 'asc',
+        ]);
 
         return $this->render('category/merchant/list.html.twig', [
-            'categories' => $filtered,
+            'categories' => $categories,
         ]);
     }
 }

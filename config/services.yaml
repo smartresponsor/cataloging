@@ -22,6 +22,9 @@ services:
 
   App\ServiceInterface\CategoryMutationServiceInterface: '@App\Service\CategoryMutationService'
 
+  App\ServiceInterface\CategoryProjectionReadServiceInterface: '@App\Service\CategoryProjectionReadService'
+  App\ServiceInterface\CategoryReadScopeServiceInterface: '@App\Service\CategoryReadScopeService'
+
   App\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Idempotency\CategoryIdempotencyStore'
 
   App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface: '@App\Repository\CategoryAccessAssignmentRepository'

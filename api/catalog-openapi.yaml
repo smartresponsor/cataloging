@@ -138,6 +138,72 @@ paths:
           description: Category not found
         '409':
           description: Publication gate failed or transition not allowed
+  /api/category/tree:
+    get:
+      summary: Read category tree from projection records
+      parameters:
+        - in: query
+          name: tenant
+          required: false
+          schema: { type: string }
+        - in: query
+          name: locale
+          required: false
+          schema: { type: string }
+        - in: query
+          name: workflow_state
+          required: false
+          schema: { type: string }
+        - in: query
+          name: published
+          required: false
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: Projection-backed category tree returned
+        '403':
+          description: Cross-tenant read denied
+  /api/category/storefront:
+    get:
+      summary: Read storefront-ready category list from projection records
+      parameters:
+        - in: query
+          name: tenant
+          required: false
+          schema: { type: string }
+        - in: query
+          name: locale
+          required: false
+          schema: { type: string }
+        - in: query
+          name: workflow_state
+          required: false
+          schema: { type: string }
+        - in: query
+          name: published
+          required: false
+          schema: { type: boolean }
+        - in: query
+          name: limit
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: offset
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: order
+          required: false
+          schema: { type: string, enum: [updated_at, name, published_at], default: name }
+        - in: query
+          name: direction
+          required: false
+          schema: { type: string, enum: [asc, desc], default: asc }
+      responses:
+        '200':
+          description: Projection-backed storefront category list returned
+        '403':
+          description: Cross-tenant read denied
   /api/category/search:
     get:
       summary: Search category projection records

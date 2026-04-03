@@ -78,3 +78,5 @@ php tools/inspection/CatalogExternalBoundaryReadinessReport.php
 ## Additional gates
 
 - tenant policy readiness
+
+- read surface readiness

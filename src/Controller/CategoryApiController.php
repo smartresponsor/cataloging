@@ -9,6 +9,8 @@ use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
 use App\Service\CategoryMutationAuthorizationService;
 use App\ServiceInterface\CategoryMutationServiceInterface;
+use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ServiceInterface\CategoryReadScopeServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,14 +22,28 @@ final class CategoryApiController
     public function __construct(
         private readonly CategoryMutationServiceInterface $categoryMutationService,
         private readonly CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
+        private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private readonly CategoryReadScopeServiceInterface $categoryReadScopeService,
         private readonly Security $security,
     ) {
     }
 
     #[Route('/api/category/tree', name: 'api_category_tree', methods: ['GET'])]
-    public function tree(): JsonResponse
+    public function tree(Request $request): JsonResponse
     {
-        return new JsonResponse(['data' => [['id' => 1, 'name' => 'Root']]]);
+        try {
+            $criteria = [
+                'tenant' => $request->query->get('tenant'),
+                'locale' => $request->query->get('locale'),
+                'workflow_state' => $request->query->get('workflow_state'),
+                'published' => $request->query->get('published'),
+            ];
+            $criteria = $this->categoryReadScopeService->applyTenantScope($request, $criteria);
+
+            return new JsonResponse(['data' => $this->categoryProjectionReadService->tree($criteria)]);
+        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 403);
+        }
     }
 
     #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
