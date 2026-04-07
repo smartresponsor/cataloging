@@ -89,6 +89,7 @@
     ],
     "report:api-contract-readiness": "@php tools/php/php84.php tools/inspection/CatalogApiContractReadinessReport.php",
     "report:attachment-policy-readiness": "@php tools/php/php84.php tools/inspection/CatalogAttachmentPolicyReadinessReport.php",
+    "report:boundary-readiness": "@php tools/php/php84.php tools/inspection/CatalogBoundaryReadinessReport.php",
     "report:class-alias": "@php tools/php/php84.php tools/inspection/CatalogClassAliasReport.php",
     "report:dependency-baseline": "@php tools/php/php84.php tools/inspection/CatalogDependencyBaselineReport.php",
     "report:external-boundary-readiness": "@php tools/php/php84.php tools/inspection/CatalogExternalBoundaryReadinessReport.php",

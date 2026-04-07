@@ -12,6 +12,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
+/**
+ * Admin API delivery adapter over shared catalog read services.
+ */
 final class CategoryAdminApiController
 {
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)

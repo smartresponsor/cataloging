@@ -105,6 +105,7 @@ $tenantPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-tenant-policy-re
 $attachmentPolicyReadiness = readJsonOrEmpty($reportDir . '/catalog-attachment-policy-readiness-report.json');
 $readSurfaceReadiness = readJsonOrEmpty($reportDir . '/catalog-read-surface-readiness-report.json');
 $graphqlStoreReadiness = readJsonOrEmpty($reportDir . '/catalog-graphql-store-readiness-report.json');
+$boundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-boundary-readiness-report.json');
 
 $generatedArtifacts = ['config/reference.php'];
 
@@ -205,6 +206,13 @@ $items = [
         'status' => (($oidcRuntimeProof['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
         'details' => [
             'oidcSummary' => mapValue($oidcRuntimeProof, 'summary'),
+        ],
+    ],
+    [
+        'check' => 'boundary-readiness',
+        'status' => (($boundaryReadiness['overallStatus'] ?? 'warn') === 'pass') ? 'pass' : 'warn',
+        'details' => [
+            'boundarySummary' => mapValue($boundaryReadiness, 'summary'),
         ],
     ],
     [

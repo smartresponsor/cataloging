@@ -11,6 +11,12 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * Secondary GraphQL read adapter over the canonical projection-backed catalog read model.
+ *
+ * This service is intentionally not the primary domain boundary. It exists as a
+ * compatibility/convenience read surface and should stay thin.
+ */
 final class GraphqlResolver implements GraphqlResolverInterface
 {
     public function __construct(

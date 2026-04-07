@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Store API delivery adapter over shared read services.
+ */
 final class CategoryStoreApiController
 {
     public function __construct(

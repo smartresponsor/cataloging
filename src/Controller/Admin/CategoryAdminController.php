@@ -15,6 +15,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
+/**
+ * Admin UI delivery adapter over shared projection-backed catalog services.
+ */
 final class CategoryAdminController extends AbstractController
 {
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)

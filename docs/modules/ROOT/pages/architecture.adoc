@@ -26,3 +26,8 @@ This page is the Antora entry point for the repository's existing architecture a
 
 This Antora page is intentionally a wrapper and entry page.
 It keeps the central aggregator discoverable while the detailed repository architecture material continues to live in the existing Markdown corpus.
+
+* `docs/category-boundary-policy.md`
+* `docs/category-graphql-boundary.md`
+* `docs/category-delivery-surface-boundary.md`
+* `docs/category-operational-proof-boundary.md`

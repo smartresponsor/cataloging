@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Search delivery adapter over shared search and tenant-scope services.
+ */
 final class CategorySearchController
 {
     public function __construct(

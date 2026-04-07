@@ -7,6 +7,11 @@ namespace App\Service;
 
 use App\ServiceInterface\GraphqlFacetResolverInterface;
 
+/**
+ * Secondary GraphQL facet adapter over the canonical search/read services.
+ *
+ * GraphQL remains a compatibility/read surface rather than a first-class domain boundary.
+ */
 final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
 {
     public function __construct(private readonly SearchService $searchService)

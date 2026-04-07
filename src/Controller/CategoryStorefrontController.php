@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Storefront delivery adapter over shared projection/read scope services.
+ */
 final class CategoryStorefrontController
 {
     public function __construct(

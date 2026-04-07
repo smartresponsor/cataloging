@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
+/**
+ * Merchant delivery adapter over shared projection-backed catalog services.
+ */
 final class CategoryMerchantController extends AbstractController
 {
     public function __construct(

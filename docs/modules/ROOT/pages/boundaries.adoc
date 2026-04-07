@@ -1,0 +1,17 @@
+= Boundary policy
+
+This page is the Antora entry point for catalog boundary, delivery-surface, GraphQL, and operational-proof policy.
+
+== Primary boundary sources
+
+* `docs/category-boundary-policy.md`
+* `docs/category-graphql-boundary.md`
+* `docs/category-delivery-surface-boundary.md`
+* `docs/category-operational-proof-boundary.md`
+* `docs/category-external-boundary-readiness.md`
+* `docs/category-tenant-policy-readiness.md`
+* `docs/category-attachment-policy-readiness.md`
+
+== Intent
+
+Cataloging is a producer-side catalog brick with explicit external integration boundaries.

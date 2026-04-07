@@ -3,6 +3,7 @@
 * Overview
 ** xref:documentation-map.adoc[Documentation map]
 ** xref:architecture.adoc[Architecture]
+* xref:boundaries.adoc[Boundary policy]
 ** xref:install.adoc[Install]
 ** xref:operations.adoc[Operations]
 ** xref:release.adoc[Release and readiness]
