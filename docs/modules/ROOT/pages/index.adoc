@@ -45,7 +45,11 @@ There is currently *no dedicated Doctum/phpDocumentor code-reference surface* co
 
 == Entry points
 
+* xref:documentation-map.adoc[Documentation map]
 * xref:architecture.adoc[Architecture]
 * xref:install.adoc[Install]
 * xref:operations.adoc[Operations]
+* xref:release.adoc[Release and readiness]
 * xref:api.adoc[API]
+* xref:reference.adoc[Reference surfaces]
+* xref:github.adoc[GitHub-facing docs]

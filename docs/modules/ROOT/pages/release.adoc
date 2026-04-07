@@ -1,0 +1,19 @@
+= Release and readiness
+
+This page is the Antora entry point for release, RC, and operational-readiness material.
+
+== Primary release/readiness sources
+
+* `docs/category-rc-readiness.md`
+* `docs/category-ga-checklist.md`
+* `docs/category-ga-cutover.md`
+* `docs/category-ga-release-notes.md`
+* `docs/category-ga-release-notes-final.md`
+* `docs/runbook-deploy.md`
+* `docs/runbook-rollback.md`
+
+== Suggested role split
+
+* use Antora for stable release/readiness entry points,
+* keep GitHub release visibility in `README.md` and changelog-style files,
+* keep machine-readable verification outputs in `report/inspection/`.
