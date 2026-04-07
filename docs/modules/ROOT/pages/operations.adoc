@@ -1,0 +1,27 @@
+= Operations
+
+This page is the Antora entry point for runtime, operational, and readiness documentation.
+
+== Primary operational sources
+
+* `docs/runbook-deploy.md`
+* `docs/runbook-rollback.md`
+* `docs/category-rc-readiness.md`
+* `docs/category-ga-checklist.md`
+* `docs/category-observability.md`
+* `docs/category-security-readiness.md`
+* `docs/category-oidc-runtime-proof.md`
+* `docs/category-migration-readiness.md`
+* `docs/category-api-contract-readiness.md`
+
+== Operational artifacts already present in the repository
+
+* alerts and canary configs: `ops/category-alerts.yaml`, `ops/category-canary.yaml`
+* observability/export configs: `ops/category-prometheus.yaml`, `ops/category-otel-export.yaml`
+* smoke scripts: `scripts/smoke/`
+* machine-readable inspection outputs: `report/inspection/`
+
+== Repository role boundary
+
+This repository remains a producer only.
+Operational docs here should describe the component and its local assets, but central site assembly, publishing orchestration, and shared documentation UI belong to the external aggregator.

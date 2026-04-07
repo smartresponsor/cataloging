@@ -1,0 +1,28 @@
+= Architecture
+
+This page is the Antora entry point for the repository's existing architecture and design material.
+
+== Primary architecture sources
+
+* `docs/category-schema.md`
+* `docs/category-observability.md`
+* `docs/category-outbox-projection-readiness.md`
+* `docs/category-idempotency-readiness.md`
+* `docs/category-search-readiness.md`
+* `docs/category-read-surface-readiness.md`
+* `docs/category-external-boundary-readiness.md`
+* `docs/category-tenant-policy-readiness.md`
+* `docs/category-attachment-policy-readiness.md`
+* `docs/category-graphql-store-readiness.md`
+
+== Supporting architecture sets
+
+* canon history and convergence notes: `docs/canon/`
+* architectural analysis snapshots: `docs/analysis/`
+* internal runtime and governance canons: `docs/internal/`
+* integration mappings: `docs/mapping/`
+
+== Notes for central documentation integration
+
+This Antora page is intentionally a wrapper and entry page.
+It keeps the central aggregator discoverable while the detailed repository architecture material continues to live in the existing Markdown corpus.

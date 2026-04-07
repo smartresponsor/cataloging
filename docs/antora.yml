@@ -1,0 +1,6 @@
+name: cataloging
+title: Cataloging
+version: current
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
