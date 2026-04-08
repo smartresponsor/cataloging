@@ -11,13 +11,20 @@ use App\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-
+/**
+ * Provides the catalog review decision coupling service application service.
+ */
 final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisionCouplingServiceInterface
 {
+    /**
+     * Initializes the catalog review decision coupling service service collaborators.
+     */
     public function __construct(private readonly CatalogChangeRequestServiceInterface $changeRequestService, private readonly CatalogWorkflowTransitionServiceInterface $workflowTransitionService, private readonly CatalogPublicationGateServiceInterface $publicationGateService)
     {
     }
-
+    /**
+     * Handles the couple workflow.
+     */
     public function couple(string $requestId, string $targetState, string $reviewedBy, string $decisionReason, array $checks = []): CategoryReviewDecisionCoupledInterface
     {
         $normalizedTargetState = trim($targetState);

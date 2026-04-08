@@ -4,13 +4,20 @@
 declare(strict_types=1);
 
 namespace App\Service\Security;
-
+/**
+ * Provides the jwk cache application service.
+ */
 final class JwkCache
 {
+    /**
+     * Initializes the jwk cache service collaborators.
+     */
     public function __construct(private readonly string $privateKeyPath)
     {
     }
-
+    /**
+     * Returns the private key value.
+     */
     public function getPrivateKey(): string
     {
         return file_exists($this->privateKeyPath) ? (string) file_get_contents($this->privateKeyPath) : '';

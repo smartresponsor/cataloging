@@ -9,9 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category dlq controller application flow.
+ */
 final class CategoryDlqController extends AbstractController
 {
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/admin/category/dlq', name: 'admin_category_dlq', methods: ['GET', 'POST'])]
     public function __invoke(Request $request): Response
     {

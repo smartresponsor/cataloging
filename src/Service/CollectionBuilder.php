@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the collection builder application service.
+ */
 final class CollectionBuilder
 {
+    /**
+     * Initializes the collection builder service collaborators.
+     */
     public function __construct(private readonly CollectionRuleEngine $engine)
     {
     }

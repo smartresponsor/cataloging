@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the tree operation application service.
+ */
 final class TreeOperation
 {
+    /**
+     * Handles the move workflow.
+     */
     public function move(string $nodeId, ?string $newParentId): void
     {
         // Invariant guards. Integration with repositories should enforce ACID transaction.
@@ -15,14 +20,18 @@ final class TreeOperation
         }
         // Repository integration is expected at application layer.
     }
-
+    /**
+     * Handles the swap workflow.
+     */
     public function swap(string $aId, string $bId): void
     {
         if ($aId === $bId) {
             throw new \InvalidArgumentException('Swap requires distinct nodes');
         }
     }
-
+    /**
+     * Handles the reparent workflow.
+     */
     public function reparent(string $nodeId, ?string $newParentId): void
     {
         $this->move($nodeId, $newParentId);

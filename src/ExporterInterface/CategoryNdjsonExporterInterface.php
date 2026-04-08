@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ExporterInterface;
-
+/**
+ * Defines the contract for category ndjson exporter.
+ */
 interface CategoryNdjsonExporterInterface
 {
     /** Export taxonomy and categories as NDJSON lines to a file. */

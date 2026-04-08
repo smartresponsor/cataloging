@@ -12,15 +12,22 @@ use App\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
 use App\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
-
+/**
+ * Provides the catalog syndication delivery service application service.
+ */
 final class CatalogSyndicationDeliveryService implements CatalogSyndicationDeliveryServiceInterface
 {
+    /**
+     * Initializes the catalog syndication delivery service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationDeliveryPolicyInterface $policy,
         private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
     ) {
     }
-
+    /**
+     * Handles the record delivery workflow.
+     */
     public function recordDelivery(
         string $deliveryId,
         string $packageId,

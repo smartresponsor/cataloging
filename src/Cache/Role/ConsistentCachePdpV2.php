@@ -25,7 +25,9 @@ final class ConsistentCachePdpV2
 
     /** @var list<mixed> */
     private readonly array $extraCallbacks;
-
+    /**
+     * Initializes the consistent cache pdp v2 service collaborators.
+     */
     public function __construct(
         mixed $inner = null,
         mixed $cacheKeyFn = null,
@@ -49,12 +51,16 @@ final class ConsistentCachePdpV2
         $this->composeFn = $composeFn;
         $this->extraCallbacks = array_values($extraCallbacks);
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     public function __invoke(mixed ...$arguments): mixed
     {
         return $this->evaluate(...$arguments);
     }
-
+    /**
+     * Handles the evaluate workflow.
+     */
     public function evaluate(mixed ...$arguments): mixed
     {
         $cacheKey = $this->resolveCacheKey(...$arguments);
@@ -74,12 +80,16 @@ final class ConsistentCachePdpV2
 
         return $result;
     }
-
+    /**
+     * Handles the decide workflow.
+     */
     public function decide(mixed ...$arguments): mixed
     {
         return $this->evaluate(...$arguments);
     }
-
+    /**
+     * Handles the authorize workflow.
+     */
     public function authorize(mixed ...$arguments): mixed
     {
         return $this->evaluate(...$arguments);

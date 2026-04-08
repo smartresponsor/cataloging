@@ -12,24 +12,32 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the catalog seed command console workflow.
+ */
 #[AsCommand(name: 'category:seed')]
 final class CatalogSeedCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the catalog seed command service collaborators.
+     */
     public function __construct(private readonly EntityManagerInterface $em)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this->addArgument('count', InputArgument::REQUIRED, 'Total categories to create (e.g., 10000 or 50000)');
         $this->addArgument('branching', InputArgument::OPTIONAL, 'Average children per node', '5');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $n = max(1, $this->argumentInt($input, 'count', 1));

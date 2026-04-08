@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
-
+/**
+ * Defines the contract for category rule suggest service.
+ */
 interface CategoryRuleSuggestServiceInterface
 {
     /** @param list<array{price:float,brand?:string,categoryId?:string}> $sample

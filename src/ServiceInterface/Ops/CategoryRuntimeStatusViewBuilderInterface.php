@@ -6,8 +6,13 @@ declare(strict_types=1);
 namespace App\ServiceInterface\Ops;
 
 use App\Projection\CategoryRuntimeStatusView;
-
+/**
+ * Defines the contract for category runtime status view builder.
+ */
 interface CategoryRuntimeStatusViewBuilderInterface
 {
+    /**
+     * Builds the requested output for the current workflow.
+     */
     public function build(string $categoryId): CategoryRuntimeStatusView;
 }

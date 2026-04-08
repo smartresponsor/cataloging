@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
-
+/**
+ * Represents the category destination media fallback evaluated application event.
+ */
 final class CategoryDestinationMediaFallbackEvaluated implements CategoryDestinationMediaFallbackEvaluatedInterface
 {
     /**
@@ -33,7 +35,9 @@ final class CategoryDestinationMediaFallbackEvaluated implements CategoryDestina
         private readonly \DateTimeImmutable $evaluatedAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return [

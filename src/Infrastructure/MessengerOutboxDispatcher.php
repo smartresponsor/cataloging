@@ -8,9 +8,14 @@ namespace App\Infrastructure;
 use App\InfrastructureInterface\OutboxDispatcherInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
-
+/**
+ * Provides the messenger outbox dispatcher implementation.
+ */
 final class MessengerOutboxDispatcher implements OutboxDispatcherInterface
 {
+    /**
+     * Initializes the messenger outbox dispatcher service collaborators.
+     */
     public function __construct(private readonly MessageBusInterface $bus)
     {
     }

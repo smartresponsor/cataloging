@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Request;
-
+/**
+ * Provides the webhook dispatch request implementation.
+ */
 final class WebhookDispatchRequest
 {
     /**
@@ -52,7 +54,9 @@ final class WebhookDispatchRequest
 
         return new self($event, $endpoint, $payload, $errors);
     }
-
+    /**
+     * Determines whether the valid condition is satisfied.
+     */
     public function isValid(): bool
     {
         return [] === $this->errors;

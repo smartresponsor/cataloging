@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
-
+/**
+ * Represents the category syndication governance trail report value.
+ */
 final class CategorySyndicationGovernanceTrailReport implements CategorySyndicationGovernanceTrailReportInterface
 {
     /**
@@ -30,52 +32,72 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
         private readonly array $checks,
     ) {
     }
-
+    /**
+     * Handles the destination id workflow.
+     */
     public function destinationId(): string
     {
         return $this->destinationId;
     }
-
+    /**
+     * Handles the category id workflow.
+     */
     public function categoryId(): string
     {
         return $this->categoryId;
     }
-
+    /**
+     * Handles the media policy mode workflow.
+     */
     public function mediaPolicyMode(): string
     {
         return $this->mediaPolicyMode;
     }
-
+    /**
+     * Handles the strict publishable workflow.
+     */
     public function strictPublishable(): bool
     {
         return $this->strictPublishable;
     }
-
+    /**
+     * Handles the fallback publishable workflow.
+     */
     public function fallbackPublishable(): bool
     {
         return $this->fallbackPublishable;
     }
-
+    /**
+     * Resolves the d publishable result for the current workflow.
+     */
     public function resolvedPublishable(): bool
     {
         return $this->resolvedPublishable;
     }
-
+    /**
+     * Handles the fallback used workflow.
+     */
     public function fallbackUsed(): bool
     {
         return $this->fallbackUsed;
     }
-
+    /**
+     * Handles the delivery status workflow.
+     */
     public function deliveryStatus(): string
     {
         return $this->deliveryStatus;
     }
-
+    /**
+     * Handles the retryable workflow.
+     */
     public function retryable(): bool
     {
         return $this->retryable;
     }
-
+    /**
+     * Handles the retry scheduled workflow.
+     */
     public function retryScheduled(): bool
     {
         return $this->retryScheduled;

@@ -10,11 +10,16 @@ use App\PolicyInterface\CategoryPolicyInterface;
 /** Validates format; uniqueness is handled by generator via repository. */
 final class CategoryPolicy implements CategoryPolicyInterface
 {
+    /**
+     * Determines whether the current workflow can edit.
+     */
     public function canEdit(string $actorId, string $taxonomyId, ?string $categoryId): bool
     {
         return true;
     }
-
+    /**
+     * Handles the validate slug workflow.
+     */
     public function validateSlug(array $slug): void
     {
         foreach ($slug as $locale => $s) {

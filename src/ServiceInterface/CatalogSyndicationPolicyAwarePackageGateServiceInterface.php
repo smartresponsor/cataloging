@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationPolicyAwarePackageGatedInterface;
-
+/**
+ * Defines the contract for catalog syndication policy aware package gate service.
+ */
 interface CatalogSyndicationPolicyAwarePackageGateServiceInterface
 {
     /**

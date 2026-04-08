@@ -37,12 +37,16 @@ final class CategoryTaxonomy
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
-
+    /**
+     * Handles the id workflow.
+     */
     public function id(): string
     {
         return $this->id;
     }
-
+    /**
+     * Handles the code workflow.
+     */
     public function code(): string
     {
         return $this->code;
@@ -59,12 +63,16 @@ final class CategoryTaxonomy
     {
         return $this->rule;
     }
-
+    /**
+     * Creates the d at result for the current workflow.
+     */
     public function createdAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
-
+    /**
+     * Handles the updated at workflow.
+     */
     public function updatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;

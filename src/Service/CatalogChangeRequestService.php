@@ -11,15 +11,22 @@ use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
 use App\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\ValueObject\CategoryChangeRequestState;
-
+/**
+ * Provides the catalog change request service application service.
+ */
 final class CatalogChangeRequestService implements CatalogChangeRequestServiceInterface
 {
+    /**
+     * Initializes the catalog change request service service collaborators.
+     */
     public function __construct(
         private readonly CategoryChangeRequestRepositoryInterface $repository,
         private readonly CategoryChangeRequestPolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Handles the submit workflow.
+     */
     public function submit(string $requestId, string $categoryId, string $submittedBy, string $summary, array $changes): CategoryChangeRequest
     {
         $this->policy->assertCanSubmit($requestId, $categoryId, $submittedBy, $summary, $changes);
@@ -29,7 +36,9 @@ final class CatalogChangeRequestService implements CatalogChangeRequestServiceIn
 
         return $request;
     }
-
+    /**
+     * Handles the review workflow.
+     */
     public function review(string $requestId, string $targetState, string $reviewedBy, string $decisionReason): CategoryChangeRequestReviewed
     {
         $request = $this->repository->findByRequestId($requestId);

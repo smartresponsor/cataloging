@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
-
+/**
+ * Defines the contract for category category service.
+ */
 interface CategoryCategoryServiceInterface
 {
     // All comments must be in English.

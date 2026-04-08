@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
-
+/**
+ * Defines the contract for catalog syndication mapping service.
+ */
 interface CatalogSyndicationMappingServiceInterface
 {
     /**

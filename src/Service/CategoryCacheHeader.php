@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the category cache header application service.
+ */
 final class CategoryCacheHeader
 {
     /** @return array{ETag:string,Cache-Control:string,Last-Modified?:string} */

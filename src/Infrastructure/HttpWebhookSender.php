@@ -7,9 +7,14 @@ namespace App\Infrastructure;
 
 use App\InfrastructureInterface\WebhookSenderInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
+/**
+ * Provides the http webhook sender implementation.
+ */
 final class HttpWebhookSender implements WebhookSenderInterface
 {
+    /**
+     * Initializes the http webhook sender service collaborators.
+     */
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly string $endpoint,

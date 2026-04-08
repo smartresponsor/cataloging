@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryPublicationGateEvaluatedInterface;
-
+/**
+ * Defines the contract for catalog publication gate service.
+ */
 interface CatalogPublicationGateServiceInterface
 {
     /** @param array<string,bool> $checks */

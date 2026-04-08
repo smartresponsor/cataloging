@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategorySyndicationMappingPolicyInterface;
-
+/**
+ * Provides the category syndication mapping policy implementation.
+ */
 final class CategorySyndicationMappingPolicy implements CategorySyndicationMappingPolicyInterface
 {
+    /**
+     * Handles the assert locale mode workflow.
+     */
     public function assertLocaleMode(string $localeMode): void
     {
         $allowed = ['per_locale', 'shared', 'destination_default'];
@@ -16,7 +21,9 @@ final class CategorySyndicationMappingPolicy implements CategorySyndicationMappi
             throw new \InvalidArgumentException(sprintf('Unsupported syndication locale mode "%s".', $localeMode));
         }
     }
-
+    /**
+     * Handles the normalize field map workflow.
+     */
     public function normalizeFieldMap(array $fieldMap): array
     {
         $normalized = [];
@@ -34,7 +41,9 @@ final class CategorySyndicationMappingPolicy implements CategorySyndicationMappi
 
         return $normalized;
     }
-
+    /**
+     * Handles the normalize required fields workflow.
+     */
     public function normalizeRequiredFields(array $requiredFields): array
     {
         $normalized = [];

@@ -8,9 +8,14 @@ namespace App\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\Uid\Uuid;
-
+/**
+ * Provides the outbox writer application service.
+ */
 final class OutboxWriter
 {
+    /**
+     * Initializes the outbox writer service collaborators.
+     */
     public function __construct(private readonly Connection $connection)
     {
     }

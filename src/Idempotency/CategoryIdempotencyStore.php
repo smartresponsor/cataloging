@@ -18,10 +18,15 @@ use Doctrine\DBAL\ParameterType;
  */
 final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterface
 {
+    /**
+     * Initializes the category idempotency store service collaborators.
+     */
     public function __construct(private readonly Connection $connection)
     {
     }
-
+    /**
+     * Handles the acquire workflow.
+     */
     public function acquire(string $key, string $operation, string $requestHash, int $ttlSec, ?string $correlationId = null): bool
     {
         $normalizedKey = trim($key);
@@ -84,7 +89,9 @@ final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterfac
             throw new \DomainException(sprintf('Idempotency key "%s" cannot be reused for a different request payload.', $normalizedKey));
         }
     }
-
+    /**
+     * Handles the purge expired workflow.
+     */
     public function purgeExpired(): int
     {
         $now = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');

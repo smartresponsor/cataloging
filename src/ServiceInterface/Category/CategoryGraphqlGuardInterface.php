@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
-
+/**
+ * Defines the contract for category graphql guard.
+ */
 interface CategoryGraphqlGuardInterface
 {
     /** @param array<string,mixed> $ast

@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Request;
-
+/**
+ * Provides the category attachment add request implementation.
+ */
 final class CategoryAttachmentAddRequest
 {
     /**
@@ -46,7 +48,9 @@ final class CategoryAttachmentAddRequest
 
         return new self($categoryId, $type, $provider, $externalAttachmentId, $referenceUri, $errors);
     }
-
+    /**
+     * Determines whether the valid condition is satisfied.
+     */
     public function isValid(): bool
     {
         return [] === $this->errors;

@@ -12,9 +12,14 @@ use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
 use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
-
+/**
+ * Provides the catalog syndication fallback aware package gate service application service.
+ */
 final class CatalogSyndicationFallbackAwarePackageGateService implements CatalogSyndicationFallbackAwarePackageGateServiceInterface
 {
+    /**
+     * Initializes the catalog syndication fallback aware package gate service service collaborators.
+     */
     public function __construct(
         private readonly CatalogSyndicationMappingServiceInterface $mappingService,
         private readonly CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,

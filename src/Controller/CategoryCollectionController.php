@@ -10,13 +10,20 @@ use App\Service\CatalogCollectionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category collection controller application flow.
+ */
 final class CategoryCollectionController
 {
+    /**
+     * Initializes the category collection controller service collaborators.
+     */
     public function __construct(private readonly CatalogCollectionService $service)
     {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/api/category/collection', name: 'api_category_collection', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {

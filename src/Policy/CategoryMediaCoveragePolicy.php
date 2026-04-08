@@ -9,7 +9,9 @@ use App\EntityInterface\CategoryMediaBindingInterface;
 use App\PolicyInterface\CategoryMediaCoveragePolicyInterface;
 use App\ValueObject\CategoryMediaCoverageReport;
 use App\ValueObjectInterface\CategoryMediaCoverageReportInterface;
-
+/**
+ * Provides the category media coverage policy implementation.
+ */
 final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyInterface
 {
     /**

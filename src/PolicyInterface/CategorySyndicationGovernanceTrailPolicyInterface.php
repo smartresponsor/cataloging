@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
-
+/**
+ * Defines the contract for category syndication governance trail policy.
+ */
 interface CategorySyndicationGovernanceTrailPolicyInterface
 {
     /**

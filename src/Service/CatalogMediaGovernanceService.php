@@ -11,15 +11,22 @@ use App\PolicyInterface\CategoryMediaGovernancePolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\ServiceInterface\CatalogMediaGovernanceServiceInterface;
 use App\ValueObject\CategoryMediaRole;
-
+/**
+ * Provides the catalog media governance service application service.
+ */
 final class CatalogMediaGovernanceService implements CatalogMediaGovernanceServiceInterface
 {
+    /**
+     * Initializes the catalog media governance service service collaborators.
+     */
     public function __construct(
         private readonly CategoryMediaBindingRepositoryInterface $repository,
         private readonly CategoryMediaGovernancePolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Handles the bind workflow.
+     */
     public function bind(
         string $bindingId,
         string $categoryId,

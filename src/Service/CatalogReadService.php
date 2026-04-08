@@ -8,9 +8,14 @@ namespace App\Service;
 use App\Repository\CatalogRepository;
 use App\ServiceInterface\CatalogReadServiceInterface;
 use Symfony\Contracts\Cache\CacheInterface;
-
+/**
+ * Provides the catalog read service application service.
+ */
 final class CatalogReadService implements CatalogReadServiceInterface
 {
+    /**
+     * Initializes the catalog read service service collaborators.
+     */
     public function __construct(
         private readonly CacheInterface $cache,
         private readonly CatalogRepository $catalogRepository,

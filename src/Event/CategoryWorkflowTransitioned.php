@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryWorkflowTransitionedInterface;
-
+/**
+ * Represents the category workflow transitioned application event.
+ */
 final class CategoryWorkflowTransitioned implements CategoryWorkflowTransitionedInterface
 {
+    /**
+     * Initializes the category workflow transitioned service collaborators.
+     */
     public function __construct(
         private readonly string $categoryId,
         private readonly string $fromState,
@@ -18,7 +23,9 @@ final class CategoryWorkflowTransitioned implements CategoryWorkflowTransitioned
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
-
+    /**
+     * Handles the event name workflow.
+     */
     public function eventName(): string
     {
         return 'category.workflow_transitioned';

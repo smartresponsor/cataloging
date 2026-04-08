@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
-
+/**
+ * Defines the contract for catalog media applicability service.
+ */
 interface CatalogMediaApplicabilityServiceInterface
 {
     /** @param array<string,mixed> $payload */

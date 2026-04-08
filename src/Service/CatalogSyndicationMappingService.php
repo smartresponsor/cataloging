@@ -11,9 +11,14 @@ use App\PolicyInterface\CategorySyndicationMappingPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
 use App\ValueObject\CategorySyndicationMappingProfile;
 use App\ValueObject\CategorySyndicationPublishPackage;
-
+/**
+ * Provides the catalog syndication mapping service application service.
+ */
 final class CatalogSyndicationMappingService implements CatalogSyndicationMappingServiceInterface
 {
+    /**
+     * Initializes the catalog syndication mapping service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationMappingPolicyInterface $policy,
     ) {

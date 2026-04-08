@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
-
+/**
+ * Defines the contract for category syndication history policy.
+ */
 interface CategorySyndicationHistoryPolicyInterface
 {
+    /**
+     * Handles the assert destination id workflow.
+     */
     public function assertDestinationId(string $destinationId): void;
 
     /** @param list<CategorySyndicationDeliveryRecordInterface> $records

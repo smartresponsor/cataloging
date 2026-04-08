@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
-
+/**
+ * Defines the contract for catalog syndication fallback aware package gate service.
+ */
 interface CatalogSyndicationFallbackAwarePackageGateServiceInterface
 {
     /**

@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Request;
-
+/**
+ * Provides the publish category request implementation.
+ */
 final class PublishCategoryRequest
 {
     /**
@@ -59,7 +61,9 @@ final class PublishCategoryRequest
 
         return new self($published, $checks, $reason, $errors);
     }
-
+    /**
+     * Determines whether the valid condition is satisfied.
+     */
     public function isValid(): bool
     {
         return [] === $this->errors;

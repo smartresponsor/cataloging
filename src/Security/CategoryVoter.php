@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /** @extends Voter<string, mixed> */
 final class CategoryVoter extends Voter
 {
+    /**
+     * Initializes the category voter service collaborators.
+     */
     public function __construct(private readonly ?CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository = null)
     {
     }
@@ -23,12 +26,16 @@ final class CategoryVoter extends Voter
     public const EDIT = 'category.edit';
     public const OWN = 'category.own';
     public const PUBLISH = 'category.publish';
-
+    /**
+     * Checks whether this service supports the provided input.
+     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::VIEW, self::EDIT, self::OWN, self::PUBLISH], true);
     }
-
+    /**
+     * Handles the vote on attribute workflow.
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $roles = $token->getRoleNames();

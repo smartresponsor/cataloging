@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Projection;
-
+/**
+ * Provides the category governance view implementation.
+ */
 final class CategoryGovernanceView
 {
     /**

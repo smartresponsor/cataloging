@@ -15,6 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class CategoryProjectionSync implements CategoryProjectionSyncInterface
 {
+    /**
+     * Initializes the category projection sync service collaborators.
+     */
     public function __construct(private readonly ManagerRegistry $registry)
     {
     }

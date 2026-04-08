@@ -9,7 +9,9 @@ use App\EntityInterface\CategoryMediaBindingInterface;
 use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\ValueObject\CategoryDestinationMediaFallbackReport;
 use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
-
+/**
+ * Provides the category destination media fallback policy implementation.
+ */
 final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinationMediaFallbackPolicyInterface
 {
     /**

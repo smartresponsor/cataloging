@@ -13,20 +13,26 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category syndication retry schedule command console workflow.
+ */
 #[AsCommand(name: 'category:syndication:retry:schedule')]
 final class CategorySyndicationRetryScheduleCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category syndication retry schedule command service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
         private readonly CatalogSyndicationRetryServiceInterface $service,
     ) {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -37,7 +43,9 @@ final class CategorySyndicationRetryScheduleCommand extends Command
             ->addArgument('reason', InputArgument::REQUIRED)
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $deliveryId = $this->argumentString($input, 'deliveryId');

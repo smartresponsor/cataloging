@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for category service.
+ */
 interface CategoryServiceInterface
 {
     /**
@@ -18,9 +20,13 @@ interface CategoryServiceInterface
 
     /** @return array<string,mixed> */
     public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array;
-
+    /**
+     * Handles the attach workflow.
+     */
     public function attach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void;
-
+    /**
+     * Handles the detach workflow.
+     */
     public function detach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void;
 
     /** @return list<array<string,mixed>> */

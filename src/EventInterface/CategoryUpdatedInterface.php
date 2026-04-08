@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
-
+/**
+ * Defines the contract for category updated.
+ */
 interface CategoryUpdatedInterface
 {
     /** @return array<string,mixed> */

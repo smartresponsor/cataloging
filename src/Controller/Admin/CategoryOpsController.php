@@ -8,9 +8,14 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category ops controller application flow.
+ */
 final class CategoryOpsController extends AbstractController
 {
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/admin/category/ops', name: 'admin_category_ops')]
     public function __invoke(): Response
     {

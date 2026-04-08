@@ -8,22 +8,31 @@ use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
-
+/**
+ * Provides the category projection read service application service.
+ */
 final class CategoryProjectionReadService implements CategoryProjectionReadServiceInterface
 {
+    /**
+     * Initializes the category projection read service service collaborators.
+     */
     public function __construct(
         private readonly ManagerRegistry $registry,
         private readonly SearchService $searchService,
     ) {
     }
-
+    /**
+     * Handles the list workflow.
+     */
     public function list(array $criteria = []): array
     {
         $result = $this->searchService->search($criteria);
 
         return $result['items'];
     }
-
+    /**
+     * Handles the tree workflow.
+     */
     public function tree(array $criteria = []): array
     {
         $normalized = $this->normalizeCriteria($criteria);
@@ -39,7 +48,9 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
 
         return $this->buildTree($this->normalizeRows($rows));
     }
-
+    /**
+     * Handles the find one workflow.
+     */
     public function findOne(string $id): ?array
     {
         $normalizedId = trim($id);

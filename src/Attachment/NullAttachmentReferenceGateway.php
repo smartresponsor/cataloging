@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace App\Attachment;
 
 use App\AttachmentInterface\AttachmentReferenceGatewayInterface;
-
+/**
+ * Provides the null attachment reference gateway implementation.
+ */
 final class NullAttachmentReferenceGateway implements AttachmentReferenceGatewayInterface
 {
+    /**
+     * Handles the assert bindable workflow.
+     */
     public function assertBindable(string $provider, string $externalAttachmentId, ?string $referenceUri = null): void
     {
         $normalizedProvider = trim($provider);

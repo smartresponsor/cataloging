@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-
+/**
+ * Provides the security header listener implementation.
+ */
 final class SecurityHeaderListener
 {
+    /**
+     * Handles the on kernel response workflow.
+     */
     public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();

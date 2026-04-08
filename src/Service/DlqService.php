@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the dlq service application service.
+ */
 final class DlqService
 {
     private string $file = 'report/category-dlq.json';
@@ -29,7 +31,9 @@ final class DlqService
         /* @var list<array<string, mixed>> $decoded */
         return $decoded;
     }
-
+    /**
+     * Handles the requeue workflow.
+     */
     public function requeue(string $id): void
     {
         $all = $this->all();

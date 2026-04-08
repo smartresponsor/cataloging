@@ -7,16 +7,25 @@ namespace App\RepositoryInterface;
 
 use App\EntityInterface\CategoryChangeRequestInterface;
 use App\EventInterface\CategoryChangeRequestReviewedInterface;
-
+/**
+ * Defines the contract for category change request repository.
+ */
 interface CategoryChangeRequestRepositoryInterface
 {
+    /**
+     * Handles the find by request id workflow.
+     */
     public function findByRequestId(string $requestId): ?CategoryChangeRequestInterface;
 
     /** @return list<CategoryChangeRequestInterface> */
     public function findByCategoryId(string $categoryId): array;
-
+    /**
+     * Handles the save workflow.
+     */
     public function save(CategoryChangeRequestInterface $request): void;
-
+    /**
+     * Handles the append review history workflow.
+     */
     public function appendReviewHistory(CategoryChangeRequestReviewedInterface $event): void;
 
     /** @return list<CategoryChangeRequestReviewedInterface> */

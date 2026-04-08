@@ -6,11 +6,15 @@ declare(strict_types=1);
 namespace App\Service\Category;
 
 use App\ServiceInterface\CategoryReadRepositoryInterface;
-
+/**
+ * Provides the category category service application service.
+ */
 final class CategoryCategoryService
 {
     private CategoryReadRepositoryInterface $repo;
-
+    /**
+     * Initializes the category category service service collaborators.
+     */
     public function __construct(CategoryReadRepositoryInterface $repo)
     {
         $this->repo = $repo;

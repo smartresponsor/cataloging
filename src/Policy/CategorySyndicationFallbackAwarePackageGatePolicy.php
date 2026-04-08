@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
 use App\ValueObject\CategorySyndicationFallbackAwarePackageGateReport;
 use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
-
+/**
+ * Provides the category syndication fallback aware package gate policy implementation.
+ */
 final class CategorySyndicationFallbackAwarePackageGatePolicy implements CategorySyndicationFallbackAwarePackageGatePolicyInterface
 {
     /**

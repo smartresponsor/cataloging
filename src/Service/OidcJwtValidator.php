@@ -7,14 +7,21 @@ namespace App\Service;
 
 use App\ServiceInterface\OidcJwtValidatorInterface;
 use App\ServiceInterface\OidcJwtVerifierInterface;
-
+/**
+ * Provides the oidc jwt validator application service.
+ */
 final class OidcJwtValidator implements OidcJwtValidatorInterface
 {
+    /**
+     * Initializes the oidc jwt validator service collaborators.
+     */
     public function __construct(
         private readonly ?OidcJwtVerifierInterface $verifier = null,
     ) {
     }
-
+    /**
+     * Validates the current input against the component rules.
+     */
     public function validate(string $jwt): array
     {
         if (null === $this->verifier) {

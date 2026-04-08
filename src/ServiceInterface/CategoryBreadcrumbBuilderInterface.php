@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for category breadcrumb builder.
+ */
 interface CategoryBreadcrumbBuilderInterface
 {
     /** @return array{breadcrumb: array<int, array{id:string,name:string,slug:string}>, seo: array{fullSlug:string,title:string}} */

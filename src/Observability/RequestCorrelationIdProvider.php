@@ -6,16 +6,22 @@ namespace App\Observability;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-
+/**
+ * Provides the request correlation id provider implementation.
+ */
 final readonly class RequestCorrelationIdProvider
 {
     public const ATTRIBUTE = '_catalog_correlation_id';
     public const HEADER = 'X-Correlation-ID';
-
+    /**
+     * Initializes the request correlation id provider service collaborators.
+     */
     public function __construct(private RequestStack $requestStack)
     {
     }
-
+    /**
+     * Handles the current workflow.
+     */
     public function current(): ?string
     {
         $request = $this->requestStack->getCurrentRequest();

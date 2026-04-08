@@ -11,18 +11,24 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category syndication delivery failed list command console workflow.
+ */
 #[AsCommand(name: 'category:syndication:delivery:failed:list')]
 final class CategorySyndicationDeliveryFailedListCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category syndication delivery failed list command service collaborators.
+     */
     public function __construct(private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -30,7 +36,9 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
             ->setHelp('Use this command to inspect failed syndication delivery records and print them in ndjson or json format.')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'ndjson');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $format = $this->optionString($input, 'format', 'json');

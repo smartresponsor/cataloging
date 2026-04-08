@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Rule;
-
+/**
+ * Provides the rule evaluator implementation.
+ */
 final class RuleEvaluator
 {
     /** @return array{sql:string,params:array<string,mixed>} */

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
-
+/**
+ * Defines the contract for catalog media coverage service.
+ */
 interface CatalogMediaCoverageServiceInterface
 {
     /** @param array<string,mixed> $payload */

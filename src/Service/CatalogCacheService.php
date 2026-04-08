@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
-
+/**
+ * Provides the catalog cache service application service.
+ */
 final class CatalogCacheService
 {
+    /**
+     * Initializes the catalog cache service service collaborators.
+     */
     public function __construct(private readonly CacheItemPoolInterface $pool)
     {
     }

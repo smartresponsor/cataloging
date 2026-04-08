@@ -7,14 +7,18 @@ namespace App\Service\Category\Quota;
 
 use App\ServiceInterface\Category\CategoryQuotaTokenBucketInterface;
 use App\ServiceInterface\Quota\CacheStoreInterface;
-
+/**
+ * Provides the category token bucket application service.
+ */
 final class CategoryTokenBucket implements CategoryQuotaTokenBucketInterface
 {
     private string $key;
     private int $capacity;
     private float $ratePerSec;
     private CacheStoreInterface $store;
-
+    /**
+     * Initializes the category token bucket service collaborators.
+     */
     public function __construct(CacheStoreInterface $store, string $key, int $capacity, float $ratePerSec)
     {
         $this->store = $store;
@@ -22,7 +26,9 @@ final class CategoryTokenBucket implements CategoryQuotaTokenBucketInterface
         $this->capacity = $capacity;
         $this->ratePerSec = $ratePerSec;
     }
-
+    /**
+     * Handles the take workflow.
+     */
     public function take(int $n = 1): bool
     {
         $now = microtime(true);

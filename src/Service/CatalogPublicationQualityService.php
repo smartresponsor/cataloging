@@ -9,13 +9,20 @@ use App\Event\CategoryPublicationQualityEvaluated;
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
 use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
-
+/**
+ * Provides the catalog publication quality service application service.
+ */
 final class CatalogPublicationQualityService implements CatalogPublicationQualityServiceInterface
 {
+    /**
+     * Initializes the catalog publication quality service service collaborators.
+     */
     public function __construct(private readonly CategoryPublicationQualityPolicyInterface $policy)
     {
     }
-
+    /**
+     * Handles the evaluate workflow.
+     */
     public function evaluate(string $categoryId, int $score, array $publicationChecks, array $checks, string $actorId, string $reason): CategoryPublicationQualityEvaluatedInterface
     {
         $profile = $this->policy->buildProfile($score, $publicationChecks, $checks);

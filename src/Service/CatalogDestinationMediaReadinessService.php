@@ -11,16 +11,23 @@ use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
-
+/**
+ * Provides the catalog destination media readiness service application service.
+ */
 final class CatalogDestinationMediaReadinessService implements CatalogDestinationMediaReadinessServiceInterface
 {
+    /**
+     * Initializes the catalog destination media readiness service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationDestinationRepositoryInterface $destinationRepository,
         private readonly CatalogMediaApplicabilityServiceInterface $applicabilityService,
         private readonly CategoryDestinationMediaReadinessPolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Handles the evaluate workflow.
+     */
     public function evaluate(string $destinationId, string $categoryId, string $actorId, string $reason): CategoryDestinationMediaReadinessEvaluatedInterface
     {
         $destination = $this->destinationRepository->find($destinationId);

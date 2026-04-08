@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
-
+/**
+ * Defines the contract for category syndication fallback aware package gate policy.
+ */
 interface CategorySyndicationFallbackAwarePackageGatePolicyInterface
 {
     /**

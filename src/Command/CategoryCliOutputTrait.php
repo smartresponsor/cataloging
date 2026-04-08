@@ -7,7 +7,9 @@ namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Provides shared helpers for category cli output trait.
+ */
 trait CategoryCliOutputTrait
 {
     /** @param array<string,mixed>|list<array<string,mixed>> $payload */

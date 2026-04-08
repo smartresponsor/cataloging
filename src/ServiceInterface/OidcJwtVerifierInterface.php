@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for oidc jwt verifier.
+ */
 interface OidcJwtVerifierInterface
 {
     /** @return array<string,mixed> */

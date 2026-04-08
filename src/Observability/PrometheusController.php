@@ -6,14 +6,21 @@ declare(strict_types=1);
 namespace App\Observability;
 
 use Symfony\Component\HttpFoundation\Response;
-
+/**
+ * Provides the prometheus controller implementation.
+ */
 final class PrometheusController
 {
+    /**
+     * Initializes the prometheus controller service collaborators.
+     */
     public function __construct(
         private readonly ?CatalogProjectionMetrics $projectionMetrics = null,
     ) {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     public function __invoke(): Response
     {
         $lines = [];

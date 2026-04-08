@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the webhook notifier application service.
+ */
 final class WebhookNotifier
 {
+    /**
+     * Initializes the webhook notifier service collaborators.
+     */
     public function __construct(private readonly string $endpoint)
     {
     }

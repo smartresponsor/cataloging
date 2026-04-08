@@ -20,10 +20,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 final class CategoryAdminController extends AbstractController
 {
+    /**
+     * Initializes the category admin controller service collaborators.
+     */
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
-
+    /**
+     * Handles the index workflow.
+     */
     #[Route('/admin/category', name: 'admin_category_index')]
     public function index(): Response
     {
@@ -38,7 +43,9 @@ final class CategoryAdminController extends AbstractController
             'categories' => $categories,
         ]);
     }
-
+    /**
+     * Handles the new workflow.
+     */
     #[Route('/admin/category/new', name: 'admin_category_new')]
     public function new(Request $request): Response
     {
@@ -57,7 +64,9 @@ final class CategoryAdminController extends AbstractController
             'is_edit' => false,
         ]);
     }
-
+    /**
+     * Handles the edit workflow.
+     */
     #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
     public function edit(int $id, Request $request): Response
     {
@@ -81,7 +90,9 @@ final class CategoryAdminController extends AbstractController
             'is_edit' => true,
         ]);
     }
-
+    /**
+     * Handles the tree workflow.
+     */
     #[Route('/admin/category/tree', name: 'admin_category_tree')]
     public function tree(): Response
     {

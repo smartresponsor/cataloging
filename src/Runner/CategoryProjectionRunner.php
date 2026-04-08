@@ -7,13 +7,20 @@ namespace App\Runner;
 
 use App\RunnerInterface\CategoryProjectionRunnerInterface;
 use App\Service\ProjectionWorker;
-
+/**
+ * Provides the category projection runner implementation.
+ */
 final class CategoryProjectionRunner implements CategoryProjectionRunnerInterface
 {
+    /**
+     * Initializes the category projection runner service collaborators.
+     */
     public function __construct(private readonly ProjectionWorker $worker)
     {
     }
-
+    /**
+     * Handles the run workflow.
+     */
     public function run(int $maxSec, int $maxBatch): void
     {
         $startedAt = new \DateTimeImmutable('now');

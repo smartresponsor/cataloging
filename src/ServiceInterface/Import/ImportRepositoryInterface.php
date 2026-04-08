@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Import;
-
+/**
+ * Defines the contract for import repository.
+ */
 interface ImportRepositoryInterface
 {
     /** @param array<string,mixed> $row */

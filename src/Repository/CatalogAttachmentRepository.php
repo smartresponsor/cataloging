@@ -9,15 +9,21 @@ use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Index;
 use Symfony\Component\Uid\Ulid;
-
+/**
+ * Provides repository services for catalog attachment repository.
+ */
 final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryInterface
 {
     private bool $schemaEnsured = false;
-
+    /**
+     * Initializes the catalog attachment repository service collaborators.
+     */
     public function __construct(private readonly Connection $connection)
     {
     }
-
+    /**
+     * Handles the list workflow.
+     */
     public function list(?string $categoryId = null): array
     {
         $this->ensureSchema();
@@ -61,7 +67,9 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             $rows,
         )));
     }
-
+    /**
+     * Handles the add workflow.
+     */
     public function add(string $categoryId, string $type, string $provider, string $externalAttachmentId, ?string $referenceUri = null): array
     {
         $this->ensureSchema();
@@ -117,7 +125,9 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'created_at' => $item['created_at'],
         ];
     }
-
+    /**
+     * Handles the find one workflow.
+     */
     public function findOne(string $attachmentId): ?array
     {
         $this->ensureSchema();
@@ -153,7 +163,9 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'created_at' => $row['created_at'],
         ];
     }
-
+    /**
+     * Deletes the requested target from the underlying store.
+     */
     public function delete(string $attachmentId): bool
     {
         $this->ensureSchema();

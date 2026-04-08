@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the catalog legacy collection filter service application service.
+ */
 final class CatalogLegacyCollectionFilterService
 {
     /**

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Outbox;
 
 use App\OutboxInterface\CategoryOutboxRetryInterface;
-
+/**
+ * Provides the category outbox retry implementation.
+ */
 final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
 {
     /** @var list<array{event:array<string, mixed>,attempt:int,runAt:int}> */
@@ -24,14 +26,18 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
             'runAt' => $runAt->getTimestamp(),
         ];
     }
-
+    /**
+     * Handles the next delay seconds workflow.
+     */
     public function nextDelaySeconds(int $attempt): int
     {
         $normalizedAttempt = max(1, $attempt);
 
         return min(900, 2 ** min($normalizedAttempt, 9));
     }
-
+    /**
+     * Handles the next run at workflow.
+     */
     public function nextRunAt(\DateTimeImmutable $now, int $attempt): \DateTimeImmutable
     {
         return $now->modify(sprintf('+%d seconds', $this->nextDelaySeconds($attempt)));

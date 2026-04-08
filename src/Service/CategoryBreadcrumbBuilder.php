@@ -7,9 +7,14 @@ namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
-
+/**
+ * Provides the category breadcrumb builder application service.
+ */
 final class CategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterface
 {
+    /**
+     * Initializes the category breadcrumb builder service collaborators.
+     */
     public function __construct(private CategoryRepositoryInterface $repo)
     {
     }

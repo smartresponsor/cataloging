@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
 use App\ValueObject\CategoryDestinationMediaReadinessReport;
 use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
-
+/**
+ * Provides the category destination media readiness policy implementation.
+ */
 final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinationMediaReadinessPolicyInterface
 {
     /**

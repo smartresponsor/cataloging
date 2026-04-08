@@ -7,9 +7,14 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category sitemap controller application flow.
+ */
 final class CategorySitemapController
 {
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/category-sitemap.xml', name: 'category_sitemap')]
     public function __invoke(): Response
     {

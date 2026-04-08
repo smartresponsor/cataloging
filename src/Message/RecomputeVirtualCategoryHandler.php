@@ -11,17 +11,24 @@ use App\Rule\RuleEvaluator;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-
+/**
+ * Provides the recompute virtual category handler implementation.
+ */
 #[AsMessageHandler]
 final class RecomputeVirtualCategoryHandler
 {
+    /**
+     * Initializes the recompute virtual category handler service collaborators.
+     */
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly Connection $infraConnection,
         private readonly RuleEvaluator $evaluator = new RuleEvaluator(),
     ) {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     public function __invoke(RecomputeVirtualCategoryMessage $msg): void
     {
         $vc = $this->em->getRepository(VirtualCategoryEntity::class)->find($msg->virtualCategoryId);

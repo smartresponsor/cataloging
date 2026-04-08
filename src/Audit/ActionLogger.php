@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Audit;
-
+/**
+ * Provides the action logger implementation.
+ */
 final class ActionLogger
 {
     /**

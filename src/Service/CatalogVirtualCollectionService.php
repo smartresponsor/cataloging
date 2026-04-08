@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\RepositoryInterface\VirtualCategoryRepositoryInterface;
-
+/**
+ * Provides the catalog virtual collection service application service.
+ */
 final class CatalogVirtualCollectionService
 {
+    /**
+     * Initializes the catalog virtual collection service service collaborators.
+     */
     public function __construct(
         private readonly CatalogCollectionService $collectionService,
         private readonly VirtualCategoryRepositoryInterface $repository,

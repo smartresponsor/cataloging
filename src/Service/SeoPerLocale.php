@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the seo per locale application service.
+ */
 final class SeoPerLocale
 {
     /**

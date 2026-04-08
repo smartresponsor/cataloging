@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the tenant filter application service.
+ */
 final class TenantFilter
 {
     /**

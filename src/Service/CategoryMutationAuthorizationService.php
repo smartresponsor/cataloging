@@ -12,9 +12,14 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
+/**
+ * Provides the category mutation authorization service application service.
+ */
 final readonly class CategoryMutationAuthorizationService
 {
+    /**
+     * Initializes the category mutation authorization service service collaborators.
+     */
     public function __construct(
         private Security $security,
         private ManagerRegistry $registry,
@@ -22,12 +27,16 @@ final readonly class CategoryMutationAuthorizationService
         private TenantRolePolicyInterface $tenantRolePolicy,
     ) {
     }
-
+    /**
+     * Handles the assert can move workflow.
+     */
     public function assertCanMove(string $categoryId): void
     {
         $this->assertGranted(CategoryVoter::EDIT, $categoryId, 'Category move is not allowed for the current actor.');
     }
-
+    /**
+     * Handles the assert can publish workflow.
+     */
     public function assertCanPublish(string $categoryId): void
     {
         $this->assertGranted(CategoryVoter::PUBLISH, $categoryId, 'Category publish is not allowed for the current actor.');

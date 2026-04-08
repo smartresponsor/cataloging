@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryCompletenessReportInterface;
-
+/**
+ * Represents the category completeness report value.
+ */
 final class CategoryCompletenessReport implements CategoryCompletenessReportInterface
 {
     /**
@@ -58,32 +60,44 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
 
         return new self($normalized, $missingRequired, $warnings, $score);
     }
-
+    /**
+     * Handles the score workflow.
+     */
     public function score(): int
     {
         return $this->score;
     }
-
+    /**
+     * Determines whether the complete condition is satisfied.
+     */
     public function isComplete(): bool
     {
         return [] === $this->missingRequired;
     }
-
+    /**
+     * Handles the missing required workflow.
+     */
     public function missingRequired(): array
     {
         return $this->missingRequired;
     }
-
+    /**
+     * Handles the warnings workflow.
+     */
     public function warnings(): array
     {
         return $this->warnings;
     }
-
+    /**
+     * Handles the checks workflow.
+     */
     public function checks(): array
     {
         return $this->checks;
     }
-
+    /**
+     * Handles the publication checks workflow.
+     */
     public function publicationChecks(): array
     {
         return [

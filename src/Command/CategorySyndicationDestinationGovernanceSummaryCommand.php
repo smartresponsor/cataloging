@@ -12,18 +12,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category syndication destination governance summary command console workflow.
+ */
 #[AsCommand(name: 'category:governance:summary:destination')]
 final class CategorySyndicationDestinationGovernanceSummaryCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category syndication destination governance summary command service collaborators.
+     */
     public function __construct(private readonly CatalogSyndicationDestinationGovernanceSummaryServiceInterface $service)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -35,7 +41,9 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
             ->addOption('trails', null, InputOption::VALUE_REQUIRED, default: '[]')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->service->buildSummary(

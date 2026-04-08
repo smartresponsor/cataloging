@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the ab variant resolver application service.
+ */
 final class AbVariantResolver
 {
     /** @var array<string,bool> */
@@ -15,7 +17,9 @@ final class AbVariantResolver
     {
         $this->flags = $flags;
     }
-
+    /**
+     * Handles the variant workflow.
+     */
     public function variant(string $feature): string
     {
         $enabled = $this->flags[$feature] ?? false;

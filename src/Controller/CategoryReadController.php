@@ -10,13 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category read controller application flow.
+ */
 final class CategoryReadController extends AbstractController
 {
+    /**
+     * Initializes the category read controller service collaborators.
+     */
     public function __construct(private readonly CatalogReadServiceInterface $categoryReadService)
     {
     }
-
+    /**
+     * Handles the list workflow.
+     */
     #[Route('/api/category/list', name: 'api_category_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
@@ -31,7 +38,9 @@ final class CategoryReadController extends AbstractController
             'pageInfo' => ['after' => $result['after']],
         ]);
     }
-
+    /**
+     * Handles the by id workflow.
+     */
     #[Route('/api/category/{id}', name: 'api_category_by_id', methods: ['GET'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
     public function byId(string $id): JsonResponse
     {
@@ -42,7 +51,9 @@ final class CategoryReadController extends AbstractController
 
         return $this->json(['ok' => true, 'item' => $item]);
     }
-
+    /**
+     * Handles the descendants tree workflow.
+     */
     #[Route('/api/category/{id}/descendants', name: 'api_category_descendants_tree', methods: ['GET'], requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'])]
     public function descendantsTree(string $id): JsonResponse
     {
@@ -53,7 +64,9 @@ final class CategoryReadController extends AbstractController
 
         return $this->json(['ok' => true, 'item' => $tree]);
     }
-
+    /**
+     * Handles the child list workflow.
+     */
     #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
     public function childList(string $id): JsonResponse
     {
@@ -68,7 +81,9 @@ final class CategoryReadController extends AbstractController
             'item' => $children,
         ]);
     }
-
+    /**
+     * Handles the ancestor list workflow.
+     */
     #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
     public function ancestorList(string $id): JsonResponse
     {

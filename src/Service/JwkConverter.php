@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the jwk converter application service.
+ */
 final class JwkConverter
 {
+    /**
+     * Handles the rsa to pem workflow.
+     */
     public function rsaToPem(string $nB64u, string $eB64u): string
     {
         $modulus = $this->b64u($nB64u);

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
-
+/**
+ * Defines the contract for catalog media publication quality bridge service.
+ */
 interface CatalogMediaPublicationQualityBridgeServiceInterface
 {
     /** @param array<string,mixed> $payload */

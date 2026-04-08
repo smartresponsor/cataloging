@@ -9,9 +9,14 @@ use App\Entity\CategoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-
+/**
+ * Provides the broken tree fixtures implementation.
+ */
 final class BrokenTreeFixtures extends Fixture
 {
+    /**
+     * Handles the load workflow.
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = class_exists(Factory::class) ? Factory::create('en_US') : null;

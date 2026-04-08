@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the canonical policy locale application service.
+ */
 final class CanonicalPolicyLocale
 {
     /** @var array<string,string> */
@@ -15,7 +17,9 @@ final class CanonicalPolicyLocale
     {
         $this->hostByLocale = $hostByLocale;
     }
-
+    /**
+     * Handles the url workflow.
+     */
     public function url(string $locale, string $slug): string
     {
         $host = $this->hostByLocale[strtolower($locale)] ?? ($this->hostByLocale['en'] ?? 'https://example.com');

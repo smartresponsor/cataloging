@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for catalog rule service.
+ */
 interface CatalogRuleServiceInterface
 {
     /**
@@ -13,6 +15,8 @@ interface CatalogRuleServiceInterface
      * @return array{count:int,sql:string}|null
      */
     public function preview(array $spec): ?array;
-
+    /**
+     * Handles the apply workflow.
+     */
     public function apply(string $id): bool;
 }

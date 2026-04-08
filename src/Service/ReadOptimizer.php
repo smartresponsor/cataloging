@@ -6,14 +6,18 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-
+/**
+ * Provides the read optimizer application service.
+ */
 final class ReadOptimizer
 {
     /** @var array<string,list<array<string,mixed>>> */
     private array $cache = [];
     private int $hit = 0;
     private int $miss = 0;
-
+    /**
+     * Initializes the read optimizer service collaborators.
+     */
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
@@ -58,7 +62,9 @@ final class ReadOptimizer
             'size' => count($this->cache),
         ];
     }
-
+    /**
+     * Handles the clear workflow.
+     */
     public function clear(): void
     {
         $this->cache = [];

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
-
+/**
+ * Defines the contract for category media applicability policy.
+ */
 interface CategoryMediaApplicabilityPolicyInterface
 {
     /**

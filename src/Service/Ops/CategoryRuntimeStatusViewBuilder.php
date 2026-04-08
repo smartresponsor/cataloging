@@ -11,9 +11,14 @@ use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\Service\Governance\CategoryGovernanceViewBuilder;
 use App\Service\Traceability\CategoryActorTraceabilityViewBuilder;
 use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
-
+/**
+ * Provides the category runtime status view builder application service.
+ */
 final class CategoryRuntimeStatusViewBuilder implements CategoryRuntimeStatusViewBuilderInterface
 {
+    /**
+     * Initializes the category runtime status view builder service collaborators.
+     */
     public function __construct(
         private readonly CategoryGovernanceViewBuilder $governanceViewBuilder,
         private readonly CategoryActorTraceabilityViewBuilder $traceabilityViewBuilder,
@@ -21,7 +26,9 @@ final class CategoryRuntimeStatusViewBuilder implements CategoryRuntimeStatusVie
         private readonly CategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
     ) {
     }
-
+    /**
+     * Builds the requested output for the current workflow.
+     */
     public function build(string $categoryId): CategoryRuntimeStatusView
     {
         $categoryId = trim($categoryId);

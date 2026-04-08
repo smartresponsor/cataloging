@@ -8,9 +8,14 @@ namespace App\Observability;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Provides the metrics controller implementation.
+ */
 final class MetricsController extends AbstractController
 {
+    /**
+     * Handles the metrics workflow.
+     */
     #[Route('/metrics', name: 'metrics', methods: ['GET'])]
     public function metrics(): Response
     {

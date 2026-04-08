@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationPublishPackageInterface;
-
+/**
+ * Represents the category syndication publish package value.
+ */
 final class CategorySyndicationPublishPackage implements CategorySyndicationPublishPackageInterface
 {
     /**
@@ -24,42 +26,58 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
         private readonly bool $publishable,
     ) {
     }
-
+    /**
+     * Handles the package id workflow.
+     */
     public function packageId(): string
     {
         return $this->packageId;
     }
-
+    /**
+     * Handles the destination id workflow.
+     */
     public function destinationId(): string
     {
         return $this->destinationId;
     }
-
+    /**
+     * Handles the category id workflow.
+     */
     public function categoryId(): string
     {
         return $this->categoryId;
     }
-
+    /**
+     * Handles the version workflow.
+     */
     public function version(): string
     {
         return $this->version;
     }
-
+    /**
+     * Handles the locale mode workflow.
+     */
     public function localeMode(): string
     {
         return $this->localeMode;
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return $this->payload;
     }
-
+    /**
+     * Handles the missing required fields workflow.
+     */
     public function missingRequiredFields(): array
     {
         return $this->missingRequiredFields;
     }
-
+    /**
+     * Handles the publishable workflow.
+     */
     public function publishable(): bool
     {
         return $this->publishable;

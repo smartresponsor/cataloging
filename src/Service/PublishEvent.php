@@ -10,16 +10,22 @@ Author: Oleksandr Tishchenко <dev@highhopesamerica.com>
 */
 
 namespace App\Service;
-
+/**
+ * Provides the publish event application service.
+ */
 final class PublishEvent
 {
     private string $categoryId;
-
+    /**
+     * Initializes the publish event service collaborators.
+     */
     public function __construct(string $categoryId)
     {
         $this->categoryId = $categoryId;
     }
-
+    /**
+     * Handles the category id workflow.
+     */
     public function categoryId(): string
     {
         return $this->categoryId;

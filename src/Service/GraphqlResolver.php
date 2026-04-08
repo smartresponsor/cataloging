@@ -19,6 +19,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 final class GraphqlResolver implements GraphqlResolverInterface
 {
+    /**
+     * Initializes the graphql resolver service collaborators.
+     */
     public function __construct(
         private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private readonly ManagerRegistry $registry,

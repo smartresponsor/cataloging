@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
-
+/**
+ * Defines the contract for category destination media readiness evaluated.
+ */
 interface CategoryDestinationMediaReadinessEvaluatedInterface
 {
     /** @return array<string,mixed> */

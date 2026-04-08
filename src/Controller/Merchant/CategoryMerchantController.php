@@ -19,12 +19,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 final class CategoryMerchantController extends AbstractController
 {
+    /**
+     * Initializes the category merchant controller service collaborators.
+     */
     public function __construct(
         private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private readonly SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
     ) {
     }
-
+    /**
+     * Handles the index workflow.
+     */
     #[Route('/merchant/category', name: 'merchant_category_index')]
     public function index(Request $request): Response
     {

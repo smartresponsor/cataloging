@@ -16,12 +16,17 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final class CategoryStoreApiController
 {
+    /**
+     * Initializes the category store api controller service collaborators.
+     */
     public function __construct(
         private readonly ChannelFilter $filter,
         private readonly ReadOptimizer $optimizer,
     ) {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/api/category/store', name: 'api_category_store', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {

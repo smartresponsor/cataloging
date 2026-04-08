@@ -11,18 +11,27 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-
+/**
+ * Provides the category slug policy subscriber implementation.
+ */
 final class CategorySlugPolicySubscriber implements EventSubscriber
 {
+    /**
+     * Initializes the category slug policy subscriber service collaborators.
+     */
     public function __construct(private readonly SlugService $svc)
     {
     }
-
+    /**
+     * Returns the subscribed events value.
+     */
     public function getSubscribedEvents(): array
     {
         return [Events::prePersist, Events::preUpdate];
     }
-
+    /**
+     * Handles the pre persist workflow.
+     */
     public function prePersist(PrePersistEventArgs $args): void
     {
         $e = $args->getObject();
@@ -31,7 +40,9 @@ final class CategorySlugPolicySubscriber implements EventSubscriber
         }
         $e->setSlug($this->svc->ensureUnique($e->getSlug()));
     }
-
+    /**
+     * Handles the pre update workflow.
+     */
     public function preUpdate(PreUpdateEventArgs $args): void
     {
         $e = $args->getObject();

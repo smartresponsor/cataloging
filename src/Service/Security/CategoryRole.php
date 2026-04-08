@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service\Security;
-
+/**
+ * Provides the category role application service.
+ */
 final class CategoryRole
 {
     public const OWNER = 'category.owner';

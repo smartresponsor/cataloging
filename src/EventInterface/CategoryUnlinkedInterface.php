@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
-
+/**
+ * Defines the contract for category unlinked.
+ */
 interface CategoryUnlinkedInterface
 {
     /** @return array<string,mixed> */

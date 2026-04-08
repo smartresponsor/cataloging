@@ -16,12 +16,16 @@ final class CatalogVoter extends Voter
     public const EDITOR = 'category.editor';
     public const RULE = 'category.rule';
     public const MERCH = 'category.merch';
-
+    /**
+     * Checks whether this service supports the provided input.
+     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::OWNER, self::EDITOR, self::RULE, self::MERCH], true);
     }
-
+    /**
+     * Handles the vote on attribute workflow.
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();

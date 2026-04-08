@@ -12,18 +12,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category publication quality evaluate command console workflow.
+ */
 #[AsCommand(name: 'category:quality:evaluate')]
 final class CategoryPublicationQualityEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category publication quality evaluate command service collaborators.
+     */
     public function __construct(private readonly CatalogPublicationQualityServiceInterface $qualityService)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -36,7 +42,9 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
             ->addOption('publication-checks', null, InputOption::VALUE_REQUIRED)
             ->addOption('checks', null, InputOption::VALUE_REQUIRED, '', '{}');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $publicationChecks = $this->decodeJsonMapOption($input, 'publication-checks');

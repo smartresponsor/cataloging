@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\PolicyInterface;
-
+/**
+ * Defines the contract for category policy.
+ */
 interface CategoryPolicyInterface
 {
+    /**
+     * Determines whether the current workflow can edit.
+     */
     public function canEdit(string $actorId, string $taxonomyId, ?string $categoryId): bool;
 
     /**

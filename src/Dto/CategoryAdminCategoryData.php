@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Dto;
-
+/**
+ * Provides the category admin category data implementation.
+ */
 final class CategoryAdminCategoryData
 {
+    /**
+     * Initializes the category admin category data service collaborators.
+     */
     public function __construct(
         public string $name = '',
         public string $slug = '',

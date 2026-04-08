@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
-
+/**
+ * Defines the contract for category review decision coupled.
+ */
 interface CategoryReviewDecisionCoupledInterface
 {
     /** @return array<string,mixed> */

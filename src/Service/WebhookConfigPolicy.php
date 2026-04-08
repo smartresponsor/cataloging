@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the webhook config policy application service.
+ */
 final class WebhookConfigPolicy
 {
+    /**
+     * Validates the current input against the component rules.
+     */
     public function validate(WebhookEndpoint $e): void
     {
         if (!preg_match('~^https?://~', $e->url())) {
@@ -16,7 +21,9 @@ final class WebhookConfigPolicy
             throw new \InvalidArgumentException('Secret too short');
         }
     }
-
+    /**
+     * Handles the rotate secret workflow.
+     */
     public function rotateSecret(WebhookEndpoint $e, string $new): WebhookEndpoint
     {
         return new WebhookEndpoint($e->id(), $e->url(), $new, $e->active());

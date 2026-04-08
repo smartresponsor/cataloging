@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryMediaBoundInterface;
-
+/**
+ * Represents the category media bound application event.
+ */
 final class CategoryMediaBound implements CategoryMediaBoundInterface
 {
     /**
@@ -29,7 +31,9 @@ final class CategoryMediaBound implements CategoryMediaBoundInterface
         private readonly \DateTimeImmutable $boundAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return [

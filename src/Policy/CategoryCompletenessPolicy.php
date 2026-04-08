@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryCompletenessPolicyInterface;
-
+/**
+ * Provides the category completeness policy implementation.
+ */
 final class CategoryCompletenessPolicy implements CategoryCompletenessPolicyInterface
 {
     /**

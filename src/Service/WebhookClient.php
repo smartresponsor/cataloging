@@ -6,18 +6,24 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\WebhookClientInterface;
-
+/**
+ * Provides the webhook client application service.
+ */
 final class WebhookClient implements WebhookClientInterface
 {
     private string $secret;
     private int $maxRetry;
-
+    /**
+     * Initializes the webhook client service collaborators.
+     */
     public function __construct(string $secret, int $maxRetry = 3)
     {
         $this->secret = $secret;
         $this->maxRetry = max(1, $maxRetry);
     }
-
+    /**
+     * Handles the send workflow.
+     */
     public function send(string $endpoint, string $event, array $payload): bool
     {
         if ('' === trim($endpoint)) {

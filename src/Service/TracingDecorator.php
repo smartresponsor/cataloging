@@ -4,13 +4,20 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the tracing decorator application service.
+ */
 final class TracingDecorator
 {
+    /**
+     * Initializes the tracing decorator service collaborators.
+     */
     public function __construct(private readonly ?object $tracerProvider = null)
     {
     }
-
+    /**
+     * Handles the trace workflow.
+     */
     public function trace(string $name, callable $fn): mixed
     {
         $span = null;

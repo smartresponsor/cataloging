@@ -12,11 +12,15 @@ use App\ValueObject\CategoryWorkflowState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\Uid\Uuid;
-
+/**
+ * Provides the category mutation service application service.
+ */
 final class CategoryMutationService implements CategoryMutationServiceInterface
 {
     private const IDEMPOTENCY_TTL_SEC = 86400;
-
+    /**
+     * Initializes the category mutation service service collaborators.
+     */
     public function __construct(
         private readonly Connection $connection,
         private readonly OutboxWriter $outboxWriter,
@@ -26,7 +30,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         private readonly CategoryIdempotencyStoreInterface $idempotencyStore,
     ) {
     }
-
+    /**
+     * Handles the move workflow.
+     */
     public function move(string $categoryId, string $newParentId, string $actorId, string $treeId = 'catalog', string $policy = 'strict', bool $dryRun = false, ?string $locale = null, ?string $idempotencyKey = null, ?string $correlationId = null): array
     {
         $normalizedCategoryId = $this->requiredString($categoryId, 'categoryId');
@@ -171,7 +177,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
 
         return $result;
     }
-
+    /**
+     * Handles the publish workflow.
+     */
     public function publish(string $categoryId, bool $published, array $checks, string $actorId, string $reason, ?string $idempotencyKey = null, ?string $correlationId = null): array
     {
         $normalizedCategoryId = $this->requiredString($categoryId, 'categoryId');

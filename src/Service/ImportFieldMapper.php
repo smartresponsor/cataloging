@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the import field mapper application service.
+ */
 final class ImportFieldMapper
 {
     /** @var array<string,string> */

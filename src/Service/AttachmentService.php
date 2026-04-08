@@ -7,9 +7,14 @@ namespace App\Service;
 
 use App\AttachmentInterface\AttachmentReferenceGatewayInterface;
 use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
-
+/**
+ * Provides the attachment service application service.
+ */
 final class AttachmentService
 {
+    /**
+     * Initializes the attachment service service collaborators.
+     */
     public function __construct(
         private readonly CatalogAttachmentRepositoryInterface $repository,
         private readonly AttachmentReferenceGatewayInterface $gateway,
@@ -58,7 +63,9 @@ final class AttachmentService
             null !== $normalizedReferenceUri && '' !== $normalizedReferenceUri ? $normalizedReferenceUri : null,
         );
     }
-
+    /**
+     * Handles the remove workflow.
+     */
     public function remove(string $attachmentId): bool
     {
         $normalizedAttachmentId = trim($attachmentId);

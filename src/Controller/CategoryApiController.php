@@ -16,9 +16,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+/**
+ * Handles the category api controller application flow.
+ */
 final class CategoryApiController
 {
+    /**
+     * Initializes the category api controller service collaborators.
+     */
     public function __construct(
         private readonly CategoryMutationServiceInterface $categoryMutationService,
         private readonly CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
@@ -27,7 +32,9 @@ final class CategoryApiController
         private readonly Security $security,
     ) {
     }
-
+    /**
+     * Handles the tree workflow.
+     */
     #[Route('/api/category/tree', name: 'api_category_tree', methods: ['GET'])]
     public function tree(Request $request): JsonResponse
     {
@@ -45,7 +52,9 @@ final class CategoryApiController
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         }
     }
-
+    /**
+     * Handles the move workflow.
+     */
     #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
     public function move(string $id, Request $request): JsonResponse
     {
@@ -80,7 +89,9 @@ final class CategoryApiController
             return new JsonResponse(['error' => $exception->getMessage()], str_contains($exception->getMessage(), 'was not found') ? 404 : 409);
         }
     }
-
+    /**
+     * Handles the publish workflow.
+     */
     #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
     public function publish(string $id, Request $request): JsonResponse
     {

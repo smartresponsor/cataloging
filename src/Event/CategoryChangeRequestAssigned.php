@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryChangeRequestAssignedInterface;
-
+/**
+ * Represents the category change request assigned application event.
+ */
 final class CategoryChangeRequestAssigned implements CategoryChangeRequestAssignedInterface
 {
+    /**
+     * Initializes the category change request assigned service collaborators.
+     */
     public function __construct(
         private readonly string $requestId,
         private readonly string $categoryId,
@@ -19,7 +24,9 @@ final class CategoryChangeRequestAssigned implements CategoryChangeRequestAssign
         private readonly ?\DateTimeImmutable $dueAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return [

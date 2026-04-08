@@ -8,7 +8,9 @@ namespace App\Repository;
 use App\EntityInterface\CategoryWorkflowInterface;
 use App\EventInterface\CategoryWorkflowTransitionedInterface;
 use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
-
+/**
+ * Provides repository services for category workflow repository.
+ */
 final class CategoryWorkflowRepository implements CategoryWorkflowRepositoryInterface
 {
     /** @var array<string,CategoryWorkflowInterface> */
@@ -16,17 +18,23 @@ final class CategoryWorkflowRepository implements CategoryWorkflowRepositoryInte
 
     /** @var array<string,list<CategoryWorkflowTransitionedInterface>> */
     private array $history = [];
-
+    /**
+     * Handles the find by category id workflow.
+     */
     public function findByCategoryId(string $categoryId): ?CategoryWorkflowInterface
     {
         return $this->current[$categoryId] ?? null;
     }
-
+    /**
+     * Handles the save workflow.
+     */
     public function save(CategoryWorkflowInterface $workflow): void
     {
         $this->current[$workflow->categoryId()] = $workflow;
     }
-
+    /**
+     * Handles the append history workflow.
+     */
     public function appendHistory(CategoryWorkflowTransitionedInterface $event): void
     {
         $payload = $event->payload();
@@ -37,7 +45,9 @@ final class CategoryWorkflowRepository implements CategoryWorkflowRepositoryInte
         $this->history[$categoryId] ??= [];
         $this->history[$categoryId][] = $event;
     }
-
+    /**
+     * Handles the history for category id workflow.
+     */
     public function historyForCategoryId(string $categoryId): array
     {
         return $this->history[$categoryId] ?? [];

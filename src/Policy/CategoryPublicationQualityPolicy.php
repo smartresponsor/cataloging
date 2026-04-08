@@ -8,9 +8,14 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
 use App\ValueObject\CategoryPublicationQualityProfile;
 use App\ValueObjectInterface\CategoryPublicationQualityProfileInterface;
-
+/**
+ * Provides the category publication quality policy implementation.
+ */
 final class CategoryPublicationQualityPolicy implements CategoryPublicationQualityPolicyInterface
 {
+    /**
+     * Builds the profile result for the current workflow.
+     */
     public function buildProfile(int $score, array $publicationChecks, array $checks): CategoryPublicationQualityProfileInterface
     {
         $normalizedPublicationChecks = [];

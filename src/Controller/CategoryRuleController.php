@@ -12,13 +12,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+/**
+ * Handles the category rule controller application flow.
+ */
 final class CategoryRuleController extends AbstractController
 {
+    /**
+     * Initializes the category rule controller service collaborators.
+     */
     public function __construct(private readonly CatalogRuleService $categoryRuleService)
     {
     }
-
+    /**
+     * Handles the preview workflow.
+     */
     #[Route('/api/category/virtual/preview', name: 'api_category_virtual_preview', methods: ['POST'])]
     #[IsGranted('category.rule')]
     public function preview(Request $request): JsonResponse
@@ -45,7 +52,9 @@ final class CategoryRuleController extends AbstractController
 
         return $this->json(['ok' => true, 'item' => $preview]);
     }
-
+    /**
+     * Handles the apply workflow.
+     */
     #[Route('/api/category/virtual/apply/{id}', name: 'api_category_virtual_apply', methods: ['POST'])]
     #[IsGranted('category.rule')]
     public function apply(string $id): JsonResponse

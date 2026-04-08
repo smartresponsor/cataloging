@@ -6,7 +6,9 @@ namespace App\Service\Security;
 
 use App\Security\ExternalIdentityContext;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
-
+/**
+ * Provides the external identity context mapper application service.
+ */
 final class ExternalIdentityContextMapper implements SecurityExternalIdentityContextMapperInterface
 {
     /** @param array<string,mixed> $claims */

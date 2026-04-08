@@ -7,9 +7,14 @@ namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategorySlugGeneratorInterface;
-
+/**
+ * Provides the category slug generator application service.
+ */
 final class CategorySlugGenerator implements CategorySlugGeneratorInterface
 {
+    /**
+     * Initializes the category slug generator service collaborators.
+     */
     public function __construct(private readonly CategoryRepositoryInterface $repo)
     {
     }

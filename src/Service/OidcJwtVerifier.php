@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\OidcJwtVerifierInterface;
-
+/**
+ * Provides the oidc jwt verifier application service.
+ */
 final class OidcJwtVerifier implements OidcJwtVerifierInterface
 {
     private string $issuer;

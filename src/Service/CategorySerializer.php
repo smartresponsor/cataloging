@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategorySerializerInterface;
-
+/**
+ * Provides the category serializer application service.
+ */
 final class CategorySerializer implements CategorySerializerInterface
 {
     /**

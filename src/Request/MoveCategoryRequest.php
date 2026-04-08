@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Request;
-
+/**
+ * Provides the move category request implementation.
+ */
 final class MoveCategoryRequest
 {
     /** @param list<string> $errors */
@@ -57,7 +59,9 @@ final class MoveCategoryRequest
 
         return new self($parentId, $treeId, $policy, $dryRun, $locale, $errors);
     }
-
+    /**
+     * Determines whether the valid condition is satisfied.
+     */
     public function isValid(): bool
     {
         return [] === $this->errors;

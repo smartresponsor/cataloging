@@ -13,13 +13,20 @@ use App\ServiceInterface\CatalogRuleServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-
+/**
+ * Provides the catalog rule service application service.
+ */
 final class CatalogRuleService implements CatalogRuleServiceInterface
 {
+    /**
+     * Initializes the catalog rule service service collaborators.
+     */
     public function __construct(private readonly EntityManagerInterface $entityManager, private readonly Connection $connection, private readonly MessageBusInterface $messageBus, private readonly RuleEvaluator $ruleEvaluator = new RuleEvaluator())
     {
     }
-
+    /**
+     * Handles the preview workflow.
+     */
     public function preview(array $spec): ?array
     {
         if ([] === $spec) {
@@ -37,7 +44,9 @@ final class CatalogRuleService implements CatalogRuleServiceInterface
 
         return ['count' => $count, 'sql' => $compiled['sql']];
     }
-
+    /**
+     * Handles the apply workflow.
+     */
     public function apply(string $id): bool
     {
         /** @var VirtualCategoryEntity|null $virtualCategory */ $virtualCategory = $this->entityManager->getRepository(VirtualCategoryEntity::class)->find($id);

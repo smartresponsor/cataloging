@@ -9,13 +9,20 @@ use App\Projection\CategoryGovernanceView;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use App\Service\Security\CategoryRole;
 use App\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
-
+/**
+ * Provides the category governance view builder application service.
+ */
 final class CategoryGovernanceViewBuilder implements CategoryGovernanceViewBuilderInterface
 {
+    /**
+     * Initializes the category governance view builder service collaborators.
+     */
     public function __construct(private readonly CategoryAccessAssignmentRepositoryInterface $assignmentRepository)
     {
     }
-
+    /**
+     * Builds the requested output for the current workflow.
+     */
     public function build(string $categoryId): CategoryGovernanceView
     {
         $primary = $this->assignmentRepository->findPrimaryForCategoryId($categoryId);

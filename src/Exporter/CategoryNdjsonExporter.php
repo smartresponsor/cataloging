@@ -7,13 +7,20 @@ namespace App\Exporter;
 
 use App\ExporterInterface\CategoryNdjsonExporterInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
-
+/**
+ * Provides the category ndjson exporter implementation.
+ */
 final class CategoryNdjsonExporter implements CategoryNdjsonExporterInterface
 {
+    /**
+     * Initializes the category ndjson exporter service collaborators.
+     */
     public function __construct(private readonly CategoryRepositoryInterface $repo)
     {
     }
-
+    /**
+     * Handles the export workflow.
+     */
     public function export(string $taxonomyCode, string $path, string $locale): void
     {
         $this->repository();

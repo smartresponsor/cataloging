@@ -25,7 +25,9 @@ final class CategoryService implements CategoryCategoryServiceInterface
     private CategoryPolicyInterface $policy;
     private CategorySlugGeneratorInterface $slugger;
     private EventDispatcherInterface $dispatcher;
-
+    /**
+     * Initializes the category service service collaborators.
+     */
     public function __construct(
         CategoryRepositoryInterface $repo,
         CategoryPolicyInterface $policy,
@@ -58,7 +60,9 @@ final class CategoryService implements CategoryCategoryServiceInterface
 
         return $view;
     }
-
+    /**
+     * Handles the move workflow.
+     */
     public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array
     {
         $view = $this->repo->move($actorId, $categoryId, $newParentId, $newOrder);
@@ -72,19 +76,25 @@ final class CategoryService implements CategoryCategoryServiceInterface
 
         return $view;
     }
-
+    /**
+     * Handles the attach workflow.
+     */
     public function attach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
     {
         $this->repo->attach($actorId, $categoryId, $targetDomain, $targetClass, $targetId);
         $this->dispatcher->dispatch(new CategoryLinked(['categoryId' => $categoryId, 'targetDomain' => $targetDomain, 'targetId' => $targetId]));
     }
-
+    /**
+     * Handles the detach workflow.
+     */
     public function detach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
     {
         $this->repo->detach($actorId, $categoryId, $targetDomain, $targetClass, $targetId);
         $this->dispatcher->dispatch(new CategoryUnlinked(['categoryId' => $categoryId, 'targetDomain' => $targetDomain, 'targetId' => $targetId]));
     }
-
+    /**
+     * Resolves the requested result for the provided input.
+     */
     public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array
     {
         return $this->repo->resolve($taxonomyCode, $targetDomain, $targetId, $locale);

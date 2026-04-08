@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInterface;
-
+/**
+ * Represents the category syndication destination governance summary value.
+ */
 final class CategorySyndicationDestinationGovernanceSummary implements CategorySyndicationDestinationGovernanceSummaryInterface
 {
     /**
@@ -30,42 +32,58 @@ final class CategorySyndicationDestinationGovernanceSummary implements CategoryS
         private readonly array $checks,
     ) {
     }
-
+    /**
+     * Handles the destination id workflow.
+     */
     public function destinationId(): string
     {
         return $this->destinationId;
     }
-
+    /**
+     * Handles the total trails workflow.
+     */
     public function totalTrails(): int
     {
         return $this->totalTrails;
     }
-
+    /**
+     * Resolves the d publishable count result for the current workflow.
+     */
     public function resolvedPublishableCount(): int
     {
         return $this->resolvedPublishableCount;
     }
-
+    /**
+     * Handles the fallback used count workflow.
+     */
     public function fallbackUsedCount(): int
     {
         return $this->fallbackUsedCount;
     }
-
+    /**
+     * Handles the retryable count workflow.
+     */
     public function retryableCount(): int
     {
         return $this->retryableCount;
     }
-
+    /**
+     * Handles the retry scheduled count workflow.
+     */
     public function retryScheduledCount(): int
     {
         return $this->retryScheduledCount;
     }
-
+    /**
+     * Handles the failure trail count workflow.
+     */
     public function failureTrailCount(): int
     {
         return $this->failureTrailCount;
     }
-
+    /**
+     * Handles the delivered trail count workflow.
+     */
     public function deliveredTrailCount(): int
     {
         return $this->deliveredTrailCount;

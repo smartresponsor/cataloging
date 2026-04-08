@@ -11,18 +11,24 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category workflow transition command console workflow.
+ */
 #[AsCommand(name: 'category:workflow:transition')]
 final class CategoryWorkflowTransitionCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category workflow transition command service collaborators.
+     */
     public function __construct(private readonly CatalogWorkflowTransitionServiceInterface $transitionService)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -33,7 +39,9 @@ final class CategoryWorkflowTransitionCommand extends Command
             ->addArgument('actorId', InputArgument::REQUIRED)
             ->addArgument('reason', InputArgument::REQUIRED);
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->transitionService->transition(

@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
-
+/**
+ * Defines the contract for category collection import service.
+ */
 interface CategoryCollectionImportServiceInterface
 {
     // All comments must be in English.

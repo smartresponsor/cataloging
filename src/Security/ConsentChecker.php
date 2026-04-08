@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Security;
 
 use Psr\Log\LoggerInterface;
-
+/**
+ * Provides the consent checker implementation.
+ */
 final class ConsentChecker
 {
+    /**
+     * Initializes the consent checker service collaborators.
+     */
     public function __construct(private readonly LoggerInterface $logger)
     {
     }

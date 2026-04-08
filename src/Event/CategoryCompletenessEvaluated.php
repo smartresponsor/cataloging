@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryCompletenessEvaluatedInterface;
-
+/**
+ * Represents the category completeness evaluated application event.
+ */
 final class CategoryCompletenessEvaluated implements CategoryCompletenessEvaluatedInterface
 {
     /**

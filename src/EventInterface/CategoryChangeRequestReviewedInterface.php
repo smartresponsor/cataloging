@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
-
+/**
+ * Defines the contract for category change request reviewed.
+ */
 interface CategoryChangeRequestReviewedInterface
 {
     /** @return array<string,mixed> */

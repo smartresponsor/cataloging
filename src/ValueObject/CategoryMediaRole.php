@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryMediaRoleInterface;
-
+/**
+ * Represents the category media role value.
+ */
 final class CategoryMediaRole implements CategoryMediaRoleInterface
 {
     private const PRIMARY = 'primary';
@@ -55,7 +57,9 @@ final class CategoryMediaRole implements CategoryMediaRoleInterface
             default => throw new \InvalidArgumentException(sprintf('Unsupported category media role "%s".', $value)),
         };
     }
-
+    /**
+     * Handles the value workflow.
+     */
     public function value(): string
     {
         return $this->value;

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-
+/**
+ * Provides the jwt user implementation.
+ */
 final readonly class JwtUser implements UserInterface
 {
     /**
@@ -24,11 +26,15 @@ final readonly class JwtUser implements UserInterface
     {
         return $this->roles;
     }
-
+    /**
+     * Handles the erase credentials workflow.
+     */
     public function eraseCredentials(): void
     {
     }
-
+    /**
+     * Returns the password value.
+     */
     public function getPassword(): ?string
     {
         return null;

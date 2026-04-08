@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
 use App\ValueObject\CategoryChangeRequestState;
 use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
-
+/**
+ * Provides the category change request policy implementation.
+ */
 final class CategoryChangeRequestPolicy implements CategoryChangeRequestPolicyInterface
 {
     /** @var array<string,list<string>> */
@@ -25,7 +27,9 @@ final class CategoryChangeRequestPolicy implements CategoryChangeRequestPolicyIn
             CategoryChangeRequestState::WITHDRAWN,
         ],
     ];
-
+    /**
+     * Determines whether the current workflow can submit.
+     */
     public function canSubmit(string $requestId, string $categoryId, string $submittedBy, string $summary, array $changes): bool
     {
         if ('' === trim($requestId) || '' === trim($categoryId) || '' === trim($submittedBy) || '' === trim($summary)) {
@@ -34,14 +38,18 @@ final class CategoryChangeRequestPolicy implements CategoryChangeRequestPolicyIn
 
         return [] !== $changes;
     }
-
+    /**
+     * Handles the assert can submit workflow.
+     */
     public function assertCanSubmit(string $requestId, string $categoryId, string $submittedBy, string $summary, array $changes): void
     {
         if (!$this->canSubmit($requestId, $categoryId, $submittedBy, $summary, $changes)) {
             throw new \DomainException('Category change request submission is not allowed.');
         }
     }
-
+    /**
+     * Determines whether the current workflow can review.
+     */
     public function canReview(CategoryChangeRequestStateInterface $from, CategoryChangeRequestStateInterface $to, string $reviewedBy, string $decisionReason): bool
     {
         if ('' === trim($reviewedBy) || '' === trim($decisionReason)) {
@@ -52,7 +60,9 @@ final class CategoryChangeRequestPolicy implements CategoryChangeRequestPolicyIn
 
         return in_array($to->value(), $allowedTargets, true);
     }
-
+    /**
+     * Handles the assert can review workflow.
+     */
     public function assertCanReview(CategoryChangeRequestStateInterface $from, CategoryChangeRequestStateInterface $to, string $reviewedBy, string $decisionReason): void
     {
         if (!$this->canReview($from, $to, $reviewedBy, $decisionReason)) {

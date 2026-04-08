@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryPublicationGateEvaluatedInterface;
-
+/**
+ * Represents the category publication gate evaluated application event.
+ */
 final class CategoryPublicationGateEvaluated implements CategoryPublicationGateEvaluatedInterface
 {
     /**

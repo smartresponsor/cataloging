@@ -10,13 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category suggest controller application flow.
+ */
 final class CategorySuggestController extends AbstractController
 {
+    /**
+     * Initializes the category suggest controller service collaborators.
+     */
     public function __construct(private readonly CatalogSuggestService $svc)
     {
     }
-
+    /**
+     * Handles the suggest workflow.
+     */
     #[Route('/api/category/suggest', name: 'api_category_suggest', methods: ['POST'])]
     public function suggest(Request $r): JsonResponse
     {

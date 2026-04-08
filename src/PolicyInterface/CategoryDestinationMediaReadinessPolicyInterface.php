@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
-
+/**
+ * Defines the contract for category destination media readiness policy.
+ */
 interface CategoryDestinationMediaReadinessPolicyInterface
 {
     /**

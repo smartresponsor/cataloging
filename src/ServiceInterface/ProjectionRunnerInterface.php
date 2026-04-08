@@ -4,10 +4,17 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for projection runner.
+ */
 interface ProjectionRunnerInterface
 {
+    /**
+     * Handles the run once workflow.
+     */
     public function runOnce(): void;
-
+    /**
+     * Handles the lag workflow.
+     */
     public function lag(): int;
 }

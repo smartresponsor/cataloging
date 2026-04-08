@@ -20,14 +20,18 @@ final class JwtUserProvider implements UserProviderInterface
         private readonly array $adminIdentifiers = [],
     ) {
     }
-
+    /**
+     * Loads the user by identifier data for the current workflow.
+     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $normalizedIdentifier = $this->normalizeIdentifier($identifier);
 
         return new JwtUser($normalizedIdentifier, $this->resolveRoles($normalizedIdentifier));
     }
-
+    /**
+     * Handles the refresh user workflow.
+     */
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof JwtUser) {
@@ -36,7 +40,9 @@ final class JwtUserProvider implements UserProviderInterface
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
-
+    /**
+     * Determines whether this service supports class.
+     */
     public function supportsClass(string $class): bool
     {
         return JwtUser::class === $class;

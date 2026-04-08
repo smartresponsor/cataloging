@@ -11,16 +11,23 @@ use App\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
 use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
-
+/**
+ * Provides the catalog syndication package gate service application service.
+ */
 final class CatalogSyndicationPackageGateService implements CatalogSyndicationPackageGateServiceInterface
 {
+    /**
+     * Initializes the catalog syndication package gate service service collaborators.
+     */
     public function __construct(
         private readonly CatalogSyndicationMappingServiceInterface $mappingService,
         private readonly CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
         private readonly CategorySyndicationPackageGatePolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Builds the gated publish package result for the current workflow.
+     */
     public function buildGatedPublishPackage(
         string $packageId,
         string $destinationId,

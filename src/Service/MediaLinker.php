@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the media linker application service.
+ */
 final class MediaLinker
 {
     /**

@@ -8,11 +8,15 @@ namespace App\Observability;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
-
+/**
+ * Provides the metrics subscriber implementation.
+ */
 final class MetricsSubscriber implements EventSubscriberInterface
 {
     private float $start = 0.0;
-
+    /**
+     * Initializes the metrics subscriber service collaborators.
+     */
     public function __construct(private RequestCorrelationIdProvider $requestCorrelationIdProvider)
     {
     }
@@ -24,12 +28,16 @@ final class MetricsSubscriber implements EventSubscriberInterface
             TerminateEvent::class => 'onTerminate',
         ];
     }
-
+    /**
+     * Handles the on request workflow.
+     */
     public function onRequest(RequestEvent $e): void
     {
         $this->start = microtime(true);
     }
-
+    /**
+     * Handles the on terminate workflow.
+     */
     public function onTerminate(TerminateEvent $e): void
     {
         $elapsed = (microtime(true) - $this->start) * 1000.0;

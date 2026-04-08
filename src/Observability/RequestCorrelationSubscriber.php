@@ -8,7 +8,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-
+/**
+ * Provides the request correlation subscriber implementation.
+ */
 final class RequestCorrelationSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
@@ -18,7 +20,9 @@ final class RequestCorrelationSubscriber implements EventSubscriberInterface
             ResponseEvent::class => ['onResponse', -256],
         ];
     }
-
+    /**
+     * Handles the on request workflow.
+     */
     public function onRequest(RequestEvent $event): void
     {
         if (!$event->isMainRequest()) {
@@ -31,7 +35,9 @@ final class RequestCorrelationSubscriber implements EventSubscriberInterface
             $this->resolveCorrelationId($request),
         );
     }
-
+    /**
+     * Handles the on response workflow.
+     */
     public function onResponse(ResponseEvent $event): void
     {
         if (!$event->isMainRequest()) {

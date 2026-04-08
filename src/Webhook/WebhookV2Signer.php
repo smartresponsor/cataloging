@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Webhook;
-
+/**
+ * Provides the webhook v2 signer implementation.
+ */
 final class WebhookV2Signer
 {
+    /**
+     * Initializes the webhook v2 signer service collaborators.
+     */
     public function __construct(private readonly string $secret = 'changeme')
     {
     }
@@ -22,7 +27,9 @@ final class WebhookV2Signer
             'signature' => $sig,
         ];
     }
-
+    /**
+     * Handles the verify workflow.
+     */
     public function verify(string $payload, int $ts, string $given): bool
     {
         $expected = hash_hmac('sha256', $ts.'.'.$payload, $this->secret);

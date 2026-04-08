@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the facet rank application service.
+ */
 final class FacetRank
 {
     /** @param array{name?:mixed,slug?:mixed,path?:mixed} $row */

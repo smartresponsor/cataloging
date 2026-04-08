@@ -7,9 +7,14 @@ namespace App\Service;
 
 use App\ServiceInterface\CategoryBulkInterface;
 use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
-
+/**
+ * Provides the category bulk application service.
+ */
 final class CategoryBulk implements CategoryBulkInterface
 {
+    /**
+     * Initializes the category bulk service collaborators.
+     */
     public function __construct(private CategoryCategoryService $service)
     {
     }

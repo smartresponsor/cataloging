@@ -11,15 +11,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the legacy collection list controller application flow.
+ */
 final class LegacyCollectionListController extends AbstractController
 {
+    /**
+     * Initializes the legacy collection list controller service collaborators.
+     */
     public function __construct(
         private readonly CatalogLegacyCollectionFilterService $service,
         private readonly CatalogCollectionProjectionRepositoryInterface $projectionRepository,
     ) {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/collection/list', name: 'legacy_collection_list_handler', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {

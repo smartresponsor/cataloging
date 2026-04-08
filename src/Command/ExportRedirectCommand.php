@@ -12,17 +12,23 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the export redirect command console workflow.
+ */
 #[AsCommand(name: 'category:export:redirects')]
 final class ExportRedirectCommand extends Command
 {
     use CategoryCliOutputTrait;
-
+    /**
+     * Initializes the export redirect command service collaborators.
+     */
     public function __construct(private readonly EntityManagerInterface $em)
     {
         parent::__construct();
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);

@@ -8,7 +8,9 @@ namespace App\Entity;
 use App\EntityInterface\CategoryMediaBindingInterface;
 use App\ValueObject\CategoryMediaRole;
 use App\ValueObjectInterface\CategoryMediaRoleInterface;
-
+/**
+ * Represents the category media binding domain record.
+ */
 final class CategoryMediaBinding implements CategoryMediaBindingInterface
 {
     /**
@@ -30,57 +32,79 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
         private readonly \DateTimeImmutable $boundAt,
     ) {
     }
-
+    /**
+     * Handles the binding id workflow.
+     */
     public function bindingId(): string
     {
         return $this->bindingId;
     }
-
+    /**
+     * Handles the category id workflow.
+     */
     public function categoryId(): string
     {
         return $this->categoryId;
     }
-
+    /**
+     * Handles the asset id workflow.
+     */
     public function assetId(): string
     {
         return $this->assetId;
     }
-
+    /**
+     * Handles the role workflow.
+     */
     public function role(): CategoryMediaRoleInterface
     {
         return $this->role;
     }
-
+    /**
+     * Handles the channels workflow.
+     */
     public function channels(): array
     {
         return $this->channels;
     }
-
+    /**
+     * Handles the locales workflow.
+     */
     public function locales(): array
     {
         return $this->locales;
     }
-
+    /**
+     * Handles the required for publish workflow.
+     */
     public function requiredForPublish(): bool
     {
         return $this->requiredForPublish;
     }
-
+    /**
+     * Handles the active workflow.
+     */
     public function active(): bool
     {
         return $this->active;
     }
-
+    /**
+     * Handles the metadata workflow.
+     */
     public function metadata(): array
     {
         return $this->metadata;
     }
-
+    /**
+     * Handles the actor id workflow.
+     */
     public function actorId(): string
     {
         return $this->actorId;
     }
-
+    /**
+     * Handles the bound at workflow.
+     */
     public function boundAt(): \DateTimeImmutable
     {
         return $this->boundAt;

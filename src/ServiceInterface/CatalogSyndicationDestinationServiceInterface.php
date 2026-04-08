@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationDestinationRegisteredInterface;
-
+/**
+ * Defines the contract for catalog syndication destination service.
+ */
 interface CatalogSyndicationDestinationServiceInterface
 {
     /**

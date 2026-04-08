@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationPolicyAwarePackageGateReportInterface;
-
+/**
+ * Represents the category syndication policy aware package gate report value.
+ */
 final class CategorySyndicationPolicyAwarePackageGateReport implements CategorySyndicationPolicyAwarePackageGateReportInterface
 {
     /**
@@ -31,57 +33,79 @@ final class CategorySyndicationPolicyAwarePackageGateReport implements CategoryS
         private readonly bool $fallbackUsed,
     ) {
     }
-
+    /**
+     * Handles the media policy mode workflow.
+     */
     public function mediaPolicyMode(): string
     {
         return $this->mediaPolicyMode;
     }
-
+    /**
+     * Handles the package missing required fields workflow.
+     */
     public function packageMissingRequiredFields(): array
     {
         return $this->packageMissingRequiredFields;
     }
-
+    /**
+     * Handles the required missing workflow.
+     */
     public function requiredMissing(): array
     {
         return $this->requiredMissing;
     }
-
+    /**
+     * Handles the warnings workflow.
+     */
     public function warnings(): array
     {
         return $this->warnings;
     }
-
+    /**
+     * Handles the checks workflow.
+     */
     public function checks(): array
     {
         return $this->checks;
     }
-
+    /**
+     * Handles the exact matched binding ids workflow.
+     */
     public function exactMatchedBindingIds(): array
     {
         return $this->exactMatchedBindingIds;
     }
-
+    /**
+     * Handles the fallback matched binding ids workflow.
+     */
     public function fallbackMatchedBindingIds(): array
     {
         return $this->fallbackMatchedBindingIds;
     }
-
+    /**
+     * Handles the strict publishable workflow.
+     */
     public function strictPublishable(): bool
     {
         return $this->strictPublishable;
     }
-
+    /**
+     * Handles the fallback publishable workflow.
+     */
     public function fallbackPublishable(): bool
     {
         return $this->fallbackPublishable;
     }
-
+    /**
+     * Resolves the d publishable result for the current workflow.
+     */
     public function resolvedPublishable(): bool
     {
         return $this->resolvedPublishable;
     }
-
+    /**
+     * Handles the fallback used workflow.
+     */
     public function fallbackUsed(): bool
     {
         return $this->fallbackUsed;

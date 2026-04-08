@@ -9,18 +9,27 @@ use App\Entity\CategoryAccessAssignment;
 use App\EntityInterface\CategoryAccessAssignmentInterface;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogAccessAssignmentServiceInterface;
-
+/**
+ * Provides the catalog access assignment service application service.
+ */
 final class CatalogAccessAssignmentService implements CatalogAccessAssignmentServiceInterface
 {
+    /**
+     * Initializes the catalog access assignment service service collaborators.
+     */
     public function __construct(private readonly CategoryAccessAssignmentRepositoryInterface $repository)
     {
     }
-
+    /**
+     * Handles the assign owner workflow.
+     */
     public function assignOwner(string $categoryId, string $actorUserId): CategoryAccessAssignmentInterface
     {
         return $this->assignRole($categoryId, $actorUserId, 'owner', true);
     }
-
+    /**
+     * Handles the assign role workflow.
+     */
     public function assignRole(string $categoryId, string $actorUserId, string $role, bool $isPrimary = false): CategoryAccessAssignmentInterface
     {
         $existing = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
@@ -52,7 +61,9 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
 
         return $assignment;
     }
-
+    /**
+     * Handles the revoke workflow.
+     */
     public function revoke(string $categoryId, string $actorUserId): void
     {
         $assignment = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
@@ -66,7 +77,9 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
 
         $this->repository->save($assignment);
     }
-
+    /**
+     * Updates the primary value.
+     */
     public function setPrimary(string $categoryId, string $actorUserId): void
     {
         $assignment = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
@@ -83,7 +96,9 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
         }
         $this->repository->save($assignment);
     }
-
+    /**
+     * Lists the active for category items for the current workflow.
+     */
     public function listActiveForCategory(string $categoryId): array
     {
         return $this->repository->findActiveByCategoryId($categoryId);

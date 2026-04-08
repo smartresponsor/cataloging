@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the etag generator application service.
+ */
 final class EtagGenerator
 {
     /** @param array<string|int,mixed> $data */

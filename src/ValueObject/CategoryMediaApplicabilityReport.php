@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
-
+/**
+ * Represents the category media applicability report value.
+ */
 final class CategoryMediaApplicabilityReport implements CategoryMediaApplicabilityReportInterface
 {
     /**
@@ -22,22 +24,30 @@ final class CategoryMediaApplicabilityReport implements CategoryMediaApplicabili
         private readonly array $matchedBindingIds,
     ) {
     }
-
+    /**
+     * Handles the checks workflow.
+     */
     public function checks(): array
     {
         return $this->checks;
     }
-
+    /**
+     * Handles the required missing workflow.
+     */
     public function requiredMissing(): array
     {
         return $this->requiredMissing;
     }
-
+    /**
+     * Handles the warnings workflow.
+     */
     public function warnings(): array
     {
         return $this->warnings;
     }
-
+    /**
+     * Handles the matched binding ids workflow.
+     */
     public function matchedBindingIds(): array
     {
         return $this->matchedBindingIds;

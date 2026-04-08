@@ -9,9 +9,14 @@ use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
-
+/**
+ * Provides the catalog syndication governance summary service application service.
+ */
 final class CatalogSyndicationGovernanceSummaryService implements CatalogSyndicationGovernanceSummaryServiceInterface
 {
+    /**
+     * Initializes the catalog syndication governance summary service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationCategoryGovernanceSummaryPolicyInterface $policy,
     ) {

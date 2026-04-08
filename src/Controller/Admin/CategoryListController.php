@@ -10,13 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category list controller application flow.
+ */
 final class CategoryListController extends AbstractController
 {
+    /**
+     * Initializes the category list controller service collaborators.
+     */
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/admin/category/list', name: 'admin_category_list', methods: ['GET'])]
     public function __invoke(Request $request): Response
     {

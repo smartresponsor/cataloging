@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
-
+/**
+ * Represents the category publication quality evaluated application event.
+ */
 final class CategoryPublicationQualityEvaluated implements CategoryPublicationQualityEvaluatedInterface
 {
     /**

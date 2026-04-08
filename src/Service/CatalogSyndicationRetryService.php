@@ -14,14 +14,21 @@ use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use App\ValueObject\CategorySyndicationRecoveryCandidate;
 use App\ValueObject\CategorySyndicationRetryPlan;
-
+/**
+ * Provides the catalog syndication retry service application service.
+ */
 final class CatalogSyndicationRetryService implements CatalogSyndicationRetryServiceInterface
 {
+    /**
+     * Initializes the catalog syndication retry service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationRetryPolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Handles the prepare recovery candidate workflow.
+     */
     public function prepareRecoveryCandidate(CategorySyndicationDeliveryRecordInterface $record, string $actorId, string $reason): CategorySyndicationRecoveryCandidatePreparedInterface
     {
         $status = $record->status()->status();
@@ -52,7 +59,9 @@ final class CatalogSyndicationRetryService implements CatalogSyndicationRetrySer
             'reason' => trim($reason),
         ], new \DateTimeImmutable('now'));
     }
-
+    /**
+     * Schedules the retry workflow for later processing.
+     */
     public function scheduleRetry(CategorySyndicationDeliveryRecordInterface $record, string $actorId, string $reason): CategorySyndicationRetryScheduledInterface
     {
         $status = $record->status()->status();

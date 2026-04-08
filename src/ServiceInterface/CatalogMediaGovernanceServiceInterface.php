@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryMediaBoundInterface;
-
+/**
+ * Defines the contract for catalog media governance service.
+ */
 interface CatalogMediaGovernanceServiceInterface
 {
     /**

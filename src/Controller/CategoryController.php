@@ -9,13 +9,17 @@ use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
-
+/**
+ * Handles the category controller application flow.
+ */
 final class CategoryController implements CategoryControllerInterface
 {
     private CatalogCategoryService $service;
     private CategoryRepositoryInterface $repo;
     private CategoryBreadcrumbBuilderInterface $breadcrumb;
-
+    /**
+     * Initializes the category controller service collaborators.
+     */
     public function __construct(CatalogCategoryService $service, CategoryRepositoryInterface $repo, CategoryBreadcrumbBuilderInterface $breadcrumb)
     {
         $this->service = $service;

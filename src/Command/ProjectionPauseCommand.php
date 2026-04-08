@@ -12,23 +12,31 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the projection pause command console workflow.
+ */
 #[AsCommand(name: 'category:projection:pause')]
 final class ProjectionPauseCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the projection pause command service collaborators.
+     */
     public function __construct(private readonly EntityManagerInterface $em)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this->addArgument('state', InputArgument::REQUIRED, 'on|off');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $state = $this->argumentString($input, 'state');

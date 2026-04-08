@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Security;
-
+/**
+ * Provides the role resolver implementation.
+ */
 final class RoleResolver
 {
     /** @param list<string> $roles */

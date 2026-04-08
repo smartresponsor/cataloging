@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
-
+/**
+ * Defines the contract for catalog syndication delivery service.
+ */
 interface CatalogSyndicationDeliveryServiceInterface
 {
+    /**
+     * Handles the record delivery workflow.
+     */
     public function recordDelivery(
         string $deliveryId,
         string $packageId,

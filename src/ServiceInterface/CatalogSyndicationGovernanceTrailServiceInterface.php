@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
-
+/**
+ * Defines the contract for catalog syndication governance trail service.
+ */
 interface CatalogSyndicationGovernanceTrailServiceInterface
 {
     /**

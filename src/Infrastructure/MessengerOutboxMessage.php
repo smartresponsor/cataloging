@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Infrastructure;
-
+/**
+ * Provides the messenger outbox message implementation.
+ */
 final class MessengerOutboxMessage
 {
     /** @param array<string,mixed> $payload */

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryReviewDecisionCoupledInterface;
-
+/**
+ * Represents the category review decision coupled application event.
+ */
 final class CategoryReviewDecisionCoupled implements CategoryReviewDecisionCoupledInterface
 {
     /**
@@ -28,7 +30,9 @@ final class CategoryReviewDecisionCoupled implements CategoryReviewDecisionCoupl
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return [

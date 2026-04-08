@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
-
+/**
+ * Defines the contract for category acl policy service.
+ */
 interface CategoryAclPolicyServiceInterface
 {
     /** @param array{categoryId:string, tenantId:string, storeId?:string|null, role:string, principalId?:string|null, locale?:string|null} $subject */

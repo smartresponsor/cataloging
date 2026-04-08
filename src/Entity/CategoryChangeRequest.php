@@ -8,7 +8,9 @@ namespace App\Entity;
 use App\EntityInterface\CategoryChangeRequestInterface;
 use App\ValueObject\CategoryChangeRequestState;
 use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
-
+/**
+ * Represents the category change request domain record.
+ */
 final class CategoryChangeRequest implements CategoryChangeRequestInterface
 {
     /**
@@ -44,7 +46,9 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
             null,
         );
     }
-
+    /**
+     * Handles the move to workflow.
+     */
     public function moveTo(CategoryChangeRequestState $state, string $reviewedBy, string $decisionReason): self
     {
         return new self(
@@ -60,22 +64,30 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
             new \DateTimeImmutable('now'),
         );
     }
-
+    /**
+     * Handles the request id workflow.
+     */
     public function requestId(): string
     {
         return $this->requestId;
     }
-
+    /**
+     * Handles the category id workflow.
+     */
     public function categoryId(): string
     {
         return $this->categoryId;
     }
-
+    /**
+     * Handles the submitted by workflow.
+     */
     public function submittedBy(): string
     {
         return $this->submittedBy;
     }
-
+    /**
+     * Handles the summary workflow.
+     */
     public function summary(): string
     {
         return $this->summary;
@@ -86,27 +98,37 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->changes;
     }
-
+    /**
+     * Handles the state workflow.
+     */
     public function state(): CategoryChangeRequestStateInterface
     {
         return $this->state;
     }
-
+    /**
+     * Handles the reviewed by workflow.
+     */
     public function reviewedBy(): ?string
     {
         return $this->reviewedBy;
     }
-
+    /**
+     * Handles the decision reason workflow.
+     */
     public function decisionReason(): ?string
     {
         return $this->decisionReason;
     }
-
+    /**
+     * Handles the submitted at workflow.
+     */
     public function submittedAt(): \DateTimeImmutable
     {
         return $this->submittedAt;
     }
-
+    /**
+     * Handles the reviewed at workflow.
+     */
     public function reviewedAt(): ?\DateTimeImmutable
     {
         return $this->reviewedAt;

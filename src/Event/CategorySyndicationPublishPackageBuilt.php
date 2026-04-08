@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
-
+/**
+ * Represents the category syndication publish package built application event.
+ */
 final class CategorySyndicationPublishPackageBuilt implements CategorySyndicationPublishPackageBuiltInterface
 {
     /**
@@ -17,12 +19,16 @@ final class CategorySyndicationPublishPackageBuilt implements CategorySyndicatio
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return $this->payload;
     }
-
+    /**
+     * Handles the occurred at workflow.
+     */
     public function occurredAt(): \DateTimeImmutable
     {
         return $this->occurredAt;

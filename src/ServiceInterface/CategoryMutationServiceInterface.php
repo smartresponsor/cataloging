@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for category mutation service.
+ */
 interface CategoryMutationServiceInterface
 {
     /**

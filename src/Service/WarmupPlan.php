@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the warmup plan application service.
+ */
 final class WarmupPlan
 {
     /** @return list<string> */

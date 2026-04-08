@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
-
+/**
+ * Defines the contract for category media applicability report.
+ */
 interface CategoryMediaApplicabilityReportInterface
 {
     /** @return array<string,bool> */

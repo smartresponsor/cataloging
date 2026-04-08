@@ -11,16 +11,23 @@ use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
-
+/**
+ * Provides the catalog destination media fallback service application service.
+ */
 final class CatalogDestinationMediaFallbackService implements CatalogDestinationMediaFallbackServiceInterface
 {
+    /**
+     * Initializes the catalog destination media fallback service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationDestinationRepositoryInterface $destinationRepository,
         private readonly CategoryMediaBindingRepositoryInterface $bindingRepository,
         private readonly CategoryDestinationMediaFallbackPolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Handles the evaluate workflow.
+     */
     public function evaluate(string $destinationId, string $categoryId, string $actorId, string $reason): CategoryDestinationMediaFallbackEvaluatedInterface
     {
         $destination = $this->destinationRepository->find($destinationId);

@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\ValueObject\CategoryWorkflowState;
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
-
+/**
+ * Provides the category workflow policy implementation.
+ */
 final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
 {
     /** @var array<string,list<string>> */
@@ -36,7 +38,9 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
             CategoryWorkflowState::DRAFT,
         ],
     ];
-
+    /**
+     * Determines whether the current workflow can transition.
+     */
     public function canTransition(CategoryWorkflowStateInterface $from, CategoryWorkflowStateInterface $to, string $actorId, string $reason): bool
     {
         $actorId = trim($actorId);
@@ -54,7 +58,9 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
 
         return in_array($to->value(), $allowedTargets, true);
     }
-
+    /**
+     * Handles the assert transition allowed workflow.
+     */
     public function assertTransitionAllowed(CategoryWorkflowStateInterface $from, CategoryWorkflowStateInterface $to, string $actorId, string $reason): void
     {
         if (!$this->canTransition($from, $to, $actorId, $reason)) {

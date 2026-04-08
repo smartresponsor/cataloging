@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
-
+/**
+ * Defines the contract for catalog syndication destination governance summary service.
+ */
 interface CatalogSyndicationDestinationGovernanceSummaryServiceInterface
 {
     /** @param list<array<string, mixed>> $trailPayloads */

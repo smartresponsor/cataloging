@@ -4,11 +4,18 @@
 declare(strict_types=1);
 
 namespace App\EntityInterface;
-
+/**
+ * Defines the contract for category taxonomy.
+ */
 interface CategoryTaxonomyInterface
 {
+    /**
+     * Handles the id workflow.
+     */
     public function id(): string;
-
+    /**
+     * Handles the code workflow.
+     */
     public function code(): string;
 
     /** @return array<string,string> */
@@ -16,8 +23,12 @@ interface CategoryTaxonomyInterface
 
     /** @return array<string,mixed> */
     public function rule(): array;
-
+    /**
+     * Creates the d at result for the current workflow.
+     */
     public function createdAt(): \DateTimeImmutable;
-
+    /**
+     * Handles the updated at workflow.
+     */
     public function updatedAt(): \DateTimeImmutable;
 }

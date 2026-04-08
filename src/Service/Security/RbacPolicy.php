@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service\Security;
-
+/**
+ * Provides the rbac policy application service.
+ */
 final class RbacPolicy
 {
+    /**
+     * Handles the allow workflow.
+     */
     public function allow(string $role, string $action): bool
     {
         if (CategoryRole::OWNER === $role) {

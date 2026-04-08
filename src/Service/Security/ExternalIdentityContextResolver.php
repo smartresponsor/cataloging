@@ -10,25 +10,33 @@ use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-
+/**
+ * Provides the external identity context resolver application service.
+ */
 final readonly class ExternalIdentityContextResolver implements SecurityExternalIdentityContextResolverInterface
 {
     private const REQUEST_ATTRIBUTE = '_catalog_external_identity_context';
-
+    /**
+     * Initializes the external identity context resolver service collaborators.
+     */
     public function __construct(
         private RequestStack $requestStack,
         private OidcJwtValidatorInterface $validator,
         private SecurityExternalIdentityContextMapperInterface $mapper,
     ) {
     }
-
+    /**
+     * Resolves the from current request result for the current workflow.
+     */
     public function resolveFromCurrentRequest(): ?ExternalIdentityContext
     {
         $request = $this->requestStack->getCurrentRequest();
 
         return $request instanceof Request ? $this->resolveFromRequest($request) : null;
     }
-
+    /**
+     * Resolves the from request result for the current workflow.
+     */
     public function resolveFromRequest(Request $request): ?ExternalIdentityContext
     {
         $cached = $request->attributes->get(self::REQUEST_ATTRIBUTE);

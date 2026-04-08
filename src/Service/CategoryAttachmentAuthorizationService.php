@@ -13,9 +13,14 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
+/**
+ * Provides the category attachment authorization service application service.
+ */
 final readonly class CategoryAttachmentAuthorizationService
 {
+    /**
+     * Initializes the category attachment authorization service service collaborators.
+     */
     public function __construct(
         private Security $security,
         private ManagerRegistry $registry,
@@ -24,7 +29,9 @@ final readonly class CategoryAttachmentAuthorizationService
         private TenantRolePolicyInterface $tenantRolePolicy,
     ) {
     }
-
+    /**
+     * Handles the assert can list workflow.
+     */
     public function assertCanList(?string $categoryId): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -45,12 +52,16 @@ final readonly class CategoryAttachmentAuthorizationService
 
         $this->assertGranted(CategoryVoter::VIEW, $normalizedCategoryId, 'Category attachment listing is not allowed for the current actor.');
     }
-
+    /**
+     * Handles the assert can attach workflow.
+     */
     public function assertCanAttach(string $categoryId): void
     {
         $this->assertGranted(CategoryVoter::EDIT, $categoryId, 'Category attachment binding is not allowed for the current actor.');
     }
-
+    /**
+     * Handles the assert can detach workflow.
+     */
     public function assertCanDetach(string $attachmentId): void
     {
         $attachment = $this->attachmentRepository->findOne(trim($attachmentId));

@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
-
+/**
+ * Defines the contract for category workflow transitioned.
+ */
 interface CategoryWorkflowTransitionedInterface
 {
+    /**
+     * Handles the event name workflow.
+     */
     public function eventName(): string;
 
     /** @return array<string,mixed> */

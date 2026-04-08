@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for webhook admin service.
+ */
 interface WebhookAdminServiceInterface
 {
     /** @return array{kid:string,secret:string} */
@@ -12,6 +14,8 @@ interface WebhookAdminServiceInterface
 
     /** @param array<string,mixed> $payload */
     public function scheduleDelivery(string $target, array $payload): int;
-
+    /**
+     * Handles the requeue workflow.
+     */
     public function requeue(int $limit): int;
 }

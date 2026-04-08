@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryPublicationReadinessInterface;
-
+/**
+ * Represents the category publication readiness value.
+ */
 final class CategoryPublicationReadiness implements CategoryPublicationReadinessInterface
 {
     /**
@@ -53,32 +55,44 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
 
         return new self($normalized, $blockers, $warnings);
     }
-
+    /**
+     * Determines whether the publishable condition is satisfied.
+     */
     public function isPublishable(): bool
     {
         return [] === $this->blockers;
     }
-
+    /**
+     * Determines whether the check value is available.
+     */
     public function hasCheck(string $name): bool
     {
         return array_key_exists($name, $this->checks);
     }
-
+    /**
+     * Handles the check workflow.
+     */
     public function check(string $name): bool
     {
         return ($this->checks[$name] ?? false) === true;
     }
-
+    /**
+     * Handles the blockers workflow.
+     */
     public function blockers(): array
     {
         return $this->blockers;
     }
-
+    /**
+     * Handles the warnings workflow.
+     */
     public function warnings(): array
     {
         return $this->warnings;
     }
-
+    /**
+     * Handles the checks workflow.
+     */
     public function checks(): array
     {
         return $this->checks;

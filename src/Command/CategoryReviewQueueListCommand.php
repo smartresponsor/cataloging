@@ -13,18 +13,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category review queue list command console workflow.
+ */
 #[AsCommand(name: 'category:review:queue:list')]
 final class CategoryReviewQueueListCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category review queue list command service collaborators.
+     */
     public function __construct(private readonly CatalogReviewQueueServiceInterface $queueService)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -33,7 +39,9 @@ final class CategoryReviewQueueListCommand extends Command
             ->addArgument('reviewer', InputArgument::REQUIRED)
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'ndjson|json', 'ndjson');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $reviewer = $this->argumentString($input, 'reviewer');

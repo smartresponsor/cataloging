@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryChangeRequestReviewedInterface;
-
+/**
+ * Represents the category change request reviewed application event.
+ */
 final class CategoryChangeRequestReviewed implements CategoryChangeRequestReviewedInterface
 {
+    /**
+     * Initializes the category change request reviewed service collaborators.
+     */
     public function __construct(
         private readonly string $requestId,
         private readonly string $categoryId,
@@ -19,7 +24,9 @@ final class CategoryChangeRequestReviewed implements CategoryChangeRequestReview
         private readonly \DateTimeImmutable $reviewedAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return [

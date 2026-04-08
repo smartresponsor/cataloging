@@ -7,9 +7,14 @@ namespace App\Service;
 
 use App\Observability\RequestCorrelationIdProvider;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
+/**
+ * Provides the webhook dispatcher application service.
+ */
 final class WebhookDispatcher
 {
+    /**
+     * Initializes the webhook dispatcher service collaborators.
+     */
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly string $secret = 'changeme',

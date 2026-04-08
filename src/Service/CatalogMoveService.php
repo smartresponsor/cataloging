@@ -6,13 +6,20 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryMoveInterface;
-
+/**
+ * Provides the catalog move service application service.
+ */
 final class CatalogMoveService implements CategoryMoveInterface
 {
+    /**
+     * Initializes the catalog move service service collaborators.
+     */
     public function __construct(private readonly \PDO $pg)
     {
     }
-
+    /**
+     * Handles the move workflow.
+     */
     public function move(string $nodeId, string $newParentId, string $treeId, string $policy, bool $dryRun = false, ?string $locale = null): array
     {
         $normalizedNodeId = trim($nodeId);

@@ -12,9 +12,14 @@ use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface;
-
+/**
+ * Provides the category actor traceability view builder application service.
+ */
 final class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceabilityViewBuilderInterface
 {
+    /**
+     * Initializes the category actor traceability view builder service collaborators.
+     */
     public function __construct(
         private readonly CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository,
         private readonly CategoryChangeRequestRepositoryInterface $changeRequestRepository,
@@ -23,7 +28,9 @@ final class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceab
         private readonly CategoryWorkflowRepositoryInterface $workflowRepository,
     ) {
     }
-
+    /**
+     * Builds the requested output for the current workflow.
+     */
     public function build(string $categoryId): CategoryActorTraceabilityView
     {
         $categoryId = trim($categoryId);

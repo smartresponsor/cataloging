@@ -12,18 +12,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category move command console workflow.
+ */
 #[AsCommand(name: 'category:move')]
 final class CategoryMoveCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category move command service collaborators.
+     */
     public function __construct(private readonly CategoryMoveInterface $moveService)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -36,7 +42,9 @@ final class CategoryMoveCommand extends Command
             ->addOption('dry-run', null, InputOption::VALUE_NONE)
             ->addOption('locale', null, InputOption::VALUE_REQUIRED);
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $result = $this->moveService->move(

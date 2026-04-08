@@ -10,16 +10,22 @@ use App\EntityInterface\CategoryAccessAssignmentInterface;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
-
+/**
+ * Provides repository services for category access assignment repository.
+ */
 final class CategoryAccessAssignmentRepository implements CategoryAccessAssignmentRepositoryInterface
 {
     /** @var array<string,CategoryAccessAssignmentInterface> */
     private array $assignments = [];
-
+    /**
+     * Initializes the category access assignment repository service collaborators.
+     */
     public function __construct(private readonly ?Connection $connection = null)
     {
     }
-
+    /**
+     * Handles the save workflow.
+     */
     public function save(CategoryAccessAssignmentInterface $assignment): void
     {
         if (!$this->connection instanceof Connection) {
@@ -80,7 +86,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             ],
         );
     }
-
+    /**
+     * Handles the find primary for category id workflow.
+     */
     public function findPrimaryForCategoryId(string $categoryId): ?CategoryAccessAssignmentInterface
     {
         $assignments = $this->findActiveByCategoryId($categoryId);
@@ -92,7 +100,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
         return null;
     }
-
+    /**
+     * Handles the find active by category id workflow.
+     */
     public function findActiveByCategoryId(string $categoryId): array
     {
         if (!$this->connection instanceof Connection) {
@@ -110,7 +120,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             ),
         );
     }
-
+    /**
+     * Handles the find active by actor user id workflow.
+     */
     public function findActiveByActorUserId(string $actorUserId): array
     {
         if (!$this->connection instanceof Connection) {
@@ -128,7 +140,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             ),
         );
     }
-
+    /**
+     * Handles the find one by category id and actor user id workflow.
+     */
     public function findOneByCategoryIdAndActorUserId(string $categoryId, string $actorUserId): ?CategoryAccessAssignmentInterface
     {
         if (!$this->connection instanceof Connection) {

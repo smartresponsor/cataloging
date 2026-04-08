@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the version compare application service.
+ */
 final class VersionCompare
 {
     /**

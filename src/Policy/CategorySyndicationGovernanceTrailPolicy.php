@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
 use App\ValueObject\CategorySyndicationGovernanceTrailReport;
 use App\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
-
+/**
+ * Provides the category syndication governance trail policy implementation.
+ */
 final class CategorySyndicationGovernanceTrailPolicy implements CategorySyndicationGovernanceTrailPolicyInterface
 {
     /**

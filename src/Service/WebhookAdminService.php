@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\WebhookAdminServiceInterface;
-
+/**
+ * Provides the webhook admin service application service.
+ */
 final class WebhookAdminService implements WebhookAdminServiceInterface
 {
     /** @var array<string, array{kid:string, secret:non-empty-string}> */
@@ -37,7 +39,9 @@ final class WebhookAdminService implements WebhookAdminServiceInterface
 
         return $id;
     }
-
+    /**
+     * Handles the requeue workflow.
+     */
     public function requeue(int $limit): int
     {
         $requeued = 0;

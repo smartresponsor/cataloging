@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Rule;
-
+/**
+ * Provides the category rule policy implementation.
+ */
 final class CategoryRulePolicy
 {
     public const MAX_CONDITIONS = 20;

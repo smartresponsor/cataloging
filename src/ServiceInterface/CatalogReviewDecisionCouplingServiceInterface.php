@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryReviewDecisionCoupledInterface;
-
+/**
+ * Defines the contract for catalog review decision coupling service.
+ */
 interface CatalogReviewDecisionCouplingServiceInterface
 {
     /** @param array<string,bool> $checks */

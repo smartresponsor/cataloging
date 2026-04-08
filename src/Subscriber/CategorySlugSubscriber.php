@@ -11,18 +11,27 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-
+/**
+ * Provides the category slug subscriber implementation.
+ */
 final class CategorySlugSubscriber implements EventSubscriber
 {
+    /**
+     * Initializes the category slug subscriber service collaborators.
+     */
     public function __construct(private readonly EntityManagerInterface $em)
     {
     }
-
+    /**
+     * Returns the subscribed events value.
+     */
     public function getSubscribedEvents(): array
     {
         return [Events::preUpdate];
     }
-
+    /**
+     * Handles the pre update workflow.
+     */
     public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();

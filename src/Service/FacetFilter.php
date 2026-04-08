@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the facet filter application service.
+ */
 final class FacetFilter
 {
     /** @param array{id?:mixed,slug?:mixed,name?:mixed,path?:mixed,locale?:mixed} $row */

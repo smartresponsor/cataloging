@@ -11,13 +11,20 @@ use App\PolicyInterface\CategoryPublicationGatePolicyInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\ValueObject\CategoryPublicationReadiness;
 use App\ValueObject\CategoryWorkflowState;
-
+/**
+ * Provides the catalog publication gate service application service.
+ */
 final class CatalogPublicationGateService implements CatalogPublicationGateServiceInterface
 {
+    /**
+     * Initializes the catalog publication gate service service collaborators.
+     */
     public function __construct(private readonly CategoryPublicationGatePolicyInterface $policy)
     {
     }
-
+    /**
+     * Handles the evaluate workflow.
+     */
     public function evaluate(string $categoryId, string $workflowState, array $checks, string $actorId, string $reason): CategoryPublicationGateEvaluatedInterface
     {
         $state = CategoryWorkflowState::fromString($workflowState);
@@ -35,7 +42,9 @@ final class CatalogPublicationGateService implements CatalogPublicationGateServi
             new \DateTimeImmutable('now'),
         );
     }
-
+    /**
+     * Handles the assert can publish workflow.
+     */
     public function assertCanPublish(string $workflowState, array $checks, string $actorId, string $reason): void
     {
         $state = CategoryWorkflowState::fromString($workflowState);

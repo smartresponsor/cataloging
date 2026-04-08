@@ -8,9 +8,14 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
 use App\ValueObject\CategorySyndicationPackageGateReport;
 use App\ValueObjectInterface\CategorySyndicationPackageGateReportInterface;
-
+/**
+ * Provides the category syndication package gate policy implementation.
+ */
 final class CategorySyndicationPackageGatePolicy implements CategorySyndicationPackageGatePolicyInterface
 {
+    /**
+     * Builds the report result for the current workflow.
+     */
     public function buildReport(array $packageMissingRequiredFields, array $mediaRequiredMissing, array $warnings, array $mediaChecks, array $matchedBindingIds): CategorySyndicationPackageGateReportInterface
     {
         $packageMissingRequiredFields = array_values(array_unique(array_filter(array_map(static fn (mixed $value): string => trim((string) $value), $packageMissingRequiredFields), static fn (string $value): bool => '' !== $value)));

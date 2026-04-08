@@ -4,13 +4,17 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the facet search advanced application service.
+ */
 final class FacetSearchAdvanced
 {
     private \PDO $pdo;
     private FacetFilter $filter;
     private FacetRank $rank;
-
+    /**
+     * Initializes the facet search advanced service collaborators.
+     */
     public function __construct(\PDO $pdo, FacetFilter $filter, FacetRank $rank)
     {
         $this->pdo = $pdo;

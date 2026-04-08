@@ -3,9 +3,14 @@
 declare(strict_types=1);
 
 namespace App\Observability;
-
+/**
+ * Provides the monolog correlation processor implementation.
+ */
 final readonly class MonologCorrelationProcessor
 {
+    /**
+     * Initializes the monolog correlation processor service collaborators.
+     */
     public function __construct(private RequestCorrelationIdProvider $requestCorrelationIdProvider)
     {
     }

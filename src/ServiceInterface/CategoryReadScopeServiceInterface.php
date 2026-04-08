@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use Symfony\Component\HttpFoundation\Request;
-
+/**
+ * Defines the contract for category read scope service.
+ */
 interface CategoryReadScopeServiceInterface
 {
     /**

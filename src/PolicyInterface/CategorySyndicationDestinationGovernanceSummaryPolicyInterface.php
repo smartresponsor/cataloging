@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInterface;
-
+/**
+ * Defines the contract for category syndication destination governance summary policy.
+ */
 interface CategorySyndicationDestinationGovernanceSummaryPolicyInterface
 {
     /** @param list<array<string,mixed>> $trailPayloads */

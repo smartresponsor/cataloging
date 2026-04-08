@@ -4,14 +4,18 @@
 declare(strict_types=1);
 
 namespace App\Event\Outbox;
-
+/**
+ * Represents the outbox message application event.
+ */
 final class OutboxMessage
 {
     public string $id;
     public string $type;
     public string $payload;
     public string $createdAt;
-
+    /**
+     * Initializes the outbox message service collaborators.
+     */
     public function __construct(string $id, string $type, string $payload, string $createdAt)
     {
         $this->id = $id;

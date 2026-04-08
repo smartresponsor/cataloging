@@ -12,18 +12,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category completeness evaluate command console workflow.
+ */
 #[AsCommand(name: 'category:completeness:evaluate')]
 final class CategoryCompletenessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category completeness evaluate command service collaborators.
+     */
     public function __construct(private readonly CatalogCompletenessServiceInterface $completenessService)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -34,7 +40,9 @@ final class CategoryCompletenessEvaluateCommand extends Command
             ->addArgument('reason', InputArgument::REQUIRED)
             ->addOption('payload', null, InputOption::VALUE_REQUIRED);
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $payload = $this->jsonOptionMap($input, 'payload');

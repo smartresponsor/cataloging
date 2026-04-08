@@ -7,16 +7,23 @@ namespace App\Policy;
 
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
-
+/**
+ * Provides the category syndication history policy implementation.
+ */
 final class CategorySyndicationHistoryPolicy implements CategorySyndicationHistoryPolicyInterface
 {
+    /**
+     * Handles the assert destination id workflow.
+     */
     public function assertDestinationId(string $destinationId): void
     {
         if ('' === trim($destinationId)) {
             throw new \InvalidArgumentException('Destination id must not be empty.');
         }
     }
-
+    /**
+     * Handles the records for destination workflow.
+     */
     public function recordsForDestination(string $destinationId, array $records): array
     {
         $normalized = trim($destinationId);

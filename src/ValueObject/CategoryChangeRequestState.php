@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
-
+/**
+ * Represents the category change request state value.
+ */
 final class CategoryChangeRequestState implements CategoryChangeRequestStateInterface
 {
     public const PROPOSED = 'proposed';
@@ -62,7 +64,9 @@ final class CategoryChangeRequestState implements CategoryChangeRequestStateInte
     {
         return new self(self::WITHDRAWN);
     }
-
+    /**
+     * Handles the value workflow.
+     */
     public function value(): string
     {
         return $this->value;

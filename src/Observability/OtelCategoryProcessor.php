@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Observability;
-
+/**
+ * Provides the otel category processor implementation.
+ */
 final class OtelCategoryProcessor
 {
     /**

@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\PolicyInterface;
-
+/**
+ * Defines the contract for category syndication mapping policy.
+ */
 interface CategorySyndicationMappingPolicyInterface
 {
+    /**
+     * Handles the assert locale mode workflow.
+     */
     public function assertLocaleMode(string $localeMode): void;
 
     /**

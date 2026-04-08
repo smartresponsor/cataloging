@@ -4,11 +4,15 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the redirect writer application service.
+ */
 final class RedirectWriter
 {
     private \PDO $db;
-
+    /**
+     * Initializes the redirect writer service collaborators.
+     */
     public function __construct(\PDO $db)
     {
         $this->db = $db;

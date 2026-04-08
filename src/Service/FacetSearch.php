@@ -4,11 +4,15 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the facet search application service.
+ */
 final class FacetSearch
 {
     private \PDO $pdo;
-
+    /**
+     * Initializes the facet search service collaborators.
+     */
     public function __construct(\PDO $pdo)
     {
         $this->pdo = $pdo;

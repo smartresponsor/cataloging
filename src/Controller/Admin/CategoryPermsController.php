@@ -8,9 +8,14 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+/**
+ * Handles the category perms controller application flow.
+ */
 final class CategoryPermsController extends AbstractController
 {
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/admin/category/perms', name: 'admin_category_perms')]
     public function __invoke(): Response
     {

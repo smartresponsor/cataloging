@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
-
+/**
+ * Represents the category media coverage evaluated application event.
+ */
 final class CategoryMediaCoverageEvaluated implements CategoryMediaCoverageEvaluatedInterface
 {
     /**

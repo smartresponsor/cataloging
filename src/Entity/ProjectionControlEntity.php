@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+/**
+ * Represents the projection control entity domain record.
+ */
 #[ORM\Entity]
 #[ORM\Table(name: 'projection_control')]
 class ProjectionControlEntity
@@ -17,17 +19,23 @@ class ProjectionControlEntity
 
     #[ORM\Column(type: 'boolean')]
     private bool $paused = false;
-
+    /**
+     * Handles the id workflow.
+     */
     public function id(): string
     {
         return $this->id;
     }
-
+    /**
+     * Handles the paused workflow.
+     */
     public function paused(): bool
     {
         return $this->paused;
     }
-
+    /**
+     * Updates the paused value.
+     */
     public function setPaused(bool $p): void
     {
         $this->paused = $p;

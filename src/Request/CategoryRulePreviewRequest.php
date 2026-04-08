@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Request;
-
+/**
+ * Provides the category rule preview request implementation.
+ */
 final class CategoryRulePreviewRequest
 {
     /**
@@ -30,7 +32,9 @@ final class CategoryRulePreviewRequest
 
         return new self($decoded);
     }
-
+    /**
+     * Determines whether the valid condition is satisfied.
+     */
     public function isValid(): bool
     {
         return [] === $this->errors;

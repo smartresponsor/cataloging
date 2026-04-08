@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Seo;
-
+/**
+ * Defines the contract for seo canonical policy.
+ */
 interface SeoCanonicalPolicyInterface extends \App\ServiceInterface\CanonicalPolicyInterface
 {
 }

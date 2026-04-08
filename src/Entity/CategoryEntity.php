@@ -7,7 +7,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
-
+/**
+ * Represents the category entity domain record.
+ */
 #[ORM\Entity]
 #[ORM\Table(name: 'category')]
 #[ORM\Index(columns: ['path'], name: 'idx_category_path')]
@@ -29,7 +31,9 @@ class CategoryEntity
 
     #[ORM\Column(type: 'integer')]
     private int $depth;
-
+    /**
+     * Initializes the category entity service collaborators.
+     */
     public function __construct(string $name, string $slug, string $path, int $depth)
     {
         $this->id = (new Ulid())->__toString();
@@ -38,52 +42,72 @@ class CategoryEntity
         $this->path = $path;
         $this->depth = $depth;
     }
-
+    /**
+     * Returns the id value.
+     */
     public function getId(): string
     {
         return $this->id;
     }
-
+    /**
+     * Returns the name value.
+     */
     public function getName(): string
     {
         return $this->name;
     }
-
+    /**
+     * Updates the name value.
+     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-
+    /**
+     * Returns the slug value.
+     */
     public function getSlug(): string
     {
         return $this->slug;
     }
-
+    /**
+     * Updates the slug value.
+     */
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }
-
+    /**
+     * Returns the path value.
+     */
     public function getPath(): string
     {
         return $this->path;
     }
-
+    /**
+     * Updates the path value.
+     */
     public function setPath(string $path): void
     {
         $this->path = $path;
     }
-
+    /**
+     * Returns the depth value.
+     */
     public function getDepth(): int
     {
         return $this->depth;
     }
-
+    /**
+     * Updates the depth value.
+     */
     public function setDepth(int $depth): void
     {
         $this->depth = $depth;
     }
-
+    /**
+     * Returns the parent path value.
+     */
     public function getParentPath(): ?string
     {
         if ($this->depth <= 0) {
@@ -97,7 +121,9 @@ class CategoryEntity
 
         return substr($this->path, 0, $separatorPosition);
     }
-
+    /**
+     * Determines whether the direct child of condition is satisfied.
+     */
     public function isDirectChildOf(self $parent): bool
     {
         if ($this->depth !== $parent->depth + 1) {

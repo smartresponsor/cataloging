@@ -7,13 +7,17 @@ namespace App\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
-
+/**
+ * Provides the search service application service.
+ */
 final class SearchService
 {
     private const DEFAULT_LIMIT = 20;
     private const MAX_LIMIT = 100;
     private const MAX_OFFSET = 10000;
-
+    /**
+     * Initializes the search service service collaborators.
+     */
     public function __construct(private readonly ManagerRegistry $registry)
     {
     }

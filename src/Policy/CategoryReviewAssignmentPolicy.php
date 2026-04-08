@@ -8,11 +8,15 @@ namespace App\Policy;
 use App\EntityInterface\CategoryChangeRequestInterface;
 use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
 use App\ValueObject\CategoryChangeRequestState;
-
+/**
+ * Provides the category review assignment policy implementation.
+ */
 final class CategoryReviewAssignmentPolicy implements CategoryReviewAssignmentPolicyInterface
 {
     private const ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
-
+    /**
+     * Determines whether the current workflow can assign.
+     */
     public function canAssign(CategoryChangeRequestInterface $request, string $assignedReviewer, string $assignedBy, string $priority): bool
     {
         if ('' === trim($assignedReviewer) || '' === trim($assignedBy)) {
@@ -28,7 +32,9 @@ final class CategoryReviewAssignmentPolicy implements CategoryReviewAssignmentPo
             CategoryChangeRequestState::IN_REVIEW,
         ], true);
     }
-
+    /**
+     * Handles the assert can assign workflow.
+     */
     public function assertCanAssign(CategoryChangeRequestInterface $request, string $assignedReviewer, string $assignedBy, string $priority): void
     {
         if (!$this->canAssign($request, $assignedReviewer, $assignedBy, $priority)) {

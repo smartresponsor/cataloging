@@ -12,18 +12,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the category syndication package preview command console workflow.
+ */
 #[AsCommand(name: 'category:syndication:package:preview')]
 final class CategorySyndicationPackagePreviewCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
-
+    /**
+     * Initializes the category syndication package preview command service collaborators.
+     */
     public function __construct(private readonly CatalogSyndicationPackageGateServiceInterface $service)
     {
         parent::__construct();
     }
-
+    /**
+     * Configures the command definition and available options.
+     */
     protected function configure(): void
     {
         $this
@@ -36,7 +42,9 @@ final class CategorySyndicationPackagePreviewCommand extends Command
             ->addOption('reason', null, InputOption::VALUE_REQUIRED, default: 'preview')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $categoryId = $this->argumentString($input, 'categoryId');

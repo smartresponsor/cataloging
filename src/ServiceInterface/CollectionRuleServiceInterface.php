@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for collection rule service.
+ */
 interface CollectionRuleServiceInterface
 {
     /**

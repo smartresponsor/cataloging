@@ -14,6 +14,9 @@ use App\ServiceInterface\GraphqlFacetResolverInterface;
  */
 final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
 {
+    /**
+     * Initializes the graphql facet resolver service collaborators.
+     */
     public function __construct(private readonly SearchService $searchService)
     {
     }

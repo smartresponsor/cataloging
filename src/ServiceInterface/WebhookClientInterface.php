@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for webhook client.
+ */
 interface WebhookClientInterface
 {
     /** @param array<string,mixed> $payload */

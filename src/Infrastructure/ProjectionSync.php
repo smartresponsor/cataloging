@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Infrastructure;
-
+/**
+ * Provides the projection sync implementation.
+ */
 final class ProjectionSync
 {
     /**

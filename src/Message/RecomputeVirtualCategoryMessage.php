@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Message;
-
+/**
+ * Provides the recompute virtual category message implementation.
+ */
 final class RecomputeVirtualCategoryMessage
 {
+    /**
+     * Initializes the recompute virtual category message service collaborators.
+     */
     public function __construct(public readonly string $virtualCategoryId)
     {
     }

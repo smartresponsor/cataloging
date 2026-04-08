@@ -6,13 +6,20 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\DBAL\Connection;
-
+/**
+ * Provides the slug service application service.
+ */
 final class SlugService
 {
+    /**
+     * Initializes the slug service service collaborators.
+     */
     public function __construct(private readonly Connection $conn)
     {
     }
-
+    /**
+     * Handles the ensure unique workflow.
+     */
     public function ensureUnique(string $slug): string
     {
         $base = $slug;

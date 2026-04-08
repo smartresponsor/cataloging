@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
+/**
+ * Provides the product webhook publisher implementation.
+ */
 final class ProductWebhookPublisher
 {
+    /**
+     * Initializes the product webhook publisher service collaborators.
+     */
     public function __construct(private readonly HttpClientInterface $client, private readonly string $url)
     {
     }

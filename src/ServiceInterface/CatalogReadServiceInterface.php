@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
-
+/**
+ * Defines the contract for catalog read service.
+ */
 interface CatalogReadServiceInterface
 {
     /** @return array{id:string,name:string,slug:string,path:string,depth:int}|null */

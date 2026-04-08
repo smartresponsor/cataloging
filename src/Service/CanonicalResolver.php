@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the canonical resolver application service.
+ */
 final class CanonicalResolver
 {
     /** @param array<string,mixed> $category */

@@ -11,19 +11,25 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+/**
+ * Executes the rebuild category tree command console workflow.
+ */
 #[AsCommand(name: 'category:rebuild-tree')]
 final class RebuildCategoryTreeCommand extends Command
 {
     use CategoryCliOutputTrait;
-
+    /**
+     * Initializes the rebuild category tree command service collaborators.
+     */
     public function __construct(
         private readonly TreeConsistencyChecker $checker,
         private readonly ProjectionRunner $runner,
     ) {
         parent::__construct();
     }
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $nodes = [

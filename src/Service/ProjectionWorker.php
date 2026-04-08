@@ -10,9 +10,14 @@ use App\OutboxInterface\CategoryOutboxRetryInterface;
 use App\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
-
+/**
+ * Provides the projection worker application service.
+ */
 final class ProjectionWorker
 {
+    /**
+     * Initializes the projection worker service collaborators.
+     */
     public function __construct(
         private readonly Connection $connection,
         private readonly CategoryProjectionSyncInterface $projectionSync,
@@ -21,7 +26,9 @@ final class ProjectionWorker
         private readonly int $maxAttempts = 5,
     ) {
     }
-
+    /**
+     * Handles the run once workflow.
+     */
     public function runOnce(int $limit = 100): int
     {
         $now = new \DateTimeImmutable('now');

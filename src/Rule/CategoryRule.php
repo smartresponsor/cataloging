@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Rule;
-
+/**
+ * Provides the category rule implementation.
+ */
 final class CategoryRule
 {
     /** @var array{all:list<array<string,mixed>>} */

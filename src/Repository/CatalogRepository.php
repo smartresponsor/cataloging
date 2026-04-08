@@ -14,6 +14,9 @@ use Doctrine\Persistence\ManagerRegistry;
 /** @extends ServiceEntityRepository<CategoryEntity> */
 final class CatalogRepository extends ServiceEntityRepository
 {
+    /**
+     * Initializes the catalog repository service collaborators.
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryEntity::class);

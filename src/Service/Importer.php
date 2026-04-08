@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the importer application service.
+ */
 final class Importer
 {
+    /**
+     * Handles the import csv workflow.
+     */
     public function importCsv(string $path): int
     {
         $count = 0;
@@ -33,7 +38,9 @@ final class Importer
 
         return $count;
     }
-
+    /**
+     * Handles the import json workflow.
+     */
     public function importJson(string $path): int
     {
         $raw = file_get_contents($path);

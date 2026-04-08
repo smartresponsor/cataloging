@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
-
+/**
+ * Represents the category destination media readiness report value.
+ */
 final class CategoryDestinationMediaReadinessReport implements CategoryDestinationMediaReadinessReportInterface
 {
     /**
@@ -23,27 +25,37 @@ final class CategoryDestinationMediaReadinessReport implements CategoryDestinati
         private readonly bool $publishable,
     ) {
     }
-
+    /**
+     * Handles the checks workflow.
+     */
     public function checks(): array
     {
         return $this->checks;
     }
-
+    /**
+     * Handles the required missing workflow.
+     */
     public function requiredMissing(): array
     {
         return $this->requiredMissing;
     }
-
+    /**
+     * Handles the warnings workflow.
+     */
     public function warnings(): array
     {
         return $this->warnings;
     }
-
+    /**
+     * Handles the matched binding ids workflow.
+     */
     public function matchedBindingIds(): array
     {
         return $this->matchedBindingIds;
     }
-
+    /**
+     * Handles the publishable workflow.
+     */
     public function publishable(): bool
     {
         return $this->publishable;

@@ -17,10 +17,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 final class CategoryAdminApiController
 {
+    /**
+     * Initializes the category admin api controller service collaborators.
+     */
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
-
+    /**
+     * Handles the list workflow.
+     */
     #[Route('/api/admin/category/list', name: 'api_admin_category_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
@@ -37,7 +42,9 @@ final class CategoryAdminApiController
             ]),
         ]);
     }
-
+    /**
+     * Handles the bulk workflow.
+     */
     #[Route('/api/admin/category/bulk', name: 'api_admin_category_bulk', methods: ['POST'])]
     public function bulk(Request $request): JsonResponse
     {

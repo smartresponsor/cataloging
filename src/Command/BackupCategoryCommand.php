@@ -10,12 +10,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-
+/**
+ * Executes the backup category command console workflow.
+ */
 #[AsCommand(name: 'category:backup')]
 final class BackupCategoryCommand extends Command
 {
     use CategoryCliOutputTrait;
-
+    /**
+     * Runs the command workflow and returns the process status.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();

@@ -13,13 +13,20 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+/**
+ * Handles the category merch controller application flow.
+ */
 final class CategoryMerchController extends AbstractController
 {
+    /**
+     * Initializes the category merch controller service collaborators.
+     */
     public function __construct(private readonly CatalogMerchService $categoryMerchService)
     {
     }
-
+    /**
+     * Handles the pin create workflow.
+     */
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_create', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function pinCreate(string $id, Request $request): JsonResponse
@@ -30,7 +37,9 @@ final class CategoryMerchController extends AbstractController
 
         return $this->json(['ok' => true]);
     }
-
+    /**
+     * Handles the pin delete workflow.
+     */
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_delete', methods: ['DELETE'])]
     #[IsGranted('category.merch')]
     public function pinDelete(string $id, Request $request): JsonResponse
@@ -40,7 +49,9 @@ final class CategoryMerchController extends AbstractController
 
         return $this->json(['ok' => true]);
     }
-
+    /**
+     * Handles the order set workflow.
+     */
     #[Route('/api/category/{id}/order', name: 'api_category_order_set', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function orderSet(string $id, Request $request): JsonResponse
@@ -50,7 +61,9 @@ final class CategoryMerchController extends AbstractController
 
         return $this->json(['ok' => true]);
     }
-
+    /**
+     * Handles the banner publish workflow.
+     */
     #[Route('/api/category/{id}/banner/publish', name: 'api_category_banner_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function bannerPublish(string $id, Request $request): JsonResponse
@@ -61,7 +74,9 @@ final class CategoryMerchController extends AbstractController
 
         return $this->json(['ok' => true, 'id' => $bannerId]);
     }
-
+    /**
+     * Handles the html publish workflow.
+     */
     #[Route('/api/category/{id}/html/publish', name: 'api_category_html_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function htmlPublish(string $id, Request $request): JsonResponse

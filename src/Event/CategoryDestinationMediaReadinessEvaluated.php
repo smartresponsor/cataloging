@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
-
+/**
+ * Represents the category destination media readiness evaluated application event.
+ */
 final class CategoryDestinationMediaReadinessEvaluated implements CategoryDestinationMediaReadinessEvaluatedInterface
 {
     /**
@@ -30,7 +32,9 @@ final class CategoryDestinationMediaReadinessEvaluated implements CategoryDestin
         private readonly \DateTimeImmutable $evaluatedAt,
     ) {
     }
-
+    /**
+     * Handles the payload workflow.
+     */
     public function payload(): array
     {
         return [

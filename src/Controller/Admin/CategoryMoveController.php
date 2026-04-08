@@ -6,9 +6,14 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\ServiceInterface\CategoryMoveInterface;
-
+/**
+ * Handles the category move controller application flow.
+ */
 final class CategoryMoveController
 {
+    /**
+     * Initializes the category move controller service collaborators.
+     */
     public function __construct(private readonly CategoryMoveInterface $service)
     {
     }

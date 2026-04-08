@@ -14,15 +14,22 @@ use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ValueObject\CategorySyndicationDestinationHistory;
 use App\ValueObject\CategorySyndicationRecoveryAuditSummary;
-
+/**
+ * Provides the catalog syndication history service application service.
+ */
 final class CatalogSyndicationHistoryService implements CatalogSyndicationHistoryServiceInterface
 {
+    /**
+     * Initializes the catalog syndication history service service collaborators.
+     */
     public function __construct(
         private readonly CategorySyndicationHistoryPolicyInterface $historyPolicy,
         private readonly CategorySyndicationRetryPolicyInterface $retryPolicy,
     ) {
     }
-
+    /**
+     * Builds the destination history result for the current workflow.
+     */
     public function buildDestinationHistory(string $destinationId, array $records, string $actorId, string $reason): CategorySyndicationDestinationHistoryBuiltInterface
     {
         $this->historyPolicy->assertDestinationId($destinationId);
@@ -88,7 +95,9 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
             'reason' => trim($reason),
         ], new \DateTimeImmutable('now'));
     }
-
+    /**
+     * Handles the consolidate recovery audit workflow.
+     */
     public function consolidateRecoveryAudit(string $destinationId, array $records, string $actorId, string $reason): CategorySyndicationRecoveryAuditConsolidatedInterface
     {
         $this->historyPolicy->assertDestinationId($destinationId);

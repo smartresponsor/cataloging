@@ -8,7 +8,9 @@ namespace App\Repository;
 use App\EntityInterface\CategoryMediaBindingInterface;
 use App\EventInterface\CategoryMediaBoundInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-
+/**
+ * Provides repository services for category media binding repository.
+ */
 final class CategoryMediaBindingRepository implements CategoryMediaBindingRepositoryInterface
 {
     /** @var array<string,CategoryMediaBindingInterface> */
@@ -16,17 +18,23 @@ final class CategoryMediaBindingRepository implements CategoryMediaBindingReposi
 
     /** @var list<CategoryMediaBoundInterface> */
     private array $history = [];
-
+    /**
+     * Handles the save workflow.
+     */
     public function save(CategoryMediaBindingInterface $binding): void
     {
         $this->bindings[$binding->bindingId()] = $binding;
     }
-
+    /**
+     * Finds the requested record in the underlying store.
+     */
     public function find(string $bindingId): ?CategoryMediaBindingInterface
     {
         return $this->bindings[$bindingId] ?? null;
     }
-
+    /**
+     * Handles the bindings for category workflow.
+     */
     public function bindingsForCategory(string $categoryId): array
     {
         return array_values(array_filter(
@@ -34,12 +42,16 @@ final class CategoryMediaBindingRepository implements CategoryMediaBindingReposi
             static fn (CategoryMediaBindingInterface $binding): bool => $binding->categoryId() === $categoryId,
         ));
     }
-
+    /**
+     * Handles the append history workflow.
+     */
     public function appendHistory(CategoryMediaBoundInterface $event): void
     {
         $this->history[] = $event;
     }
-
+    /**
+     * Handles the history workflow.
+     */
     public function history(): array
     {
         return $this->history;

@@ -12,16 +12,23 @@ use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
 use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
-
+/**
+ * Provides the catalog review assignment service application service.
+ */
 final class CatalogReviewAssignmentService implements CatalogReviewAssignmentServiceInterface
 {
+    /**
+     * Initializes the catalog review assignment service service collaborators.
+     */
     public function __construct(
         private readonly CategoryChangeRequestRepositoryInterface $changeRequestRepository,
         private readonly CategoryReviewAssignmentRepositoryInterface $assignmentRepository,
         private readonly CategoryReviewAssignmentPolicyInterface $policy,
     ) {
     }
-
+    /**
+     * Handles the assign workflow.
+     */
     public function assign(
         string $requestId,
         string $assignedReviewer,

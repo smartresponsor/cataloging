@@ -9,7 +9,9 @@ use App\EntityInterface\CategoryMediaBindingInterface;
 use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
 use App\ValueObject\CategoryMediaApplicabilityReport;
 use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
-
+/**
+ * Provides the category media applicability policy implementation.
+ */
 final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabilityPolicyInterface
 {
     /**

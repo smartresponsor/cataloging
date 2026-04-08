@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Service\Category\Suggest;
 
 use App\ServiceInterface\Category\CategoryRuleSuggestServiceInterface;
-
+/**
+ * Provides the category rule suggest service application service.
+ */
 final class CategoryRuleSuggestService implements CategoryRuleSuggestServiceInterface
 {
     /**

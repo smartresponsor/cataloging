@@ -7,11 +7,15 @@ namespace App\Service\Category\Rule;
 
 use App\ServiceInterface\Category\CategoryRuleAdminServiceInterface;
 use App\ServiceInterface\Rule\RuleRepositoryInterface;
-
+/**
+ * Provides the category rule admin service application service.
+ */
 final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterface
 {
     private const PREVIEW_SAMPLE_LIMIT = 50;
-
+    /**
+     * Initializes the category rule admin service service collaborators.
+     */
     public function __construct(
         private readonly RuleRepositoryInterface $repo,
         private readonly CategoryRuleEngine $engine,

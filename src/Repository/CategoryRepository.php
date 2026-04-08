@@ -24,7 +24,9 @@ final class CategoryRepository implements CategoryRepositoryInterface
     {
         return [];
     }
-
+    /**
+     * Handles the slug exists workflow.
+     */
     public function slugExists(string $slug, string $taxonomyId, ?string $parentId, string $locale): bool
     {
         return false;
@@ -56,11 +58,15 @@ final class CategoryRepository implements CategoryRepositoryInterface
     {
         return ['id' => $categoryId, 'parentId' => $newParentId, 'order' => $newOrder];
     }
-
+    /**
+     * Handles the attach workflow.
+     */
     public function attach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
     {
     }
-
+    /**
+     * Handles the detach workflow.
+     */
     public function detach(string $actorId, string $categoryId, string $targetDomain, string $targetClass, string $targetId): void
     {
     }
@@ -76,7 +82,9 @@ final class CategoryRepository implements CategoryRepositoryInterface
     {
         return ['id' => '', 'taxonomyCode' => $taxonomyCode, 'slug' => $slug, 'locale' => $locale];
     }
-
+    /**
+     * Handles the full slug workflow.
+     */
     public function fullSlug(string $categoryId, string $locale): string
     {
         return '';

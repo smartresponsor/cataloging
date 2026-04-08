@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the tenant quota checker application service.
+ */
 final class TenantQuotaChecker
 {
     /** @param array{max_categories?: int, max_depth?: int, max_updates_per_day?: int} $limits */

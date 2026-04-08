@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
 use App\ValueObject\CategoryDestinationMediaPolicyPreference;
 use App\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
-
+/**
+ * Provides the category destination media policy preference policy implementation.
+ */
 final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDestinationMediaPolicyPreferencePolicyInterface
 {
     private const MODES = ['strict_exact', 'allow_fallback', 'prefer_exact_warn'];

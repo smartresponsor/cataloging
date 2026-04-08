@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the fastly purger application service.
+ */
 final class FastlyPurger
 {
     /** @param list<string> $keys @return string */

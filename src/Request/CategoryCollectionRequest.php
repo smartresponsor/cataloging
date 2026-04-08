@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Request;
-
+/**
+ * Provides the category collection request implementation.
+ */
 final class CategoryCollectionRequest
 {
     /**
@@ -30,7 +32,9 @@ final class CategoryCollectionRequest
 
         return new self($decoded);
     }
-
+    /**
+     * Determines whether the valid condition is satisfied.
+     */
     public function isValid(): bool
     {
         return [] === $this->errors;

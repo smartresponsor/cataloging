@@ -15,12 +15,17 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final class CategorySearchController
 {
+    /**
+     * Initializes the category search controller service collaborators.
+     */
     public function __construct(
         private readonly SearchService $search,
         private readonly CategoryReadScopeServiceInterface $categoryReadScopeService,
     ) {
     }
-
+    /**
+     * Executes the invokable workflow for this service.
+     */
     #[Route('/api/category/search', name: 'api_category_search', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {

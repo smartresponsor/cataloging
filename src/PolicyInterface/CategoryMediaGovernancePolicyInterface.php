@@ -4,7 +4,9 @@
 declare(strict_types=1);
 
 namespace App\PolicyInterface;
-
+/**
+ * Defines the contract for category media governance policy.
+ */
 interface CategoryMediaGovernancePolicyInterface
 {
     /**

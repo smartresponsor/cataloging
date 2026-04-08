@@ -12,9 +12,14 @@ use App\Entity\CategoryHtmlBlock;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-
+/**
+ * Provides the category fixtures implementation.
+ */
 final class CategoryFixtures extends Fixture
 {
+    /**
+     * Handles the load workflow.
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = class_exists(Factory::class) ? Factory::create('en_US') : null;

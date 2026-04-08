@@ -8,7 +8,9 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
 use App\ValueObject\CategorySyndicationCategoryGovernanceSummary;
 use App\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterface;
-
+/**
+ * Provides the category syndication category governance summary policy implementation.
+ */
 final class CategorySyndicationCategoryGovernanceSummaryPolicy implements CategorySyndicationCategoryGovernanceSummaryPolicyInterface
 {
     /** @param list<array<string,mixed>> $trailPayloads */

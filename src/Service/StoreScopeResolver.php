@@ -4,9 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
-
+/**
+ * Provides the store scope resolver application service.
+ */
 final class StoreScopeResolver
 {
+    /**
+     * Resolves the requested result for the provided input.
+     */
     public function resolve(string $host): string
     {
         return 'merchant.local' === $host ? 'merchant' : 'default';
