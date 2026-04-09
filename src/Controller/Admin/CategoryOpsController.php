@@ -27,11 +27,6 @@ final class CategoryOpsController extends AbstractController
         ]);
     }
 
-    /**
-     * @param array $default
-     *
-     * @return array
-     */
     private function readJsonFile(string $path, array $default): array
     {
         if (!is_file($path) || !is_readable($path)) {

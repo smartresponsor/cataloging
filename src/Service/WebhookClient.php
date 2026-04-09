@@ -66,7 +66,7 @@ final class WebhookClient implements WebhookClientInterface
         $response = file_get_contents($endpoint, false, $context);
         /** @var list<string> $headers */
         $headers = $http_response_header;
-        $statusLine = isset($headers[0]) ? $headers[0] : '';
+        $statusLine = $headers[0] ?? '';
 
         if (preg_match('/\s(\d{3})\s?/', $statusLine, $matches)) {
             $status = (int) $matches[1];

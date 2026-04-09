@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\SearchService;
 use App\ServiceInterface\CategoryReadScopeServiceInterface;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -50,6 +51,7 @@ final readonly class CategorySearchController
             return new JsonResponse($result);
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
+        } catch (Exception $e) {
         }
     }
 }

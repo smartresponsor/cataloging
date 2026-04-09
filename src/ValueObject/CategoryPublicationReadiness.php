@@ -34,10 +34,9 @@ final readonly class CategoryPublicationReadiness implements CategoryPublication
             'localeReady',
         ];
 
-        $normalized = [];
-        foreach ($checks as $name => $value) {
-            $normalized[$name] = (bool) $value;
-        }
+        $normalized = array_map(function ($value) {
+            return (bool) $value;
+        }, $checks);
 
         $blockers = [];
         foreach ($required as $name) {

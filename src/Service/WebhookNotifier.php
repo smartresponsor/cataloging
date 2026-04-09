@@ -20,7 +20,5 @@ final readonly class WebhookNotifier
     /** @param array<string,mixed> $payload */
     public function notify(string $event, array $payload): void
     {
-        if ('' === trim($this->endpoint)) {
-        }
     }
 }

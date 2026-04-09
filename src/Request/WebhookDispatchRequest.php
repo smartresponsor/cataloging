@@ -11,7 +11,6 @@ namespace App\Request;
 final readonly class WebhookDispatchRequest
 {
     /**
-     * @param array        $payload
      * @param list<string> $errors
      */
     public function __construct(

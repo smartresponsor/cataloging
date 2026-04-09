@@ -28,10 +28,9 @@ final readonly class CategoryCompletenessReport implements CategoryCompletenessR
     /** @param array<string,bool> $checks */
     public static function fromChecks(array $checks): self
     {
-        $normalized = [];
-        foreach ($checks as $name => $value) {
-            $normalized[$name] = (bool) $value;
-        }
+        $normalized = array_map(function ($value) {
+            return (bool) $value;
+        }, $checks);
 
         $required = [
             'slugReady',

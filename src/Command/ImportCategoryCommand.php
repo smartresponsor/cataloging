@@ -49,8 +49,6 @@ final class ImportCategoryCommand extends Command
         }
         foreach ($lines as $line) {
             $data = json_decode($line, true, 512, JSON_THROW_ON_ERROR);
-            if (!is_array($data)) {
-            }
         }
         $output->writeln('<info>Import done</info>');
 

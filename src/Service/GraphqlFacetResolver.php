@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\GraphqlFacetResolverInterface;
+use Doctrine\DBAL\Exception;
 
 /**
  * Secondary GraphQL facet adapter over the canonical search/read services.
@@ -28,6 +29,8 @@ final readonly class GraphqlFacetResolver implements GraphqlFacetResolverInterfa
      *     items:list<array{id:string,slug:string,name:string,path:string,locale:string,score:null}>,
      *     total:int,
      * }
+     *
+     * @throws Exception
      */
     public function categoryFacet(array $args): array
     {

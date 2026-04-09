@@ -25,7 +25,13 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     ) {
     }
 
-    /** @return array{id:string,name:string,slug:string,path:string,depth:int}|null */
+    /**
+     * @param string $id
+     *
+     * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
+     *
+     * @throws Exception
+     */
     public function byId(string $id): ?array
     {
         return $this->findCategory($id);
@@ -49,6 +55,7 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *     }>,
      * }|null
      *
+     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function descendantsTree(string $id): ?array
@@ -74,6 +81,7 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
+     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function childList(string $id): ?array
@@ -91,7 +99,14 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
         return $this->normalizeCategories($children);
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null */
+    /**
+     * @param string $id
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
+     *
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function childrenList(string $id): ?array
     {
         return $this->childList($id);
@@ -102,6 +117,7 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
+     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function ancestorList(string $id): ?array
