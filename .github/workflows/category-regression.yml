@@ -1,0 +1,12 @@
+name: Category Regression
+on:
+  workflow_dispatch: {}
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run regression
+        run: |
+          chmod +x tools/ci/run-category-regression.sh
+          tools/ci/run-category-regression.sh

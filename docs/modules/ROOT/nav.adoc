@@ -1,0 +1,16 @@
+* xref:index.adoc[Cataloging documentation]
+
+* Overview
+** xref:documentation-map.adoc[Documentation map]
+** xref:architecture.adoc[Architecture]
+* xref:boundaries.adoc[Boundary policy]
+** xref:install.adoc[Install]
+** xref:operations.adoc[Operations]
+** xref:release.adoc[Release and readiness]
+
+* API and reference
+** xref:api.adoc[API]
+** xref:reference.adoc[Reference surfaces]
+
+* Repository-facing surfaces
+** xref:github.adoc[GitHub-facing docs]

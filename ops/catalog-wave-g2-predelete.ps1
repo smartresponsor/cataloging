@@ -1,0 +1,29 @@
+$paths = @(
+    'tools/Category/sketch7/category-core-phase-rc7-01-rule-engine-v1-core.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-02-collection-rebuild-worker.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-03-primary-category-field.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-04-featured-in-collection.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-05-publish-schedule.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-06-hierarchy-node-v0.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-07-layered-navigation-service.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-08-graphql-fast-connections.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-09-seo-locale-v2.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-10-admin-rule-builder-ui.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-11-webhook-events.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-12-cache-keys-policy.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-13-slo-smoke-profiles.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-14-observability-pack.zip'
+    'tools/Category/sketch7/category-core-phase-rc7-15-docs-and-ops-kit.zip'
+    'tools/Category/sketch7/category-sketch7-andyjson-core-kit.zip'
+    'tools/Category/sketch7/category-sketch7-last-step.zip'
+    'tools/Category/sketch7/category-sketch7-overlay.zip'
+    'tools/Category/sketch7/category-sketch7-winners.zip'
+    'tools/Category/sketch7'
+)
+
+foreach ($rel in $paths) {
+    $full = Join-Path $PSScriptRoot ('..\' + $rel.Replace('/', '\'))
+    if (Test-Path $full) {
+        Remove-Item $full -Recurse -Force
+    }
+}

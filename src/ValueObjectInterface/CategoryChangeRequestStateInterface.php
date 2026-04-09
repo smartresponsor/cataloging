@@ -1,0 +1,16 @@
+<?php
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+declare(strict_types=1);
+
+namespace App\ValueObjectInterface;
+/**
+ * Defines the contract for category change request state.
+ */
+interface CategoryChangeRequestStateInterface
+{
+    /**
+     * Handles the value workflow.
+     */
+    public function value(): string;
+}

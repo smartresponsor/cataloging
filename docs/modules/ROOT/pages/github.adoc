@@ -1,0 +1,25 @@
+= GitHub-facing repository surface
+
+This page clarifies which documents are primarily repository-facing and should remain outside the Antora narrative module.
+
+== Primary GitHub-facing docs
+
+* `README.md`
+* `docs/category-changelog.md`
+* `docs/category-ga-readme.md`
+* `docs/category-license.md`
+
+== Role boundary
+
+These files are optimized for repository readers, release/change visibility, and direct GitHub consumption.
+They should not be mirrored into Antora unless there is a strong consumer need and a clear maintenance owner.
+
+== Release-oriented companions in docs/
+
+The repository also contains release/readiness companions that remain part of the narrative corpus rather than the GitHub landing surface:
+
+* `docs/category-ga-checklist.md`
+* `docs/category-ga-cutover.md`
+* `docs/category-ga-release-notes.md`
+* `docs/category-ga-release-notes-final.md`
+* `docs/category-rc-readiness.md`

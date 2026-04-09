@@ -1,0 +1,24 @@
+= Install
+
+This page is the Antora entry point for installation and bring-up material.
+
+== Core install sources
+
+* `docs/category-install.md`
+* `docs/runbook-install.md`
+* `docs/category-fixtures.md`
+* `docs/category-schema.md`
+
+== Runtime prerequisites already present in the repository
+
+* application entry point: `bin/console`
+* Symfony configuration: `config/`
+* database migrations: `migrations/`
+* SQL helper artifacts: `config/sql/`
+* deployment/container artifacts: `docker/`, `deploy/`, `ops/`
+
+== Install guidance split
+
+* use the narrative install docs in `docs/` for operator and developer instructions,
+* use `migrations/` and `config/sql/` as executable repository assets,
+* keep generated outputs under `public/` or `report/`, not inside the Antora module tree.

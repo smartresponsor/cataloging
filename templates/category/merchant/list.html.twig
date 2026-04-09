@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Merchant categories</h1>
+<ul>
+  {% for c in categories %}
+    <li>{{ c.name }} ({{ c.tenant }})</li>
+  {% endfor %}
+</ul>
+{% endblock %}

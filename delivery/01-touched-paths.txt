@@ -1,0 +1,10 @@
+src/Entity/CategoryAccessAssignment.php
+src/EntityInterface/CategoryAccessAssignmentInterface.php
+src/Repository/CategoryAccessAssignmentRepository.php
+src/RepositoryInterface/CategoryAccessAssignmentRepositoryInterface.php
+src/Service/CategoryAccessAssignmentService.php
+src/ServiceInterface/CategoryAccessAssignmentServiceInterface.php
+src/Security/CategoryVoter.php
+docs/internal/CATEGORY_ACCESS_ASSIGNMENT_CANON.md
+CATALOGING-W01-NOTES.md
+delivery/01-change-manifest.json

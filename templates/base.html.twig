@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Cataloging{% endblock %}</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f6f7fb;
+            color: #1d2433;
+        }
+
+        main {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 32px 20px 64px;
+        }
+
+        a {
+            color: #0f5ad1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #d7dcea;
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e7ebf3;
+            text-align: left;
+        }
+
+        .flash-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #e8f1ff;
+            border: 1px solid #bcd0f6;
+        }
+
+        .flash-success {
+            background: #e8f7ec;
+            border-color: #b8e0c2;
+        }
+
+        .container,
+        .row,
+        .col-lg-8,
+        .col-12 {
+            display: block;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #d7dcea;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(32, 49, 86, 0.08);
+        }
+
+        .card-header,
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            font: inherit;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #bcc6dc;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        button,
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #0f5ad1;
+            background: #0f5ad1;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .btn-outline-secondary {
+            background: #fff;
+            color: #1d2433;
+            border-color: #bcc6dc;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .gap-2 {
+            gap: 10px;
+        }
+
+        .py-4 {
+            padding-block: 16px;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 12px 32px rgba(32, 49, 86, 0.08);
+        }
+
+        .bg-light {
+            background: #f3f5f9;
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<main>
+    {% for label, messages in app.flashes %}
+        <div class="flash-list">
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+</main>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

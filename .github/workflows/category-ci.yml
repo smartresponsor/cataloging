@@ -1,0 +1,30 @@
+name: Category CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Run tests
+        run: tools/ci/run-tests.sh
+      - name: Run cs
+        run: tools/ci/run-cs.sh
+  release:
+    if: startsWith(github.ref, 'refs/tags/category-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build archive
+        run: zip -r category-release.zip src config templates public docker docs
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: category-release
+          path: category-release.zip

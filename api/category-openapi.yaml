@@ -1,0 +1,280 @@
+openapi: 3.0.3
+info:
+  title: Category API Compatibility Contract
+  version: 1.0.0-rc1
+  description: Legacy compatibility document retained for category-named consumers; canonical truth lives in api/catalog-openapi.yaml.
+paths:
+  /api/category/list:
+    get:
+      summary: List catalog categories
+      responses:
+        '200':
+          description: Category list returned
+  /api/category/{id}/child:
+    get:
+      summary: List direct children for a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Child category list returned
+        '404':
+          description: Category not found
+  /api/category/{id}/ancestor:
+    get:
+      summary: List ancestors for a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Ancestor category list returned
+        '404':
+          description: Category not found
+  /api/category/{id}/move:
+    post:
+      summary: Move a category under a new parent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+        - in: header
+          name: X-Idempotency-Key
+          required: false
+          schema: { type: string }
+        - in: header
+          name: X-Correlation-ID
+          required: false
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [parent_id]
+              properties:
+                parent_id: { type: string }
+                tree_id: { type: string, default: catalog }
+                policy: { type: string, default: strict }
+                dry_run: { type: boolean, default: false }
+                locale: { type: string, nullable: true }
+      responses:
+        '200':
+          description: Category move executed
+        '400':
+          description: Invalid move payload
+        '404':
+          description: Category or new parent not found
+        '409':
+          description: Move conflict or domain violation
+  /api/category/{id}/publish:
+    post:
+      summary: Publish or unpublish a category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+        - in: header
+          name: X-Idempotency-Key
+          required: false
+          schema: { type: string }
+        - in: header
+          name: X-Correlation-ID
+          required: false
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [published]
+              properties:
+                published: { type: boolean }
+                reason: { type: string, default: api publish request }
+                checks:
+                  type: object
+                  additionalProperties: { type: boolean }
+      responses:
+        '200':
+          description: Category publication state changed
+        '400':
+          description: Invalid publish payload
+        '404':
+          description: Category not found
+        '409':
+          description: Publication gate failed or transition not allowed
+  /api/category/tree:
+    get:
+      summary: Read category tree from projection records
+      parameters:
+        - in: query
+          name: tenant
+          required: false
+          schema: { type: string }
+        - in: query
+          name: locale
+          required: false
+          schema: { type: string }
+        - in: query
+          name: workflow_state
+          required: false
+          schema: { type: string }
+        - in: query
+          name: published
+          required: false
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: Projection-backed category tree returned
+        '403':
+          description: Cross-tenant read denied
+  /api/category/storefront:
+    get:
+      summary: Read storefront-ready category list from projection records
+      parameters:
+        - in: query
+          name: tenant
+          required: false
+          schema: { type: string }
+        - in: query
+          name: locale
+          required: false
+          schema: { type: string }
+        - in: query
+          name: workflow_state
+          required: false
+          schema: { type: string }
+        - in: query
+          name: published
+          required: false
+          schema: { type: boolean }
+        - in: query
+          name: limit
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: offset
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: order
+          required: false
+          schema: { type: string, enum: [updated_at, name, published_at], default: name }
+        - in: query
+          name: direction
+          required: false
+          schema: { type: string, enum: [asc, desc], default: asc }
+      responses:
+        '200':
+          description: Projection-backed storefront category list returned
+        '403':
+          description: Cross-tenant read denied
+  /api/category/search:
+    get:
+      summary: Search category projection records
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema: { type: string }
+        - in: query
+          name: tenant
+          required: false
+          schema: { type: string }
+        - in: query
+          name: locale
+          required: false
+          schema: { type: string }
+        - in: query
+          name: workflow_state
+          required: false
+          schema: { type: string }
+        - in: query
+          name: published
+          required: false
+          schema: { type: boolean }
+        - in: query
+          name: limit
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: offset
+          required: false
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: order
+          required: false
+          schema: { type: string, enum: [updated_at, name, published_at], default: updated_at }
+        - in: query
+          name: direction
+          required: false
+          schema: { type: string, enum: [asc, desc], default: desc }
+      responses:
+        '200':
+          description: Projection-backed category search result returned
+  /api/category/attachment:
+    get:
+      summary: List category attachments
+      responses:
+        '200':
+          description: Attachment list returned
+    post:
+      summary: Register a category attachment reference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [category_id, type, provider, external_attachment_id]
+              properties:
+                category_id: { type: string }
+                type: { type: string }
+                provider: { type: string }
+                external_attachment_id: { type: string }
+                reference_uri: { type: string }
+      responses:
+        '201':
+          description: Attachment reference bound to category
+        '400':
+          description: Validation failure
+  /api/category/collection:
+    post:
+      summary: Build a rule-based collection from projection records
+      responses:
+        '200':
+          description: Collection build result returned
+        '400':
+          description: Invalid rules payload
+  /api/category/virtual/preview:
+    post:
+      summary: Preview a virtual category rule
+      responses:
+        '200':
+          description: Rule preview returned
+        '400':
+          description: Invalid rule specification
+        '413':
+          description: Cardinality exceeds configured limit
+  /api/category/virtual/apply/{id}:
+    post:
+      summary: Apply a virtual category rule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Rule applied
+        '404':
+          description: Virtual category not found

@@ -1,0 +1,348 @@
+Targets
+    Occurrences of '/Domain/' in Directory D:\PhpstormProjects\www\Cataloging
+Found Occurrences in Directory D:\PhpstormProjects\www\Cataloging  (341 usages found)
+    Unclassified  (341 usages found)
+        Cataloging  (341 usages found)
+            .commanding\logs\inspection  (341 usages found)
+                catalog-canon-report.txt  (341 usages found)
+                    2     Occurrences of '/Domain/' in Directory D:\PhpstormProjects\www\Cataloging
+                    8                     411                     1 src/Domain/Category/Acl/AclPolicyService.php
+                    9                     412                     2 src/Domain/Category/Acl/AclRepositoryInterface.php
+                    10                     413                     3 src/Domain/Category/ApproxTotalService.php
+                    11                     414                     4 src/Domain/Category/Category.php
+                    12                     415                     5 src/Domain/Category/CategoryInterface.php
+                    13                     416                     6 src/Domain/Category/CatalogRepositoryInterface.php
+                    14                     417                     7 src/Domain/Category/Graphql/CategoryLoader.php
+                    15                     418                     8 src/Domain/Category/Graphql/GraphqlGuard.php
+                    16                     419                     9 src/Domain/Category/Import/ImportRepositoryInterface.php
+                    17                     420                     10 src/Domain/Category/Import/ImportService.php
+                    18                     421                     11 src/Domain/Category/Quota/CacheStoreInterface.php
+                    19                     422                     12 src/Domain/Category/Quota/QuotaService.php
+                    20                     423                     13 src/Domain/Category/Quota/TokenBucket.php
+                    21                     424                     14 src/Domain/Category/Rule/RuleAdminService.php
+                    22                     425                     15 src/Domain/Category/Rule/RuleEngine.php
+                    23                     426                     16 src/Domain/Category/Rule/RuleRepositoryInterface.php
+                    24                     427                     17 src/Domain/Category/Seo/SeoRepositoryInterface.php
+                    25                     428                     18 src/Domain/Category/Suggest/RuleSuggestService.php
+                    26                     435                     2 src/Domain/Category/Acl/AclPolicyService.php
+                    27                     436                     3 src/Domain/Category/Acl/AclRepositoryInterface.php
+                    28                     437                     4 src/Domain/Category/ApproxTotalService.php
+                    29                     438                     5 src/Domain/Category/Category.php
+                    30                     439                     6 src/Domain/Category/CategoryInterface.php
+                    31                     440                     7 src/Domain/Category/CatalogRepositoryInterface.php
+                    32                     441                     8 src/Domain/Category/CatalogCategoryService.php
+                    33                     442                     9 src/Domain/Category/CollectionImportService.php
+                    34                     443                     10 src/Domain/Category/CollectionService.php
+                    35                     444                     11 src/Domain/Category/Graphql/CategoryLoader.php
+                    36                     445                     12 src/Domain/Category/Graphql/GraphqlGuard.php
+                    37                     446                     13 src/Domain/Category/Import/ImportRepositoryInterface.php
+                    38                     447                     14 src/Domain/Category/Import/ImportService.php
+                    39                     448                     15 src/Domain/Category/Quota/CacheStoreInterface.php
+                    40                     449                     16 src/Domain/Category/Quota/QuotaService.php
+                    41                     450                     17 src/Domain/Category/Quota/TokenBucket.php
+                    42                     451                     18 src/Domain/Category/Rule/RuleAdminService.php
+                    43                     452                     19 src/Domain/Category/Rule/RuleEngine.php
+                    44                     453                     20 src/Domain/Category/Rule/RuleRepositoryInterface.php
+                    45                     454                     21 src/Domain/Category/Seo/SeoRepositoryInterface.php
+                    46                     455                     22 src/Domain/Category/Suggest/RuleSuggestService.php
+                    47                     491                     1 src/Domain/Category/Acl/AclPolicyService.php
+                    48                     492                     2 src/Domain/Category/Acl/AclRepositoryInterface.php
+                    49                     493                     3 src/Domain/Category/ApproxTotalService.php
+                    50                     494                     4 src/Domain/Category/Category.php
+                    51                     495                     5 src/Domain/Category/CategoryInterface.php
+                    52                     496                     6 src/Domain/Category/CatalogRepositoryInterface.php
+                    53                     497                     7 src/Domain/Category/CatalogCategoryService.php
+                    54                     498                     8 src/Domain/Category/CollectionImportService.php
+                    55                     499                     9 src/Domain/Category/CollectionService.php
+                    56                     500                     10 src/Domain/Category/Graphql/CategoryLoader.php
+                    57                     501                     11 src/Domain/Category/Graphql/GraphqlGuard.php
+                    58                     502                     12 src/Domain/Category/Import/ImportRepositoryInterface.php
+                    59                     503                     13 src/Domain/Category/Import/ImportService.php
+                    60                     504                     14 src/Domain/Category/Quota/CacheStoreInterface.php
+                    61                     505                     15 src/Domain/Category/Quota/QuotaService.php
+                    62                     506                     16 src/Domain/Category/Quota/TokenBucket.php
+                    63                     507                     17 src/Domain/Category/Rule/RuleAdminService.php
+                    64                     508                     18 src/Domain/Category/Rule/RuleEngine.php
+                    65                     509                     19 src/Domain/Category/Rule/RuleRepositoryInterface.php
+                    66                     510                     20 src/Domain/Category/Seo/SeoRepositoryInterface.php
+                    67                     511                     21 src/Domain/Category/Suggest/RuleSuggestService.php
+                    68                     545                     1 src/Domain/Category/Acl/AclPolicyService.php
+                    69                     546                     2 src/Domain/Category/ApproxTotalService.php
+                    70                     547                     3 src/Domain/Category/Quota/QuotaService.php
+                    71                     548                     4 src/Domain/Category/Quota/TokenBucket.php
+                    72                     549                     5 src/Domain/Category/Graphql/CategoryLoader.php
+                    73                     550                     6 src/Domain/Category/Graphql/GraphqlGuard.php
+                    74                     551                     7 src/Domain/Category/Import/ImportService.php
+                    75                     552                     8 src/Domain/Category/Rule/RuleAdminService.php
+                    76                     553                     9 src/Domain/Category/Rule/RuleEngine.php
+                    77                     554                     10 src/Domain/Category/Suggest/RuleSuggestService.php
+                    78                     555                     11 src/Domain/Category/Acl/AclRepositoryInterface.php
+                    79                     556                     12 src/Domain/Category/Import/ImportRepositoryInterface.php
+                    80                     557                     13 src/Domain/Category/Quota/CacheStoreInterface.php
+                    81                     558                     14 src/Domain/Category/Rule/RuleRepositoryInterface.php
+                    82                     559                     15 src/Domain/Category/Seo/SeoRepositoryInterface.php
+                    83                     560                     16 src/Domain/Category/CatalogRepositoryInterface.php
+                    84                     561                     17 src/Domain/Category/CategoryInterface.php
+                    85                     566                     1 src/Domain/Category/Acl/AclPolicyService.php
+                    86                     567                     2 src/Domain/Category/Acl/AclRepositoryInterface.php
+                    87                     568                     3 src/Domain/Category/ApproxTotalService.php
+                    88                     569                     4 src/Domain/Category/Category.php
+                    89                     570                     5 src/Domain/Category/CategoryInterface.php
+                    90                     571                     6 src/Domain/Category/CatalogRepositoryInterface.php
+                    91                     572                     7 src/Domain/Category/CatalogCategoryService.php
+                    92                     573                     8 src/Domain/Category/CollectionImportService.php
+                    93                     574                     9 src/Domain/Category/CollectionService.php
+                    94                     575                     10 src/Domain/Category/Graphql/CategoryLoader.php
+                    95                     576                     11 src/Domain/Category/Graphql/GraphqlGuard.php
+                    96                     577                     12 src/Domain/Category/Import/ImportRepositoryInterface.php
+                    97                     578                     13 src/Domain/Category/Import/ImportService.php
+                    98                     579                     14 src/Domain/Category/Quota/CacheStoreInterface.php
+                    99                     580                     15 src/Domain/Category/Quota/QuotaService.php
+                    100                     581                     16 src/Domain/Category/Quota/TokenBucket.php
+                    101                     582                     17 src/Domain/Category/Rule/RuleAdminService.php
+                    102                     583                     18 src/Domain/Category/Rule/RuleEngine.php
+                    103                     584                     19 src/Domain/Category/Rule/RuleRepositoryInterface.php
+                    104                     585                     20 src/Domain/Category/Seo/SeoRepositoryInterface.php
+                    105                     586                     21 src/Domain/Category/Suggest/RuleSuggestService.php
+                    106                     614                     3 {"path": "src/Domain/Category/Category.php", "kind": "layer_namespace"}
+                    107                     615                     4 {"path": "src/Domain/Category/CategoryService.php", "kind": "domain_namespace"}
+                    108                     616                     5 {"path": "src/Domain/Category/CollectionImportService.php", "kind": "domain_namespace"}
+                    109                     617                     6 {"path": "src/Domain/Category/CollectionService.php", "kind": "domain_namespace"}
+                    110                     679                     1 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/ApproxTotalService.php", "namespace": "App\\Service\\Category\\Domain"}
+                    111                     680                     2 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/CategoryInterface.php", "namespace": "App\\Service\\Category\\Domain"}
+                    112                     681                     3 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/CategoryRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Category"}
+                    113                     682                     4 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Acl/AclPolicyService.php", "namespace": "App\\Service\\Category\\Domain\\Acl"}
+                    114                     683                     5 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Acl/AclRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Acl"}
+                    115                     684                     6 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Graphql/CategoryLoader.php", "namespace": "App\\Service\\Category\\Domain\\Graphql"}
+                    116                     685                     7 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Graphql/GraphqlGuard.php", "namespace": "App\\Service\\Category\\Domain\\Graphql"}
+                    117                     686                     8 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Import/ImportService.php", "namespace": "App\\Service\\Category\\Domain\\Import"}
+                    118 d": "domain-nested-suffix", "file": "src/Domain/Category/Import/ImportRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Import
+                    119                     688                     10 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Quota/QuotaService.php", "namespace": "App\\Service\\Category\\Domain\\Quota"}
+                    120                     689                     11 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Quota/TokenBucket.php", "namespace": "App\\Service\\Category\\Domain\\Quota"}
+                    121                     690                     12 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Quota/CacheStoreInterface.php", "namespace": "App\\Service\\Category\\Domain\\Quota"}
+                    122                     691                     13 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Rule/RuleAdminService.php", "namespace": "App\\Service\\Category\\Domain\\Rule"}
+                    123                     692                     14 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Rule/RuleEngine.php", "namespace": "App\\Service\\Category\\Domain\\Rule"}
+                    124                     693                     15 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Rule"}
+                    125                     694                     16 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Seo"}
+                    126                     695                     17 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Suggest/RuleSuggestService.php", "namespace": "App\\Service\\Category\\Domain\\Suggest"}
+                    127                     736                     4 {"action": "deprecate", "path": "src/Domain/Category/CategoryService.php"}
+                    128                     737                     5 {"action": "deprecate", "path": "src/Domain/Category/CollectionImportService.php"}
+                    129                     738                     6 {"action": "deprecate", "path": "src/Domain/Category/CollectionService.php"}
+                    130                     740                     1 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Acl/AclPolicyService.php"}
+                    131                     741                     2 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php"}
+                    132                     742                     3 {"action": "evacuate-domain-root", "path": "src/Domain/Category/ApproxTotalService.php"}
+                    133                     743                     4 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Category.php"}
+                    134                     744                     5 {"action": "evacuate-domain-root", "path": "src/Domain/Category/CategoryInterface.php"}
+                    135                     745                     6 {"action": "evacuate-domain-root", "path": "src/Domain/Category/CategoryRepositoryInterface.php"}
+                    136                     746                     7 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Graphql/CategoryLoader.php"}
+                    137                     747                     8 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Graphql/GraphqlGuard.php"}
+                    138                     748                     9 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php"}
+                    139                     749                     10 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Import/ImportService.php"}
+                    140                     750                     11 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Quota/CacheStoreInterface.php"}
+                    141                     751                     12 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Quota/QuotaService.php"}
+                    142                     752                     13 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Quota/TokenBucket.php"}
+                    143                     753                     14 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Rule/RuleAdminService.php"}
+                    144                     754                     15 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Rule/RuleEngine.php"}
+                    145                     755                     16 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php"}
+                    146                     756                     17 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php"}
+                    147                     757                     18 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Suggest/RuleSuggestService.php"}
+                    148                     769                     1 {"action": "bridge", "legacy": "src/Domain/Category/Acl/AclPolicyService.php", "canonical": "src/Service/Category/Acl/AclPolicyService.php"}
+                    149                     770                     2 {"action": "bridge", "legacy": "src/Domain/Category/ApproxTotalService.php", "canonical": "src/Service/Category/ApproxTotalService.php"}
+                    150                     771                     3 {"action": "bridge", "legacy": "src/Domain/Category/Quota/QuotaService.php", "canonical": "src/Service/Category/Quota/QuotaService.php"}
+                    151                     772                     4 {"action": "bridge", "legacy": "src/Domain/Category/Quota/TokenBucket.php", "canonical": "src/Service/Category/Quota/TokenBucket.php"}
+                    152                     774                     1 {"action": "bridge", "legacy": "src/Domain/Category/Graphql/CategoryLoader.php", "canonical": "src/Service/Category/Graphql/CategoryLoader.php"}
+                    153                     775                     2 {"action": "bridge", "legacy": "src/Domain/Category/Graphql/GraphqlGuard.php", "canonical": "src/Service/Category/Graphql/GraphqlGuard.php"}
+                    154                     777                     1 {"action": "bridge", "legacy": "src/Domain/Category/Import/ImportService.php", "canonical": "src/Service/Category/Import/ImportService.php"}
+                    155                     778                     2 {"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleAdminService.php", "canonical": "src/Service/Category/Rule/RuleAdminService.php"}
+                    156                     779                     3 {"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleEngine.php", "canonical": "src/Service/Category/Rule/RuleEngine.php"}
+                    157                     780                     4 {"action": "bridge", "legacy": "src/Domain/Category/Suggest/RuleSuggestService.php", "canonical": "src/Service/Category/Suggest/RuleSuggestService.php"}
+                    158    1 {"action": "bridge", "legacy": "src/Domain/Category/Acl/AclRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Acl/AclReposit
+                    159    2 {"action": "bridge", "legacy": "src/Domain/Category/Import/ImportRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Import/I
+                    160    3 {"action": "bridge", "legacy": "src/Domain/Category/Quota/CacheStoreInterface.php", "canonical": "src/ServiceInterface/Category/Quota/CacheStor
+                    161    4 {"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Rule/RuleRep
+                    162    5 {"action": "bridge", "legacy": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Seo/SeoReposit
+                    163    6 {"action": "bridge", "legacy": "src/Domain/Category/CategoryRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/CategoryRepos
+                    164                     788                     7 {"action": "bridge", "legacy": "src/Domain/Category/CategoryInterface.php", "canonical": "src/EntityInterface/Category/CategoryInterface.php"}
+                    165                     790                     1 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Acl/AclPolicyService.php"}
+                    166                     791                     2 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/ApproxTotalService.php"}
+                    167                     792                     3 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Quota/QuotaService.php"}
+                    168                     793                     4 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Quota/TokenBucket.php"}
+                    169                     794                     5 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Graphql/CategoryLoader.php"}
+                    170                     795                     6 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Graphql/GraphqlGuard.php"}
+                    171                     796                     7 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Import/ImportService.php"}
+                    172                     797                     8 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Rule/RuleAdminService.php"}
+                    173                     798                     9 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Rule/RuleEngine.php"}
+                    174                     799                     10 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Suggest/RuleSuggestService.php"}
+                    175                     800                     11 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php"}
+                    176                     801                     12 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php"}
+                    177                     802                     13 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Quota/CacheStoreInterface.php"}
+                    178                     803                     14 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php"}
+                    179                     804                     15 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php"}
+                    180                     805                     16 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/CategoryRepositoryInterface.php"}
+                    181                     806                     17 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/CategoryInterface.php"}
+                    182                     844                     1 {"from": "src/Domain/Category/CategoryService.php", "to": "src/Service/Category/CategoryQueryService.php", "state": "bridge"}
+                    183                     845                     2 {"from": "src/Domain/Category/CollectionImportService.php", "to": "src/Service/Category/CollectionImportService.php", "state": "bridge"}
+                    184                     846                     3 {"from": "src/Domain/Category/CollectionService.php", "to": "src/Service/Category/CollectionService.php", "state": "bridge"}
+                    185                     850                     1 {"group": "domain", "path": "src/Domain/Category/Acl/AclPolicyService.php", "state": "delete-ready-after-scan"}
+                    186                     851                     2 {"group": "domain", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    187                     852                     3 {"group": "domain", "path": "src/Domain/Category/ApproxTotalService.php", "state": "delete-ready-after-scan"}
+                    188                     853                     4 {"group": "domain", "path": "src/Domain/Category/Category.php", "state": "delete-ready-after-scan"}
+                    189                     854                     5 {"group": "domain", "path": "src/Domain/Category/CategoryInterface.php", "state": "delete-ready-after-scan"}
+                    190                     855                     6 {"group": "domain", "path": "src/Domain/Category/CategoryRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    191                     856                     7 {"group": "domain", "path": "src/Domain/Category/CategoryService.php", "state": "delete-ready-after-scan"}
+                    192                     857                     8 {"group": "domain", "path": "src/Domain/Category/CollectionImportService.php", "state": "delete-ready-after-scan"}
+                    193                     858                     9 {"group": "domain", "path": "src/Domain/Category/CollectionService.php", "state": "delete-ready-after-scan"}
+                    194                     859                     10 {"group": "domain", "path": "src/Domain/Category/Graphql/CategoryLoader.php", "state": "delete-ready-after-scan"}
+                    195                     860                     11 {"group": "domain", "path": "src/Domain/Category/Graphql/GraphqlGuard.php", "state": "delete-ready-after-scan"}
+                    196                     861                     12 {"group": "domain", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    197                     862                     13 {"group": "domain", "path": "src/Domain/Category/Import/ImportService.php", "state": "delete-ready-after-scan"}
+                    198                     863                     14 {"group": "domain", "path": "src/Domain/Category/Quota/CacheStoreInterface.php", "state": "delete-ready-after-scan"}
+                    199                     864                     15 {"group": "domain", "path": "src/Domain/Category/Quota/QuotaService.php", "state": "delete-ready-after-scan"}
+                    200                     865                     16 {"group": "domain", "path": "src/Domain/Category/Quota/TokenBucket.php", "state": "delete-ready-after-scan"}
+                    201                     866                     17 {"group": "domain", "path": "src/Domain/Category/Rule/RuleAdminService.php", "state": "delete-ready-after-scan"}
+                    202                     867                     18 {"group": "domain", "path": "src/Domain/Category/Rule/RuleEngine.php", "state": "delete-ready-after-scan"}
+                    203                     868                     19 {"group": "domain", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    204                     869                     20 {"group": "domain", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    205                     870                     21 {"group": "domain", "path": "src/Domain/Category/Suggest/RuleSuggestService.php", "state": "delete-ready-after-scan"}
+                    206                     915                     2 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Acl/AclPolicyService.php"}
+                    207                     916                     3 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php"}
+                    208                     917                     4 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/ApproxTotalService.php"}
+                    209                     918                     5 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Category.php"}
+                    210                     919                     6 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CategoryInterface.php"}
+                    211                     920                     7 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CategoryRepositoryInterface.php"}
+                    212                     921                     8 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CategoryService.php"}
+                    213                     922                     9 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CollectionImportService.php"}
+                    214                     923                     10 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CollectionService.php"}
+                    215                     924                     11 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Graphql/CategoryLoader.php"}
+                    216                     925                     12 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Graphql/GraphqlGuard.php"}
+                    217                     926                     13 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php"}
+                    218                     927                     14 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Import/ImportService.php"}
+                    219                     928                     15 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Quota/CacheStoreInterface.php"}
+                    220                     929                     16 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Quota/QuotaService.php"}
+                    221                     930                     17 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Quota/TokenBucket.php"}
+                    222                     931                     18 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Rule/RuleAdminService.php"}
+                    223                     932                     19 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Rule/RuleEngine.php"}
+                    224                     933                     20 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php"}
+                    225                     934                     21 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php"}
+                    226                     935                     22 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Suggest/RuleSuggestService.php"}
+                    227                     1413                     3 {"path": "src/Domain/Category/Category.php", "kind": "layer_namespace"}
+                    228                     1414                     4 {"path": "src/Domain/Category/CategoryService.php", "kind": "domain_namespace"}
+                    229                     1415                     5 {"path": "src/Domain/Category/CollectionImportService.php", "kind": "domain_namespace"}
+                    230                     1416                     6 {"path": "src/Domain/Category/CollectionService.php", "kind": "domain_namespace"}
+                    231                     1476                     1 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/ApproxTotalService.php", "namespace": "App\\Service\\Category\\Domain"}
+                    232                     1477                     2 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/CategoryInterface.php", "namespace": "App\\Service\\Category\\Domain"}
+                    233                     1478                     3 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/CategoryRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Category"}
+                    234                     1479                     4 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Acl/AclPolicyService.php", "namespace": "App\\Service\\Category\\Domain\\Acl"}
+                    235                     1480                     5 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Acl/AclRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Acl"}
+                    236                     1481                     6 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Graphql/CategoryLoader.php", "namespace": "App\\Service\\Category\\Domain\\Graphql"}
+                    237                     1482                     7 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Graphql/GraphqlGuard.php", "namespace": "App\\Service\\Category\\Domain\\Graphql"}
+                    238                     1483                     8 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Import/ImportService.php", "namespace": "App\\Service\\Category\\Domain\\Import"}
+                    239 d": "domain-nested-suffix", "file": "src/Domain/Category/Import/ImportRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Import
+                    240                     1485                     10 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Quota/QuotaService.php", "namespace": "App\\Service\\Category\\Domain\\Quota"}
+                    241                     1486                     11 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Quota/TokenBucket.php", "namespace": "App\\Service\\Category\\Domain\\Quota"}
+                    242                     1487                     12 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Quota/CacheStoreInterface.php", "namespace": "App\\Service\\Category\\Domain\\Quota"}
+                    243                     1488                     13 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Rule/RuleAdminService.php", "namespace": "App\\Service\\Category\\Domain\\Rule"}
+                    244                     1489                     14 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Rule/RuleEngine.php", "namespace": "App\\Service\\Category\\Domain\\Rule"}
+                    245                     1490                     15 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Rule"}
+                    246                     1491                     16 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "namespace": "App\\Service\\Category\\Domain\\Seo"}
+                    247                     1492                     17 {"kind": "domain-nested-suffix", "file": "src/Domain/Category/Suggest/RuleSuggestService.php", "namespace": "App\\Service\\Category\\Domain\\Suggest"}
+                    248                     1533                     4 {"action": "deprecate", "path": "src/Domain/Category/CategoryService.php"}
+                    249                     1534                     5 {"action": "deprecate", "path": "src/Domain/Category/CollectionImportService.php"}
+                    250                     1535                     6 {"action": "deprecate", "path": "src/Domain/Category/CollectionService.php"}
+                    251                     1537                     1 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Acl/AclPolicyService.php"}
+                    252                     1538                     2 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php"}
+                    253                     1539                     3 {"action": "evacuate-domain-root", "path": "src/Domain/Category/ApproxTotalService.php"}
+                    254                     1540                     4 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Category.php"}
+                    255                     1541                     5 {"action": "evacuate-domain-root", "path": "src/Domain/Category/CategoryInterface.php"}
+                    256                     1542                     6 {"action": "evacuate-domain-root", "path": "src/Domain/Category/CategoryRepositoryInterface.php"}
+                    257                     1543                     7 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Graphql/CategoryLoader.php"}
+                    258                     1544                     8 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Graphql/GraphqlGuard.php"}
+                    259                     1545                     9 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php"}
+                    260                     1546                     10 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Import/ImportService.php"}
+                    261                     1547                     11 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Quota/CacheStoreInterface.php"}
+                    262                     1548                     12 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Quota/QuotaService.php"}
+                    263                     1549                     13 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Quota/TokenBucket.php"}
+                    264                     1550                     14 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Rule/RuleAdminService.php"}
+                    265                     1551                     15 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Rule/RuleEngine.php"}
+                    266                     1552                     16 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php"}
+                    267                     1553                     17 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php"}
+                    268                     1554                     18 {"action": "evacuate-domain-root", "path": "src/Domain/Category/Suggest/RuleSuggestService.php"}
+                    269                     1566                     1 {"action": "bridge", "legacy": "src/Domain/Category/Acl/AclPolicyService.php", "canonical": "src/Service/Category/Acl/AclPolicyService.php"}
+                    270                     1567                     2 {"action": "bridge", "legacy": "src/Domain/Category/ApproxTotalService.php", "canonical": "src/Service/Category/ApproxTotalService.php"}
+                    271                     1568                     3 {"action": "bridge", "legacy": "src/Domain/Category/Quota/QuotaService.php", "canonical": "src/Service/Category/Quota/QuotaService.php"}
+                    272                     1569                     4 {"action": "bridge", "legacy": "src/Domain/Category/Quota/TokenBucket.php", "canonical": "src/Service/Category/Quota/TokenBucket.php"}
+                    273                     1571                     1 {"action": "bridge", "legacy": "src/Domain/Category/Graphql/CategoryLoader.php", "canonical": "src/Service/Category/Graphql/CategoryLoader.php"}
+                    274                     1572                     2 {"action": "bridge", "legacy": "src/Domain/Category/Graphql/GraphqlGuard.php", "canonical": "src/Service/Category/Graphql/GraphqlGuard.php"}
+                    275                     1574                     1 {"action": "bridge", "legacy": "src/Domain/Category/Import/ImportService.php", "canonical": "src/Service/Category/Import/ImportService.php"}
+                    276                     1575                     2 {"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleAdminService.php", "canonical": "src/Service/Category/Rule/RuleAdminService.php"}
+                    277                     1576                     3 {"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleEngine.php", "canonical": "src/Service/Category/Rule/RuleEngine.php"}
+                    278                     1577                     4 {"action": "bridge", "legacy": "src/Domain/Category/Suggest/RuleSuggestService.php", "canonical": "src/Service/Category/Suggest/RuleSuggestService.php"}
+                    279    1 {"action": "bridge", "legacy": "src/Domain/Category/Acl/AclRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Acl/AclReposit
+                    280    2 {"action": "bridge", "legacy": "src/Domain/Category/Import/ImportRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Import/I
+                    281    3 {"action": "bridge", "legacy": "src/Domain/Category/Quota/CacheStoreInterface.php", "canonical": "src/ServiceInterface/Category/Quota/CacheStor
+                    282    4 {"action": "bridge", "legacy": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Rule/RuleRep
+                    283    5 {"action": "bridge", "legacy": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/Seo/SeoReposit
+                    284    6 {"action": "bridge", "legacy": "src/Domain/Category/CategoryRepositoryInterface.php", "canonical": "src/ServiceInterface/Category/CategoryRepos
+                    285                     1585                     7 {"action": "bridge", "legacy": "src/Domain/Category/CategoryInterface.php", "canonical": "src/EntityInterface/Category/CategoryInterface.php"}
+                    286                     1587                     1 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Acl/AclPolicyService.php"}
+                    287                     1588                     2 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/ApproxTotalService.php"}
+                    288                     1589                     3 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Quota/QuotaService.php"}
+                    289                     1590                     4 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Quota/TokenBucket.php"}
+                    290                     1591                     5 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Graphql/CategoryLoader.php"}
+                    291                     1592                     6 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Graphql/GraphqlGuard.php"}
+                    292                     1593                     7 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Import/ImportService.php"}
+                    293                     1594                     8 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Rule/RuleAdminService.php"}
+                    294                     1595                     9 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Rule/RuleEngine.php"}
+                    295                     1596                     10 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Suggest/RuleSuggestService.php"}
+                    296                     1597                     11 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php"}
+                    297                     1598                     12 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php"}
+                    298                     1599                     13 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Quota/CacheStoreInterface.php"}
+                    299                     1600                     14 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php"}
+                    300                     1601                     15 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php"}
+                    301                     1602                     16 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/CategoryRepositoryInterface.php"}
+                    302                     1603                     17 {"action": "delete-after-reference-scan", "path": "src/Domain/Category/CategoryInterface.php"}
+                    303                     1641                     1 {"from": "src/Domain/Category/CategoryService.php", "to": "src/Service/Category/CategoryQueryService.php", "state": "bridge"}
+                    304                     1642                     2 {"from": "src/Domain/Category/CollectionImportService.php", "to": "src/Service/Category/CollectionImportService.php", "state": "bridge"}
+                    305                     1643                     3 {"from": "src/Domain/Category/CollectionService.php", "to": "src/Service/Category/CollectionService.php", "state": "bridge"}
+                    306                     1647                     1 {"group": "domain", "path": "src/Domain/Category/Acl/AclPolicyService.php", "state": "delete-ready-after-scan"}
+                    307                     1648                     2 {"group": "domain", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    308                     1649                     3 {"group": "domain", "path": "src/Domain/Category/ApproxTotalService.php", "state": "delete-ready-after-scan"}
+                    309                     1650                     4 {"group": "domain", "path": "src/Domain/Category/Category.php", "state": "delete-ready-after-scan"}
+                    310                     1651                     5 {"group": "domain", "path": "src/Domain/Category/CategoryInterface.php", "state": "delete-ready-after-scan"}
+                    311                     1652                     6 {"group": "domain", "path": "src/Domain/Category/CategoryRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    312                     1653                     7 {"group": "domain", "path": "src/Domain/Category/CategoryService.php", "state": "delete-ready-after-scan"}
+                    313                     1654                     8 {"group": "domain", "path": "src/Domain/Category/CollectionImportService.php", "state": "delete-ready-after-scan"}
+                    314                     1655                     9 {"group": "domain", "path": "src/Domain/Category/CollectionService.php", "state": "delete-ready-after-scan"}
+                    315                     1656                     10 {"group": "domain", "path": "src/Domain/Category/Graphql/CategoryLoader.php", "state": "delete-ready-after-scan"}
+                    316                     1657                     11 {"group": "domain", "path": "src/Domain/Category/Graphql/GraphqlGuard.php", "state": "delete-ready-after-scan"}
+                    317                     1658                     12 {"group": "domain", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    318                     1659                     13 {"group": "domain", "path": "src/Domain/Category/Import/ImportService.php", "state": "delete-ready-after-scan"}
+                    319                     1660                     14 {"group": "domain", "path": "src/Domain/Category/Quota/CacheStoreInterface.php", "state": "delete-ready-after-scan"}
+                    320                     1661                     15 {"group": "domain", "path": "src/Domain/Category/Quota/QuotaService.php", "state": "delete-ready-after-scan"}
+                    321                     1662                     16 {"group": "domain", "path": "src/Domain/Category/Quota/TokenBucket.php", "state": "delete-ready-after-scan"}
+                    322                     1663                     17 {"group": "domain", "path": "src/Domain/Category/Rule/RuleAdminService.php", "state": "delete-ready-after-scan"}
+                    323                     1664                     18 {"group": "domain", "path": "src/Domain/Category/Rule/RuleEngine.php", "state": "delete-ready-after-scan"}
+                    324                     1665                     19 {"group": "domain", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    325                     1666                     20 {"group": "domain", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php", "state": "delete-ready-after-scan"}
+                    326                     1667                     21 {"group": "domain", "path": "src/Domain/Category/Suggest/RuleSuggestService.php", "state": "delete-ready-after-scan"}
+                    327                     1712                     2 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Acl/AclPolicyService.php"}
+                    328                     1713                     3 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Acl/AclRepositoryInterface.php"}
+                    329                     1714                     4 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/ApproxTotalService.php"}
+                    330                     1715                     5 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Category.php"}
+                    331                     1716                     6 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CategoryInterface.php"}
+                    332                     1717                     7 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CategoryRepositoryInterface.php"}
+                    333                     1718                     8 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CategoryService.php"}
+                    334                     1719                     9 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CollectionImportService.php"}
+                    335                     1720                     10 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/CollectionService.php"}
+                    336                     1721                     11 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Graphql/CategoryLoader.php"}
+                    337                     1722                     12 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Graphql/GraphqlGuard.php"}
+                    338                     1723                     13 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Import/ImportRepositoryInterface.php"}
+                    339                     1724                     14 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Import/ImportService.php"}
+                    340                     1725                     15 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Quota/CacheStoreInterface.php"}
+                    341                     1726                     16 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Quota/QuotaService.php"}
+                    342                     1727                     17 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Quota/TokenBucket.php"}
+                    343                     1728                     18 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Rule/RuleAdminService.php"}
+                    344                     1729                     19 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Rule/RuleEngine.php"}
+                    345                     1730                     20 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Rule/RuleRepositoryInterface.php"}
+                    346                     1731                     21 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Seo/SeoRepositoryInterface.php"}
+                    347                     1732                     22 {"wave": "036", "action": "delete-candidate", "path": "src/Domain/Category/Suggest/RuleSuggestService.php"}

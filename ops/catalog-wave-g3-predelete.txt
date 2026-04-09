@@ -1,0 +1,1 @@
+tools/canary/run-category-canary.sh
