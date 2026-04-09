@@ -8,11 +8,11 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
 use App\ValueObject\CategorySyndicationFallbackAwarePackageGateReport;
 use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
+
 /**
  * Provides the category syndication fallback aware package gate policy implementation.
  */
-final class CategorySyndicationFallbackAwarePackageGatePolicy
-    implements CategorySyndicationFallbackAwarePackageGatePolicyInterface
+final class CategorySyndicationFallbackAwarePackageGatePolicy implements CategorySyndicationFallbackAwarePackageGatePolicyInterface
 {
     /**
      * @param list<string>       $packageMissingRequiredFields
@@ -33,8 +33,7 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy
         array $fallbackChecks,
         array $exactMatchedBindingIds,
         array $fallbackMatchedBindingIds,
-    ): CategorySyndicationFallbackAwarePackageGateReportInterface
-    {
+    ): CategorySyndicationFallbackAwarePackageGateReportInterface {
         $packageMissingRequiredFields = $this->normalizeList($packageMissingRequiredFields);
         $strictMediaRequiredMissing = $this->normalizeList($strictMediaRequiredMissing);
         $fallbackMediaRequiredMissing = $this->normalizeList($fallbackMediaRequiredMissing);
@@ -50,11 +49,9 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy
 
         $checks = [
             'packageFieldsReady' => [] === $packageMissingRequiredFields,
-            'strictDestinationMediaReady' =>
-                [] === $strictMediaRequiredMissing
+            'strictDestinationMediaReady' => [] === $strictMediaRequiredMissing
                 && (bool) ($strictChecks['destinationMediaPublishable'] ?? false),
-            'fallbackDestinationMediaReady' =>
-                [] === $fallbackMediaRequiredMissing
+            'fallbackDestinationMediaReady' => [] === $fallbackMediaRequiredMissing
                 && (bool) ($fallbackChecks['destinationMediaReadyWithFallback'] ?? false),
             'fallbackUsed' => (bool) ($fallbackChecks['fallbackUsed'] ?? false),
             'strictPackageGatePublishable' => false,

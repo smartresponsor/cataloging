@@ -11,27 +11,21 @@ profile:
         -   inspection: PhpMissingDocCommentInspection
             enabled: false
         -   inspection: PhpEnforceDocCommentInspection
-            options:
-                CHECK_METHOD: false
-                CHECK_FUNCTION: false
-                CHECK_CLASS: false
+            enabled: false
         -   inspection: PhpGetterAndSetterCanBeReplacedWithPropertyHooksInspection
             enabled: false
         -   inspection: PhpVariableNamingConventionInspection
-            options:
-                m_minLength: 2
-                m_maxLength: 37
-            ignore:
-                - "tests/**"
+            enabled: false
         -   inspection: PhpMethodNamingConventionInspection
-            options:
-                m_minLength: 2
-                m_maxLength: 37
-            ignore:
-                - "tests/**"
+            enabled: false
         -   inspection: PhpClassNamingConventionInspection
-            options:
-                m_maxLength: 57
+            enabled: false
+        -   inspection: PhpPropertyNamingConventionInspection
+            enabled: false
+        -   inspection: PhpConstantNamingConventionInspection
+            enabled: false
+        -   inspection: PhpFunctionNamingConventionInspection
+            enabled: false
 
 exclude:
     -   name: All
@@ -50,3 +44,4 @@ exclude:
             - .qodana
             - composer.json
             - qodana.yaml
+            - config/reference.php

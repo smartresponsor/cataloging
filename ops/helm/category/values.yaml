@@ -1,8 +1,8 @@
 image:
-  repository: category
-  tag: latest
+    repository: category
+    tag: latest
 service:
-  port: 8080
+    port: 8080
 env:
-  APP_ENV: prod
-  CATEGORY_PROMETHEUS: 'true'
+    APP_ENV: prod
+    CATEGORY_PROMETHEUS: 'true'

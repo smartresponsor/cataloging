@@ -1,15 +1,20 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<h1>Category permissions</h1>
-<table>
-  <tr><th>Role</th><th>Create</th><th>Move</th><th>Publish</th></tr>
-  {% for p in perms %}
-    <tr>
-      <td>{{ p.role }}</td>
-      <td>{{ p.create ? 'yes' : 'no' }}</td>
-      <td>{{ p.move ? 'yes' : 'no' }}</td>
-      <td>{{ p.publish ? 'yes' : 'no' }}</td>
-    </tr>
-  {% endfor %}
-</table>
+    <h1>Category permissions</h1>
+    <table>
+        <tr>
+            <th>Role</th>
+            <th>Create</th>
+            <th>Move</th>
+            <th>Publish</th>
+        </tr>
+        {% for p in perms %}
+            <tr>
+                <td>{{ p.role }}</td>
+                <td>{{ p.create ? 'yes' : 'no' }}</td>
+                <td>{{ p.move ? 'yes' : 'no' }}</td>
+                <td>{{ p.publish ? 'yes' : 'no' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

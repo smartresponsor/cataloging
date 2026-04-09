@@ -1,5 +1,6 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
-# Purpose: Multi-pack consumer engine. Downloads release assets, verifies sha256, applies files, and pushes directly to base branch.
+# Purpose: Multi-pack consumer engine. Downloads release assets,
+# verifies sha256, applies files, and pushes directly to base branch.
 
 [CmdletBinding()]
 param(
@@ -210,7 +211,15 @@ function GetBranchHeadSha([string]$Owner, [string]$Repo, [string]$Branch, [strin
   }
 }
 
-function DownloadAssets([string]$Owner, [string]$Repo, [string]$Tag, [string]$ZipName, [string]$ShaName, [string]$ReadToken, [string]$Branch) {
+function DownloadAssets(
+  [string]$Owner,
+  [string]$Repo,
+  [string]$Tag,
+  [string]$ZipName,
+  [string]$ShaName,
+  [string]$ReadToken,
+  [string]$Branch
+) {
   EnsureDir $WorkDir
 
   $useBranch = if ([string]::IsNullOrWhiteSpace($Branch)) { "master" } else { $Branch }
@@ -238,7 +247,10 @@ function DownloadAssets([string]$Owner, [string]$Repo, [string]$Tag, [string]$Zi
       return @{ zip = $zipPath; sha = $shaPath; dir = $dlDir; tag = $Tag }
     }
 
-    Write-Host "Release asset download failed or not available for $Owner/$Repo@$Tag. Falling back to branch archive '$useBranch'."
+    Write-Host (
+      "Release asset download failed or not available for " +
+      "$Owner/$Repo@$Tag. Falling back to branch archive '$useBranch'."
+    )
     # fall through into branch zipball path
   }
 
@@ -328,7 +340,10 @@ foreach ($pack in $packs) {
 
   $owner = [string](Get-OptionalProp $src 'owner')
   $repo  = [string](Get-OptionalProp $src 'repo')
-  if ([string]::IsNullOrWhiteSpace($owner) -or [string]::IsNullOrWhiteSpace($repo)) { throw "Pack $id missing source owner/repo." }
+  if (
+    [string]::IsNullOrWhiteSpace($owner) -or
+    [string]::IsNullOrWhiteSpace($repo)
+  ) { throw "Pack $id missing source owner/repo." }
 
   $zipName = [string](Get-OptionalProp $src 'assetZip')
   if (-not $zipName) { $zipName = [string](Get-OptionalProp $defSrc 'assetZip') }
@@ -363,12 +378,19 @@ foreach ($pack in $packs) {
   $triggerPack = [string]$env:AUTOMATER_TRIGGER_PACK_ID
   if ([string]::IsNullOrWhiteSpace($triggerPack)) { $triggerPack = [string]$env:AUTOMATE_TRIGGER_PACK_ID }
 
-  if (-not [string]::IsNullOrWhiteSpace($triggerTag) -and (-not [string]::IsNullOrWhiteSpace($triggerPack)) -and $triggerPack -ne $id) {
+  if (
+    -not [string]::IsNullOrWhiteSpace($triggerTag) -and
+    (-not [string]::IsNullOrWhiteSpace($triggerPack)) -and
+    $triggerPack -ne $id
+  ) {
     continue
   }
   $tag = $null
   $downloadTag = $null
-  if (-not [string]::IsNullOrWhiteSpace($triggerTag) -and ([string]::IsNullOrWhiteSpace($triggerPack) -or $triggerPack -eq $id)) {
+  if (
+    -not [string]::IsNullOrWhiteSpace($triggerTag) -and
+    ([string]::IsNullOrWhiteSpace($triggerPack) -or $triggerPack -eq $id)
+  ) {
     $tag = $triggerTag
     $downloadTag = $triggerTag
   } else {

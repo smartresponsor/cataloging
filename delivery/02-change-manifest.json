@@ -1,1 +1,5 @@
-{"wave":"02","component":"Cataloging","message":"category-governance-runtime-read-side"}
+{
+    "wave": "02",
+    "component": "Cataloging",
+    "message": "category-governance-runtime-read-side"
+}

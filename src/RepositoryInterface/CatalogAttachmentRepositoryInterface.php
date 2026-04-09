@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\RepositoryInterface;
+
 /**
  * Defines the contract for catalog attachment repository.
  */
@@ -16,7 +17,7 @@ interface CatalogAttachmentRepositoryInterface
      *     type:string,
      *     provider:string,
      *     external_attachment_id:string,
-     *     reference_uri:?string,
+     *     'reference_uri':?string,
      *     path:?string,
      *     created_at:string,
      * }>
@@ -30,7 +31,7 @@ interface CatalogAttachmentRepositoryInterface
      *     type:string,
      *     provider:string,
      *     external_attachment_id:string,
-     *     reference_uri:?string,
+     *     'reference_uri':?string,
      *     path:?string,
      *     created_at:string,
      * }
@@ -50,12 +51,13 @@ interface CatalogAttachmentRepositoryInterface
      *     type:string,
      *     provider:string,
      *     external_attachment_id:string,
-     *     reference_uri:?string,
+     *     'reference_uri':?string,
      *     path:?string,
      *     created_at:string,
      * }|null
      */
     public function findOne(string $attachmentId): ?array;
+
     /**
      * Deletes the requested target from the underlying store.
      */

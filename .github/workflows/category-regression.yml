@@ -1,6 +1,6 @@
 name: Category Regression
 on:
-  workflow_dispatch: {}
+  workflow_dispatch: { }
 jobs:
   regression:
     runs-on: ubuntu-latest

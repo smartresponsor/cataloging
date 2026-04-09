@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the category collection request implementation.
  */
@@ -15,7 +16,7 @@ final class CategoryCollectionRequest
      */
     public function __construct(
         public readonly array $rules,
-        private array $errors = [],
+        private readonly array $errors = [],
     ) {
     }
 
@@ -32,6 +33,7 @@ final class CategoryCollectionRequest
 
         return new self($decoded);
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

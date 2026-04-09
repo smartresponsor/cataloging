@@ -211,13 +211,26 @@ try {
   foreach ($i in $filtered) {
     $p = Normalize-RelPath $i.path
     if ($i.status -eq "D") {
-      Write-NdjsonLine $manifestFile ([pscustomobject]@{ path=$p; status="D"; sha256=$null; size=$null; oldPath=$i.oldPath })
+      Write-NdjsonLine $manifestFile ([pscustomobject]@{
+        path = $p
+        status = "D"
+        sha256 = $null
+        size = $null
+        oldPath = $i.oldPath
+      })
       continue
     }
 
     $abs = Join-Path $repoRoot $p
     if (!(Test-Path -LiteralPath $abs -PathType Leaf)) {
-      Write-NdjsonLine $manifestFile ([pscustomobject]@{ path=$p; status=$i.status; sha256=$null; size=$null; oldPath=$i.oldPath; note="missing-on-disk" })
+      Write-NdjsonLine $manifestFile ([pscustomobject]@{
+        path = $p
+        status = $i.status
+        sha256 = $null
+        size = $null
+        oldPath = $i.oldPath
+        note = "missing-on-disk"
+      })
       continue
     }
 
@@ -228,7 +241,14 @@ try {
     $note = $null
     if (-not $added) { $note = "zip-skip" }
 
-    Write-NdjsonLine $manifestFile ([pscustomobject]@{ path=$p; status=$i.status; sha256=$h; size=$size; oldPath=$i.oldPath; note=$note })
+    Write-NdjsonLine $manifestFile ([pscustomobject]@{
+      path = $p
+      status = $i.status
+      sha256 = $h
+      size = $size
+      oldPath = $i.oldPath
+      note = $note
+    })
   }
 } finally {
   $zip.Dispose()

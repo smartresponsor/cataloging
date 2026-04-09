@@ -24,6 +24,7 @@ final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterfac
     public function __construct(private readonly Connection $connection)
     {
     }
+
     /**
      * Handles the acquire workflow.
      */
@@ -33,8 +34,7 @@ final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterfac
         string $requestHash,
         int $ttlSec,
         ?string $correlationId = null,
-    ): bool
-    {
+    ): bool {
         $normalizedKey = trim($key);
         $normalizedOperation = trim($operation);
         $normalizedRequestHash = trim($requestHash);
@@ -89,21 +89,17 @@ final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterfac
             );
 
             if (
-                is_array($existing) &&
-                ($existing['operation'] ?? null) === $normalizedOperation &&
-                ($existing['request_hash'] ?? null) === $normalizedRequestHash
+                is_array($existing)
+                && ($existing['operation'] ?? null) === $normalizedOperation
+                && ($existing['request_hash'] ?? null) === $normalizedRequestHash
             ) {
                 return false;
             }
 
-            throw new \DomainException(
-                sprintf(
-                    'Idempotency key "%s" cannot be reused for a different request payload.',
-                    $normalizedKey,
-                ),
-            );
+            throw new \DomainException(sprintf('Idempotency key "%s" cannot be reused for a different request payload.', $normalizedKey));
         }
     }
+
     /**
      * Handles the purge expired workflow.
      */

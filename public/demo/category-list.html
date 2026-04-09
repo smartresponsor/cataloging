@@ -1,1 +1,5 @@
-<!doctype html><title>Category demo</title><h1>Category tree</h1><pre id='tree'></pre><script>fetch('category-tree.json').then(r=>r.json()).then(d=>{document.getElementById('tree').textContent=JSON.stringify(d,null,2);});</script>
+<!doctype html><title>Category demo</title><h1>Category tree</h1>
+<pre id='tree'></pre>
+<script>fetch('category-tree.json').then(r => r.json()).then(d => {
+    document.getElementById('tree').textContent = JSON.stringify(d, null, 2);
+});</script>

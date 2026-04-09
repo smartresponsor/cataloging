@@ -4,7 +4,8 @@ This page is the Antora entry point for API and reference surfaces.
 
 == OpenAPI contracts
 
-The repository already contains committed OpenAPI artifacts and those remain the source of truth for HTTP contract material:
+The repository already contains committed OpenAPI artifacts and those
+remain the source of truth for HTTP contract material:
 
 * canonical contract: `api/catalog-openapi.yaml`
 * compatibility contract: `api/category-openapi.yaml`
@@ -16,17 +17,25 @@ The runtime documentation surface is configured through:
 * `config/packages/nelmio_api_doc.yaml`
 * `config/routes/nelmio_api_doc.yaml`
 
-This is the correct place for runtime OpenAPI/Nelmio integration in the repository. The Antora surface should link to it conceptually, not duplicate the schema manually.
+This is the correct place for runtime OpenAPI/Nelmio integration in the
+repository. The Antora surface should link to it conceptually, not
+duplicate the schema manually.
 
 == Generated/public artifacts
 
-Generated or public-facing API/reference artifacts should remain outside the Antora module tree, for example:
+Generated or public-facing API/reference artifacts should remain outside
+the Antora module tree, for example:
 
 * `public/api/category-mobile.json`
 * `public/docs/category/index.html`
 
 == Code-reference surface
 
-There is no first-class generated Doctum/phpDocumentor code-reference surface committed in this repository today.
-Transitive `phpdocumentor/*` packages in `composer.lock` do not by themselves constitute a maintained code-reference documentation surface.
-If code-reference generation is added later, place the generated output in a dedicated generated-docs location and expose it from this page as a separate entry point instead of mixing it into hand-written narrative pages.
+There is no first-class generated Doctum/phpDocumentor code-reference
+surface committed in this repository today.
+Transitive `phpdocumentor/*` packages in `composer.lock` do not by
+themselves constitute a maintained code-reference documentation surface.
+If code-reference generation is added later, place the generated output in
+a dedicated generated-docs location and expose it from this page as a
+separate entry point instead of mixing it into hand-written narrative
+pages.

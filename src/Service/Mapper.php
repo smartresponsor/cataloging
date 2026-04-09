@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the mapper application service.
  */
@@ -12,7 +13,7 @@ final class Mapper
     /**
      * @param array<string,mixed> $input
      *
-     * @return array{id:string,parentId:?string,slug:string,name:string,locale:string}
+     * @return array{'id':string,'parentId':?string,'slug':string,'name':string,'locale':string}
      */
     public function map(array $input): array
     {

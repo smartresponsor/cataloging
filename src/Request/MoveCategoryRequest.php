@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the move category request implementation.
  */
@@ -16,9 +17,8 @@ final class MoveCategoryRequest
         public readonly string $policy = 'strict',
         public readonly bool $dryRun = false,
         public readonly ?string $locale = null,
-        private array $errors = [],
-    )
-    {
+        private readonly array $errors = [],
+    ) {
     }
 
     /** @param array<string,mixed> $data */
@@ -48,8 +48,7 @@ final class MoveCategoryRequest
         $dryRun = match (true) {
             is_bool($data['dry_run'] ?? null) => (bool) $data['dry_run'],
             is_int($data['dry_run'] ?? null) => 0 !== $data['dry_run'],
-            is_string($data['dry_run'] ?? null) =>
-                filter_var($data['dry_run'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? false,
+            is_string($data['dry_run'] ?? null) => filter_var($data['dry_run'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? false,
             default => false,
         };
 
@@ -60,6 +59,7 @@ final class MoveCategoryRequest
 
         return new self($parentId, $treeId, $policy, $dryRun, $locale, $errors);
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

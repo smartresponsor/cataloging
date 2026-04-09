@@ -7,6 +7,7 @@ namespace App\Service;
 
 use App\ServiceInterface\CategoryBulkInterface;
 use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
+
 /**
  * Provides the category bulk application service.
  */
@@ -15,7 +16,7 @@ final class CategoryBulk implements CategoryBulkInterface
     /**
      * Initializes the category bulk service collaborators.
      */
-    public function __construct(private CategoryCategoryService $service)
+    public function __construct(private readonly CategoryCategoryService $service)
     {
     }
 
@@ -193,8 +194,8 @@ final class CategoryBulk implements CategoryBulkInterface
                 $nested = [];
                 foreach ($entryValue as $nestedKey => $nestedValue) {
                     if (
-                        is_string($nestedKey) &&
-                        (is_bool($nestedValue)
+                        is_string($nestedKey)
+                        && (is_bool($nestedValue)
                 || is_float($nestedValue)
                 || is_int($nestedValue)
                 || is_string($nestedValue)

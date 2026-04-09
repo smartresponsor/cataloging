@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
 /**
  * Defines the contract for category projection read service.
  */
@@ -10,14 +11,15 @@ interface CategoryProjectionReadServiceInterface
 {
     /**
      * @param array<string,mixed> $criteria
+     *
      * @return list<array{
      *   id:string,
      *   slug:string,
      *   name:string,
-     *   parent_id:?string,
+     *   'parent_id':?string,
      *   path:string,
      *   locale:string,
-     *   tenant:string,
+     *   'tenant':string,
      *   workflow_state:string,
      *   published:bool,
      *   published_at:?string,
@@ -28,6 +30,7 @@ interface CategoryProjectionReadServiceInterface
 
     /**
      * @param array<string,mixed> $criteria
+     *
      * @return list<array<string,mixed>>
      */
     public function tree(array $criteria = []): array;
@@ -37,10 +40,10 @@ interface CategoryProjectionReadServiceInterface
      *   id:string,
      *   slug:string,
      *   name:string,
-     *   parent_id:?string,
+     *   'parent_id':?string,
      *   path:string,
      *   locale:string,
-     *   tenant:string,
+     *   'tenant':string,
      *   workflow_state:string,
      *   published:bool,
      *   published_at:?string,

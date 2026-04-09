@@ -1,2 +1,2 @@
 parameters:
-  category.webhook_v2.secret: 'changeme'
+    category.webhook_v2.secret: 'changeme'

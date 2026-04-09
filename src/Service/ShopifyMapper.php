@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the shopify mapper application service.
  */
@@ -12,7 +13,7 @@ final class ShopifyMapper
     /**
      * @param array<string,mixed> $shopify
      *
-     * @return array{id:string,parentId:?string,slug:string,name:string,locale:string,seoTitle:?string,redirect:mixed}
+     * @return array{'id':string,'parentId':?string,'slug':string,'name':string,'locale':string,'seoTitle':?string,'redirect':mixed}
      */
     public function map(array $shopify): array
     {

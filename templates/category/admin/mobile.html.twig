@@ -1,20 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<style>
-.cat-card { border: 1px solid #ddd; margin-bottom: .75rem; padding: .5rem; border-radius: .25rem; }
-@media (min-width: 769px) {
-  .cat-card { max-width: 360px; }
-}
-</style>
-<h1>Category mobile</h1>
-<div class="cat-card">
-  <div><strong>ID:</strong> 1</div>
-  <div><strong>Name:</strong> Root</div>
-  <div><strong>Published:</strong> yes</div>
-</div>
-<div class="cat-card">
-  <div><strong>ID:</strong> 2</div>
-  <div><strong>Name:</strong> Electronics</div>
-  <div><strong>Published:</strong> yes</div>
-</div>
+    <style>
+        .cat-card {
+            border: 1px solid #ddd;
+            margin-bottom: .75rem;
+            padding: .5rem;
+            border-radius: .25rem;
+        }
+
+        @media (min-width: 769px) {
+            .cat-card {
+                max-width: 360px;
+            }
+        }
+    </style>
+    <h1>Category mobile</h1>
+    <div class="cat-card">
+        <div><strong>ID:</strong> 1</div>
+        <div><strong>Name:</strong> Root</div>
+        <div><strong>Published:</strong> yes</div>
+    </div>
+    <div class="cat-card">
+        <div><strong>ID:</strong> 2</div>
+        <div><strong>Name:</strong> Electronics</div>
+        <div><strong>Published:</strong> yes</div>
+    </div>
 {% endblock %}

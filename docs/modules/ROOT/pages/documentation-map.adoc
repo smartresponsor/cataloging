@@ -1,19 +1,25 @@
 = Documentation map
 
-This page describes how documentation is organized in this repository and how the Antora producer surface relates to the existing documentation corpus.
+This page describes how documentation is organized in this repository and
+how the Antora producer surface relates to the existing documentation
+corpus.
 
 == Documentation role split
 
 === Antora producer pages
 
-The Antora pages under `docs/modules/ROOT/pages/` provide the stable entry surface for a central documentation aggregator.
-They are intentionally thin and should stay focused on discovery, navigation, and role separation.
+The Antora pages under `docs/modules/ROOT/pages/` provide the stable entry
+surface for a central documentation aggregator.
+They are intentionally thin and should stay focused on discovery,
+navigation, and role separation.
 
 === Narrative repository docs
 
-The main hand-written repository corpus remains under `docs/` and is grouped broadly as follows:
+The main hand-written repository corpus remains under `docs/` and is
+grouped broadly as follows:
 
-* component/runtime/install and release docs: `docs/category-*.md`, `docs/runbook-*.md`
+* component/runtime/install and release docs:
+  `docs/category-*.md`, `docs/runbook-*.md`
 * canonical convergence and historical change waves: `docs/canon/`
 * analysis snapshots and structural review notes: `docs/analysis/`
 * internal canon and runtime-status material: `docs/internal/`
@@ -22,7 +28,8 @@ The main hand-written repository corpus remains under `docs/` and is grouped bro
 
 === GitHub-facing repository docs
 
-GitHub-facing repository surfaces remain separate from the Antora module pages:
+GitHub-facing repository surfaces remain separate from the Antora module
+pages:
 
 * `README.md`
 * `docs/category-changelog.md`
@@ -31,7 +38,8 @@ GitHub-facing repository surfaces remain separate from the Antora module pages:
 
 === Generated and machine-readable surfaces
 
-Generated and machine-readable surfaces remain outside the narrative Antora pages:
+Generated and machine-readable surfaces remain outside the narrative
+Antora pages:
 
 * OpenAPI contracts under `api/`
 * public/generated doc artifacts under `public/`
@@ -39,9 +47,11 @@ Generated and machine-readable surfaces remain outside the narrative Antora page
 
 == Integration rule
 
-Do not duplicate the repository Markdown corpus into Antora pages without a clear reason.
+Do not duplicate the repository Markdown corpus into Antora pages without
+a clear reason.
 Prefer one of the following:
 
 * keep the original Markdown corpus as the source of truth,
 * add a thin Antora wrapper page,
-* add a dedicated generated/reference entry point when the source is machine-generated.
+* add a dedicated generated/reference entry point when the source is
+  machine-generated.

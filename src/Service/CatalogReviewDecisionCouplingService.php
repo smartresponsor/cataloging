@@ -11,6 +11,7 @@ use App\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+
 /**
  * Provides the catalog review decision coupling service application service.
  */
@@ -23,9 +24,9 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
         private readonly CatalogChangeRequestServiceInterface $changeRequestService,
         private readonly CatalogWorkflowTransitionServiceInterface $workflowTransitionService,
         private readonly CatalogPublicationGateServiceInterface $publicationGateService,
-    )
-    {
+    ) {
     }
+
     /**
      * Handles the couple workflow.
      */
@@ -35,13 +36,10 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
         string $reviewedBy,
         string $decisionReason,
         array $checks = [],
-    ): CategoryReviewDecisionCoupledInterface
-    {
+    ): CategoryReviewDecisionCoupledInterface {
         $normalizedTargetState = trim($targetState);
         if (!in_array($normalizedTargetState, ['accepted', 'rejected'], true)) {
-            throw new \DomainException(
-                sprintf('Unsupported review decision coupling state: %s', $normalizedTargetState),
-            );
+            throw new \DomainException(sprintf('Unsupported review decision coupling state: %s', $normalizedTargetState));
         }
         $reviewEvent = $this->changeRequestService->review(
             $requestId,

@@ -7,6 +7,7 @@ namespace App\Service;
 
 use App\AttachmentInterface\AttachmentReferenceGatewayInterface;
 use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+
 /**
  * Provides the attachment service application service.
  */
@@ -28,7 +29,7 @@ final class AttachmentService
      *     type:string,
      *     provider:string,
      *     external_attachment_id:string,
-     *     reference_uri:?string,
+     *     'reference_uri':?string,
      *     path:?string,
      *     created_at:string,
      * }>
@@ -53,7 +54,7 @@ final class AttachmentService
      *     type:string,
      *     provider:string,
      *     external_attachment_id:string,
-     *     reference_uri:?string,
+     *     'reference_uri':?string,
      *     path:?string,
      *     created_at:string,
      * }
@@ -64,8 +65,7 @@ final class AttachmentService
         string $provider,
         string $externalAttachmentId,
         ?string $referenceUri = null,
-    ): array
-    {
+    ): array {
         $normalizedCategoryId = trim($categoryId);
         $normalizedType = trim($type);
         $normalizedProvider = trim($provider);
@@ -87,6 +87,7 @@ final class AttachmentService
             null !== $normalizedReferenceUri && '' !== $normalizedReferenceUri ? $normalizedReferenceUri : null,
         );
     }
+
     /**
      * Handles the remove workflow.
      */

@@ -1,15 +1,20 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<h1>Category audit</h1>
-<table>
-  <tr><th>ts</th><th>action</th><th>user</th><th>tenant</th></tr>
-  {% for row in rows %}
-    <tr>
-      <td>{{ row.ts }}</td>
-      <td>{{ row.action }}</td>
-      <td>{{ row.user|default('-') }}</td>
-      <td>{{ row.tenant|default('-') }}</td>
-    </tr>
-  {% endfor %}
-</table>
+    <h1>Category audit</h1>
+    <table>
+        <tr>
+            <th>ts</th>
+            <th>action</th>
+            <th>user</th>
+            <th>tenant</th>
+        </tr>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row.ts }}</td>
+                <td>{{ row.action }}</td>
+                <td>{{ row.user|default('-') }}</td>
+                <td>{{ row.tenant|default('-') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

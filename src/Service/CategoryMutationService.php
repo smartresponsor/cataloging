@@ -12,12 +12,14 @@ use App\ValueObject\CategoryWorkflowState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\Uid\Uuid;
+
 /**
  * Provides the category mutation service application service.
  */
 final class CategoryMutationService implements CategoryMutationServiceInterface
 {
-private const int IDEMPOTENCY_TTL_SEC = 86400;
+    private const int IDEMPOTENCY_TTL_SEC = 86400;
+
     /**
      * Initializes the category mutation service service collaborators.
      */
@@ -30,6 +32,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         private readonly CategoryIdempotencyStoreInterface $idempotencyStore,
     ) {
     }
+
     /**
      * Handles the move workflow.
      */
@@ -43,8 +46,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         ?string $locale = null,
         ?string $idempotencyKey = null,
         ?string $correlationId = null,
-    ): array
-    {
+    ): array {
         $normalizedCategoryId = $this->requiredString($categoryId, 'categoryId');
         $normalizedNewParentId = $this->requiredString($newParentId, 'newParentId');
         $normalizedActorId = $this->requiredString($actorId, 'actorId');
@@ -79,9 +81,9 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         /**
          * @var array{
          *     id:string,
-         *     oldParentId:?string,
-         *     newParentId:string,
-         *     treeId:string,
+         *     'oldParentId':?string,
+         *     'newParentId':string,
+         *     'treeId':string,
          *     policy:string,
          *     changedCount:int,
          *     dryRun:bool,
@@ -101,90 +103,135 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
                 $requestHash,
                 $normalizedCorrelationId,
             ): array {
-            if (
-                !$dryRun &&
-                !$this->idempotencyStore->acquire(
-                    $commandKey,
-                    'category.move',
-                    $requestHash,
-                    self::IDEMPOTENCY_TTL_SEC,
-                    $normalizedCorrelationId,
-                )
-            ) {
-                return $this->duplicateMoveResult(
-                    $connection,
-                    $normalizedCategoryId,
-                    $normalizedNewParentId,
-                    $normalizedTreeId,
-                    $normalizedPolicy,
-                );
-            }
+                if (
+                    !$dryRun
+                    && !$this->idempotencyStore->acquire(
+                        $commandKey,
+                        'category.move',
+                        $requestHash,
+                        self::IDEMPOTENCY_TTL_SEC,
+                        $normalizedCorrelationId,
+                    )
+                ) {
+                    return $this->duplicateMoveResult(
+                        $connection,
+                        $normalizedCategoryId,
+                        $normalizedNewParentId,
+                        $normalizedTreeId,
+                        $normalizedPolicy,
+                    );
+                }
 
-            $node = $this->fetchCategory($connection, $normalizedCategoryId);
-            $newParent = $this->fetchCategory($connection, $normalizedNewParentId);
+                $node = $this->fetchCategory($connection, $normalizedCategoryId);
+                $newParent = $this->fetchCategory($connection, $normalizedNewParentId);
 
-            $oldPath = $this->requiredPath($node['path'] ?? null);
-            $newParentPath = $this->requiredPath($newParent['path'] ?? null);
+                $oldPath = $this->requiredPath($node['path'] ?? null);
+                $newParentPath = $this->requiredPath($newParent['path'] ?? null);
 
-            if ($newParentPath === $oldPath || str_starts_with($newParentPath, $oldPath.'.')) {
-                throw new \InvalidArgumentException('Cannot move a node under its own descendant.');
-            }
+                if ($newParentPath === $oldPath || str_starts_with($newParentPath, $oldPath.'.')) {
+                    throw new \InvalidArgumentException('Cannot move a node under its own descendant.');
+                }
 
-            $oldParentId = $this->nullableScalarToString($node['parent_id'] ?? null);
-            if ($oldParentId === $normalizedNewParentId) {
-                return [
-                    'id' => $normalizedCategoryId,
+                $oldParentId = $this->nullableScalarToString($node['parent_id'] ?? null);
+                if ($oldParentId === $normalizedNewParentId) {
+                    return [
+                        'id' => $normalizedCategoryId,
+                        'oldParentId' => $oldParentId,
+                        'newParentId' => $normalizedNewParentId,
+                        'treeId' => $normalizedTreeId,
+                        'policy' => $normalizedPolicy,
+                        'changedCount' => 0,
+                        'dryRun' => $dryRun,
+                        'redirects' => [],
+                        'duplicate' => false,
+                    ];
+                }
+
+                $leafSegment = $this->lastSegment($oldPath);
+                $newPath = '' !== $newParentPath ? $newParentPath.'.'.$leafSegment : $leafSegment;
+                $subtree = $this->fetchSubtree($connection, $oldPath);
+
+                $changedCount = 0;
+                $redirects = [];
+                foreach ($subtree as $row) {
+                    $currentPath = $this->requiredPath($row['path'] ?? null);
+                    $rebasedPath = $this->rebasePath($currentPath, $oldPath, $newPath);
+                    if ($rebasedPath === $currentPath) {
+                        continue;
+                    }
+
+                    $rowId = $this->requiredString($row['id'] ?? null, 'category row id');
+                    $level = $this->levelFromPath($rebasedPath);
+                    $parentId = $rowId === $normalizedCategoryId
+                        ? $normalizedNewParentId
+                        : $this->nullableScalarToString($row['parent_id'] ?? null);
+
+                    $connection->update(
+                        'category',
+                        [
+                            'path' => $rebasedPath,
+                            'level' => $level,
+                            'parent_id' => $parentId,
+                        ],
+                        ['id' => $rowId],
+                        [
+                            'path' => ParameterType::STRING,
+                            'level' => ParameterType::INTEGER,
+                            'parent_id' => null === $parentId ? ParameterType::NULL : ParameterType::STRING,
+                            'id' => ParameterType::STRING,
+                        ],
+                    );
+
+                    ++$changedCount;
+                    $redirects[] = ['id' => $rowId, 'from' => $currentPath, 'to' => $rebasedPath];
+                }
+
+                if ($dryRun) {
+                    return [
+                        'id' => $normalizedCategoryId,
+                        'oldParentId' => $oldParentId,
+                        'newParentId' => $normalizedNewParentId,
+                        'treeId' => $normalizedTreeId,
+                        'policy' => $normalizedPolicy,
+                        'changedCount' => $changedCount,
+                        'dryRun' => true,
+                        'redirects' => $redirects,
+                        'duplicate' => false,
+                    ];
+                }
+
+                $this->writeAudit($connection, 'category.move', [
+                    'categoryId' => $normalizedCategoryId,
+                    'actorId' => $normalizedActorId,
                     'oldParentId' => $oldParentId,
                     'newParentId' => $normalizedNewParentId,
                     'treeId' => $normalizedTreeId,
                     'policy' => $normalizedPolicy,
-                    'changedCount' => 0,
-                    'dryRun' => $dryRun,
-                    'redirects' => [],
-                    'duplicate' => false,
-                ];
-            }
-
-            $leafSegment = $this->lastSegment($oldPath);
-            $newPath = '' !== $newParentPath ? $newParentPath.'.'.$leafSegment : $leafSegment;
-            $subtree = $this->fetchSubtree($connection, $oldPath);
-
-            $changedCount = 0;
-            $redirects = [];
-            foreach ($subtree as $row) {
-                $currentPath = $this->requiredPath($row['path'] ?? null);
-                $rebasedPath = $this->rebasePath($currentPath, $oldPath, $newPath);
-                if ($rebasedPath === $currentPath) {
-                    continue;
-                }
-
-                $rowId = $this->requiredString($row['id'] ?? null, 'category row id');
-                $level = $this->levelFromPath($rebasedPath);
-                $parentId = $rowId === $normalizedCategoryId
-                    ? $normalizedNewParentId
-                    : $this->nullableScalarToString($row['parent_id'] ?? null);
-
-                $connection->update(
-                    'category',
-                    [
-                        'path' => $rebasedPath,
-                        'level' => $level,
-                        'parent_id' => $parentId,
-                    ],
-                    ['id' => $rowId],
-                    [
-                        'path' => ParameterType::STRING,
-                        'level' => ParameterType::INTEGER,
-                        'parent_id' => null === $parentId ? ParameterType::NULL : ParameterType::STRING,
-                        'id' => ParameterType::STRING,
-                    ],
+                    'changedCount' => $changedCount,
+                    'redirects' => $redirects,
+                    'correlationId' => $normalizedCorrelationId,
+                    'idempotencyKey' => $commandKey,
+                ]);
+                $this->outboxWriter->append('category.moved', [
+                    'categoryId' => $normalizedCategoryId,
+                    'actorId' => $normalizedActorId,
+                    'oldParentId' => $oldParentId,
+                    'newParentId' => $normalizedNewParentId,
+                    'treeId' => $normalizedTreeId,
+                    'policy' => $normalizedPolicy,
+                    'changedCount' => $changedCount,
+                    'redirects' => $redirects,
+                    'correlationId' => $normalizedCorrelationId,
+                    'idempotencyKey' => $commandKey,
+                ],
+                    sprintf(
+                        'category.move:%s:%s:%s',
+                        $normalizedCategoryId,
+                        $normalizedNewParentId,
+                        sha1(json_encode($redirects, JSON_THROW_ON_ERROR)),
+                    ),
                 );
 
-                ++$changedCount;
-                $redirects[] = ['id' => $rowId, 'from' => $currentPath, 'to' => $rebasedPath];
-            }
-
-            if ($dryRun) {
                 return [
                     'id' => $normalizedCategoryId,
                     'oldParentId' => $oldParentId,
@@ -192,56 +239,11 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
                     'treeId' => $normalizedTreeId,
                     'policy' => $normalizedPolicy,
                     'changedCount' => $changedCount,
-                    'dryRun' => true,
+                    'dryRun' => false,
                     'redirects' => $redirects,
                     'duplicate' => false,
                 ];
-            }
-
-            $this->writeAudit($connection, 'category.move', [
-                'categoryId' => $normalizedCategoryId,
-                'actorId' => $normalizedActorId,
-                'oldParentId' => $oldParentId,
-                'newParentId' => $normalizedNewParentId,
-                'treeId' => $normalizedTreeId,
-                'policy' => $normalizedPolicy,
-                'changedCount' => $changedCount,
-                'redirects' => $redirects,
-                'correlationId' => $normalizedCorrelationId,
-                'idempotencyKey' => $commandKey,
-            ]);
-            $this->outboxWriter->append('category.moved', [
-                'categoryId' => $normalizedCategoryId,
-                'actorId' => $normalizedActorId,
-                'oldParentId' => $oldParentId,
-                'newParentId' => $normalizedNewParentId,
-                'treeId' => $normalizedTreeId,
-                'policy' => $normalizedPolicy,
-                'changedCount' => $changedCount,
-                'redirects' => $redirects,
-                'correlationId' => $normalizedCorrelationId,
-                'idempotencyKey' => $commandKey,
-            ],
-            sprintf(
-                'category.move:%s:%s:%s',
-                $normalizedCategoryId,
-                $normalizedNewParentId,
-                sha1(json_encode($redirects, JSON_THROW_ON_ERROR)),
-            ),
-        );
-
-            return [
-                'id' => $normalizedCategoryId,
-                'oldParentId' => $oldParentId,
-                'newParentId' => $normalizedNewParentId,
-                'treeId' => $normalizedTreeId,
-                'policy' => $normalizedPolicy,
-                'changedCount' => $changedCount,
-                'dryRun' => false,
-                'redirects' => $redirects,
-                'duplicate' => false,
-            ];
-        });
+            });
 
         if (!$result['dryRun'] && !$result['duplicate']) {
             $this->cacheInvalidationRecorder->invalidate($result['id']);
@@ -249,6 +251,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
 
         return $result;
     }
+
     /**
      * Handles the publish workflow.
      */
@@ -260,8 +263,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         string $reason,
         ?string $idempotencyKey = null,
         ?string $correlationId = null,
-    ): array
-    {
+    ): array {
         $normalizedCategoryId = $this->requiredString($categoryId, 'categoryId');
         $normalizedActorId = $this->requiredString($actorId, 'actorId');
         $normalizedReason = $this->requiredString($reason, 'reason');
@@ -292,7 +294,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
          *     blockers:list<string>,
          *     warnings:list<string>,
          *     checks:array<string,bool>,
-         *     publishedAt:?string,
+         *     'publishedAt':?string,
          *     reason:string,
          *     duplicate:bool,
          * } $result
@@ -308,118 +310,113 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
                 $requestHash,
                 $normalizedCorrelationId,
             ): array {
-            if (
-                !$this->idempotencyStore->acquire(
-                    $commandKey,
-                    $published ? 'category.publish' : 'category.unpublish',
-                    $requestHash,
-                    self::IDEMPOTENCY_TTL_SEC,
-                    $normalizedCorrelationId,
-                )
-            ) {
-                return $this->duplicatePublishResult(
-                    $connection,
-                    $normalizedCategoryId,
-                    $normalizedChecks,
-                    $normalizedReason,
-                );
-            }
-
-            $category = $this->fetchCategory($connection, $normalizedCategoryId);
-            $currentWorkflowState = $this->workflowStateValue($category['workflow_state'] ?? null);
-            $previousPublished = (bool) ($category['published'] ?? false);
-
-            if ($published) {
-                $gate = $this->publicationGateService->evaluate(
-                    $normalizedCategoryId,
-                    $currentWorkflowState,
-                    $normalizedChecks,
-                    $normalizedActorId,
-                    $normalizedReason,
-                );
-                $payload = $gate->payload();
-                if (($payload['publishable'] ?? false) !== true) {
-                    throw new \DomainException(
-                        'Category publication gate failed: '.implode(
-                            ',',
-                            $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : []),
-                        ),
+                if (
+                    !$this->idempotencyStore->acquire(
+                        $commandKey,
+                        $published ? 'category.publish' : 'category.unpublish',
+                        $requestHash,
+                        self::IDEMPOTENCY_TTL_SEC,
+                        $normalizedCorrelationId,
+                    )
+                ) {
+                    return $this->duplicatePublishResult(
+                        $connection,
+                        $normalizedCategoryId,
+                        $normalizedChecks,
+                        $normalizedReason,
                     );
                 }
-                $targetState = CategoryWorkflowState::PUBLISHED;
-                $publishedAt = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
-                $blockers = $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : []);
-                $warnings = $this->stringList(is_iterable($payload['warnings'] ?? null) ? $payload['warnings'] : []);
-                $checksForResponse = $this->boolMap(is_iterable($payload['checks'] ?? null) ? $payload['checks'] : []);
-            } else {
-                $targetState = CategoryWorkflowState::DRAFT;
-                $publishedAt = null;
-                $blockers = [];
-                $warnings = [];
-                $checksForResponse = [];
-            }
 
-            $from = CategoryWorkflowState::fromString($currentWorkflowState);
-            $to = CategoryWorkflowState::fromString($targetState);
-            $this->workflowPolicy->assertTransitionAllowed($from, $to, $normalizedActorId, $normalizedReason);
+                $category = $this->fetchCategory($connection, $normalizedCategoryId);
+                $currentWorkflowState = $this->workflowStateValue($category['workflow_state'] ?? null);
+                $previousPublished = (bool) ($category['published'] ?? false);
 
-            $connection->update(
-                'category',
-                [
-                    'workflow_state' => $targetState,
+                if ($published) {
+                    $gate = $this->publicationGateService->evaluate(
+                        $normalizedCategoryId,
+                        $currentWorkflowState,
+                        $normalizedChecks,
+                        $normalizedActorId,
+                        $normalizedReason,
+                    );
+                    $payload = $gate->payload();
+                    if (($payload['publishable'] ?? false) !== true) {
+                        throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
+                    }
+                    $targetState = CategoryWorkflowState::PUBLISHED;
+                    $publishedAt = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+                    $blockers = $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : []);
+                    $warnings = $this->stringList(is_iterable($payload['warnings'] ?? null) ? $payload['warnings'] : []);
+                    $checksForResponse = $this->boolMap(is_iterable($payload['checks'] ?? null) ? $payload['checks'] : []);
+                } else {
+                    $targetState = CategoryWorkflowState::DRAFT;
+                    $publishedAt = null;
+                    $blockers = [];
+                    $warnings = [];
+                    $checksForResponse = [];
+                }
+
+                $from = CategoryWorkflowState::fromString($currentWorkflowState);
+                $to = CategoryWorkflowState::fromString($targetState);
+                $this->workflowPolicy->assertTransitionAllowed($from, $to, $normalizedActorId, $normalizedReason);
+
+                $connection->update(
+                    'category',
+                    [
+                        'workflow_state' => $targetState,
+                        'published' => $published,
+                        'published_at' => $publishedAt,
+                    ],
+                    ['id' => $normalizedCategoryId],
+                    [
+                        'workflow_state' => ParameterType::STRING,
+                        'published' => ParameterType::BOOLEAN,
+                        'published_at' => null === $publishedAt ? ParameterType::NULL : ParameterType::STRING,
+                        'id' => ParameterType::STRING,
+                    ],
+                );
+
+                $payload = [
+                    'categoryId' => $normalizedCategoryId,
+                    'actorId' => $normalizedActorId,
+                    'reason' => $normalizedReason,
                     'published' => $published,
-                    'published_at' => $publishedAt,
-                ],
-                ['id' => $normalizedCategoryId],
-                [
-                    'workflow_state' => ParameterType::STRING,
-                    'published' => ParameterType::BOOLEAN,
-                    'published_at' => null === $publishedAt ? ParameterType::NULL : ParameterType::STRING,
-                    'id' => ParameterType::STRING,
-                ],
-            );
+                    'previousPublished' => $previousPublished,
+                    'workflowState' => $targetState,
+                    'previousWorkflowState' => $currentWorkflowState,
+                    'checks' => $checksForResponse,
+                    'blockers' => $blockers,
+                    'warnings' => $warnings,
+                    'publishedAt' => $publishedAt,
+                    'correlationId' => $normalizedCorrelationId,
+                    'idempotencyKey' => $commandKey,
+                ];
 
-            $payload = [
-                'categoryId' => $normalizedCategoryId,
-                'actorId' => $normalizedActorId,
-                'reason' => $normalizedReason,
-                'published' => $published,
-                'previousPublished' => $previousPublished,
-                'workflowState' => $targetState,
-                'previousWorkflowState' => $currentWorkflowState,
-                'checks' => $checksForResponse,
-                'blockers' => $blockers,
-                'warnings' => $warnings,
-                'publishedAt' => $publishedAt,
-                'correlationId' => $normalizedCorrelationId,
-                'idempotencyKey' => $commandKey,
-            ];
+                $this->writeAudit($connection, 'category.publish', $payload);
+                $this->outboxWriter->append(
+                    $published ? 'category.published' : 'category.unpublished',
+                    $payload,
+                    sprintf(
+                        'category.publish:%s:%s:%s',
+                        $normalizedCategoryId,
+                        $published ? '1' : '0',
+                        sha1($normalizedReason),
+                    ),
+                );
 
-            $this->writeAudit($connection, 'category.publish', $payload);
-            $this->outboxWriter->append(
-                $published ? 'category.published' : 'category.unpublished',
-                $payload,
-                sprintf(
-                    'category.publish:%s:%s:%s',
-                    $normalizedCategoryId,
-                    $published ? '1' : '0',
-                    sha1($normalizedReason),
-                ),
-            );
-
-            return [
-                'id' => $normalizedCategoryId,
-                'published' => $published,
-                'workflowState' => $targetState,
-                'previousWorkflowState' => $currentWorkflowState,
-                'blockers' => $blockers,
-                'warnings' => $warnings,
-                'checks' => $checksForResponse,
-                'publishedAt' => $publishedAt,
-                'reason' => $normalizedReason,
-                'duplicate' => false,
-            ];
-        });
+                return [
+                    'id' => $normalizedCategoryId,
+                    'published' => $published,
+                    'workflowState' => $targetState,
+                    'previousWorkflowState' => $currentWorkflowState,
+                    'blockers' => $blockers,
+                    'warnings' => $warnings,
+                    'checks' => $checksForResponse,
+                    'publishedAt' => $publishedAt,
+                    'reason' => $normalizedReason,
+                    'duplicate' => false,
+                ];
+            });
 
         if (!$result['duplicate']) {
             $this->cacheInvalidationRecorder->invalidate($result['id']);
@@ -431,9 +428,9 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
     /**
      * @return array{
      *     id:string,
-     *     oldParentId:?string,
-     *     newParentId:string,
-     *     treeId:string,
+     *     'oldParentId':?string,
+     *     'newParentId':string,
+     *     'treeId':string,
      *     policy:string,
      *     changedCount:int,
      *     dryRun:bool,
@@ -447,8 +444,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         string $newParentId,
         string $treeId,
         string $policy,
-    ): array
-    {
+    ): array {
         $category = $this->fetchCategory($connection, $categoryId);
 
         return [
@@ -466,6 +462,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
 
     /**
      * @param array<string,bool> $checks
+     *
      * @return array{
      *     id:string,
      *     published:bool,
@@ -474,7 +471,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
      *     blockers:list<string>,
      *     warnings:list<string>,
      *     checks:array<string,bool>,
-     *     publishedAt:?string,
+     *     'publishedAt':?string,
      *     reason:string,
      *     duplicate:bool,
      * }
@@ -484,8 +481,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         string $categoryId,
         array $checks,
         string $reason,
-    ): array
-    {
+    ): array {
         $category = $this->fetchCategory($connection, $categoryId);
         $workflowState = $this->workflowStateValue($category['workflow_state'] ?? null);
 
@@ -709,8 +705,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         bool $dryRun,
         ?string $locale,
         ?string $idempotencyKey,
-    ): string
-    {
+    ): string {
         $providedKey = $this->normalizeOptionalString($idempotencyKey);
         if (null !== $providedKey) {
             return sprintf('category.move:client:%s', $providedKey);
@@ -730,8 +725,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         string $actorId,
         string $reason,
         ?string $idempotencyKey,
-    ): string
-    {
+    ): string {
         $providedKey = $this->normalizeOptionalString($idempotencyKey);
         if (null !== $providedKey) {
             return sprintf('category.publish:client:%s', $providedKey);
@@ -751,8 +745,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         string $policy,
         bool $dryRun,
         ?string $locale,
-    ): string
-    {
+    ): string {
         return sha1(json_encode([
             'categoryId' => $categoryId,
             'newParentId' => $newParentId,
@@ -771,8 +764,7 @@ private const int IDEMPOTENCY_TTL_SEC = 86400;
         array $checks,
         string $actorId,
         string $reason,
-    ): string
-    {
+    ): string {
         return sha1(json_encode([
             'categoryId' => $categoryId,
             'published' => $published,

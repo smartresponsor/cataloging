@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the category rule preview request implementation.
  */
@@ -15,7 +16,7 @@ final class CategoryRulePreviewRequest
      */
     public function __construct(
         public readonly ?array $spec,
-        private array $errors = [],
+        private readonly array $errors = [],
     ) {
     }
 
@@ -32,6 +33,7 @@ final class CategoryRulePreviewRequest
 
         return new self($decoded);
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

@@ -11,7 +11,7 @@ use App\Entity\CategoryEntity;
 use App\Entity\CategoryHtmlBlock;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
+
 /**
  * Provides the category fixtures implementation.
  */
@@ -22,7 +22,8 @@ final class CategoryFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $faker = class_exists(Factory::class) ? Factory::create('en_US') : null;
+        $fakerFactoryClass = 'Faker\\Factory';
+        $faker = class_exists($fakerFactoryClass) ? $fakerFactoryClass::create('en_US') : null;
         if (null !== $faker) {
             $faker->seed(2025);
         }

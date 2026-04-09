@@ -1,5 +1,5 @@
 security:
-  role_hierarchy:
-    category.owner: [category.editor, category.viewer]
-    category.editor: [category.viewer]
-    category.viewer: []
+    role_hierarchy:
+        category.owner: [ category.editor, category.viewer ]
+        category.editor: [ category.viewer ]
+        category.viewer: [ ]

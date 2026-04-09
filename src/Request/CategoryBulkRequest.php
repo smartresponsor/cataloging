@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the category bulk request implementation.
  */
@@ -16,7 +17,7 @@ final class CategoryBulkRequest
     public function __construct(
         public readonly array $ids,
         public readonly string $action,
-        private array $errors = [],
+        private readonly array $errors = [],
     ) {
     }
 
@@ -70,6 +71,7 @@ final class CategoryBulkRequest
 
         return $normalized;
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

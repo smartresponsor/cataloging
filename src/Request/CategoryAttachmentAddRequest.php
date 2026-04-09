@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the category attachment add request implementation.
  */
@@ -18,7 +19,7 @@ final class CategoryAttachmentAddRequest
         public readonly ?string $provider,
         public readonly ?string $externalAttachmentId,
         public readonly ?string $referenceUri,
-        private array $errors = [],
+        private readonly array $errors = [],
     ) {
     }
 
@@ -48,6 +49,7 @@ final class CategoryAttachmentAddRequest
 
         return new self($categoryId, $type, $provider, $externalAttachmentId, $referenceUri, $errors);
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

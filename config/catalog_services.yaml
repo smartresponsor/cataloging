@@ -1,50 +1,51 @@
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
-  App\Controller\StatusController:
-    tags: ['controller.service_arguments']
+    App\Controller\StatusController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Controller\LegacyCategoryListController:
-    tags: ['controller.service_arguments']
+    App\Controller\LegacyCategoryListController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Controller\LegacyCollectionListController:
-    tags: ['controller.service_arguments']
+    App\Controller\LegacyCollectionListController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Controller\CategoryAttachmentController:
-    tags: ['controller.service_arguments']
+    App\Controller\CategoryAttachmentController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Controller\CategoryCollectionController:
-    tags: ['controller.service_arguments']
+    App\Controller\CategoryCollectionController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Controller\CategoryReadController:
-    tags: ['controller.service_arguments']
+    App\Controller\CategoryReadController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Controller\CategoryVirtualController:
-    tags: ['controller.service_arguments']
+    App\Controller\CategoryVirtualController:
+        tags: [ 'controller.service_arguments' ]
 
-  App\Repository\CatalogAttachmentRepository: ~
-  App\Repository\CatalogCollectionProjectionRepository: ~
-  App\Repository\CatalogRepository: ~
-  App\Repository\VirtualCategoryRepository: ~
+    App\Repository\CatalogAttachmentRepository: ~
+    App\Repository\CatalogCollectionProjectionRepository: ~
+    App\Repository\CatalogRepository: ~
+    App\Repository\VirtualCategoryRepository: ~
 
-  App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
-  App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface: '@App\Repository\CatalogCollectionProjectionRepository'
-  App\RepositoryInterface\VirtualCategoryRepositoryInterface: '@App\Repository\VirtualCategoryRepository'
+    App\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Repository\CatalogAttachmentRepository'
+    App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface:
+        '@App\Repository\CatalogCollectionProjectionRepository'
+    App\RepositoryInterface\VirtualCategoryRepositoryInterface: '@App\Repository\VirtualCategoryRepository'
 
-  App\Service\AttachmentService: ~
-  App\Service\CatalogCollectionService: ~
-  App\Service\CatalogLegacyCollectionFilterService: ~
-  App\Service\CatalogMoveService: ~
-  App\Service\CatalogReadService: ~
-  App\Service\CatalogVirtualCollectionService: ~
-  App\Service\CollectionRuleEngine: ~
-  App\Service\CollectionBuilder: ~
+    App\Service\AttachmentService: ~
+    App\Service\CatalogCollectionService: ~
+    App\Service\CatalogLegacyCollectionFilterService: ~
+    App\Service\CatalogMoveService: ~
+    App\Service\CatalogReadService: ~
+    App\Service\CatalogVirtualCollectionService: ~
+    App\Service\CollectionRuleEngine: ~
+    App\Service\CollectionBuilder: ~
 
-  App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'
-  App\ServiceInterface\CategoryMoveInterface: '@App\Service\CatalogMoveService'
-  App\ServiceInterface\CatalogReadServiceInterface: '@App\Service\CatalogReadService'
+    App\ServiceInterface\CatalogMoveServiceInterface: '@App\Service\CatalogMoveService'
+    App\ServiceInterface\CategoryMoveInterface: '@App\Service\CatalogMoveService'
+    App\ServiceInterface\CatalogReadServiceInterface: '@App\Service\CatalogReadService'
 
-  App\Security\:
-    resource: '../src/Security/'
+    App\Security\:
+        resource: '../src/Security/'

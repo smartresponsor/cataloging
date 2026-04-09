@@ -7,6 +7,7 @@ namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
+
 /**
  * Provides the category breadcrumb builder application service.
  */
@@ -15,15 +16,15 @@ final class CategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterf
     /**
      * Initializes the category breadcrumb builder service collaborators.
      */
-    public function __construct(private CategoryRepositoryInterface $repo)
+    public function __construct(private readonly CategoryRepositoryInterface $repo)
     {
     }
 
     /**
      * @return array{
- *     breadcrumb: list<array{id:string,name:string,slug:string}>,
- *     seo: array{fullSlug: string, title: string},
- * }
+     *     breadcrumb: list<array{id:string,name:string,slug:string}>,
+     *     seo: array{fullSlug: string, title: string},
+     * }
      */
     public function build(string $categoryId, string $locale): array
     {

@@ -7,6 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
+/** @noinspection PhpMissingParentCallCommonInspection */
 final class Version20251102082500_category_access_assignment_runtime_hardening extends AbstractMigration
 {
     public function getDescription(): string

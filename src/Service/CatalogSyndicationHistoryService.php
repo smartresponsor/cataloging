@@ -14,6 +14,7 @@ use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ValueObject\CategorySyndicationDestinationHistory;
 use App\ValueObject\CategorySyndicationRecoveryAuditSummary;
+
 /**
  * Provides the catalog syndication history service application service.
  */
@@ -27,6 +28,7 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
         private readonly CategorySyndicationRetryPolicyInterface $retryPolicy,
     ) {
     }
+
     /**
      * Builds the destination history result for the current workflow.
      */
@@ -35,8 +37,7 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
         array $records,
         string $actorId,
         string $reason,
-    ): CategorySyndicationDestinationHistoryBuiltInterface
-    {
+    ): CategorySyndicationDestinationHistoryBuiltInterface {
         $this->historyPolicy->assertDestinationId($destinationId);
         $filtered = $this->historyPolicy->recordsForDestination($destinationId, $records);
 
@@ -66,8 +67,8 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
             };
 
             if (
-                null !== $record->deliveredAt() &&
-                (null === $latestDeliveredAt || $record->deliveredAt() > $latestDeliveredAt)
+                null !== $record->deliveredAt()
+                && (null === $latestDeliveredAt || $record->deliveredAt() > $latestDeliveredAt)
             ) {
                 $latestDeliveredAt = $record->deliveredAt();
             }
@@ -103,6 +104,7 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
             'reason' => trim($reason),
         ], new \DateTimeImmutable('now'));
     }
+
     /**
      * Handles the consolidate recovery audit workflow.
      */
@@ -111,8 +113,7 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
         array $records,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRecoveryAuditConsolidatedInterface
-    {
+    ): CategorySyndicationRecoveryAuditConsolidatedInterface {
         $this->historyPolicy->assertDestinationId($destinationId);
         $filtered = $this->historyPolicy->recordsForDestination($destinationId, $records);
 

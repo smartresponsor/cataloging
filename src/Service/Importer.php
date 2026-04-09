@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the importer application service.
  */
@@ -38,6 +39,7 @@ final class Importer
 
         return $count;
     }
+
     /**
      * Handles the import json workflow.
      */
@@ -58,7 +60,6 @@ final class Importer
                 continue;
             }
             /** @var array<string, scalar|null> $item */
-            $item = $item;
             $this->upsert($item);
             ++$count;
         }

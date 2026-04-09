@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
 /**
  * Defines the contract for category mutation service.
  */
@@ -11,9 +12,9 @@ interface CategoryMutationServiceInterface
     /**
      * @return array{
      *   id:string,
-     *   oldParentId:?string,
-     *   newParentId:string,
-     *   treeId:string,
+     *   'oldParentId':?string,
+     *   'newParentId':string,
+     *   'treeId':string,
      *   policy:string,
      *   changedCount:int,
      *   dryRun:bool,
@@ -44,7 +45,7 @@ interface CategoryMutationServiceInterface
      *   blockers:list<string>,
      *   warnings:list<string>,
      *   checks:array<string,bool>,
-     *   publishedAt:?string,
+     *   'publishedAt':?string,
      *   reason:string,
      *   duplicate:bool
      * }

@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
 {% block title %}Category Admin{% endblock %}
 {% block body %}
-<h1>Categories</h1>
-<a href="{{ path('admin_category_new') }}">New</a>
-<table>
-  <tr><th>ID</th><th>Name</th><th>Slug</th><th>Actions</th></tr>
-  {% for c in categories %}
-    <tr>
-      <td>{{ c.id }}</td>
-      <td>{{ c.name }}</td>
-      <td>{{ c.slug }}</td>
-      <td><a href="{{ path('admin_category_edit', {id: c.id}) }}">Edit</a></td>
-    </tr>
-  {% endfor %}
-</table>
+    <h1>Categories</h1>
+    <a href="{{ path('admin_category_new') }}">New</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Actions</th>
+        </tr>
+        {% for c in categories %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.slug }}</td>
+                <td><a href="{{ path('admin_category_edit', {id: c.id}) }}">Edit</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

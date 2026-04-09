@@ -1,10 +1,12 @@
 = Reference surfaces
 
-This page is the Antora entry point for generated, machine-readable, and reference-oriented surfaces.
+This page is the Antora entry point for generated, machine-readable, and
+reference-oriented surfaces.
 
 == OpenAPI and HTTP contract artifacts
 
-The canonical HTTP contract remains outside the Antora module pages and is already committed in the repository:
+The canonical HTTP contract remains outside the Antora module pages and is
+already committed in the repository:
 
 * canonical contract: `api/catalog-openapi.yaml`
 * compatibility contract: `api/category-openapi.yaml`
@@ -13,22 +15,28 @@ The canonical HTTP contract remains outside the Antora module pages and is alrea
 
 == Generated/public reference artifacts
 
-Generated or public-facing artifacts remain outside the Antora narrative tree:
+Generated or public-facing artifacts remain outside the Antora narrative
+tree:
 
 * generated public API artifact: `public/api/category-mobile.json`
 * generated public docs surface: `public/docs/category/index.html`
 
 == Machine-readable inspection/report surfaces
 
-Inspection outputs belong in `report/` rather than inside the Antora module tree.
+Inspection outputs belong in `report/` rather than inside the Antora
+module tree.
 Representative locations include:
 
 * `report/inspection/`
 * `report/pipeline/`
 
-These artifacts support operational verification and CI-style evidence, but they should not be duplicated as hand-written narrative docs.
+These artifacts support operational verification and CI-style evidence,
+but they should not be duplicated as hand-written narrative docs.
 
 == Code-reference surface
 
-There is still no dedicated first-class Doctum or phpDocumentor code-reference publication surface committed as a maintained repository artifact.
-If one is added later, keep it separate from hand-written Antora narrative pages and expose it from this page as an explicit reference entry point.
+There is still no dedicated first-class Doctum or phpDocumentor
+code-reference publication surface committed as a maintained repository
+artifact.
+If one is added later, keep it separate from hand-written Antora narrative
+pages and expose it from this page as an explicit reference entry point.

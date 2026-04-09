@@ -5,11 +5,10 @@ declare(strict_types=1);
 
 namespace App\Consistency\Role;
 
-if (!interface_exists(\PolicyInterface\Role\PdpV2Interface::class, false)) {
+if (!interface_exists('PolicyInterface\\Role\\PdpV2Interface', false)) {
     /**
      * Defines the contract for pdp v2.
      */
-
     eval('namespace PolicyInterface\\Role; interface PdpV2Interface {}');
 }
 

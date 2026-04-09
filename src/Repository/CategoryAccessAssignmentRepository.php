@@ -10,6 +10,7 @@ use App\EntityInterface\CategoryAccessAssignmentInterface;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
+
 /**
  * Provides repository services for category access assignment repository.
  */
@@ -17,12 +18,14 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 {
     /** @var array<string,CategoryAccessAssignmentInterface> */
     private array $assignments = [];
+
     /**
      * Initializes the category access assignment repository service collaborators.
      */
     public function __construct(private readonly ?Connection $connection = null)
     {
     }
+
     /**
      * Handles the save workflow.
      */
@@ -36,7 +39,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
         $existing = $this->connection->fetchOne(
             'SELECT assignment_id FROM category_access_assignment '
-            . 'WHERE category_id = :categoryId AND actor_user_id = :actorUserId',
+            .'WHERE category_id = :categoryId AND actor_user_id = :actorUserId',
             [
                 'categoryId' => $assignment->categoryId(),
                 'actorUserId' => $assignment->actorUserId(),
@@ -90,6 +93,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             ],
         );
     }
+
     /**
      * Handles the find primary for category id workflow.
      */
@@ -104,6 +108,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
         return null;
     }
+
     /**
      * Handles the find active by category id workflow.
      */
@@ -112,8 +117,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
         if (!$this->connection instanceof Connection) {
             return array_values(array_filter(
                 $this->assignments,
-                static fn (CategoryAccessAssignmentInterface $assignment): bool =>
-                    $assignment->categoryId() === $categoryId
+                static fn (CategoryAccessAssignmentInterface $assignment): bool => $assignment->categoryId() === $categoryId
                     && 'active' === $assignment->status(),
             ));
         }
@@ -130,6 +134,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             ),
         );
     }
+
     /**
      * Handles the find active by actor user id workflow.
      */
@@ -138,8 +143,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
         if (!$this->connection instanceof Connection) {
             return array_values(array_filter(
                 $this->assignments,
-                static fn (CategoryAccessAssignmentInterface $assignment): bool =>
-                    $assignment->actorUserId() === $actorUserId
+                static fn (CategoryAccessAssignmentInterface $assignment): bool => $assignment->actorUserId() === $actorUserId
                     && 'active' === $assignment->status(),
             ));
         }
@@ -156,14 +160,14 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             ),
         );
     }
+
     /**
      * Handles the find one by category id and actor user id workflow.
      */
     public function findOneByCategoryIdAndActorUserId(
         string $categoryId,
         string $actorUserId,
-    ): ?CategoryAccessAssignmentInterface
-    {
+    ): ?CategoryAccessAssignmentInterface {
         if (!$this->connection instanceof Connection) {
             foreach ($this->assignments as $assignment) {
                 if ($assignment->categoryId() === $categoryId && $assignment->actorUserId() === $actorUserId) {
@@ -189,6 +193,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * @param list<array<string,mixed>> $rows
+     *
      * @return list<CategoryAccessAssignmentInterface>
      */
     private function hydrateMany(array $rows): array

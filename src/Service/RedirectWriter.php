@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the redirect writer application service.
  */
 final class RedirectWriter
 {
     private \PDO $db;
+
     /**
      * Initializes the redirect writer service collaborators.
      */
@@ -18,7 +20,7 @@ final class RedirectWriter
         $this->db = $db;
     }
 
-    /** @param array<int,array{from:string,to:string,locale:?string}> $rows */
+    /** @param array<int,array{'from':string,'to':string,'locale':?string}> $rows */
     public function write(array $rows): int
     {
         $sql = 'INSERT INTO redirect_rule(from_path,to_path,locale,source) VALUES(:from,:to,:locale,\'category-move\')

@@ -6,23 +6,25 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+
 /**
  * Represents the category workflow state value.
  */
 final class CategoryWorkflowState implements CategoryWorkflowStateInterface
 {
-public const string DRAFT = 'draft';
-public const string IN_REVIEW = 'in_review';
-public const string APPROVED = 'approved';
-public const string PUBLISHED = 'published';
-public const string ARCHIVED = 'archived';
-    private const ALLOWED = [
+    public const string DRAFT = 'draft';
+    public const string IN_REVIEW = 'in_review';
+    public const string APPROVED = 'approved';
+    public const string PUBLISHED = 'published';
+    public const string ARCHIVED = 'archived';
+    private const array ALLOWED = [
         self::DRAFT,
         self::IN_REVIEW,
         self::APPROVED,
         self::PUBLISHED,
         self::ARCHIVED,
     ];
+
     /**
      * Initializes the category workflow state service collaborators.
      */
@@ -42,6 +44,7 @@ public const string ARCHIVED = 'archived';
     {
         return new self($value);
     }
+
     /**
      * Handles the value workflow.
      */
@@ -49,6 +52,7 @@ public const string ARCHIVED = 'archived';
     {
         return $this->value;
     }
+
     /**
      * Handles the is workflow.
      */

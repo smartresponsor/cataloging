@@ -8,13 +8,14 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
 use App\ValueObject\CategoryDestinationMediaPolicyPreference;
 use App\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
+
 /**
  * Provides the category destination media policy preference policy implementation.
  */
-final class CategoryDestinationMediaPolicyPreferencePolicy
-    implements CategoryDestinationMediaPolicyPreferencePolicyInterface
+final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDestinationMediaPolicyPreferencePolicyInterface
 {
-private const array MODES = ['strict_exact', 'allow_fallback', 'prefer_exact_warn'];
+    private const array MODES = ['strict_exact', 'allow_fallback', 'prefer_exact_warn'];
+
     /**
      * @param array<string,mixed> $strictPayload
      * @param array<string,mixed> $fallbackPayload
@@ -23,8 +24,7 @@ private const array MODES = ['strict_exact', 'allow_fallback', 'prefer_exact_war
         string $mediaPolicyMode,
         array $strictPayload,
         array $fallbackPayload,
-    ): CategoryDestinationMediaPolicyPreferenceInterface
-    {
+    ): CategoryDestinationMediaPolicyPreferenceInterface {
         $mode = trim($mediaPolicyMode);
         if (!in_array($mode, self::MODES, true)) {
             throw new \InvalidArgumentException('Unsupported destination media policy mode.');

@@ -1,10 +1,10 @@
 {
-  "endpoints": [
-    {
-      "id": "default",
-      "url": "https://example.com/webhook",
-      "secret": "***",
-      "active": true
-    }
-  ]
+    "endpoints": [
+        {
+            "id": "default",
+            "url": "https://example.com/webhook",
+            "secret": "***",
+            "active": true
+        }
+    ]
 }

@@ -1,23 +1,23 @@
-{{- define "category.fullname" -}}
-category
-{{- end }}
+{ { - define "category.fullname" - } }
+    category
+  { { - end } }
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "category.fullname" . }}
+    name: { { include "category.fullname" . } }
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: category
-  template:
-    metadata:
-      labels:
-        app: category
-    spec:
-      containers:
-        - name: category
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          ports:
-            - containerPort: 8080
+    replicas: 1
+    selector:
+        matchLabels:
+            app: category
+    template:
+        metadata:
+            labels:
+                app: category
+        spec:
+            containers:
+                -   name: category
+                    image: { { .Values.image.repository } }:{{ .Values.image.tag }}
+                    ports:
+                          - containerPort: 8080

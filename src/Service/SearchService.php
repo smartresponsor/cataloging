@@ -7,14 +7,16 @@ namespace App\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * Provides the search service application service.
  */
 final class SearchService
 {
-private const int DEFAULT_LIMIT = 20;
-private const int MAX_LIMIT = 100;
-private const int MAX_OFFSET = 10000;
+    private const int DEFAULT_LIMIT = 20;
+    private const int MAX_LIMIT = 100;
+    private const int MAX_OFFSET = 10000;
+
     /**
      * Initializes the search service service collaborators.
      */
@@ -30,10 +32,10 @@ private const int MAX_OFFSET = 10000;
      *     id:string,
      *     slug:string,
      *     name:string,
-     *     parent_id:?string,
+     *     'parent_id':?string,
      *     path:string,
      *     locale:string,
-     *     tenant:string,
+     *     'tenant':string,
      *     workflow_state:string,
      *     published:bool,
      *     published_at:?string,
@@ -41,7 +43,7 @@ private const int MAX_OFFSET = 10000;
      *   }>,
      *   facets:array{
      *     locale:array<string,int>,
-     *     tenant:array<string,int>,
+     *     'tenant':array<string,int>,
      *     workflow_state:array<string,int>,
      *     published:array<string,int>
      *   },
@@ -53,7 +55,7 @@ private const int MAX_OFFSET = 10000;
      *     direction:string,
      *     criteria:array{
      *       q:string,
-     *       tenant:?string,
+     *       'tenant':?string,
      *       locale:?string,
      *       workflow_state:?string,
      *       published:?bool
@@ -69,13 +71,13 @@ private const int MAX_OFFSET = 10000;
         $orderSql = $this->orderSql($normalized['order'], $normalized['direction']);
 
         $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
-            . 'workflow_state, published, published_at, updated_at FROM category_projection ';
+            .'workflow_state, published, published_at, updated_at FROM category_projection ';
 
         $rows = $connection->fetchAllAssociative(
             $selectSql
-            . $whereSql
-            . $orderSql
-            . ' LIMIT :limit OFFSET :offset',
+            .$whereSql
+            .$orderSql
+            .' LIMIT :limit OFFSET :offset',
             [
                 ...$params,
                 'limit' => $normalized['limit'],
@@ -129,9 +131,10 @@ private const int MAX_OFFSET = 10000;
 
     /**
      * @param array<string,mixed> $criteria
+     *
      * @return array{
      *   q:string,
-     *   tenant:?string,
+     *   'tenant':?string,
      *   locale:?string,
      *   workflow_state:?string,
      *   published:?bool,
@@ -169,7 +172,7 @@ private const int MAX_OFFSET = 10000;
     /**
      * @param array{
      *     q:string,
-     *     tenant:?string,
+     *     'tenant':?string,
      *     locale:?string,
      *     workflow_state:?string,
      *     published:?bool,
@@ -178,6 +181,7 @@ private const int MAX_OFFSET = 10000;
      *     order:string,
      *     direction:string,
      * } $criteria
+     *
      * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
      */
     private function compileFilters(array $criteria): array
@@ -232,14 +236,15 @@ private const int MAX_OFFSET = 10000;
 
     /**
      * @param list<array<string,mixed>> $rows
+     *
      * @return list<array{
      *     id:string,
      *     slug:string,
      *     name:string,
-     *     parent_id:?string,
+     *     'parent_id':?string,
      *     path:string,
      *     locale:string,
-     *     tenant:string,
+     *     'tenant':string,
      *     workflow_state:string,
      *     published:bool,
      *     published_at:?string,
@@ -274,8 +279,9 @@ private const int MAX_OFFSET = 10000;
     }
 
     /**
-     * @param array<string,mixed> $params
+     * @param array<string,mixed>         $params
      * @param array<string,ParameterType> $types
+     *
      * @return array<string,int>
      */
     private function facetCounts(
@@ -284,8 +290,7 @@ private const int MAX_OFFSET = 10000;
         string $whereSql,
         array $params,
         array $types,
-    ): array
-    {
+    ): array {
         if (!in_array($field, ['locale', 'tenant', 'workflow_state', 'published'], true)) {
             return [];
         }
@@ -293,9 +298,9 @@ private const int MAX_OFFSET = 10000;
         $rows = $connection->fetchAllAssociative(
             sprintf(
                 'SELECT %1$s AS facet_value, COUNT(*) AS facet_count '
-                . 'FROM category_projection%2$s '
-                . 'GROUP BY %1$s '
-                . 'ORDER BY facet_count DESC, %1$s ASC',
+                .'FROM category_projection%2$s '
+                .'GROUP BY %1$s '
+                .'ORDER BY facet_count DESC, %1$s ASC',
                 $field,
                 $whereSql,
             ),

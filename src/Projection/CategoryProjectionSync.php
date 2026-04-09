@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace App\Projection;
 
 use App\ProjectionInterface\CategoryProjectionSyncInterface;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -53,14 +52,14 @@ final class CategoryProjectionSync implements CategoryProjectionSyncInterface
         $publishedAt = $this->nullableStringValue($row['published_at'] ?? null);
 
         $sql = 'INSERT INTO category_projection (id, slug, name, parent_id, path, locale, tenant, '
-            . 'workflow_state, published, published_at, updated_at) '
-            . 'VALUES (:id, :slug, :name, :parentId, :path, :locale, :tenant, :workflowState, '
-            . ':published, :publishedAt, :updatedAt) '
-            . 'ON DUPLICATE KEY UPDATE slug = VALUES(slug), name = VALUES(name), '
-            . 'parent_id = VALUES(parent_id), path = VALUES(path), locale = VALUES(locale), '
-            . 'tenant = VALUES(tenant), workflow_state = VALUES(workflow_state), '
-            . 'published = VALUES(published), published_at = VALUES(published_at), '
-            . 'updated_at = VALUES(updated_at)';
+            .'workflow_state, published, published_at, updated_at) '
+            .'VALUES (:id, :slug, :name, :parentId, :path, :locale, :tenant, :workflowState, '
+            .':published, :publishedAt, :updatedAt) '
+            .'ON DUPLICATE KEY UPDATE slug = VALUES(slug), name = VALUES(name), '
+            .'parent_id = VALUES(parent_id), path = VALUES(path), locale = VALUES(locale), '
+            .'tenant = VALUES(tenant), workflow_state = VALUES(workflow_state), '
+            .'published = VALUES(published), published_at = VALUES(published_at), '
+            .'updated_at = VALUES(updated_at)';
 
         $this->infraConnection()->executeStatement(
             $sql,
@@ -91,15 +90,14 @@ final class CategoryProjectionSync implements CategoryProjectionSyncInterface
                 'updatedAt' => ParameterType::STRING,
             ],
         );
-
     }
 
-    private function dataConnection(): Connection
+    private function dataConnection(): object
     {
         return $this->registry->getConnection('data');
     }
 
-    private function infraConnection(): Connection
+    private function infraConnection(): object
     {
         return $this->registry->getConnection('infra');
     }
@@ -124,7 +122,7 @@ final class CategoryProjectionSync implements CategoryProjectionSyncInterface
     {
         return match (true) {
             is_bool($value) => $value,
-            is_int($value) => $value !== 0,
+            is_int($value) => 0 !== $value,
             is_string($value) => in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true),
             default => false,
         };

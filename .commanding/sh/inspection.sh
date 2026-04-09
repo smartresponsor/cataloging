@@ -259,9 +259,15 @@ composer_install_if_needed() {
     VENDOR_AUTOLOAD_DETAIL=""
     check_vendor_autoload_integrity
     if [ "$VENDOR_AUTOLOAD_STATUS" = "broken" ]; then
-      add_finding "composer install preflight" warn tooling high medium "run composer install --no-plugins or restore vendor" "$VENDOR_AUTOLOAD_DETAIL"
+      add_finding \
+        "composer install preflight" warn tooling high medium \
+        "run composer install --no-plugins or restore vendor" \
+        "$VENDOR_AUTOLOAD_DETAIL"
     else
-      add_finding "composer install preflight" ok tooling low low "vendor stack already present" "vendor/autoload.php found"
+      add_finding \
+        "composer install preflight" ok tooling low low \
+        "vendor stack already present" \
+        "vendor/autoload.php found"
     fi
     return 0
   fi
@@ -272,22 +278,37 @@ composer_install_if_needed() {
     "$COMPOSER_BIN" install --no-plugins --no-interaction --no-progress
   ) >> "$RUN_LOG" 2>&1; then
     if [ -f "$PROJECT_ROOT/vendor/autoload.php" ]; then
-      add_finding "composer install preflight" ok tooling medium low "install vendor stack before inspection" "composer install"
+      add_finding \
+        "composer install preflight" ok tooling medium low \
+        "install vendor stack before inspection" \
+        "composer install"
     else
-      add_finding "composer install preflight" warn tooling high medium "run composer install manually" "composer install finished without vendor/autoload.php"
+      add_finding \
+        "composer install preflight" warn tooling high medium \
+        "run composer install manually" \
+        "composer install finished without vendor/autoload.php"
     fi
   else
     if [ -f "$PROJECT_ROOT/vendor/autoload.php" ]; then
-      add_finding "composer install preflight" ok tooling low low "vendor stack already present" "composer install failed but vendor/autoload.php exists"
+      add_finding \
+        "composer install preflight" ok tooling low low \
+        "vendor stack already present" \
+        "composer install failed but vendor/autoload.php exists"
     else
-      add_finding "composer install preflight" warn tooling high medium "run composer install manually" "composer install failed"
+      add_finding \
+        "composer install preflight" warn tooling high medium \
+        "run composer install manually" \
+        "composer install failed"
     fi
   fi
 }
 
 bootstrap_packages() {
   [ -f "$PROJECT_ROOT/composer.json" ] || {
-    add_finding "bootstrap packages" warn tooling medium low "run inside PHP component root with composer.json" "$PROJECT_ROOT/composer.json missing"
+    add_finding \
+      "bootstrap packages" warn tooling medium low \
+      "run inside PHP component root with composer.json" \
+      "$PROJECT_ROOT/composer.json missing"
     return 0
   }
 
@@ -362,7 +383,10 @@ bootstrap_packages() {
     if [ "${#unresolved[@]}" -eq 0 ]; then
       add_finding "bootstrap packages" ok tooling medium low "install missing dev packages" "${unique_missing[*]}"
     else
-      add_finding "bootstrap packages" warn tooling high medium "review unresolved packages after composer require" "${unresolved[*]}"
+      add_finding \
+        "bootstrap packages" warn tooling high medium \
+        "review unresolved packages after composer require" \
+        "${unresolved[*]}"
     fi
   else
     for item in "${unique_missing[@]}"; do
@@ -636,12 +660,18 @@ EOF
 
 add_composer_scripts_if_missing() {
   [ -f "$PROJECT_ROOT/composer.json" ] || {
-    add_finding "composer scripts bootstrap" warn tooling medium low "composer.json missing" "$PROJECT_ROOT/composer.json"
+    add_finding \
+      "composer scripts bootstrap" warn tooling medium low \
+      "composer.json missing" \
+      "$PROJECT_ROOT/composer.json"
     return 0
   }
 
   [ -n "$PHP_BIN" ] || {
-    add_finding "composer scripts bootstrap" warn tooling medium medium "install php to edit composer.json safely" "php not found"
+    add_finding \
+      "composer scripts bootstrap" warn tooling medium medium \
+      "install php to edit composer.json safely" \
+      "php not found"
     return 0
   }
 
@@ -694,14 +724,27 @@ PHP
 
   if ! result="$("$PHP_BIN" "$php_file" "$PROJECT_ROOT/composer.json" 2>>"$RUN_LOG")"; then
     rm -f "$php_file"
-    add_finding "composer scripts bootstrap" warn tooling medium medium "repair composer.json manually" "scripts update failed"
+    add_finding \
+      "composer scripts bootstrap" warn tooling medium medium \
+      "repair composer.json manually" \
+      "scripts update failed"
     return 0
   fi
 
   rm -f "$php_file"
 
-  added="$("$PHP_BIN" -r '$x=json_decode(stream_get_contents(STDIN),true); echo implode(",", $x["added"] ?? []);' <<<"$result" 2>/dev/null || true)"
-  conflicts="$("$PHP_BIN" -r '$x=json_decode(stream_get_contents(STDIN),true); echo implode(",", $x["conflicts"] ?? []);' <<<"$result" 2>/dev/null || true)"
+  added="$(
+    "$PHP_BIN" -r '
+      $x = json_decode(stream_get_contents(STDIN), true);
+      echo implode(",", $x["added"] ?? []);
+    ' <<<"$result" 2>/dev/null || true
+  )"
+  conflicts="$(
+    "$PHP_BIN" -r '
+      $x = json_decode(stream_get_contents(STDIN), true);
+      echo implode(",", $x["conflicts"] ?? []);
+    ' <<<"$result" 2>/dev/null || true
+  )"
 
   if [ -n "${added:-}" ]; then
     add_finding "composer scripts added" ok tooling low low "composer scripts ready" "$added"
@@ -769,7 +812,10 @@ report_vendor_autoload_integrity_if_needed() {
 
   case "$VENDOR_AUTOLOAD_STATUS" in
     broken)
-      add_finding "vendor autoload integrity" warn tooling high medium "run composer install --no-plugins or restore missing vendor files" "$VENDOR_AUTOLOAD_DETAIL"
+      add_finding \
+        "vendor autoload integrity" warn tooling high medium \
+        "run composer install --no-plugins or restore missing vendor files" \
+        "$VENDOR_AUTOLOAD_DETAIL"
       VENDOR_INTEGRITY_REPORTED=1
       ;;
   esac
@@ -784,7 +830,10 @@ warmup_cache() {
   fi
 
   if [ ! -f "$PROJECT_ROOT/bin/console" ]; then
-    add_finding "symfony cache warmup" ok runtime low low "skip cache warmup for package/component repo" "bin/console not found"
+    add_finding \
+      "symfony cache warmup" ok runtime low low \
+      "skip cache warmup for package/component repo" \
+      "bin/console not found"
     return 0
   fi
 
@@ -795,7 +844,10 @@ warmup_cache() {
   ) >> "$RUN_LOG" 2>&1; then
     add_finding "symfony cache warmup" ok runtime low low "cache warmed" "bin/console cache:warmup --env=dev"
   else
-    add_finding "symfony cache warmup" warn runtime medium low "review cache warmup output" "bin/console cache:warmup --env=dev"
+    add_finding \
+      "symfony cache warmup" warn runtime medium low \
+      "review cache warmup output" \
+      "bin/console cache:warmup --env=dev"
   fi
 }
 
@@ -824,7 +876,10 @@ run_one_tool() {
 
   if ! tool_binary_exists "$rel_tool"; then
     if [ -n "$package_name" ] && package_is_unresolved "$package_name"; then
-      add_finding "$name" ok tooling low low "tool skipped until package bootstrap succeeds" "$rel_tool missing after bootstrap"
+      add_finding \
+        "$name" ok tooling low low \
+        "tool skipped until package bootstrap succeeds" \
+        "$rel_tool missing after bootstrap"
     else
       add_finding "$name" warn tooling high medium "bootstrap inspector stack" "$rel_tool missing"
     fi
@@ -840,7 +895,10 @@ run_one_tool() {
     check_vendor_autoload_integrity
     if [ "$VENDOR_AUTOLOAD_STATUS" = "broken" ]; then
       report_vendor_autoload_integrity_if_needed
-      add_finding "$name" ok tooling low low "tool skipped until vendor autoload integrity is restored" "$VENDOR_AUTOLOAD_DETAIL"
+      add_finding \
+        "$name" ok tooling low low \
+        "tool skipped until vendor autoload integrity is restored" \
+        "$VENDOR_AUTOLOAD_DETAIL"
       return 0
     fi
   fi
@@ -859,11 +917,17 @@ run_one_tool() {
   if [ "$name" = "php-cs-fixer" ]; then
     case "$exit_code" in
       8)
-        add_finding "$name" warn "$category" "$severity" low "review php-cs-fixer diff and apply fixes" "files need fixing (dry-run exit 8)"
+        add_finding \
+          "$name" warn "$category" "$severity" low \
+          "review php-cs-fixer diff and apply fixes" \
+          "files need fixing (dry-run exit 8)"
         return 0
         ;;
       12)
-        add_finding "$name" warn "$category" "$severity" medium "review php-cs-fixer diff and invalid syntax output" "invalid syntax and files need fixing"
+        add_finding \
+          "$name" warn "$category" "$severity" medium \
+          "review php-cs-fixer diff and invalid syntax output" \
+          "invalid syntax and files need fixing"
         return 0
         ;;
     esac
@@ -1045,7 +1109,12 @@ render_outputs() {
       $chatLines[] = "";
       $chatLines[] = "Normalized findings";
       foreach ($findings as $item) {
-          $chatLines[] = " - [" . $item["status"] . "][" . $item["category"] . "][" . $item["severity"] . "/" . $item["risk"] . "] " . $item["name"] . " :: " . $item["action"] . " :: " . $item["detail"];
+          $chatLines[] =
+              " - [" . $item["status"] . "][" . $item["category"] . "]"
+              . "[" . $item["severity"] . "/" . $item["risk"] . "] "
+              . $item["name"] . " :: "
+              . $item["action"] . " :: "
+              . $item["detail"];
       }
       $chatLines[] = "";
       $chatLines[] = "Artifact";
@@ -1054,7 +1123,20 @@ render_outputs() {
       $chatLines[] = " - json: " . $latestJson;
       $chatLines[] = " - findings: " . $latestFindings;
       file_put_contents($chat, implode("\n", $chatLines) . "\n");
-    ' "$RUN_FINDINGS_TSV" "$RUN_SUMMARY" "$RUN_NDJSON" "$RUN_SUMMARY_JSON" "$RUN_CHAT" "$overall_status" "$dominant_risk" "$RUN_FINDINGS" "$LATEST_LOG" "$LATEST_SUMMARY" "$LATEST_SUMMARY_JSON" "$LATEST_FINDINGS" >> "$RUN_LOG" 2>&1
+    ' \
+      "$RUN_FINDINGS_TSV" \\
+      "$RUN_SUMMARY" \\
+      "$RUN_NDJSON" \\
+      "$RUN_SUMMARY_JSON" \\
+      "$RUN_CHAT" \\
+      "$overall_status" \\
+      "$dominant_risk" \\
+      "$RUN_FINDINGS" \\
+      "$LATEST_LOG" \\
+      "$LATEST_SUMMARY" \\
+      "$LATEST_SUMMARY_JSON" \\
+      "$LATEST_FINDINGS" \\
+      >> "$RUN_LOG" 2>&1
   else
     cp "$RUN_SUMMARY" "$RUN_CHAT"
     : > "$RUN_SUMMARY_JSON"
@@ -1212,7 +1294,12 @@ bootstrap_only() {
 
 run_tool_suite() {
   warmup_cache
-  run_one_tool "php-cs-fixer" style medium "vendor/bin/php-cs-fixer" ".php-cs-fixer.dist.php" fix --dry-run --diff --config=.php-cs-fixer.dist.php
+  run_one_tool \
+    "php-cs-fixer" style medium \
+    "vendor/bin/php-cs-fixer" \
+    ".php-cs-fixer.dist.php" \
+    fix --dry-run --diff \
+    --config=.php-cs-fixer.dist.php
   run_one_tool "phpstan" typing high "vendor/bin/phpstan" "phpstan.neon.dist" analyse -c phpstan.neon.dist
   run_one_tool "rector" quality medium "vendor/bin/rector" "rector.php" process --dry-run
   run_one_tool "deptrac" architecture high "vendor/bin/deptrac" "deptrac.yaml" analyse --config-file=deptrac.yaml

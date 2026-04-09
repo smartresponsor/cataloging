@@ -21,13 +21,13 @@ final class CategoryVoter extends Voter
      */
     public function __construct(
         private readonly ?CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository = null,
-    )
-    {
+    ) {
     }
-public const string VIEW = 'category.view';
-public const string EDIT = 'category.edit';
-public const string OWN = 'category.own';
-public const string PUBLISH = 'category.publish';
+    public const string VIEW = 'category.view';
+    public const string EDIT = 'category.edit';
+    public const string OWN = 'category.own';
+    public const string PUBLISH = 'category.publish';
+
     /**
      * Checks whether this service supports the provided input.
      */
@@ -35,6 +35,7 @@ public const string PUBLISH = 'category.publish';
     {
         return in_array($attribute, [self::VIEW, self::EDIT, self::OWN, self::PUBLISH], true);
     }
+
     /**
      * Handles the vote on attribute workflow.
      */
@@ -43,8 +44,7 @@ public const string PUBLISH = 'category.publish';
         mixed $subject,
         TokenInterface $token,
         ?Vote $vote = null,
-    ): bool
-    {
+    ): bool {
         $roles = $token->getRoleNames();
         if (in_array('ROLE_SUPER_ADMIN', $roles, true) || in_array('ROLE_ADMIN', $roles, true)) {
             return true;

@@ -1,9 +1,9 @@
 web_profiler:
-  toolbar: true
-  intercept_redirects: false
+    toolbar: true
+    intercept_redirects: false
 
 framework:
-  profiler:
-    collect: true
-    only_exceptions: false
-    only_main_requests: false
+    profiler:
+        collect: true
+        only_exceptions: false
+        only_main_requests: false

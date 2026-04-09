@@ -1,1 +1,9 @@
-{"title": "Category SLO", "panels": [{"type": "graph", "title": "Read p95"}]}
+{
+    "title": "Category SLO",
+    "panels": [
+        {
+            "type": "graph",
+            "title": "Read p95"
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 category:
-  - { id: 1, name: 'Root', slug: 'root', locale: 'en', parent: null }
-  - { id: 2, name: 'Electronics', slug: 'electronics', locale: 'en', parent: 1 }
-  - { id: 3, name: 'Phones', slug: 'phones', locale: 'en', parent: 2 }
-  - { id: 4, name: 'Electronics', slug: 'electronics', locale: 'uk', parent: 1 }
-  - { id: 5, name: 'Phones', slug: 'phones', locale: 'uk', parent: 4 }
+    - { id: 1, name: 'Root', slug: 'root', locale: 'en', parent: null }
+    - { id: 2, name: 'Electronics', slug: 'electronics', locale: 'en', parent: 1 }
+    - { id: 3, name: 'Phones', slug: 'phones', locale: 'en', parent: 2 }
+    - { id: 4, name: 'Electronics', slug: 'electronics', locale: 'uk', parent: 1 }
+    - { id: 5, name: 'Phones', slug: 'phones', locale: 'uk', parent: 4 }

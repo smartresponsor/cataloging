@@ -1,12 +1,12 @@
 security:
-  access_decision_manager:
-    strategy: unanimous
-  role_hierarchy:
-    ROLE_ADMIN: [ROLE_USER]
-    ROLE_MERCHANT: [ROLE_USER]
+    access_decision_manager:
+        strategy: unanimous
+    role_hierarchy:
+        ROLE_ADMIN: [ ROLE_USER ]
+        ROLE_MERCHANT: [ ROLE_USER ]
 
-  access_control:
-    - { path: ^/admin/category, roles: ROLE_ADMIN }
-    - { path: ^/api/admin/category, roles: ROLE_ADMIN }
-    - { path: ^/api/category/webhook/test, roles: ROLE_ADMIN }
-    - { path: ^/api/category/.+/publish, roles: IS_AUTHENTICATED_FULLY }
+    access_control:
+        - { path: ^/admin/category, roles: ROLE_ADMIN }
+        - { path: ^/api/admin/category, roles: ROLE_ADMIN }
+        - { path: ^/api/category/webhook/test, roles: ROLE_ADMIN }
+        - { path: ^/api/category/.+/publish, roles: IS_AUTHENTICATED_FULLY }

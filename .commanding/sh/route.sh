@@ -53,7 +53,8 @@ filter_route_exact() {
   local route_name="$1"
   (
     cd "$PROJECT_ROOT"
-    php "$CONSOLE_BIN" debug:router --format=md --show-controllers | grep -E "(${route_name})|(^ --------------)|(^ Name)"
+    php "$CONSOLE_BIN" debug:router --format=md --show-controllers \
+      | grep -E "(${route_name})|(^ --------------)|(^ Name)"
   )
 }
 

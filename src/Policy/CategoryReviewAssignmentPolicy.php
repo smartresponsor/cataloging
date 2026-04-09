@@ -8,12 +8,14 @@ namespace App\Policy;
 use App\EntityInterface\CategoryChangeRequestInterface;
 use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
 use App\ValueObject\CategoryChangeRequestState;
+
 /**
  * Provides the category review assignment policy implementation.
  */
 final class CategoryReviewAssignmentPolicy implements CategoryReviewAssignmentPolicyInterface
 {
-private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
+    private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
+
     /**
      * Determines whether the current workflow can assign.
      */
@@ -22,8 +24,7 @@ private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
         string $assignedReviewer,
         string $assignedBy,
         string $priority,
-    ): bool
-    {
+    ): bool {
         if ('' === trim($assignedReviewer) || '' === trim($assignedBy)) {
             return false;
         }
@@ -37,6 +38,7 @@ private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
             CategoryChangeRequestState::IN_REVIEW,
         ], true);
     }
+
     /**
      * Handles the assert can assign workflow.
      */
@@ -45,12 +47,9 @@ private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
         string $assignedReviewer,
         string $assignedBy,
         string $priority,
-    ): void
-    {
+    ): void {
         if (!$this->canAssign($request, $assignedReviewer, $assignedBy, $priority)) {
-            throw new \DomainException(
-                sprintf('Category review assignment is not allowed for request state: %s', $request->state()->value()),
-            );
+            throw new \DomainException(sprintf('Category review assignment is not allowed for request state: %s', $request->state()->value()));
         }
     }
 }

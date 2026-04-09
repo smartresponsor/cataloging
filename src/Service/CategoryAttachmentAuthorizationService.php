@@ -13,6 +13,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 /**
  * Provides the category attachment authorization service application service.
  */
@@ -29,6 +30,7 @@ final readonly class CategoryAttachmentAuthorizationService
         private TenantRolePolicyInterface $tenantRolePolicy,
     ) {
     }
+
     /**
      * Handles the assert can list workflow.
      */
@@ -47,9 +49,7 @@ final readonly class CategoryAttachmentAuthorizationService
         }
 
         if (null === $normalizedCategoryId) {
-            throw new AccessDeniedHttpException(
-                'Listing attachments without category scope is not allowed for the current actor.',
-            );
+            throw new AccessDeniedHttpException('Listing attachments without category scope is not allowed for the current actor.');
         }
 
         $this->assertGranted(
@@ -58,6 +58,7 @@ final readonly class CategoryAttachmentAuthorizationService
             'Category attachment listing is not allowed for the current actor.',
         );
     }
+
     /**
      * Handles the assert can attach workflow.
      */
@@ -69,6 +70,7 @@ final readonly class CategoryAttachmentAuthorizationService
             'Category attachment binding is not allowed for the current actor.',
         );
     }
+
     /**
      * Handles the assert can detach workflow.
      */
@@ -95,14 +97,10 @@ final readonly class CategoryAttachmentAuthorizationService
         $categoryTenant = $this->categoryTenant($categoryId);
         $externalIdentityContext = $this->resolveExternalIdentityContext();
         if (null === $externalIdentityContext || null === $externalIdentityContext->tenant) {
-            throw new AccessDeniedHttpException(
-                'External tenant identity is required for category attachment operations.',
-            );
+            throw new AccessDeniedHttpException('External tenant identity is required for category attachment operations.');
         }
         if (null !== $categoryTenant && $externalIdentityContext->tenant !== $categoryTenant) {
-            throw new AccessDeniedHttpException(
-                'Cross-tenant category attachment operation is not allowed for the current actor.',
-            );
+            throw new AccessDeniedHttpException('Cross-tenant category attachment operation is not allowed for the current actor.');
         }
 
         $subject = new \App\Entity\Category();
@@ -157,8 +155,7 @@ final readonly class CategoryAttachmentAuthorizationService
         string $actorTenant,
         array $categoryRoles,
         ?string $categoryTenant,
-    ): bool
-    {
+    ): bool {
         if ([] === $categoryRoles) {
             return false;
         }

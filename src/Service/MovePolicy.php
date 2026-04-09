@@ -4,11 +4,12 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the move policy application service.
  */
 final class MovePolicy
 {
-    public const PreserveSlug = 'preserveSlug';
-    public const RebuildSlug = 'rebuildSlug';
+    public const string PreserveSlug = 'preserveSlug';
+    public const string RebuildSlug = 'rebuildSlug';
 }

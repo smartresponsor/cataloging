@@ -1,6 +1,7 @@
 = Cataloging documentation
 
-This repository now exposes a minimal Antora-compatible documentation surface for use as a *producer* in a central documentation site.
+This repository now exposes a minimal Antora-compatible documentation
+surface for use as a *producer* in a central documentation site.
 
 The Antora surface is intentionally thin:
 
@@ -12,15 +13,22 @@ The Antora surface is intentionally thin:
 
 === Antora narrative entry surface
 
-The Antora pages in `docs/modules/ROOT/pages/` act as stable entry points for the central aggregator and point to the repo's existing documentation corpus.
+The Antora pages in `docs/modules/ROOT/pages/` act as stable entry points
+for the central aggregator and point to the repo's existing documentation
+corpus.
 
 === Hand-written narrative and operational docs
 
 Most hand-written repository docs already exist under `docs/`, for example:
 
-* install and runtime: `docs/category-install.md`, `docs/runbook-install.md`, `docs/runbook-deploy.md`, `docs/runbook-rollback.md`
-* architecture and readiness: `docs/category-schema.md`, `docs/category-rc-readiness.md`, `docs/category-observability.md`, `docs/category-security-readiness.md`
-* canon, analysis, internal, and mapping sets under `docs/canon/`, `docs/analysis/`, `docs/internal/`, and `docs/mapping/`
+* install and runtime:
+  `docs/category-install.md`, `docs/runbook-install.md`,
+  `docs/runbook-deploy.md`, `docs/runbook-rollback.md`
+* architecture and readiness:
+  `docs/category-schema.md`, `docs/category-rc-readiness.md`,
+  `docs/category-observability.md`, `docs/category-security-readiness.md`
+* canon, analysis, internal, and mapping sets under `docs/canon/`,
+  `docs/analysis/`, `docs/internal/`, and `docs/mapping/`
 
 === GitHub-facing docs
 
@@ -33,15 +41,22 @@ GitHub-facing repository docs remain outside the Antora module surface:
 
 === Generated and contract/reference artifacts
 
-Generated and machine-readable artifacts stay separate from hand-written narrative docs:
+Generated and machine-readable artifacts stay separate from hand-written
+narrative docs:
 
 * canonical OpenAPI contract: `api/catalog-openapi.yaml`
 * compatibility OpenAPI contract: `api/category-openapi.yaml`
-* Nelmio/OpenAPI runtime routes/config: `config/packages/nelmio_api_doc.yaml`, `config/routes/nelmio_api_doc.yaml`
+* Nelmio/OpenAPI runtime routes/config:
+  `config/packages/nelmio_api_doc.yaml`,
+  `config/routes/nelmio_api_doc.yaml`
 * generated static docs surface: `public/docs/category/index.html`
 * generated public API artifact: `public/api/category-mobile.json`
 
-There is currently *no dedicated Doctum/phpDocumentor code-reference surface* committed as a first-class producer artifact in this repository. If a generated code-reference surface is added later, it should remain separate from narrative docs and be linked from this Antora entry surface rather than mixed into the module pages.
+There is currently *no dedicated Doctum/phpDocumentor code-reference
+surface* committed as a first-class producer artifact in this repository.
+If a generated code-reference surface is added later, it should remain
+separate from narrative docs and be linked from this Antora entry surface
+rather than mixed into the module pages.
 
 == Entry points
 

@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the webhook dispatch request implementation.
  */
@@ -17,7 +18,7 @@ final class WebhookDispatchRequest
         public readonly string $event,
         public readonly string $endpoint,
         public readonly array $payload,
-        private array $errors = [],
+        private readonly array $errors = [],
     ) {
     }
 
@@ -59,6 +60,7 @@ final class WebhookDispatchRequest
 
         return new self($event, $endpoint, $payload, $errors);
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

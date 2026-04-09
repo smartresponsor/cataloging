@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the jwk converter application service.
  */
@@ -55,10 +56,10 @@ final class JwkConverter
     private function encodeInteger(string $value): string
     {
         if ('' === $value || (ord($value[0]) & 0x80) !== 0) {
-            $value = "\x00" . $value;
+            $value = "\x00".$value;
         }
 
-        return "\x02" . $this->len(strlen($value)) . $value;
+        return "\x02".$this->len(strlen($value)).$value;
     }
 
     private function encodeNull(): string
@@ -68,9 +69,9 @@ final class JwkConverter
 
     private function encodeBitString(string $value): string
     {
-        $body = "\x00" . $value;
+        $body = "\x00".$value;
 
-        return "\x03" . $this->len(strlen($body)) . $body;
+        return "\x03".$this->len(strlen($body)).$body;
     }
 
     private function encodeObjectIdentifier(string $oid): string
@@ -86,7 +87,7 @@ final class JwkConverter
             $encoded .= $this->encodeBase128Int($part);
         }
 
-        return "\x06" . $this->len(strlen($encoded)) . $encoded;
+        return "\x06".$this->len(strlen($encoded)).$encoded;
     }
 
     private function encodeBase128Int(int $value): string
@@ -118,7 +119,7 @@ final class JwkConverter
     {
         $body = implode('', $chunks);
 
-        return "\x30" . $this->len(strlen($body)) . $body;
+        return "\x30".$this->len(strlen($body)).$body;
     }
 
     private function len(int $length): string
@@ -128,10 +129,10 @@ final class JwkConverter
         }
         $tmp = '';
         while ($length > 0) {
-            $tmp = chr($length & 0xFF) . $tmp;
+            $tmp = chr($length & 0xFF).$tmp;
             $length >>= 8;
         }
 
-        return chr(0x80 | strlen($tmp)) . $tmp;
+        return chr(0x80 | strlen($tmp)).$tmp;
     }
 }

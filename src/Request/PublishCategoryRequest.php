@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Request;
+
 /**
  * Provides the publish category request implementation.
  */
@@ -11,15 +12,14 @@ final class PublishCategoryRequest
 {
     /**
      * @param array<string,bool> $checks
-     * @param list<string> $errors
+     * @param list<string>       $errors
      */
     public function __construct(
         public readonly ?bool $published,
         public readonly array $checks = [],
         public readonly string $reason = 'api publish request',
-        private array $errors = [],
-    )
-    {
+        private readonly array $errors = [],
+    ) {
     }
 
     /** @param array<string,mixed> $data */
@@ -61,6 +61,7 @@ final class PublishCategoryRequest
 
         return new self($published, $checks, $reason, $errors);
     }
+
     /**
      * Determines whether the valid condition is satisfied.
      */

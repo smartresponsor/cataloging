@@ -25,6 +25,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
     private CategoryPolicyInterface $policy;
     private CategorySlugGeneratorInterface $slugger;
     private EventDispatcherInterface $dispatcher;
+
     /**
      * Initializes the category service service collaborators.
      */
@@ -54,8 +55,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
         array $name,
         array $slug,
         array $meta = [],
-    ): array
-    {
+    ): array {
         if (!$this->policy->canEdit($actorId, $taxonomyId, $parentId)) {
             throw new \RuntimeException('Forbidden');
         }
@@ -67,6 +67,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
 
         return $view;
     }
+
     /**
      * Handles the move workflow.
      */
@@ -83,6 +84,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
 
         return $view;
     }
+
     /**
      * Handles the attach workflow.
      */
@@ -92,8 +94,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
         string $targetDomain,
         string $targetClass,
         string $targetId,
-    ): void
-    {
+    ): void {
         $this->repo->attach($actorId, $categoryId, $targetDomain, $targetClass, $targetId);
         $this->dispatcher->dispatch(
             new CategoryLinked([
@@ -103,6 +104,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
             ]),
         );
     }
+
     /**
      * Handles the detach workflow.
      */
@@ -112,8 +114,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
         string $targetDomain,
         string $targetClass,
         string $targetId,
-    ): void
-    {
+    ): void {
         $this->repo->detach($actorId, $categoryId, $targetDomain, $targetClass, $targetId);
         $this->dispatcher->dispatch(
             new CategoryUnlinked([
@@ -123,6 +124,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
             ]),
         );
     }
+
     /**
      * Resolves the requested result for the provided input.
      */

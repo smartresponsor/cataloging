@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 /**
  * Provides the category mutation authorization service application service.
  */
@@ -27,6 +28,7 @@ final readonly class CategoryMutationAuthorizationService
         private TenantRolePolicyInterface $tenantRolePolicy,
     ) {
     }
+
     /**
      * Handles the assert can move workflow.
      */
@@ -34,6 +36,7 @@ final readonly class CategoryMutationAuthorizationService
     {
         $this->assertGranted(CategoryVoter::EDIT, $categoryId, 'Category move is not allowed for the current actor.');
     }
+
     /**
      * Handles the assert can publish workflow.
      */
@@ -55,10 +58,10 @@ final readonly class CategoryMutationAuthorizationService
         $categoryTenant = $this->categoryTenant($categoryId);
         $externalIdentityContext = $this->resolveExternalIdentityContext();
         if (
-            null !== $externalIdentityContext &&
-            null !== $externalIdentityContext->tenant &&
-            null !== $categoryTenant &&
-            $externalIdentityContext->tenant !== $categoryTenant
+            null !== $externalIdentityContext
+            && null !== $externalIdentityContext->tenant
+            && null !== $categoryTenant
+            && $externalIdentityContext->tenant !== $categoryTenant
         ) {
             throw new AccessDeniedHttpException('Cross-tenant category mutation is not allowed for the current actor.');
         }
@@ -71,8 +74,8 @@ final readonly class CategoryMutationAuthorizationService
         }
 
         if (
-            null !== $externalIdentityContext &&
-            $this->externalTenantRoleAllows(
+            null !== $externalIdentityContext
+            && $this->externalTenantRoleAllows(
                 $attribute,
                 $externalIdentityContext->tenant,
                 $externalIdentityContext->categoryRoles,
@@ -118,8 +121,7 @@ final readonly class CategoryMutationAuthorizationService
         ?string $actorTenant,
         array $categoryRoles,
         ?string $categoryTenant,
-    ): bool
-    {
+    ): bool {
         if ([] === $categoryRoles) {
             return false;
         }

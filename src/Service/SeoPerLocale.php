@@ -4,15 +4,16 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the seo per locale application service.
  */
 final class SeoPerLocale
 {
     /**
-     * @param array{id?:mixed,locale?:mixed,name?:mixed,slug?:mixed} $category
+     * @param array{'id'?:mixed,'locale'?:mixed,'name'?:mixed,'slug'?:mixed} $category
      *
-     * @return array{id:?string,locale:string,title:string,description:string,canonical:string}
+     * @return array{'id':?string,'locale':string,'title':string,'description':string,'canonical':string}
      */
     public function build(array $category): array
     {

@@ -8,6 +8,7 @@ use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * Provides the category projection read service application service.
  */
@@ -21,6 +22,7 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
         private readonly SearchService $searchService,
     ) {
     }
+
     /**
      * Handles the list workflow.
      */
@@ -30,6 +32,7 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
 
         return $result['items'];
     }
+
     /**
      * Handles the tree workflow.
      */
@@ -38,18 +41,19 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
         $normalized = $this->normalizeCriteria($criteria);
         [$whereSql, $params, $types] = $this->compileFilters($normalized);
         $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
-            . 'workflow_state, published, published_at, updated_at FROM category_projection ';
+            .'workflow_state, published, published_at, updated_at FROM category_projection ';
 
         $rows = $this->infraConnection()->fetchAllAssociative(
             $selectSql
-            . $whereSql
-            . ' ORDER BY path ASC, name ASC, id ASC',
+            .$whereSql
+            .' ORDER BY path ASC, name ASC, id ASC',
             $params,
             $types,
         );
 
         return $this->buildTree($this->normalizeRows($rows));
     }
+
     /**
      * Handles the find one workflow.
      */
@@ -60,14 +64,13 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
             return null;
         }
         $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
-            . 'workflow_state, published, published_at, updated_at FROM category_projection WHERE id = :id LIMIT 1';
+            .'workflow_state, published, published_at, updated_at FROM category_projection WHERE id = :id LIMIT 1';
 
         $row = $this->infraConnection()->fetchAssociative(
             $selectSql,
             ['id' => $normalizedId],
             ['id' => ParameterType::STRING],
         );
-
 
         if (!is_array($row)) {
             return null;
@@ -88,7 +91,8 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
 
     /**
      * @param array<string,mixed> $criteria
-     * @return array{tenant:?string,locale:?string,workflow_state:?string,published:?bool}
+     *
+     * @return array{'tenant':?string,'locale':?string,'workflow_state':?string,'published':?bool}
      */
     private function normalizeCriteria(array $criteria): array
     {
@@ -101,7 +105,8 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
     }
 
     /**
-     * @param array{tenant:?string,locale:?string,workflow_state:?string,published:?bool} $criteria
+     * @param array{'tenant':?string,'locale':?string,'workflow_state':?string,'published':?bool} $criteria
+     *
      * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
      */
     private function compileFilters(array $criteria): array
@@ -178,14 +183,15 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
 
     /**
      * @param list<array<string,mixed>> $rows
+     *
      * @return list<array{
      *   id:string,
      *   slug:string,
      *   name:string,
-     *   parent_id:?string,
+     *   'parent_id':?string,
      *   path:string,
      *   locale:string,
-     *   tenant:string,
+     *   'tenant':string,
      *   workflow_state:string,
      *   published:bool,
      *   published_at:?string,
@@ -224,15 +230,16 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
      *   id:string,
      *   slug:string,
      *   name:string,
-     *   parent_id:?string,
+     *   'parent_id':?string,
      *   path:string,
      *   locale:string,
-     *   tenant:string,
+     *   'tenant':string,
      *   workflow_state:string,
      *   published:bool,
      *   published_at:?string,
      *   updated_at:string
      * }> $rows
+     *
      * @return list<array<string,mixed>>
      */
     private function buildTree(array $rows): array
@@ -266,8 +273,9 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
     }
 
     /**
-     * @param list<array<string,mixed>> $nodes
+     * @param list<array<string,mixed>>         $nodes
      * @param array<string,array<string,mixed>> $index
+     *
      * @return list<array<string,mixed>>
      */
     private function rebindChildren(array $nodes, array $index): array

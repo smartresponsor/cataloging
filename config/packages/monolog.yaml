@@ -1,18 +1,18 @@
 monolog:
-  channels: ['catalog_audit', 'catalog_security']
-  handlers:
-    main:
-      type: stream
-      path: '%kernel.logs_dir%/%kernel.environment%.log'
-      level: info
-      channels: ['!event', '!catalog_audit', '!catalog_security']
-    catalog_audit:
-      type: stream
-      path: '%kernel.logs_dir%/catalog-audit-%kernel.environment%.log'
-      level: info
-      channels: ['catalog_audit']
-    catalog_security:
-      type: stream
-      path: '%kernel.logs_dir%/catalog-security-%kernel.environment%.log'
-      level: warning
-      channels: ['catalog_security']
+    channels: [ 'catalog_audit', 'catalog_security' ]
+    handlers:
+        main:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: info
+            channels: [ '!event', '!catalog_audit', '!catalog_security' ]
+        catalog_audit:
+            type: stream
+            path: '%kernel.logs_dir%/catalog-audit-%kernel.environment%.log'
+            level: info
+            channels: [ 'catalog_audit' ]
+        catalog_security:
+            type: stream
+            path: '%kernel.logs_dir%/catalog-security-%kernel.environment%.log'
+            level: warning
+            channels: [ 'catalog_security' ]

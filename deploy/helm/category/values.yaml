@@ -1,6 +1,6 @@
 image:
-  repository: registry.local/category
-  tag: rc1
+    repository: registry.local/category
+    tag: rc1
 service:
-  type: ClusterIP
-  port: 8080
+    type: ClusterIP
+    port: 8080

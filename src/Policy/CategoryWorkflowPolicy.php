@@ -8,13 +8,14 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\ValueObject\CategoryWorkflowState;
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+
 /**
  * Provides the category workflow policy implementation.
  */
 final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
 {
     /** @var array<string,list<string>> */
-    private const TRANSITIONS = [
+    private const array TRANSITIONS = [
         CategoryWorkflowState::DRAFT => [
             CategoryWorkflowState::IN_REVIEW,
             CategoryWorkflowState::APPROVED,
@@ -38,6 +39,7 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
             CategoryWorkflowState::DRAFT,
         ],
     ];
+
     /**
      * Determines whether the current workflow can transition.
      */
@@ -46,8 +48,7 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
         CategoryWorkflowStateInterface $to,
         string $actorId,
         string $reason,
-    ): bool
-    {
+    ): bool {
         $actorId = trim($actorId);
         $reason = trim($reason);
 
@@ -63,6 +64,7 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
 
         return in_array($to->value(), $allowedTargets, true);
     }
+
     /**
      * Handles the assert transition allowed workflow.
      */
@@ -71,12 +73,9 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
         CategoryWorkflowStateInterface $to,
         string $actorId,
         string $reason,
-    ): void
-    {
+    ): void {
         if (!$this->canTransition($from, $to, $actorId, $reason)) {
-            throw new \DomainException(
-                sprintf('Category workflow transition is not allowed: %s -> %s', $from->value(), $to->value()),
-            );
+            throw new \DomainException(sprintf('Category workflow transition is not allowed: %s -> %s', $from->value(), $to->value()));
         }
     }
 }
