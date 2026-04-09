@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationPolicyAwarePackageGatedInterface;
+
 /**
  * Represents the category syndication policy aware package gated application event.
  */
@@ -17,6 +18,7 @@ final class CategorySyndicationPolicyAwarePackageGated implements CategorySyndic
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -24,6 +26,7 @@ final class CategorySyndicationPolicyAwarePackageGated implements CategorySyndic
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

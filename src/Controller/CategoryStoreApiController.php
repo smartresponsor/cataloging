@@ -14,16 +14,17 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Store API delivery adapter over shared read services.
  */
-final class CategoryStoreApiController
+final readonly class CategoryStoreApiController
 {
     /**
      * Initializes the category store api controller service collaborators.
      */
     public function __construct(
-        private readonly ChannelFilter $filter,
-        private readonly ReadOptimizer $optimizer,
+        private ChannelFilter $filter,
+        private ReadOptimizer $optimizer,
     ) {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */

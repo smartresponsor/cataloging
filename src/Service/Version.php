@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\VersionInterface;
+
 /**
  * Provides the version application service.
  */
@@ -15,6 +16,7 @@ final class Version implements VersionInterface
     private string $categoryId;
     private int $number;
     private \DateTimeImmutable $createdAt;
+
     /**
      * Initializes the version service collaborators.
      */
@@ -25,6 +27,7 @@ final class Version implements VersionInterface
         $this->number = $number;
         $this->createdAt = $createdAt;
     }
+
     /**
      * Handles the id workflow.
      */
@@ -32,6 +35,7 @@ final class Version implements VersionInterface
     {
         return $this->id;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -39,6 +43,7 @@ final class Version implements VersionInterface
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the number workflow.
      */
@@ -46,6 +51,7 @@ final class Version implements VersionInterface
     {
         return $this->number;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */

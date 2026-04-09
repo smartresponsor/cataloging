@@ -7,6 +7,7 @@ namespace App\Entity;
 
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
+
 /**
  * Represents the category syndication delivery record domain record.
  */
@@ -27,6 +28,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
         private readonly ?\DateTimeImmutable $deliveredAt,
     ) {
     }
+
     /**
      * Handles the delivery id workflow.
      */
@@ -34,6 +36,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->deliveryId;
     }
+
     /**
      * Handles the package id workflow.
      */
@@ -41,6 +44,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->packageId;
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -48,6 +52,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -55,6 +60,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the status workflow.
      */
@@ -62,6 +68,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->status;
     }
+
     /**
      * Handles the attempt workflow.
      */
@@ -69,6 +76,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->attempt;
     }
+
     /**
      * Handles the response code workflow.
      */
@@ -76,6 +84,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->responseCode;
     }
+
     /**
      * Handles the response message workflow.
      */
@@ -83,6 +92,7 @@ final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeli
     {
         return $this->responseMessage;
     }
+
     /**
      * Handles the delivered at workflow.
      */

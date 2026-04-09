@@ -6,17 +6,19 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
+
 /**
  * Provides the category invalidator application service.
  */
-final class CategoryInvalidator
+final readonly class CategoryInvalidator
 {
     /**
      * Initializes the category invalidator service collaborators.
      */
-    public function __construct(private readonly CacheItemPoolInterface $pool)
+    public function __construct(private CacheItemPoolInterface $pool)
     {
     }
+
     /**
      * Handles the invalidate all workflow.
      */

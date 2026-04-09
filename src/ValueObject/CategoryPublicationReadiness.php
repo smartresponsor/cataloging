@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryPublicationReadinessInterface;
+
 /**
  * Represents the category publication readiness value.
  */
-final class CategoryPublicationReadiness implements CategoryPublicationReadinessInterface
+final readonly class CategoryPublicationReadiness implements CategoryPublicationReadinessInterface
 {
     /**
      * @param array<string,bool> $checks
@@ -17,9 +18,9 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
      * @param list<string>       $warnings
      */
     public function __construct(
-        private readonly array $checks,
-        private readonly array $blockers,
-        private readonly array $warnings = [],
+        private array $checks,
+        private array $blockers,
+        private array $warnings = [],
     ) {
     }
 
@@ -35,7 +36,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
 
         $normalized = [];
         foreach ($checks as $name => $value) {
-            $normalized[(string) $name] = (bool) $value;
+            $normalized[$name] = (bool) $value;
         }
 
         $blockers = [];
@@ -55,6 +56,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
 
         return new self($normalized, $blockers, $warnings);
     }
+
     /**
      * Determines whether the publishable condition is satisfied.
      */
@@ -62,6 +64,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
     {
         return [] === $this->blockers;
     }
+
     /**
      * Determines whether the check value is available.
      */
@@ -69,6 +72,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
     {
         return array_key_exists($name, $this->checks);
     }
+
     /**
      * Handles the check workflow.
      */
@@ -76,6 +80,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
     {
         return ($this->checks[$name] ?? false) === true;
     }
+
     /**
      * Handles the blockers workflow.
      */
@@ -83,6 +88,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
     {
         return $this->blockers;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -90,6 +96,7 @@ final class CategoryPublicationReadiness implements CategoryPublicationReadiness
     {
         return $this->warnings;
     }
+
     /**
      * Handles the checks workflow.
      */

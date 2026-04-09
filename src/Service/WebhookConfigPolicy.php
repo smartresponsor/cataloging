@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the webhook config policy application service.
  */
@@ -21,6 +22,7 @@ final class WebhookConfigPolicy
             throw new \InvalidArgumentException('Secret too short');
         }
     }
+
     /**
      * Handles the rotate secret workflow.
      */

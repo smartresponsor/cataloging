@@ -7,12 +7,14 @@ namespace App\Service\Category\Import;
 
 use App\ServiceInterface\Category\CategoryImportServiceInterface;
 use App\ServiceInterface\Import\ImportRepositoryInterface;
+
 /**
  * Provides the category import service application service.
  */
 final class CategoryImportService implements CategoryImportServiceInterface
 {
     private ImportRepositoryInterface $repo;
+
     /**
      * Initializes the category import service service collaborators.
      */
@@ -20,6 +22,7 @@ final class CategoryImportService implements CategoryImportServiceInterface
     {
         $this->repo = $repo;
     }
+
     /**
      * Handles the import csv workflow.
      */
@@ -52,6 +55,7 @@ final class CategoryImportService implements CategoryImportServiceInterface
 
         return $n;
     }
+
     /**
      * Handles the import ndjson workflow.
      */

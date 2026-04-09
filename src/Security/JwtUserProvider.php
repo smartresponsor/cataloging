@@ -9,17 +9,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /** @implements UserProviderInterface<JwtUser> */
-final class JwtUserProvider implements UserProviderInterface
+final readonly class JwtUserProvider implements UserProviderInterface
 {
     /**
      * @param list<string> $defaultRoles
      * @param list<string> $adminIdentifiers
      */
     public function __construct(
-        private readonly array $defaultRoles = ['ROLE_USER'],
-        private readonly array $adminIdentifiers = [],
+        private array $defaultRoles = ['ROLE_USER'],
+        private array $adminIdentifiers = [],
     ) {
     }
+
     /**
      * Loads the user by identifier data for the current workflow.
      */
@@ -29,6 +30,7 @@ final class JwtUserProvider implements UserProviderInterface
 
         return new JwtUser($normalizedIdentifier, $this->resolveRoles($normalizedIdentifier));
     }
+
     /**
      * Handles the refresh user workflow.
      */
@@ -40,6 +42,7 @@ final class JwtUserProvider implements UserProviderInterface
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
+
     /**
      * Determines whether this service supports class.
      */

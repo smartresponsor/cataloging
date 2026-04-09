@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationPolicyAwarePackageGateReportInterface;
+
 /**
  * Represents the category syndication policy aware package gate report value.
  */
-final class CategorySyndicationPolicyAwarePackageGateReport
-    implements CategorySyndicationPolicyAwarePackageGateReportInterface
+final readonly class CategorySyndicationPolicyAwarePackageGateReport implements CategorySyndicationPolicyAwarePackageGateReportInterface
 {
     /**
      * @param list<string>       $packageMissingRequiredFields
@@ -21,19 +21,20 @@ final class CategorySyndicationPolicyAwarePackageGateReport
      * @param list<string>       $fallbackMatchedBindingIds
      */
     public function __construct(
-        private readonly string $mediaPolicyMode,
-        private readonly array $packageMissingRequiredFields,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $exactMatchedBindingIds,
-        private readonly array $fallbackMatchedBindingIds,
-        private readonly bool $strictPublishable,
-        private readonly bool $fallbackPublishable,
-        private readonly bool $resolvedPublishable,
-        private readonly bool $fallbackUsed,
+        private string $mediaPolicyMode,
+        private array $packageMissingRequiredFields,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $checks,
+        private array $exactMatchedBindingIds,
+        private array $fallbackMatchedBindingIds,
+        private bool $strictPublishable,
+        private bool $fallbackPublishable,
+        private bool $resolvedPublishable,
+        private bool $fallbackUsed,
     ) {
     }
+
     /**
      * Handles the media policy mode workflow.
      */
@@ -41,6 +42,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->mediaPolicyMode;
     }
+
     /**
      * Handles the package missing required fields workflow.
      */
@@ -48,6 +50,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->packageMissingRequiredFields;
     }
+
     /**
      * Handles the required missing workflow.
      */
@@ -55,6 +58,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->requiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -62,6 +66,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->warnings;
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -69,6 +74,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->checks;
     }
+
     /**
      * Handles the exact matched binding ids workflow.
      */
@@ -76,6 +82,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->exactMatchedBindingIds;
     }
+
     /**
      * Handles the fallback matched binding ids workflow.
      */
@@ -83,6 +90,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->fallbackMatchedBindingIds;
     }
+
     /**
      * Handles the strict publishable workflow.
      */
@@ -90,6 +98,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->strictPublishable;
     }
+
     /**
      * Handles the fallback publishable workflow.
      */
@@ -97,6 +106,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->fallbackPublishable;
     }
+
     /**
      * Resolves the d publishable result for the current workflow.
      */
@@ -104,6 +114,7 @@ final class CategorySyndicationPolicyAwarePackageGateReport
     {
         return $this->resolvedPublishable;
     }
+
     /**
      * Handles the fallback used workflow.
      */

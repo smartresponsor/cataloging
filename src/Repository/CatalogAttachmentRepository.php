@@ -9,18 +9,21 @@ use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Index;
 use Symfony\Component\Uid\Ulid;
+
 /**
  * Provides repository services for catalog attachment repository.
  */
 final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryInterface
 {
     private bool $schemaEnsured = false;
+
     /**
      * Initializes the catalog attachment repository service collaborators.
      */
     public function __construct(private readonly Connection $connection)
     {
     }
+
     /**
      * Handles the list workflow.
      */
@@ -30,7 +33,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
         $sql = '
             SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at '
-            . 'FROM category_attachment';
+            .'FROM category_attachment';
         $params = [];
         if (null !== $categoryId && '' !== $categoryId) {
             $sql .= ' WHERE category_id = :category_id';
@@ -71,6 +74,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             $rows,
         )));
     }
+
     /**
      * Handles the add workflow.
      */
@@ -80,8 +84,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         string $provider,
         string $externalAttachmentId,
         ?string $referenceUri = null,
-    ): array
-    {
+    ): array {
         $this->ensureSchema();
 
         $existing = $this->connection->fetchAssociative(
@@ -133,7 +136,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'provider' => $provider,
             'external_attachment_id' => $externalAttachmentId,
             'path' => null !== $referenceUri ? $referenceUri : '',
-            'created_at' => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'created_at' => new \DateTimeImmutable()->format(DATE_ATOM),
         ];
 
         $this->connection->insert('category_attachment', $item);
@@ -149,6 +152,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'created_at' => $item['created_at'],
         ];
     }
+
     /**
      * Handles the find one workflow.
      */
@@ -192,6 +196,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'created_at' => $row['created_at'],
         ];
     }
+
     /**
      * Deletes the requested target from the underlying store.
      */
@@ -228,7 +233,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
         $columns = [];
         if ($schemaManager->tablesExist(['category_attachment'])) {
-            $columns = array_change_key_case($schemaManager->listTableColumns('category_attachment'), CASE_LOWER);
+            $columns = array_change_key_case($schemaManager->listTableColumns('category_attachment'));
         }
 
         if (!isset($columns['provider'])) {

@@ -4,10 +4,11 @@
 declare(strict_types=1);
 
 namespace App\Projection;
+
 /**
  * Provides the category actor traceability view implementation.
  */
-final class CategoryActorTraceabilityView
+final readonly class CategoryActorTraceabilityView
 {
     /**
      * @param list<array<string,mixed>>                          $accessAssignments
@@ -18,14 +19,14 @@ final class CategoryActorTraceabilityView
      * @param array<string,array{count:int, roles:list<string>}> $actorSummary
      */
     public function __construct(
-        public readonly string $categoryId,
-        public readonly array $accessAssignments,
-        public readonly array $changeRequests,
-        public readonly array $reviewAssignments,
-        public readonly array $mediaBindings,
-        public readonly array $workflowHistory,
-        public readonly array $actorSummary,
-        public readonly string $generatedAt,
+        public string $categoryId,
+        public array $accessAssignments,
+        public array $changeRequests,
+        public array $reviewAssignments,
+        public array $mediaBindings,
+        public array $workflowHistory,
+        public array $actorSummary,
+        public string $generatedAt,
     ) {
     }
 

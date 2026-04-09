@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
+
 /**
  * Represents the category destination media fallback report value.
  */
-final class CategoryDestinationMediaFallbackReport implements CategoryDestinationMediaFallbackReportInterface
+final readonly class CategoryDestinationMediaFallbackReport implements CategoryDestinationMediaFallbackReportInterface
 {
     /**
      * @param array<string,bool> $checks
@@ -19,15 +20,16 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
      * @param list<string>       $fallbackMatchedBindingIds
      */
     public function __construct(
-        private readonly array $checks,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $exactMatchedBindingIds,
-        private readonly array $fallbackMatchedBindingIds,
-        private readonly bool $publishable,
-        private readonly bool $publishableWithFallback,
+        private array $checks,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $exactMatchedBindingIds,
+        private array $fallbackMatchedBindingIds,
+        private bool $publishable,
+        private bool $publishableWithFallback,
     ) {
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -35,6 +37,7 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
     {
         return $this->checks;
     }
+
     /**
      * Handles the required missing workflow.
      */
@@ -42,6 +45,7 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
     {
         return $this->requiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -49,6 +53,7 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
     {
         return $this->warnings;
     }
+
     /**
      * Handles the exact matched binding ids workflow.
      */
@@ -56,6 +61,7 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
     {
         return $this->exactMatchedBindingIds;
     }
+
     /**
      * Handles the fallback matched binding ids workflow.
      */
@@ -63,6 +69,7 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
     {
         return $this->fallbackMatchedBindingIds;
     }
+
     /**
      * Handles the publishable workflow.
      */
@@ -70,6 +77,7 @@ final class CategoryDestinationMediaFallbackReport implements CategoryDestinatio
     {
         return $this->publishable;
     }
+
     /**
      * Handles the publishable with fallback workflow.
      */

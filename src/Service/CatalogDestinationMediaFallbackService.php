@@ -11,20 +11,22 @@ use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
+
 /**
  * Provides the catalog destination media fallback service application service.
  */
-final class CatalogDestinationMediaFallbackService implements CatalogDestinationMediaFallbackServiceInterface
+final readonly class CatalogDestinationMediaFallbackService implements CatalogDestinationMediaFallbackServiceInterface
 {
     /**
      * Initializes the catalog destination media fallback service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDestinationRepositoryInterface $destinationRepository,
-        private readonly CategoryMediaBindingRepositoryInterface $bindingRepository,
-        private readonly CategoryDestinationMediaFallbackPolicyInterface $policy,
+        private CategorySyndicationDestinationRepositoryInterface $destinationRepository,
+        private CategoryMediaBindingRepositoryInterface $bindingRepository,
+        private CategoryDestinationMediaFallbackPolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -33,8 +35,7 @@ final class CatalogDestinationMediaFallbackService implements CatalogDestination
         string $categoryId,
         string $actorId,
         string $reason,
-    ): CategoryDestinationMediaFallbackEvaluatedInterface
-    {
+    ): CategoryDestinationMediaFallbackEvaluatedInterface {
         $destination = $this->destinationRepository->find($destinationId);
         if (null === $destination) {
             throw new \InvalidArgumentException('Unknown destination.');
@@ -51,8 +52,8 @@ final class CatalogDestinationMediaFallbackService implements CatalogDestination
         return new CategoryDestinationMediaFallbackEvaluated(
             trim($destinationId),
             trim($categoryId),
-            trim((string) ($settings['channel'] ?? '')),
-            trim((string) ($settings['locale'] ?? '')),
+            trim($settings['channel'] ?? ''),
+            trim($settings['locale'] ?? ''),
             $report->publishable(),
             $report->publishableWithFallback(),
             $report->requiredMissing(),

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\WebhookClientInterface;
+
 /**
  * Provides the webhook client application service.
  */
@@ -13,6 +14,7 @@ final class WebhookClient implements WebhookClientInterface
 {
     private string $secret;
     private int $maxRetry;
+
     /**
      * Initializes the webhook client service collaborators.
      */
@@ -21,6 +23,7 @@ final class WebhookClient implements WebhookClientInterface
         $this->secret = $secret;
         $this->maxRetry = max(1, $maxRetry);
     }
+
     /**
      * Handles the send workflow.
      */
@@ -63,7 +66,7 @@ final class WebhookClient implements WebhookClientInterface
         $response = file_get_contents($endpoint, false, $context);
         /** @var list<string> $headers */
         $headers = $http_response_header;
-        $statusLine = isset($headers[0]) ? (string) $headers[0] : '';
+        $statusLine = isset($headers[0]) ? $headers[0] : '';
 
         if (preg_match('/\s(\d{3})\s?/', $statusLine, $matches)) {
             $status = (int) $matches[1];

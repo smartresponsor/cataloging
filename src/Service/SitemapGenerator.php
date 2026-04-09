@@ -4,15 +4,16 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the sitemap generator application service.
  */
-final class SitemapGenerator
+final readonly class SitemapGenerator
 {
     /**
      * Initializes the sitemap generator service collaborators.
      */
-    public function __construct(private readonly CanonicalResolver $canonicalResolver)
+    public function __construct(private CanonicalResolver $canonicalResolver)
     {
     }
 

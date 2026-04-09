@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category review assign command console workflow.
  */
@@ -20,6 +21,7 @@ final class CategoryReviewAssignCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category review assign command service collaborators.
      */
@@ -27,6 +29,7 @@ final class CategoryReviewAssignCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -44,6 +47,7 @@ final class CategoryReviewAssignCommand extends Command
             ->addOption('priority', null, InputOption::VALUE_REQUIRED, '', 'normal')
             ->addOption('due-at', null, InputOption::VALUE_REQUIRED);
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */

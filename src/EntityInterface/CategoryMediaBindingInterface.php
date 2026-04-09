@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\EntityInterface;
 
 use App\ValueObjectInterface\CategoryMediaRoleInterface;
+
 /**
  * Defines the contract for category media binding.
  */
@@ -15,14 +16,17 @@ interface CategoryMediaBindingInterface
      * Handles the binding id workflow.
      */
     public function bindingId(): string;
+
     /**
      * Handles the category id workflow.
      */
     public function categoryId(): string;
+
     /**
      * Handles the asset id workflow.
      */
     public function assetId(): string;
+
     /**
      * Handles the role workflow.
      */
@@ -33,10 +37,12 @@ interface CategoryMediaBindingInterface
 
     /** @return list<string> */
     public function locales(): array;
+
     /**
      * Handles the required for publish workflow.
      */
     public function requiredForPublish(): bool;
+
     /**
      * Handles the active workflow.
      */
@@ -44,10 +50,12 @@ interface CategoryMediaBindingInterface
 
     /** @return array<string,mixed> */
     public function metadata(): array;
+
     /**
      * Handles the actor id workflow.
      */
     public function actorId(): string;
+
     /**
      * Handles the bound at workflow.
      */

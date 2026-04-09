@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryMediaBoundInterface;
+
 /**
  * Represents the category media bound application event.
  */
-final class CategoryMediaBound implements CategoryMediaBoundInterface
+final readonly class CategoryMediaBound implements CategoryMediaBoundInterface
 {
     /**
      * @param list<string>        $channels
@@ -17,20 +18,21 @@ final class CategoryMediaBound implements CategoryMediaBoundInterface
      * @param array<string,mixed> $metadata
      */
     public function __construct(
-        private readonly string $bindingId,
-        private readonly string $categoryId,
-        private readonly string $assetId,
-        private readonly string $role,
-        private readonly array $channels,
-        private readonly array $locales,
-        private readonly bool $requiredForPublish,
-        private readonly bool $active,
-        private readonly array $metadata,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $boundAt,
+        private string $bindingId,
+        private string $categoryId,
+        private string $assetId,
+        private string $role,
+        private array $channels,
+        private array $locales,
+        private bool $requiredForPublish,
+        private bool $active,
+        private array $metadata,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $boundAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */

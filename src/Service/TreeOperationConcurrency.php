@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the tree operation concurrency application service.
  */
@@ -11,6 +12,7 @@ final class TreeOperationConcurrency
 {
     private \PDO $pdo;
     private TreeLock $lock;
+
     /**
      * Initializes the tree operation concurrency service collaborators.
      */
@@ -19,6 +21,7 @@ final class TreeOperationConcurrency
         $this->pdo = $pdo;
         $this->lock = $lock;
     }
+
     /**
      * Handles the move workflow.
      */

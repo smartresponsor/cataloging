@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
+
 /**
  * Represents the category syndication governance trail recorded application event.
  */
@@ -17,6 +18,7 @@ final class CategorySyndicationGovernanceTrailRecorded implements CategorySyndic
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -24,6 +26,7 @@ final class CategorySyndicationGovernanceTrailRecorded implements CategorySyndic
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

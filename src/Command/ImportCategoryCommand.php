@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the import category command console workflow.
  */
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ImportCategoryCommand extends Command
 {
     use CategoryCliOutputTrait;
+
     /**
      * Configures the command definition and available options.
      */
@@ -25,6 +27,7 @@ final class ImportCategoryCommand extends Command
         parent::configure();
         $this->addArgument('file', InputArgument::REQUIRED, 'NDJSON file');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
@@ -47,7 +50,6 @@ final class ImportCategoryCommand extends Command
         foreach ($lines as $line) {
             $data = json_decode($line, true, 512, JSON_THROW_ON_ERROR);
             if (!is_array($data)) {
-                continue;
             }
         }
         $output->writeln('<info>Import done</info>');

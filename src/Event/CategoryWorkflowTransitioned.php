@@ -6,23 +6,25 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryWorkflowTransitionedInterface;
+
 /**
  * Represents the category workflow transitioned application event.
  */
-final class CategoryWorkflowTransitioned implements CategoryWorkflowTransitionedInterface
+final readonly class CategoryWorkflowTransitioned implements CategoryWorkflowTransitionedInterface
 {
     /**
      * Initializes the category workflow transitioned service collaborators.
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly string $fromState,
-        private readonly string $toState,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $occurredAt,
+        private string $categoryId,
+        private string $fromState,
+        private string $toState,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the event name workflow.
      */

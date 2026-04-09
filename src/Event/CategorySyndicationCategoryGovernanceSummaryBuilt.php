@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
+
 /**
  * Represents the category syndication category governance summary built application event.
  */
-final class CategorySyndicationCategoryGovernanceSummaryBuilt
-    implements CategorySyndicationCategoryGovernanceSummaryBuiltInterface
+final class CategorySyndicationCategoryGovernanceSummaryBuilt implements CategorySyndicationCategoryGovernanceSummaryBuiltInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
@@ -24,6 +24,7 @@ final class CategorySyndicationCategoryGovernanceSummaryBuilt
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

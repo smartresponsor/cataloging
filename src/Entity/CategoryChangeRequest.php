@@ -8,6 +8,7 @@ namespace App\Entity;
 use App\EntityInterface\CategoryChangeRequestInterface;
 use App\ValueObject\CategoryChangeRequestState;
 use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
+
 /**
  * Represents the category change request domain record.
  */
@@ -37,8 +38,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
         string $submittedBy,
         string $summary,
         array $changes,
-    ): self
-    {
+    ): self {
         return new self(
             $requestId,
             $categoryId,
@@ -52,6 +52,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
             null,
         );
     }
+
     /**
      * Handles the move to workflow.
      */
@@ -70,6 +71,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
             new \DateTimeImmutable('now'),
         );
     }
+
     /**
      * Handles the request id workflow.
      */
@@ -77,6 +79,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->requestId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -84,6 +87,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the submitted by workflow.
      */
@@ -91,6 +95,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->submittedBy;
     }
+
     /**
      * Handles the summary workflow.
      */
@@ -104,6 +109,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->changes;
     }
+
     /**
      * Handles the state workflow.
      */
@@ -111,6 +117,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->state;
     }
+
     /**
      * Handles the reviewed by workflow.
      */
@@ -118,6 +125,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->reviewedBy;
     }
+
     /**
      * Handles the decision reason workflow.
      */
@@ -125,6 +133,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->decisionReason;
     }
+
     /**
      * Handles the submitted at workflow.
      */
@@ -132,6 +141,7 @@ final class CategoryChangeRequest implements CategoryChangeRequestInterface
     {
         return $this->submittedAt;
     }
+
     /**
      * Handles the reviewed at workflow.
      */

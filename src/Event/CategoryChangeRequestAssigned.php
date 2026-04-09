@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryChangeRequestAssignedInterface;
+
 /**
  * Represents the category change request assigned application event.
  */
@@ -24,6 +25,7 @@ final class CategoryChangeRequestAssigned implements CategoryChangeRequestAssign
         private readonly ?\DateTimeImmutable $dueAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */

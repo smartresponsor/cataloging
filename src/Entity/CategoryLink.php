@@ -16,6 +16,7 @@ final class CategoryLink
     private string $targetClass;
     private string $targetId; // ULID
     private \DateTimeImmutable $createdAt;
+
     /**
      * Initializes the category link service collaborators.
      */
@@ -36,6 +37,7 @@ final class CategoryLink
         $this->targetId = $targetId;
         $this->createdAt = $createdAt;
     }
+
     /**
      * Handles the id workflow.
      */
@@ -43,6 +45,7 @@ final class CategoryLink
     {
         return $this->id;
     }
+
     /**
      * Handles the taxonomy id workflow.
      */
@@ -50,6 +53,7 @@ final class CategoryLink
     {
         return $this->taxonomyId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -57,6 +61,7 @@ final class CategoryLink
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the target domain workflow.
      */
@@ -64,6 +69,7 @@ final class CategoryLink
     {
         return $this->targetDomain;
     }
+
     /**
      * Handles the target class workflow.
      */
@@ -71,6 +77,7 @@ final class CategoryLink
     {
         return $this->targetClass;
     }
+
     /**
      * Handles the target id workflow.
      */
@@ -78,6 +85,7 @@ final class CategoryLink
     {
         return $this->targetId;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */

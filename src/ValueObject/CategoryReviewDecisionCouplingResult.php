@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryReviewDecisionCouplingResultInterface;
+
 /**
  * Represents the category review decision coupling result value.
  */
-final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisionCouplingResultInterface
+final readonly class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisionCouplingResultInterface
 {
     /**
      * @param list<string>       $blockers
@@ -17,18 +18,19 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $reviewState,
-        private readonly string $workflowState,
-        private readonly bool $publishable,
-        private readonly array $blockers,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly string $actorId,
-        private readonly string $reason,
+        private string $requestId,
+        private string $categoryId,
+        private string $reviewState,
+        private string $workflowState,
+        private bool $publishable,
+        private array $blockers,
+        private array $warnings,
+        private array $checks,
+        private string $actorId,
+        private string $reason,
     ) {
     }
+
     /**
      * Handles the request id workflow.
      */
@@ -36,6 +38,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->requestId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -43,6 +46,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the review state workflow.
      */
@@ -50,6 +54,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->reviewState;
     }
+
     /**
      * Handles the workflow state workflow.
      */
@@ -57,6 +62,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->workflowState;
     }
+
     /**
      * Handles the publishable workflow.
      */
@@ -64,6 +70,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->publishable;
     }
+
     /**
      * Handles the blockers workflow.
      */
@@ -71,6 +78,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->blockers;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -78,6 +86,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->warnings;
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -85,6 +94,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->checks;
     }
+
     /**
      * Handles the actor id workflow.
      */
@@ -92,6 +102,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->actorId;
     }
+
     /**
      * Handles the reason workflow.
      */
@@ -99,6 +110,7 @@ final class CategoryReviewDecisionCouplingResult implements CategoryReviewDecisi
     {
         return $this->reason;
     }
+
     /**
      * Handles the payload workflow.
      */

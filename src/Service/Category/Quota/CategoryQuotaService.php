@@ -7,12 +7,14 @@ namespace App\Service\Category\Quota;
 
 use App\ServiceInterface\Category\CategoryQuotaServiceInterface;
 use App\ServiceInterface\Quota\CacheStoreInterface;
+
 /**
  * Provides the category quota service application service.
  */
 final class CategoryQuotaService implements CategoryQuotaServiceInterface
 {
     private CacheStoreInterface $store;
+
     /**
      * Initializes the category quota service service collaborators.
      */
@@ -20,6 +22,7 @@ final class CategoryQuotaService implements CategoryQuotaServiceInterface
     {
         $this->store = $store;
     }
+
     /**
      * Handles the allow workflow.
      */
@@ -28,6 +31,6 @@ final class CategoryQuotaService implements CategoryQuotaServiceInterface
         $key = 'quota:'.$scope.':'.$id.':'.$op;
         $bucket = new CategoryTokenBucket($this->store, $key, $capacity, $ratePerSec);
 
-        return $bucket->take(1);
+        return $bucket->take();
     }
 }

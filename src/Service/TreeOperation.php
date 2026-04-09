@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the tree operation application service.
  */
@@ -20,6 +21,7 @@ final class TreeOperation
         }
         // Repository integration is expected at application layer.
     }
+
     /**
      * Handles the swap workflow.
      */
@@ -29,6 +31,7 @@ final class TreeOperation
             throw new \InvalidArgumentException('Swap requires distinct nodes');
         }
     }
+
     /**
      * Handles the reparent workflow.
      */

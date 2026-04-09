@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Represents the category alias entity domain record.
  */
@@ -26,6 +27,7 @@ class CategoryAliasEntity
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
+
     /**
      * Initializes the category alias entity service collaborators.
      */
@@ -35,6 +37,7 @@ class CategoryAliasEntity
         $this->categoryId = $categoryId;
         $this->createdAt = new \DateTimeImmutable('now');
     }
+
     /**
      * Handles the id workflow.
      */
@@ -42,6 +45,7 @@ class CategoryAliasEntity
     {
         return $this->id;
     }
+
     /**
      * Handles the old slug workflow.
      */
@@ -49,6 +53,7 @@ class CategoryAliasEntity
     {
         return $this->oldSlug;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -56,6 +61,7 @@ class CategoryAliasEntity
     {
         return $this->categoryId;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */

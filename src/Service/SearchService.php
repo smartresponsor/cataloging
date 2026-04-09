@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -62,6 +63,8 @@ final class SearchService
      *     }
      *   }
      * }
+     *
+     * @throws Exception
      */
     public function search(array $criteria = []): array
     {
@@ -172,7 +175,7 @@ final class SearchService
     /**
      * @param array{
      *     q:string,
-     *     'tenant':?string,
+     * $criteria 'tenant':?string,
      *     locale:?string,
      *     workflow_state:?string,
      *     published:?bool,
@@ -237,19 +240,12 @@ final class SearchService
     /**
      * @param list<array<string,mixed>> $rows
      *
-     * @return list<array{
-     *     id:string,
-     *     slug:string,
-     *     name:string,
-     *     'parent_id':?string,
-     *     path:string,
-     *     locale:string,
-     *     'tenant':string,
-     *     workflow_state:string,
-     *     published:bool,
-     *     published_at:?string,
-     *     updated_at:string,
-     * } >
+     * @return array tenant':string,
+     *               workflow_state:string,
+     *               published:bool,
+     *               published_at:?string,
+     *               updated_at:string,
+     *               } >
      */
     private function normalizeRows(array $rows): array
     {
@@ -279,10 +275,15 @@ final class SearchService
     }
 
     /**
+     * @param Connection                  $connection
+     * @param string                      $field
+     * @param string                      $whereSql
      * @param array<string,mixed>         $params
      * @param array<string,ParameterType> $types
      *
      * @return array<string,int>
+     *
+     * @throws Exception
      */
     private function facetCounts(
         Connection $connection,

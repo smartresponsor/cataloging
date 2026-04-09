@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryChangeRequestAssignedInterface;
+
 /**
  * Defines the contract for catalog review assignment service.
  */

@@ -8,17 +8,19 @@ namespace App\Repository;
 use App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * Provides repository services for catalog collection projection repository.
  */
-final class CatalogCollectionProjectionRepository implements CatalogCollectionProjectionRepositoryInterface
+final readonly class CatalogCollectionProjectionRepository implements CatalogCollectionProjectionRepositoryInterface
 {
     /**
      * Initializes the catalog collection projection repository service collaborators.
      */
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(private ManagerRegistry $registry)
     {
     }
+
     /**
      * Handles the list workflow.
      */

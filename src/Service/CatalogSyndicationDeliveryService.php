@@ -12,6 +12,7 @@ use App\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
 use App\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
+
 /**
  * Provides the catalog syndication delivery service application service.
  */
@@ -25,6 +26,7 @@ final class CatalogSyndicationDeliveryService implements CatalogSyndicationDeliv
         private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
     ) {
     }
+
     /**
      * Handles the record delivery workflow.
      */

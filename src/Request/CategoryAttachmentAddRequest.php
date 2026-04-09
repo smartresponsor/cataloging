@@ -8,18 +8,18 @@ namespace App\Request;
 /**
  * Provides the category attachment add request implementation.
  */
-final class CategoryAttachmentAddRequest
+final readonly class CategoryAttachmentAddRequest
 {
     /**
      * @param list<string> $errors
      */
     public function __construct(
-        public readonly ?string $categoryId,
-        public readonly string $type,
-        public readonly ?string $provider,
-        public readonly ?string $externalAttachmentId,
-        public readonly ?string $referenceUri,
-        private readonly array $errors = [],
+        public ?string $categoryId,
+        public string $type,
+        public ?string $provider,
+        public ?string $externalAttachmentId,
+        public ?string $referenceUri,
+        private array $errors = [],
     ) {
     }
 

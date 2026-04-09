@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\EntityInterface\CategorySyndicationDestinationInterface;
+
 /**
  * Represents the category syndication destination domain record.
  */
@@ -94,6 +95,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
 
         return $normalized;
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -101,6 +103,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the name workflow.
      */
@@ -108,6 +111,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->name;
     }
+
     /**
      * Handles the destination type workflow.
      */
@@ -115,6 +119,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->destinationType;
     }
+
     /**
      * Handles the delivery mode workflow.
      */
@@ -122,6 +127,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->deliveryMode;
     }
+
     /**
      * Handles the enabled workflow.
      */
@@ -129,6 +135,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->enabled;
     }
+
     /**
      * Updates the tings value.
      */
@@ -136,6 +143,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->settings;
     }
+
     /**
      * Creates the d by result for the current workflow.
      */
@@ -143,6 +151,7 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
     {
         return $this->createdBy;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */

@@ -14,8 +14,10 @@ use App\ServiceInterface\CategoryReadScopeServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * Handles the category api controller application flow.
  */
@@ -32,6 +34,7 @@ final class CategoryApiController
         private readonly Security $security,
     ) {
     }
+
     /**
      * Handles the tree workflow.
      */
@@ -48,10 +51,11 @@ final class CategoryApiController
             $criteria = $this->categoryReadScopeService->applyTenantScope($request, $criteria);
 
             return new JsonResponse(['data' => $this->categoryProjectionReadService->tree($criteria)]);
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         }
     }
+
     /**
      * Handles the move workflow.
      */
@@ -79,7 +83,7 @@ final class CategoryApiController
             );
 
             return new JsonResponse(['data' => $result], 200);
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 400);
@@ -92,6 +96,7 @@ final class CategoryApiController
             );
         }
     }
+
     /**
      * Handles the publish workflow.
      */
@@ -117,7 +122,7 @@ final class CategoryApiController
             );
 
             return new JsonResponse(['data' => $result], 200);
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 400);

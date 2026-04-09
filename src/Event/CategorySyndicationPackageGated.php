@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationPackageGatedInterface;
+
 /**
  * Represents the category syndication package gated application event.
  */
@@ -17,6 +18,7 @@ final class CategorySyndicationPackageGated implements CategorySyndicationPackag
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -24,6 +26,7 @@ final class CategorySyndicationPackageGated implements CategorySyndicationPackag
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

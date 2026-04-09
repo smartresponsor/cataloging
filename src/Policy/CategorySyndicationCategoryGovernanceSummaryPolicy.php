@@ -8,18 +8,17 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
 use App\ValueObject\CategorySyndicationCategoryGovernanceSummary;
 use App\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterface;
+
 /**
  * Provides the category syndication category governance summary policy implementation.
  */
-final class CategorySyndicationCategoryGovernanceSummaryPolicy
-    implements CategorySyndicationCategoryGovernanceSummaryPolicyInterface
+final class CategorySyndicationCategoryGovernanceSummaryPolicy implements CategorySyndicationCategoryGovernanceSummaryPolicyInterface
 {
     /** @param list<array<string,mixed>> $trailPayloads */
     public function buildSummary(
         string $categoryId,
         array $trailPayloads,
-    ): CategorySyndicationCategoryGovernanceSummaryInterface
-    {
+    ): CategorySyndicationCategoryGovernanceSummaryInterface {
         $statusCounts = [
             'pending' => 0,
             'delivered' => 0,
@@ -52,32 +51,32 @@ final class CategorySyndicationCategoryGovernanceSummaryPolicy
 
             $status = $this->scalarString($payload['deliveryStatus'] ?? 'pending');
             if ('' !== $status) {
-                $statusCounts[$status] = (int) ($statusCounts[$status] ?? 0) + 1;
+                $statusCounts[$status] = ($statusCounts[$status] ?? 0) + 1;
             }
 
             $mode = $this->scalarString($payload['mediaPolicyMode'] ?? 'strict_exact');
             if ('' !== $mode) {
-                $policyModeCounts[$mode] = (int) ($policyModeCounts[$mode] ?? 0) + 1;
+                $policyModeCounts[$mode] = ($policyModeCounts[$mode] ?? 0) + 1;
             }
 
-            if ((bool) ($payload['resolvedPublishable'] ?? false)) {
+            if ($payload['resolvedPublishable'] ?? false) {
                 ++$resolvedPublishableCount;
             }
-            if ((bool) ($payload['fallbackUsed'] ?? false)) {
+            if ($payload['fallbackUsed'] ?? false) {
                 ++$fallbackUsedCount;
             }
-            if ((bool) ($payload['retryable'] ?? false)) {
+            if ($payload['retryable'] ?? false) {
                 ++$retryableCount;
             }
-            if ((bool) ($payload['retryScheduled'] ?? false)) {
+            if ($payload['retryScheduled'] ?? false) {
                 ++$retryScheduledCount;
             }
 
             $checks = is_array($payload['checks'] ?? null) ? $payload['checks'] : [];
-            if ((bool) ($checks['governanceTrailHasFailures'] ?? false)) {
+            if ($checks['governanceTrailHasFailures'] ?? false) {
                 ++$failureTrailCount;
             }
-            if ((bool) ($checks['governanceTrailHasDelivered'] ?? false)) {
+            if ($checks['governanceTrailHasDelivered'] ?? false) {
                 ++$deliveredTrailCount;
             }
 

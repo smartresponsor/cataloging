@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+
 /**
  * Provides the read optimizer application service.
  */
@@ -15,6 +16,7 @@ final class ReadOptimizer
     private array $cache = [];
     private int $hit = 0;
     private int $miss = 0;
+
     /**
      * Initializes the read optimizer service collaborators.
      */
@@ -26,6 +28,8 @@ final class ReadOptimizer
      * @param array<string,mixed> $criteria
      *
      * @return list<array<string,mixed>>
+     *
+     * @throws \JsonException
      */
     public function getTree(array $criteria = []): array
     {
@@ -62,6 +66,7 @@ final class ReadOptimizer
             'size' => count($this->cache),
         ];
     }
+
     /**
      * Handles the clear workflow.
      */
@@ -70,7 +75,13 @@ final class ReadOptimizer
         $this->cache = [];
     }
 
-    /** @param array<string,mixed> $criteria */
+    /**
+     * @param array<string,mixed> $criteria
+     *
+     * @return string
+     *
+     * @throws \JsonException
+     */
     private function cacheKey(array $criteria): string
     {
         ksort($criteria);

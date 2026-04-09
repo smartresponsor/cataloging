@@ -9,17 +9,19 @@ use App\Projection\CategoryGovernanceView;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use App\Service\Security\CategoryRole;
 use App\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
+
 /**
  * Provides the category governance view builder application service.
  */
-final class CategoryGovernanceViewBuilder implements CategoryGovernanceViewBuilderInterface
+final readonly class CategoryGovernanceViewBuilder implements CategoryGovernanceViewBuilderInterface
 {
     /**
      * Initializes the category governance view builder service collaborators.
      */
-    public function __construct(private readonly CategoryAccessAssignmentRepositoryInterface $assignmentRepository)
+    public function __construct(private CategoryAccessAssignmentRepositoryInterface $assignmentRepository)
     {
     }
+
     /**
      * Builds the requested output for the current workflow.
      */
@@ -45,7 +47,7 @@ final class CategoryGovernanceViewBuilder implements CategoryGovernanceViewBuild
             primaryActorUserId: $primary?->actorUserId(),
             activeAssignments: $assignments,
             roleCapabilities: $this->roleCapabilities(),
-            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
+            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
         );
     }
 

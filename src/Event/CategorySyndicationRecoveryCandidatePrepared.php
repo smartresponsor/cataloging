@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
+
 /**
  * Represents the category syndication recovery candidate prepared application event.
  */
-final class CategorySyndicationRecoveryCandidatePrepared
-    implements CategorySyndicationRecoveryCandidatePreparedInterface
+final class CategorySyndicationRecoveryCandidatePrepared implements CategorySyndicationRecoveryCandidatePreparedInterface
 {
     /**
      * @param array<string,mixed> $payload
@@ -20,6 +20,7 @@ final class CategorySyndicationRecoveryCandidatePrepared
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -27,6 +28,7 @@ final class CategorySyndicationRecoveryCandidatePrepared
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

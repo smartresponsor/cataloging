@@ -7,17 +7,19 @@ namespace App\Repository;
 
 use App\RepositoryInterface\VirtualCategoryRepositoryInterface;
 use Doctrine\DBAL\Connection;
+
 /**
  * Provides repository services for virtual category repository.
  */
-final class VirtualCategoryRepository implements VirtualCategoryRepositoryInterface
+final readonly class VirtualCategoryRepository implements VirtualCategoryRepositoryInterface
 {
     /**
      * Initializes the virtual category repository service collaborators.
      */
-    public function __construct(private readonly Connection $connection)
+    public function __construct(private Connection $connection)
     {
     }
+
     /**
      * Handles the find by id workflow.
      */

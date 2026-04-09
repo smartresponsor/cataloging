@@ -11,19 +11,21 @@ use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
 use App\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\ValueObject\CategoryChangeRequestState;
+
 /**
  * Provides the catalog change request service application service.
  */
-final class CatalogChangeRequestService implements CatalogChangeRequestServiceInterface
+final readonly class CatalogChangeRequestService implements CatalogChangeRequestServiceInterface
 {
     /**
      * Initializes the catalog change request service service collaborators.
      */
     public function __construct(
-        private readonly CategoryChangeRequestRepositoryInterface $repository,
-        private readonly CategoryChangeRequestPolicyInterface $policy,
+        private CategoryChangeRequestRepositoryInterface $repository,
+        private CategoryChangeRequestPolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the submit workflow.
      */
@@ -33,8 +35,7 @@ final class CatalogChangeRequestService implements CatalogChangeRequestServiceIn
         string $submittedBy,
         string $summary,
         array $changes,
-    ): CategoryChangeRequest
-    {
+    ): CategoryChangeRequest {
         $this->policy->assertCanSubmit($requestId, $categoryId, $submittedBy, $summary, $changes);
 
         $request = CategoryChangeRequest::open($requestId, $categoryId, $submittedBy, $summary, $changes);
@@ -42,6 +43,7 @@ final class CatalogChangeRequestService implements CatalogChangeRequestServiceIn
 
         return $request;
     }
+
     /**
      * Handles the review workflow.
      */
@@ -50,8 +52,7 @@ final class CatalogChangeRequestService implements CatalogChangeRequestServiceIn
         string $targetState,
         string $reviewedBy,
         string $decisionReason,
-    ): CategoryChangeRequestReviewed
-    {
+    ): CategoryChangeRequestReviewed {
         $request = $this->repository->findByRequestId($requestId);
 
         if (!$request instanceof CategoryChangeRequest) {

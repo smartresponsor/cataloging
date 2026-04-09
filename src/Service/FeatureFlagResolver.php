@@ -4,20 +4,22 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the feature flag resolver application service.
  */
-final class FeatureFlagResolver
+final readonly class FeatureFlagResolver
 {
     /** @param array<string,bool> $flags */
-    public function __construct(private readonly array $flags = [])
+    public function __construct(private array $flags = [])
     {
     }
+
     /**
      * Determines whether the enabled condition is satisfied.
      */
     public function isEnabled(string $flag): bool
     {
-        return (bool) ($this->flags[$flag] ?? false);
+        return $this->flags[$flag] ?? false;
     }
 }

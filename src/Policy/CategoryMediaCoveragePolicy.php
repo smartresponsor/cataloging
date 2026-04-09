@@ -9,6 +9,7 @@ use App\EntityInterface\CategoryMediaBindingInterface;
 use App\PolicyInterface\CategoryMediaCoveragePolicyInterface;
 use App\ValueObject\CategoryMediaCoverageReport;
 use App\ValueObjectInterface\CategoryMediaCoverageReportInterface;
+
 /**
  * Provides the category media coverage policy implementation.
  */
@@ -68,22 +69,14 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
     /** @param list<CategoryMediaBindingInterface> $bindings */
     private function hasRole(array $bindings, string $role): bool
     {
-        foreach ($bindings as $binding) {
-            if ($binding->role()->value() === $role) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($bindings, fn ($binding) => $binding->role()->value() === $role);
     }
 
     /** @param list<CategoryMediaBindingInterface> $bindings */
     private function allRequiredBindingsCovered(array $bindings): bool
     {
-        foreach ($bindings as $binding) {
-            if ('' === trim($binding->assetId())) {
-                return false;
-            }
+        if (array_any($bindings, fn ($binding) => '' === trim($binding->assetId()))) {
+            return false;
         }
 
         return true;

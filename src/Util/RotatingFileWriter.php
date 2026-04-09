@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Util;
+
 /**
  * Provides the rotating file writer implementation.
  */
@@ -16,9 +17,9 @@ final class RotatingFileWriter
         private readonly string $path,
         private readonly int $maxBytes = 5242880,
         private readonly int $maxFiles = 3,
-    )
-    {
+    ) {
     }
+
     /**
      * Handles the write workflow.
      */

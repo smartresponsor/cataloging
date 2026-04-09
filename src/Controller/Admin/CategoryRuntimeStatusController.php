@@ -8,17 +8,19 @@ namespace App\Controller\Admin;
 use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category runtime status controller application flow.
  */
-final class CategoryRuntimeStatusController
+final readonly class CategoryRuntimeStatusController
 {
     /**
      * Initializes the category runtime status controller service collaborators.
      */
-    public function __construct(private readonly CategoryRuntimeStatusViewBuilderInterface $viewBuilder)
+    public function __construct(private CategoryRuntimeStatusViewBuilderInterface $viewBuilder)
     {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */

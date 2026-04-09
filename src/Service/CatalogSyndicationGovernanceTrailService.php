@@ -9,15 +9,16 @@ use App\Event\CategorySyndicationGovernanceTrailRecorded;
 use App\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
 use App\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationGovernanceTrailServiceInterface;
+
 /**
  * Provides the catalog syndication governance trail service application service.
  */
-final class CatalogSyndicationGovernanceTrailService implements CatalogSyndicationGovernanceTrailServiceInterface
+final readonly class CatalogSyndicationGovernanceTrailService implements CatalogSyndicationGovernanceTrailServiceInterface
 {
     /**
      * Initializes the catalog syndication governance trail service service collaborators.
      */
-    public function __construct(private readonly CategorySyndicationGovernanceTrailPolicyInterface $policy)
+    public function __construct(private CategorySyndicationGovernanceTrailPolicyInterface $policy)
     {
     }
 
@@ -34,8 +35,7 @@ final class CatalogSyndicationGovernanceTrailService implements CatalogSyndicati
         array $recoveryPayload,
         string $actorId,
         string $reason,
-    ): CategorySyndicationGovernanceTrailRecordedInterface
-    {
+    ): CategorySyndicationGovernanceTrailRecordedInterface {
         $report = $this->policy->buildReport($policyAwarePayload, $deliveryPayload, $historyPayload, $recoveryPayload);
 
         return new CategorySyndicationGovernanceTrailRecorded([

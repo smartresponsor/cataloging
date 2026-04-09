@@ -9,19 +9,21 @@ use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterfa
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 /**
  * Provides the category read scope service application service.
  */
-final class CategoryReadScopeService implements CategoryReadScopeServiceInterface
+final readonly class CategoryReadScopeService implements CategoryReadScopeServiceInterface
 {
     /**
      * Initializes the category read scope service service collaborators.
      */
     public function __construct(
-        private readonly SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
-        private readonly Security $security,
+        private SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
+        private Security $security,
     ) {
     }
+
     /**
      * Applies the tenant scope workflow to the provided input.
      */

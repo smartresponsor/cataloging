@@ -8,17 +8,17 @@ namespace App\Request;
 /**
  * Provides the webhook dispatch request implementation.
  */
-final class WebhookDispatchRequest
+final readonly class WebhookDispatchRequest
 {
     /**
-     * @param array<mixed> $payload
+     * @param array        $payload
      * @param list<string> $errors
      */
     public function __construct(
-        public readonly string $event,
-        public readonly string $endpoint,
-        public readonly array $payload,
-        private readonly array $errors = [],
+        public string $event,
+        public string $endpoint,
+        public array $payload,
+        private array $errors = [],
     ) {
     }
 

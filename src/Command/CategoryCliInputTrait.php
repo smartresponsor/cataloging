@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
+
 /**
  * Provides shared helpers for category cli input trait.
  */
@@ -46,7 +47,7 @@ trait CategoryCliInputTrait
 
     private function nonEmptyString(mixed $value, string $default = ''): string
     {
-        $normalized = $this->scalarString($value, '');
+        $normalized = $this->scalarString($value);
 
         return '' !== $normalized ? $normalized : $default;
     }

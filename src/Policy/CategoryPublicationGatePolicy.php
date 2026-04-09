@@ -9,6 +9,7 @@ use App\PolicyInterface\CategoryPublicationGatePolicyInterface;
 use App\ValueObject\CategoryWorkflowState;
 use App\ValueObjectInterface\CategoryPublicationReadinessInterface;
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+
 /**
  * Provides the category publication gate policy implementation.
  */
@@ -22,8 +23,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
-    ): bool
-    {
+    ): bool {
         if ('' === trim($actorId) || '' === trim($reason)) {
             return false;
         }
@@ -34,6 +34,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
 
         return $readiness->isPublishable();
     }
+
     /**
      * Handles the assert can publish workflow.
      */
@@ -42,8 +43,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
-    ): void
-    {
+    ): void {
         if ($this->canPublish($workflowState, $readiness, $actorId, $reason)) {
             return;
         }

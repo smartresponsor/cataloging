@@ -8,16 +8,16 @@ namespace App\Request;
 /**
  * Provides the category bulk request implementation.
  */
-final class CategoryBulkRequest
+final readonly class CategoryBulkRequest
 {
     /**
      * @param list<int|string> $ids
      * @param list<string>     $errors
      */
     public function __construct(
-        public readonly array $ids,
-        public readonly string $action,
-        private readonly array $errors = [],
+        public array $ids,
+        public string $action,
+        private array $errors = [],
     ) {
     }
 

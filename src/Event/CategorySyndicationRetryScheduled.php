@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationRetryScheduledInterface;
+
 /**
  * Represents the category syndication retry scheduled application event.
  */
@@ -19,6 +20,7 @@ final class CategorySyndicationRetryScheduled implements CategorySyndicationRetr
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -26,6 +28,7 @@ final class CategorySyndicationRetryScheduled implements CategorySyndicationRetr
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

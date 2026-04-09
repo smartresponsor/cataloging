@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
+
 /**
  * Represents the category syndication recovery audit consolidated application event.
  */
-final class CategorySyndicationRecoveryAuditConsolidated
-    implements CategorySyndicationRecoveryAuditConsolidatedInterface
+final class CategorySyndicationRecoveryAuditConsolidated implements CategorySyndicationRecoveryAuditConsolidatedInterface
 {
     /**
      * @param array<string,mixed> $payload
@@ -20,6 +20,7 @@ final class CategorySyndicationRecoveryAuditConsolidated
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -27,6 +28,7 @@ final class CategorySyndicationRecoveryAuditConsolidated
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

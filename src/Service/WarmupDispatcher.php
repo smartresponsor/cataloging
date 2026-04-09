@@ -4,18 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the warmup dispatcher application service.
  */
-final class WarmupDispatcher
+final readonly class WarmupDispatcher
 {
     /**
      * Initializes the warmup dispatcher service collaborators.
      */
     public function __construct(
-        private readonly WarmupPlan $plan,
-        private readonly CloudflarePurger $cf,
-        private readonly FastlyPurger $fastly,
+        private WarmupPlan $plan,
+        private CloudflarePurger $cf,
+        private FastlyPurger $fastly,
     ) {
     }
 

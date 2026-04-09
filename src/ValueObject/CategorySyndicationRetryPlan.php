@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationRetryPlanInterface;
+
 /**
  * Represents the category syndication retry plan value.
  */
@@ -25,6 +26,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
         private readonly bool $retryable,
     ) {
     }
+
     /**
      * Handles the delivery id workflow.
      */
@@ -32,6 +34,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->deliveryId;
     }
+
     /**
      * Handles the package id workflow.
      */
@@ -39,6 +42,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->packageId;
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -46,6 +50,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -53,6 +58,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the next attempt workflow.
      */
@@ -60,6 +66,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->nextAttempt;
     }
+
     /**
      * Handles the delay seconds workflow.
      */
@@ -67,6 +74,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->delaySeconds;
     }
+
     /**
      * Schedules the d at workflow for later processing.
      */
@@ -74,6 +82,7 @@ final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlan
     {
         return $this->scheduledAt;
     }
+
     /**
      * Handles the retryable workflow.
      */

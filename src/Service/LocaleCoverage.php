@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the locale coverage application service.
  */
@@ -13,6 +14,8 @@ final class LocaleCoverage
      * @param list<array{id?:mixed,locale?:mixed}> $categories
      *
      * @return list<array{id:string,has_en:bool,has_uk:bool,has_es:bool}>
+     *
+     * @throws \JsonException
      */
     public function build(array $categories): array
     {

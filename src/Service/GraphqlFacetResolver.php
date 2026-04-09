@@ -12,12 +12,12 @@ use App\ServiceInterface\GraphqlFacetResolverInterface;
  *
  * GraphQL remains a compatibility/read surface rather than a first-class domain boundary.
  */
-final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
+final readonly class GraphqlFacetResolver implements GraphqlFacetResolverInterface
 {
     /**
      * Initializes the graphql facet resolver service collaborators.
      */
-    public function __construct(private readonly SearchService $searchService)
+    public function __construct(private SearchService $searchService)
     {
     }
 
@@ -25,9 +25,9 @@ final class GraphqlFacetResolver implements GraphqlFacetResolverInterface
      * @param array<string,mixed> $args
      *
      * @return array{
- *     items:list<array{id:string,slug:string,name:string,path:string,locale:string,score:null}>,
- *     total:int,
- * }
+     *     items:list<array{id:string,slug:string,name:string,path:string,locale:string,score:null}>,
+     *     total:int,
+     * }
      */
     public function categoryFacet(array $args): array
     {

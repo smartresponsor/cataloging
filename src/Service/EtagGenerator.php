@@ -4,12 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the etag generator application service.
  */
 final class EtagGenerator
 {
-    /** @param array<string|int,mixed> $data */
+    /**
+     * @param array<string|int,mixed> $data
+     *
+     * @return string
+     *
+     * @throws \JsonException
+     */
     public function forArray(array $data): string
     {
         ksort($data);

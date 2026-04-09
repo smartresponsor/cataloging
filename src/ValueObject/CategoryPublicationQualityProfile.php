@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryPublicationQualityProfileInterface;
+
 /**
  * Represents the category publication quality profile value.
  */
-final class CategoryPublicationQualityProfile implements CategoryPublicationQualityProfileInterface
+final readonly class CategoryPublicationQualityProfile implements CategoryPublicationQualityProfileInterface
 {
     /**
      * @param list<string>       $hardBlockers
@@ -19,15 +20,16 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly int $score,
-        private readonly array $hardBlockers,
-        private readonly array $softWarnings,
-        private readonly array $advisoryWarnings,
-        private readonly array $publicationChecks,
-        private readonly array $checks,
-        private readonly string $riskLevel,
+        private int $score,
+        private array $hardBlockers,
+        private array $softWarnings,
+        private array $advisoryWarnings,
+        private array $publicationChecks,
+        private array $checks,
+        private string $riskLevel,
     ) {
     }
+
     /**
      * Handles the score workflow.
      */
@@ -35,6 +37,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return $this->score;
     }
+
     /**
      * Determines whether the publishable quality condition is satisfied.
      */
@@ -42,6 +45,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return [] === $this->hardBlockers;
     }
+
     /**
      * Handles the risk level workflow.
      */
@@ -49,6 +53,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return $this->riskLevel;
     }
+
     /**
      * Handles the hard blockers workflow.
      */
@@ -56,6 +61,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return $this->hardBlockers;
     }
+
     /**
      * Handles the soft warnings workflow.
      */
@@ -63,6 +69,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return $this->softWarnings;
     }
+
     /**
      * Handles the advisory warnings workflow.
      */
@@ -70,6 +77,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return $this->advisoryWarnings;
     }
+
     /**
      * Handles the publication checks workflow.
      */
@@ -77,6 +85,7 @@ final class CategoryPublicationQualityProfile implements CategoryPublicationQual
     {
         return $this->publicationChecks;
     }
+
     /**
      * Handles the checks workflow.
      */

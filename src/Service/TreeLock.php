@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the tree lock application service.
  */
 final class TreeLock
 {
     private \PDO $pdo;
+
     /**
      * Initializes the tree lock service collaborators.
      */
@@ -17,6 +19,7 @@ final class TreeLock
     {
         $this->pdo = $pdo;
     }
+
     /**
      * Handles the acquire workflow.
      */
@@ -26,6 +29,7 @@ final class TreeLock
         $stmt->bindValue(':k', $key);
         $stmt->execute();
     }
+
     /**
      * Handles the release workflow.
      */

@@ -8,15 +8,15 @@ namespace App\Request;
 /**
  * Provides the category collection request implementation.
  */
-final class CategoryCollectionRequest
+final readonly class CategoryCollectionRequest
 {
     /**
-     * @param array<mixed> $rules
+     * @param array        $rules
      * @param list<string> $errors
      */
     public function __construct(
-        public readonly array $rules,
-        private readonly array $errors = [],
+        public array $rules,
+        private array $errors = [],
     ) {
     }
 

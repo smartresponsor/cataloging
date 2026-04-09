@@ -4,9 +4,12 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Integration;
+
+use App\ServiceInterface\WebhookClientInterface;
+
 /**
  * Defines the contract for integration webhook client.
  */
-interface IntegrationWebhookClientInterface extends \App\ServiceInterface\WebhookClientInterface
+interface IntegrationWebhookClientInterface extends WebhookClientInterface
 {
 }

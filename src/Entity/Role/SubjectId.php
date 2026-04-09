@@ -4,17 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Entity\Role;
+
 /**
  * Represents the subject id domain record.
  */
-final class SubjectId
+final readonly class SubjectId
 {
     /**
      * Initializes the subject id service collaborators.
      */
-    public function __construct(private readonly mixed $value)
+    public function __construct(private mixed $value)
     {
     }
+
     /**
      * Handles the value workflow.
      */
@@ -22,6 +24,7 @@ final class SubjectId
     {
         return $this->value;
     }
+
     /**
      * Handles the to string workflow.
      */

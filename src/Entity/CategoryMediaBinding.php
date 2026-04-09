@@ -8,6 +8,7 @@ namespace App\Entity;
 use App\EntityInterface\CategoryMediaBindingInterface;
 use App\ValueObject\CategoryMediaRole;
 use App\ValueObjectInterface\CategoryMediaRoleInterface;
+
 /**
  * Represents the category media binding domain record.
  */
@@ -32,6 +33,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
         private readonly \DateTimeImmutable $boundAt,
     ) {
     }
+
     /**
      * Handles the binding id workflow.
      */
@@ -39,6 +41,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->bindingId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -46,6 +49,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the asset id workflow.
      */
@@ -53,6 +57,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->assetId;
     }
+
     /**
      * Handles the role workflow.
      */
@@ -60,6 +65,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->role;
     }
+
     /**
      * Handles the channels workflow.
      */
@@ -67,6 +73,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->channels;
     }
+
     /**
      * Handles the locales workflow.
      */
@@ -74,6 +81,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->locales;
     }
+
     /**
      * Handles the required for publish workflow.
      */
@@ -81,6 +89,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->requiredForPublish;
     }
+
     /**
      * Handles the active workflow.
      */
@@ -88,6 +97,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->active;
     }
+
     /**
      * Handles the metadata workflow.
      */
@@ -95,6 +105,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->metadata;
     }
+
     /**
      * Handles the actor id workflow.
      */
@@ -102,6 +113,7 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
     {
         return $this->actorId;
     }
+
     /**
      * Handles the bound at workflow.
      */

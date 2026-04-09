@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+
 /**
  * Represents the category publication quality evaluated application event.
  */
-final class CategoryPublicationQualityEvaluated implements CategoryPublicationQualityEvaluatedInterface
+final readonly class CategoryPublicationQualityEvaluated implements CategoryPublicationQualityEvaluatedInterface
 {
     /**
      * @param list<string>       $hardBlockers
@@ -19,18 +20,18 @@ final class CategoryPublicationQualityEvaluated implements CategoryPublicationQu
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly int $score,
-        private readonly bool $publishableQuality,
-        private readonly string $riskLevel,
-        private readonly array $hardBlockers,
-        private readonly array $softWarnings,
-        private readonly array $advisoryWarnings,
-        private readonly array $publicationChecks,
-        private readonly array $checks,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $evaluatedAt,
+        private string $categoryId,
+        private int $score,
+        private bool $publishableQuality,
+        private string $riskLevel,
+        private array $hardBlockers,
+        private array $softWarnings,
+        private array $advisoryWarnings,
+        private array $publicationChecks,
+        private array $checks,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $evaluatedAt,
     ) {
     }
 

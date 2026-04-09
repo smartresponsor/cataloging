@@ -8,6 +8,7 @@ namespace App\Repository;
 use App\Entity\CategoryEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,7 +23,13 @@ final class CatalogRepository extends ServiceEntityRepository
         parent::__construct($registry, CategoryEntity::class);
     }
 
-    /** @return array{id:string,name:string,slug:string,path:string,depth:int}|null */
+    /**
+     * @param string $id
+     *
+     * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
+     *
+     * @throws Exception
+     */
     public function findNodeRowById(string $id): ?array
     {
         $row = $this->getConnection()->fetchAssociative(
@@ -39,7 +46,13 @@ final class CatalogRepository extends ServiceEntityRepository
         return $normalized[0] ?? null;
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}> */
+    /**
+     * @param string $path
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     *
+     * @throws Exception
+     */
     public function findChildrenRowsByPath(string $path): array
     {
         $rows = $this->getConnection()->executeQuery(
@@ -50,7 +63,13 @@ final class CatalogRepository extends ServiceEntityRepository
         return $this->normalizeRows($rows);
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}> */
+    /**
+     * @param string $path
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     *
+     * @throws Exception
+     */
     public function findAncestorRowsByPath(string $path): array
     {
         $rows = $this->getConnection()->executeQuery(
@@ -61,19 +80,32 @@ final class CatalogRepository extends ServiceEntityRepository
         return $this->normalizeRows($rows);
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}> */
+    /**
+     * @param string $path
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     *
+     * @throws Exception
+     */
     public function findDescendantRowsByPath(string $path): array
     {
         $rows = $this->getConnection()->executeQuery(
             'SELECT id, name, slug, path, depth FROM category WHERE path <@ ? AND path <> ? '
-            . 'ORDER BY depth ASC, slug ASC',
+            .'ORDER BY depth ASC, slug ASC',
             [$path, $path],
         )->fetchAllAssociative();
 
         return $this->normalizeRows($rows);
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}> */
+    /**
+     * @param int    $limit
+     * @param string $after
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     *
+     * @throws Exception
+     */
     public function findPageRows(int $limit, string $after): array
     {
         $normalizedAfter = '' !== $after ? (base64_decode($after, true) ?: '') : '';

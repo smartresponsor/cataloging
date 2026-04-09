@@ -6,15 +6,16 @@ declare(strict_types=1);
 namespace App\Security;
 
 use Psr\Log\LoggerInterface;
+
 /**
  * Provides the policy evaluator implementation.
  */
-final class PolicyEvaluator
+final readonly class PolicyEvaluator
 {
     /**
      * Initializes the policy evaluator service collaborators.
      */
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 

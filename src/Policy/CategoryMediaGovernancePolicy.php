@@ -7,6 +7,7 @@ namespace App\Policy;
 
 use App\PolicyInterface\CategoryMediaGovernancePolicyInterface;
 use App\ValueObject\CategoryMediaRole;
+
 /**
  * Provides the category media governance policy implementation.
  */

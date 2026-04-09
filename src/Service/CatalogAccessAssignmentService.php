@@ -9,17 +9,19 @@ use App\Entity\CategoryAccessAssignment;
 use App\EntityInterface\CategoryAccessAssignmentInterface;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogAccessAssignmentServiceInterface;
+
 /**
  * Provides the catalog access assignment service application service.
  */
-final class CatalogAccessAssignmentService implements CatalogAccessAssignmentServiceInterface
+final readonly class CatalogAccessAssignmentService implements CatalogAccessAssignmentServiceInterface
 {
     /**
      * Initializes the catalog access assignment service service collaborators.
      */
-    public function __construct(private readonly CategoryAccessAssignmentRepositoryInterface $repository)
+    public function __construct(private CategoryAccessAssignmentRepositoryInterface $repository)
     {
     }
+
     /**
      * Handles the assign owner workflow.
      */
@@ -27,6 +29,7 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
     {
         return $this->assignRole($categoryId, $actorUserId, 'owner', true);
     }
+
     /**
      * Handles the assign role workflow.
      */
@@ -35,8 +38,7 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
         string $actorUserId,
         string $role,
         bool $isPrimary = false,
-    ): CategoryAccessAssignmentInterface
-    {
+    ): CategoryAccessAssignmentInterface {
         $existing = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
 
         if ($existing instanceof CategoryAccessAssignmentInterface) {
@@ -66,6 +68,7 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
 
         return $assignment;
     }
+
     /**
      * Handles the revoke workflow.
      */
@@ -82,6 +85,7 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
 
         $this->repository->save($assignment);
     }
+
     /**
      * Updates the primary value.
      */
@@ -101,6 +105,7 @@ final class CatalogAccessAssignmentService implements CatalogAccessAssignmentSer
         }
         $this->repository->save($assignment);
     }
+
     /**
      * Lists the active for category items for the current workflow.
      */

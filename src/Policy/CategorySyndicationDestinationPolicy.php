@@ -6,13 +6,15 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
+
 /**
  * Provides the category syndication destination policy implementation.
  */
 final class CategorySyndicationDestinationPolicy implements CategorySyndicationDestinationPolicyInterface
 {
-private const array TYPES = ['marketplace', 'storefront', 'search', 'feed', 'partner'];
-private const array MODES = ['push', 'pull', 'export'];
+    private const array TYPES = ['marketplace', 'storefront', 'search', 'feed', 'partner'];
+    private const array MODES = ['push', 'pull', 'export'];
+
     /**
      * Handles the assert destination type workflow.
      */
@@ -22,6 +24,7 @@ private const array MODES = ['push', 'pull', 'export'];
             throw new \InvalidArgumentException('Unsupported destination type.');
         }
     }
+
     /**
      * Handles the assert delivery mode workflow.
      */

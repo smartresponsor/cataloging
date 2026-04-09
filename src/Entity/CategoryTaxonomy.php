@@ -37,6 +37,7 @@ final class CategoryTaxonomy
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
+
     /**
      * Handles the id workflow.
      */
@@ -44,6 +45,7 @@ final class CategoryTaxonomy
     {
         return $this->id;
     }
+
     /**
      * Handles the code workflow.
      */
@@ -63,6 +65,7 @@ final class CategoryTaxonomy
     {
         return $this->rule;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */
@@ -70,6 +73,7 @@ final class CategoryTaxonomy
     {
         return $this->createdAt;
     }
+
     /**
      * Handles the updated at workflow.
      */

@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryPublicationGateEvaluatedInterface;
+
 /**
  * Represents the category publication gate evaluated application event.
  */
-final class CategoryPublicationGateEvaluated implements CategoryPublicationGateEvaluatedInterface
+final readonly class CategoryPublicationGateEvaluated implements CategoryPublicationGateEvaluatedInterface
 {
     /**
      * @param list<string>       $blockers
@@ -17,15 +18,15 @@ final class CategoryPublicationGateEvaluated implements CategoryPublicationGateE
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly string $workflowState,
-        private readonly bool $publishable,
-        private readonly array $blockers,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $occurredAt,
+        private string $categoryId,
+        private string $workflowState,
+        private bool $publishable,
+        private array $blockers,
+        private array $warnings,
+        private array $checks,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

@@ -11,21 +11,23 @@ use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\Service\Governance\CategoryGovernanceViewBuilder;
 use App\Service\Traceability\CategoryActorTraceabilityViewBuilder;
 use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
+
 /**
  * Provides the category runtime status view builder application service.
  */
-final class CategoryRuntimeStatusViewBuilder implements CategoryRuntimeStatusViewBuilderInterface
+final readonly class CategoryRuntimeStatusViewBuilder implements CategoryRuntimeStatusViewBuilderInterface
 {
     /**
      * Initializes the category runtime status view builder service collaborators.
      */
     public function __construct(
-        private readonly CategoryGovernanceViewBuilder $governanceViewBuilder,
-        private readonly CategoryActorTraceabilityViewBuilder $traceabilityViewBuilder,
-        private readonly CategoryWorkflowRepositoryInterface $workflowRepository,
-        private readonly CategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
+        private CategoryGovernanceViewBuilder $governanceViewBuilder,
+        private CategoryActorTraceabilityViewBuilder $traceabilityViewBuilder,
+        private CategoryWorkflowRepositoryInterface $workflowRepository,
+        private CategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
     ) {
     }
+
     /**
      * Builds the requested output for the current workflow.
      */
@@ -54,7 +56,7 @@ final class CategoryRuntimeStatusViewBuilder implements CategoryRuntimeStatusVie
                 'workflowReady' => null !== $workflow['currentState'] || $workflow['historyCount'] > 0,
                 'reviewReady' => $review['assignmentCount'] > 0,
             ],
-            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
+            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
         );
     }
 

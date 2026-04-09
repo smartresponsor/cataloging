@@ -8,16 +8,16 @@ namespace App\Request;
 /**
  * Provides the move category request implementation.
  */
-final class MoveCategoryRequest
+final readonly class MoveCategoryRequest
 {
     /** @param list<string> $errors */
     public function __construct(
-        public readonly ?string $parentId,
-        public readonly string $treeId = 'catalog',
-        public readonly string $policy = 'strict',
-        public readonly bool $dryRun = false,
-        public readonly ?string $locale = null,
-        private readonly array $errors = [],
+        public ?string $parentId,
+        public string $treeId = 'catalog',
+        public string $policy = 'strict',
+        public bool $dryRun = false,
+        public ?string $locale = null,
+        private array $errors = [],
     ) {
     }
 

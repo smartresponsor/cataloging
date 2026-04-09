@@ -4,21 +4,22 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the collection builder application service.
  */
-final class CollectionBuilder
+final readonly class CollectionBuilder
 {
     /**
      * Initializes the collection builder service collaborators.
      */
-    public function __construct(private readonly CollectionRuleEngine $engine)
+    public function __construct(private CollectionRuleEngine $engine)
     {
     }
 
     /**
      * @param list<array<string, list<bool|float|int|string>|bool|float|int|string|null>> $all
-     * @param array<string,array<int,bool|float|int|string>|bool|float|int|string>         $rules
+     * @param array<string,array<int,bool|float|int|string>|bool|float|int|string>        $rules
      *
      * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
      */

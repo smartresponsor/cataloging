@@ -4,18 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the etag middleware application service.
  */
 final class EtagMiddleware
 {
     /**
-     * @param array{headers?:array<string,string>} $request
+     * @param array{headers?:array<string,string>}                          $request
      * @param array{headers?:array<string,string>,status?:int,body?:string} $response
-     * @param callable(
-     *     array{headers?:array<string,string>},
-     *     array{headers?:array<string,string>,status?:int,body?:string},
-     * ): array<string,mixed> $next
+     * @param callable                                                      $next     (
+     *                                                                                array{headers?:array<string,string>},
+     *                                                                                array{headers?:array<string,string>,status?:int,body?:string},
+     *                                                                                ): array<string,mixed> $next
      *
      * @return array<string,mixed>
      */

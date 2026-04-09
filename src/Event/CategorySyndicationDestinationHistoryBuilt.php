@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
+
 /**
  * Represents the category syndication destination history built application event.
  */
@@ -19,6 +20,7 @@ final class CategorySyndicationDestinationHistoryBuilt implements CategorySyndic
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -26,6 +28,7 @@ final class CategorySyndicationDestinationHistoryBuilt implements CategorySyndic
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

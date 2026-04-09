@@ -6,23 +6,25 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationMappingProfileInterface;
+
 /**
  * Represents the category syndication mapping profile value.
  */
-final class CategorySyndicationMappingProfile implements CategorySyndicationMappingProfileInterface
+final readonly class CategorySyndicationMappingProfile implements CategorySyndicationMappingProfileInterface
 {
     /**
      * @param array<string,string> $fieldMap
      * @param list<string>         $requiredFields
      */
     public function __construct(
-        private readonly string $destinationId,
-        private readonly string $version,
-        private readonly array $fieldMap,
-        private readonly array $requiredFields,
-        private readonly string $localeMode,
+        private string $destinationId,
+        private string $version,
+        private array $fieldMap,
+        private array $requiredFields,
+        private string $localeMode,
     ) {
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -30,6 +32,7 @@ final class CategorySyndicationMappingProfile implements CategorySyndicationMapp
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the version workflow.
      */
@@ -37,6 +40,7 @@ final class CategorySyndicationMappingProfile implements CategorySyndicationMapp
     {
         return $this->version;
     }
+
     /**
      * Handles the field map workflow.
      */
@@ -44,6 +48,7 @@ final class CategorySyndicationMappingProfile implements CategorySyndicationMapp
     {
         return $this->fieldMap;
     }
+
     /**
      * Handles the required fields workflow.
      */
@@ -51,6 +56,7 @@ final class CategorySyndicationMappingProfile implements CategorySyndicationMapp
     {
         return $this->requiredFields;
     }
+
     /**
      * Handles the locale mode workflow.
      */

@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+
 /**
  * Represents the category destination media fallback evaluated application event.
  */
-final class CategoryDestinationMediaFallbackEvaluated implements CategoryDestinationMediaFallbackEvaluatedInterface
+final readonly class CategoryDestinationMediaFallbackEvaluated implements CategoryDestinationMediaFallbackEvaluatedInterface
 {
     /**
      * @param list<string>       $requiredMissing
@@ -19,22 +20,23 @@ final class CategoryDestinationMediaFallbackEvaluated implements CategoryDestina
      * @param list<string>       $fallbackMatchedBindingIds
      */
     public function __construct(
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly string $channel,
-        private readonly string $locale,
-        private readonly bool $publishable,
-        private readonly bool $publishableWithFallback,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $exactMatchedBindingIds,
-        private readonly array $fallbackMatchedBindingIds,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $evaluatedAt,
+        private string $destinationId,
+        private string $categoryId,
+        private string $channel,
+        private string $locale,
+        private bool $publishable,
+        private bool $publishableWithFallback,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $checks,
+        private array $exactMatchedBindingIds,
+        private array $fallbackMatchedBindingIds,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $evaluatedAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */

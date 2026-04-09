@@ -8,17 +8,19 @@ namespace App\Service;
 use App\Entity\CategoryEntity;
 use App\ServiceInterface\CatalogMovePreviewServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+
 /**
  * Provides the catalog move preview service application service.
  */
-final class CatalogMovePreviewService implements CatalogMovePreviewServiceInterface
+final readonly class CatalogMovePreviewService implements CatalogMovePreviewServiceInterface
 {
     /**
      * Initializes the catalog move preview service service collaborators.
      */
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
+
     /**
      * Handles the preview workflow.
      */

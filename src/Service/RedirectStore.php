@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the redirect store application service.
  */
 final class RedirectStore
 {
     private \PDO $pdo;
+
     /**
      * Initializes the redirect store service collaborators.
      */
@@ -17,6 +19,7 @@ final class RedirectStore
     {
         $this->pdo = $pdo;
     }
+
     /**
      * Handles the put workflow.
      */
@@ -24,7 +27,7 @@ final class RedirectStore
     {
         $q = $this->pdo->prepare(
             'INSERT INTO seo_redirect(from_path, to_path, status) VALUES(:f,:t,:s) '
-            . 'ON CONFLICT (from_path) DO UPDATE SET to_path = EXCLUDED.to_path, status = EXCLUDED.status',
+            .'ON CONFLICT (from_path) DO UPDATE SET to_path = EXCLUDED.to_path, status = EXCLUDED.status',
         );
         $q->bindValue(':f', $from);
         $q->bindValue(':t', $to);

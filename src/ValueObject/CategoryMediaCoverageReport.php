@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryMediaCoverageReportInterface;
+
 /**
  * Represents the category media coverage report value.
  */
-final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportInterface
+final readonly class CategoryMediaCoverageReport implements CategoryMediaCoverageReportInterface
 {
     /**
      * @param array<string,bool> $checks
@@ -17,11 +18,12 @@ final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportIn
      * @param list<string>       $warnings
      */
     public function __construct(
-        private readonly array $checks,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
+        private array $checks,
+        private array $requiredMissing,
+        private array $warnings,
     ) {
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -29,6 +31,7 @@ final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportIn
     {
         return $this->checks;
     }
+
     /**
      * Handles the required missing workflow.
      */
@@ -36,6 +39,7 @@ final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportIn
     {
         return $this->requiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -43,6 +47,7 @@ final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportIn
     {
         return $this->warnings;
     }
+
     /**
      * Handles the media ready workflow.
      */
@@ -50,6 +55,7 @@ final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportIn
     {
         return ($this->checks['mediaReady'] ?? false) === true;
     }
+
     /**
      * Handles the banner ready workflow.
      */
@@ -57,6 +63,7 @@ final class CategoryMediaCoverageReport implements CategoryMediaCoverageReportIn
     {
         return ($this->checks['bannerReady'] ?? false) === true;
     }
+
     /**
      * Handles the required coverage ready workflow.
      */

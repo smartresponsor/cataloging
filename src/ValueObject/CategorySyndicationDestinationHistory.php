@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationDestinationHistoryInterface;
+
 /**
  * Represents the category syndication destination history value.
  */
@@ -29,6 +30,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
         private readonly ?\DateTimeImmutable $latestDeliveredAt,
     ) {
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -36,6 +38,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the package ids workflow.
      */
@@ -43,6 +46,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->packageIds;
     }
+
     /**
      * Handles the category ids workflow.
      */
@@ -50,6 +54,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->categoryIds;
     }
+
     /**
      * Handles the total records workflow.
      */
@@ -57,6 +62,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->totalRecords;
     }
+
     /**
      * Handles the delivered count workflow.
      */
@@ -64,6 +70,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->deliveredCount;
     }
+
     /**
      * Handles the failed count workflow.
      */
@@ -71,6 +78,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->failedCount;
     }
+
     /**
      * Handles the pending count workflow.
      */
@@ -78,6 +86,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->pendingCount;
     }
+
     /**
      * Handles the retry scheduled count workflow.
      */
@@ -85,6 +94,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->retryScheduledCount;
     }
+
     /**
      * Handles the skipped count workflow.
      */
@@ -92,6 +102,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->skippedCount;
     }
+
     /**
      * Handles the max attempt workflow.
      */
@@ -99,6 +110,7 @@ final class CategorySyndicationDestinationHistory implements CategorySyndication
     {
         return $this->maxAttempt;
     }
+
     /**
      * Handles the latest delivered at workflow.
      */

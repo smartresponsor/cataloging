@@ -6,16 +6,18 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
+
 /**
  * Represents the category change request state value.
  */
 final class CategoryChangeRequestState implements CategoryChangeRequestStateInterface
 {
-public const string PROPOSED = 'proposed';
-public const string IN_REVIEW = 'in_review';
-public const string ACCEPTED = 'accepted';
-public const string REJECTED = 'rejected';
-public const string WITHDRAWN = 'withdrawn';
+    public const string PROPOSED = 'proposed';
+    public const string IN_REVIEW = 'in_review';
+    public const string ACCEPTED = 'accepted';
+    public const string REJECTED = 'rejected';
+    public const string WITHDRAWN = 'withdrawn';
+
     private function __construct(
         private readonly string $value,
     ) {
@@ -63,6 +65,7 @@ public const string WITHDRAWN = 'withdrawn';
     {
         return new self(self::WITHDRAWN);
     }
+
     /**
      * Handles the value workflow.
      */

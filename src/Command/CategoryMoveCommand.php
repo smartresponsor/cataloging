@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category move command console workflow.
  */
@@ -20,6 +21,7 @@ final class CategoryMoveCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category move command service collaborators.
      */
@@ -27,6 +29,7 @@ final class CategoryMoveCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -46,6 +49,7 @@ final class CategoryMoveCommand extends Command
             ->addOption('dry-run', null, InputOption::VALUE_NONE)
             ->addOption('locale', null, InputOption::VALUE_REQUIRED);
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
@@ -58,7 +62,7 @@ final class CategoryMoveCommand extends Command
             $this->argumentString($input, 'treeId'),
             $this->argumentString($input, 'policy'),
             (bool) $input->getOption('dry-run'),
-            $this->nonEmptyString($this->optionString($input, 'locale'), '') ?: null,
+            $this->nonEmptyString($this->optionString($input, 'locale')) ?: null,
         );
         [$changed, $redirects] = $result;
 

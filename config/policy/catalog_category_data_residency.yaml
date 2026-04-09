@@ -1,5 +1,5 @@
 category:
-  default:
-    forbidden_fields:
-      - internal_note
-      - debug_payload
+    default:
+        forbidden_fields:
+            - internal_note
+            - debug_payload

@@ -6,12 +6,14 @@ declare(strict_types=1);
 namespace App\Service\Category;
 
 use App\ServiceInterface\CategoryReadRepositoryInterface;
+
 /**
  * Provides the category category service application service.
  */
 final class CategoryCategoryService
 {
     private CategoryReadRepositoryInterface $repo;
+
     /**
      * Initializes the category category service service collaborators.
      */
@@ -22,20 +24,20 @@ final class CategoryCategoryService
 
     /**
      * @param array{
- *     parentId?: string,
- *     search?: string,
- *     first?: int,
- *     after?: string,
- *     withTotal?: bool,
- *     approxTotal?: bool,
- * } $opt
+     *     parentId?: string,
+     *     search?: string,
+     *     first?: int,
+     *     after?: string,
+     *     withTotal?: bool,
+     *     approxTotal?: bool,
+     * } $opt
      *
      * @return array{
- *     edges: array<int, array{id: string, name: string, slug: string, level: int, path: string}>,
- *     pageInfo: array{endCursor?: string, hasNextPage: bool},
- *     total?: int,
- *     approxTotal?: int,
- * }
+     *     edges: array<int, array{id: string, name: string, slug: string, level: int, path: string}>,
+     *     pageInfo: array{endCursor?: string, hasNextPage: bool},
+     *     total?: int,
+     *     approxTotal?: int,
+     * }
      */
     public function list(array $opt = []): array
     {

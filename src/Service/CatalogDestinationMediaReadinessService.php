@@ -11,20 +11,22 @@ use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
+
 /**
  * Provides the catalog destination media readiness service application service.
  */
-final class CatalogDestinationMediaReadinessService implements CatalogDestinationMediaReadinessServiceInterface
+final readonly class CatalogDestinationMediaReadinessService implements CatalogDestinationMediaReadinessServiceInterface
 {
     /**
      * Initializes the catalog destination media readiness service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDestinationRepositoryInterface $destinationRepository,
-        private readonly CatalogMediaApplicabilityServiceInterface $applicabilityService,
-        private readonly CategoryDestinationMediaReadinessPolicyInterface $policy,
+        private CategorySyndicationDestinationRepositoryInterface $destinationRepository,
+        private CatalogMediaApplicabilityServiceInterface $applicabilityService,
+        private CategoryDestinationMediaReadinessPolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -33,8 +35,7 @@ final class CatalogDestinationMediaReadinessService implements CatalogDestinatio
         string $categoryId,
         string $actorId,
         string $reason,
-    ): CategoryDestinationMediaReadinessEvaluatedInterface
-    {
+    ): CategoryDestinationMediaReadinessEvaluatedInterface {
         $destination = $this->destinationRepository->find($destinationId);
         if (null === $destination) {
             throw new \InvalidArgumentException('Unknown destination.');

@@ -6,26 +6,28 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationPublishPackageInterface;
+
 /**
  * Represents the category syndication publish package value.
  */
-final class CategorySyndicationPublishPackage implements CategorySyndicationPublishPackageInterface
+final readonly class CategorySyndicationPublishPackage implements CategorySyndicationPublishPackageInterface
 {
     /**
      * @param array<string,mixed> $payload
      * @param list<string>        $missingRequiredFields
      */
     public function __construct(
-        private readonly string $packageId,
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly string $version,
-        private readonly string $localeMode,
-        private readonly array $payload,
-        private readonly array $missingRequiredFields,
-        private readonly bool $publishable,
+        private string $packageId,
+        private string $destinationId,
+        private string $categoryId,
+        private string $version,
+        private string $localeMode,
+        private array $payload,
+        private array $missingRequiredFields,
+        private bool $publishable,
     ) {
     }
+
     /**
      * Handles the package id workflow.
      */
@@ -33,6 +35,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->packageId;
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -40,6 +43,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -47,6 +51,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the version workflow.
      */
@@ -54,6 +59,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->version;
     }
+
     /**
      * Handles the locale mode workflow.
      */
@@ -61,6 +67,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->localeMode;
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -68,6 +75,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->payload;
     }
+
     /**
      * Handles the missing required fields workflow.
      */
@@ -75,6 +83,7 @@ final class CategorySyndicationPublishPackage implements CategorySyndicationPubl
     {
         return $this->missingRequiredFields;
     }
+
     /**
      * Handles the publishable workflow.
      */

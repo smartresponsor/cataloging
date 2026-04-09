@@ -17,6 +17,7 @@ final class CategoryPolicy implements CategoryPolicyInterface
     {
         return true;
     }
+
     /**
      * Handles the validate slug workflow.
      */

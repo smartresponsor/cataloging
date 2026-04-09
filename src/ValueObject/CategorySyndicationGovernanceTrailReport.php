@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
+
 /**
  * Represents the category syndication governance trail report value.
  */
-final class CategorySyndicationGovernanceTrailReport implements CategorySyndicationGovernanceTrailReportInterface
+final readonly class CategorySyndicationGovernanceTrailReport implements CategorySyndicationGovernanceTrailReportInterface
 {
     /**
      * @param array<string,int>  $historyCounts
@@ -17,21 +18,22 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly string $mediaPolicyMode,
-        private readonly bool $strictPublishable,
-        private readonly bool $fallbackPublishable,
-        private readonly bool $resolvedPublishable,
-        private readonly bool $fallbackUsed,
-        private readonly string $deliveryStatus,
-        private readonly bool $retryable,
-        private readonly bool $retryScheduled,
-        private readonly array $historyCounts,
-        private readonly array $warnings,
-        private readonly array $checks,
+        private string $destinationId,
+        private string $categoryId,
+        private string $mediaPolicyMode,
+        private bool $strictPublishable,
+        private bool $fallbackPublishable,
+        private bool $resolvedPublishable,
+        private bool $fallbackUsed,
+        private string $deliveryStatus,
+        private bool $retryable,
+        private bool $retryScheduled,
+        private array $historyCounts,
+        private array $warnings,
+        private array $checks,
     ) {
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -39,6 +41,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -46,6 +49,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the media policy mode workflow.
      */
@@ -53,6 +57,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->mediaPolicyMode;
     }
+
     /**
      * Handles the strict publishable workflow.
      */
@@ -60,6 +65,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->strictPublishable;
     }
+
     /**
      * Handles the fallback publishable workflow.
      */
@@ -67,6 +73,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->fallbackPublishable;
     }
+
     /**
      * Resolves the d publishable result for the current workflow.
      */
@@ -74,6 +81,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->resolvedPublishable;
     }
+
     /**
      * Handles the fallback used workflow.
      */
@@ -81,6 +89,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->fallbackUsed;
     }
+
     /**
      * Handles the delivery status workflow.
      */
@@ -88,6 +97,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->deliveryStatus;
     }
+
     /**
      * Handles the retryable workflow.
      */
@@ -95,6 +105,7 @@ final class CategorySyndicationGovernanceTrailReport implements CategorySyndicat
     {
         return $this->retryable;
     }
+
     /**
      * Handles the retry scheduled workflow.
      */

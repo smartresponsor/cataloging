@@ -6,25 +6,27 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationRecoveryCandidateInterface;
+
 /**
  * Represents the category syndication recovery candidate value.
  */
-final class CategorySyndicationRecoveryCandidate implements CategorySyndicationRecoveryCandidateInterface
+final readonly class CategorySyndicationRecoveryCandidate implements CategorySyndicationRecoveryCandidateInterface
 {
     /**
      * Initializes the category syndication recovery candidate service collaborators.
      */
     public function __construct(
-        private readonly string $deliveryId,
-        private readonly string $packageId,
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly int $attempt,
-        private readonly ?int $responseCode,
-        private readonly string $responseMessage,
-        private readonly bool $retryable,
+        private string $deliveryId,
+        private string $packageId,
+        private string $destinationId,
+        private string $categoryId,
+        private int $attempt,
+        private ?int $responseCode,
+        private string $responseMessage,
+        private bool $retryable,
     ) {
     }
+
     /**
      * Handles the delivery id workflow.
      */
@@ -32,6 +34,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->deliveryId;
     }
+
     /**
      * Handles the package id workflow.
      */
@@ -39,6 +42,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->packageId;
     }
+
     /**
      * Handles the destination id workflow.
      */
@@ -46,6 +50,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->destinationId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -53,6 +58,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the attempt workflow.
      */
@@ -60,6 +66,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->attempt;
     }
+
     /**
      * Handles the response code workflow.
      */
@@ -67,6 +74,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->responseCode;
     }
+
     /**
      * Handles the response message workflow.
      */
@@ -74,6 +82,7 @@ final class CategorySyndicationRecoveryCandidate implements CategorySyndicationR
     {
         return $this->responseMessage;
     }
+
     /**
      * Handles the retryable workflow.
      */

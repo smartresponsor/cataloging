@@ -6,12 +6,14 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
+
 /**
  * Provides the category syndication delivery policy implementation.
  */
 final class CategorySyndicationDeliveryPolicy implements CategorySyndicationDeliveryPolicyInterface
 {
-private const array STATUSES = ['pending', 'delivered', 'failed', 'retry_scheduled', 'skipped'];
+    private const array STATUSES = ['pending', 'delivered', 'failed', 'retry_scheduled', 'skipped'];
+
     /**
      * Handles the assert status workflow.
      */
@@ -21,6 +23,7 @@ private const array STATUSES = ['pending', 'delivered', 'failed', 'retry_schedul
             throw new \InvalidArgumentException('Unsupported syndication delivery status.');
         }
     }
+
     /**
      * Handles the assert attempt workflow.
      */
@@ -30,6 +33,7 @@ private const array STATUSES = ['pending', 'delivered', 'failed', 'retry_schedul
             throw new \InvalidArgumentException('Delivery attempt must be greater than zero.');
         }
     }
+
     /**
      * Handles the normalize response message workflow.
      */

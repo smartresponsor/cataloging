@@ -4,6 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Observability;
+
+use Random\RandomException;
+
 /**
  * Provides the otel category processor implementation.
  */
@@ -13,6 +16,9 @@ final class OtelCategoryProcessor
      * @param array<string, scalar|null> $context
      *
      * @return array{trace_id:string,span_id:string,ts:string}
+     *
+     * @throws RandomException
+     * @throws \JsonException
      */
     public function process(array $context): array
     {

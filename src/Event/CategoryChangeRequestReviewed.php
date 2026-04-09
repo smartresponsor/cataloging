@@ -6,24 +6,26 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryChangeRequestReviewedInterface;
+
 /**
  * Represents the category change request reviewed application event.
  */
-final class CategoryChangeRequestReviewed implements CategoryChangeRequestReviewedInterface
+final readonly class CategoryChangeRequestReviewed implements CategoryChangeRequestReviewedInterface
 {
     /**
      * Initializes the category change request reviewed service collaborators.
      */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $fromState,
-        private readonly string $toState,
-        private readonly string $reviewedBy,
-        private readonly string $decisionReason,
-        private readonly \DateTimeImmutable $reviewedAt,
+        private string $requestId,
+        private string $categoryId,
+        private string $fromState,
+        private string $toState,
+        private string $reviewedBy,
+        private string $decisionReason,
+        private \DateTimeImmutable $reviewedAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */

@@ -8,6 +8,7 @@ namespace App\Entity;
 use App\EntityInterface\CategoryWorkflowInterface;
 use App\ValueObject\CategoryWorkflowState;
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+
 /**
  * Represents the category workflow domain record.
  */
@@ -35,6 +36,7 @@ final class CategoryWorkflow implements CategoryWorkflowInterface
             new \DateTimeImmutable('now'),
         );
     }
+
     /**
      * Handles the transition to workflow.
      */
@@ -48,6 +50,7 @@ final class CategoryWorkflow implements CategoryWorkflowInterface
             new \DateTimeImmutable('now'),
         );
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -55,6 +58,7 @@ final class CategoryWorkflow implements CategoryWorkflowInterface
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the state workflow.
      */
@@ -62,6 +66,7 @@ final class CategoryWorkflow implements CategoryWorkflowInterface
     {
         return $this->state;
     }
+
     /**
      * Handles the actor id workflow.
      */
@@ -69,6 +74,7 @@ final class CategoryWorkflow implements CategoryWorkflowInterface
     {
         return $this->actorId;
     }
+
     /**
      * Handles the reason workflow.
      */
@@ -76,6 +82,7 @@ final class CategoryWorkflow implements CategoryWorkflowInterface
     {
         return $this->reason;
     }
+
     /**
      * Handles the transitioned at workflow.
      */

@@ -7,12 +7,14 @@ namespace App\Service\Category\Rule;
 
 use App\ServiceInterface\Category\CategoryRuleAdminServiceInterface;
 use App\ServiceInterface\Rule\RuleRepositoryInterface;
+
 /**
  * Provides the category rule admin service application service.
  */
 final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterface
 {
-private const int PREVIEW_SAMPLE_LIMIT = 50;
+    private const int PREVIEW_SAMPLE_LIMIT = 50;
+
     /**
      * Initializes the category rule admin service service collaborators.
      */

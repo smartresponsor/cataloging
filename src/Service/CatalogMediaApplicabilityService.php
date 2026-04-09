@@ -10,19 +10,21 @@ use App\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
 use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
+
 /**
  * Provides the catalog media applicability service application service.
  */
-final class CatalogMediaApplicabilityService implements CatalogMediaApplicabilityServiceInterface
+final readonly class CatalogMediaApplicabilityService implements CatalogMediaApplicabilityServiceInterface
 {
     /**
      * Initializes the catalog media applicability service service collaborators.
      */
     public function __construct(
-        private readonly CategoryMediaBindingRepositoryInterface $repository,
-        private readonly CategoryMediaApplicabilityPolicyInterface $policy,
+        private CategoryMediaBindingRepositoryInterface $repository,
+        private CategoryMediaApplicabilityPolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -31,8 +33,7 @@ final class CatalogMediaApplicabilityService implements CatalogMediaApplicabilit
         array $payload,
         string $actorId,
         string $reason,
-    ): CategoryMediaApplicabilityEvaluatedInterface
-    {
+    ): CategoryMediaApplicabilityEvaluatedInterface {
         $report = $this->policy->buildReport($payload, $this->repository->bindingsForCategory($categoryId));
 
         return new CategoryMediaApplicabilityEvaluated(

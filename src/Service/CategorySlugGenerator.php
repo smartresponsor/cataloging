@@ -7,15 +7,16 @@ namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategorySlugGeneratorInterface;
+
 /**
  * Provides the category slug generator application service.
  */
-final class CategorySlugGenerator implements CategorySlugGeneratorInterface
+final readonly class CategorySlugGenerator implements CategorySlugGeneratorInterface
 {
     /**
      * Initializes the category slug generator service collaborators.
      */
-    public function __construct(private readonly CategoryRepositoryInterface $repo)
+    public function __construct(private CategoryRepositoryInterface $repo)
     {
     }
 
@@ -36,7 +37,7 @@ final class CategorySlugGenerator implements CategorySlugGeneratorInterface
         $normalized = strtolower(trim($slug));
         $normalized = preg_replace('/\s+/', '-', $normalized) ?? $normalized;
         $normalized = preg_replace('/[^a-z0-9\-]/', '', $normalized) ?? $normalized;
-        $normalized = preg_replace('/\-+/', '-', $normalized) ?? $normalized;
+        $normalized = preg_replace('/-+/', '-', $normalized) ?? $normalized;
 
         return trim($normalized, '-');
     }

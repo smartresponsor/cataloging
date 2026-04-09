@@ -9,17 +9,19 @@ use App\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category governance controller application flow.
  */
-final class CategoryGovernanceController
+final readonly class CategoryGovernanceController
 {
     /**
      * Initializes the category governance controller service collaborators.
      */
-    public function __construct(private readonly CategoryGovernanceViewBuilderInterface $viewBuilder)
+    public function __construct(private CategoryGovernanceViewBuilderInterface $viewBuilder)
     {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */

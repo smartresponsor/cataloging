@@ -4,9 +4,12 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Api;
+
+use App\ServiceInterface\GraphqlResolverInterface;
+
 /**
  * Defines the contract for api graphql resolver.
  */
-interface ApiGraphqlResolverInterface extends \App\ServiceInterface\GraphqlResolverInterface
+interface ApiGraphqlResolverInterface extends GraphqlResolverInterface
 {
 }

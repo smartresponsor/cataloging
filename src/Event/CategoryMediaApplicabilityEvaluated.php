@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
+
 /**
  * Represents the category media applicability evaluated application event.
  */
-final class CategoryMediaApplicabilityEvaluated implements CategoryMediaApplicabilityEvaluatedInterface
+final readonly class CategoryMediaApplicabilityEvaluated implements CategoryMediaApplicabilityEvaluatedInterface
 {
     /**
      * @param list<string>       $requiredMissing
@@ -18,16 +19,16 @@ final class CategoryMediaApplicabilityEvaluated implements CategoryMediaApplicab
      * @param list<string>       $matchedBindingIds
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly string $channel,
-        private readonly string $locale,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $matchedBindingIds,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $evaluatedAt,
+        private string $categoryId,
+        private string $channel,
+        private string $locale,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $checks,
+        private array $matchedBindingIds,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $evaluatedAt,
     ) {
     }
 

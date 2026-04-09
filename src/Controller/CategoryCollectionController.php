@@ -10,17 +10,19 @@ use App\Service\CatalogCollectionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category collection controller application flow.
  */
-final class CategoryCollectionController
+final readonly class CategoryCollectionController
 {
     /**
      * Initializes the category collection controller service collaborators.
      */
-    public function __construct(private readonly CatalogCollectionService $service)
+    public function __construct(private CatalogCollectionService $service)
     {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */
@@ -43,7 +45,7 @@ final class CategoryCollectionController
     }
 
     /**
-     * @param array<mixed> $rules
+     * @param array $rules
      *
      * @return array<string, array<int, bool|float|int|string>|bool|float|int|string>
      */

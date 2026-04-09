@@ -6,10 +6,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Ai\CatalogSuggestService;
+use App\Util\RotatingFileWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category suggest controller application flow.
  */
@@ -21,6 +23,7 @@ final class CategorySuggestController extends AbstractController
     public function __construct(private readonly CatalogSuggestService $svc)
     {
     }
+
     /**
      * Handles the suggest workflow.
      */
@@ -34,7 +37,7 @@ final class CategorySuggestController extends AbstractController
         // simple audit log
         $logDir = getcwd().'/var/log';
         $this->ensureDirectory($logDir);
-        $writer = new \App\Util\RotatingFileWriter($logDir.'/category_suggest.log');
+        $writer = new RotatingFileWriter($logDir.'/category_suggest.log');
         $writer->write(
             json_encode(
                 ['name' => $name, 'desc' => $desc, 'tags' => $tags, 'res' => $res],
@@ -56,9 +59,6 @@ final class CategorySuggestController extends AbstractController
     private function requestStringList(Request $request, string $key): array
     {
         $values = $request->request->all($key);
-        if (!is_array($values)) {
-            return [];
-        }
 
         $result = [];
         foreach ($values as $value) {

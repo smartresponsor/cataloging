@@ -6,23 +6,32 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Observability\RequestCorrelationIdProvider;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 /**
  * Provides the webhook dispatcher application service.
  */
-final class WebhookDispatcher
+final readonly class WebhookDispatcher
 {
     /**
      * Initializes the webhook dispatcher service collaborators.
      */
     public function __construct(
-        private readonly HttpClientInterface $httpClient,
-        private readonly string $secret = 'changeme',
-        private readonly ?RequestCorrelationIdProvider $correlationIdProvider = null,
+        private HttpClientInterface $httpClient,
+        private string $secret = 'changeme',
+        private ?RequestCorrelationIdProvider $correlationIdProvider = null,
     ) {
     }
 
-    /** @param array<string,mixed> $payload */
+    /**
+     * @param string              $event
+     * @param array<string,mixed> $payload
+     * @param string              $endpoint
+     *
+     * @throws TransportExceptionInterface
+     * @throws \JsonException
+     */
     public function dispatch(string $event, array $payload, string $endpoint): void
     {
         $body = json_encode(['event' => $event, 'payload' => $payload], JSON_THROW_ON_ERROR);

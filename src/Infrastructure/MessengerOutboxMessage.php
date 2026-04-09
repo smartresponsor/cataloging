@@ -4,13 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Infrastructure;
+
 /**
  * Provides the messenger outbox message implementation.
  */
-final class MessengerOutboxMessage
+final readonly class MessengerOutboxMessage
 {
     /** @param array<string,mixed> $payload */
-    public function __construct(private readonly array $payload)
+    public function __construct(private array $payload)
     {
     }
 

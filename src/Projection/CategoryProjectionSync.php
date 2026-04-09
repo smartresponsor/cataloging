@@ -12,12 +12,12 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Projection sync worker that updates MySQL read models from outbox events.
  */
-final class CategoryProjectionSync implements CategoryProjectionSyncInterface
+final readonly class CategoryProjectionSync implements CategoryProjectionSyncInterface
 {
     /**
      * Initializes the category projection sync service collaborators.
      */
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(private ManagerRegistry $registry)
     {
     }
 
@@ -74,7 +74,7 @@ final class CategoryProjectionSync implements CategoryProjectionSyncInterface
                 'workflowState' => $this->stringValue($row['workflow_state'] ?? 'draft'),
                 'published' => $this->boolValue($row['published'] ?? false),
                 'publishedAt' => $publishedAt,
-                'updatedAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+                'updatedAt' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,

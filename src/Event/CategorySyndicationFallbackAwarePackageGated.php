@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
+
 /**
  * Represents the category syndication fallback aware package gated application event.
  */
-final class CategorySyndicationFallbackAwarePackageGated
-    implements CategorySyndicationFallbackAwarePackageGatedInterface
+final class CategorySyndicationFallbackAwarePackageGated implements CategorySyndicationFallbackAwarePackageGatedInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
@@ -18,6 +18,7 @@ final class CategorySyndicationFallbackAwarePackageGated
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -25,6 +26,7 @@ final class CategorySyndicationFallbackAwarePackageGated
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

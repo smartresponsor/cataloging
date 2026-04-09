@@ -10,17 +10,19 @@ use App\Service\CatalogVirtualCollectionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category virtual controller application flow.
  */
-final class CategoryVirtualController
+final readonly class CategoryVirtualController
 {
     /**
      * Initializes the category virtual controller service collaborators.
      */
-    public function __construct(private readonly CatalogVirtualCollectionService $service)
+    public function __construct(private CatalogVirtualCollectionService $service)
     {
     }
+
     /**
      * Handles the preview workflow.
      */
@@ -41,6 +43,7 @@ final class CategoryVirtualController
             'total' => count($result),
         ]);
     }
+
     /**
      * Handles the apply workflow.
      */

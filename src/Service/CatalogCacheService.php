@@ -6,19 +6,27 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
+
 /**
  * Provides the catalog cache service application service.
  */
-final class CatalogCacheService
+final readonly class CatalogCacheService
 {
     /**
      * Initializes the catalog cache service service collaborators.
      */
-    public function __construct(private readonly CacheItemPoolInterface $pool)
+    public function __construct(private CacheItemPoolInterface $pool)
     {
     }
 
-    /** @return array<string,mixed> */
+    /**
+     * @param string $locale
+     *
+     * @return array<string,mixed>
+     *
+     * @throws InvalidArgumentException
+     */
     public function getTree(string $locale): array
     {
         $key = 'category_tree_'.$locale;

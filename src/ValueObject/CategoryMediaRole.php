@@ -6,16 +6,18 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryMediaRoleInterface;
+
 /**
  * Represents the category media role value.
  */
 final class CategoryMediaRole implements CategoryMediaRoleInterface
 {
-private const string PRIMARY = 'primary';
-private const string BANNER = 'banner';
-private const string ICON = 'icon';
-private const string THUMBNAIL = 'thumbnail';
-private const string HERO = 'hero';
+    private const string PRIMARY = 'primary';
+    private const string BANNER = 'banner';
+    private const string ICON = 'icon';
+    private const string THUMBNAIL = 'thumbnail';
+    private const string HERO = 'hero';
+
     private function __construct(private readonly string $value)
     {
     }
@@ -56,6 +58,7 @@ private const string HERO = 'hero';
             default => throw new \InvalidArgumentException(sprintf('Unsupported category media role "%s".', $value)),
         };
     }
+
     /**
      * Handles the value workflow.
      */

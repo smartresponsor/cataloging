@@ -9,20 +9,27 @@ use App\Entity\CategoryBanner;
 use App\Entity\CategoryHtmlBlock;
 use App\Entity\CategoryPin;
 use App\ServiceInterface\CatalogMerchServiceInterface;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+
 /**
  * Provides the catalog merch service application service.
  */
-final class CatalogMerchService implements CatalogMerchServiceInterface
+final readonly class CatalogMerchService implements CatalogMerchServiceInterface
 {
     /**
      * Initializes the catalog merch service service collaborators.
      */
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 
-    /** @param list<string> $recordIds */
+    /**
+     * @param string       $categoryId
+     * @param list<string> $recordIds
+     *
+     * @throws Exception
+     */
     public function orderSet(string $categoryId, array $recordIds): void
     {
         $position = 0;
@@ -33,6 +40,7 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
             );
         }
     }
+
     /**
      * Handles the pin create workflow.
      */
@@ -42,6 +50,7 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
         $this->entityManager->persist($pin);
         $this->entityManager->flush();
     }
+
     /**
      * Handles the pin delete workflow.
      */
@@ -59,6 +68,7 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
         $this->entityManager->remove($pin);
         $this->entityManager->flush();
     }
+
     /**
      * Handles the banner publish workflow.
      */
@@ -71,6 +81,7 @@ final class CatalogMerchService implements CatalogMerchServiceInterface
 
         return (string) $banner->id();
     }
+
     /**
      * Handles the html publish workflow.
      */

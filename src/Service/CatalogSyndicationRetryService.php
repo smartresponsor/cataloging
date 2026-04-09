@@ -14,6 +14,7 @@ use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use App\ValueObject\CategorySyndicationRecoveryCandidate;
 use App\ValueObject\CategorySyndicationRetryPlan;
+
 /**
  * Provides the catalog syndication retry service application service.
  */
@@ -26,6 +27,7 @@ final class CatalogSyndicationRetryService implements CatalogSyndicationRetrySer
         private readonly CategorySyndicationRetryPolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the prepare recovery candidate workflow.
      */
@@ -33,8 +35,7 @@ final class CatalogSyndicationRetryService implements CatalogSyndicationRetrySer
         CategorySyndicationDeliveryRecordInterface $record,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRecoveryCandidatePreparedInterface
-    {
+    ): CategorySyndicationRecoveryCandidatePreparedInterface {
         $status = $record->status()->status();
         $this->policy->assertFailedStatus($status);
         $retryable = $this->policy->isRetryable($record->responseCode());
@@ -63,6 +64,7 @@ final class CatalogSyndicationRetryService implements CatalogSyndicationRetrySer
             'reason' => trim($reason),
         ], new \DateTimeImmutable('now'));
     }
+
     /**
      * Schedules the retry workflow for later processing.
      */
@@ -70,8 +72,7 @@ final class CatalogSyndicationRetryService implements CatalogSyndicationRetrySer
         CategorySyndicationDeliveryRecordInterface $record,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRetryScheduledInterface
-    {
+    ): CategorySyndicationRetryScheduledInterface {
         $status = $record->status()->status();
         $this->policy->assertFailedStatus($status);
 

@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\EntityInterface;
+
 /**
  * Defines the contract for category.
  */
@@ -13,10 +14,12 @@ interface CategoryInterface
      * Handles the id workflow.
      */
     public function id(): string;
+
     /**
      * Handles the taxonomy id workflow.
      */
     public function taxonomyId(): string;
+
     /**
      * Handles the parent id workflow.
      */
@@ -27,10 +30,12 @@ interface CategoryInterface
 
     /** @return array<string,string> */
     public function slug(): array;
+
     /**
      * Handles the path workflow.
      */
     public function path(): string;
+
     /**
      * Handles the order workflow.
      */
@@ -38,10 +43,12 @@ interface CategoryInterface
 
     /** @return array<string,mixed> */
     public function meta(): array;
+
     /**
      * Creates the d at result for the current workflow.
      */
     public function createdAt(): \DateTimeImmutable;
+
     /**
      * Handles the updated at workflow.
      */

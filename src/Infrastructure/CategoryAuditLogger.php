@@ -6,15 +6,16 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use Psr\Log\LoggerInterface;
+
 /**
  * Provides the category audit logger implementation.
  */
-final class CategoryAuditLogger
+final readonly class CategoryAuditLogger
 {
     /**
      * Initializes the category audit logger service collaborators.
      */
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 

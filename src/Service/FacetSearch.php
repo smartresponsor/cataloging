@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the facet search application service.
  */
 final class FacetSearch
 {
     private \PDO $pdo;
+
     /**
      * Initializes the facet search service collaborators.
      */
@@ -21,8 +23,8 @@ final class FacetSearch
     /** @return list<array{id:string,slug:string,name:string,path:string,locale:string}> */
     public function search(string $term, string $locale = 'en', int $limit = 20, int $offset = 0): array
     {
-        $sql = 'SELECT id, slug, name, path, locale FROM category_projection 
-                WHERE locale = :locale AND (slug LIKE :q OR name LIKE :q) 
+        $sql = 'SELECT id, slug, name, path, locale FROM category_projection
+                WHERE locale = :locale AND (slug LIKE :q OR name LIKE :q)
                 ORDER BY name ASC LIMIT :lim OFFSET :off';
         $stmt = $this->pdo->prepare($sql);
         $like = '%'.$term.'%';

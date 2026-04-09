@@ -9,17 +9,19 @@ use App\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterf
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category actor traceability controller application flow.
  */
-final class CategoryActorTraceabilityController
+final readonly class CategoryActorTraceabilityController
 {
     /**
      * Initializes the category actor traceability controller service collaborators.
      */
-    public function __construct(private readonly CategoryActorTraceabilityViewBuilderInterface $viewBuilder)
+    public function __construct(private CategoryActorTraceabilityViewBuilderInterface $viewBuilder)
     {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */

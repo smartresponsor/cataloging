@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
+
 /**
  * Represents the category destination media readiness report value.
  */
-final class CategoryDestinationMediaReadinessReport implements CategoryDestinationMediaReadinessReportInterface
+final readonly class CategoryDestinationMediaReadinessReport implements CategoryDestinationMediaReadinessReportInterface
 {
     /**
      * @param array<string,bool> $checks
@@ -18,13 +19,14 @@ final class CategoryDestinationMediaReadinessReport implements CategoryDestinati
      * @param list<string>       $matchedBindingIds
      */
     public function __construct(
-        private readonly array $checks,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $matchedBindingIds,
-        private readonly bool $publishable,
+        private array $checks,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $matchedBindingIds,
+        private bool $publishable,
     ) {
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -32,6 +34,7 @@ final class CategoryDestinationMediaReadinessReport implements CategoryDestinati
     {
         return $this->checks;
     }
+
     /**
      * Handles the required missing workflow.
      */
@@ -39,6 +42,7 @@ final class CategoryDestinationMediaReadinessReport implements CategoryDestinati
     {
         return $this->requiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -46,6 +50,7 @@ final class CategoryDestinationMediaReadinessReport implements CategoryDestinati
     {
         return $this->warnings;
     }
+
     /**
      * Handles the matched binding ids workflow.
      */
@@ -53,6 +58,7 @@ final class CategoryDestinationMediaReadinessReport implements CategoryDestinati
     {
         return $this->matchedBindingIds;
     }
+
     /**
      * Handles the publishable workflow.
      */

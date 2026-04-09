@@ -4,13 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the tenant quota checker application service.
  */
-final class TenantQuotaChecker
+final readonly class TenantQuotaChecker
 {
     /** @param array{max_categories?: int, max_depth?: int, max_updates_per_day?: int} $limits */
-    public function __construct(private readonly array $limits = [
+    public function __construct(private array $limits = [
         'max_categories' => 500,
         'max_depth' => 6,
         'max_updates_per_day' => 200,

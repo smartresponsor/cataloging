@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the import field mapper application service.
  */
@@ -20,13 +21,15 @@ final class ImportFieldMapper
      * @param array<string,mixed> $row
      *
      * @return array<string,mixed>
+     *
+     * @throws \JsonException
      */
     public function map(array $row): array
     {
         /** @var array<string,mixed> $out */
         $out = [];
         foreach ($row as $key => $value) {
-            $target = $this->map[(string) $key] ?? (string) $key;
+            $target = $this->map[$key] ?? $key;
             $out[$target] = $value;
         }
         $logFile = 'report/category-import-mapper.log.json';

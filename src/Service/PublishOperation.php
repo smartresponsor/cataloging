@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the publish operation application service.
  */
 final class PublishOperation
 {
     private DraftPolicy $policy;
+
     /**
      * Initializes the publish operation service collaborators.
      */
@@ -17,6 +19,7 @@ final class PublishOperation
     {
         $this->policy = $policy;
     }
+
     /**
      * Handles the publish workflow.
      */

@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
+
 /**
  * Defines the contract for category syndication fallback aware package gated.
  */
@@ -11,6 +12,7 @@ interface CategorySyndicationFallbackAwarePackageGatedInterface
 {
     /** @return array<string,mixed> */
     public function payload(): array;
+
     /**
      * Handles the occurred at workflow.
      */

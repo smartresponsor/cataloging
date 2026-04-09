@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
+
 /**
  * Represents the category syndication fallback aware package gate report value.
  */
-final class CategorySyndicationFallbackAwarePackageGateReport
-    implements CategorySyndicationFallbackAwarePackageGateReportInterface
+final readonly class CategorySyndicationFallbackAwarePackageGateReport implements CategorySyndicationFallbackAwarePackageGateReportInterface
 {
     /**
      * @param list<string>       $packageMissingRequiredFields
@@ -22,17 +22,18 @@ final class CategorySyndicationFallbackAwarePackageGateReport
      * @param list<string>       $fallbackMatchedBindingIds
      */
     public function __construct(
-        private readonly array $packageMissingRequiredFields,
-        private readonly array $strictMediaRequiredMissing,
-        private readonly array $fallbackMediaRequiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $exactMatchedBindingIds,
-        private readonly array $fallbackMatchedBindingIds,
-        private readonly bool $strictPublishable,
-        private readonly bool $fallbackPublishable,
+        private array $packageMissingRequiredFields,
+        private array $strictMediaRequiredMissing,
+        private array $fallbackMediaRequiredMissing,
+        private array $warnings,
+        private array $checks,
+        private array $exactMatchedBindingIds,
+        private array $fallbackMatchedBindingIds,
+        private bool $strictPublishable,
+        private bool $fallbackPublishable,
     ) {
     }
+
     /**
      * Handles the package missing required fields workflow.
      */
@@ -40,6 +41,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->packageMissingRequiredFields;
     }
+
     /**
      * Handles the strict media required missing workflow.
      */
@@ -47,6 +49,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->strictMediaRequiredMissing;
     }
+
     /**
      * Handles the fallback media required missing workflow.
      */
@@ -54,6 +57,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->fallbackMediaRequiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -61,6 +65,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->warnings;
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -68,6 +73,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->checks;
     }
+
     /**
      * Handles the exact matched binding ids workflow.
      */
@@ -75,6 +81,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->exactMatchedBindingIds;
     }
+
     /**
      * Handles the fallback matched binding ids workflow.
      */
@@ -82,6 +89,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->fallbackMatchedBindingIds;
     }
+
     /**
      * Handles the strict publishable workflow.
      */
@@ -89,6 +97,7 @@ final class CategorySyndicationFallbackAwarePackageGateReport
     {
         return $this->strictPublishable;
     }
+
     /**
      * Handles the fallback publishable workflow.
      */

@@ -11,19 +11,21 @@ use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
 use App\ValueObject\CategoryWorkflowState;
+
 /**
  * Provides the catalog workflow transition service application service.
  */
-final class CatalogWorkflowTransitionService implements CatalogWorkflowTransitionServiceInterface
+final readonly class CatalogWorkflowTransitionService implements CatalogWorkflowTransitionServiceInterface
 {
     /**
      * Initializes the catalog workflow transition service service collaborators.
      */
     public function __construct(
-        private readonly CategoryWorkflowRepositoryInterface $repository,
-        private readonly CategoryWorkflowPolicyInterface $policy,
+        private CategoryWorkflowRepositoryInterface $repository,
+        private CategoryWorkflowPolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the transition workflow.
      */
@@ -32,8 +34,7 @@ final class CatalogWorkflowTransitionService implements CatalogWorkflowTransitio
         string $targetState,
         string $actorId,
         string $reason,
-    ): CategoryWorkflowTransitioned
-    {
+    ): CategoryWorkflowTransitioned {
         $current = $this->repository->findByCategoryId($categoryId);
         $currentWorkflow = $current instanceof CategoryWorkflow
             ? $current

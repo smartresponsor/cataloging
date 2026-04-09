@@ -25,6 +25,7 @@ final class ConsistentCachePdpV2
 
     /** @var list<mixed> */
     private readonly array $extraCallbacks;
+
     /**
      * Initializes the consistent cache pdp v2 service collaborators.
      */
@@ -51,6 +52,7 @@ final class ConsistentCachePdpV2
         $this->composeFn = $composeFn;
         $this->extraCallbacks = array_values($extraCallbacks);
     }
+
     /**
      * Executes the invokable workflow for this service.
      */
@@ -58,6 +60,7 @@ final class ConsistentCachePdpV2
     {
         return $this->evaluate(...$arguments);
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -80,6 +83,7 @@ final class ConsistentCachePdpV2
 
         return $result;
     }
+
     /**
      * Handles the decide workflow.
      */
@@ -87,6 +91,7 @@ final class ConsistentCachePdpV2
     {
         return $this->evaluate(...$arguments);
     }
+
     /**
      * Handles the authorize workflow.
      */

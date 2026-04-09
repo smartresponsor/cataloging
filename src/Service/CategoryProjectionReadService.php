@@ -12,14 +12,14 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Provides the category projection read service application service.
  */
-final class CategoryProjectionReadService implements CategoryProjectionReadServiceInterface
+final readonly class CategoryProjectionReadService implements CategoryProjectionReadServiceInterface
 {
     /**
      * Initializes the category projection read service service collaborators.
      */
     public function __construct(
-        private readonly ManagerRegistry $registry,
-        private readonly SearchService $searchService,
+        private ManagerRegistry $registry,
+        private SearchService $searchService,
     ) {
     }
 
@@ -105,7 +105,7 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
     }
 
     /**
-     * @param array{'tenant':?string,'locale':?string,'workflow_state':?string,'published':?bool} $criteria
+     * @param array{'tenant':?string,' $criteria locale':?string,'workflow_state':?string,'published':?bool} $criteria
      *
      * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
      */
@@ -184,19 +184,12 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
     /**
      * @param list<array<string,mixed>> $rows
      *
-     * @return list<array{
-     *   id:string,
-     *   slug:string,
-     *   name:string,
-     *   'parent_id':?string,
-     *   path:string,
-     *   locale:string,
-     *   'tenant':string,
-     *   workflow_state:string,
-     *   published:bool,
-     *   published_at:?string,
-     *   updated_at:string
-     * }>
+     * @return array tenant':string,
+     *               workflow_state:string,
+     *               published:bool,
+     *               published_at:?string,
+     *               updated_at:string
+     *               }>
      */
     private function normalizeRows(array $rows): array
     {
@@ -226,19 +219,12 @@ final class CategoryProjectionReadService implements CategoryProjectionReadServi
     }
 
     /**
-     * @param list<array{
-     *   id:string,
-     *   slug:string,
-     *   name:string,
-     *   'parent_id':?string,
-     *   path:string,
-     *   locale:string,
-     *   'tenant':string,
-     *   workflow_state:string,
-     *   published:bool,
-     *   published_at:?string,
-     *   updated_at:string
-     * }> $rows
+     * @param array $rows tenant':string,
+     *                    workflow_state:string,
+     *                    published:bool,
+     *                    published_at:?string,
+     *                    updated_at:string
+     *                    }> $rows
      *
      * @return list<array<string,mixed>>
      */

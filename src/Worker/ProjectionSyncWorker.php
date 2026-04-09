@@ -6,18 +6,20 @@ declare(strict_types=1);
 namespace App\Worker;
 
 use App\RunnerInterface\CategoryProjectionRunnerInterface;
+
 /**
  * Provides the projection sync worker implementation.
  */
-final class ProjectionSyncWorker
+final readonly class ProjectionSyncWorker
 {
     /**
      * Initializes the projection sync worker service collaborators.
      */
     public function __construct(
-        private readonly ?CategoryProjectionRunnerInterface $runner = null,
+        private ?CategoryProjectionRunnerInterface $runner = null,
     ) {
     }
+
     /**
      * Handles the run workflow.
      */

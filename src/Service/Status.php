@@ -4,14 +4,16 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the status application service.
  */
 final class Status
 {
-public const string DRAFT = 'draft';
-public const string PUBLISHED = 'published';
+    public const string DRAFT = 'draft';
+    public const string PUBLISHED = 'published';
     private string $value;
+
     /**
      * Initializes the status service collaborators.
      */
@@ -22,6 +24,7 @@ public const string PUBLISHED = 'published';
         }
         $this->value = $value;
     }
+
     /**
      * Handles the value workflow.
      */
@@ -29,6 +32,7 @@ public const string PUBLISHED = 'published';
     {
         return $this->value;
     }
+
     /**
      * Determines whether the draft condition is satisfied.
      */
@@ -36,6 +40,7 @@ public const string PUBLISHED = 'published';
     {
         return self::DRAFT === $this->value;
     }
+
     /**
      * Determines whether the published condition is satisfied.
      */

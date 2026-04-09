@@ -10,6 +10,7 @@ use App\OutboxInterface\CategoryOutboxRetryInterface;
 use App\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
+
 /**
  * Provides the projection worker application service.
  */
@@ -26,6 +27,7 @@ final class ProjectionWorker
         private readonly int $maxAttempts = 5,
     ) {
     }
+
     /**
      * Handles the run once workflow.
      */
@@ -35,8 +37,8 @@ final class ProjectionWorker
         $rows = $this->connection->fetchAllAssociative(
             'SELECT id, type, payload, "key", created_at, available_at, attempts '
             .'FROM outbox '
-            . 'WHERE processed_at IS NULL AND dead_lettered_at IS NULL '
-            . 'AND (available_at IS NULL OR available_at <= :now) '
+            .'WHERE processed_at IS NULL AND dead_lettered_at IS NULL '
+            .'AND (available_at IS NULL OR available_at <= :now) '
             .'ORDER BY created_at ASC '
             .'LIMIT :limit',
             [
@@ -91,8 +93,7 @@ final class ProjectionWorker
         int $attempt,
         \DateTimeImmutable $now,
         \Throwable $exception,
-    ): void
-    {
+    ): void {
         $this->retry->schedule($event, $attempt);
         $message = substr($exception->getMessage(), 0, 2000);
 

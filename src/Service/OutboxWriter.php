@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\Uid\Uuid;
@@ -31,7 +32,7 @@ final class OutboxWriter
                 'type' => $type,
                 'payload' => json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
                 'key' => $key,
-                'createdAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+                'createdAt' => (new DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,
@@ -47,7 +48,7 @@ final class OutboxWriter
                 'type' => $type,
                 'payload' => json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
                 'key' => $key,
-                'createdAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+                'createdAt' => (new DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,

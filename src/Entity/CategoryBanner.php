@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Represents the category banner domain record.
  */
@@ -32,6 +33,7 @@ class CategoryBanner
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $publishedAt = null;
+
     /**
      * Initializes the category banner service collaborators.
      */
@@ -41,6 +43,7 @@ class CategoryBanner
         $this->title = $title;
         $this->content = $content;
     }
+
     /**
      * Handles the id workflow.
      */
@@ -48,6 +51,7 @@ class CategoryBanner
     {
         return $this->id;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -55,6 +59,7 @@ class CategoryBanner
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the title workflow.
      */
@@ -62,6 +67,7 @@ class CategoryBanner
     {
         return $this->title;
     }
+
     /**
      * Handles the content workflow.
      */
@@ -69,6 +75,7 @@ class CategoryBanner
     {
         return $this->content;
     }
+
     /**
      * Determines whether the draft condition is satisfied.
      */
@@ -76,6 +83,7 @@ class CategoryBanner
     {
         return $this->isDraft;
     }
+
     /**
      * Handles the published at workflow.
      */
@@ -83,6 +91,7 @@ class CategoryBanner
     {
         return $this->publishedAt;
     }
+
     /**
      * Handles the publish workflow.
      */

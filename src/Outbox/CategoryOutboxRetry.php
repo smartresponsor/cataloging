@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Outbox;
 
 use App\OutboxInterface\CategoryOutboxRetryInterface;
+
 /**
  * Provides the category outbox retry implementation.
  */
@@ -26,6 +27,7 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
             'runAt' => $runAt->getTimestamp(),
         ];
     }
+
     /**
      * Handles the next delay seconds workflow.
      */
@@ -35,6 +37,7 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
 
         return min(900, 2 ** min($normalizedAttempt, 9));
     }
+
     /**
      * Handles the next run at workflow.
      */

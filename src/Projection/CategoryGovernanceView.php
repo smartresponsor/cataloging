@@ -4,21 +4,22 @@
 declare(strict_types=1);
 
 namespace App\Projection;
+
 /**
  * Provides the category governance view implementation.
  */
-final class CategoryGovernanceView
+final readonly class CategoryGovernanceView
 {
     /**
      * @param list<array<string,mixed>> $activeAssignments
      * @param array<string,bool>        $roleCapabilities
      */
     public function __construct(
-        public readonly string $categoryId,
-        public readonly ?string $primaryActorUserId,
-        public readonly array $activeAssignments,
-        public readonly array $roleCapabilities,
-        public readonly string $generatedAt,
+        public string $categoryId,
+        public ?string $primaryActorUserId,
+        public array $activeAssignments,
+        public array $roleCapabilities,
+        public string $generatedAt,
     ) {
     }
 

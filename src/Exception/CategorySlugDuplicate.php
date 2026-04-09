@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Exception;
+
 /**
  * Provides the category slug duplicate implementation.
  */

@@ -7,20 +7,26 @@ namespace App\Infrastructure;
 
 use App\InfrastructureInterface\OutboxDispatcherInterface;
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+
 /**
  * Provides the messenger outbox dispatcher implementation.
  */
-final class MessengerOutboxDispatcher implements OutboxDispatcherInterface
+final readonly class MessengerOutboxDispatcher implements OutboxDispatcherInterface
 {
     /**
      * Initializes the messenger outbox dispatcher service collaborators.
      */
-    public function __construct(private readonly MessageBusInterface $bus)
+    public function __construct(private MessageBusInterface $bus)
     {
     }
 
-    /** @param array<string,mixed> $event */
+    /**
+     * @param array<string,mixed> $event
+     *
+     * @throws ExceptionInterface
+     */
     public function dispatch(array $event): void
     {
         $this->bus->dispatch(new Envelope(new MessengerOutboxMessage($event)));

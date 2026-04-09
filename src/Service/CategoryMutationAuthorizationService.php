@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Category;
 use App\Security\CategoryVoter;
 use App\Security\ExternalIdentityContext;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
@@ -66,7 +67,7 @@ final readonly class CategoryMutationAuthorizationService
             throw new AccessDeniedHttpException('Cross-tenant category mutation is not allowed for the current actor.');
         }
 
-        $subject = new \App\Entity\Category();
+        $subject = new Category();
         $subject->id = trim($categoryId);
 
         if ($this->security->isGranted($attribute, $subject)) {
@@ -138,12 +139,6 @@ final readonly class CategoryMutationAuthorizationService
             return false;
         }
 
-        foreach ($categoryRoles as $role) {
-            if ($this->tenantRolePolicy->allow(['org' => $tenant, 'tenant' => $tenant, 'role' => $role], $action)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($categoryRoles, fn ($role) => $this->tenantRolePolicy->allow(['org' => $tenant, 'tenant' => $tenant, 'role' => $role], $action));
     }
 }

@@ -11,6 +11,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category projection run command console workflow.
  */
@@ -26,6 +27,7 @@ final class CategoryProjectionRunCommand extends Command
     ) {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -38,6 +40,7 @@ final class CategoryProjectionRunCommand extends Command
             ->addOption('max-sec', null, InputOption::VALUE_REQUIRED, 'Maximum seconds for loop mode.', '5')
             ->addOption('max-batch', null, InputOption::VALUE_REQUIRED, 'Maximum messages for loop mode.', '100');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
@@ -45,7 +48,7 @@ final class CategoryProjectionRunCommand extends Command
     {
         parent::execute($input, $output);
         $limit = max(1, (int) $input->getOption('limit'));
-        if ((bool) $input->getOption('once')) {
+        if ($input->getOption('once')) {
             $processed = $this->worker->runOnce($limit);
             $output->writeln(sprintf('<info>projection batch processed=%d</info>', $processed));
 

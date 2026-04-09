@@ -4,12 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the billing tag emitter application service.
  */
 final class BillingTagEmitter
 {
-    /** @param array<string,mixed> $payload */
+    /**
+     * @param string              $tenant
+     * @param string              $operation
+     * @param array<string,mixed> $payload
+     *
+     * @throws \JsonException
+     */
     public function emit(string $tenant, string $operation, array $payload = []): void
     {
         $entry = [

@@ -12,6 +12,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the export redirect command console workflow.
  */
@@ -19,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ExportRedirectCommand extends Command
 {
     use CategoryCliOutputTrait;
+
     /**
      * Initializes the export redirect command service collaborators.
      */
@@ -26,6 +28,7 @@ final class ExportRedirectCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */

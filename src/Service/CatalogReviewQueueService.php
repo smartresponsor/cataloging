@@ -12,19 +12,21 @@ use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogReviewQueueServiceInterface;
 use App\ValueObject\CategoryChangeRequestState;
 use App\ValueObject\CategoryReviewQueueItem;
+
 /**
  * Provides the catalog review queue service application service.
  */
-final class CatalogReviewQueueService implements CatalogReviewQueueServiceInterface
+final readonly class CatalogReviewQueueService implements CatalogReviewQueueServiceInterface
 {
     /**
      * Initializes the catalog review queue service service collaborators.
      */
     public function __construct(
-        private readonly CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private readonly CategoryReviewAssignmentRepositoryInterface $assignmentRepository,
+        private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
+        private CategoryReviewAssignmentRepositoryInterface $assignmentRepository,
     ) {
     }
+
     /**
      * Handles the queue for reviewer workflow.
      */

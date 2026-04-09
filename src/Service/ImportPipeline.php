@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the import pipeline application service.
  */
 final class ImportPipeline
 {
     private string $dlqPath;
+
     /**
      * Initializes the import pipeline service collaborators.
      */

@@ -8,15 +8,15 @@ namespace App\Request;
 /**
  * Provides the category rule preview request implementation.
  */
-final class CategoryRulePreviewRequest
+final readonly class CategoryRulePreviewRequest
 {
     /**
-     * @param array<mixed>|null $spec
-     * @param list<string>      $errors
+     * @param array|null   $spec
+     * @param list<string> $errors
      */
     public function __construct(
-        public readonly ?array $spec,
-        private readonly array $errors = [],
+        public ?array $spec,
+        private array $errors = [],
     ) {
     }
 

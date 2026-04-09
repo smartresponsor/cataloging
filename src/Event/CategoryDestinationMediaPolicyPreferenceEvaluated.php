@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
+
 /**
  * Represents the category destination media policy preference evaluated application event.
  */
-final class CategoryDestinationMediaPolicyPreferenceEvaluated
-    implements CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
+final class CategoryDestinationMediaPolicyPreferenceEvaluated implements CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
@@ -18,6 +18,7 @@ final class CategoryDestinationMediaPolicyPreferenceEvaluated
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -25,6 +26,7 @@ final class CategoryDestinationMediaPolicyPreferenceEvaluated
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

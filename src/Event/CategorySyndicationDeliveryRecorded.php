@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
+
 /**
  * Represents the category syndication delivery recorded application event.
  */
@@ -19,6 +20,7 @@ final class CategorySyndicationDeliveryRecorded implements CategorySyndicationDe
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -26,6 +28,7 @@ final class CategorySyndicationDeliveryRecorded implements CategorySyndicationDe
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

@@ -9,6 +9,7 @@ use App\EntityInterface\CategoryMediaBindingInterface;
 use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\ValueObject\CategoryDestinationMediaFallbackReport;
 use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
+
 /**
  * Provides the category destination media fallback policy implementation.
  */
@@ -23,8 +24,7 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
         string $categoryId,
         array $destinationSettings,
         array $bindings,
-    ): CategoryDestinationMediaFallbackReportInterface
-    {
+    ): CategoryDestinationMediaFallbackReportInterface {
         $channel = $this->stringValue($destinationSettings['channel'] ?? null);
         $locale = $this->stringValue($destinationSettings['locale'] ?? null);
         $requiredRoles = $this->stringList($destinationSettings['requiredMediaRoles'] ?? null);
@@ -117,8 +117,8 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
             $warnings,
             $exactMatchedBindingIds,
             $fallbackMatchedBindingIds,
-            (bool) $checks['exactDestinationMediaReady'],
-            (bool) $checks['destinationMediaReadyWithFallback'],
+            $checks['exactDestinationMediaReady'],
+            $checks['destinationMediaReadyWithFallback'],
         );
     }
 

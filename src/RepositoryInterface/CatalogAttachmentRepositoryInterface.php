@@ -11,16 +11,12 @@ namespace App\RepositoryInterface;
 interface CatalogAttachmentRepositoryInterface
 {
     /**
-     * @return list<array{
-     *     attachment_id:string,
-     *     category_id:string,
-     *     type:string,
-     *     provider:string,
-     *     external_attachment_id:string,
-     *     'reference_uri':?string,
-     *     path:?string,
-     *     created_at:string,
-     * }>
+     * @param string|null $categoryId
+     *
+     * @return array 'reference_uri':?string,
+     *               path:?string,
+     *               created_at:string,
+     *               }>
      */
     public function list(?string $categoryId = null): array;
 
@@ -45,16 +41,12 @@ interface CatalogAttachmentRepositoryInterface
     ): array;
 
     /**
-     * @return array{
-     *     attachment_id:string,
-     *     category_id:string,
-     *     type:string,
-     *     provider:string,
-     *     external_attachment_id:string,
-     *     'reference_uri':?string,
-     *     path:?string,
-     *     created_at:string,
-     * }|null
+     * @param string $attachmentId
+     *
+     * @return array|null 'reference_uri':?string,
+     *                    path:?string,
+     *                    created_at:string,
+     *                    }|null
      */
     public function findOne(string $attachmentId): ?array;
 

@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryReviewDecisionCoupledInterface;
+
 /**
  * Represents the category review decision coupled application event.
  */
-final class CategoryReviewDecisionCoupled implements CategoryReviewDecisionCoupledInterface
+final readonly class CategoryReviewDecisionCoupled implements CategoryReviewDecisionCoupledInterface
 {
     /**
      * @param list<string>       $blockers
@@ -17,19 +18,20 @@ final class CategoryReviewDecisionCoupled implements CategoryReviewDecisionCoupl
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $reviewState,
-        private readonly string $workflowState,
-        private readonly bool $publishable,
-        private readonly array $blockers,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $occurredAt,
+        private string $requestId,
+        private string $categoryId,
+        private string $reviewState,
+        private string $workflowState,
+        private bool $publishable,
+        private array $blockers,
+        private array $warnings,
+        private array $checks,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */

@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category syndication destination history command console workflow.
  */
@@ -22,6 +23,7 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category syndication destination history command service collaborators.
      */
@@ -29,6 +31,7 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -47,6 +50,7 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
             ->addOption('records', null, InputOption::VALUE_REQUIRED, default: '[]')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */

@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the facet search advanced application service.
  */
@@ -12,6 +13,7 @@ final class FacetSearchAdvanced
     private \PDO $pdo;
     private FacetFilter $filter;
     private FacetRank $rank;
+
     /**
      * Initializes the facet search advanced service collaborators.
      */
@@ -29,8 +31,7 @@ final class FacetSearchAdvanced
         ?string $pathPrefix = null,
         int $limit = 20,
         int $offset = 0,
-    ): array
-    {
+    ): array {
         $sql = 'SELECT id, slug, name, path, locale FROM category_projection WHERE (slug LIKE :q OR name LIKE :q)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':q', '%'.$term.'%');

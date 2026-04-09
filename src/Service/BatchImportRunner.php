@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the batch import runner application service.
  */
 final class BatchImportRunner
 {
     private ProgressTracker $progress;
+
     /**
      * Initializes the batch import runner service collaborators.
      */

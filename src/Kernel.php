@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+
 /**
  * Provides the kernel implementation.
  */
@@ -18,6 +19,7 @@ final class Kernel extends BaseKernel
     use MicroKernelTrait;
 
     private const string BUNDLES_CONFIG_PATH = __DIR__.'/../config/catalog_bundles.php';
+
     /**
      * Registers the bundles available for the current environment.
      */
@@ -32,6 +34,7 @@ final class Kernel extends BaseKernel
             yield $this->instantiateBundle($class);
         }
     }
+
     /**
      * Configures the service container resources for the application kernel.
      */
@@ -43,6 +46,7 @@ final class Kernel extends BaseKernel
         $container->import('../config/services_'.$this->environment.'.yaml', null, true);
         $container->import('../config/catalog_services*.yaml');
     }
+
     /**
      * Configures the route resources for the application kernel.
      */

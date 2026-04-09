@@ -11,19 +11,19 @@ use App\EventInterface\CategorySyndicationDestinationRegisteredInterface;
 use App\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
+
 /**
  * Provides the catalog syndication destination service application service.
  */
-final class CatalogSyndicationDestinationService implements CatalogSyndicationDestinationServiceInterface
+final readonly class CatalogSyndicationDestinationService implements CatalogSyndicationDestinationServiceInterface
 {
     /**
      * Initializes the catalog syndication destination service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDestinationPolicyInterface $policy,
-        private readonly CategorySyndicationDestinationRepositoryInterface $repository,
-    )
-    {
+        private CategorySyndicationDestinationPolicyInterface $policy,
+        private CategorySyndicationDestinationRepositoryInterface $repository,
+    ) {
     }
 
     /** @param array<string,mixed> $settings */
@@ -36,8 +36,7 @@ final class CatalogSyndicationDestinationService implements CatalogSyndicationDe
         array $settings,
         string $actorId,
         string $reason,
-    ): CategorySyndicationDestinationRegisteredInterface
-    {
+    ): CategorySyndicationDestinationRegisteredInterface {
         $this->policy->assertDestinationType($destinationType);
         $this->policy->assertDeliveryMode($deliveryMode);
         /** @var array<string,string> $normalizedSettings */

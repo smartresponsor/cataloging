@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Sdk\Category;
 
-final class CategoryClient
+final readonly class CategoryClient
 {
-    public function __construct(private readonly string $baseUri)
+    public function __construct(private string $baseUri)
     {
     }
 

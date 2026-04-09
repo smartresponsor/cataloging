@@ -15,14 +15,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Admin API delivery adapter over shared catalog read services.
  */
-final class CategoryAdminApiController
+final readonly class CategoryAdminApiController
 {
     /**
      * Initializes the category admin api controller service collaborators.
      */
-    public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
+    public function __construct(private CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
+
     /**
      * Handles the list workflow.
      */
@@ -42,6 +43,7 @@ final class CategoryAdminApiController
             ]),
         ]);
     }
+
     /**
      * Handles the bulk workflow.
      */

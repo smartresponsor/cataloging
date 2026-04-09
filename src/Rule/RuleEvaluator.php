@@ -4,12 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Rule;
+
 /**
  * Provides the rule evaluator implementation.
  */
 final class RuleEvaluator
 {
-    /** @return array{sql:string,params:array<string,mixed>} */
+    /**
+     * @param CategoryRule $rule
+     *
+     * @return array{sql:string,params:array<string,mixed>}
+     *
+     * @throws \JsonException
+     */
     public function compile(CategoryRule $rule): array
     {
         $where = [];

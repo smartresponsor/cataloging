@@ -8,6 +8,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category ops controller application flow.
  */
@@ -27,9 +28,9 @@ final class CategoryOpsController extends AbstractController
     }
 
     /**
-     * @param array<mixed> $default
+     * @param array $default
      *
-     * @return array<mixed>
+     * @return array
      */
     private function readJsonFile(string $path, array $default): array
     {

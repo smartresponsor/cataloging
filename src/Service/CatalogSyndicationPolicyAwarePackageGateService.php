@@ -11,19 +11,19 @@ use App\PolicyInterface\CategorySyndicationPolicyAwarePackageGatePolicyInterface
 use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
 use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
 use App\ServiceInterface\CatalogSyndicationPolicyAwarePackageGateServiceInterface;
+
 /**
  * Provides the catalog syndication policy aware package gate service application service.
  */
-final class CatalogSyndicationPolicyAwarePackageGateService
-    implements CatalogSyndicationPolicyAwarePackageGateServiceInterface
+final readonly class CatalogSyndicationPolicyAwarePackageGateService implements CatalogSyndicationPolicyAwarePackageGateServiceInterface
 {
     /**
      * Initializes the catalog syndication policy aware package gate service service collaborators.
      */
     public function __construct(
-        private readonly CatalogSyndicationFallbackAwarePackageGateServiceInterface $fallbackAwareGateService,
-        private readonly CatalogDestinationMediaPolicyPreferenceServiceInterface $preferenceService,
-        private readonly CategorySyndicationPolicyAwarePackageGatePolicyInterface $policy,
+        private CatalogSyndicationFallbackAwarePackageGateServiceInterface $fallbackAwareGateService,
+        private CatalogDestinationMediaPolicyPreferenceServiceInterface $preferenceService,
+        private CategorySyndicationPolicyAwarePackageGatePolicyInterface $policy,
     ) {
     }
 
@@ -43,8 +43,7 @@ final class CatalogSyndicationPolicyAwarePackageGateService
         array $requiredFields,
         string $actorId,
         string $reason,
-    ): CategorySyndicationPolicyAwarePackageGatedInterface
-    {
+    ): CategorySyndicationPolicyAwarePackageGatedInterface {
         $fallbackAware = $this->fallbackAwareGateService->buildGatedPublishPackage(
             $packageId,
             $destinationId,

@@ -4,15 +4,16 @@
 declare(strict_types=1);
 
 namespace App\Webhook;
+
 /**
  * Provides the webhook v2 signer implementation.
  */
-final class WebhookV2Signer
+final readonly class WebhookV2Signer
 {
     /**
      * Initializes the webhook v2 signer service collaborators.
      */
-    public function __construct(private readonly string $secret = 'changeme')
+    public function __construct(private string $secret = 'changeme')
     {
     }
 
@@ -27,6 +28,7 @@ final class WebhookV2Signer
             'signature' => $sig,
         ];
     }
+
     /**
      * Handles the verify workflow.
      */

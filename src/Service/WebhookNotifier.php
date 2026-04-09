@@ -4,15 +4,16 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the webhook notifier application service.
  */
-final class WebhookNotifier
+final readonly class WebhookNotifier
 {
     /**
      * Initializes the webhook notifier service collaborators.
      */
-    public function __construct(private readonly string $endpoint)
+    public function __construct(private string $endpoint)
     {
     }
 
@@ -20,7 +21,6 @@ final class WebhookNotifier
     public function notify(string $event, array $payload): void
     {
         if ('' === trim($this->endpoint)) {
-            return;
         }
     }
 }

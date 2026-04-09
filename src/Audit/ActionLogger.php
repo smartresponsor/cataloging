@@ -4,14 +4,19 @@
 declare(strict_types=1);
 
 namespace App\Audit;
+
 /**
  * Provides the action logger implementation.
  */
 final class ActionLogger
 {
     /**
+     * @param string              $actor
+     * @param string              $action
      * @param array<string,mixed> $target
      * @param array<string,mixed> $ctx
+     *
+     * @throws \JsonException
      */
     public function log(string $actor, string $action, array $target, array $ctx = []): void
     {

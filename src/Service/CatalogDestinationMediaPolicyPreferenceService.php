@@ -12,22 +12,23 @@ use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
 use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+
 /**
  * Provides the catalog destination media policy preference service application service.
  */
-final class CatalogDestinationMediaPolicyPreferenceService
-    implements CatalogDestinationMediaPolicyPreferenceServiceInterface
+final readonly class CatalogDestinationMediaPolicyPreferenceService implements CatalogDestinationMediaPolicyPreferenceServiceInterface
 {
     /**
      * Initializes the catalog destination media policy preference service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDestinationRepositoryInterface $destinationRepository,
-        private readonly CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
-        private readonly CatalogDestinationMediaFallbackServiceInterface $destinationMediaFallbackService,
-        private readonly CategoryDestinationMediaPolicyPreferencePolicyInterface $policy,
+        private CategorySyndicationDestinationRepositoryInterface $destinationRepository,
+        private CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
+        private CatalogDestinationMediaFallbackServiceInterface $destinationMediaFallbackService,
+        private CategoryDestinationMediaPolicyPreferencePolicyInterface $policy,
     ) {
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -36,15 +37,14 @@ final class CatalogDestinationMediaPolicyPreferenceService
         string $categoryId,
         string $actorId,
         string $reason,
-    ): CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
-    {
+    ): CategoryDestinationMediaPolicyPreferenceEvaluatedInterface {
         $destination = $this->destinationRepository->find($destinationId);
         if (null === $destination) {
             throw new \InvalidArgumentException('Unknown destination.');
         }
 
         $settings = $destination->settings();
-        $mode = trim((string) ($settings['mediaPolicyMode'] ?? 'allow_fallback'));
+        $mode = trim($settings['mediaPolicyMode'] ?? 'allow_fallback');
 
         $strictPayload = $this->destinationMediaReadinessService->evaluate(
             $destinationId,
@@ -72,8 +72,8 @@ final class CatalogDestinationMediaPolicyPreferenceService
                 'requiredMissing' => $report->requiredMissing(),
                 'warnings' => $report->warnings(),
                 'checks' => $report->checks(),
-                'channel' => trim((string) ($settings['channel'] ?? '')),
-                'locale' => trim((string) ($settings['locale'] ?? '')),
+                'channel' => trim($settings['channel'] ?? ''),
+                'locale' => trim($settings['locale'] ?? ''),
                 'actorId' => trim($actorId),
                 'reason' => trim($reason),
             ],

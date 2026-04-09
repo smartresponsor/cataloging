@@ -10,12 +10,14 @@ use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * Provides the external identity context resolver application service.
  */
 final readonly class ExternalIdentityContextResolver implements SecurityExternalIdentityContextResolverInterface
 {
-private const string REQUEST_ATTRIBUTE = '_catalog_external_identity_context';
+    private const string REQUEST_ATTRIBUTE = '_catalog_external_identity_context';
+
     /**
      * Initializes the external identity context resolver service collaborators.
      */
@@ -25,6 +27,7 @@ private const string REQUEST_ATTRIBUTE = '_catalog_external_identity_context';
         private SecurityExternalIdentityContextMapperInterface $mapper,
     ) {
     }
+
     /**
      * Resolves the from current request result for the current workflow.
      */
@@ -34,6 +37,7 @@ private const string REQUEST_ATTRIBUTE = '_catalog_external_identity_context';
 
         return $request instanceof Request ? $this->resolveFromRequest($request) : null;
     }
+
     /**
      * Resolves the from request result for the current workflow.
      */
@@ -63,7 +67,7 @@ private const string REQUEST_ATTRIBUTE = '_catalog_external_identity_context';
             return null;
         }
 
-        $token = trim((string) $matches[1]);
+        $token = trim($matches[1]);
 
         return '' !== $token ? $token : null;
     }

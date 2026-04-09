@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryReviewQueueItemInterface;
+
 /**
  * Represents the category review queue item value.
  */
@@ -46,6 +47,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
             $dueAt,
         );
     }
+
     /**
      * Handles the request id workflow.
      */
@@ -53,6 +55,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->requestId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -60,6 +63,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the assigned reviewer workflow.
      */
@@ -67,6 +71,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->assignedReviewer;
     }
+
     /**
      * Handles the priority workflow.
      */
@@ -74,6 +79,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->priority;
     }
+
     /**
      * Handles the request state workflow.
      */
@@ -81,6 +87,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->requestState;
     }
+
     /**
      * Handles the ready for review workflow.
      */
@@ -88,6 +95,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->readyForReview;
     }
+
     /**
      * Handles the readiness warnings workflow.
      */
@@ -95,6 +103,7 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
     {
         return $this->readinessWarnings;
     }
+
     /**
      * Handles the due at workflow.
      */

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\EntityInterface\CategoryAccessAssignmentInterface;
+
 /**
  * Represents the category access assignment domain record.
  */
@@ -43,6 +44,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
             revokedAt: null,
         );
     }
+
     /**
      * Handles the assignment id workflow.
      */
@@ -50,6 +52,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->assignmentId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -57,6 +60,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the actor user id workflow.
      */
@@ -64,6 +68,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->actorUserId;
     }
+
     /**
      * Handles the role workflow.
      */
@@ -71,6 +76,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->role;
     }
+
     /**
      * Handles the status workflow.
      */
@@ -78,6 +84,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->status;
     }
+
     /**
      * Determines whether the primary condition is satisfied.
      */
@@ -85,6 +92,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->isPrimary;
     }
+
     /**
      * Handles the granted at workflow.
      */
@@ -92,6 +100,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->grantedAt;
     }
+
     /**
      * Handles the revoked at workflow.
      */
@@ -99,6 +108,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         return $this->revokedAt;
     }
+
     /**
      * Handles the activate workflow.
      */
@@ -107,6 +117,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
         $this->status = 'active';
         $this->revokedAt = null;
     }
+
     /**
      * Handles the revoke workflow.
      */
@@ -116,6 +127,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
         $this->isPrimary = false;
         $this->revokedAt = new \DateTimeImmutable('now');
     }
+
     /**
      * Marks the primary state for the current workflow.
      */
@@ -123,6 +135,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         $this->isPrimary = true;
     }
+
     /**
      * Handles the clear primary workflow.
      */
@@ -130,6 +143,7 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     {
         $this->isPrimary = false;
     }
+
     /**
      * Handles the change role workflow.
      */

@@ -9,16 +9,17 @@ use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+
 /**
  * Provides the catalog syndication governance summary service application service.
  */
-final class CatalogSyndicationGovernanceSummaryService implements CatalogSyndicationGovernanceSummaryServiceInterface
+final readonly class CatalogSyndicationGovernanceSummaryService implements CatalogSyndicationGovernanceSummaryServiceInterface
 {
     /**
      * Initializes the catalog syndication governance summary service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationCategoryGovernanceSummaryPolicyInterface $policy,
+        private CategorySyndicationCategoryGovernanceSummaryPolicyInterface $policy,
     ) {
     }
 
@@ -28,8 +29,7 @@ final class CatalogSyndicationGovernanceSummaryService implements CatalogSyndica
         array $trailPayloads,
         string $actorId,
         string $reason,
-    ): CategorySyndicationCategoryGovernanceSummaryBuiltInterface
-    {
+    ): CategorySyndicationCategoryGovernanceSummaryBuiltInterface {
         $summary = $this->policy->buildSummary($categoryId, $trailPayloads);
 
         return new CategorySyndicationCategoryGovernanceSummaryBuilt(

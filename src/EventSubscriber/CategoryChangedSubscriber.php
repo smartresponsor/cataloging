@@ -7,15 +7,16 @@ namespace App\EventSubscriber;
 
 use App\Service\CacheInvalidationRecorder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /**
  * Provides the category changed subscriber implementation.
  */
-final class CategoryChangedSubscriber implements EventSubscriberInterface
+final readonly class CategoryChangedSubscriber implements EventSubscriberInterface
 {
     /**
      * Initializes the category changed subscriber service collaborators.
      */
-    public function __construct(private readonly CacheInvalidationRecorder $invalidator)
+    public function __construct(private CacheInvalidationRecorder $invalidator)
     {
     }
 
@@ -27,6 +28,7 @@ final class CategoryChangedSubscriber implements EventSubscriberInterface
             'category.published' => 'onChanged',
         ];
     }
+
     /**
      * Handles the on changed workflow.
      */

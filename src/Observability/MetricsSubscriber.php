@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Observability;
 
+use App\Util\RotatingFileWriter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
@@ -47,7 +48,7 @@ final class MetricsSubscriber implements EventSubscriberInterface
         $elapsed = (microtime(true) - $this->start) * 1000.0;
         $status = $e->getResponse()->getStatusCode();
         $rec = [
-            'ts' => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'ts' => new \DateTimeImmutable()->format(DATE_ATOM),
             'path' => $e->getRequest()->getPathInfo(),
             'ms' => round($elapsed, 2),
             'status' => $status,
@@ -55,7 +56,7 @@ final class MetricsSubscriber implements EventSubscriberInterface
         ];
         $metricsDir = sys_get_temp_dir().'/sr_metrics';
         $this->ensureDirectory($metricsDir);
-        $writer = new \App\Util\RotatingFileWriter($metricsDir.'/category_http.jsonl');
+        $writer = new RotatingFileWriter($metricsDir.'/category_http.jsonl');
         $writer->write(json_encode($rec)."\n");
     }
 

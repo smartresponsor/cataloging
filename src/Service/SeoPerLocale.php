@@ -14,6 +14,8 @@ final class SeoPerLocale
      * @param array{'id'?:mixed,'locale'?:mixed,'name'?:mixed,'slug'?:mixed} $category
      *
      * @return array{'id':?string,'locale':string,'title':string,'description':string,'canonical':string}
+     *
+     * @throws \JsonException
      */
     public function build(array $category): array
     {

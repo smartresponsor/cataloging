@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\EntityInterface\CategoryReviewAssignmentInterface;
+
 /**
  * Represents the category review assignment domain record.
  */
@@ -43,6 +44,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
             $dueAt,
         );
     }
+
     /**
      * Handles the request id workflow.
      */
@@ -50,6 +52,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
     {
         return $this->requestId;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -57,6 +60,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the assigned reviewer workflow.
      */
@@ -64,6 +68,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
     {
         return $this->assignedReviewer;
     }
+
     /**
      * Handles the assigned by workflow.
      */
@@ -71,6 +76,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
     {
         return $this->assignedBy;
     }
+
     /**
      * Handles the priority workflow.
      */
@@ -78,6 +84,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
     {
         return $this->priority;
     }
+
     /**
      * Handles the assigned at workflow.
      */
@@ -85,6 +92,7 @@ final class CategoryReviewAssignment implements CategoryReviewAssignmentInterfac
     {
         return $this->assignedAt;
     }
+
     /**
      * Handles the due at workflow.
      */

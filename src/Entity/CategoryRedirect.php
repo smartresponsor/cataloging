@@ -12,6 +12,7 @@ final class CategoryRedirect
     private string $from;
     private string $to;
     private \DateTimeImmutable $createdAt;
+
     /**
      * Initializes the category redirect service collaborators.
      */
@@ -22,6 +23,7 @@ final class CategoryRedirect
         $this->to = $to;
         $this->createdAt = $createdAt;
     }
+
     /**
      * Handles the id workflow.
      */
@@ -29,6 +31,7 @@ final class CategoryRedirect
     {
         return $this->id;
     }
+
     /**
      * Handles the frm workflow.
      */
@@ -36,6 +39,7 @@ final class CategoryRedirect
     {
         return $this->from;
     }
+
     /**
      * Handles the to workflow.
      */
@@ -43,6 +47,7 @@ final class CategoryRedirect
     {
         return $this->to;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */

@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
+
 /**
  * Represents the category destination media readiness evaluated application event.
  */
-final class CategoryDestinationMediaReadinessEvaluated implements CategoryDestinationMediaReadinessEvaluatedInterface
+final readonly class CategoryDestinationMediaReadinessEvaluated implements CategoryDestinationMediaReadinessEvaluatedInterface
 {
     /**
      * @param list<string>       $requiredMissing
@@ -18,20 +19,21 @@ final class CategoryDestinationMediaReadinessEvaluated implements CategoryDestin
      * @param list<string>       $matchedBindingIds
      */
     public function __construct(
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly string $channel,
-        private readonly string $locale,
-        private readonly bool $publishable,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $matchedBindingIds,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $evaluatedAt,
+        private string $destinationId,
+        private string $categoryId,
+        private string $channel,
+        private string $locale,
+        private bool $publishable,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $checks,
+        private array $matchedBindingIds,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $evaluatedAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */

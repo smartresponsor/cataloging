@@ -8,6 +8,7 @@ namespace App\Service;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\GraphqlResolverInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,16 +18,16 @@ use Doctrine\Persistence\ManagerRegistry;
  * This service is intentionally not the primary domain boundary. It exists as a
  * compatibility/convenience read surface and should stay thin.
  */
-final class GraphqlResolver implements GraphqlResolverInterface
+final readonly class GraphqlResolver implements GraphqlResolverInterface
 {
     /**
      * Initializes the graphql resolver service collaborators.
      */
     public function __construct(
-        private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
-        private readonly ManagerRegistry $registry,
-        private readonly ?PublishOperation $publish = null,
-        private readonly ?TreeOperation $tree = null,
+        private CategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private ManagerRegistry $registry,
+        private ?PublishOperation $publish = null,
+        private ?TreeOperation $tree = null,
     ) {
     }
 
@@ -46,7 +47,13 @@ final class GraphqlResolver implements GraphqlResolverInterface
         return $this->normalizeNode($row);
     }
 
-    /** @param array<string,mixed> $args @return list<array<string,mixed>> */
+    /**
+     * @param array<string,mixed> $args @return list<array<string,mixed>>
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
     public function categoryPath(array $args): array
     {
         $id = $this->stringValue($args, 'id');
@@ -73,16 +80,16 @@ final class GraphqlResolver implements GraphqlResolverInterface
         $params = [];
         $types = [];
         foreach ($prefixes as $index => $prefix) {
-            $key = 'path' . $index;
-            $placeholders[] = ':' . $key;
+            $key = 'path'.$index;
+            $placeholders[] = ':'.$key;
             $params[$key] = $prefix;
             $types[$key] = ParameterType::STRING;
         }
 
         $rows = $this->infraConnection()->fetchAllAssociative(
             'SELECT id, parent_id, slug, name, locale, workflow_state, published, path '
-            .'FROM category_projection WHERE path IN (' . implode(', ', $placeholders) . ') '
-            . 'ORDER BY LENGTH(path) ASC, path ASC',
+            .'FROM category_projection WHERE path IN ('.implode(', ', $placeholders).') '
+            .'ORDER BY LENGTH(path) ASC, path ASC',
             $params,
             $types,
         );

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Represents the category pin domain record.
  */
@@ -30,6 +31,7 @@ class CategoryPin
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
+
     /**
      * Initializes the category pin service collaborators.
      */
@@ -40,6 +42,7 @@ class CategoryPin
         $this->position = $position;
         $this->createdAt = new \DateTimeImmutable('now');
     }
+
     /**
      * Handles the id workflow.
      */
@@ -47,6 +50,7 @@ class CategoryPin
     {
         return $this->id;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -54,6 +58,7 @@ class CategoryPin
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the record id workflow.
      */
@@ -61,6 +66,7 @@ class CategoryPin
     {
         return $this->recordId;
     }
+
     /**
      * Handles the position workflow.
      */
@@ -68,6 +74,7 @@ class CategoryPin
     {
         return $this->position;
     }
+
     /**
      * Updates the position value.
      */
@@ -75,6 +82,7 @@ class CategoryPin
     {
         $this->position = $p;
     }
+
     /**
      * Creates the d at result for the current workflow.
      */

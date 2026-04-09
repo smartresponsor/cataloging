@@ -8,17 +8,17 @@ namespace App\Request;
 /**
  * Provides the publish category request implementation.
  */
-final class PublishCategoryRequest
+final readonly class PublishCategoryRequest
 {
     /**
      * @param array<string,bool> $checks
      * @param list<string>       $errors
      */
     public function __construct(
-        public readonly ?bool $published,
-        public readonly array $checks = [],
-        public readonly string $reason = 'api publish request',
-        private readonly array $errors = [],
+        public ?bool $published,
+        public array $checks = [],
+        public string $reason = 'api publish request',
+        private array $errors = [],
     ) {
     }
 

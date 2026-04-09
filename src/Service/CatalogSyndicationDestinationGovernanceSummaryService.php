@@ -9,17 +9,17 @@ use App\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
 use App\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
 use App\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+
 /**
  * Provides the catalog syndication destination governance summary service application service.
  */
-final class CatalogSyndicationDestinationGovernanceSummaryService
-    implements CatalogSyndicationDestinationGovernanceSummaryServiceInterface
+final readonly class CatalogSyndicationDestinationGovernanceSummaryService implements CatalogSyndicationDestinationGovernanceSummaryServiceInterface
 {
     /**
      * Initializes the catalog syndication destination governance summary service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDestinationGovernanceSummaryPolicyInterface $policy,
+        private CategorySyndicationDestinationGovernanceSummaryPolicyInterface $policy,
     ) {
     }
 
@@ -29,8 +29,7 @@ final class CatalogSyndicationDestinationGovernanceSummaryService
         array $trailPayloads,
         string $actorId,
         string $reason,
-    ): CategorySyndicationDestinationGovernanceSummaryBuiltInterface
-    {
+    ): CategorySyndicationDestinationGovernanceSummaryBuiltInterface {
         $summary = $this->policy->buildSummary($destinationId, $trailPayloads);
 
         return new CategorySyndicationDestinationGovernanceSummaryBuilt(

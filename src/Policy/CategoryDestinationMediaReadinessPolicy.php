@@ -8,6 +8,7 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
 use App\ValueObject\CategoryDestinationMediaReadinessReport;
 use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
+
 /**
  * Provides the category destination media readiness policy implementation.
  */
@@ -30,24 +31,23 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
         array $requiredMissing,
         array $warnings,
         array $matchedBindingIds,
-    ): CategoryDestinationMediaReadinessReportInterface
-    {
+    ): CategoryDestinationMediaReadinessReportInterface {
         $channel = $this->stringValue($destinationSettings['channel'] ?? null);
         $locale = $this->stringValue($destinationSettings['locale'] ?? null);
         $requiredRoles = $this->stringList($destinationSettings['requiredMediaRoles'] ?? null);
 
         $checks['destinationChannelMediaReady'] =
             '' === $channel
-            || (bool) ($checks['channelScopedMediaReady'] ?? false);
-        $checks['destinationLocaleMediaReady'] = '' === $locale || (bool) ($checks['localeScopedMediaReady'] ?? false);
+            || ($checks['channelScopedMediaReady'] ?? false);
+        $checks['destinationLocaleMediaReady'] = '' === $locale || ($checks['localeScopedMediaReady'] ?? false);
         $checks['destinationRequiredRolesReady'] =
             [] === $requiredRoles
-            || (bool) ($checks['requiredRoleCoverageReady'] ?? false);
-        $checks['destinationScopedExactMatchReady'] = (bool) ($checks['exactChannelLocaleMatchReady'] ?? false);
-        $checks['destinationMediaPublishable'] = (bool) $checks['destinationChannelMediaReady']
-            && (bool) $checks['destinationLocaleMediaReady']
-            && (bool) $checks['destinationRequiredRolesReady']
-            && (bool) $checks['destinationScopedExactMatchReady'];
+            || ($checks['requiredRoleCoverageReady'] ?? false);
+        $checks['destinationScopedExactMatchReady'] = $checks['exactChannelLocaleMatchReady'] ?? false;
+        $checks['destinationMediaPublishable'] = $checks['destinationChannelMediaReady']
+            && $checks['destinationLocaleMediaReady']
+            && $checks['destinationRequiredRolesReady']
+            && $checks['destinationScopedExactMatchReady'];
 
         if (!$checks['destinationChannelMediaReady']) {
             $requiredMissing[] = 'destination_channel_media';
@@ -82,7 +82,7 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
             $requiredMissing,
             $warnings,
             $matchedBindingIds,
-            (bool) $checks['destinationMediaPublishable'],
+            $checks['destinationMediaPublishable'],
         );
     }
 

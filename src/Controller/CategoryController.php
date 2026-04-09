@@ -9,6 +9,7 @@ use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+
 /**
  * Handles the category controller application flow.
  */
@@ -17,6 +18,7 @@ final class CategoryController implements CategoryControllerInterface
     private CatalogCategoryService $service;
     private CategoryRepositoryInterface $repo;
     private CategoryBreadcrumbBuilderInterface $breadcrumb;
+
     /**
      * Initializes the category controller service collaborators.
      */
@@ -24,8 +26,7 @@ final class CategoryController implements CategoryControllerInterface
         CatalogCategoryService $service,
         CategoryRepositoryInterface $repo,
         CategoryBreadcrumbBuilderInterface $breadcrumb,
-    )
-    {
+    ) {
         $this->service = $service;
         $this->repo = $repo;
         $this->breadcrumb = $breadcrumb;
@@ -87,7 +88,7 @@ final class CategoryController implements CategoryControllerInterface
         $actorId = $this->requiredString($auth, 'actorId');
         $categoryId = $this->requiredString($route, 'id');
         $parentId = $this->nullableStringFromMap($body, 'parentId');
-        $order = $this->intFromMap($body, 'order', 0);
+        $order = $this->intFromMap($body, 'order');
 
         return $this->service->move($actorId, $categoryId, $parentId, $order);
     }

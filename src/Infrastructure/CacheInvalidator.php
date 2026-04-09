@@ -6,17 +6,19 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use Psr\Cache\CacheItemPoolInterface;
+
 /**
  * Provides the cache invalidator implementation.
  */
-final class CacheInvalidator
+final readonly class CacheInvalidator
 {
     /**
      * Initializes the cache invalidator service collaborators.
      */
-    public function __construct(private readonly CacheItemPoolInterface $pool)
+    public function __construct(private CacheItemPoolInterface $pool)
     {
     }
+
     /**
      * Handles the invalidate slug workflow.
      */

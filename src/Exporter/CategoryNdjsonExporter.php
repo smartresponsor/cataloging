@@ -11,12 +11,12 @@ use App\RepositoryInterface\CategoryRepositoryInterface;
 /**
  * Provides the category ndjson exporter implementation.
  */
-final class CategoryNdjsonExporter implements CategoryNdjsonExporterInterface
+final readonly class CategoryNdjsonExporter implements CategoryNdjsonExporterInterface
 {
     /**
      * Initializes the category ndjson exporter service collaborators.
      */
-    public function __construct(private readonly CategoryRepositoryInterface $repo)
+    public function __construct(private CategoryRepositoryInterface $repo)
     {
     }
 
@@ -32,10 +32,5 @@ final class CategoryNdjsonExporter implements CategoryNdjsonExporterInterface
         // Implement traversal via tree(.., depth=7)
         fwrite($h, json_encode(['type' => 'info', 'taxonomy' => $taxonomyCode, 'exportedAt' => date(DATE_ATOM)])."\n");
         fclose($h);
-    }
-
-    private function repository(): CategoryRepositoryInterface
-    {
-        return $this->repo;
     }
 }

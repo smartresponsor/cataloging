@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the collection rule engine application service.
  */
@@ -35,17 +36,10 @@ final class CollectionRuleEngine
     private function matchesRule(
         array|bool|float|int|string|null $actualValue,
         array|bool|float|int|string|null $expectedValue,
-    ): bool
-    {
+    ): bool {
         if (is_array($actualValue)) {
             if (is_array($expectedValue)) {
-                foreach ($expectedValue as $expectedItem) {
-                    if (in_array($expectedItem, $actualValue, true)) {
-                        return true;
-                    }
-                }
-
-                return false;
+                return array_any($expectedValue, fn ($expectedItem) => in_array($expectedItem, $actualValue, true));
             }
 
             return in_array($expectedValue, $actualValue, true);

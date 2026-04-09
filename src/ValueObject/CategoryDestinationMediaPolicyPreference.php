@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
+
 /**
  * Represents the category destination media policy preference value.
  */
-final class CategoryDestinationMediaPolicyPreference implements CategoryDestinationMediaPolicyPreferenceInterface
+final readonly class CategoryDestinationMediaPolicyPreference implements CategoryDestinationMediaPolicyPreferenceInterface
 {
     /**
      * @param array<string,bool> $checks
@@ -17,16 +18,17 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
      * @param list<string>       $warnings
      */
     public function __construct(
-        private readonly string $mediaPolicyMode,
-        private readonly array $checks,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly bool $strictPublishable,
-        private readonly bool $fallbackPublishable,
-        private readonly bool $resolvedPublishable,
-        private readonly bool $fallbackUsed,
+        private string $mediaPolicyMode,
+        private array $checks,
+        private array $requiredMissing,
+        private array $warnings,
+        private bool $strictPublishable,
+        private bool $fallbackPublishable,
+        private bool $resolvedPublishable,
+        private bool $fallbackUsed,
     ) {
     }
+
     /**
      * Handles the media policy mode workflow.
      */
@@ -34,6 +36,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->mediaPolicyMode;
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -41,6 +44,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->checks;
     }
+
     /**
      * Handles the required missing workflow.
      */
@@ -48,6 +52,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->requiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -55,6 +60,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->warnings;
     }
+
     /**
      * Handles the strict publishable workflow.
      */
@@ -62,6 +68,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->strictPublishable;
     }
+
     /**
      * Handles the fallback publishable workflow.
      */
@@ -69,6 +76,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->fallbackPublishable;
     }
+
     /**
      * Resolves the d publishable result for the current workflow.
      */
@@ -76,6 +84,7 @@ final class CategoryDestinationMediaPolicyPreference implements CategoryDestinat
     {
         return $this->resolvedPublishable;
     }
+
     /**
      * Handles the fallback used workflow.
      */

@@ -7,6 +7,7 @@ namespace App\Policy;
 
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
+
 /**
  * Provides the category syndication history policy implementation.
  */
@@ -21,6 +22,7 @@ final class CategorySyndicationHistoryPolicy implements CategorySyndicationHisto
             throw new \InvalidArgumentException('Destination id must not be empty.');
         }
     }
+
     /**
      * Handles the records for destination workflow.
      */
@@ -30,8 +32,7 @@ final class CategorySyndicationHistoryPolicy implements CategorySyndicationHisto
 
         return array_values(array_filter(
             $records,
-            static fn (CategorySyndicationDeliveryRecordInterface $record): bool =>
-                $record->destinationId() === $normalized,
+            static fn (CategorySyndicationDeliveryRecordInterface $record): bool => $record->destinationId() === $normalized,
         ));
     }
 }

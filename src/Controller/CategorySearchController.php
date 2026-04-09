@@ -8,21 +8,23 @@ use App\Service\SearchService;
 use App\ServiceInterface\CategoryReadScopeServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Search delivery adapter over shared search and tenant-scope services.
  */
-final class CategorySearchController
+final readonly class CategorySearchController
 {
     /**
      * Initializes the category search controller service collaborators.
      */
     public function __construct(
-        private readonly SearchService $search,
-        private readonly CategoryReadScopeServiceInterface $categoryReadScopeService,
+        private SearchService $search,
+        private CategoryReadScopeServiceInterface $categoryReadScopeService,
     ) {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */
@@ -46,9 +48,8 @@ final class CategorySearchController
             $result = $this->search->search($criteria);
 
             return new JsonResponse($result);
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         }
     }
-
 }

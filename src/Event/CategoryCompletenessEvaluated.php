@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryCompletenessEvaluatedInterface;
+
 /**
  * Represents the category completeness evaluated application event.
  */
-final class CategoryCompletenessEvaluated implements CategoryCompletenessEvaluatedInterface
+final readonly class CategoryCompletenessEvaluated implements CategoryCompletenessEvaluatedInterface
 {
     /**
      * @param list<string>       $missingRequired
@@ -18,16 +19,16 @@ final class CategoryCompletenessEvaluated implements CategoryCompletenessEvaluat
      * @param array<string,bool> $publicationChecks
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly int $score,
-        private readonly bool $complete,
-        private readonly array $missingRequired,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $publicationChecks,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $evaluatedAt,
+        private string $categoryId,
+        private int $score,
+        private bool $complete,
+        private array $missingRequired,
+        private array $warnings,
+        private array $checks,
+        private array $publicationChecks,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $evaluatedAt,
     ) {
     }
 

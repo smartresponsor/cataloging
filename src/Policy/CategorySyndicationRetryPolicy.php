@@ -6,13 +6,15 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
+
 /**
  * Provides the category syndication retry policy implementation.
  */
 final class CategorySyndicationRetryPolicy implements CategorySyndicationRetryPolicyInterface
 {
     /** @var array<int,int> */
-private const array DELAYS = [1 => 300, 2 => 900, 3 => 1800, 4 => 3600];
+    private const array DELAYS = [1 => 300, 2 => 900, 3 => 1800, 4 => 3600];
+
     /**
      * Determines whether the retryable condition is satisfied.
      */
@@ -20,6 +22,7 @@ private const array DELAYS = [1 => 300, 2 => 900, 3 => 1800, 4 => 3600];
     {
         return null === $responseCode || 429 === $responseCode || $responseCode >= 500;
     }
+
     /**
      * Handles the assert failed status workflow.
      */
@@ -29,6 +32,7 @@ private const array DELAYS = [1 => 300, 2 => 900, 3 => 1800, 4 => 3600];
             throw new \InvalidArgumentException('Retry scheduling is allowed only for failed deliveries.');
         }
     }
+
     /**
      * Handles the next attempt workflow.
      */
@@ -40,6 +44,7 @@ private const array DELAYS = [1 => 300, 2 => 900, 3 => 1800, 4 => 3600];
 
         return $currentAttempt + 1;
     }
+
     /**
      * Handles the delay seconds for attempt workflow.
      */

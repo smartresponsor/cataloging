@@ -12,22 +12,24 @@ use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface;
+
 /**
  * Provides the category actor traceability view builder application service.
  */
-final class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceabilityViewBuilderInterface
+final readonly class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceabilityViewBuilderInterface
 {
     /**
      * Initializes the category actor traceability view builder service collaborators.
      */
     public function __construct(
-        private readonly CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository,
-        private readonly CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private readonly CategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
-        private readonly CategoryMediaBindingRepositoryInterface $mediaBindingRepository,
-        private readonly CategoryWorkflowRepositoryInterface $workflowRepository,
+        private CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository,
+        private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
+        private CategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
+        private CategoryMediaBindingRepositoryInterface $mediaBindingRepository,
+        private CategoryWorkflowRepositoryInterface $workflowRepository,
     ) {
     }
+
     /**
      * Builds the requested output for the current workflow.
      */
@@ -129,7 +131,7 @@ final class CategoryActorTraceabilityViewBuilder implements CategoryActorTraceab
             mediaBindings: $mediaBindings,
             workflowHistory: $workflowHistory,
             actorSummary: $actorSummary,
-            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
+            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
         );
     }
 

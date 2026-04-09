@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
+
 /**
  * Represents the category media coverage evaluated application event.
  */
-final class CategoryMediaCoverageEvaluated implements CategoryMediaCoverageEvaluatedInterface
+final readonly class CategoryMediaCoverageEvaluated implements CategoryMediaCoverageEvaluatedInterface
 {
     /**
      * @param list<string>       $requiredMissing
@@ -17,13 +18,13 @@ final class CategoryMediaCoverageEvaluated implements CategoryMediaCoverageEvalu
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly array $requiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $evaluatedAt,
+        private string $categoryId,
+        private array $requiredMissing,
+        private array $warnings,
+        private array $checks,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $evaluatedAt,
     ) {
     }
 

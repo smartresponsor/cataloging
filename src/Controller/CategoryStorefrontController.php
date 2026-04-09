@@ -9,21 +9,23 @@ use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\CategoryReadScopeServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Storefront delivery adapter over shared projection/read scope services.
  */
-final class CategoryStorefrontController
+final readonly class CategoryStorefrontController
 {
     /**
      * Initializes the category storefront controller service collaborators.
      */
     public function __construct(
-        private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
-        private readonly CategoryReadScopeServiceInterface $categoryReadScopeService,
+        private CategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private CategoryReadScopeServiceInterface $categoryReadScopeService,
     ) {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */
@@ -44,7 +46,7 @@ final class CategoryStorefrontController
             $criteria = $this->categoryReadScopeService->applyTenantScope($request, $criteria);
 
             return new JsonResponse($this->categoryProjectionReadService->list($criteria));
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         }
     }

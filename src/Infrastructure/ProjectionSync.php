@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Infrastructure;
+
 /**
  * Provides the projection sync implementation.
  */
@@ -44,6 +45,8 @@ final class ProjectionSync
      * @param array<int|string, array<string, scalar|null>> $mysql
      *
      * @return list<array<string, scalar|int|string|null>>
+     *
+     * @throws \JsonException
      */
     public function sync(array $pg, array $mysql): array
     {

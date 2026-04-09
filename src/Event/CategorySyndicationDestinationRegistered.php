@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\EventInterface\CategorySyndicationDestinationRegisteredInterface;
+
 /**
  * Represents the category syndication destination registered application event.
  */
@@ -19,6 +20,7 @@ final class CategorySyndicationDestinationRegistered implements CategorySyndicat
         private readonly \DateTimeImmutable $occurredAt,
     ) {
     }
+
     /**
      * Handles the payload workflow.
      */
@@ -26,6 +28,7 @@ final class CategorySyndicationDestinationRegistered implements CategorySyndicat
     {
         return $this->payload;
     }
+
     /**
      * Handles the occurred at workflow.
      */

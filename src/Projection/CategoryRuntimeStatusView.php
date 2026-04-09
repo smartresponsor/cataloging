@@ -4,10 +4,11 @@
 declare(strict_types=1);
 
 namespace App\Projection;
+
 /**
  * Provides the category runtime status view implementation.
  */
-final class CategoryRuntimeStatusView
+final readonly class CategoryRuntimeStatusView
 {
     /**
      * @param array<string,mixed> $governance
@@ -17,13 +18,13 @@ final class CategoryRuntimeStatusView
      * @param array<string,bool>  $surfaceStatus
      */
     public function __construct(
-        public readonly string $categoryId,
-        public readonly array $governance,
-        public readonly array $traceability,
-        public readonly array $workflow,
-        public readonly array $review,
-        public readonly array $surfaceStatus,
-        public readonly string $generatedAt,
+        public string $categoryId,
+        public array $governance,
+        public array $traceability,
+        public array $workflow,
+        public array $review,
+        public array $surfaceStatus,
+        public string $generatedAt,
     ) {
     }
 

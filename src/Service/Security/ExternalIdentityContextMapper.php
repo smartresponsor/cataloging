@@ -6,6 +6,7 @@ namespace App\Service\Security;
 
 use App\Security\ExternalIdentityContext;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
+
 /**
  * Provides the external identity context mapper application service.
  */
@@ -37,7 +38,7 @@ final class ExternalIdentityContextMapper implements SecurityExternalIdentityCon
                 continue;
             }
             if (!str_starts_with($normalized, 'ROLE_')) {
-                $normalized = 'ROLE_' . $normalized;
+                $normalized = 'ROLE_'.$normalized;
             }
             $roles[] = $normalized;
         }
@@ -69,7 +70,8 @@ final class ExternalIdentityContextMapper implements SecurityExternalIdentityCon
 
     /**
      * @param array<string,mixed> $claims
-     * @param list<string> $keys
+     * @param list<string>        $keys
+     *
      * @return list<string>
      */
     private function claimValues(array $claims, array $keys): array

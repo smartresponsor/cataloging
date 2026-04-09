@@ -12,20 +12,20 @@ use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
 use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
+
 /**
  * Provides the catalog syndication fallback aware package gate service application service.
  */
-final class CatalogSyndicationFallbackAwarePackageGateService
-    implements CatalogSyndicationFallbackAwarePackageGateServiceInterface
+final readonly class CatalogSyndicationFallbackAwarePackageGateService implements CatalogSyndicationFallbackAwarePackageGateServiceInterface
 {
     /**
      * Initializes the catalog syndication fallback aware package gate service service collaborators.
      */
     public function __construct(
-        private readonly CatalogSyndicationMappingServiceInterface $mappingService,
-        private readonly CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
-        private readonly CatalogDestinationMediaFallbackServiceInterface $destinationMediaFallbackService,
-        private readonly CategorySyndicationFallbackAwarePackageGatePolicyInterface $policy,
+        private CatalogSyndicationMappingServiceInterface $mappingService,
+        private CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
+        private CatalogDestinationMediaFallbackServiceInterface $destinationMediaFallbackService,
+        private CategorySyndicationFallbackAwarePackageGatePolicyInterface $policy,
     ) {
     }
 
@@ -45,8 +45,7 @@ final class CatalogSyndicationFallbackAwarePackageGateService
         array $requiredFields,
         string $actorId,
         string $reason,
-    ): CategorySyndicationFallbackAwarePackageGatedInterface
-    {
+    ): CategorySyndicationFallbackAwarePackageGatedInterface {
         $packageBuilt = $this->mappingService->buildPublishPackage(
             $packageId,
             $destinationId,

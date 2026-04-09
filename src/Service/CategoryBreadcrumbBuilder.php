@@ -11,12 +11,12 @@ use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 /**
  * Provides the category breadcrumb builder application service.
  */
-final class CategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterface
+final readonly class CategoryBreadcrumbBuilder implements CategoryBreadcrumbBuilderInterface
 {
     /**
      * Initializes the category breadcrumb builder service collaborators.
      */
-    public function __construct(private readonly CategoryRepositoryInterface $repo)
+    public function __construct(private CategoryRepositoryInterface $repo)
     {
     }
 

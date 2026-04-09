@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\EventInterface;
+
 /**
  * Defines the contract for category syndication recovery audit consolidated.
  */
@@ -11,6 +12,7 @@ interface CategorySyndicationRecoveryAuditConsolidatedInterface
 {
     /** @return array<string,mixed> */
     public function payload(): array;
+
     /**
      * Handles the occurred at workflow.
      */

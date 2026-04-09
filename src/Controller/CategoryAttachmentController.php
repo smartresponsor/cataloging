@@ -10,7 +10,9 @@ use App\Service\AttachmentService;
 use App\Service\CategoryAttachmentAuthorizationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category attachment controller application flow.
  */
@@ -22,9 +24,9 @@ final class CategoryAttachmentController
     public function __construct(
         private readonly AttachmentService $service,
         private readonly CategoryAttachmentAuthorizationService $authorizationService,
-    )
-    {
+    ) {
     }
+
     /**
      * Handles the list workflow.
      */
@@ -41,10 +43,11 @@ final class CategoryAttachmentController
                 'ok' => true,
                 'items' => $this->service->list('' !== $normalizedCategoryId ? $normalizedCategoryId : null),
             ]);
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 403);
         }
     }
+
     /**
      * Handles the add workflow.
      */
@@ -66,7 +69,7 @@ final class CategoryAttachmentController
                 $input->externalAttachmentId ?? '',
                 $input->referenceUri,
             );
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
@@ -77,6 +80,7 @@ final class CategoryAttachmentController
             'item' => $item,
         ], 201);
     }
+
     /**
      * Deletes the requested target from the underlying store.
      */
@@ -86,7 +90,7 @@ final class CategoryAttachmentController
         try {
             $this->authorizationService->assertCanDetach($attachmentId);
             $deleted = $this->service->remove($attachmentId);
-        } catch (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception) {
+        } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);

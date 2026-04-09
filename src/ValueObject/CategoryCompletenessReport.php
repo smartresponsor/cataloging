@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategoryCompletenessReportInterface;
+
 /**
  * Represents the category completeness report value.
  */
-final class CategoryCompletenessReport implements CategoryCompletenessReportInterface
+final readonly class CategoryCompletenessReport implements CategoryCompletenessReportInterface
 {
     /**
      * @param array<string,bool> $checks
@@ -17,10 +18,10 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
      * @param list<string>       $warnings
      */
     public function __construct(
-        private readonly array $checks,
-        private readonly array $missingRequired,
-        private readonly array $warnings,
-        private readonly int $score,
+        private array $checks,
+        private array $missingRequired,
+        private array $warnings,
+        private int $score,
     ) {
     }
 
@@ -29,7 +30,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
     {
         $normalized = [];
         foreach ($checks as $name => $value) {
-            $normalized[(string) $name] = (bool) $value;
+            $normalized[$name] = (bool) $value;
         }
 
         $required = [
@@ -60,6 +61,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
 
         return new self($normalized, $missingRequired, $warnings, $score);
     }
+
     /**
      * Handles the score workflow.
      */
@@ -67,6 +69,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
     {
         return $this->score;
     }
+
     /**
      * Determines whether the complete condition is satisfied.
      */
@@ -74,6 +77,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
     {
         return [] === $this->missingRequired;
     }
+
     /**
      * Handles the missing required workflow.
      */
@@ -81,6 +85,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
     {
         return $this->missingRequired;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -88,6 +93,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
     {
         return $this->warnings;
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -95,6 +101,7 @@ final class CategoryCompletenessReport implements CategoryCompletenessReportInte
     {
         return $this->checks;
     }
+
     /**
      * Handles the publication checks workflow.
      */

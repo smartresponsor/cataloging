@@ -10,17 +10,19 @@ use App\EventInterface\CategoryCompletenessEvaluatedInterface;
 use App\PolicyInterface\CategoryCompletenessPolicyInterface;
 use App\ServiceInterface\CatalogCompletenessServiceInterface;
 use App\ValueObject\CategoryCompletenessReport;
+
 /**
  * Provides the catalog completeness service application service.
  */
-final class CatalogCompletenessService implements CatalogCompletenessServiceInterface
+final readonly class CatalogCompletenessService implements CatalogCompletenessServiceInterface
 {
     /**
      * Initializes the catalog completeness service service collaborators.
      */
-    public function __construct(private readonly CategoryCompletenessPolicyInterface $policy)
+    public function __construct(private CategoryCompletenessPolicyInterface $policy)
     {
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -29,8 +31,7 @@ final class CatalogCompletenessService implements CatalogCompletenessServiceInte
         array $payload,
         string $actorId,
         string $reason,
-    ): CategoryCompletenessEvaluatedInterface
-    {
+    ): CategoryCompletenessEvaluatedInterface {
         $report = CategoryCompletenessReport::fromChecks($this->policy->buildChecks($payload));
 
         return new CategoryCompletenessEvaluated(

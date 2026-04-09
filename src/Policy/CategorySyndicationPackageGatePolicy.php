@@ -8,6 +8,7 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
 use App\ValueObject\CategorySyndicationPackageGateReport;
 use App\ValueObjectInterface\CategorySyndicationPackageGateReportInterface;
+
 /**
  * Provides the category syndication package gate policy implementation.
  */
@@ -22,8 +23,7 @@ final class CategorySyndicationPackageGatePolicy implements CategorySyndicationP
         array $warnings,
         array $mediaChecks,
         array $matchedBindingIds,
-    ): CategorySyndicationPackageGateReportInterface
-    {
+    ): CategorySyndicationPackageGateReportInterface {
         $packageMissingRequiredFields = array_values(
             array_unique(
                 array_filter(
@@ -63,9 +63,8 @@ final class CategorySyndicationPackageGatePolicy implements CategorySyndicationP
 
         $checks = [
             'packageFieldsReady' => [] === $packageMissingRequiredFields,
-            'destinationMediaReady' =>
-                [] === $mediaRequiredMissing
-                && (bool) ($mediaChecks['destinationMediaPublishable'] ?? false),
+            'destinationMediaReady' => [] === $mediaRequiredMissing
+                && ($mediaChecks['destinationMediaPublishable'] ?? false),
             'packageGatePublishable' => false,
         ];
         foreach ($mediaChecks as $key => $value) {

@@ -50,10 +50,10 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy implements Categor
         $checks = [
             'packageFieldsReady' => [] === $packageMissingRequiredFields,
             'strictDestinationMediaReady' => [] === $strictMediaRequiredMissing
-                && (bool) ($strictChecks['destinationMediaPublishable'] ?? false),
+                && ($strictChecks['destinationMediaPublishable'] ?? false),
             'fallbackDestinationMediaReady' => [] === $fallbackMediaRequiredMissing
-                && (bool) ($fallbackChecks['destinationMediaReadyWithFallback'] ?? false),
-            'fallbackUsed' => (bool) ($fallbackChecks['fallbackUsed'] ?? false),
+                && ($fallbackChecks['destinationMediaReadyWithFallback'] ?? false),
+            'fallbackUsed' => $fallbackChecks['fallbackUsed'] ?? false,
             'strictPackageGatePublishable' => false,
             'fallbackPackageGatePublishable' => false,
         ];

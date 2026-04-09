@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterface;
+
 /**
  * Represents the category syndication category governance summary value.
  */
-final class CategorySyndicationCategoryGovernanceSummary
-    implements CategorySyndicationCategoryGovernanceSummaryInterface
+final readonly class CategorySyndicationCategoryGovernanceSummary implements CategorySyndicationCategoryGovernanceSummaryInterface
 {
     /**
      * @param list<string>       $destinationIds
@@ -20,21 +20,22 @@ final class CategorySyndicationCategoryGovernanceSummary
      * @param array<string,bool> $checks
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly int $totalTrails,
-        private readonly int $resolvedPublishableCount,
-        private readonly int $fallbackUsedCount,
-        private readonly int $retryableCount,
-        private readonly int $retryScheduledCount,
-        private readonly int $failureTrailCount,
-        private readonly int $deliveredTrailCount,
-        private readonly array $destinationIds,
-        private readonly array $statusCounts,
-        private readonly array $policyModeCounts,
-        private readonly array $warningCodes,
-        private readonly array $checks,
+        private string $categoryId,
+        private int $totalTrails,
+        private int $resolvedPublishableCount,
+        private int $fallbackUsedCount,
+        private int $retryableCount,
+        private int $retryScheduledCount,
+        private int $failureTrailCount,
+        private int $deliveredTrailCount,
+        private array $destinationIds,
+        private array $statusCounts,
+        private array $policyModeCounts,
+        private array $warningCodes,
+        private array $checks,
     ) {
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -42,6 +43,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the total trails workflow.
      */
@@ -49,6 +51,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->totalTrails;
     }
+
     /**
      * Resolves the d publishable count result for the current workflow.
      */
@@ -56,6 +59,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->resolvedPublishableCount;
     }
+
     /**
      * Handles the fallback used count workflow.
      */
@@ -63,6 +67,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->fallbackUsedCount;
     }
+
     /**
      * Handles the retryable count workflow.
      */
@@ -70,6 +75,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->retryableCount;
     }
+
     /**
      * Handles the retry scheduled count workflow.
      */
@@ -77,6 +83,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->retryScheduledCount;
     }
+
     /**
      * Handles the failure trail count workflow.
      */
@@ -84,6 +91,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->failureTrailCount;
     }
+
     /**
      * Handles the delivered trail count workflow.
      */
@@ -91,6 +99,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->deliveredTrailCount;
     }
+
     /**
      * Handles the destination ids workflow.
      */
@@ -98,6 +107,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->destinationIds;
     }
+
     /**
      * Handles the status counts workflow.
      */
@@ -105,6 +115,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->statusCounts;
     }
+
     /**
      * Handles the policy mode counts workflow.
      */
@@ -112,6 +123,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->policyModeCounts;
     }
+
     /**
      * Handles the warning codes workflow.
      */
@@ -119,6 +131,7 @@ final class CategorySyndicationCategoryGovernanceSummary
     {
         return $this->warningCodes;
     }
+
     /**
      * Handles the checks workflow.
      */

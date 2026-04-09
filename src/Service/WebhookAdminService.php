@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\WebhookAdminServiceInterface;
+use Random\RandomException;
+
 /**
  * Provides the webhook admin service application service.
  */
@@ -17,7 +19,13 @@ final class WebhookAdminService implements WebhookAdminServiceInterface
     private static array $deliveries = [];
     private static int $deliverySequence = 1;
 
-    /** @return array{kid:string,secret:non-empty-string} */
+    /**
+     * @param string $name
+     *
+     * @return array{kid:string,secret:non-empty-string}
+     *
+     * @throws RandomException
+     */
     public function registerKey(string $name): array
     {
         $token = bin2hex(random_bytes(16));
@@ -39,6 +47,7 @@ final class WebhookAdminService implements WebhookAdminServiceInterface
 
         return $id;
     }
+
     /**
      * Handles the requeue workflow.
      */

@@ -7,12 +7,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
+
 /**
  * Represents the category entity domain record.
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'category')]
-#[ORM\Index(columns: ['path'], name: 'idx_category_path')]
+#[ORM\Index(name: 'idx_category_path', columns: ['path'])]
 class CategoryEntity
 {
     #[ORM\Id]
@@ -31,17 +32,19 @@ class CategoryEntity
 
     #[ORM\Column(type: 'integer')]
     private int $depth;
+
     /**
      * Initializes the category entity service collaborators.
      */
     public function __construct(string $name, string $slug, string $path, int $depth)
     {
-        $this->id = (new Ulid())->__toString();
+        $this->id = new Ulid()->__toString();
         $this->name = $name;
         $this->slug = $slug;
         $this->path = $path;
         $this->depth = $depth;
     }
+
     /**
      * Returns the id value.
      */
@@ -49,6 +52,7 @@ class CategoryEntity
     {
         return $this->id;
     }
+
     /**
      * Returns the name value.
      */
@@ -56,6 +60,7 @@ class CategoryEntity
     {
         return $this->name;
     }
+
     /**
      * Updates the name value.
      */
@@ -63,6 +68,7 @@ class CategoryEntity
     {
         $this->name = $name;
     }
+
     /**
      * Returns the slug value.
      */
@@ -70,6 +76,7 @@ class CategoryEntity
     {
         return $this->slug;
     }
+
     /**
      * Updates the slug value.
      */
@@ -77,6 +84,7 @@ class CategoryEntity
     {
         $this->slug = $slug;
     }
+
     /**
      * Returns the path value.
      */
@@ -84,6 +92,7 @@ class CategoryEntity
     {
         return $this->path;
     }
+
     /**
      * Updates the path value.
      */
@@ -91,6 +100,7 @@ class CategoryEntity
     {
         $this->path = $path;
     }
+
     /**
      * Returns the depth value.
      */
@@ -98,6 +108,7 @@ class CategoryEntity
     {
         return $this->depth;
     }
+
     /**
      * Updates the depth value.
      */
@@ -105,6 +116,7 @@ class CategoryEntity
     {
         $this->depth = $depth;
     }
+
     /**
      * Returns the parent path value.
      */
@@ -121,6 +133,7 @@ class CategoryEntity
 
         return substr($this->path, 0, $separatorPosition);
     }
+
     /**
      * Determines whether the direct child of condition is satisfied.
      */

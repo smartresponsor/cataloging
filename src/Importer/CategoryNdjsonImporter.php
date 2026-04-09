@@ -7,12 +7,14 @@ namespace App\Importer;
 
 use App\ImporterInterface\CategoryNdjsonImporterInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+
 /**
  * Provides the category ndjson importer implementation.
  */
 final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 {
     private CatalogCategoryService $service;
+
     /**
      * Initializes the category ndjson importer service collaborators.
      */

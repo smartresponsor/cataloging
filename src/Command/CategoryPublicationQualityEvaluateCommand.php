@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category publication quality evaluate command console workflow.
  */
@@ -20,6 +21,7 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category publication quality evaluate command service collaborators.
      */
@@ -27,6 +29,7 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -46,6 +49,7 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
             ->addOption('publication-checks', null, InputOption::VALUE_REQUIRED)
             ->addOption('checks', null, InputOption::VALUE_REQUIRED, '', '{}');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
@@ -67,7 +71,14 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
         return $this->writeJson($output, $event->payload());
     }
 
-    /** @return array<string,bool> */
+    /**
+     * @param InputInterface $input
+     * @param string         $name
+     *
+     * @return array<string,bool>
+     *
+     * @throws \JsonException
+     */
     private function decodeJsonMapOption(InputInterface $input, string $name): array
     {
         $decoded = json_decode($this->optionString($input, $name, '{}'), true, 512, JSON_THROW_ON_ERROR);

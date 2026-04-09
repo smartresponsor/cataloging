@@ -7,12 +7,20 @@ namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Provides shared helpers for category cli output trait.
  */
 trait CategoryCliOutputTrait
 {
-    /** @param array<string,mixed>|list<array<string,mixed>> $payload */
+    /**
+     * @param OutputInterface                               $output
+     * @param array<string,mixed>|list<array<string,mixed>> $payload
+     *
+     * @return int
+     *
+     * @throws \JsonException
+     */
     private function writeJson(OutputInterface $output, array $payload): int
     {
         $output->writeln(
@@ -25,7 +33,15 @@ trait CategoryCliOutputTrait
         return Command::SUCCESS;
     }
 
-    /** @param list<array<string,mixed>> $rows */
+    /**
+     * @param OutputInterface           $output
+     * @param list<array<string,mixed>> $rows
+     * @param string                    $format
+     *
+     * @return int
+     *
+     * @throws \JsonException
+     */
     private function writeStructuredRows(OutputInterface $output, array $rows, string $format): int
     {
         if ('json' === $format) {
@@ -49,7 +65,14 @@ trait CategoryCliOutputTrait
         return Command::SUCCESS;
     }
 
-    /** @param array<string,mixed>|list<array<string,mixed>> $payload */
+    /**
+     * @param array<string,mixed>|list<array<string,mixed>> $payload
+     * @param int                                           $flags
+     *
+     * @return string
+     *
+     * @throws \JsonException
+     */
     private function encodeJson(array $payload, int $flags): string
     {
         return json_encode($payload, $flags | JSON_THROW_ON_ERROR);

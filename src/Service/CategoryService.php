@@ -77,7 +77,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
         $this->dispatcher->dispatch(new CategoryMoved(
             $this->stringValue($view, 'id', $categoryId),
             $this->stringValue($view, 'oldParentId'),
-            (string) ($newParentId ?? ''),
+            $newParentId ?? '',
             $this->stringValue($view, 'treeId', 'default'),
             $this->intValue($view, 'changedCount', 1),
         ));

@@ -7,18 +7,21 @@ namespace App\Service;
 
 use App\Repository\CatalogRepository;
 use App\ServiceInterface\CatalogReadServiceInterface;
+use Doctrine\DBAL\Exception;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
+
 /**
  * Provides the catalog read service application service.
  */
-final class CatalogReadService implements CatalogReadServiceInterface
+final readonly class CatalogReadService implements CatalogReadServiceInterface
 {
     /**
      * Initializes the catalog read service service collaborators.
      */
     public function __construct(
-        private readonly CacheInterface $cache,
-        private readonly CatalogRepository $catalogRepository,
+        private CacheInterface $cache,
+        private CatalogRepository $catalogRepository,
     ) {
     }
 
@@ -29,6 +32,8 @@ final class CatalogReadService implements CatalogReadServiceInterface
     }
 
     /**
+     * @param string $id
+     *
      * @return array{
      *     id:string,
      *     name:string,
@@ -43,6 +48,8 @@ final class CatalogReadService implements CatalogReadServiceInterface
      *         depth:int,
      *     }>,
      * }|null
+     *
+     * @throws InvalidArgumentException
      */
     public function descendantsTree(string $id): ?array
     {
@@ -62,7 +69,13 @@ final class CatalogReadService implements CatalogReadServiceInterface
         ];
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null */
+    /**
+     * @param string $id
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
+     *
+     * @throws InvalidArgumentException
+     */
     public function childList(string $id): ?array
     {
         $node = $this->findCategory($id);
@@ -84,7 +97,13 @@ final class CatalogReadService implements CatalogReadServiceInterface
         return $this->childList($id);
     }
 
-    /** @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null */
+    /**
+     * @param string $id
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
+     *
+     * @throws InvalidArgumentException
+     */
     public function ancestorList(string $id): ?array
     {
         $node = $this->findCategory($id);
@@ -100,7 +119,14 @@ final class CatalogReadService implements CatalogReadServiceInterface
         return $this->normalizeCategories($ancestors);
     }
 
-    /** @return array{item:list<array{id:string,name:string,slug:string,path:string,depth:int}>,after:string} */
+    /**
+     * @param int    $first
+     * @param string $after
+     *
+     * @return array{item:list<array{id:string,name:string,slug:string,path:string,depth:int}>,after:string}
+     *
+     * @throws Exception
+     */
     public function list(int $first, string $after): array
     {
         $rows = $this->catalogRepository->findPageRows($first, $after);
@@ -118,7 +144,13 @@ final class CatalogReadService implements CatalogReadServiceInterface
         return ['item' => $normalized, 'after' => $next];
     }
 
-    /** @return array{id:string,name:string,slug:string,path:string,depth:int}|null */
+    /**
+     * @param string $id
+     *
+     * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
+     *
+     * @throws Exception
+     */
     private function findCategory(string $id): ?array
     {
         $normalizedId = trim($id);

@@ -11,19 +11,21 @@ use App\PolicyInterface\CategoryCompletenessPolicyInterface;
 use App\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
 use App\ServiceInterface\CatalogMediaCoverageServiceInterface;
 use App\ValueObject\CategoryCompletenessReport;
+
 /**
  * Provides the catalog media completeness bridge service application service.
  */
-final class CatalogMediaCompletenessBridgeService implements CatalogMediaCompletenessBridgeServiceInterface
+final readonly class CatalogMediaCompletenessBridgeService implements CatalogMediaCompletenessBridgeServiceInterface
 {
     /**
      * Initializes the catalog media completeness bridge service service collaborators.
      */
     public function __construct(
-        private readonly CategoryCompletenessPolicyInterface $completenessPolicy,
-        private readonly CatalogMediaCoverageServiceInterface $mediaCoverageService,
+        private CategoryCompletenessPolicyInterface $completenessPolicy,
+        private CatalogMediaCoverageServiceInterface $mediaCoverageService,
     ) {
     }
+
     /**
      * Handles the evaluate workflow.
      */
@@ -32,8 +34,7 @@ final class CatalogMediaCompletenessBridgeService implements CatalogMediaComplet
         array $payload,
         string $actorId,
         string $reason,
-    ): CategoryCompletenessEvaluatedInterface
-    {
+    ): CategoryCompletenessEvaluatedInterface {
         $baseChecks = $this->completenessPolicy->buildChecks($payload);
         $mediaPayload = $this->mediaCoverageService->evaluate($categoryId, $payload, $actorId, $reason)->payload();
         $mergedChecks = array_merge(

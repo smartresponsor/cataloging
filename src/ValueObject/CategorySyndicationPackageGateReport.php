@@ -6,10 +6,11 @@ declare(strict_types=1);
 namespace App\ValueObject;
 
 use App\ValueObjectInterface\CategorySyndicationPackageGateReportInterface;
+
 /**
  * Represents the category syndication package gate report value.
  */
-final class CategorySyndicationPackageGateReport implements CategorySyndicationPackageGateReportInterface
+final readonly class CategorySyndicationPackageGateReport implements CategorySyndicationPackageGateReportInterface
 {
     /**
      * @param list<string>       $packageMissingRequiredFields
@@ -19,14 +20,15 @@ final class CategorySyndicationPackageGateReport implements CategorySyndicationP
      * @param list<string>       $matchedBindingIds
      */
     public function __construct(
-        private readonly array $packageMissingRequiredFields,
-        private readonly array $mediaRequiredMissing,
-        private readonly array $warnings,
-        private readonly array $checks,
-        private readonly array $matchedBindingIds,
-        private readonly bool $publishable,
+        private array $packageMissingRequiredFields,
+        private array $mediaRequiredMissing,
+        private array $warnings,
+        private array $checks,
+        private array $matchedBindingIds,
+        private bool $publishable,
     ) {
     }
+
     /**
      * Handles the package missing required fields workflow.
      */
@@ -34,6 +36,7 @@ final class CategorySyndicationPackageGateReport implements CategorySyndicationP
     {
         return $this->packageMissingRequiredFields;
     }
+
     /**
      * Handles the media required missing workflow.
      */
@@ -41,6 +44,7 @@ final class CategorySyndicationPackageGateReport implements CategorySyndicationP
     {
         return $this->mediaRequiredMissing;
     }
+
     /**
      * Handles the warnings workflow.
      */
@@ -48,6 +52,7 @@ final class CategorySyndicationPackageGateReport implements CategorySyndicationP
     {
         return $this->warnings;
     }
+
     /**
      * Handles the checks workflow.
      */
@@ -55,6 +60,7 @@ final class CategorySyndicationPackageGateReport implements CategorySyndicationP
     {
         return $this->checks;
     }
+
     /**
      * Handles the matched binding ids workflow.
      */
@@ -62,6 +68,7 @@ final class CategorySyndicationPackageGateReport implements CategorySyndicationP
     {
         return $this->matchedBindingIds;
     }
+
     /**
      * Handles the publishable workflow.
      */
