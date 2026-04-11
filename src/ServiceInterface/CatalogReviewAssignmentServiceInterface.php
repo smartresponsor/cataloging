@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryChangeRequestAssignedInterface;
+use App\ValueObject\CategoryReviewAssignmentRequest;
 
 /**
  * Defines the contract for catalog review assignment service.
@@ -15,11 +16,5 @@ interface CatalogReviewAssignmentServiceInterface
     /**
      * Handles the assign workflow.
      */
-    public function assign(
-        string $requestId,
-        string $assignedReviewer,
-        string $assignedBy,
-        string $priority = 'normal',
-        ?\DateTimeImmutable $dueAt = null,
-    ): CategoryChangeRequestAssignedInterface;
+    public function assign(CategoryReviewAssignmentRequest $request): CategoryChangeRequestAssignedInterface;
 }

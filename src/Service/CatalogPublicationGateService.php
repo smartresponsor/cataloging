@@ -9,6 +9,8 @@ use App\Event\CategoryPublicationGateEvaluated;
 use App\EventInterface\CategoryPublicationGateEvaluatedInterface;
 use App\PolicyInterface\CategoryPublicationGatePolicyInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
+use App\ValueObject\CategoryPublicationGateAssertionRequest;
+use App\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\ValueObject\CategoryPublicationReadiness;
 use App\ValueObject\CategoryWorkflowState;
 
@@ -27,25 +29,20 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(
-        string $categoryId,
-        string $workflowState,
-        array $checks,
-        string $actorId,
-        string $reason,
-    ): CategoryPublicationGateEvaluatedInterface {
-        $state = CategoryWorkflowState::fromString($workflowState);
-        $readiness = CategoryPublicationReadiness::fromChecks($checks);
+    public function evaluate(CategoryPublicationGateEvaluationRequest $request): CategoryPublicationGateEvaluatedInterface
+    {
+        $state = CategoryWorkflowState::fromString($request->workflowState());
+        $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
         return new CategoryPublicationGateEvaluated(
-            $categoryId,
+            $request->categoryId(),
             $state->value(),
-            $this->policy->canPublish($state, $readiness, $actorId, $reason),
+            $this->policy->canPublish($state, $readiness, $request->actorId(), $request->reason()),
             $readiness->blockers(),
             $readiness->warnings(),
             $readiness->checks(),
-            trim($actorId),
-            trim($reason),
+            trim($request->actorId()),
+            trim($request->reason()),
             new \DateTimeImmutable('now'),
         );
     }
@@ -53,11 +50,11 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
     /**
      * Handles the assert can publish workflow.
      */
-    public function assertCanPublish(string $workflowState, array $checks, string $actorId, string $reason): void
+    public function assertCanPublish(CategoryPublicationGateAssertionRequest $request): void
     {
-        $state = CategoryWorkflowState::fromString($workflowState);
-        $readiness = CategoryPublicationReadiness::fromChecks($checks);
+        $state = CategoryWorkflowState::fromString($request->workflowState());
+        $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
-        $this->policy->assertCanPublish($state, $readiness, $actorId, $reason);
+        $this->policy->assertCanPublish($state, $readiness, $request->actorId(), $request->reason());
     }
 }

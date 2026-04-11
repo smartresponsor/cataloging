@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,7 +32,7 @@ final readonly class CategoryAdminApiController
     public function list(Request $request): JsonResponse
     {
         return new JsonResponse([
-            'data' => $this->categoryProjectionReadService->list([
+            'data' => $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
                 'tenant' => $request->query->get('tenant'),
                 'locale' => $request->query->get('locale'),
                 'workflow_state' => $request->query->get('workflow_state'),
@@ -40,7 +41,7 @@ final readonly class CategoryAdminApiController
                 'offset' => $request->query->get('offset') ?? 0,
                 'order' => $request->query->get('order') ?? 'updated_at',
                 'direction' => $request->query->get('direction') ?? 'desc',
-            ]),
+            ])),
         ]);
     }
 

@@ -26,6 +26,8 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
     /**
      * Handles the list workflow.
+     *
+     * @throws \Throwable
      */
     public function list(?string $categoryId = null): array
     {
@@ -77,6 +79,8 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
     /**
      * Handles the add workflow.
+     *
+     * @throws \Throwable
      */
     public function add(
         string $categoryId,
@@ -155,6 +159,8 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
     /**
      * Handles the find one workflow.
+     *
+     * @throws \Throwable
      */
     public function findOne(string $attachmentId): ?array
     {
@@ -199,6 +205,8 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
 
     /**
      * Deletes the requested target from the underlying store.
+     *
+     * @throws \Throwable
      */
     public function delete(string $attachmentId): bool
     {
@@ -209,6 +217,9 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         ]);
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function ensureSchema(): void
     {
         if ($this->schemaEnsured) {

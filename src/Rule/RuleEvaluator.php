@@ -21,42 +21,42 @@ final class RuleEvaluator
     {
         $where = [];
         $params = [];
-        $i = 0;
-        foreach ($rule->spec()['all'] as $cond) {
-            $attrRaw = $cond['attr'] ?? null;
-            if (is_scalar($attrRaw) && '' !== trim((string) $attrRaw)) {
-                $attr = trim((string) $attrRaw);
-                $opRaw = $cond['op'] ?? null;
-                $op = is_scalar($opRaw) ? trim((string) $opRaw) : '';
-                $val = $cond['value'] ?? null;
-                if ('in' === $op && is_array($val)) {
+        $parameterIndex = 0;
+        foreach ($rule->spec()['all'] as $condition) {
+            $attributeRaw = $condition['attr'] ?? null;
+            if (is_scalar($attributeRaw) && '' !== trim((string) $attributeRaw)) {
+                $attribute = trim((string) $attributeRaw);
+                $operatorRaw = $condition['op'] ?? null;
+                $operator = is_scalar($operatorRaw) ? trim((string) $operatorRaw) : '';
+                $value = $condition['value'] ?? null;
+                if ('in' === $operator && is_array($value)) {
                     $marks = [];
-                    foreach ($val as $v) {
-                        $key = ':p'.$i++;
+                    foreach ($value as $candidateValue) {
+                        $key = ':p'.$parameterIndex++;
                         $marks[] = $key;
-                        $params[$key] = $v;
+                        $params[$key] = $candidateValue;
                     }
-                    $where[] = sprintf('%s IN (%s)', $attr, implode(',', $marks));
-                } elseif ('between' === $op && is_array($val) && 2 === count($val)) {
-                    $a = ':p'.$i++;
-                    $b = ':p'.$i++;
-                    $where[] = sprintf('%s BETWEEN %s AND %s', $attr, $a, $b);
-                    $params[$a] = $val[0];
-                    $params[$b] = $val[1];
-                } elseif (in_array($op, ['>', '>=', '<', '<='], true)) {
-                    $a = ':p'.$i++;
-                    $where[] = sprintf('%s %s %s', $attr, $op, $a);
-                    $params[$a] = $val;
+                    $where[] = sprintf('%s IN (%s)', $attribute, implode(',', $marks));
+                } elseif ('between' === $operator && is_array($value) && 2 === count($value)) {
+                    $lowerBoundKey = ':p'.$parameterIndex++;
+                    $upperBoundKey = ':p'.$parameterIndex++;
+                    $where[] = sprintf('%s BETWEEN %s AND %s', $attribute, $lowerBoundKey, $upperBoundKey);
+                    $params[$lowerBoundKey] = $value[0];
+                    $params[$upperBoundKey] = $value[1];
+                } elseif (in_array($operator, ['>', '>=', '<', '<='], true)) {
+                    $comparisonKey = ':p'.$parameterIndex++;
+                    $where[] = sprintf('%s %s %s', $attribute, $operator, $comparisonKey);
+                    $params[$comparisonKey] = $value;
                 } else {
-                    throw new \InvalidArgumentException('Unsupported operator: '.$op);
+                    throw new \InvalidArgumentException('Unsupported operator: '.$operator);
                 }
                 continue;
             }
-            $tagRaw = $cond['tag'] ?? null;
+            $tagRaw = $condition['tag'] ?? null;
             if (is_scalar($tagRaw)) {
-                $a = ':p'.$i++;
-                $where[] = 'JSON_CONTAINS(tag_set, '.$a.')';
-                $params[$a] = json_encode((string) $tagRaw, JSON_THROW_ON_ERROR);
+                $tagKey = ':p'.$parameterIndex++;
+                $where[] = 'JSON_CONTAINS(tag_set, '.$tagKey.')';
+                $params[$tagKey] = json_encode((string) $tagRaw, JSON_THROW_ON_ERROR);
             }
         }
 

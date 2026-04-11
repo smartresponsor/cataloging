@@ -10,6 +10,7 @@ use App\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
 use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
+use App\ValueObject\CategoryEvaluationRequest;
 
 /**
  * Provides the catalog media applicability service application service.
@@ -28,24 +29,24 @@ final readonly class CatalogMediaApplicabilityService implements CatalogMediaApp
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryMediaApplicabilityEvaluatedInterface {
-        $report = $this->policy->buildReport($payload, $this->repository->bindingsForCategory($categoryId));
+    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaApplicabilityEvaluatedInterface
+    {
+        $report = $this->policy->buildReport(
+            $request->payload(),
+            $this->repository->bindingsForCategory($request->categoryId()),
+        );
+        $payload = $request->payload();
 
         return new CategoryMediaApplicabilityEvaluated(
-            trim($categoryId),
+            trim($request->categoryId()),
             trim($this->scalarString($payload['channel'] ?? '')),
             trim($this->scalarString($payload['locale'] ?? '')),
             $report->requiredMissing(),
             $report->warnings(),
             $report->checks(),
             $report->matchedBindingIds(),
-            trim($actorId),
-            trim($reason),
+            trim($request->actorId()),
+            trim($request->reason()),
             new \DateTimeImmutable('now'),
         );
     }

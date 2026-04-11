@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
+use App\ValueObject\CategoryReviewAssignmentRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -55,13 +56,13 @@ final class CategoryReviewAssignCommand extends Command
     {
         parent::execute($input, $output);
         $dueAt = $this->optionString($input, 'due-at');
-        $event = $this->assignmentService->assign(
+        $event = $this->assignmentService->assign(new CategoryReviewAssignmentRequest(
             $this->argumentString($input, 'requestId'),
             $this->argumentString($input, 'reviewer'),
             $this->argumentString($input, 'assignedBy'),
             $this->optionString($input, 'priority', 'normal'),
             '' !== $dueAt ? new \DateTimeImmutable($dueAt) : null,
-        );
+        ));
 
         return $this->writeJson($output, $event->payload());
     }

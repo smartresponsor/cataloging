@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CategoryMoveInterface;
+use App\ValueObject\CatalogMoveRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -56,14 +57,14 @@ final class CategoryMoveCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
-        $result = $this->moveService->move(
+        $result = $this->moveService->move(new CatalogMoveRequest(
             $this->argumentString($input, 'nodeId'),
             $this->argumentString($input, 'newParentId'),
             $this->argumentString($input, 'treeId'),
             $this->argumentString($input, 'policy'),
             (bool) $input->getOption('dry-run'),
             $this->nonEmptyString($this->optionString($input, 'locale')) ?: null,
-        );
+        ));
         [$changed, $redirects] = $result;
 
         return $this->writeJson($output, [

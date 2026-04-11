@@ -30,6 +30,8 @@ final class ProjectionWorker
 
     /**
      * Handles the run once workflow.
+     *
+     * @throws \Throwable
      */
     public function runOnce(int $limit = 100): int
     {
@@ -86,7 +88,11 @@ final class ProjectionWorker
         return $processed;
     }
 
-    /** @param array<string,mixed> $event */
+    /**
+     * @param array<string,mixed> $event
+     *
+     * @throws \Throwable
+     */
     private function markFailure(
         string $outboxId,
         array $event,
@@ -135,6 +141,9 @@ final class ProjectionWorker
         );
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function markProcessed(string $outboxId, int $attempt, \DateTimeImmutable $now): void
     {
         $this->connection->update(

@@ -4,6 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ValueObject\CategoryCanonicalUrlRequest;
+
 /**
  * Provides the canonical policy application service.
  */
@@ -12,11 +15,8 @@ final class CanonicalPolicy
     /**
      * Handles the url workflow.
      */
-    public function url(string $host, string $locale, string $slug): string
+    public function url(CategoryCanonicalUrlRequest $request): string
     {
-        $l = strtolower($locale ?: 'en');
-        $s = trim($slug, '/');
-
-        return rtrim($host, '/').'/'.$l.'/'.$s;
+        return $request->host().'/'.$request->locale().'/'.$request->slug();
     }
 }

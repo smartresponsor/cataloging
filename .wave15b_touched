@@ -1,0 +1,16 @@
+src/ValueObject/CategoryCanonicalResolveRequest.php
+src/ValueObject/CategoryCanonicalUrlRequest.php
+src/ValueObject/CategoryLocaleCanonicalUrlRequest.php
+src/ValueObject/CategoryHostContextRequest.php
+src/ValueObject/CategoryStorefrontAdaptRequest.php
+src/ValueObject/CategoryStorePolicyEvaluationRequest.php
+src/Service/CanonicalResolver.php
+src/Service/SitemapGenerator.php
+src/Service/RegionResolver.php
+src/Service/StoreScopeResolver.php
+src/Service/StorefrontAdapter.php
+src/ServiceInterface/CanonicalPolicyInterface.php
+src/Service/CanonicalPolicy.php
+src/Service/CanonicalPolicyLocale.php
+src/Service/StorePolicy.php
+src/Controller/CategoryStoreApiController.php

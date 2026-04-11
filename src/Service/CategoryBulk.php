@@ -7,6 +7,9 @@ namespace App\Service;
 
 use App\ServiceInterface\CategoryBulkInterface;
 use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
+use App\ValueObject\CategoryCreateRequest;
+use App\ValueObject\CategoryLinkRequest;
+use App\ValueObject\CategoryServiceMoveRequest;
 
 /**
  * Provides the category bulk application service.
@@ -55,20 +58,13 @@ final class CategoryBulk implements CategoryBulkInterface
         $payload = $this->requiredMap($op, 'payload');
 
         return match ($operation) {
-            'create' => $this->service->create(
-                $actorId,
-                $this->requiredString($payload, 'taxonomyId'),
-                $this->optionalString($payload, 'parentId'),
-                $this->requiredStringMap($payload, 'name'),
-                $this->requiredStringMap($payload, 'slug'),
-                $this->optionalMetaMap($payload, 'meta'),
-            ),
-            'move' => $this->service->move(
+            'create' => $this->service->create($this->createRequest($actorId, $payload)),
+            'move' => $this->service->move(new CategoryServiceMoveRequest(
                 $actorId,
                 $this->requiredString($payload, 'id'),
                 $this->optionalString($payload, 'parentId'),
                 $this->intValue($payload, 'order'),
-            ),
+            )),
             'attach' => $this->attachOperation($actorId, $payload),
             'detach' => $this->detachOperation($actorId, $payload),
             default => throw new \InvalidArgumentException('Unknown op: '.$operation),
@@ -82,13 +78,7 @@ final class CategoryBulk implements CategoryBulkInterface
      */
     private function attachOperation(string $actorId, array $payload): array
     {
-        $this->service->attach(
-            $actorId,
-            $this->requiredString($payload, 'id'),
-            $this->requiredString($payload, 'targetDomain'),
-            $this->requiredString($payload, 'targetClass'),
-            $this->requiredString($payload, 'targetId'),
-        );
+        $this->service->attach($this->linkRequest($actorId, $payload));
 
         return ['status' => 'attached'];
     }
@@ -100,13 +90,7 @@ final class CategoryBulk implements CategoryBulkInterface
      */
     private function detachOperation(string $actorId, array $payload): array
     {
-        $this->service->detach(
-            $actorId,
-            $this->requiredString($payload, 'id'),
-            $this->requiredString($payload, 'targetDomain'),
-            $this->requiredString($payload, 'targetClass'),
-            $this->requiredString($payload, 'targetId'),
-        );
+        $this->service->detach($this->linkRequest($actorId, $payload));
 
         return ['status' => 'detached'];
     }
@@ -185,6 +169,7 @@ final class CategoryBulk implements CategoryBulkInterface
         if (!is_array($value)) {
             return [];
         }
+
         $normalized = [];
         foreach ($value as $entryKey => $entryValue) {
             if (!is_string($entryKey)) {
@@ -193,13 +178,15 @@ final class CategoryBulk implements CategoryBulkInterface
             if (is_array($entryValue)) {
                 $nested = [];
                 foreach ($entryValue as $nestedKey => $nestedValue) {
+                    if (!is_string($nestedKey)) {
+                        continue;
+                    }
                     if (
-                        is_string($nestedKey)
-                        && (is_bool($nestedValue)
-                || is_float($nestedValue)
-                || is_int($nestedValue)
-                || is_string($nestedValue)
-                || null === $nestedValue)
+                        is_bool($nestedValue)
+                        || is_float($nestedValue)
+                        || is_int($nestedValue)
+                        || is_string($nestedValue)
+                        || null === $nestedValue
                     ) {
                         $nested[$nestedKey] = $nestedValue;
                     }
@@ -207,15 +194,42 @@ final class CategoryBulk implements CategoryBulkInterface
                 $normalized[$entryKey] = $nested;
                 continue;
             }
-            if (is_bool($entryValue)
-            || is_float($entryValue)
-            || is_int($entryValue)
-            || is_string($entryValue)
-            || null === $entryValue) {
+            if (
+                is_bool($entryValue)
+                || is_float($entryValue)
+                || is_int($entryValue)
+                || is_string($entryValue)
+                || null === $entryValue
+            ) {
                 $normalized[$entryKey] = $entryValue;
             }
         }
 
         return $normalized;
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function createRequest(string $actorId, array $payload): CategoryCreateRequest
+    {
+        return new CategoryCreateRequest(
+            $actorId,
+            $this->requiredString($payload, 'taxonomyId'),
+            $this->optionalString($payload, 'parentId'),
+            $this->requiredStringMap($payload, 'name'),
+            $this->requiredStringMap($payload, 'slug'),
+            $this->optionalMetaMap($payload, 'meta'),
+        );
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function linkRequest(string $actorId, array $payload): CategoryLinkRequest
+    {
+        return new CategoryLinkRequest(
+            $actorId,
+            $this->requiredString($payload, 'id'),
+            $this->requiredString($payload, 'targetDomain'),
+            $this->requiredString($payload, 'targetClass'),
+            $this->requiredString($payload, 'targetId'),
+        );
     }
 }

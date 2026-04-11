@@ -23,7 +23,12 @@ use App\Service\CatalogDestinationMediaReadinessService;
 use App\Service\CatalogMediaApplicabilityService;
 use App\Service\CatalogSyndicationFallbackAwarePackageGateService;
 use App\Service\CatalogSyndicationMappingService;
+use App\ValueObject\CatalogAuditContext;
 use App\ValueObject\CategoryMediaRole;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCase
@@ -32,16 +37,20 @@ final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCa
     {
         $destinationRepository = new CategorySyndicationDestinationRepository();
         $destinationRepository->save(CategorySyndicationDestination::register(
-            'dest-1',
-            'Search Export',
-            'search',
-            'export',
-            true,
-            [
-                'channel' => 'web',
-                'locale' => 'en_US',
-                'requiredMediaRoles' => '["banner"]',
-            ],
+            new CategorySyndicationDestinationDefinition(
+                'dest-1',
+                'Search Export',
+                'search',
+                'export',
+            ),
+            new CategorySyndicationDestinationConfiguration(
+                true,
+                [
+                    'channel' => 'web',
+                    'locale' => 'en_US',
+                    'requiredMediaRoles' => '["banner"]',
+                ],
+            ),
             'operator-1',
         ));
 
@@ -75,16 +84,13 @@ final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCa
         );
 
         $event = $service->buildGatedPublishPackage(
-            'pkg-1',
-            'dest-1',
-            'cat-1',
-            'v1',
-            'per_locale',
-            ['title' => 'Category One'],
-            ['title' => 'title'],
-            ['title'],
-            'actor-1',
-            'test',
+            new CategorySyndicationPackageBuildRequest(
+                new CategorySyndicationPackageContext('pkg-1', 'dest-1', 'cat-1', 'v1', 'per_locale'),
+                ['title' => 'Category One'],
+                ['title' => 'title'],
+                ['title'],
+                new CatalogAuditContext('actor-1', 'test'),
+            ),
         );
 
         /** @var array{strictPublishable:bool,fallbackPublishable:bool,warnings:list<string>,fallbackMatchedBindingIds:list<string>} $payload */

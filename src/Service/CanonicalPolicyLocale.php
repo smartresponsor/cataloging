@@ -4,6 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ValueObject\CategoryLocaleCanonicalUrlRequest;
+
 /**
  * Provides the canonical policy locale application service.
  */
@@ -17,14 +20,15 @@ final class CanonicalPolicyLocale
     {
         $this->hostByLocale = $hostByLocale;
     }
+
     /**
      * Handles the url workflow.
      */
-    public function url(string $locale, string $slug): string
+    public function url(CategoryLocaleCanonicalUrlRequest $request): string
     {
-        $host = $this->hostByLocale[strtolower($locale)] ?? ($this->hostByLocale['en'] ?? 'https://example.com');
-        $s = trim($slug, '/');
+        $locale = $request->locale();
+        $host = $this->hostByLocale[$locale] ?? ($this->hostByLocale['en'] ?? 'https://example.com');
 
-        return rtrim($host, '/').'/'.strtolower($locale).'/'.$s;
+        return rtrim($host, '/').'/'.$locale.'/'.$request->slug();
     }
 }

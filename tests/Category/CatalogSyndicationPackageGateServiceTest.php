@@ -22,6 +22,9 @@ use App\Service\CatalogMediaGovernanceService;
 use App\Service\CatalogSyndicationDestinationService;
 use App\Service\CatalogSyndicationMappingService;
 use App\Service\CatalogSyndicationPackageGateService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationPackageGateServiceTest extends TestCase
@@ -38,8 +41,8 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
         $mappingService = new CatalogSyndicationMappingService(new CategorySyndicationMappingPolicy());
         $service = new CatalogSyndicationPackageGateService($mappingService, $destinationMediaReadiness, new CategorySyndicationPackageGatePolicy());
 
-        $governance->bind('bind-primary', 'category-1501', 'asset-primary', 'primary', ['storefront'], ['en_US'], true, true, [], 'operator-1', 'primary');
-        $governance->bind('bind-hero', 'category-1501', 'asset-hero', 'hero', ['storefront'], ['en_US'], false, true, [], 'operator-1', 'hero');
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-primary', 'category-1501', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'primary')));
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-hero', 'category-1501', 'asset-hero', 'hero', ['storefront'], ['en_US']), new CategoryMediaBindingState(false, true, []), new CatalogAuditContext('operator-1', 'hero')));
 
         $destinationService->register(
             'destination-1501',
@@ -53,16 +56,19 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
         );
 
         $event = $service->buildGatedPublishPackage(
-            'pkg-1501',
-            'destination-1501',
-            'category-1501',
-            'v1',
-            'per_locale',
-            ['name' => 'Summer Shoes', 'slug' => 'summer-shoes', 'seoTitle' => 'Summer Shoes'],
-            ['name' => 'title', 'slug' => 'handle', 'seoTitle' => 'seo_title'],
-            ['title', 'handle', 'seo_title'],
-            'operator-7',
-            'build gated package',
+            new CategorySyndicationPackageBuildRequest(
+                new CategorySyndicationPackageContext(
+                    'pkg-1501',
+                    'destination-1501',
+                    'category-1501',
+                    'v1',
+                    'per_locale',
+                ),
+                ['name' => 'Summer Shoes', 'slug' => 'summer-shoes', 'seoTitle' => 'Summer Shoes'],
+                ['name' => 'title', 'slug' => 'handle', 'seoTitle' => 'seo_title'],
+                ['title', 'handle', 'seo_title'],
+                new CatalogAuditContext('operator-7', 'build gated package'),
+            ),
         );
 
         /** @var array{publishable:bool,checks:array{packageGatePublishable:bool},matchedBindingIds:list<string>,packageMissingRequiredFields:list<string>,mediaRequiredMissing:list<string>} $payload */

@@ -9,6 +9,10 @@ declare(strict_types=1);
 namespace App\Tests\Category;
 
 use App\Policy\CategoryMediaGovernancePolicy;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryMediaBindingScope;
+use App\ValueObject\CategoryMediaBindingState;
+use App\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryMediaGovernancePolicyTest extends TestCase
@@ -18,14 +22,18 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
         $policy = new CategoryMediaGovernancePolicy();
 
         $policy->assertBindingAllowed(
-            'binding-1',
-            'category-1',
-            'asset-1',
-            'primary',
-            ['storefront'],
-            ['en_US'],
-            'operator-1',
-            'bind primary category image',
+            new CategoryMediaBindRequest(
+                new CategoryMediaBindingScope(
+                    'binding-1',
+                    'category-1',
+                    'asset-1',
+                    'primary',
+                    ['storefront'],
+                    ['en_US'],
+                ),
+                new CategoryMediaBindingState(true, true, []),
+                new CatalogAuditContext('operator-1', 'bind primary category image'),
+            ),
         );
 
         self::assertTrue(true);
@@ -37,14 +45,18 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
 
         $policy = new CategoryMediaGovernancePolicy();
         $policy->assertBindingAllowed(
-            'binding-1',
-            'category-1',
-            'asset-1',
-            'primary',
-            [],
-            ['en_US'],
-            'operator-1',
-            'bind primary category image',
+            new CategoryMediaBindRequest(
+                new CategoryMediaBindingScope(
+                    'binding-1',
+                    'category-1',
+                    'asset-1',
+                    'primary',
+                    [],
+                    ['en_US'],
+                ),
+                new CategoryMediaBindingState(true, true, []),
+                new CatalogAuditContext('operator-1', 'bind primary category image'),
+            ),
         );
     }
 }

@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace App\Tests\Category;
 
 use App\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\ValueObject\CategoryDestinationMediaReadinessContext;
+use App\ValueObject\CategoryDestinationMediaReadinessState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryDestinationMediaReadinessPolicyTest extends TestCase
@@ -17,19 +19,31 @@ final class CategoryDestinationMediaReadinessPolicyTest extends TestCase
     {
         $policy = new CategoryDestinationMediaReadinessPolicy();
         $report = $policy->buildReport(
-            'dest-1',
-            'category-1',
-            ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => ['primary', 'hero']],
-            ['channel' => 'storefront', 'locale' => 'en_US', 'requiredRoles' => ['primary', 'hero']],
-            [
-                'channelScopedMediaReady' => true,
-                'localeScopedMediaReady' => true,
-                'requiredRoleCoverageReady' => false,
-                'exactChannelLocaleMatchReady' => true,
-            ],
-            ['destination_required_role:hero'],
-            [],
-            ['bind-1'],
+            new CategoryDestinationMediaReadinessContext(
+                'dest-1',
+                'category-1',
+                [
+                    'channel' => 'storefront',
+                    'locale' => 'en_US',
+                    'requiredMediaRoles' => ['primary', 'hero'],
+                ],
+                [
+                    'channel' => 'storefront',
+                    'locale' => 'en_US',
+                    'requiredRoles' => ['primary', 'hero'],
+                ],
+            ),
+            new CategoryDestinationMediaReadinessState(
+                [
+                    'channelScopedMediaReady' => true,
+                    'localeScopedMediaReady' => true,
+                    'requiredRoleCoverageReady' => false,
+                    'exactChannelLocaleMatchReady' => true,
+                ],
+                ['destination_required_role:hero'],
+                [],
+                ['bind-1'],
+            ),
         );
 
         self::assertFalse($report->publishable());

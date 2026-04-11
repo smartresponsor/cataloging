@@ -6,16 +6,12 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
+use App\ValueObject\CategoryEvaluationRequest;
+
 /**
  * Defines the contract for catalog media coverage service.
  */
 interface CatalogMediaCoverageServiceInterface
 {
-    /** @param array<string,mixed> $payload */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryMediaCoverageEvaluatedInterface;
+    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaCoverageEvaluatedInterface;
 }

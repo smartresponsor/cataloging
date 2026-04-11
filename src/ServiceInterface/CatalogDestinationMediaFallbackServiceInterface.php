@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+
 /**
  * Defines the contract for catalog destination media fallback service.
  */
@@ -15,9 +17,6 @@ interface CatalogDestinationMediaFallbackServiceInterface
      * Handles the evaluate workflow.
      */
     public function evaluate(
-        string $destinationId,
-        string $categoryId,
-        string $actorId,
-        string $reason,
+        CategoryDestinationMediaEvaluationRequest $request,
     ): CategoryDestinationMediaFallbackEvaluatedInterface;
 }

@@ -12,6 +12,9 @@ use App\Policy\CategoryCompletenessPolicy;
 use App\Policy\CategoryPublicationGatePolicy;
 use App\Service\CatalogCompletenessService;
 use App\Service\CatalogPublicationGateService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryEvaluationRequest;
+use App\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +25,7 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
         $completeness = new CatalogCompletenessService(new CategoryCompletenessPolicy());
         $gate = new CatalogPublicationGateService(new CategoryPublicationGatePolicy());
 
-        $completenessEvent = $completeness->evaluate('category-603', [
+        $completenessEvent = $completeness->evaluate(new CategoryEvaluationRequest('category-603', [
             'slug' => 'chairs',
             'seo' => [
                 'title' => 'Chairs',
@@ -42,17 +45,17 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
                 'bannerId' => '',
                 'htmlBlockId' => '',
             ],
-        ], 'operator-3', 'approval handoff');
+        ], new CatalogAuditContext('operator-3', 'approval handoff')));
 
         /** @var array{publicationChecks:array<string,bool>} $completenessPayload */
         $completenessPayload = $completenessEvent->payload();
-        $gateEvent = $gate->evaluate(
+        $gateEvent = $gate->evaluate(new CategoryPublicationGateEvaluationRequest(
             'category-603',
             CategoryWorkflowState::APPROVED,
             $completenessPayload['publicationChecks'],
             'operator-3',
             'approval handoff',
-        );
+        ));
 
         /** @var array{publishable:bool,warnings:list<string>} $payload */
         $payload = $gateEvent->payload();

@@ -10,6 +10,9 @@ namespace App\Tests\Category;
 
 use App\Policy\CategoryPublicationQualityPolicy;
 use App\Service\CatalogPublicationQualityService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
+use App\ValueObject\CategoryPublicationQualityInput;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationQualityServiceTest extends TestCase
@@ -19,22 +22,25 @@ final class CatalogPublicationQualityServiceTest extends TestCase
         $service = new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy());
 
         $payload = $this->normalizePayload($service->evaluate(
-            'category-701',
-            78,
-            [
-                'slugReady' => true,
-                'seoReady' => true,
-                'contentReady' => true,
-                'localeReady' => true,
-                'mediaReady' => false,
-                'aliasReady' => false,
-            ],
-            [
-                'bannerReady' => false,
-                'htmlBlockReady' => true,
-            ],
-            'operator-1',
-            'pre-publish quality evaluation',
+            new CategoryPublicationQualityEvaluationRequest(
+                new CategoryPublicationQualityInput(
+                    'category-701',
+                    78,
+                    [
+                        'slugReady' => true,
+                        'seoReady' => true,
+                        'contentReady' => true,
+                        'localeReady' => true,
+                        'mediaReady' => false,
+                        'aliasReady' => false,
+                    ],
+                    [
+                        'bannerReady' => false,
+                        'htmlBlockReady' => true,
+                    ],
+                ),
+                new CatalogAuditContext('operator-1', 'pre-publish quality evaluation'),
+            ),
         )->payload());
 
         self::assertTrue($payload['publishableQuality']);

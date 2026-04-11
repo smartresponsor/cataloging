@@ -6,21 +6,16 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
 /**
  * Defines the contract for catalog publication quality service.
  */
 interface CatalogPublicationQualityServiceInterface
 {
     /**
-     * @param array<string,bool> $publicationChecks
-     * @param array<string,bool> $checks
+     * Evaluates publication quality for the provided request.
      */
     public function evaluate(
-        string $categoryId,
-        int $score,
-        array $publicationChecks,
-        array $checks,
-        string $actorId,
-        string $reason,
+        CategoryPublicationQualityEvaluationRequest $request,
     ): CategoryPublicationQualityEvaluatedInterface;
 }

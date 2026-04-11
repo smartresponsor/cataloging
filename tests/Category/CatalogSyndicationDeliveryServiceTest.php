@@ -11,6 +11,10 @@ namespace App\Tests\Category;
 use App\Policy\CategorySyndicationDeliveryPolicy;
 use App\Repository\CategorySyndicationDeliveryRecordRepository;
 use App\Service\CatalogSyndicationDeliveryService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategorySyndicationDeliveryAttempt;
+use App\ValueObject\CategorySyndicationDeliveryContext;
+use App\ValueObject\CategorySyndicationDeliveryRecordRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDeliveryServiceTest extends TestCase
@@ -23,16 +27,17 @@ final class CatalogSyndicationDeliveryServiceTest extends TestCase
         );
 
         $event = $service->recordDelivery(
-            'delivery-100',
-            'pkg-100',
-            'dest-100',
-            'category-500',
-            'failed',
-            1,
-            503,
-            'temporary downstream outage',
-            'operator-1',
-            'record delivery result',
+            new CategorySyndicationDeliveryRecordRequest(
+                new CategorySyndicationDeliveryContext(
+                    'delivery-100',
+                    'pkg-100',
+                    'dest-100',
+                    'category-500',
+                    'failed',
+                ),
+                new CategorySyndicationDeliveryAttempt(1, 503, 'temporary downstream outage'),
+                new CatalogAuditContext('operator-1', 'record delivery result'),
+            ),
         );
 
         $payload = $event->payload();

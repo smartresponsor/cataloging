@@ -10,6 +10,7 @@ use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
 use App\PolicyInterface\CategoryMediaCoveragePolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\ServiceInterface\CatalogMediaCoverageServiceInterface;
+use App\ValueObject\CategoryEvaluationRequest;
 
 /**
  * Provides the catalog media coverage service application service.
@@ -28,21 +29,20 @@ final readonly class CatalogMediaCoverageService implements CatalogMediaCoverage
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryMediaCoverageEvaluatedInterface {
-        $report = $this->policy->buildReport($payload, $this->repository->bindingsForCategory($categoryId));
+    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaCoverageEvaluatedInterface
+    {
+        $report = $this->policy->buildReport(
+            $request->payload(),
+            $this->repository->bindingsForCategory($request->categoryId()),
+        );
 
         return new CategoryMediaCoverageEvaluated(
-            trim($categoryId),
+            trim($request->categoryId()),
             $report->requiredMissing(),
             $report->warnings(),
             $report->checks(),
-            trim($actorId),
-            trim($reason),
+            trim($request->actorId()),
+            trim($request->reason()),
             new \DateTimeImmutable('now'),
         );
     }

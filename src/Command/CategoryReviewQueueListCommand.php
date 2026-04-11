@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\ValueObject\CategoryReviewQueueRequest;
 use App\ValueObjectInterface\CategoryReviewQueueItemInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +52,7 @@ final class CategoryReviewQueueListCommand extends Command
         parent::execute($input, $output);
         $reviewer = $this->argumentString($input, 'reviewer');
         $format = $this->optionString($input, 'format', 'json');
-        $items = $this->queueService->queueForReviewer($reviewer);
+        $items = $this->queueService->queueForReviewer(new CategoryReviewQueueRequest($reviewer));
 
         $payload = array_map(
             static fn (CategoryReviewQueueItemInterface $item): array => self::normalizeItem($item),

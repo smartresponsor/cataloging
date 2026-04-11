@@ -6,6 +6,9 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\ValueObject\CategoryResolveRequest;
+use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategoryTreeRequest;
 
 /**
  * SQL-backed repository. Actual SQL and connections are injected in infrastructure layer.
@@ -14,7 +17,7 @@ use App\RepositoryInterface\CategoryRepositoryInterface;
 final class CategoryRepository implements CategoryRepositoryInterface
 {
     /** @return list<array<string,mixed>> */
-    public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array
+    public function tree(CategoryTreeRequest $request): array
     {
         return [];
     }
@@ -54,9 +57,9 @@ final class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /** @return array<string,mixed> */
-    public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array
+    public function move(CategoryServiceMoveRequest $request): array
     {
-        return ['id' => $categoryId, 'parentId' => $newParentId, 'order' => $newOrder];
+        return ['id' => $request->categoryId(), 'parentId' => $request->newParentId(), 'order' => $request->newOrder()];
     }
     /**
      * Handles the attach workflow.
@@ -84,7 +87,7 @@ final class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /** @return list<array<string,mixed>> */
-    public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array
+    public function resolve(CategoryResolveRequest $request): array
     {
         return [];
     }

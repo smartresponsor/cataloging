@@ -6,26 +6,16 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationPolicyAwarePackageGatedInterface;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 /**
  * Defines the contract for catalog syndication policy aware package gate service.
  */
 interface CatalogSyndicationPolicyAwarePackageGateServiceInterface
 {
     /**
-     * @param array<string,mixed>  $categoryData
-     * @param array<string,string> $fieldMap
-     * @param list<string>         $requiredFields
+     * Builds the policy aware gated package result for a syndication request.
      */
     public function buildGatedPublishPackage(
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $version,
-        string $localeMode,
-        array $categoryData,
-        array $fieldMap,
-        array $requiredFields,
-        string $actorId,
-        string $reason,
+        CategorySyndicationPackageBuildRequest $request,
     ): CategorySyndicationPolicyAwarePackageGatedInterface;
 }

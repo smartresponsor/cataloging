@@ -9,6 +9,8 @@ use App\Entity\CategoryAccessAssignment;
 use App\EntityInterface\CategoryAccessAssignmentInterface;
 use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogAccessAssignmentServiceInterface;
+use App\ValueObject\CategoryAccessAssignmentRequest;
+use App\ValueObject\CategoryAccessAssignmentSelection;
 
 /**
  * Provides the catalog access assignment service application service.
@@ -25,31 +27,35 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Handles the assign owner workflow.
      */
-    public function assignOwner(string $categoryId, string $actorUserId): CategoryAccessAssignmentInterface
+    public function assignOwner(CategoryAccessAssignmentSelection $selection): CategoryAccessAssignmentInterface
     {
-        return $this->assignRole($categoryId, $actorUserId, 'owner', true);
+        return $this->assignRole(new CategoryAccessAssignmentRequest(
+            $selection->categoryId(),
+            $selection->actorUserId(),
+            'owner',
+            true,
+        ));
     }
 
     /**
      * Handles the assign role workflow.
      */
-    public function assignRole(
-        string $categoryId,
-        string $actorUserId,
-        string $role,
-        bool $isPrimary = false,
-    ): CategoryAccessAssignmentInterface {
-        $existing = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
+    public function assignRole(CategoryAccessAssignmentRequest $request): CategoryAccessAssignmentInterface
+    {
+        $existing = $this->repository->findOneByCategoryIdAndActorUserId(
+            $request->categoryId(),
+            $request->actorUserId(),
+        );
 
         if ($existing instanceof CategoryAccessAssignmentInterface) {
             if (method_exists($existing, 'activate')) {
                 $existing->activate();
             }
             if (method_exists($existing, 'changeRole')) {
-                $existing->changeRole($role);
+                $existing->changeRole($request->role());
             }
-            if ($isPrimary) {
-                $this->clearPrimaryForCategory($categoryId);
+            if ($request->isPrimary()) {
+                $this->clearPrimaryForCategory($request->categoryId());
                 if (method_exists($existing, 'markPrimary')) {
                     $existing->markPrimary();
                 }
@@ -59,11 +65,16 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
             return $existing;
         }
 
-        if ($isPrimary) {
-            $this->clearPrimaryForCategory($categoryId);
+        if ($request->isPrimary()) {
+            $this->clearPrimaryForCategory($request->categoryId());
         }
 
-        $assignment = CategoryAccessAssignment::create($categoryId, $actorUserId, $role, $isPrimary);
+        $assignment = CategoryAccessAssignment::create(
+            $request->categoryId(),
+            $request->actorUserId(),
+            $request->role(),
+            $request->isPrimary(),
+        );
         $this->repository->save($assignment);
 
         return $assignment;
@@ -72,9 +83,12 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Handles the revoke workflow.
      */
-    public function revoke(string $categoryId, string $actorUserId): void
+    public function revoke(CategoryAccessAssignmentSelection $selection): void
     {
-        $assignment = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
+        $assignment = $this->repository->findOneByCategoryIdAndActorUserId(
+            $selection->categoryId(),
+            $selection->actorUserId(),
+        );
         if (!$assignment instanceof CategoryAccessAssignmentInterface) {
             return;
         }
@@ -89,14 +103,17 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Updates the primary value.
      */
-    public function setPrimary(string $categoryId, string $actorUserId): void
+    public function setPrimary(CategoryAccessAssignmentSelection $selection): void
     {
-        $assignment = $this->repository->findOneByCategoryIdAndActorUserId($categoryId, $actorUserId);
+        $assignment = $this->repository->findOneByCategoryIdAndActorUserId(
+            $selection->categoryId(),
+            $selection->actorUserId(),
+        );
         if (!$assignment instanceof CategoryAccessAssignmentInterface) {
             return;
         }
 
-        $this->clearPrimaryForCategory($categoryId);
+        $this->clearPrimaryForCategory($selection->categoryId());
         if (method_exists($assignment, 'activate')) {
             $assignment->activate();
         }

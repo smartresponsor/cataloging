@@ -8,6 +8,7 @@ namespace App\Controller\Admin;
 use App\Dto\CategoryAdminCategoryData;
 use App\Form\CategoryAdminCategoryType;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,12 +33,12 @@ final class CategoryAdminController extends AbstractController
     #[Route('/admin/category', name: 'admin_category_index')]
     public function index(): Response
     {
-        $categories = $this->categoryProjectionReadService->list([
+        $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
             'limit' => 100,
             'offset' => 0,
             'order' => 'name',
             'direction' => 'asc',
-        ]);
+        ]));
 
         return $this->render('category/list.html.twig', [
             'categories' => $categories,

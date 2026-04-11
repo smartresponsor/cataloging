@@ -6,26 +6,16 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 /**
  * Defines the contract for catalog syndication mapping service.
  */
 interface CatalogSyndicationMappingServiceInterface
 {
     /**
-     * @param array<string,mixed>  $categoryData
-     * @param array<string,string> $fieldMap
-     * @param list<string>         $requiredFields
+     * Builds the publish package for a syndication request.
      */
     public function buildPublishPackage(
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $version,
-        string $localeMode,
-        array $categoryData,
-        array $fieldMap,
-        array $requiredFields,
-        string $actorId,
-        string $reason,
+        CategorySyndicationPackageBuildRequest $request,
     ): CategorySyndicationPublishPackageBuiltInterface;
 }

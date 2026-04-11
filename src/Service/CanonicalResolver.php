@@ -4,16 +4,16 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ValueObject\CategoryCanonicalResolveRequest;
+
 /**
  * Provides the canonical resolver application service.
  */
 final class CanonicalResolver
 {
-    /** @param array<string,mixed> $category */
-    public function resolve(array $category, string $locale): string
+    public function resolve(CategoryCanonicalResolveRequest $request): string
     {
-        $slug = $category['slug'] ?? 'category';
-
-        return '/'.$locale.'/category/'.(is_scalar($slug) ? (string) $slug : 'category');
+        return '/'.$request->locale().'/category/'.$request->slug();
     }
 }

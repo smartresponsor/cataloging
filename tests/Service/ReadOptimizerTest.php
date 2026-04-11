@@ -6,6 +6,7 @@ namespace App\Tests\Service;
 
 use App\Service\ReadOptimizer;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 use PHPUnit\Framework\TestCase;
 
 final class ReadOptimizerTest extends TestCase
@@ -18,12 +19,12 @@ final class ReadOptimizerTest extends TestCase
             {
             }
 
-            public function list(array $criteria = []): array
+            public function list(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
             }
 
-            public function tree(array $criteria = []): array
+            public function tree(?CategoryProjectionCriteria $criteria = null): array
             {
                 ++$this->calls;
 
@@ -49,8 +50,9 @@ final class ReadOptimizerTest extends TestCase
         };
 
         $optimizer = new ReadOptimizer($readService);
-        $first = $optimizer->getTree(['published' => true]);
-        $second = $optimizer->getTree(['published' => true]);
+        $criteria = CategoryProjectionCriteria::fromArray(['published' => true]);
+        $first = $optimizer->getTree($criteria);
+        $second = $optimizer->getTree($criteria);
 
         self::assertCount(1, $first);
         self::assertSame('default', $first[0]['channel']);

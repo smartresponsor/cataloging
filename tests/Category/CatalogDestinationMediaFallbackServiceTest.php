@@ -14,6 +14,11 @@ use App\Repository\CategoryMediaBindingRepository;
 use App\Repository\CategorySyndicationDestinationRepository;
 use App\Service\CatalogDestinationMediaFallbackService;
 use App\Service\CatalogSyndicationDestinationService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaFallbackServiceTest extends TestCase
@@ -41,17 +46,30 @@ final class CatalogDestinationMediaFallbackServiceTest extends TestCase
         ));
 
         $destinationService->register(
-            'destination-1802',
-            'Storefront CA French',
-            'storefront',
-            'push',
-            true,
-            ['channel' => 'storefront', 'locale' => 'fr_CA', 'requiredMediaRoles' => ['primary']],
-            'operator-1',
-            'register destination'
+            new CategorySyndicationDestinationRegisterRequest(
+                new CategorySyndicationDestinationDefinition(
+                    'destination-1802',
+                    'Storefront CA French',
+                    'storefront',
+                    'push',
+                ),
+                new CategorySyndicationDestinationConfiguration(
+                    true,
+                    ['channel' => 'storefront', 'locale' => 'fr_CA', 'requiredMediaRoles' => ['primary']],
+                ),
+                new CatalogAuditContext('operator-1', 'register destination'),
+            ),
         );
 
-        $payload = $this->normalizePayload($service->evaluate('destination-1802', 'category-1802', 'operator-9', 'evaluate fallback')->payload());
+        $payload = $this->normalizePayload(
+            $service->evaluate(
+                new CategoryDestinationMediaEvaluationRequest(
+                    'destination-1802',
+                    'category-1802',
+                    new CatalogAuditContext('operator-9', 'evaluate fallback'),
+                ),
+            )->payload(),
+        );
         self::assertFalse($payload['publishable']);
         self::assertTrue($payload['publishableWithFallback']);
         self::assertSame(['bind-global-primary'], $payload['fallbackMatchedBindingIds']);

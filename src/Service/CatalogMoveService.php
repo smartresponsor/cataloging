@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryMoveInterface;
+use App\ValueObject\CatalogMoveRequest;
 
 /**
  * Provides the catalog move service application service.
@@ -22,18 +23,14 @@ final class CatalogMoveService implements CategoryMoveInterface
     /**
      * Handles the move workflow.
      */
-    public function move(
-        string $nodeId,
-        string $newParentId,
-        string $treeId,
-        string $policy,
-        bool $dryRun = false,
-        ?string $locale = null,
-    ): array {
-        $normalizedNodeId = trim($nodeId);
-        $normalizedNewParentId = trim($newParentId);
-        $normalizedTreeId = trim($treeId);
-        $normalizedPolicy = trim($policy);
+    public function move(CatalogMoveRequest $request): array
+    {
+        $normalizedNodeId = trim($request->nodeId());
+        $normalizedNewParentId = trim($request->newParentId());
+        $normalizedTreeId = trim($request->treeId());
+        $normalizedPolicy = trim($request->policy());
+        $dryRun = $request->dryRun();
+        $locale = $request->locale();
         $normalizedLocale = is_string($locale) ? trim($locale) : null;
 
         if ('' === $normalizedNodeId) {

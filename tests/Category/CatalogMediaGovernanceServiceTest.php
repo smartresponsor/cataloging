@@ -11,6 +11,10 @@ namespace App\Tests\Category;
 use App\Policy\CategoryMediaGovernancePolicy;
 use App\Repository\CategoryMediaBindingRepository;
 use App\Service\CatalogMediaGovernanceService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryMediaBindingScope;
+use App\ValueObject\CategoryMediaBindingState;
+use App\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaGovernanceServiceTest extends TestCase
@@ -21,17 +25,18 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
         $service = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
 
         $payload = $this->normalizePayload($service->bind(
-            'binding-201',
-            'category-701',
-            'asset-501',
-            'banner',
-            ['storefront', 'storefront', 'mobile'],
-            ['en_US', 'en_US', 'uk_UA'],
-            true,
-            true,
-            ['format' => 'webp'],
-            'operator-1',
-            'bind category banner asset',
+            new CategoryMediaBindRequest(
+                new CategoryMediaBindingScope(
+                    'binding-201',
+                    'category-701',
+                    'asset-501',
+                    'banner',
+                    ['storefront', 'storefront', 'mobile'],
+                    ['en_US', 'en_US', 'uk_UA'],
+                ),
+                new CategoryMediaBindingState(true, true, ['format' => 'webp']),
+                new CatalogAuditContext('operator-1', 'bind category banner asset'),
+            ),
         )->payload());
 
         self::assertSame('binding-201', $payload['bindingId']);

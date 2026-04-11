@@ -12,6 +12,7 @@ use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogReviewQueueServiceInterface;
 use App\ValueObject\CategoryChangeRequestState;
 use App\ValueObject\CategoryReviewQueueItem;
+use App\ValueObject\CategoryReviewQueueRequest;
 
 /**
  * Provides the catalog review queue service application service.
@@ -30,18 +31,18 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
     /**
      * Handles the queue for reviewer workflow.
      */
-    public function queueForReviewer(string $reviewer): array
+    public function queueForReviewer(CategoryReviewQueueRequest $request): array
     {
         $items = [];
 
-        foreach ($this->assignmentRepository->findByReviewer($reviewer) as $assignment) {
-            $request = $this->changeRequestRepository->findByRequestId($assignment->requestId());
+        foreach ($this->assignmentRepository->findByReviewer($request->reviewer()) as $assignment) {
+            $changeRequest = $this->changeRequestRepository->findByRequestId($assignment->requestId());
 
-            if (!$request instanceof CategoryChangeRequestInterface) {
+            if (!$changeRequest instanceof CategoryChangeRequestInterface) {
                 continue;
             }
 
-            $items[] = $this->buildQueueItem($assignment, $request);
+            $items[] = $this->buildQueueItem($assignment, $changeRequest);
         }
 
         usort($items, static function (CategoryReviewQueueItem $left, CategoryReviewQueueItem $right): int {
@@ -53,10 +54,10 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
 
     private function buildQueueItem(
         CategoryReviewAssignmentInterface $assignment,
-        CategoryChangeRequestInterface $request,
+        CategoryChangeRequestInterface $changeRequest,
     ): CategoryReviewQueueItem {
         $warnings = [];
-        $state = $request->state()->value();
+        $state = $changeRequest->state()->value();
         $readyForReview = true;
 
         if (CategoryChangeRequestState::PROPOSED === $state) {
@@ -64,19 +65,19 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
             $warnings[] = 'request_not_started';
         }
 
-        if ([] === $request->changes()) {
+        if ([] === $changeRequest->changes()) {
             $readyForReview = false;
             $warnings[] = 'request_changes_missing';
         }
 
-        if ('' === trim($request->summary())) {
+        if ('' === trim($changeRequest->summary())) {
             $readyForReview = false;
             $warnings[] = 'request_summary_missing';
         }
 
         return CategoryReviewQueueItem::create(
-            $request->requestId(),
-            $request->categoryId(),
+            $changeRequest->requestId(),
+            $changeRequest->categoryId(),
             $assignment->assignedReviewer(),
             $assignment->priority(),
             $state,

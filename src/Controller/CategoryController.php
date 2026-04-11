@@ -9,6 +9,10 @@ use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\ValueObject\CategoryCreateRequest;
+use App\ValueObject\CategoryLinkRequest;
+use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategoryTreeRequest;
 
 /**
  * Handles the category controller application flow.
@@ -39,7 +43,7 @@ final class CategoryController implements CategoryControllerInterface
         $locale = $this->stringFromMap($query, 'locale', 'en');
         $depth = $this->intFromMap($query, 'depth', 2);
         $parentId = $this->nullableStringFromMap($query, 'parentId');
-        $tree = $this->repo->tree($taxonomy, $parentId, $depth, $locale);
+        $tree = $this->repo->tree(new CategoryTreeRequest($taxonomy, $parentId, $depth, $locale));
 
         return $this->listOfMaps($tree);
     }
@@ -66,14 +70,14 @@ final class CategoryController implements CategoryControllerInterface
      */
     public function create(array $body, array $route, array $auth): array
     {
-        $actorId = $this->requiredString($auth, 'actorId');
-        $taxonomyId = $this->requiredString($body, 'taxonomyId');
-        $parentId = $this->nullableStringFromMap($body, 'parentId');
-        $name = $this->stringMap($body, 'name');
-        $slug = $this->stringMap($body, 'slug');
-        $meta = $this->metaMap($body, 'meta');
-
-        return $this->service->create($actorId, $taxonomyId, $parentId, $name, $slug, $meta);
+        return $this->service->create(new CategoryCreateRequest(
+            $this->requiredString($auth, 'actorId'),
+            $this->requiredString($body, 'taxonomyId'),
+            $this->nullableStringFromMap($body, 'parentId'),
+            $this->stringMap($body, 'name'),
+            $this->stringMap($body, 'slug'),
+            $this->metaMap($body, 'meta'),
+        ));
     }
 
     /**
@@ -90,7 +94,7 @@ final class CategoryController implements CategoryControllerInterface
         $parentId = $this->nullableStringFromMap($body, 'parentId');
         $order = $this->intFromMap($body, 'order');
 
-        return $this->service->move($actorId, $categoryId, $parentId, $order);
+        return $this->service->move(new CategoryServiceMoveRequest($actorId, $categoryId, $parentId, $order));
     }
 
     /**
@@ -100,15 +104,13 @@ final class CategoryController implements CategoryControllerInterface
      */
     public function attach(array $body, array $route, array $auth): void
     {
-        $actorId = $this->requiredString($auth, 'actorId');
-        $categoryId = $this->requiredString($route, 'id');
-        $this->service->attach(
-            $actorId,
-            $categoryId,
+        $this->service->attach(new CategoryLinkRequest(
+            $this->requiredString($auth, 'actorId'),
+            $this->requiredString($route, 'id'),
             $this->requiredString($body, 'targetDomain'),
             $this->requiredString($body, 'targetClass'),
             $this->requiredString($body, 'targetId'),
-        );
+        ));
     }
 
     /**
@@ -118,15 +120,13 @@ final class CategoryController implements CategoryControllerInterface
      */
     public function detach(array $body, array $route, array $auth): void
     {
-        $actorId = $this->requiredString($auth, 'actorId');
-        $categoryId = $this->requiredString($route, 'id');
-        $this->service->detach(
-            $actorId,
-            $categoryId,
+        $this->service->detach(new CategoryLinkRequest(
+            $this->requiredString($auth, 'actorId'),
+            $this->requiredString($route, 'id'),
             $this->requiredString($body, 'targetDomain'),
             $this->requiredString($body, 'targetClass'),
             $this->requiredString($body, 'targetId'),
-        );
+        ));
     }
 
     /** @param array<string, mixed> $map */
@@ -236,6 +236,8 @@ final class CategoryController implements CategoryControllerInterface
     }
 
     /**
+     * @param mixed $value
+     *
      * @return list<array<string, mixed>>
      */
     private function listOfMaps(mixed $value): array
@@ -244,13 +246,13 @@ final class CategoryController implements CategoryControllerInterface
             return [];
         }
 
-        $items = [];
-        foreach ($value as $item) {
-            if (is_array($item)) {
-                $items[] = $item;
+        $normalized = [];
+        foreach ($value as $entry) {
+            if (is_array($entry)) {
+                $normalized[] = $entry;
             }
         }
 
-        return array_values($items);
+        return $normalized;
     }
 }

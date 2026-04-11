@@ -16,6 +16,8 @@ use App\Service\CatalogMediaCompletenessBridgeService;
 use App\Service\CatalogMediaCoverageService;
 use App\Service\CatalogMediaPublicationQualityBridgeService;
 use App\Service\CatalogPublicationQualityService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryEvaluationRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
@@ -27,7 +29,7 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
         $completenessBridge = new CatalogMediaCompletenessBridgeService(new CategoryCompletenessPolicy(), $coverage);
         $qualityBridge = new CatalogMediaPublicationQualityBridgeService($completenessBridge, new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy()));
 
-        $payload = $this->normalizePayload($qualityBridge->evaluate('category-903', [
+        $payload = $this->normalizePayload($qualityBridge->evaluate(new CategoryEvaluationRequest('category-903', [
             'slug' => 'clearance',
             'seo' => ['title' => 'Clearance', 'description' => 'Clearance offers'],
             'content' => ['body' => 'Discounted products'],
@@ -35,7 +37,7 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
             'media' => ['primaryAssetId' => 'asset-inline'],
             'aliases' => ['sale'],
             'presentation' => ['bannerId' => '', 'htmlBlockId' => 'html-9'],
-        ], 'operator-3', 'quality with missing governed required media')->payload());
+        ], new CatalogAuditContext('operator-3', 'quality with missing governed required media')))->payload());
 
         self::assertFalse($payload['publishableQuality']);
         self::assertContains('requiredMediaCoverageReady', $payload['hardBlockers']);

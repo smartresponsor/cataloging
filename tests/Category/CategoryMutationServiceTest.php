@@ -11,6 +11,8 @@ use App\Service\CacheInvalidationRecorder;
 use App\Service\CatalogPublicationGateService;
 use App\Service\CategoryMutationService;
 use App\Service\OutboxWriter;
+use App\ValueObject\CategoryMutationMoveRequest;
+use App\ValueObject\CategoryMutationPublishRequest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +26,7 @@ final class CategoryMutationServiceTest extends TestCase
         $this->seedCategoryTree($connection);
 
         $service = $this->createService($connection);
-        $result = $service->move('electronics', 'fashion', 'oleksandr', 'catalog', 'strict');
+        $result = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict'));
 
         self::assertSame('electronics', $result['id']);
         self::assertSame('fashion', $result['newParentId']);
@@ -61,8 +63,8 @@ final class CategoryMutationServiceTest extends TestCase
         $this->seedCategoryTree($connection);
 
         $service = $this->createService($connection);
-        $first = $service->move('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1');
-        $second = $service->move('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1');
+        $first = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
+        $second = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
 
         self::assertFalse($first['duplicate']);
         self::assertTrue($second['duplicate']);
@@ -85,13 +87,13 @@ final class CategoryMutationServiceTest extends TestCase
         $connection->update('category', ['workflow_state' => 'approved'], ['id' => 'electronics']);
 
         $service = $this->createService($connection);
-        $result = $service->publish('electronics', true, [
+        $result = $service->publish(new CategoryMutationPublishRequest('electronics', true, [
             'slugReady' => true,
             'seoReady' => true,
             'contentReady' => true,
             'localeReady' => true,
             'mediaReady' => false,
-        ], 'oleksandr', 'manual publish');
+        ], 'oleksandr', 'manual publish'));
 
         self::assertTrue($result['published']);
         self::assertSame('published', $result['workflowState']);
@@ -132,8 +134,8 @@ final class CategoryMutationServiceTest extends TestCase
             'localeReady' => true,
         ];
 
-        $first = $service->publish('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2');
-        $second = $service->publish('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2');
+        $first = $service->publish(new CategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
+        $second = $service->publish(new CategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
 
         self::assertFalse($first['duplicate']);
         self::assertTrue($second['duplicate']);

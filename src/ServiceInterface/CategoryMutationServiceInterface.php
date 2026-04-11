@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
+use App\ValueObject\CategoryMutationMoveRequest;
+use App\ValueObject\CategoryMutationPublishRequest;
+
 /**
  * Defines the contract for category mutation service.
  */
@@ -22,21 +25,9 @@ interface CategoryMutationServiceInterface
      *   duplicate:bool
      * }
      */
-    public function move(
-        string $categoryId,
-        string $newParentId,
-        string $actorId,
-        string $treeId = 'catalog',
-        string $policy = 'strict',
-        bool $dryRun = false,
-        ?string $locale = null,
-        ?string $idempotencyKey = null,
-        ?string $correlationId = null,
-    ): array;
+    public function move(CategoryMutationMoveRequest $request): array;
 
     /**
-     * @param array<string,bool> $checks
-     *
      * @return array{
      *   id:string,
      *   published:bool,
@@ -50,13 +41,5 @@ interface CategoryMutationServiceInterface
      *   duplicate:bool
      * }
      */
-    public function publish(
-        string $categoryId,
-        bool $published,
-        array $checks,
-        string $actorId,
-        string $reason,
-        ?string $idempotencyKey = null,
-        ?string $correlationId = null,
-    ): array;
+    public function publish(CategoryMutationPublishRequest $request): array;
 }

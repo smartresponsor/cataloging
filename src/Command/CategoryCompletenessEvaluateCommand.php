@@ -6,12 +6,15 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogCompletenessServiceInterface;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryEvaluationRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category completeness evaluate command console workflow.
  */
@@ -20,6 +23,7 @@ final class CategoryCompletenessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category completeness evaluate command service collaborators.
      */
@@ -27,6 +31,7 @@ final class CategoryCompletenessEvaluateCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -44,6 +49,7 @@ final class CategoryCompletenessEvaluateCommand extends Command
             ->addArgument('reason', InputArgument::REQUIRED)
             ->addOption('payload', null, InputOption::VALUE_REQUIRED);
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
@@ -53,10 +59,14 @@ final class CategoryCompletenessEvaluateCommand extends Command
         $payload = $this->jsonOptionMap($input, 'payload');
 
         $event = $this->completenessService->evaluate(
-            $this->argumentString($input, 'categoryId'),
-            $payload,
-            $this->argumentString($input, 'actorId'),
-            $this->argumentString($input, 'reason'),
+            new CategoryEvaluationRequest(
+                $this->argumentString($input, 'categoryId'),
+                $payload,
+                new CatalogAuditContext(
+                    $this->argumentString($input, 'actorId'),
+                    $this->argumentString($input, 'reason'),
+                ),
+            ),
         );
 
         return $this->writeJson($output, $event->payload());

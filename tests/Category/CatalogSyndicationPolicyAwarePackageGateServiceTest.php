@@ -13,6 +13,10 @@ use App\Policy\CategorySyndicationPolicyAwarePackageGatePolicy;
 use App\Service\CatalogSyndicationPolicyAwarePackageGateService;
 use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
 use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
@@ -20,22 +24,19 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
     public function testBuildGatedPublishPackageResolvesPublishabilityViaPolicy(): void
     {
         $fallbackAwareGateService = new class implements CatalogSyndicationFallbackAwarePackageGateServiceInterface {
-            /**
-             * @param array<string,mixed>  $categoryData
-             * @param array<string,string> $fieldMap
-             * @param list<string>         $requiredFields
-             */
-            public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): \App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
+            public function buildGatedPublishPackage(CategorySyndicationPackageBuildRequest $request): \App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
             {
+                $context = $request->context();
+
                 return new \App\Event\CategorySyndicationFallbackAwarePackageGated([
-                    'packageId' => $packageId,
-                    'destinationId' => $destinationId,
-                    'categoryId' => $categoryId,
-                    'version' => $version,
-                    'localeMode' => $localeMode,
+                    'packageId' => $context->packageId(),
+                    'destinationId' => $context->destinationId(),
+                    'categoryId' => $context->categoryId(),
+                    'version' => $context->version(),
+                    'localeMode' => $context->localeMode(),
                     'payload' => ['slug' => 'chairs'],
-                    'fieldMap' => $fieldMap,
-                    'requiredFields' => $requiredFields,
+                    'fieldMap' => $request->fieldMap(),
+                    'requiredFields' => $request->requiredFields(),
                     'packageMissingRequiredFields' => [],
                     'warnings' => ['package_publishable_via_fallback_only'],
                     'checks' => ['fallbackPackageGatePublishable' => true],
@@ -46,11 +47,11 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
         };
 
         $preferenceService = new class implements CatalogDestinationMediaPolicyPreferenceServiceInterface {
-            public function evaluate(string $destinationId, string $categoryId, string $actorId, string $reason): \App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
+            public function evaluate(CategoryDestinationMediaEvaluationRequest $request): \App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
             {
                 return new \App\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
-                    'destinationId' => $destinationId,
-                    'categoryId' => $categoryId,
+                    'destinationId' => $request->destinationId(),
+                    'categoryId' => $request->categoryId(),
                     'mediaPolicyMode' => 'allow_fallback',
                     'strictPublishable' => false,
                     'fallbackPublishable' => true,
@@ -59,8 +60,8 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
                     'requiredMissing' => [],
                     'warnings' => ['destination_media_policy_preferred_exact_fallback_used'],
                     'checks' => ['resolvedPublishable' => true],
-                    'actorId' => $actorId,
-                    'reason' => $reason,
+                    'actorId' => $request->actorId(),
+                    'reason' => $request->reason(),
                 ], new \DateTimeImmutable());
             }
         };
@@ -71,7 +72,15 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
             new CategorySyndicationPolicyAwarePackageGatePolicy(),
         );
 
-        $event = $service->buildGatedPublishPackage('pkg-1', 'dst-1', 'cat-1', 'v1', 'per_locale', ['slug' => 'chairs'], ['slug' => 'slug'], ['slug'], 'actor-1', 'test');
+        $event = $service->buildGatedPublishPackage(
+            new CategorySyndicationPackageBuildRequest(
+                new CategorySyndicationPackageContext('pkg-1', 'dst-1', 'cat-1', 'v1', 'per_locale'),
+                ['slug' => 'chairs'],
+                ['slug' => 'slug'],
+                ['slug'],
+                new CatalogAuditContext('actor-1', 'test'),
+            ),
+        );
         $payload = $event->payload();
         self::assertIsArray($payload['warnings'] ?? null);
         /** @var list<string> $warnings */

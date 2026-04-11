@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ValueObject\CategoryCanonicalResolveRequest;
+
 /**
  * Provides the sitemap generator application service.
  */
@@ -24,15 +26,16 @@ final readonly class SitemapGenerator
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
         ];
-        foreach ($categories as $cat) {
-            if (!empty($cat['noindex'])) {
+        foreach ($categories as $category) {
+            if (!empty($category['noindex'])) {
                 continue;
             }
-            $loc = $this->canonicalResolver->resolve($cat, $locale);
-            $xml[] = '<url><loc>'.htmlspecialchars($loc, ENT_XML1).'</loc></url>';
+            $location = $this->canonicalResolver->resolve(new CategoryCanonicalResolveRequest($category, $locale));
+            $xml[] = '<url><loc>'.htmlspecialchars($location, ENT_XML1).'</loc></url>';
         }
         $xml[] = '</urlset>';
 
-        return implode("\n", $xml);
+        return implode("
+", $xml);
     }
 }

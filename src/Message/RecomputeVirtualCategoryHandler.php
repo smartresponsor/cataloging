@@ -30,6 +30,8 @@ final readonly class RecomputeVirtualCategoryHandler
 
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @throws \Throwable
      */
     public function __invoke(RecomputeVirtualCategoryMessage $msg): void
     {
@@ -43,14 +45,14 @@ final readonly class RecomputeVirtualCategoryHandler
 
         $sql = 'SELECT id FROM record_index WHERE '.$compiled['sql'];
         $stmt = $this->infraConnection->prepare($sql);
-        foreach ($compiled['params'] as $k => $v) {
-            $stmt->bindValue($k, $v);
+        foreach ($compiled['params'] as $parameterKey => $parameterValue) {
+            $stmt->bindValue($parameterKey, $parameterValue);
         }
         $ids = $stmt->executeQuery()->fetchFirstColumn();
 
         $this->infraConnection->executeStatement(
             'DELETE FROM virtual_category_member WHERE virtual_category_id = ?',
-            [$vc->getId()]
+            [$vc->getId()],
         );
         if ([] === $ids) {
             return;
@@ -58,13 +60,13 @@ final readonly class RecomputeVirtualCategoryHandler
 
         $values = [];
         $params = [];
-        foreach ($ids as $rid) {
-            if (!is_scalar($rid) && null !== $rid) {
+        foreach ($ids as $recordId) {
+            if (!is_scalar($recordId) && null !== $recordId) {
                 continue;
             }
             $values[] = '(?, ?)';
             $params[] = $vc->getId();
-            $params[] = (string) $rid;
+            $params[] = (string) $recordId;
         }
 
         if ([] === $values) {
@@ -73,7 +75,7 @@ final readonly class RecomputeVirtualCategoryHandler
 
         $this->infraConnection->executeStatement(
             'INSERT INTO virtual_category_member (virtual_category_id, record_id) VALUES '.implode(',', $values),
-            $params
+            $params,
         );
     }
 }

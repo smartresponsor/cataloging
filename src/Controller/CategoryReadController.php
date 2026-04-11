@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\ServiceInterface\CatalogReadServiceInterface;
+use App\ValueObject\CategoryCatalogReadNodeRequest;
+use App\ValueObject\CategoryCatalogReadPageRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +31,10 @@ final class CategoryReadController extends AbstractController
     #[Route('/api/category/list', name: 'api_category_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $first = max(1, min(100, (int) $request->query->get('first', 20)));
-        $after = (string) $request->query->get('after', '');
-        $result = $this->categoryReadService->list($first, $after);
+        $result = $this->categoryReadService->list(new CategoryCatalogReadPageRequest(
+            (int) $request->query->get('first', 20),
+            (string) $request->query->get('after', ''),
+        ));
 
         return $this->json([
             'ok' => true,
@@ -52,7 +55,7 @@ final class CategoryReadController extends AbstractController
     )]
     public function byId(string $id): JsonResponse
     {
-        $item = $this->categoryReadService->byId($id);
+        $item = $this->categoryReadService->byId(new CategoryCatalogReadNodeRequest($id));
         if (null === $item) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
@@ -71,7 +74,7 @@ final class CategoryReadController extends AbstractController
     )]
     public function descendantsTree(string $id): JsonResponse
     {
-        $tree = $this->categoryReadService->descendantsTree($id);
+        $tree = $this->categoryReadService->descendantsTree(new CategoryCatalogReadNodeRequest($id));
         if (null === $tree) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
@@ -85,7 +88,7 @@ final class CategoryReadController extends AbstractController
     #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
     public function childList(string $id): JsonResponse
     {
-        $children = $this->categoryReadService->childList($id);
+        $children = $this->categoryReadService->childList(new CategoryCatalogReadNodeRequest($id));
         if (null === $children) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }
@@ -103,7 +106,7 @@ final class CategoryReadController extends AbstractController
     #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
     public function ancestorList(string $id): JsonResponse
     {
-        $ancestors = $this->categoryReadService->ancestorList($id);
+        $ancestors = $this->categoryReadService->ancestorList(new CategoryCatalogReadNodeRequest($id));
         if (null === $ancestors) {
             return $this->json(['ok' => false, 'error' => 'not_found'], 404);
         }

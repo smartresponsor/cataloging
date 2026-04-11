@@ -10,6 +10,9 @@ namespace App\Tests\Category;
 
 use App\Policy\CategorySyndicationMappingPolicy;
 use App\Service\CatalogSyndicationMappingService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationMappingServiceTest extends TestCase
@@ -19,24 +22,27 @@ final class CatalogSyndicationMappingServiceTest extends TestCase
         $service = new CatalogSyndicationMappingService(new CategorySyndicationMappingPolicy());
 
         $event = $service->buildPublishPackage(
-            'pkg-100',
-            'dest-101',
-            'category-701',
-            'v1',
-            'per_locale',
-            [
-                'name' => 'Summer Shoes',
-                'slug' => 'summer-shoes',
-                'seoTitle' => '',
-            ],
-            [
-                'name' => 'title',
-                'slug' => 'handle',
-                'seoTitle' => 'seo_title',
-            ],
-            ['title', 'handle', 'seo_title'],
-            'operator-1',
-            'build destination package',
+            new CategorySyndicationPackageBuildRequest(
+                new CategorySyndicationPackageContext(
+                    'pkg-100',
+                    'dest-101',
+                    'category-701',
+                    'v1',
+                    'per_locale',
+                ),
+                [
+                    'name' => 'Summer Shoes',
+                    'slug' => 'summer-shoes',
+                    'seoTitle' => '',
+                ],
+                [
+                    'name' => 'title',
+                    'slug' => 'handle',
+                    'seoTitle' => 'seo_title',
+                ],
+                ['title', 'handle', 'seo_title'],
+                new CatalogAuditContext('operator-1', 'build destination package'),
+            ),
         );
 
         /** @var array{payload:array{title:string,handle:string},publishable:bool,missingRequiredFields:list<string>} $payload */

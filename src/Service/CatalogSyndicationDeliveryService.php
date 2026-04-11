@@ -11,6 +11,7 @@ use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
 use App\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
 use App\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
+use App\ValueObject\CategorySyndicationDeliveryRecordRequest;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
 
 /**
@@ -31,32 +32,26 @@ final class CatalogSyndicationDeliveryService implements CatalogSyndicationDeliv
      * Handles the record delivery workflow.
      */
     public function recordDelivery(
-        string $deliveryId,
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $status,
-        int $attempt,
-        ?int $responseCode,
-        string $responseMessage,
-        string $actorId,
-        string $reason,
+        CategorySyndicationDeliveryRecordRequest $request,
     ): CategorySyndicationDeliveryRecordedInterface {
-        $this->policy->assertStatus($status);
-        $this->policy->assertAttempt($attempt);
+        $context = $request->context();
+        $attempt = $request->attempt();
+        $audit = $request->auditContext();
+        $this->policy->assertStatus($context->status());
+        $this->policy->assertAttempt($attempt->attempt());
 
-        $normalizedStatus = new CategorySyndicationDeliveryStatus(trim($status));
-        $normalizedResponseMessage = $this->policy->normalizeResponseMessage($responseMessage);
+        $normalizedStatus = new CategorySyndicationDeliveryStatus(trim($context->status()));
+        $normalizedResponseMessage = $this->policy->normalizeResponseMessage($attempt->responseMessage());
         $deliveredAt = 'delivered' === $normalizedStatus->status() ? new \DateTimeImmutable('now') : null;
 
         $record = new CategorySyndicationDeliveryRecord(
-            trim($deliveryId),
-            trim($packageId),
-            trim($destinationId),
-            trim($categoryId),
+            trim($context->deliveryId()),
+            trim($context->packageId()),
+            trim($context->destinationId()),
+            trim($context->categoryId()),
             $normalizedStatus,
-            $attempt,
-            $responseCode,
+            $attempt->attempt(),
+            $attempt->responseCode(),
             $normalizedResponseMessage,
             $deliveredAt,
         );
@@ -75,8 +70,8 @@ final class CatalogSyndicationDeliveryService implements CatalogSyndicationDeliv
                 'responseMessage' => $record->responseMessage(),
                 'deliveredAt' => $record->deliveredAt()?->format(DATE_ATOM),
                 'retryable' => 'failed' === $record->status()->status(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
+                'actorId' => trim($audit->actorId()),
+                'reason' => trim($audit->reason()),
             ],
             new \DateTimeImmutable('now'),
         );

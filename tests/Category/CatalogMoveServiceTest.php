@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Tests\Category;
 
 use App\Service\CatalogMoveService;
+use App\ValueObject\CatalogMoveRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMoveServiceTest extends TestCase
@@ -16,7 +17,7 @@ final class CatalogMoveServiceTest extends TestCase
         $service = new CatalogMoveService($pdo);
 
         /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
-        $result = $service->move('electronics', 'fashion', 'main-tree', 'strict');
+        $result = $service->move(new CatalogMoveRequest('electronics', 'fashion', 'main-tree', 'strict'));
         [$changed, $redirects] = $result;
 
         self::assertSame(2, $changed);
@@ -55,7 +56,7 @@ final class CatalogMoveServiceTest extends TestCase
         $service = new CatalogMoveService($pdo);
 
         /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
-        $result = $service->move('electronics', 'fashion', 'main-tree', 'strict', true, 'en_US');
+        $result = $service->move(new CatalogMoveRequest('electronics', 'fashion', 'main-tree', 'strict', true, 'en_US'));
         [$changed, $redirects] = $result;
 
         self::assertSame(2, $changed);
@@ -75,7 +76,7 @@ final class CatalogMoveServiceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot move a node under its own descendant.');
 
-        $service->move('electronics', 'phones', 'main-tree', 'strict');
+        $service->move(new CatalogMoveRequest('electronics', 'phones', 'main-tree', 'strict'));
     }
 
     private function createPdo(): \PDO

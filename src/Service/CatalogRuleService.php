@@ -32,6 +32,8 @@ final readonly class CatalogRuleService implements CatalogRuleServiceInterface
 
     /**
      * Handles the preview workflow.
+     *
+     * @throws \Throwable
      */
     public function preview(array $spec): ?array
     {
@@ -53,6 +55,8 @@ final readonly class CatalogRuleService implements CatalogRuleServiceInterface
 
     /**
      * Handles the apply workflow.
+     *
+     * @throws \Throwable
      */
     public function apply(string $id): bool
     {

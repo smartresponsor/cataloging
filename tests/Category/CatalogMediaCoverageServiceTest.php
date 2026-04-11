@@ -13,6 +13,11 @@ use App\Policy\CategoryMediaGovernancePolicy;
 use App\Repository\CategoryMediaBindingRepository;
 use App\Service\CatalogMediaCoverageService;
 use App\Service\CatalogMediaGovernanceService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryEvaluationRequest;
+use App\ValueObject\CategoryMediaBindingScope;
+use App\ValueObject\CategoryMediaBindingState;
+use App\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaCoverageServiceTest extends TestCase
@@ -23,13 +28,13 @@ final class CatalogMediaCoverageServiceTest extends TestCase
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
 
-        $governance->bind('bind-1', 'category-901', 'asset-primary', 'primary', ['storefront'], ['en_US'], true, true, [], 'operator-1', 'bind primary');
-        $governance->bind('bind-2', 'category-901', 'asset-banner', 'banner', ['storefront'], ['en_US'], false, true, [], 'operator-1', 'bind banner');
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-1', 'category-901', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'bind primary')));
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-2', 'category-901', 'asset-banner', 'banner', ['storefront'], ['en_US']), new CategoryMediaBindingState(false, true, []), new CatalogAuditContext('operator-1', 'bind banner')));
 
-        $payload = $this->normalizePayload($coverage->evaluate('category-901', [
+        $payload = $this->normalizePayload($coverage->evaluate(new CategoryEvaluationRequest('category-901', [
             'media' => ['primaryAssetId' => ''],
             'presentation' => ['bannerId' => ''],
-        ], 'operator-2', 'media readiness review')->payload());
+        ], new CatalogAuditContext('operator-2', 'media readiness review')))->payload());
 
         self::assertSame([], $payload['requiredMissing']);
         self::assertTrue($payload['checks']['mediaReady']);

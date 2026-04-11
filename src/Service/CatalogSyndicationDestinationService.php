@@ -11,6 +11,8 @@ use App\EventInterface\CategorySyndicationDestinationRegisteredInterface;
 use App\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
 
 /**
  * Provides the catalog syndication destination service application service.
@@ -26,29 +28,25 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
     ) {
     }
 
-    /** @param array<string,mixed> $settings */
     public function register(
-        string $destinationId,
-        string $name,
-        string $destinationType,
-        string $deliveryMode,
-        bool $enabled,
-        array $settings,
-        string $actorId,
-        string $reason,
+        CategorySyndicationDestinationRegisterRequest $request,
     ): CategorySyndicationDestinationRegisteredInterface {
-        $this->policy->assertDestinationType($destinationType);
-        $this->policy->assertDeliveryMode($deliveryMode);
-        /** @var array<string,string> $normalizedSettings */
-        $normalizedSettings = $this->policy->normalizeSettings($settings);
+        $definition = $request->definition();
+        $configuration = $request->configuration();
+        $audit = $request->auditContext();
+
+        $this->policy->assertDestinationType($definition->destinationType());
+        $this->policy->assertDeliveryMode($definition->deliveryMode());
+
+        $normalizedConfiguration = new CategorySyndicationDestinationConfiguration(
+            $configuration->enabled(),
+            $this->policy->normalizeSettings($configuration->settings()),
+        );
+
         $destination = CategorySyndicationDestination::register(
-            $destinationId,
-            $name,
-            $destinationType,
-            $deliveryMode,
-            $enabled,
-            $normalizedSettings,
-            $actorId,
+            $definition,
+            $normalizedConfiguration,
+            $audit->actorId(),
         );
         $this->repository->save($destination);
 
@@ -60,8 +58,8 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
                 'deliveryMode' => $destination->deliveryMode(),
                 'enabled' => $destination->enabled(),
                 'settings' => $destination->settings(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
+                'actorId' => trim($audit->actorId()),
+                'reason' => trim($audit->reason()),
             ],
             new \DateTimeImmutable('now'),
         );

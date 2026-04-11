@@ -4,6 +4,9 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ValueObject\CategoryHostContextRequest;
+
 /**
  * Provides the store scope resolver application service.
  */
@@ -12,8 +15,8 @@ final class StoreScopeResolver
     /**
      * Resolves the requested result for the provided input.
      */
-    public function resolve(string $host): string
+    public function resolve(CategoryHostContextRequest $request): string
     {
-        return 'merchant.local' === $host ? 'merchant' : 'default';
+        return 'merchant.local' === $request->host() ? 'merchant' : 'default';
     }
 }

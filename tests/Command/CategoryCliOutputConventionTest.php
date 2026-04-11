@@ -10,6 +10,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategoryReviewQueueListCommand;
 use App\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\ValueObject\CategoryReviewQueueRequest;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +22,7 @@ final class CategoryCliOutputConventionTest extends TestCase
     {
         /** @var CatalogReviewQueueServiceInterface&MockObject $service */
         $service = $this->createMock(CatalogReviewQueueServiceInterface::class);
-        $service->method('queueForReviewer')->willReturn([]);
+        $service->method('queueForReviewer')->with($this->isInstanceOf(CategoryReviewQueueRequest::class))->willReturn([]);
 
         $command = new CategoryReviewQueueListCommand($service);
         $tester = new CommandTester($command);

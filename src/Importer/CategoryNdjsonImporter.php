@@ -7,6 +7,8 @@ namespace App\Importer;
 
 use App\ImporterInterface\CategoryNdjsonImporterInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\ValueObject\CategoryCreateRequest;
+use App\ValueObject\CategoryLinkRequest;
 
 /**
  * Provides the category ndjson importer implementation.
@@ -54,13 +56,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 
                     if ('category' === $type) {
                         if (!$dryRun) {
-                            $actorId = $this->optionalStringValue($data, 'actorId') ?? 'system';
-                            $taxonomyId = $this->requiredStringValue($data, 'taxonomyId');
-                            $parentId = $this->optionalStringValue($data, 'parentId');
-                            $name = $this->stringMapValue($data, 'name');
-                            $slug = $this->stringMapValue($data, 'slug');
-                            $meta = $this->metaMapValue($data, 'meta');
-                            $this->service->create($actorId, $taxonomyId, $parentId, $name, $slug, $meta);
+                            $this->service->create($this->createRequest($data));
                         }
                         ++$ok;
                         continue;
@@ -68,14 +64,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 
                     if ('link' === $type) {
                         if (!$dryRun) {
-                            $actorId = $this->optionalStringValue($data, 'actorId') ?? 'system';
-                            $this->service->attach(
-                                $actorId,
-                                $this->requiredStringValue($data, 'categoryId'),
-                                $this->requiredStringValue($data, 'targetDomain'),
-                                $this->requiredStringValue($data, 'targetClass'),
-                                $this->requiredStringValue($data, 'targetId')
-                            );
+                            $this->service->attach($this->linkRequest($data));
                         }
                         ++$ok;
                         continue;
@@ -160,7 +149,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
             if (!is_string($entryKey) || !is_scalar($entryValue)) {
                 continue;
             }
-            $normalized[$entryKey] = (string) $entryValue;
+            $normalized[$entryKey] = trim((string) $entryValue);
         }
 
         return $normalized;
@@ -177,6 +166,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
         if (!is_array($value)) {
             return [];
         }
+
         $normalized = [];
         foreach ($value as $entryKey => $entryValue) {
             if (!is_string($entryKey)) {
@@ -213,5 +203,30 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
         }
 
         return $normalized;
+    }
+
+    /** @param array<string,mixed> $data */
+    private function createRequest(array $data): CategoryCreateRequest
+    {
+        return new CategoryCreateRequest(
+            $this->optionalStringValue($data, 'actorId') ?? 'system',
+            $this->requiredStringValue($data, 'taxonomyId'),
+            $this->optionalStringValue($data, 'parentId'),
+            $this->stringMapValue($data, 'name'),
+            $this->stringMapValue($data, 'slug'),
+            $this->metaMapValue($data, 'meta'),
+        );
+    }
+
+    /** @param array<string,mixed> $data */
+    private function linkRequest(array $data): CategoryLinkRequest
+    {
+        return new CategoryLinkRequest(
+            $this->optionalStringValue($data, 'actorId') ?? 'system',
+            $this->requiredStringValue($data, 'categoryId'),
+            $this->requiredStringValue($data, 'targetDomain'),
+            $this->requiredStringValue($data, 'targetClass'),
+            $this->requiredStringValue($data, 'targetId'),
+        );
     }
 }

@@ -4,23 +4,13 @@
 declare(strict_types=1);
 
 namespace App\PolicyInterface;
+
+use App\ValueObject\CategoryMediaBindRequest;
+
 /**
  * Defines the contract for category media governance policy.
  */
 interface CategoryMediaGovernancePolicyInterface
 {
-    /**
-     * @param list<string> $channels
-     * @param list<string> $locales
-     */
-    public function assertBindingAllowed(
-        string $bindingId,
-        string $categoryId,
-        string $assetId,
-        string $role,
-        array $channels,
-        array $locales,
-        string $actorId,
-        string $reason,
-    ): void;
+    public function assertBindingAllowed(CategoryMediaBindRequest $request): void;
 }

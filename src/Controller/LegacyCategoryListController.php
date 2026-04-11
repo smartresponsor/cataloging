@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\ServiceInterface\CatalogReadServiceInterface;
+use App\ValueObject\CategoryCatalogReadPageRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,9 +28,10 @@ final class LegacyCategoryListController extends AbstractController
     #[Route('/category/list', name: 'legacy_category_list_handler', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {
-        $first = max(1, min(100, (int) $request->query->get('first', 20)));
-        $after = (string) $request->query->get('after', '');
-        $result = $this->catalogReadService->list($first, $after);
+        $result = $this->catalogReadService->list(new CategoryCatalogReadPageRequest(
+            (int) $request->query->get('first', 20),
+            (string) $request->query->get('after', ''),
+        ));
         $items = $result['item'];
 
         return $this->json([

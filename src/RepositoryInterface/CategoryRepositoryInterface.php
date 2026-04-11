@@ -4,13 +4,18 @@
 declare(strict_types=1);
 
 namespace App\RepositoryInterface;
+
+use App\ValueObject\CategoryResolveRequest;
+use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategoryTreeRequest;
+
 /**
  * Defines the contract for category repository.
  */
 interface CategoryRepositoryInterface
 {
     /** @return list<array<string,mixed>> */
-    public function tree(string $taxonomyCode, ?string $parentId, int $depth, string $locale): array;
+    public function tree(CategoryTreeRequest $request): array;
 
     /** @return list<array<string,mixed>> */
     public function breadcrumb(string $categoryId, string $locale): array;
@@ -29,7 +34,7 @@ interface CategoryRepositoryInterface
     public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta): array;
 
     /** @return array<string,mixed> */
-    public function move(string $actorId, string $categoryId, ?string $newParentId, int $newOrder): array;
+    public function move(CategoryServiceMoveRequest $request): array;
     /**
      * Handles the attach workflow.
      */
@@ -52,7 +57,7 @@ interface CategoryRepositoryInterface
     ): void;
 
     /** @return list<array<string,mixed>> */
-    public function resolve(string $taxonomyCode, string $targetDomain, string $targetId, string $locale): array;
+    public function resolve(CategoryResolveRequest $request): array;
 
     /** @return array<string,mixed> */
     public function bySlug(string $taxonomyCode, string $slug, string $locale): array;

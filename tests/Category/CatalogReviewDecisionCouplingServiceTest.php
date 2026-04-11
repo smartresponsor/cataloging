@@ -17,6 +17,9 @@ use App\Service\CatalogChangeRequestService;
 use App\Service\CatalogPublicationGateService;
 use App\Service\CatalogReviewDecisionCouplingService;
 use App\Service\CatalogWorkflowTransitionService;
+use App\ValueObject\CategoryChangeRequestReviewRequest;
+use App\ValueObject\CategoryChangeRequestSubmitRequest;
+use App\ValueObject\CategoryReviewDecisionCouplingRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogReviewDecisionCouplingServiceTest extends TestCase
@@ -36,16 +39,16 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
             $publicationGateService,
         );
 
-        $changeRequestService->submit(
+        $changeRequestService->submit(new CategoryChangeRequestSubmitRequest(
             'req-510',
             'category-510',
             'author-1',
             'Promote category to spring landing',
             ['slug' => 'spring-landing'],
-        );
-        $changeRequestService->review('req-510', 'in_review', 'reviewer-0', 'Entered moderation');
+        ));
+        $changeRequestService->review(new CategoryChangeRequestReviewRequest('req-510', 'in_review', 'reviewer-0', 'Entered moderation'));
 
-        $event = $service->couple(
+        $event = $service->couple(new CategoryReviewDecisionCouplingRequest(
             'req-510',
             'accepted',
             'reviewer-1',
@@ -58,7 +61,7 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
                 'mediaReady' => false,
                 'aliasReady' => true,
             ],
-        );
+        ));
 
         $payload = $event->payload();
 
@@ -84,16 +87,16 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
             $publicationGateService,
         );
 
-        $changeRequestService->submit(
+        $changeRequestService->submit(new CategoryChangeRequestSubmitRequest(
             'req-511',
             'category-511',
             'author-1',
             'Remove deprecated alias',
             ['alias' => 'old-path'],
-        );
-        $changeRequestService->review('req-511', 'in_review', 'reviewer-0', 'Entered moderation');
+        ));
+        $changeRequestService->review(new CategoryChangeRequestReviewRequest('req-511', 'in_review', 'reviewer-0', 'Entered moderation'));
 
-        $event = $service->couple(
+        $event = $service->couple(new CategoryReviewDecisionCouplingRequest(
             'req-511',
             'rejected',
             'reviewer-2',
@@ -104,7 +107,7 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
                 'contentReady' => false,
                 'localeReady' => false,
             ],
-        );
+        ));
 
         $payload = $event->payload();
 

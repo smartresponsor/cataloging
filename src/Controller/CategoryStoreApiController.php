@@ -7,6 +7,7 @@ namespace App\Controller;
 
 use App\Service\ChannelFilter;
 use App\Service\ReadOptimizer;
+use App\ValueObject\CategoryProjectionCriteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,19 +35,20 @@ final readonly class CategoryStoreApiController
         $channel = trim((string) $request->query->get('channel', 'default'));
         $tenant = trim((string) $request->query->get('tenant', ''));
         $locale = trim((string) $request->query->get('locale', ''));
-        $criteria = array_filter([
+        $criteria = CategoryProjectionCriteria::fromArray(array_filter([
             'published' => true,
             'tenant' => '' === $tenant ? null : $tenant,
             'locale' => '' === $locale ? null : $locale,
-        ], static fn (mixed $value): bool => null !== $value);
+        ], static fn (mixed $value): bool => null !== $value));
 
         $tree = $this->optimizer->getTree($criteria);
-        $filtered = $this->filter->filter($tree, '' === $channel ? 'default' : $channel);
+        $normalizedChannel = '' === $channel ? 'default' : $channel;
+        $filtered = $this->filter->filter($tree, $normalizedChannel);
 
         return new JsonResponse([
             'data' => $filtered,
-            'channel' => '' === $channel ? 'default' : $channel,
-            'criteria' => $criteria,
+            'channel' => $normalizedChannel,
+            'criteria' => $criteria->toArray(),
         ]);
     }
 }

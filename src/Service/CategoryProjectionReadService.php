@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,7 +27,7 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
     /**
      * Handles the list workflow.
      */
-    public function list(array $criteria = []): array
+    public function list(?CategoryProjectionCriteria $criteria = null): array
     {
         $result = $this->searchService->search($criteria);
 
@@ -36,9 +37,9 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
     /**
      * Handles the tree workflow.
      */
-    public function tree(array $criteria = []): array
+    public function tree(?CategoryProjectionCriteria $criteria = null): array
     {
-        $normalized = $this->normalizeCriteria($criteria);
+        $normalized = $this->normalizeCriteria(($criteria ?? CategoryProjectionCriteria::fromArray([]))->toArray());
         [$whereSql, $params, $types] = $this->compileFilters($normalized);
         $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
             .'workflow_state, published, published_at, updated_at FROM category_projection ';
@@ -105,7 +106,12 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
     }
 
     /**
-     * @param array{'tenant':?string,' $criteria locale':?string,'workflow_state':?string,'published':?bool} $criteria
+     * @param array{
+     *     tenant:?string,
+     *     locale:?string,
+     *     workflow_state:?string,
+     *     published:?bool
+     * } $criteria
      *
      * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
      */

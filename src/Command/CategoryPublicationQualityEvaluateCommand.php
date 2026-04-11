@@ -6,6 +6,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
+use App\ValueObject\CategoryPublicationQualityInput;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -60,12 +63,18 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
         $checks = $this->decodeJsonMapOption($input, 'checks');
 
         $event = $this->qualityService->evaluate(
-            $this->argumentString($input, 'categoryId'),
-            $this->argumentInt($input, 'score'),
-            $publicationChecks,
-            $checks,
-            $this->argumentString($input, 'actorId'),
-            $this->argumentString($input, 'reason'),
+            new CategoryPublicationQualityEvaluationRequest(
+                new CategoryPublicationQualityInput(
+                    $this->argumentString($input, 'categoryId'),
+                    $this->argumentInt($input, 'score'),
+                    $publicationChecks,
+                    $checks,
+                ),
+                new CatalogAuditContext(
+                    $this->argumentString($input, 'actorId'),
+                    $this->argumentString($input, 'reason'),
+                ),
+            ),
         );
 
         return $this->writeJson($output, $event->payload());

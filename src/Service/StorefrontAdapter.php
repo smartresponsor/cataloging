@@ -4,24 +4,25 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ValueObject\CategoryStorefrontAdaptRequest;
+
 /**
  * Provides the storefront adapter application service.
  */
 final class StorefrontAdapter
 {
     /**
-     * @param list<array{id:mixed,name?:mixed,slug?:mixed,locale?:mixed,published?:mixed}> $tree
-     *
      * @return list<array{id:mixed,name:string,slug:string,locale:string}>
      */
-    public function adapt(array $tree): array
+    public function adapt(CategoryStorefrontAdaptRequest $request): array
     {
-        $out = [];
-        foreach ($tree as $node) {
+        $adaptedTree = [];
+        foreach ($request->tree() as $node) {
             if (!($node['published'] ?? true)) {
                 continue;
             }
-            $out[] = [
+            $adaptedTree[] = [
                 'id' => $node['id'],
                 'name' => $this->stringValue($node, 'name'),
                 'slug' => $this->stringValue($node, 'slug'),
@@ -29,7 +30,7 @@ final class StorefrontAdapter
             ];
         }
 
-        return $out;
+        return $adaptedTree;
     }
 
     /** @param array<string,mixed> $node */

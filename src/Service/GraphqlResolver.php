@@ -7,6 +7,9 @@ namespace App\Service;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\GraphqlResolverInterface;
+use App\ValueObject\CategoryGraphqlMoveRequest;
+use App\ValueObject\CategoryGraphqlNodeRequest;
+use App\ValueObject\CategoryGraphqlPublishRequest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
@@ -31,10 +34,10 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
     ) {
     }
 
-    /** @param array<string,mixed> $args @return array<string,mixed>|null */
-    public function category(array $args): ?array
+    /** @return array<string,mixed>|null */
+    public function category(CategoryGraphqlNodeRequest $request): ?array
     {
-        $id = $this->stringValue($args, 'id');
+        $id = $request->id();
         if ('' === $id) {
             return null;
         }
@@ -48,15 +51,13 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
     }
 
     /**
-     * @param array<string,mixed> $args @return list<array<string,mixed>>
-     *
-     * @return array
+     * @return list<array<string,mixed>>
      *
      * @throws Exception
      */
-    public function categoryPath(array $args): array
+    public function categoryPath(CategoryGraphqlNodeRequest $request): array
     {
-        $id = $this->stringValue($args, 'id');
+        $id = $request->id();
         if ('' === $id) {
             return [];
         }
@@ -102,11 +103,10 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
         return [] === $result ? [$this->normalizeNode($row)] : $result;
     }
 
-    /** @param array<string,mixed> $args @return array<string,mixed>|null */
-    public function publishCategory(array $args): ?array
+    /** @return array<string,mixed>|null */
+    public function publishCategory(CategoryGraphqlPublishRequest $request): ?array
     {
-        $input = $this->arrayValue($args, 'input');
-        $id = $this->stringValue($input, 'id');
+        $id = $request->id();
         if ('' === $id || null === $this->publish) {
             return null;
         }
@@ -120,18 +120,14 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
         ];
     }
 
-    /** @param array<string,mixed> $args */
-    public function moveCategory(array $args): bool
+    public function moveCategory(CategoryGraphqlMoveRequest $request): bool
     {
-        $input = $this->arrayValue($args, 'input');
-        $id = $this->stringValue($input, 'id');
-        $parentId = $this->nullableStringValue($input, 'parentId');
-
+        $id = $request->id();
         if ('' === $id || null === $this->tree) {
             return false;
         }
 
-        $this->tree->move($id, $parentId);
+        $this->tree->move($id, $request->parentId());
 
         return true;
     }
@@ -198,18 +194,6 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
         $value = $input[$key];
 
         return is_scalar($value) ? trim((string) $value) : null;
-    }
-
-    /**
-     * @param array<string,mixed> $input
-     *
-     * @return array<string,mixed>
-     */
-    private function arrayValue(array $input, string $key): array
-    {
-        $value = $input[$key] ?? [];
-
-        return is_array($value) ? $value : [];
     }
 
     private function boolValue(mixed $value): bool

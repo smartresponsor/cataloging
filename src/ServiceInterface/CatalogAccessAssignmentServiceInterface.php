@@ -6,6 +6,9 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EntityInterface\CategoryAccessAssignmentInterface;
+use App\ValueObject\CategoryAccessAssignmentRequest;
+use App\ValueObject\CategoryAccessAssignmentSelection;
+
 /**
  * Defines the contract for catalog access assignment service.
  */
@@ -14,24 +17,22 @@ interface CatalogAccessAssignmentServiceInterface
     /**
      * Handles the assign owner workflow.
      */
-    public function assignOwner(string $categoryId, string $actorUserId): CategoryAccessAssignmentInterface;
+    public function assignOwner(CategoryAccessAssignmentSelection $selection): CategoryAccessAssignmentInterface;
+
     /**
      * Handles the assign role workflow.
      */
-    public function assignRole(
-        string $categoryId,
-        string $actorUserId,
-        string $role,
-        bool $isPrimary = false,
-    ): CategoryAccessAssignmentInterface;
+    public function assignRole(CategoryAccessAssignmentRequest $request): CategoryAccessAssignmentInterface;
+
     /**
      * Handles the revoke workflow.
      */
-    public function revoke(string $categoryId, string $actorUserId): void;
+    public function revoke(CategoryAccessAssignmentSelection $selection): void;
+
     /**
      * Updates the primary value.
      */
-    public function setPrimary(string $categoryId, string $actorUserId): void;
+    public function setPrimary(CategoryAccessAssignmentSelection $selection): void;
 
     /** @return list<CategoryAccessAssignmentInterface> */
     public function listActiveForCategory(string $categoryId): array;

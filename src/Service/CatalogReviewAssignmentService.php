@@ -12,6 +12,7 @@ use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
 use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
+use App\ValueObject\CategoryReviewAssignmentRequest;
 
 /**
  * Provides the catalog review assignment service application service.
@@ -31,28 +32,28 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
     /**
      * Handles the assign workflow.
      */
-    public function assign(
-        string $requestId,
-        string $assignedReviewer,
-        string $assignedBy,
-        string $priority = 'normal',
-        ?\DateTimeImmutable $dueAt = null,
-    ): CategoryChangeRequestAssigned {
-        $request = $this->changeRequestRepository->findByRequestId($requestId);
+    public function assign(CategoryReviewAssignmentRequest $request): CategoryChangeRequestAssigned
+    {
+        $changeRequest = $this->changeRequestRepository->findByRequestId($request->requestId());
 
-        if (!$request instanceof CategoryChangeRequest) {
-            throw new \DomainException(sprintf('Category change request not found: %s', $requestId));
+        if (!$changeRequest instanceof CategoryChangeRequest) {
+            throw new \DomainException(sprintf('Category change request not found: %s', $request->requestId()));
         }
 
-        $this->policy->assertCanAssign($request, $assignedReviewer, $assignedBy, $priority);
+        $this->policy->assertCanAssign(
+            $changeRequest,
+            $request->assignedReviewer(),
+            $request->assignedBy(),
+            $request->priority(),
+        );
 
         $assignment = CategoryReviewAssignment::create(
-            $request->requestId(),
-            $request->categoryId(),
-            $assignedReviewer,
-            $assignedBy,
-            $priority,
-            $dueAt,
+            $changeRequest->requestId(),
+            $changeRequest->categoryId(),
+            $request->assignedReviewer(),
+            $request->assignedBy(),
+            $request->priority(),
+            $request->dueAt(),
         );
 
         $this->assignmentRepository->save($assignment);

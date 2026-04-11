@@ -10,6 +10,7 @@ use App\Event\CategoryMediaBound;
 use App\PolicyInterface\CategoryMediaGovernancePolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\ServiceInterface\CatalogMediaGovernanceServiceInterface;
+use App\ValueObject\CategoryMediaBindRequest;
 use App\ValueObject\CategoryMediaRole;
 
 /**
@@ -29,67 +30,51 @@ final readonly class CatalogMediaGovernanceService implements CatalogMediaGovern
     /**
      * Handles the bind workflow.
      */
-    public function bind(
-        string $bindingId,
-        string $categoryId,
-        string $assetId,
-        string $role,
-        array $channels,
-        array $locales,
-        bool $requiredForPublish,
-        bool $active,
-        array $metadata,
-        string $actorId,
-        string $reason,
-    ): CategoryMediaBound {
-        $this->policy->assertBindingAllowed(
-            $bindingId,
-            $categoryId,
-            $assetId,
-            $role,
-            $channels,
-            $locales,
-            $actorId,
-            $reason,
-        );
+    public function bind(CategoryMediaBindRequest $request): CategoryMediaBound
+    {
+        $scope = $request->scope();
+        $state = $request->state();
+        $audit = $request->auditContext();
+
+        $this->policy->assertBindingAllowed($request);
 
         $normalizedChannels = array_values(array_unique(array_map(
             static fn ($value): string => trim((string) $value),
-            $channels,
+            $scope->channels(),
         )));
         $normalizedLocales = array_values(array_unique(array_map(
             static fn ($value): string => trim((string) $value),
-            $locales,
+            $scope->locales(),
         )));
 
         $binding = new CategoryMediaBinding(
-            $bindingId,
-            $categoryId,
-            $assetId,
-            CategoryMediaRole::fromString($role),
+            $scope->bindingId(),
+            $scope->categoryId(),
+            $scope->assetId(),
+            CategoryMediaRole::fromString($scope->role()),
             $normalizedChannels,
             $normalizedLocales,
-            $requiredForPublish,
-            $active,
-            $metadata,
-            $actorId,
+            $state->requiredForPublish(),
+            $state->active(),
+            $state->metadata(),
+            $audit->actorId(),
             new \DateTimeImmutable('now'),
         );
 
         $this->repository->save($binding);
 
         $event = new CategoryMediaBound(
-            $bindingId,
-            $categoryId,
-            $assetId,
-            $role,
+            $scope->bindingId(),
+            $scope->categoryId(),
+            $scope->assetId(),
+            $scope->role(),
             $normalizedChannels,
             $normalizedLocales,
-            $requiredForPublish,
-            $active,
-            $metadata,
-            $actorId,
-            $reason,
+            $state->requiredForPublish(),
+            $state->active(),
+            $state->metadata(),
+            $audit->actorId(),
+            $audit->reason(),
             $binding->boundAt(),
         );
 

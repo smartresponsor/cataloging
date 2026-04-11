@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+
 /**
  * Defines the contract for catalog destination media policy preference service.
  */
@@ -15,9 +17,6 @@ interface CatalogDestinationMediaPolicyPreferenceServiceInterface
      * Handles the evaluate workflow.
      */
     public function evaluate(
-        string $destinationId,
-        string $categoryId,
-        string $actorId,
-        string $reason,
+        CategoryDestinationMediaEvaluationRequest $request,
     ): CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
 }

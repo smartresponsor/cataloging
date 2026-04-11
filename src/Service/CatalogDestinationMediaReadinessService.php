@@ -11,6 +11,10 @@ use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\ValueObject\CategoryDestinationMediaReadinessContext;
+use App\ValueObject\CategoryDestinationMediaReadinessState;
+use App\ValueObject\CategoryEvaluationRequest;
 
 /**
  * Provides the catalog destination media readiness service application service.
@@ -31,11 +35,10 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
      * Handles the evaluate workflow.
      */
     public function evaluate(
-        string $destinationId,
-        string $categoryId,
-        string $actorId,
-        string $reason,
+        CategoryDestinationMediaEvaluationRequest $request,
     ): CategoryDestinationMediaReadinessEvaluatedInterface {
+        $destinationId = $request->destinationId();
+        $categoryId = $request->categoryId();
         $destination = $this->destinationRepository->find($destinationId);
         if (null === $destination) {
             throw new \InvalidArgumentException('Unknown destination.');
@@ -46,22 +49,33 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
             'locale' => $this->stringValue($settings['locale'] ?? null),
             'requiredRoles' => $this->stringList($settings['requiredMediaRoles'] ?? null),
         ];
-        $applicability = $this->applicabilityService->evaluate($categoryId, $payload, $actorId, $reason);
+        $applicability = $this->applicabilityService->evaluate(
+            new CategoryEvaluationRequest(
+                $categoryId,
+                $payload,
+                $request->auditContext(),
+            ),
+        );
         $applicabilityPayload = $applicability->payload();
+
         $report = $this->policy->buildReport(
-            $destinationId,
-            $categoryId,
-            $settings,
-            $payload,
-            $this->boolMap($applicabilityPayload['checks'] ?? null),
-            $this->stringList($applicabilityPayload['requiredMissing'] ?? null),
-            $this->stringList($applicabilityPayload['warnings'] ?? null),
-            $this->stringList($applicabilityPayload['matchedBindingIds'] ?? null),
+            new CategoryDestinationMediaReadinessContext(
+                $destinationId,
+                $categoryId,
+                $settings,
+                $payload,
+            ),
+            new CategoryDestinationMediaReadinessState(
+                $this->boolMap($applicabilityPayload['checks'] ?? null),
+                $this->stringList($applicabilityPayload['requiredMissing'] ?? null),
+                $this->stringList($applicabilityPayload['warnings'] ?? null),
+                $this->stringList($applicabilityPayload['matchedBindingIds'] ?? null),
+            ),
         );
 
         return new CategoryDestinationMediaReadinessEvaluated(
-            trim($destinationId),
-            trim($categoryId),
+            $destinationId,
+            $categoryId,
             $this->stringValue($settings['channel'] ?? null),
             $this->stringValue($settings['locale'] ?? null),
             $report->publishable(),
@@ -69,8 +83,8 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
             $report->warnings(),
             $report->checks(),
             $report->matchedBindingIds(),
-            trim($actorId),
-            trim($reason),
+            $request->actorId(),
+            $request->reason(),
             new \DateTimeImmutable(),
         );
     }
@@ -86,11 +100,14 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
         if (!is_array($value)) {
             return [];
         }
+
         $result = [];
         foreach ($value as $item) {
             if (!is_scalar($item)) {
                 continue;
-            } $normalized = trim((string) $item);
+            }
+
+            $normalized = trim((string) $item);
             if ('' !== $normalized) {
                 $result[] = $normalized;
             }
@@ -104,10 +121,12 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
     {
         if (!is_array($value)) {
             return [];
-        } $result = [];
-        foreach ($value as $k => $v) {
-            if (is_string($k) && '' !== trim($k)) {
-                $result[$k] = (bool) $v;
+        }
+
+        $result = [];
+        foreach ($value as $key => $item) {
+            if (is_string($key) && '' != trim($key)) {
+                $result[$key] = (bool) $item;
             }
         }
 

@@ -8,6 +8,9 @@ use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\ServiceInterface\CategoryMutationServiceInterface;
+use App\ValueObject\CategoryMutationMoveRequest;
+use App\ValueObject\CategoryMutationPublishRequest;
+use App\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\ValueObject\CategoryWorkflowState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
@@ -35,26 +38,20 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
 
     /**
      * Handles the move workflow.
+     *
+     * @throws \Throwable
      */
-    public function move(
-        string $categoryId,
-        string $newParentId,
-        string $actorId,
-        string $treeId = 'catalog',
-        string $policy = 'strict',
-        bool $dryRun = false,
-        ?string $locale = null,
-        ?string $idempotencyKey = null,
-        ?string $correlationId = null,
-    ): array {
-        $normalizedCategoryId = $this->requiredString($categoryId, 'categoryId');
-        $normalizedNewParentId = $this->requiredString($newParentId, 'newParentId');
-        $normalizedActorId = $this->requiredString($actorId, 'actorId');
-        $normalizedTreeId = $this->requiredString($treeId, 'treeId');
-        $normalizedPolicy = $this->requiredString($policy, 'policy');
-        $normalizedLocale = null !== $locale ? trim($locale) : null;
-        $normalizedCorrelationId = $this->normalizeOptionalString($correlationId);
-        $commandKey = $this->moveIdempotencyKey(
+    public function move(CategoryMutationMoveRequest $request): array
+    {
+        $normalizedCategoryId = $this->requiredString($request->categoryId(), 'categoryId');
+        $normalizedNewParentId = $this->requiredString($request->newParentId(), 'newParentId');
+        $normalizedActorId = $this->requiredString($request->actorId(), 'actorId');
+        $normalizedTreeId = $this->requiredString($request->treeId(), 'treeId');
+        $normalizedPolicy = $this->requiredString($request->policy(), 'policy');
+        $dryRun = $request->dryRun();
+        $normalizedLocale = null !== $request->locale() ? trim($request->locale()) : null;
+        $normalizedCorrelationId = $this->normalizeOptionalString($request->correlationId());
+        $normalizedRequest = new CategoryMutationMoveRequest(
             $normalizedCategoryId,
             $normalizedNewParentId,
             $normalizedActorId,
@@ -62,17 +59,11 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
             $normalizedPolicy,
             $dryRun,
             $normalizedLocale,
-            $idempotencyKey,
+            $request->idempotencyKey(),
+            $normalizedCorrelationId,
         );
-        $requestHash = $this->moveRequestHash(
-            $normalizedCategoryId,
-            $normalizedNewParentId,
-            $normalizedActorId,
-            $normalizedTreeId,
-            $normalizedPolicy,
-            $dryRun,
-            $normalizedLocale,
-        );
+        $commandKey = $this->moveIdempotencyKey($normalizedRequest);
+        $requestHash = $this->moveRequestHash($normalizedRequest);
 
         if ($normalizedCategoryId === $normalizedNewParentId) {
             throw new \InvalidArgumentException('A node cannot be moved under itself.');
@@ -254,36 +245,28 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
 
     /**
      * Handles the publish workflow.
+     *
+     * @throws \Throwable
      */
-    public function publish(
-        string $categoryId,
-        bool $published,
-        array $checks,
-        string $actorId,
-        string $reason,
-        ?string $idempotencyKey = null,
-        ?string $correlationId = null,
-    ): array {
-        $normalizedCategoryId = $this->requiredString($categoryId, 'categoryId');
-        $normalizedActorId = $this->requiredString($actorId, 'actorId');
-        $normalizedReason = $this->requiredString($reason, 'reason');
-        $normalizedChecks = $this->normalizeChecks($checks);
-        $normalizedCorrelationId = $this->normalizeOptionalString($correlationId);
-        $commandKey = $this->publishIdempotencyKey(
+    public function publish(CategoryMutationPublishRequest $request): array
+    {
+        $normalizedCategoryId = $this->requiredString($request->categoryId(), 'categoryId');
+        $published = $request->published();
+        $normalizedActorId = $this->requiredString($request->actorId(), 'actorId');
+        $normalizedReason = $this->requiredString($request->reason(), 'reason');
+        $normalizedChecks = $this->normalizeChecks($request->checks());
+        $normalizedCorrelationId = $this->normalizeOptionalString($request->correlationId());
+        $normalizedRequest = new CategoryMutationPublishRequest(
             $normalizedCategoryId,
             $published,
             $normalizedChecks,
             $normalizedActorId,
             $normalizedReason,
-            $idempotencyKey,
+            $request->idempotencyKey(),
+            $normalizedCorrelationId,
         );
-        $requestHash = $this->publishRequestHash(
-            $normalizedCategoryId,
-            $published,
-            $normalizedChecks,
-            $normalizedActorId,
-            $normalizedReason,
-        );
+        $commandKey = $this->publishIdempotencyKey($normalizedRequest);
+        $requestHash = $this->publishRequestHash($normalizedRequest);
 
         /**
          * @var array{
@@ -332,13 +315,13 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                 $previousPublished = (bool) ($category['published'] ?? false);
 
                 if ($published) {
-                    $gate = $this->publicationGateService->evaluate(
+                    $gate = $this->publicationGateService->evaluate(new CategoryPublicationGateEvaluationRequest(
                         $normalizedCategoryId,
                         $currentWorkflowState,
                         $normalizedChecks,
                         $normalizedActorId,
                         $normalizedReason,
-                    );
+                    ));
                     $payload = $gate->payload();
                     if (($payload['publishable'] ?? false) !== true) {
                         throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
@@ -499,7 +482,11 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         ];
     }
 
-    /** @return array<string,mixed> */
+    /**
+     * @return array<string,mixed>
+     *
+     * @throws \Throwable
+     */
     private function fetchCategory(Connection $connection, string $categoryId): array
     {
         $row = $connection->fetchAssociative(
@@ -534,7 +521,11 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return array_values(array_filter($rows, 'is_array'));
     }
 
-    /** @param array<string,mixed> $payload */
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @throws \Throwable
+     */
     private function writeAudit(Connection $connection, string $action, array $payload): void
     {
         $connection->insert('category_audit', [
@@ -612,6 +603,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return $normalized;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function workflowStateValue(mixed $value): string
     {
         if (!is_scalar($value) || '' === trim((string) $value)) {
@@ -621,6 +615,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return CategoryWorkflowState::fromString(trim((string) $value))->value();
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function requiredPath(mixed $value): string
     {
         $normalized = $this->requiredString($value, 'path');
@@ -631,6 +628,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return $normalized;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function requiredString(mixed $value, string $field): string
     {
         if (!is_scalar($value)) {
@@ -696,81 +696,47 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return substr_count($path, '.');
     }
 
-    private function moveIdempotencyKey(
-        string $categoryId,
-        string $newParentId,
-        string $actorId,
-        string $treeId,
-        string $policy,
-        bool $dryRun,
-        ?string $locale,
-        ?string $idempotencyKey,
-    ): string {
-        $providedKey = $this->normalizeOptionalString($idempotencyKey);
+    private function moveIdempotencyKey(CategoryMutationMoveRequest $request): string
+    {
+        $providedKey = $this->normalizeOptionalString($request->idempotencyKey());
         if (null !== $providedKey) {
             return sprintf('category.move:client:%s', $providedKey);
         }
 
-        return sprintf(
-            'category.move:auto:%s',
-            $this->moveRequestHash($categoryId, $newParentId, $actorId, $treeId, $policy, $dryRun, $locale),
-        );
+        return sprintf('category.move:auto:%s', $this->moveRequestHash($request));
     }
 
-    /** @param array<string,bool> $checks */
-    private function publishIdempotencyKey(
-        string $categoryId,
-        bool $published,
-        array $checks,
-        string $actorId,
-        string $reason,
-        ?string $idempotencyKey,
-    ): string {
-        $providedKey = $this->normalizeOptionalString($idempotencyKey);
+    private function publishIdempotencyKey(CategoryMutationPublishRequest $request): string
+    {
+        $providedKey = $this->normalizeOptionalString($request->idempotencyKey());
         if (null !== $providedKey) {
             return sprintf('category.publish:client:%s', $providedKey);
         }
 
-        return sprintf(
-            'category.publish:auto:%s',
-            $this->publishRequestHash($categoryId, $published, $checks, $actorId, $reason),
-        );
+        return sprintf('category.publish:auto:%s', $this->publishRequestHash($request));
     }
 
-    private function moveRequestHash(
-        string $categoryId,
-        string $newParentId,
-        string $actorId,
-        string $treeId,
-        string $policy,
-        bool $dryRun,
-        ?string $locale,
-    ): string {
+    private function moveRequestHash(CategoryMutationMoveRequest $request): string
+    {
         return sha1(json_encode([
-            'categoryId' => $categoryId,
-            'newParentId' => $newParentId,
-            'actorId' => $actorId,
-            'treeId' => $treeId,
-            'policy' => $policy,
-            'dryRun' => $dryRun,
-            'locale' => $locale,
+            'categoryId' => $request->categoryId(),
+            'newParentId' => $request->newParentId(),
+            'actorId' => $request->actorId(),
+            'treeId' => $request->treeId(),
+            'policy' => $request->policy(),
+            'dryRun' => $request->dryRun(),
+            'locale' => $request->locale(),
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
 
-    /** @param array<string,bool> $checks */
-    private function publishRequestHash(
-        string $categoryId,
-        bool $published,
-        array $checks,
-        string $actorId,
-        string $reason,
-    ): string {
+    private function publishRequestHash(CategoryMutationPublishRequest $request): string
+    {
         return sha1(json_encode([
-            'categoryId' => $categoryId,
-            'published' => $published,
-            'checks' => $checks,
-            'actorId' => $actorId,
-            'reason' => $reason,
+            'categoryId' => $request->categoryId(),
+            'published' => $request->published(),
+            'checks' => $request->checks(),
+            'actorId' => $request->actorId(),
+            'reason' => $request->reason(),
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
 }

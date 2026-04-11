@@ -19,7 +19,11 @@ use App\Service\CatalogDestinationMediaFallbackService;
 use App\Service\CatalogDestinationMediaPolicyPreferenceService;
 use App\Service\CatalogDestinationMediaReadinessService;
 use App\Service\CatalogMediaApplicabilityService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
 use App\ValueObject\CategoryMediaRole;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
@@ -28,17 +32,21 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
     {
         $destinationRepository = new CategorySyndicationDestinationRepository();
         $destinationRepository->save(CategorySyndicationDestination::register(
-            'destination-1901',
-            'Storefront Feed',
-            'storefront',
-            'push',
-            true,
-            [
-                'channel' => 'storefront',
-                'locale' => 'en_US',
-                'requiredMediaRoles' => ['primary'],
-                'mediaPolicyMode' => 'allow_fallback',
-            ],
+            new CategorySyndicationDestinationDefinition(
+                'destination-1901',
+                'Storefront Feed',
+                'storefront',
+                'push',
+            ),
+            new CategorySyndicationDestinationConfiguration(
+                true,
+                [
+                    'channel' => 'storefront',
+                    'locale' => 'en_US',
+                    'requiredMediaRoles' => ['primary'],
+                    'mediaPolicyMode' => 'allow_fallback',
+                ],
+            ),
             'operator-1',
         ));
 
@@ -59,12 +67,24 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
 
         $service = new CatalogDestinationMediaPolicyPreferenceService(
             $destinationRepository,
-            new CatalogDestinationMediaReadinessService($destinationRepository, new CatalogMediaApplicabilityService($bindingRepository, new \App\Policy\CategoryMediaApplicabilityPolicy()), new CategoryDestinationMediaReadinessPolicy()),
+            new CatalogDestinationMediaReadinessService(
+                $destinationRepository,
+                new CatalogMediaApplicabilityService($bindingRepository, new \App\Policy\CategoryMediaApplicabilityPolicy()),
+                new CategoryDestinationMediaReadinessPolicy(),
+            ),
             new CatalogDestinationMediaFallbackService($destinationRepository, $bindingRepository, new CategoryDestinationMediaFallbackPolicy()),
             new CategoryDestinationMediaPolicyPreferencePolicy(),
         );
 
-        $payload = $this->normalizePayload($service->evaluate('destination-1901', 'category-1901', 'operator-1', 'step08')->payload());
+        $payload = $this->normalizePayload(
+            $service->evaluate(
+                new CategoryDestinationMediaEvaluationRequest(
+                    'destination-1901',
+                    'category-1901',
+                    new CatalogAuditContext('operator-1', 'step08'),
+                ),
+            )->payload(),
+        );
         self::assertSame('allow_fallback', $payload['mediaPolicyMode']);
         self::assertFalse($payload['strictPublishable']);
         self::assertTrue($payload['fallbackPublishable']);

@@ -13,6 +13,11 @@ use App\Policy\CategoryMediaGovernancePolicy;
 use App\Repository\CategoryMediaBindingRepository;
 use App\Service\CatalogMediaApplicabilityService;
 use App\Service\CatalogMediaGovernanceService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryEvaluationRequest;
+use App\ValueObject\CategoryMediaBindingScope;
+use App\ValueObject\CategoryMediaBindingState;
+use App\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaApplicabilityServiceTest extends TestCase
@@ -23,15 +28,15 @@ final class CatalogMediaApplicabilityServiceTest extends TestCase
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $applicability = new CatalogMediaApplicabilityService($repository, new CategoryMediaApplicabilityPolicy());
 
-        $governance->bind('bind-us-primary', 'category-1201', 'asset-primary-us', 'primary', ['storefront'], ['en_US'], true, true, [], 'operator-1', 'bind US primary');
-        $governance->bind('bind-us-banner', 'category-1201', 'asset-banner-us', 'banner', ['storefront'], ['en_US'], false, true, [], 'operator-1', 'bind US banner');
-        $governance->bind('bind-fr-primary', 'category-1201', 'asset-primary-fr', 'primary', ['storefront'], ['fr_FR'], true, true, [], 'operator-1', 'bind FR primary');
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-us-primary', 'category-1201', 'asset-primary-us', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'bind US primary')));
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-us-banner', 'category-1201', 'asset-banner-us', 'banner', ['storefront'], ['en_US']), new CategoryMediaBindingState(false, true, []), new CatalogAuditContext('operator-1', 'bind US banner')));
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-fr-primary', 'category-1201', 'asset-primary-fr', 'primary', ['storefront'], ['fr_FR']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'bind FR primary')));
 
-        $event = $applicability->evaluate('category-1201', [
+        $event = $applicability->evaluate(new CategoryEvaluationRequest('category-1201', [
             'channel' => 'storefront',
             'locale' => 'en_US',
             'requiredRoles' => ['primary', 'banner'],
-        ], 'operator-2', 'evaluate scoped media');
+        ], new CatalogAuditContext('operator-2', 'evaluate scoped media')));
 
         /** @var array{requiredMissing:list<mixed>, warnings:list<string>, checks:array<string,bool>, matchedBindingIds:list<string>} $payload */
         $payload = $event->payload();
@@ -48,13 +53,13 @@ final class CatalogMediaApplicabilityServiceTest extends TestCase
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $applicability = new CatalogMediaApplicabilityService($repository, new CategoryMediaApplicabilityPolicy());
 
-        $governance->bind('bind-search-icon', 'category-1202', 'asset-icon', 'icon', ['search'], ['en_US'], true, true, [], 'operator-1', 'bind search icon');
+        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-search-icon', 'category-1202', 'asset-icon', 'icon', ['search'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'bind search icon')));
 
-        $event = $applicability->evaluate('category-1202', [
+        $event = $applicability->evaluate(new CategoryEvaluationRequest('category-1202', [
             'channel' => 'storefront',
             'locale' => 'en_US',
             'requiredRoles' => ['primary'],
-        ], 'operator-2', 'evaluate missing scoped role');
+        ], new CatalogAuditContext('operator-2', 'evaluate missing scoped role')));
 
         /** @var array{requiredMissing:list<mixed>, warnings:list<string>, checks:array<string,bool>, matchedBindingIds:list<string>} $payload */
         $payload = $event->payload();

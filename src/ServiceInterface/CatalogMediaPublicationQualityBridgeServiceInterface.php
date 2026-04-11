@@ -6,16 +6,12 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\ValueObject\CategoryEvaluationRequest;
+
 /**
  * Defines the contract for catalog media publication quality bridge service.
  */
 interface CatalogMediaPublicationQualityBridgeServiceInterface
 {
-    /** @param array<string,mixed> $payload */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryPublicationQualityEvaluatedInterface;
+    public function evaluate(CategoryEvaluationRequest $request): CategoryPublicationQualityEvaluatedInterface;
 }

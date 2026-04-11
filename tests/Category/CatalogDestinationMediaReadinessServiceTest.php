@@ -18,6 +18,14 @@ use App\Service\CatalogDestinationMediaReadinessService;
 use App\Service\CatalogMediaApplicabilityService;
 use App\Service\CatalogMediaGovernanceService;
 use App\Service\CatalogSyndicationDestinationService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\ValueObject\CategoryMediaBindingScope;
+use App\ValueObject\CategoryMediaBindingState;
+use App\ValueObject\CategoryMediaBindRequest;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaReadinessServiceTest extends TestCase
@@ -32,21 +40,64 @@ final class CatalogDestinationMediaReadinessServiceTest extends TestCase
         $applicability = new CatalogMediaApplicabilityService($bindingRepository, new CategoryMediaApplicabilityPolicy());
         $service = new CatalogDestinationMediaReadinessService($destinationRepository, $applicability, new CategoryDestinationMediaReadinessPolicy());
 
-        $governance->bind('bind-primary', 'category-1301', 'asset-primary', 'primary', ['storefront'], ['en_US'], true, true, [], 'operator-1', 'primary');
-        $governance->bind('bind-hero', 'category-1301', 'asset-hero', 'hero', ['storefront'], ['en_US'], false, true, [], 'operator-1', 'hero');
-
-        $destinationService->register(
-            'destination-1301',
-            'Storefront US',
-            'storefront',
-            'push',
-            true,
-            ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => ['primary', 'hero']],
-            'operator-1',
-            'register destination'
+        $governance->bind(
+            new CategoryMediaBindRequest(
+                new CategoryMediaBindingScope(
+                    'bind-primary',
+                    'category-1301',
+                    'asset-primary',
+                    'primary',
+                    ['storefront'],
+                    ['en_US'],
+                ),
+                new CategoryMediaBindingState(true, true, []),
+                new CatalogAuditContext('operator-1', 'primary'),
+            ),
+        );
+        $governance->bind(
+            new CategoryMediaBindRequest(
+                new CategoryMediaBindingScope(
+                    'bind-hero',
+                    'category-1301',
+                    'asset-hero',
+                    'hero',
+                    ['storefront'],
+                    ['en_US'],
+                ),
+                new CategoryMediaBindingState(false, true, []),
+                new CatalogAuditContext('operator-1', 'hero'),
+            ),
         );
 
-        $payload = $this->normalizePayload($service->evaluate('destination-1301', 'category-1301', 'operator-9', 'destination media readiness')->payload());
+        $destinationService->register(
+            new CategorySyndicationDestinationRegisterRequest(
+                new CategorySyndicationDestinationDefinition(
+                    'destination-1301',
+                    'Storefront US',
+                    'storefront',
+                    'push',
+                ),
+                new CategorySyndicationDestinationConfiguration(
+                    true,
+                    [
+                        'channel' => 'storefront',
+                        'locale' => 'en_US',
+                        'requiredMediaRoles' => ['primary', 'hero'],
+                    ],
+                ),
+                new CatalogAuditContext('operator-1', 'register destination'),
+            ),
+        );
+
+        $payload = $this->normalizePayload(
+            $service->evaluate(
+                new CategoryDestinationMediaEvaluationRequest(
+                    'destination-1301',
+                    'category-1301',
+                    new CatalogAuditContext('operator-9', 'destination media readiness'),
+                ),
+            )->payload(),
+        );
 
         self::assertTrue($payload['publishable']);
         self::assertTrue($payload['checks']['destinationMediaPublishable']);

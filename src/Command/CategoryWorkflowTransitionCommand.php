@@ -6,11 +6,13 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\ValueObject\CategoryWorkflowTransitionRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category workflow transition command console workflow.
  */
@@ -19,6 +21,7 @@ final class CategoryWorkflowTransitionCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category workflow transition command service collaborators.
      */
@@ -26,6 +29,7 @@ final class CategoryWorkflowTransitionCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -43,18 +47,19 @@ final class CategoryWorkflowTransitionCommand extends Command
             ->addArgument('actorId', InputArgument::REQUIRED)
             ->addArgument('reason', InputArgument::REQUIRED);
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
-        $event = $this->transitionService->transition(
+        $event = $this->transitionService->transition(new CategoryWorkflowTransitionRequest(
             $this->argumentString($input, 'categoryId'),
             $this->argumentString($input, 'targetState'),
             $this->argumentString($input, 'actorId'),
             $this->argumentString($input, 'reason'),
-        );
+        ));
 
         return $this->writeJson($output, $event->payload());
     }

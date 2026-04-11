@@ -4,6 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
+use App\ValueObject\CategoryCanonicalUrlRequest;
+
 /**
  * Defines the contract for canonical policy.
  */
@@ -12,5 +15,5 @@ interface CanonicalPolicyInterface
     /**
      * Handles the url workflow.
      */
-    public function url(string $host, string $locale, string $slug): string;
+    public function url(CategoryCanonicalUrlRequest $request): string;
 }

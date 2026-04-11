@@ -11,6 +11,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategorySyndicationPackagePreviewCommand;
 use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +20,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
     public function testExecutePrintsPreviewPackage(): void
     {
         $service = $this->createMock(CatalogSyndicationPackageGateServiceInterface::class);
-        $service->method('buildGatedPublishPackage')->willReturn(new class implements \App\EventInterface\CategorySyndicationPackageGatedInterface {
+        $service->method('buildGatedPublishPackage')->with(self::isInstanceOf(CategorySyndicationPackageBuildRequest::class))->willReturn(new class implements \App\EventInterface\CategorySyndicationPackageGatedInterface {
             /** @param array<string, mixed> $payload */
             public function __construct(private readonly array $payload = ['publishable' => true, 'packageId' => 'pkg-1'])
             {
@@ -132,8 +133,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
             '--destination' => '{"destinationId":"dest-1","channel":"web","locale":"en_US"}',
         ]);
 
-        self::assertStringContainsString('"packageId":"pkg-1"', str_replace(['
-', '
-', ' '], '', $tester->getDisplay()));
+        self::assertStringContainsString('"packageId":"pkg-1"', str_replace(["", "
+", ' '], '', $tester->getDisplay()));
     }
 }

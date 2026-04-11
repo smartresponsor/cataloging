@@ -9,6 +9,7 @@ use App\Event\CategoryPublicationQualityEvaluated;
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
 use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
 
 /**
  * Provides the catalog publication quality service application service.
@@ -26,17 +27,14 @@ final readonly class CatalogPublicationQualityService implements CatalogPublicat
      * Handles the evaluate workflow.
      */
     public function evaluate(
-        string $categoryId,
-        int $score,
-        array $publicationChecks,
-        array $checks,
-        string $actorId,
-        string $reason,
+        CategoryPublicationQualityEvaluationRequest $request,
     ): CategoryPublicationQualityEvaluatedInterface {
-        $profile = $this->policy->buildProfile($score, $publicationChecks, $checks);
+        $input = $request->input();
+        $audit = $request->auditContext();
+        $profile = $this->policy->buildProfile($input->score(), $input->publicationChecks(), $input->checks());
 
         return new CategoryPublicationQualityEvaluated(
-            trim($categoryId),
+            trim($input->categoryId()),
             $profile->score(),
             $profile->isPublishableQuality(),
             $profile->riskLevel(),
@@ -45,8 +43,8 @@ final readonly class CatalogPublicationQualityService implements CatalogPublicat
             $profile->advisoryWarnings(),
             $profile->publicationChecks(),
             $profile->checks(),
-            trim($actorId),
-            trim($reason),
+            trim($audit->actorId()),
+            trim($audit->reason()),
             new \DateTimeImmutable('now'),
         );
     }

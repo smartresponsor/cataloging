@@ -10,6 +10,8 @@ namespace App\Tests\Category;
 
 use App\Policy\CategoryCompletenessPolicy;
 use App\Service\CatalogCompletenessService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryEvaluationRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCompletenessServiceTest extends TestCase
@@ -18,7 +20,7 @@ final class CatalogCompletenessServiceTest extends TestCase
     {
         $service = new CatalogCompletenessService(new CategoryCompletenessPolicy());
 
-        $event = $service->evaluate('category-601', [
+        $event = $service->evaluate(new CategoryEvaluationRequest('category-601', [
             'slug' => 'outdoor-lights',
             'seo' => [
                 'title' => 'Outdoor Lights',
@@ -38,7 +40,7 @@ final class CatalogCompletenessServiceTest extends TestCase
                 'bannerId' => 'banner-1',
                 'htmlBlockId' => 'html-1',
             ],
-        ], 'operator-1', 'completeness review');
+        ], new CatalogAuditContext('operator-1', 'completeness review')));
 
         $payload = $this->normalizeCompletenessPayload($event->payload());
         self::assertTrue($payload['complete']);
@@ -52,7 +54,7 @@ final class CatalogCompletenessServiceTest extends TestCase
     {
         $service = new CatalogCompletenessService(new CategoryCompletenessPolicy());
 
-        $event = $service->evaluate('category-602', [
+        $event = $service->evaluate(new CategoryEvaluationRequest('category-602', [
             'slug' => '',
             'seo' => [
                 'title' => '',
@@ -72,7 +74,7 @@ final class CatalogCompletenessServiceTest extends TestCase
                 'bannerId' => '',
                 'htmlBlockId' => '',
             ],
-        ], 'operator-2', 'pre-publish audit');
+        ], new CatalogAuditContext('operator-2', 'pre-publish audit')));
 
         $payload = $this->normalizeCompletenessPayload($event->payload());
         self::assertFalse($payload['complete']);

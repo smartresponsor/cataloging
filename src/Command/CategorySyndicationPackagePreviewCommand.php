@@ -6,6 +6,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\ValueObject\CategorySyndicationPackageContext;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -66,16 +69,19 @@ final class CategorySyndicationPackagePreviewCommand extends Command
         $localeMode = $this->nonEmptyString($mapping['localeMode'] ?? null, 'per_locale');
 
         $event = $this->service->buildGatedPublishPackage(
-            $packageId,
-            $destinationId,
-            $categoryId,
-            $version,
-            $localeMode,
-            $this->nestedMap($mapping['payload'] ?? null),
-            $this->stringMap($mapping['fieldMap'] ?? null),
-            $this->stringList($mapping['requiredFields'] ?? null),
-            $actorId,
-            $reason,
+            new CategorySyndicationPackageBuildRequest(
+                new CategorySyndicationPackageContext(
+                    $packageId,
+                    $destinationId,
+                    $categoryId,
+                    $version,
+                    $localeMode,
+                ),
+                $this->nestedMap($mapping['payload'] ?? null),
+                $this->stringMap($mapping['fieldMap'] ?? null),
+                $this->stringList($mapping['requiredFields'] ?? null),
+                new CatalogAuditContext($actorId, $reason),
+            ),
         );
         $payload = method_exists($event, 'payload')
             ? $event->payload()

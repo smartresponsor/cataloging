@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
@@ -26,7 +27,6 @@ final class SearchService
     }
 
     /**
-     * @param array<string,mixed> $criteria
      *
      * @return array{
      *   items:list<array{
@@ -66,9 +66,9 @@ final class SearchService
      *
      * @throws Exception
      */
-    public function search(array $criteria = []): array
+    public function search(?CategoryProjectionCriteria $criteria = null): array
     {
-        $normalized = $this->normalizeCriteria($criteria);
+        $normalized = $this->normalizeCriteria($criteria ?? CategoryProjectionCriteria::fromArray([]));
         $connection = $this->infraConnection();
         [$whereSql, $params, $types] = $this->compileFilters($normalized);
         $orderSql = $this->orderSql($normalized['order'], $normalized['direction']);
@@ -133,7 +133,6 @@ final class SearchService
     }
 
     /**
-     * @param array<string,mixed> $criteria
      *
      * @return array{
      *   q:string,
@@ -147,17 +146,18 @@ final class SearchService
      *   direction:string
      * }
      */
-    private function normalizeCriteria(array $criteria): array
+    private function normalizeCriteria(CategoryProjectionCriteria $criteria): array
     {
-        $q = $this->optionalString($criteria['q'] ?? null) ?? '';
-        $tenant = $this->optionalString($criteria['tenant'] ?? null);
-        $locale = $this->optionalString($criteria['locale'] ?? null);
-        $workflowState = $this->optionalString($criteria['workflow_state'] ?? null);
-        $published = $this->optionalBool($criteria['published'] ?? null);
-        $limit = $this->boundedInt($criteria['limit'] ?? null, self::DEFAULT_LIMIT, 1, self::MAX_LIMIT);
-        $offset = $this->boundedInt($criteria['offset'] ?? null, 0, 0, self::MAX_OFFSET);
-        $order = $this->allowedString($criteria['order'] ?? null, ['updated_at', 'name', 'published_at'], 'updated_at');
-        $direction = $this->allowedString($criteria['direction'] ?? null, ['asc', 'desc'], 'desc');
+        $criteriaMap = $criteria->toArray();
+        $q = $this->optionalString($criteriaMap['q'] ?? null) ?? '';
+        $tenant = $this->optionalString($criteriaMap['tenant'] ?? null);
+        $locale = $this->optionalString($criteriaMap['locale'] ?? null);
+        $workflowState = $this->optionalString($criteriaMap['workflow_state'] ?? null);
+        $published = $this->optionalBool($criteriaMap['published'] ?? null);
+        $limit = $this->boundedInt($criteriaMap['limit'] ?? null, self::DEFAULT_LIMIT, 1, self::MAX_LIMIT);
+        $offset = $this->boundedInt($criteriaMap['offset'] ?? null, 0, 0, self::MAX_OFFSET);
+        $order = $this->allowedString($criteriaMap['order'] ?? null, ['updated_at', 'name', 'published_at'], 'updated_at');
+        $direction = $this->allowedString($criteriaMap['direction'] ?? null, ['asc', 'desc'], 'desc');
 
         return [
             'q' => $q,
@@ -175,14 +175,14 @@ final class SearchService
     /**
      * @param array{
      *     q:string,
-     * $criteria 'tenant':?string,
+     *     tenant:?string,
      *     locale:?string,
      *     workflow_state:?string,
      *     published:?bool,
      *     limit:int,
      *     offset:int,
      *     order:string,
-     *     direction:string,
+     *     direction:string
      * } $criteria
      *
      * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
@@ -240,12 +240,19 @@ final class SearchService
     /**
      * @param list<array<string,mixed>> $rows
      *
-     * @return array tenant':string,
-     *               workflow_state:string,
-     *               published:bool,
-     *               published_at:?string,
-     *               updated_at:string,
-     *               } >
+     * @return list<array{
+     *     id:string,
+     *     slug:string,
+     *     name:string,
+     *     parent_id:?string,
+     *     path:string,
+     *     locale:string,
+     *     tenant:string,
+     *     workflow_state:string,
+     *     published:bool,
+     *     published_at:?string,
+     *     updated_at:string
+     * }>
      */
     private function normalizeRows(array $rows): array
     {

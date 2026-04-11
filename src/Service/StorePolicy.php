@@ -4,18 +4,21 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
+use App\ValueObject\CategoryStorePolicyEvaluationRequest;
+
 /**
  * Provides the store policy application service.
  */
 final class StorePolicy
 {
     /**
-     * @param array{id?: scalar|null, visibility?: array<string, string>, priority?: array<string, int>} $category
-     *
      * @return array{id: scalar|null, store_id: string, visibility: string, priority: int}
      */
-    public function evaluate(array $category, string $storeId): array
+    public function evaluate(CategoryStorePolicyEvaluationRequest $request): array
     {
+        $category = $request->category();
+        $storeId = $request->storeId();
         $visibility = $category['visibility'][$storeId] ?? 'visible';
         $priority = $category['priority'][$storeId] ?? 100;
         $row = [

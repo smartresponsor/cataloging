@@ -15,6 +15,10 @@ use App\Repository\CategoryReviewAssignmentRepository;
 use App\Service\CatalogChangeRequestService;
 use App\Service\CatalogReviewAssignmentService;
 use App\Service\CatalogReviewQueueService;
+use App\ValueObject\CategoryChangeRequestReviewRequest;
+use App\ValueObject\CategoryChangeRequestSubmitRequest;
+use App\ValueObject\CategoryReviewAssignmentRequest;
+use App\ValueObject\CategoryReviewQueueRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogReviewQueueServiceTest extends TestCase
@@ -31,17 +35,17 @@ final class CatalogReviewQueueServiceTest extends TestCase
         );
         $queueService = new CatalogReviewQueueService($changeRepository, $assignmentRepository);
 
-        $requestService->submit(
+        $requestService->submit(new CategoryChangeRequestSubmitRequest(
             'req-410',
             'category-410',
             'author-1',
             'Adjust category placement',
             ['parentId' => 'garden'],
-        );
-        $requestService->review('req-410', 'in_review', 'moderator-1', 'Opened for review');
-        $assignmentService->assign('req-410', 'reviewer-1', 'lead-1', 'urgent');
+        ));
+        $requestService->review(new CategoryChangeRequestReviewRequest('req-410', 'in_review', 'moderator-1', 'Opened for review'));
+        $assignmentService->assign(new CategoryReviewAssignmentRequest('req-410', 'reviewer-1', 'lead-1', 'urgent'));
 
-        $queue = $queueService->queueForReviewer('reviewer-1');
+        $queue = $queueService->queueForReviewer(new CategoryReviewQueueRequest('reviewer-1'));
 
         self::assertCount(1, $queue);
         self::assertSame('req-410', $queue[0]->requestId());
@@ -62,16 +66,16 @@ final class CatalogReviewQueueServiceTest extends TestCase
         );
         $queueService = new CatalogReviewQueueService($changeRepository, $assignmentRepository);
 
-        $requestService->submit(
+        $requestService->submit(new CategoryChangeRequestSubmitRequest(
             'req-411',
             'category-411',
             'author-1',
             'Update seasonal sorting',
             ['sort' => 'seasonal'],
-        );
-        $assignmentService->assign('req-411', 'reviewer-1', 'lead-1', 'normal');
+        ));
+        $assignmentService->assign(new CategoryReviewAssignmentRequest('req-411', 'reviewer-1', 'lead-1', 'normal'));
 
-        $queue = $queueService->queueForReviewer('reviewer-1');
+        $queue = $queueService->queueForReviewer(new CategoryReviewQueueRequest('reviewer-1'));
 
         self::assertCount(1, $queue);
         self::assertFalse($queue[0]->readyForReview());

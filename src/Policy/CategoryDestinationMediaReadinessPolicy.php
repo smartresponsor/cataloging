@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
+use App\ValueObject\CategoryDestinationMediaReadinessContext;
 use App\ValueObject\CategoryDestinationMediaReadinessReport;
+use App\ValueObject\CategoryDestinationMediaReadinessState;
 use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
 
 /**
@@ -14,24 +16,16 @@ use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
  */
 final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinationMediaReadinessPolicyInterface
 {
-    /**
-     * @param array<string,mixed> $destinationSettings
-     * @param array<string,mixed> $applicabilityPayload
-     * @param array<string,bool>  $checks
-     * @param list<string>        $requiredMissing
-     * @param list<string>        $warnings
-     * @param list<string>        $matchedBindingIds
-     */
     public function buildReport(
-        string $destinationId,
-        string $categoryId,
-        array $destinationSettings,
-        array $applicabilityPayload,
-        array $checks,
-        array $requiredMissing,
-        array $warnings,
-        array $matchedBindingIds,
+        CategoryDestinationMediaReadinessContext $context,
+        CategoryDestinationMediaReadinessState $state,
     ): CategoryDestinationMediaReadinessReportInterface {
+        $destinationSettings = $context->destinationSettings();
+        $checks = $state->checks();
+        $requiredMissing = $state->requiredMissing();
+        $warnings = $state->warnings();
+        $matchedBindingIds = $state->matchedBindingIds();
+
         $channel = $this->stringValue($destinationSettings['channel'] ?? null);
         $locale = $this->stringValue($destinationSettings['locale'] ?? null);
         $requiredRoles = $this->stringList($destinationSettings['requiredMediaRoles'] ?? null);

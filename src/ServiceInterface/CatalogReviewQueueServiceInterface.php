@@ -5,12 +5,14 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
+use App\ValueObject\CategoryReviewQueueRequest;
 use App\ValueObjectInterface\CategoryReviewQueueItemInterface;
+
 /**
  * Defines the contract for catalog review queue service.
  */
 interface CatalogReviewQueueServiceInterface
 {
     /** @return list<CategoryReviewQueueItemInterface> */
-    public function queueForReviewer(string $reviewer): array;
+    public function queueForReviewer(CategoryReviewQueueRequest $request): array;
 }

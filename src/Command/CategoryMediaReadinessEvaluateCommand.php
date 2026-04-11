@@ -6,12 +6,15 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category media readiness evaluate command console workflow.
  */
@@ -20,6 +23,7 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category media readiness evaluate command service collaborators.
      */
@@ -27,6 +31,7 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -46,6 +51,7 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
             ->addOption('destination', null, InputOption::VALUE_REQUIRED)
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
@@ -67,15 +73,21 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
         }
 
         if (
-            'cli-preview-destination' === $destinationId &&
-            isset($settings['destinationId']) &&
-            is_string($settings['destinationId']) &&
-            '' !== trim($settings['destinationId'])
+            'cli-preview-destination' === $destinationId
+            && isset($settings['destinationId'])
+            && is_string($settings['destinationId'])
+            && '' !== trim($settings['destinationId'])
         ) {
             $destinationId = trim($settings['destinationId']);
         }
 
-        $report = $this->service->evaluate($destinationId, $categoryId, $actorId, $reason);
+        $report = $this->service->evaluate(
+            new CategoryDestinationMediaEvaluationRequest(
+                $destinationId,
+                $categoryId,
+                new CatalogAuditContext($actorId, $reason),
+            ),
+        );
         $payload = method_exists($report, 'payload')
             ? $report->payload()
             : (method_exists($report, 'toArray') ? $report->toArray() : ['result' => 'ok']);

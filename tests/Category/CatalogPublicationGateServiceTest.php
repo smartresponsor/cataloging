@@ -10,6 +10,8 @@ namespace App\Tests\Category;
 
 use App\Policy\CategoryPublicationGatePolicy;
 use App\Service\CatalogPublicationGateService;
+use App\ValueObject\CategoryPublicationGateAssertionRequest;
+use App\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +21,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
     {
         $service = new CatalogPublicationGateService(new CategoryPublicationGatePolicy());
 
-        $event = $service->evaluate(
+        $event = $service->evaluate(new CategoryPublicationGateEvaluationRequest(
             'category-200',
             CategoryWorkflowState::APPROVED,
             [
@@ -32,7 +34,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
             ],
             'operator-1',
             'release candidate approved',
-        );
+        ));
 
         $payload = $event->payload();
         self::assertTrue($payload['publishable']);
@@ -47,7 +49,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
 
         $this->expectException(\DomainException::class);
 
-        $service->assertCanPublish(
+        $service->assertCanPublish(new CategoryPublicationGateAssertionRequest(
             CategoryWorkflowState::DRAFT,
             [
                 'slugReady' => true,
@@ -57,7 +59,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
             ],
             'operator-1',
             'attempting premature publish',
-        );
+        ));
     }
 
     public function testAssertCanPublishFailsForMissingRequiredChecks(): void
@@ -66,7 +68,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
 
         $this->expectException(\DomainException::class);
 
-        $service->assertCanPublish(
+        $service->assertCanPublish(new CategoryPublicationGateAssertionRequest(
             CategoryWorkflowState::APPROVED,
             [
                 'slugReady' => true,
@@ -76,6 +78,6 @@ final class CatalogPublicationGateServiceTest extends TestCase
             ],
             'operator-1',
             'seo still incomplete',
-        );
+        ));
     }
 }

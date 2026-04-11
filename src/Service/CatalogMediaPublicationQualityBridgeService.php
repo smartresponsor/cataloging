@@ -9,6 +9,9 @@ use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
 use App\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
 use App\ServiceInterface\CatalogMediaPublicationQualityBridgeServiceInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\ValueObject\CategoryEvaluationRequest;
+use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
+use App\ValueObject\CategoryPublicationQualityInput;
 
 /**
  * Provides the catalog media publication quality bridge service application service.
@@ -27,23 +30,22 @@ final readonly class CatalogMediaPublicationQualityBridgeService implements Cata
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryPublicationQualityEvaluatedInterface {
-        $completenessPayload = $this->completenessBridge->evaluate($categoryId, $payload, $actorId, $reason)->payload();
+    public function evaluate(CategoryEvaluationRequest $request): CategoryPublicationQualityEvaluatedInterface
+    {
+        $completenessPayload = $this->completenessBridge->evaluate($request)->payload();
 
         return $this->publicationQualityService->evaluate(
-            $categoryId,
-            $this->scalarInt($completenessPayload['score'] ?? 0),
-            is_array($completenessPayload['publicationChecks'] ?? null)
-                ? $completenessPayload['publicationChecks']
-                : [],
-            is_array($completenessPayload['checks'] ?? null) ? $completenessPayload['checks'] : [],
-            $actorId,
-            $reason,
+            new CategoryPublicationQualityEvaluationRequest(
+                new CategoryPublicationQualityInput(
+                    $request->categoryId(),
+                    $this->scalarInt($completenessPayload['score'] ?? 0),
+                    is_array($completenessPayload['publicationChecks'] ?? null)
+                        ? $completenessPayload['publicationChecks']
+                        : [],
+                    is_array($completenessPayload['checks'] ?? null) ? $completenessPayload['checks'] : [],
+                ),
+                $request->auditContext(),
+            ),
         );
     }
 

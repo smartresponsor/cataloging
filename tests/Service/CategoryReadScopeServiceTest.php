@@ -7,6 +7,8 @@ namespace App\Tests\Service;
 use App\Security\ExternalIdentityContext;
 use App\Service\CategoryReadScopeService;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\ValueObject\CategoryProjectionCriteria;
+use App\ValueObject\CategoryReadScopeRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +33,9 @@ final class CategoryReadScopeServiceTest extends TestCase
             $this->createConfiguredMock(Security::class, ['isGranted' => false]),
         );
 
-        $criteria = $service->applyTenantScope(new Request(), []);
+        $criteria = $service->applyTenantScope(new CategoryReadScopeRequest(new Request(), CategoryProjectionCriteria::fromArray([])));
 
-        self::assertTrue($criteria['published']);
+        self::assertTrue($criteria->published());
     }
 
     public function testCrossTenantReadIsRejectedForScopedActor(): void
@@ -54,6 +56,9 @@ final class CategoryReadScopeServiceTest extends TestCase
         );
 
         $this->expectException(AccessDeniedHttpException::class);
-        $service->applyTenantScope(new Request(query: ['tenant' => 'tenant-b']), ['tenant' => 'tenant-b']);
+        $service->applyTenantScope(new CategoryReadScopeRequest(
+            new Request(query: ['tenant' => 'tenant-b']),
+            CategoryProjectionCriteria::fromArray(['tenant' => 'tenant-b']),
+        ));
     }
 }

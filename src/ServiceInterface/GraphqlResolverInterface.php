@@ -4,32 +4,24 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
+use App\ValueObject\CategoryGraphqlMoveRequest;
+use App\ValueObject\CategoryGraphqlNodeRequest;
+use App\ValueObject\CategoryGraphqlPublishRequest;
+
 /**
  * Defines the contract for graphql resolver.
  */
 interface GraphqlResolverInterface
 {
-    /**
-     * @param array<string,mixed> $args
-     *
-     * @return array<string,mixed>|null
-     */
-    public function category(array $args): ?array;
+    /** @return array<string,mixed>|null */
+    public function category(CategoryGraphqlNodeRequest $request): ?array;
 
-    /**
-     * @param array<string,mixed> $args
-     *
-     * @return list<array<string,mixed>>
-     */
-    public function categoryPath(array $args): array;
+    /** @return list<array<string,mixed>> */
+    public function categoryPath(CategoryGraphqlNodeRequest $request): array;
 
-    /**
-     * @param array<string,mixed> $args
-     *
-     * @return array<string,mixed>|null
-     */
-    public function publishCategory(array $args): ?array;
+    /** @return array<string,mixed>|null */
+    public function publishCategory(CategoryGraphqlPublishRequest $request): ?array;
 
-    /** @param array<string,mixed> $args */
-    public function moveCategory(array $args): bool;
+    public function moveCategory(CategoryGraphqlMoveRequest $request): bool;
 }

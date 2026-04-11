@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
+use App\ValueObject\CategoryReadRepositoryListRequest;
+
 /** LayerInterface mirror (canon) */
 interface CategoryReadRepositoryInterface
 {
@@ -18,7 +20,7 @@ interface CategoryReadRepositoryInterface
  *     approxTotal?: int,
  * }
      */
-    public function list(array $opt, bool $withTotal, bool $approxTotal): array;
+    public function list(CategoryReadRepositoryListRequest $request): array;
 
     /**
      * @return array<int, array{id: string, name: string, slug: string}>

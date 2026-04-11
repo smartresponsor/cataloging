@@ -11,6 +11,8 @@ use App\PolicyInterface\CategorySyndicationPolicyAwarePackageGatePolicyInterface
 use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
 use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
 use App\ServiceInterface\CatalogSyndicationPolicyAwarePackageGateServiceInterface;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
  * Provides the catalog syndication policy aware package gate service application service.
@@ -27,36 +29,19 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
     ) {
     }
 
-    /**
-     * @param array<string,mixed>  $categoryData
-     * @param array<string,string> $fieldMap
-     * @param list<string>         $requiredFields
-     */
     public function buildGatedPublishPackage(
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $version,
-        string $localeMode,
-        array $categoryData,
-        array $fieldMap,
-        array $requiredFields,
-        string $actorId,
-        string $reason,
+        CategorySyndicationPackageBuildRequest $request,
     ): CategorySyndicationPolicyAwarePackageGatedInterface {
-        $fallbackAware = $this->fallbackAwareGateService->buildGatedPublishPackage(
-            $packageId,
-            $destinationId,
-            $categoryId,
-            $version,
-            $localeMode,
-            $categoryData,
-            $fieldMap,
-            $requiredFields,
-            $actorId,
-            $reason,
+        $context = $request->context();
+        $audit = $request->auditContext();
+        $fallbackAware = $this->fallbackAwareGateService->buildGatedPublishPackage($request)->payload();
+        $preference = $this->preferenceService->evaluate(
+            new CategoryDestinationMediaEvaluationRequest(
+                $context->destinationId(),
+                $context->categoryId(),
+                $audit,
+            ),
         )->payload();
-        $preference = $this->preferenceService->evaluate($destinationId, $categoryId, $actorId, $reason)->payload();
         $report = $this->policy->buildReport(
             is_array($fallbackAware['packageMissingRequiredFields'] ?? null)
                 ? $fallbackAware['packageMissingRequiredFields']
@@ -66,11 +51,11 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
         );
 
         return new CategorySyndicationPolicyAwarePackageGated([
-            'packageId' => trim($packageId),
-            'destinationId' => trim($destinationId),
-            'categoryId' => trim($categoryId),
-            'version' => trim($version),
-            'localeMode' => trim($localeMode),
+            'packageId' => trim($context->packageId()),
+            'destinationId' => trim($context->destinationId()),
+            'categoryId' => trim($context->categoryId()),
+            'version' => trim($context->version()),
+            'localeMode' => trim($context->localeMode()),
             'payload' => is_array($fallbackAware['payload'] ?? null) ? $fallbackAware['payload'] : [],
             'fieldMap' => is_array($fallbackAware['fieldMap'] ?? null) ? $fallbackAware['fieldMap'] : [],
             'requiredFields' => is_array($fallbackAware['requiredFields'] ?? null)
@@ -83,8 +68,8 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
             'checks' => $report->checks(),
             'exactMatchedBindingIds' => $report->exactMatchedBindingIds(),
             'fallbackMatchedBindingIds' => $report->fallbackMatchedBindingIds(),
-            'actorId' => trim($actorId),
-            'reason' => trim($reason),
+            'actorId' => trim($audit->actorId()),
+            'reason' => trim($audit->reason()),
         ], new \DateTimeImmutable());
     }
 }

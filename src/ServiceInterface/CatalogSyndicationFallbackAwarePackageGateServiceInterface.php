@@ -6,26 +6,16 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 /**
  * Defines the contract for catalog syndication fallback aware package gate service.
  */
 interface CatalogSyndicationFallbackAwarePackageGateServiceInterface
 {
     /**
-     * @param array<string,mixed>  $categoryData
-     * @param array<string,string> $fieldMap
-     * @param list<string>         $requiredFields
+     * Builds the fallback aware gated package result for a syndication request.
      */
     public function buildGatedPublishPackage(
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $version,
-        string $localeMode,
-        array $categoryData,
-        array $fieldMap,
-        array $requiredFields,
-        string $actorId,
-        string $reason,
+        CategorySyndicationPackageBuildRequest $request,
     ): CategorySyndicationFallbackAwarePackageGatedInterface;
 }

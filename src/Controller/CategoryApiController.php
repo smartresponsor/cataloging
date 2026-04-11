@@ -11,6 +11,10 @@ use App\Service\CategoryMutationAuthorizationService;
 use App\ServiceInterface\CategoryMutationServiceInterface;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\ValueObject\CategoryMutationMoveRequest;
+use App\ValueObject\CategoryMutationPublishRequest;
+use App\ValueObject\CategoryProjectionCriteria;
+use App\ValueObject\CategoryReadScopeRequest;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,13 +46,15 @@ final class CategoryApiController
     public function tree(Request $request): JsonResponse
     {
         try {
-            $criteria = [
-                'tenant' => $request->query->get('tenant'),
-                'locale' => $request->query->get('locale'),
-                'workflow_state' => $request->query->get('workflow_state'),
-                'published' => $request->query->get('published'),
-            ];
-            $criteria = $this->categoryReadScopeService->applyTenantScope($request, $criteria);
+            $criteria = $this->categoryReadScopeService->applyTenantScope(new CategoryReadScopeRequest(
+                $request,
+                CategoryProjectionCriteria::fromArray([
+                    'tenant' => $request->query->get('tenant'),
+                    'locale' => $request->query->get('locale'),
+                    'workflow_state' => $request->query->get('workflow_state'),
+                    'published' => $request->query->get('published'),
+                ]),
+            ));
 
             return new JsonResponse(['data' => $this->categoryProjectionReadService->tree($criteria)]);
         } catch (AccessDeniedHttpException $exception) {
@@ -70,7 +76,7 @@ final class CategoryApiController
         try {
             $this->categoryMutationAuthorizationService->assertCanMove($id);
 
-            $result = $this->categoryMutationService->move(
+            $result = $this->categoryMutationService->move(new CategoryMutationMoveRequest(
                 $id,
                 (string) $dto->parentId,
                 $this->resolveActorId($request),
@@ -80,7 +86,7 @@ final class CategoryApiController
                 $dto->locale,
                 $this->resolveIdempotencyKey($request),
                 $this->resolveCorrelationId($request),
-            );
+            ));
 
             return new JsonResponse(['data' => $result], 200);
         } catch (AccessDeniedHttpException $exception) {
@@ -111,7 +117,7 @@ final class CategoryApiController
         try {
             $this->categoryMutationAuthorizationService->assertCanPublish($id);
 
-            $result = $this->categoryMutationService->publish(
+            $result = $this->categoryMutationService->publish(new CategoryMutationPublishRequest(
                 $id,
                 (bool) $dto->published,
                 $dto->checks,
@@ -119,7 +125,7 @@ final class CategoryApiController
                 $dto->reason,
                 $this->resolveIdempotencyKey($request),
                 $this->resolveCorrelationId($request),
-            );
+            ));
 
             return new JsonResponse(['data' => $result], 200);
         } catch (AccessDeniedHttpException $exception) {

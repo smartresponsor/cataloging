@@ -11,6 +11,8 @@ use App\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
 use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
  * Provides the catalog syndication package gate service application service.
@@ -31,37 +33,19 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
      * Builds the gated publish package result for the current workflow.
      */
     public function buildGatedPublishPackage(
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $version,
-        string $localeMode,
-        array $categoryData,
-        array $fieldMap,
-        array $requiredFields,
-        string $actorId,
-        string $reason,
+        CategorySyndicationPackageBuildRequest $request,
     ): CategorySyndicationPackageGatedInterface {
-        $packageBuilt = $this->mappingService->buildPublishPackage(
-            $packageId,
-            $destinationId,
-            $categoryId,
-            $version,
-            $localeMode,
-            $categoryData,
-            $fieldMap,
-            $requiredFields,
-            $actorId,
-            $reason,
-        );
+        $context = $request->context();
+        $audit = $request->auditContext();
+        $packageBuilt = $this->mappingService->buildPublishPackage($request);
         $packagePayload = $packageBuilt->payload();
-
-        $mediaReadiness = $this->destinationMediaReadinessService->evaluate(
-            $destinationId,
-            $categoryId,
-            $actorId,
-            $reason,
+        $destinationRequest = new CategoryDestinationMediaEvaluationRequest(
+            $context->destinationId(),
+            $context->categoryId(),
+            $audit,
         );
+
+        $mediaReadiness = $this->destinationMediaReadinessService->evaluate($destinationRequest);
         $mediaPayload = $mediaReadiness->payload();
 
         $report = $this->policy->buildReport(
@@ -74,11 +58,11 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
 
         return new CategorySyndicationPackageGated(
             [
-                'packageId' => trim($packageId),
-                'destinationId' => trim($destinationId),
-                'categoryId' => trim($categoryId),
-                'version' => trim($version),
-                'localeMode' => trim($localeMode),
+                'packageId' => trim($context->packageId()),
+                'destinationId' => trim($context->destinationId()),
+                'categoryId' => trim($context->categoryId()),
+                'version' => trim($context->version()),
+                'localeMode' => trim($context->localeMode()),
                 'payload' => is_array($packagePayload['payload'] ?? null) ? $packagePayload['payload'] : [],
                 'fieldMap' => is_array($packagePayload['fieldMap'] ?? null) ? $packagePayload['fieldMap'] : [],
                 'requiredFields' => is_array($packagePayload['requiredFields'] ?? null)
@@ -90,8 +74,8 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
                 'checks' => $report->checks(),
                 'matchedBindingIds' => $report->matchedBindingIds(),
                 'publishable' => $report->publishable(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
+                'actorId' => trim($audit->actorId()),
+                'reason' => trim($audit->reason()),
             ],
             new \DateTimeImmutable(),
         );

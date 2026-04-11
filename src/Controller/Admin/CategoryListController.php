@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,13 +32,13 @@ final class CategoryListController extends AbstractController
     {
         $page = max(1, (int) $request->query->get('page', 1));
         $published = $request->query->getBoolean('published');
-        $items = $this->categoryProjectionReadService->list([
+        $items = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
             'published' => $published ? true : null,
             'limit' => 100,
             'offset' => 0,
             'order' => 'name',
             'direction' => 'asc',
-        ]);
+        ]));
 
         return $this->render('category/admin/list.html.twig', [
             'items' => $items,

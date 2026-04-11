@@ -7,6 +7,8 @@ namespace App\Service;
 
 use App\Repository\CatalogRepository;
 use App\ServiceInterface\CatalogReadServiceInterface;
+use App\ValueObject\CategoryCatalogReadNodeRequest;
+use App\ValueObject\CategoryCatalogReadPageRequest;
 use Doctrine\DBAL\Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -32,9 +34,9 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *
      * @throws Exception
      */
-    public function byId(string $id): ?array
+    public function byId(CategoryCatalogReadNodeRequest $request): ?array
     {
-        return $this->findCategory($id);
+        return $this->findCategory($request);
     }
 
     /**
@@ -58,9 +60,9 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function descendantsTree(string $id): ?array
+    public function descendantsTree(CategoryCatalogReadNodeRequest $request): ?array
     {
-        $node = $this->findCategory($id);
+        $node = $this->findCategory($request);
         if (null === $node) {
             return null;
         }
@@ -84,9 +86,9 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function childList(string $id): ?array
+    public function childList(CategoryCatalogReadNodeRequest $request): ?array
     {
-        $node = $this->findCategory($id);
+        $node = $this->findCategory($request);
         if (null === $node) {
             return null;
         }
@@ -107,9 +109,9 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function childrenList(string $id): ?array
+    public function childrenList(CategoryCatalogReadNodeRequest $request): ?array
     {
-        return $this->childList($id);
+        return $this->childList($request);
     }
 
     /**
@@ -120,9 +122,9 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function ancestorList(string $id): ?array
+    public function ancestorList(CategoryCatalogReadNodeRequest $request): ?array
     {
-        $node = $this->findCategory($id);
+        $node = $this->findCategory($request);
         if (null === $node) {
             return null;
         }
@@ -143,13 +145,13 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *
      * @throws Exception
      */
-    public function list(int $first, string $after): array
+    public function list(CategoryCatalogReadPageRequest $request): array
     {
-        $rows = $this->catalogRepository->findPageRows($first, $after);
+        $rows = $this->catalogRepository->findPageRows($request->first(), $request->after());
         $normalized = $this->normalizeCategories($rows);
 
         $next = '';
-        if (count($normalized) === $first) {
+        if (count($normalized) === $request->first()) {
             $last = end($normalized);
             if (is_array($last)) {
                 $path = $last['path'];
@@ -167,9 +169,9 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *
      * @throws Exception
      */
-    private function findCategory(string $id): ?array
+    private function findCategory(CategoryCatalogReadNodeRequest $request): ?array
     {
-        $normalizedId = trim($id);
+        $normalizedId = $request->id();
         if ('' === $normalizedId) {
             return null;
         }

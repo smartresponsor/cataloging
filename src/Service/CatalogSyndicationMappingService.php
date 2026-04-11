@@ -10,6 +10,7 @@ use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
 use App\PolicyInterface\CategorySyndicationMappingPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
 use App\ValueObject\CategorySyndicationMappingProfile;
+use App\ValueObject\CategorySyndicationPackageBuildRequest;
 use App\ValueObject\CategorySyndicationPublishPackage;
 
 /**
@@ -25,38 +26,26 @@ final readonly class CatalogSyndicationMappingService implements CatalogSyndicat
     ) {
     }
 
-    /**
-     * @param array<string,mixed> $categoryData
-     * @param array<string,mixed> $fieldMap
-     * @param list<string>        $requiredFields
-     */
     public function buildPublishPackage(
-        string $packageId,
-        string $destinationId,
-        string $categoryId,
-        string $version,
-        string $localeMode,
-        array $categoryData,
-        array $fieldMap,
-        array $requiredFields,
-        string $actorId,
-        string $reason,
+        CategorySyndicationPackageBuildRequest $request,
     ): CategorySyndicationPublishPackageBuiltInterface {
-        $this->policy->assertLocaleMode($localeMode);
-        $normalizedFieldMap = $this->policy->normalizeFieldMap($this->normalizeFieldMap($fieldMap));
-        $normalizedRequiredFields = $this->policy->normalizeRequiredFields($requiredFields);
+        $context = $request->context();
+        $audit = $request->auditContext();
+        $this->policy->assertLocaleMode($context->localeMode());
+        $normalizedFieldMap = $this->policy->normalizeFieldMap($this->normalizeFieldMap($request->fieldMap()));
+        $normalizedRequiredFields = $this->policy->normalizeRequiredFields($request->requiredFields());
 
         $profile = new CategorySyndicationMappingProfile(
-            trim($destinationId),
-            trim($version),
+            trim($context->destinationId()),
+            trim($context->version()),
             $normalizedFieldMap,
             $normalizedRequiredFields,
-            trim($localeMode),
+            trim($context->localeMode()),
         );
 
         $payload = [];
         foreach ($profile->fieldMap() as $sourceField => $targetField) {
-            $payload[$targetField] = $categoryData[$sourceField] ?? null;
+            $payload[$targetField] = $request->categoryData()[$sourceField] ?? null;
         }
 
         $missingRequiredFields = [];
@@ -68,9 +57,9 @@ final readonly class CatalogSyndicationMappingService implements CatalogSyndicat
         }
 
         $package = new CategorySyndicationPublishPackage(
-            trim($packageId),
+            trim($context->packageId()),
             $profile->destinationId(),
-            trim($categoryId),
+            trim($context->categoryId()),
             $profile->version(),
             $profile->localeMode(),
             $payload,
@@ -90,8 +79,8 @@ final readonly class CatalogSyndicationMappingService implements CatalogSyndicat
                 'publishable' => $package->publishable(),
                 'fieldMap' => $profile->fieldMap(),
                 'requiredFields' => $profile->requiredFields(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
+                'actorId' => trim($audit->actorId()),
+                'reason' => trim($audit->reason()),
             ],
             new \DateTimeImmutable('now'),
         );

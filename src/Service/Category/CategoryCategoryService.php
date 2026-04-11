@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service\Category;
 
 use App\ServiceInterface\CategoryReadRepositoryInterface;
+use App\ValueObject\CategoryReadRepositoryListRequest;
 
 /**
  * Provides the category category service application service.
@@ -23,15 +24,6 @@ final class CategoryCategoryService
     }
 
     /**
-     * @param array{
-     *     parentId?: string,
-     *     search?: string,
-     *     first?: int,
-     *     after?: string,
-     *     withTotal?: bool,
-     *     approxTotal?: bool,
-     * } $opt
-     *
      * @return array{
      *     edges: array<int, array{id: string, name: string, slug: string, level: int, path: string}>,
      *     pageInfo: array{endCursor?: string, hasNextPage: bool},
@@ -39,15 +31,14 @@ final class CategoryCategoryService
      *     approxTotal?: int,
      * }
      */
-    public function list(array $opt = []): array
+    public function list(?CategoryReadRepositoryListRequest $request = null): array
     {
-        $withTotal = (bool) ($opt['withTotal'] ?? false);
-        $approxTotal = (bool) ($opt['approxTotal'] ?? false);
-        if ($withTotal && $approxTotal) {
+        $normalizedRequest = $request ?? new CategoryReadRepositoryListRequest();
+        if ($normalizedRequest->withTotal() && $normalizedRequest->approxTotal()) {
             throw new \InvalidArgumentException('Choose either withTotal=true or approxTotal=true, not both.');
         }
 
-        return $this->repo->list($opt, $withTotal, $approxTotal);
+        return $this->repo->list($normalizedRequest);
     }
 
     /**

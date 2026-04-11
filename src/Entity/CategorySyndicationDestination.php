@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\EntityInterface\CategorySyndicationDestinationInterface;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
 
 /**
  * Represents the category syndication destination domain record.
@@ -16,36 +18,29 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
      * @param array<string,string> $settings
      */
     public function __construct(
-        private readonly string $destinationId,
-        private readonly string $name,
-        private readonly string $destinationType,
-        private readonly string $deliveryMode,
-        private readonly bool $enabled,
-        private readonly array $settings,
+        private readonly CategorySyndicationDestinationDefinition $definition,
+        private readonly CategorySyndicationDestinationConfiguration $configuration,
         private readonly string $createdBy,
         private readonly \DateTimeImmutable $createdAt,
     ) {
     }
 
-    /**
-     * @param array<string,mixed> $settings
-     */
     public static function register(
-        string $destinationId,
-        string $name,
-        string $destinationType,
-        string $deliveryMode,
-        bool $enabled,
-        array $settings,
+        CategorySyndicationDestinationDefinition $definition,
+        CategorySyndicationDestinationConfiguration $configuration,
         string $createdBy,
     ): self {
         return new self(
-            trim($destinationId),
-            trim($name),
-            trim($destinationType),
-            trim($deliveryMode),
-            $enabled,
-            self::normalizeSettings($settings),
+            new CategorySyndicationDestinationDefinition(
+                trim($definition->destinationId()),
+                trim($definition->name()),
+                trim($definition->destinationType()),
+                trim($definition->deliveryMode()),
+            ),
+            new CategorySyndicationDestinationConfiguration(
+                $configuration->enabled(),
+                self::normalizeSettings($configuration->settings()),
+            ),
             trim($createdBy),
             new \DateTimeImmutable('now'),
         );
@@ -96,65 +91,45 @@ final class CategorySyndicationDestination implements CategorySyndicationDestina
         return $normalized;
     }
 
-    /**
-     * Handles the destination id workflow.
-     */
     public function destinationId(): string
     {
-        return $this->destinationId;
+        return $this->definition->destinationId();
     }
 
-    /**
-     * Handles the name workflow.
-     */
     public function name(): string
     {
-        return $this->name;
+        return $this->definition->name();
     }
 
-    /**
-     * Handles the destination type workflow.
-     */
     public function destinationType(): string
     {
-        return $this->destinationType;
+        return $this->definition->destinationType();
     }
 
-    /**
-     * Handles the delivery mode workflow.
-     */
     public function deliveryMode(): string
     {
-        return $this->deliveryMode;
+        return $this->definition->deliveryMode();
     }
 
-    /**
-     * Handles the enabled workflow.
-     */
     public function enabled(): bool
     {
-        return $this->enabled;
+        return $this->configuration->enabled();
     }
 
-    /**
-     * Updates the tings value.
-     */
+    /** @return array<string,string> */
     public function settings(): array
     {
-        return $this->settings;
+        /** @var array<string,string> $settings */
+        $settings = $this->configuration->settings();
+
+        return $settings;
     }
 
-    /**
-     * Creates the d by result for the current workflow.
-     */
     public function createdBy(): string
     {
         return $this->createdBy;
     }
 
-    /**
-     * Creates the d at result for the current workflow.
-     */
     public function createdAt(): \DateTimeImmutable
     {
         return $this->createdAt;

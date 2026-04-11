@@ -11,6 +11,8 @@ namespace App\Tests\Category;
 use App\Policy\CategoryChangeRequestPolicy;
 use App\Repository\CategoryChangeRequestRepository;
 use App\Service\CatalogChangeRequestService;
+use App\ValueObject\CategoryChangeRequestReviewRequest;
+use App\ValueObject\CategoryChangeRequestSubmitRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogChangeRequestServiceTest extends TestCase
@@ -19,13 +21,13 @@ final class CatalogChangeRequestServiceTest extends TestCase
     {
         $service = new CatalogChangeRequestService(new CategoryChangeRequestRepository(), new CategoryChangeRequestPolicy());
 
-        $request = $service->submit(
+        $request = $service->submit(new CategoryChangeRequestSubmitRequest(
             'req-200',
             'category-200',
             'author-1',
             'Retitle category and update alias',
             ['title' => 'Outdoor furniture', 'alias' => 'patio-furniture'],
-        );
+        ));
 
         self::assertSame('req-200', $request->requestId());
         self::assertSame('proposed', $request->state()->value());
@@ -36,20 +38,20 @@ final class CatalogChangeRequestServiceTest extends TestCase
     {
         $repository = new CategoryChangeRequestRepository();
         $service = new CatalogChangeRequestService($repository, new CategoryChangeRequestPolicy());
-        $service->submit(
+        $service->submit(new CategoryChangeRequestSubmitRequest(
             'req-201',
             'category-201',
             'author-1',
             'Approve category move',
             ['parentId' => 'summer'],
-        );
+        ));
 
-        $event = $service->review(
+        $event = $service->review(new CategoryChangeRequestReviewRequest(
             'req-201',
             'accepted',
             'moderator-1',
             'Validated against merchandising policy',
-        );
+        ));
 
         $payload = $event->payload();
         self::assertSame('accepted', $payload['toState']);
@@ -63,11 +65,11 @@ final class CatalogChangeRequestServiceTest extends TestCase
 
         $this->expectException(\DomainException::class);
 
-        $service->review(
+        $service->review(new CategoryChangeRequestReviewRequest(
             'req-missing',
             'rejected',
             'moderator-1',
             'No request exists',
-        );
+        ));
     }
 }

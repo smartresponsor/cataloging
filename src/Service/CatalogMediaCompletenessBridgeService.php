@@ -11,6 +11,7 @@ use App\PolicyInterface\CategoryCompletenessPolicyInterface;
 use App\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
 use App\ServiceInterface\CatalogMediaCoverageServiceInterface;
 use App\ValueObject\CategoryCompletenessReport;
+use App\ValueObject\CategoryEvaluationRequest;
 
 /**
  * Provides the catalog media completeness bridge service application service.
@@ -29,14 +30,10 @@ final readonly class CatalogMediaCompletenessBridgeService implements CatalogMed
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryCompletenessEvaluatedInterface {
-        $baseChecks = $this->completenessPolicy->buildChecks($payload);
-        $mediaPayload = $this->mediaCoverageService->evaluate($categoryId, $payload, $actorId, $reason)->payload();
+    public function evaluate(CategoryEvaluationRequest $request): CategoryCompletenessEvaluatedInterface
+    {
+        $baseChecks = $this->completenessPolicy->buildChecks($request->payload());
+        $mediaPayload = $this->mediaCoverageService->evaluate($request)->payload();
         $mergedChecks = array_merge(
             $baseChecks,
             is_array($mediaPayload['checks'] ?? null) ? $mediaPayload['checks'] : [],
@@ -45,15 +42,15 @@ final readonly class CatalogMediaCompletenessBridgeService implements CatalogMed
         $report = CategoryCompletenessReport::fromChecks($mergedChecks);
 
         return new CategoryCompletenessEvaluated(
-            trim($categoryId),
+            trim($request->categoryId()),
             $report->score(),
             $report->isComplete(),
             $report->missingRequired(),
             $report->warnings(),
             $report->checks(),
             $report->publicationChecks(),
-            trim($actorId),
-            trim($reason),
+            trim($request->actorId()),
+            trim($request->reason()),
             new \DateTimeImmutable('now'),
         );
     }

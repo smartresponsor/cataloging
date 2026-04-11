@@ -6,16 +6,12 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryCompletenessEvaluatedInterface;
+use App\ValueObject\CategoryEvaluationRequest;
+
 /**
  * Defines the contract for catalog media completeness bridge service.
  */
 interface CatalogMediaCompletenessBridgeServiceInterface
 {
-    /** @param array<string,mixed> $payload */
-    public function evaluate(
-        string $categoryId,
-        array $payload,
-        string $actorId,
-        string $reason,
-    ): CategoryCompletenessEvaluatedInterface;
+    public function evaluate(CategoryEvaluationRequest $request): CategoryCompletenessEvaluatedInterface;
 }

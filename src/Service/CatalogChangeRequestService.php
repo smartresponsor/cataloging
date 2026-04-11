@@ -10,7 +10,9 @@ use App\Event\CategoryChangeRequestReviewed;
 use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
 use App\ServiceInterface\CatalogChangeRequestServiceInterface;
+use App\ValueObject\CategoryChangeRequestReviewRequest;
 use App\ValueObject\CategoryChangeRequestState;
+use App\ValueObject\CategoryChangeRequestSubmitRequest;
 
 /**
  * Provides the catalog change request service application service.
@@ -29,49 +31,57 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
     /**
      * Handles the submit workflow.
      */
-    public function submit(
-        string $requestId,
-        string $categoryId,
-        string $submittedBy,
-        string $summary,
-        array $changes,
-    ): CategoryChangeRequest {
-        $this->policy->assertCanSubmit($requestId, $categoryId, $submittedBy, $summary, $changes);
+    public function submit(CategoryChangeRequestSubmitRequest $request): CategoryChangeRequest
+    {
+        $this->policy->assertCanSubmit(
+            $request->requestId(),
+            $request->categoryId(),
+            $request->submittedBy(),
+            $request->summary(),
+            $request->changes(),
+        );
 
-        $request = CategoryChangeRequest::open($requestId, $categoryId, $submittedBy, $summary, $changes);
-        $this->repository->save($request);
+        $entity = CategoryChangeRequest::open(
+            $request->requestId(),
+            $request->categoryId(),
+            $request->submittedBy(),
+            $request->summary(),
+            $request->changes(),
+        );
+        $this->repository->save($entity);
 
-        return $request;
+        return $entity;
     }
 
     /**
      * Handles the review workflow.
      */
-    public function review(
-        string $requestId,
-        string $targetState,
-        string $reviewedBy,
-        string $decisionReason,
-    ): CategoryChangeRequestReviewed {
-        $request = $this->repository->findByRequestId($requestId);
+    public function review(CategoryChangeRequestReviewRequest $request): CategoryChangeRequestReviewed
+    {
+        $entity = $this->repository->findByRequestId($request->requestId());
 
-        if (!$request instanceof CategoryChangeRequest) {
-            throw new \DomainException(sprintf('Category change request not found: %s', $requestId));
+        if (!$entity instanceof CategoryChangeRequest) {
+            throw new \DomainException(sprintf('Category change request not found: %s', $request->requestId()));
         }
 
-        $toState = CategoryChangeRequestState::fromString($targetState);
-        $this->policy->assertCanReview($request->state(), $toState, $reviewedBy, $decisionReason);
+        $toState = CategoryChangeRequestState::fromString($request->targetState());
+        $this->policy->assertCanReview(
+            $entity->state(),
+            $toState,
+            $request->reviewedBy(),
+            $request->decisionReason(),
+        );
 
-        $updated = $request->moveTo($toState, $reviewedBy, $decisionReason);
+        $updated = $entity->moveTo($toState, $request->reviewedBy(), $request->decisionReason());
         $this->repository->save($updated);
 
         $event = new CategoryChangeRequestReviewed(
             $updated->requestId(),
             $updated->categoryId(),
-            $request->state()->value(),
+            $entity->state()->value(),
             $toState->value(),
-            $reviewedBy,
-            $decisionReason,
+            $request->reviewedBy(),
+            $request->decisionReason(),
             $updated->reviewedAt() ?? new \DateTimeImmutable('now'),
         );
 

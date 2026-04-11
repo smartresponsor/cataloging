@@ -6,27 +6,12 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryMediaBoundInterface;
+use App\ValueObject\CategoryMediaBindRequest;
+
 /**
  * Defines the contract for catalog media governance service.
  */
 interface CatalogMediaGovernanceServiceInterface
 {
-    /**
-     * @param list<string>        $channels
-     * @param list<string>        $locales
-     * @param array<string,mixed> $metadata
-     */
-    public function bind(
-        string $bindingId,
-        string $categoryId,
-        string $assetId,
-        string $role,
-        array $channels,
-        array $locales,
-        bool $requiredForPublish,
-        bool $active,
-        array $metadata,
-        string $actorId,
-        string $reason,
-    ): CategoryMediaBoundInterface;
+    public function bind(CategoryMediaBindRequest $request): CategoryMediaBoundInterface;
 }

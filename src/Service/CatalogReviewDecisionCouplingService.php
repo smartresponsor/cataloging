@@ -11,6 +11,10 @@ use App\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\ValueObject\CategoryChangeRequestReviewRequest;
+use App\ValueObject\CategoryPublicationGateEvaluationRequest;
+use App\ValueObject\CategoryReviewDecisionCouplingRequest;
+use App\ValueObject\CategoryWorkflowTransitionRequest;
 
 /**
  * Provides the catalog review decision coupling service application service.
@@ -30,47 +34,42 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
     /**
      * Handles the couple workflow.
      */
-    public function couple(
-        string $requestId,
-        string $targetState,
-        string $reviewedBy,
-        string $decisionReason,
-        array $checks = [],
-    ): CategoryReviewDecisionCoupledInterface {
-        $normalizedTargetState = trim($targetState);
+    public function couple(CategoryReviewDecisionCouplingRequest $request): CategoryReviewDecisionCoupledInterface
+    {
+        $normalizedTargetState = trim($request->targetState());
         if (!in_array($normalizedTargetState, ['accepted', 'rejected'], true)) {
             throw new \DomainException(sprintf('Unsupported review decision coupling state: %s', $normalizedTargetState));
         }
-        $reviewEvent = $this->changeRequestService->review(
-            $requestId,
+        $reviewEvent = $this->changeRequestService->review(new CategoryChangeRequestReviewRequest(
+            $request->requestId(),
             $normalizedTargetState,
-            $reviewedBy,
-            $decisionReason,
-        );
+            $request->reviewedBy(),
+            $request->decisionReason(),
+        ));
         $reviewPayload = $reviewEvent->payload();
         $categoryId = $this->scalarString($reviewPayload['categoryId'] ?? null);
         if ('' === $categoryId) {
-            throw new \DomainException(sprintf('Review event for request %s does not contain categoryId.', $requestId));
+            throw new \DomainException(sprintf('Review event for request %s does not contain categoryId.', $request->requestId()));
         }
         if ('accepted' === $normalizedTargetState) {
-            $workflowEvent = $this->workflowTransitionService->transition(
+            $workflowEvent = $this->workflowTransitionService->transition(new CategoryWorkflowTransitionRequest(
                 $categoryId,
                 'approved',
-                $reviewedBy,
-                sprintf('accepted change request %s', $requestId),
-            );
+                $request->reviewedBy(),
+                sprintf('accepted change request %s', $request->requestId()),
+            ));
             $workflowPayload = $workflowEvent->payload();
-            $gateEvent = $this->publicationGateService->evaluate(
+            $gateEvent = $this->publicationGateService->evaluate(new CategoryPublicationGateEvaluationRequest(
                 $categoryId,
                 'approved',
-                $checks,
-                $reviewedBy,
-                $decisionReason,
-            );
+                $request->checks(),
+                $request->reviewedBy(),
+                $request->decisionReason(),
+            ));
             $gatePayload = $gateEvent->payload();
 
             return new CategoryReviewDecisionCoupled(
-                $requestId,
+                $request->requestId(),
                 $categoryId,
                 $normalizedTargetState,
                 $this->scalarString($workflowPayload['toState'] ?? 'approved'),
@@ -78,30 +77,30 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
                 $this->stringList($gatePayload['blockers'] ?? null),
                 $this->stringList($gatePayload['warnings'] ?? null),
                 $this->boolMap($gatePayload['checks'] ?? null),
-                trim($reviewedBy),
-                trim($decisionReason),
+                trim($request->reviewedBy()),
+                trim($request->decisionReason()),
                 new \DateTimeImmutable('now'),
             );
         }
-        $workflowEvent = $this->workflowTransitionService->transition(
+        $workflowEvent = $this->workflowTransitionService->transition(new CategoryWorkflowTransitionRequest(
             $categoryId,
             'draft',
-            $reviewedBy,
-            sprintf('rejected change request %s', $requestId),
-        );
+            $request->reviewedBy(),
+            sprintf('rejected change request %s', $request->requestId()),
+        ));
         $workflowPayload = $workflowEvent->payload();
 
         return new CategoryReviewDecisionCoupled(
-            $requestId,
+            $request->requestId(),
             $categoryId,
             $normalizedTargetState,
             $this->scalarString($workflowPayload['toState'] ?? 'draft'),
             false,
             ['review_rejected'],
             [],
-            $this->boolMap($checks),
-            trim($reviewedBy),
-            trim($decisionReason),
+            $this->boolMap($request->checks()),
+            trim($request->reviewedBy()),
+            trim($request->decisionReason()),
             new \DateTimeImmutable('now'),
         );
     }
@@ -116,17 +115,21 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
     {
         if (!is_array($value)) {
             return [];
-        } $r = [];
-        foreach ($value as $i) {
-            if (!is_scalar($i)) {
+        }
+
+        $result = [];
+        foreach ($value as $item) {
+            if (!is_scalar($item)) {
                 continue;
-            } $n = trim((string) $i);
-            if ('' !== $n) {
-                $r[] = $n;
+            }
+
+            $normalized = trim((string) $item);
+            if ('' !== $normalized) {
+                $result[] = $normalized;
             }
         }
 
-        return array_values($r);
+        return array_values($result);
     }
 
     /** @return array<string,bool> */
@@ -134,13 +137,15 @@ final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisio
     {
         if (!is_array($value)) {
             return [];
-        } $r = [];
-        foreach ($value as $k => $v) {
-            if (is_string($k) && '' !== trim($k)) {
-                $r[$k] = (bool) $v;
+        }
+
+        $result = [];
+        foreach ($value as $checkName => $checkValue) {
+            if (is_string($checkName) && '' !== trim($checkName)) {
+                $result[$checkName] = (bool) $checkValue;
             }
         }
 
-        return $r;
+        return $result;
     }
 }

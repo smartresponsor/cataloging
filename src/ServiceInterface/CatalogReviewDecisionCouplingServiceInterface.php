@@ -6,17 +6,12 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryReviewDecisionCoupledInterface;
+use App\ValueObject\CategoryReviewDecisionCouplingRequest;
+
 /**
  * Defines the contract for catalog review decision coupling service.
  */
 interface CatalogReviewDecisionCouplingServiceInterface
 {
-    /** @param array<string,bool> $checks */
-    public function couple(
-        string $requestId,
-        string $targetState,
-        string $reviewedBy,
-        string $decisionReason,
-        array $checks = [],
-    ): CategoryReviewDecisionCoupledInterface;
+    public function couple(CategoryReviewDecisionCouplingRequest $request): CategoryReviewDecisionCoupledInterface;
 }

@@ -11,6 +11,10 @@ namespace App\Tests\Category;
 use App\Policy\CategorySyndicationDestinationPolicy;
 use App\Repository\CategorySyndicationDestinationRepository;
 use App\Service\CatalogSyndicationDestinationService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDestinationServiceTest extends TestCase
@@ -23,17 +27,25 @@ final class CatalogSyndicationDestinationServiceTest extends TestCase
         );
 
         $event = $service->register(
-            'destination-01',
-            'US Search Feed',
-            'search',
-            'export',
-            true,
-            [
-                'feedCode' => 'search-us',
-                'channel' => 'web-us',
-            ],
-            'operator-7',
-            'baseline syndication destination registration',
+            new CategorySyndicationDestinationRegisterRequest(
+                new CategorySyndicationDestinationDefinition(
+                    'destination-01',
+                    'US Search Feed',
+                    'search',
+                    'export',
+                ),
+                new CategorySyndicationDestinationConfiguration(
+                    true,
+                    [
+                        'feedCode' => 'search-us',
+                        'channel' => 'web-us',
+                    ],
+                ),
+                new CatalogAuditContext(
+                    'operator-7',
+                    'baseline syndication destination registration',
+                ),
+            ),
         );
 
         $payload = $event->payload();

@@ -7,6 +7,7 @@ namespace App\Controller\Merchant;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,13 +36,13 @@ final class CategoryMerchantController extends AbstractController
     {
         $context = $this->externalIdentityContextResolver->resolveFromRequest($request);
         $tenant = $context?->tenant ?? 'merchant';
-        $categories = $this->categoryProjectionReadService->list([
+        $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
             'tenant' => $tenant,
             'limit' => 100,
             'offset' => 0,
             'order' => 'name',
             'direction' => 'asc',
-        ]);
+        ]));
 
         return $this->render('category/merchant/list.html.twig', [
             'categories' => $categories,

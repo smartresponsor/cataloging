@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryProjectionCriteria;
 
 /**
  * Provides the read optimizer application service.
@@ -25,14 +26,13 @@ final class ReadOptimizer
     }
 
     /**
-     * @param array<string,mixed> $criteria
-     *
      * @return list<array<string,mixed>>
      *
      * @throws \JsonException
      */
-    public function getTree(array $criteria = []): array
+    public function getTree(?CategoryProjectionCriteria $criteria = null): array
     {
+        $criteria ??= CategoryProjectionCriteria::fromArray([]);
         $cacheKey = $this->cacheKey($criteria);
         $cachedTree = $this->cache[$cacheKey] ?? null;
         if (is_array($cachedTree)) {
@@ -76,16 +76,15 @@ final class ReadOptimizer
     }
 
     /**
-     * @param array<string,mixed> $criteria
-     *
      * @return string
      *
      * @throws \JsonException
      */
-    private function cacheKey(array $criteria): string
+    private function cacheKey(CategoryProjectionCriteria $criteria): string
     {
-        ksort($criteria);
+        $criteriaMap = $criteria->toArray();
+        ksort($criteriaMap);
 
-        return sha1(json_encode($criteria, JSON_THROW_ON_ERROR));
+        return sha1(json_encode($criteriaMap, JSON_THROW_ON_ERROR));
     }
 }

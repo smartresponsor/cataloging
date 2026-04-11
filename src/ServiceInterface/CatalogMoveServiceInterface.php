@@ -4,6 +4,9 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
+use App\ValueObject\CatalogMoveRequest;
+
 /**
  * Defines the contract for catalog move service.
  */
@@ -14,12 +17,5 @@ interface CatalogMoveServiceInterface
      *
      * @return array{0:int,1:array<int,mixed>}
      */
-    public function move(
-        string $nodeId,
-        string $newParentId,
-        string $treeId,
-        string $policy,
-        bool $dryRun = false,
-        ?string $locale = null,
-    ): array;
+    public function move(CatalogMoveRequest $request): array;
 }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\ServiceInterface\CategoryMoveInterface;
+use App\ValueObject\CatalogMoveRequest;
 
 /**
  * Handles the category move controller application flow.
@@ -26,14 +27,14 @@ final readonly class CategoryMoveController
      */
     public function move(array $body): array
     {
-        [$count, $redirects] = $this->service->move(
+        [$count, $redirects] = $this->service->move(new CatalogMoveRequest(
             $body['nodeId'],
             $body['newParentId'],
             $body['treeId'],
             $body['policy'],
             (bool) ($body['dryRun'] ?? false),
             $body['locale'] ?? null,
-        );
+        ));
 
         return [
             'ok' => true,

@@ -11,6 +11,7 @@ use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
 use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
+use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
 /**
  * Provides the catalog destination media fallback service application service.
@@ -31,11 +32,10 @@ final readonly class CatalogDestinationMediaFallbackService implements CatalogDe
      * Handles the evaluate workflow.
      */
     public function evaluate(
-        string $destinationId,
-        string $categoryId,
-        string $actorId,
-        string $reason,
+        CategoryDestinationMediaEvaluationRequest $request,
     ): CategoryDestinationMediaFallbackEvaluatedInterface {
+        $destinationId = $request->destinationId();
+        $categoryId = $request->categoryId();
         $destination = $this->destinationRepository->find($destinationId);
         if (null === $destination) {
             throw new \InvalidArgumentException('Unknown destination.');
@@ -50,8 +50,8 @@ final readonly class CatalogDestinationMediaFallbackService implements CatalogDe
         );
 
         return new CategoryDestinationMediaFallbackEvaluated(
-            trim($destinationId),
-            trim($categoryId),
+            $destinationId,
+            $categoryId,
             trim($settings['channel'] ?? ''),
             trim($settings['locale'] ?? ''),
             $report->publishable(),
@@ -61,8 +61,8 @@ final readonly class CatalogDestinationMediaFallbackService implements CatalogDe
             $report->checks(),
             $report->exactMatchedBindingIds(),
             $report->fallbackMatchedBindingIds(),
-            trim($actorId),
-            trim($reason),
+            $request->actorId(),
+            $request->reason(),
             new \DateTimeImmutable(),
         );
     }

@@ -11,6 +11,9 @@ namespace App\Tests\Category;
 
 use App\Policy\CategorySyndicationGovernanceTrailPolicy;
 use App\Service\CatalogSyndicationGovernanceTrailService;
+use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategorySyndicationGovernanceTrailPayloadSet;
+use App\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationGovernanceTrailServiceTest extends TestCase
@@ -20,36 +23,39 @@ final class CatalogSyndicationGovernanceTrailServiceTest extends TestCase
         $service = new CatalogSyndicationGovernanceTrailService(new CategorySyndicationGovernanceTrailPolicy());
 
         $event = $service->recordTrail(
-            [
-                'destinationId' => 'dst-1',
-                'categoryId' => 'cat-1',
-                'mediaPolicyMode' => 'prefer_exact_warn',
-                'strictPublishable' => false,
-                'fallbackPublishable' => true,
-                'resolvedPublishable' => true,
-                'fallbackUsed' => true,
-                'warnings' => ['package_publishable_by_destination_media_policy_fallback'],
-            ],
-            [
-                'destinationId' => 'dst-1',
-                'categoryId' => 'cat-1',
-                'status' => 'retry_scheduled',
-                'retryable' => true,
-            ],
-            [
-                'destinationId' => 'dst-1',
-                'totalRecords' => 4,
-                'deliveredCount' => 1,
-                'failedCount' => 2,
-                'pendingCount' => 0,
-                'retryScheduledCount' => 1,
-                'skippedCount' => 0,
-            ],
-            [
-                'scheduledRetries' => 1,
-            ],
-            'actor-1',
-            'test',
+            new CategorySyndicationGovernanceTrailRecordRequest(
+                new CategorySyndicationGovernanceTrailPayloadSet(
+                    [
+                        'destinationId' => 'dst-1',
+                        'categoryId' => 'cat-1',
+                        'mediaPolicyMode' => 'prefer_exact_warn',
+                        'strictPublishable' => false,
+                        'fallbackPublishable' => true,
+                        'resolvedPublishable' => true,
+                        'fallbackUsed' => true,
+                        'warnings' => ['package_publishable_by_destination_media_policy_fallback'],
+                    ],
+                    [
+                        'destinationId' => 'dst-1',
+                        'categoryId' => 'cat-1',
+                        'status' => 'retry_scheduled',
+                        'retryable' => true,
+                    ],
+                    [
+                        'destinationId' => 'dst-1',
+                        'totalRecords' => 4,
+                        'deliveredCount' => 1,
+                        'failedCount' => 2,
+                        'pendingCount' => 0,
+                        'retryScheduledCount' => 1,
+                        'skippedCount' => 0,
+                    ],
+                    [
+                        'scheduledRetries' => 1,
+                    ],
+                ),
+                new CatalogAuditContext('actor-1', 'test'),
+            ),
         );
 
         $payload = $event->payload();

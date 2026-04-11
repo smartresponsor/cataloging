@@ -28,6 +28,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * Handles the save workflow.
+     *
+     * @throws \Throwable
      */
     public function save(CategoryAccessAssignmentInterface $assignment): void
     {
@@ -96,6 +98,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * Handles the find primary for category id workflow.
+     *
+     * @throws \Throwable
      */
     public function findPrimaryForCategoryId(string $categoryId): ?CategoryAccessAssignmentInterface
     {
@@ -111,6 +115,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * Handles the find active by category id workflow.
+     *
+     * @throws \Throwable
      */
     public function findActiveByCategoryId(string $categoryId): array
     {
@@ -137,6 +143,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * Handles the find active by actor user id workflow.
+     *
+     * @throws \Throwable
      */
     public function findActiveByActorUserId(string $actorUserId): array
     {
@@ -163,6 +171,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * Handles the find one by category id and actor user id workflow.
+     *
+     * @throws \Throwable
      */
     public function findOneByCategoryIdAndActorUserId(
         string $categoryId,
@@ -195,6 +205,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
      * @param list<array<string,mixed>> $rows
      *
      * @return list<CategoryAccessAssignmentInterface>
+     *
+     * @throws \Throwable
      */
     private function hydrateMany(array $rows): array
     {
@@ -208,6 +220,8 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
 
     /**
      * @param array<string,mixed> $row
+     *
+     * @throws \Throwable
      */
     private function hydrateOne(array $row): CategoryAccessAssignmentInterface
     {
@@ -235,6 +249,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
         return false;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function dateTimeImmutable(mixed $value, string $field): \DateTimeImmutable
     {
         $normalized = $this->requiredString($value, $field);
@@ -242,6 +259,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
         return new \DateTimeImmutable($normalized);
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function optionalDateTimeImmutable(mixed $value): ?\DateTimeImmutable
     {
         if (null === $value) {
@@ -259,6 +279,9 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
         return new \DateTimeImmutable($normalized);
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function requiredString(mixed $value, string $field): string
     {
         if (!is_scalar($value)) {

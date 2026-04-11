@@ -6,6 +6,8 @@ namespace App\Tests\Service;
 
 use App\Service\GraphqlResolver;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\ValueObject\CategoryGraphqlNodeRequest;
+use App\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,12 +18,12 @@ final class GraphqlResolverTest extends TestCase
     public function testCategoryUsesProjectionRow(): void
     {
         $readService = new class implements CategoryProjectionReadServiceInterface {
-            public function list(array $criteria = []): array
+            public function list(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
             }
 
-            public function tree(array $criteria = []): array
+            public function tree(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
             }
@@ -45,7 +47,7 @@ final class GraphqlResolverTest extends TestCase
         };
 
         $resolver = new GraphqlResolver($readService, $this->registryWithPaths([]));
-        $node = $resolver->category(['id' => 'cat-1']);
+        $node = $resolver->category(new CategoryGraphqlNodeRequest('cat-1'));
 
         self::assertIsArray($node);
         self::assertSame('cat-1', $node['id']);
@@ -56,12 +58,12 @@ final class GraphqlResolverTest extends TestCase
     public function testCategoryPathUsesProjectionPrefixes(): void
     {
         $readService = new class implements CategoryProjectionReadServiceInterface {
-            public function list(array $criteria = []): array
+            public function list(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
             }
 
-            public function tree(array $criteria = []): array
+            public function tree(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
             }
@@ -89,7 +91,7 @@ final class GraphqlResolverTest extends TestCase
             ['id' => 'cat-2', 'parent_id' => 'cat-root', 'slug' => 'electronics', 'name' => 'Electronics', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root.electronics'],
         ];
         $resolver = new GraphqlResolver($readService, $this->registryWithPaths($rows));
-        $path = $resolver->categoryPath(['id' => 'cat-2']);
+        $path = $resolver->categoryPath(new CategoryGraphqlNodeRequest('cat-2'));
 
         self::assertCount(2, $path);
         self::assertSame('cat-root', $path[0]['id']);
