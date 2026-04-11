@@ -5,8 +5,11 @@ declare(strict_types=1);
 
 namespace App\RepositoryInterface;
 
+use App\ValueObject\CategoryRepositoryCreateRequest;
 use App\ValueObject\CategoryResolveRequest;
 use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategorySlugExistsRequest;
+use App\ValueObject\CategorySlugLookupRequest;
 use App\ValueObject\CategoryTreeRequest;
 
 /**
@@ -19,22 +22,18 @@ interface CategoryRepositoryInterface
 
     /** @return list<array<string,mixed>> */
     public function breadcrumb(string $categoryId, string $locale): array;
+
     /**
      * Handles the slug exists workflow.
      */
-    public function slugExists(string $slug, string $taxonomyId, ?string $parentId, string $locale): bool;
+    public function slugExists(CategorySlugExistsRequest $request): bool;
 
-    /**
-     * @param array<string,mixed> $name
-     * @param array<string,mixed> $slug
-     * @param array<string,mixed> $meta
-     *
-     * @return array<string,mixed>
-     */
-    public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta): array;
+    /** @return array<string,mixed> */
+    public function create(CategoryRepositoryCreateRequest $request): array;
 
     /** @return array<string,mixed> */
     public function move(CategoryServiceMoveRequest $request): array;
+
     /**
      * Handles the attach workflow.
      */
@@ -45,6 +44,7 @@ interface CategoryRepositoryInterface
         string $targetClass,
         string $targetId,
     ): void;
+
     /**
      * Handles the detach workflow.
      */
@@ -60,7 +60,8 @@ interface CategoryRepositoryInterface
     public function resolve(CategoryResolveRequest $request): array;
 
     /** @return array<string,mixed> */
-    public function bySlug(string $taxonomyCode, string $slug, string $locale): array;
+    public function bySlug(CategorySlugLookupRequest $request): array;
+
     /**
      * Handles the full slug workflow.
      */

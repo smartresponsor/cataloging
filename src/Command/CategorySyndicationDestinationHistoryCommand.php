@@ -8,6 +8,7 @@ namespace App\Command;
 use App\Entity\CategorySyndicationDeliveryRecord;
 use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\ValueObject\CategorySyndicationHistoryRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -84,7 +85,12 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
             );
         }
 
-        $event = $this->service->buildDestinationHistory($destinationId, $records, $actorId, $reason);
+        $event = $this->service->buildDestinationHistory(new CategorySyndicationHistoryRequest(
+            $destinationId,
+            $records,
+            $actorId,
+            $reason,
+        ));
         $payload = method_exists($event, 'payload')
             ? $event->payload()
             : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);

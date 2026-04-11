@@ -4,11 +4,13 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
+use App\ValueObject\WebhookDispatchRequest;
+
 /**
  * Defines the contract for webhook client.
  */
 interface WebhookClientInterface
 {
-    /** @param array<string,mixed> $payload */
-    public function send(string $endpoint, string $event, array $payload): bool;
+    public function send(WebhookDispatchRequest $request): bool;
 }

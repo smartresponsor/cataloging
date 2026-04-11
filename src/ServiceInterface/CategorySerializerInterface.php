@@ -4,17 +4,14 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
+use App\ValueObject\CategorySerializationRequest;
+
 /**
  * Defines the contract for category serializer.
  */
 interface CategorySerializerInterface
 {
-    /**
-     * @param array<string,mixed> $source
-     * @param list<string>        $includeFieldList
-     * @param list<string>        $excludeFieldList
-     *
-     * @return array<string,mixed>
-     */
-    public function serialize(array $source, array $includeFieldList, array $excludeFieldList): array;
+    /** @return array<string,mixed> */
+    public function serialize(CategorySerializationRequest $request): array;
 }

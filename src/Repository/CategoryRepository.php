@@ -6,8 +6,11 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\ValueObject\CategoryRepositoryCreateRequest;
 use App\ValueObject\CategoryResolveRequest;
 use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategorySlugExistsRequest;
+use App\ValueObject\CategorySlugLookupRequest;
 use App\ValueObject\CategoryTreeRequest;
 
 /**
@@ -27,30 +30,25 @@ final class CategoryRepository implements CategoryRepositoryInterface
     {
         return [];
     }
+
     /**
      * Handles the slug exists workflow.
      */
-    public function slugExists(string $slug, string $taxonomyId, ?string $parentId, string $locale): bool
+    public function slugExists(CategorySlugExistsRequest $request): bool
     {
         return false;
     }
 
-    /**
-     * @param array<string,mixed> $name
-     * @param array<string,mixed> $slug
-     * @param array<string,mixed> $meta
-     *
-     * @return array<string,mixed>
-     */
-    public function create(string $taxonomyId, ?string $parentId, array $name, array $slug, array $meta): array
+    /** @return array<string,mixed> */
+    public function create(CategoryRepositoryCreateRequest $request): array
     {
         return [
             'id' => '',
-            'taxonomyId' => $taxonomyId,
-            'parentId' => $parentId,
-            'name' => $name,
-            'slug' => $slug,
-            'meta' => $meta,
+            'taxonomyId' => $request->taxonomyId(),
+            'parentId' => $request->parentId(),
+            'name' => $request->name(),
+            'slug' => $request->slug(),
+            'meta' => $request->meta(),
             'path' => '',
             'order' => 0,
         ];
@@ -61,6 +59,7 @@ final class CategoryRepository implements CategoryRepositoryInterface
     {
         return ['id' => $request->categoryId(), 'parentId' => $request->newParentId(), 'order' => $request->newOrder()];
     }
+
     /**
      * Handles the attach workflow.
      */
@@ -70,9 +69,9 @@ final class CategoryRepository implements CategoryRepositoryInterface
         string $targetDomain,
         string $targetClass,
         string $targetId,
-    ): void
-    {
+    ): void {
     }
+
     /**
      * Handles the detach workflow.
      */
@@ -82,8 +81,7 @@ final class CategoryRepository implements CategoryRepositoryInterface
         string $targetDomain,
         string $targetClass,
         string $targetId,
-    ): void
-    {
+    ): void {
     }
 
     /** @return list<array<string,mixed>> */
@@ -93,10 +91,16 @@ final class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /** @return array<string,mixed> */
-    public function bySlug(string $taxonomyCode, string $slug, string $locale): array
+    public function bySlug(CategorySlugLookupRequest $request): array
     {
-        return ['id' => '', 'taxonomyCode' => $taxonomyCode, 'slug' => $slug, 'locale' => $locale];
+        return [
+            'id' => '',
+            'taxonomyCode' => $request->taxonomyCode(),
+            'slug' => $request->slug(),
+            'locale' => $request->locale(),
+        ];
     }
+
     /**
      * Handles the full slug workflow.
      */

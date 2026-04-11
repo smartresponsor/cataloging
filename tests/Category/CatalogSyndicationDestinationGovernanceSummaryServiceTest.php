@@ -11,6 +11,7 @@ namespace App\Tests\Category;
 
 use App\Policy\CategorySyndicationDestinationGovernanceSummaryPolicy;
 use App\Service\CatalogSyndicationDestinationGovernanceSummaryService;
+use App\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDestinationGovernanceSummaryServiceTest extends TestCase
@@ -19,7 +20,7 @@ final class CatalogSyndicationDestinationGovernanceSummaryServiceTest extends Te
     {
         $service = new CatalogSyndicationDestinationGovernanceSummaryService(new CategorySyndicationDestinationGovernanceSummaryPolicy());
 
-        $event = $service->buildSummary('dst-1', [
+        $event = $service->buildSummary(new CategorySyndicationDestinationGovernanceSummaryRequest('dst-1', [
             [
                 'deliveryStatus' => 'delivered',
                 'mediaPolicyMode' => 'strict_exact',
@@ -46,7 +47,7 @@ final class CatalogSyndicationDestinationGovernanceSummaryServiceTest extends Te
                     'governanceTrailHasDelivered' => false,
                 ],
             ],
-        ], 'actor-1', 'test');
+        ], 'actor-1', 'test'));
 
         $payload = $this->normalizeSummaryPayload($event->payload());
 

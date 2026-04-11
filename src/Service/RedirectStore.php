@@ -5,10 +5,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ServiceInterface\RedirectStoreInterface;
+use App\ValueObject\RedirectPutRequest;
+
 /**
  * Provides the redirect store application service.
  */
-final class RedirectStore
+final class RedirectStore implements RedirectStoreInterface
 {
     private \PDO $pdo;
 
@@ -23,15 +26,15 @@ final class RedirectStore
     /**
      * Handles the put workflow.
      */
-    public function put(string $from, string $to, int $status = 301): void
+    public function put(RedirectPutRequest $request): void
     {
         $q = $this->pdo->prepare(
             'INSERT INTO seo_redirect(from_path, to_path, status) VALUES(:f,:t,:s) '
             .'ON CONFLICT (from_path) DO UPDATE SET to_path = EXCLUDED.to_path, status = EXCLUDED.status',
         );
-        $q->bindValue(':f', $from);
-        $q->bindValue(':t', $to);
-        $q->bindValue(':s', $status);
+        $q->bindValue(':f', $request->from());
+        $q->bindValue(':t', $request->to());
+        $q->bindValue(':s', $request->status());
         $q->execute();
     }
 

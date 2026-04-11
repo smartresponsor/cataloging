@@ -4,11 +4,13 @@
 declare(strict_types=1);
 
 namespace App\InfrastructureInterface;
+
+use App\ValueObject\WebhookPayloadRequest;
+
 /**
  * Defines the contract for webhook sender.
  */
 interface WebhookSenderInterface
 {
-    /** @param array<string, mixed> $payload */
-    public function send(array $payload): void;
+    public function send(WebhookPayloadRequest $request): void;
 }

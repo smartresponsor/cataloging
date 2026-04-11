@@ -9,6 +9,8 @@ use App\Entity\CategoryBanner;
 use App\Entity\CategoryHtmlBlock;
 use App\Entity\CategoryPin;
 use App\ServiceInterface\CatalogMerchServiceInterface;
+use App\ValueObject\CategoryMerchBannerPublishRequest;
+use App\ValueObject\CategoryMerchPinCreateRequest;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -25,7 +27,6 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
     }
 
     /**
-     * @param string       $categoryId
      * @param list<string> $recordIds
      *
      * @throws Exception
@@ -44,9 +45,9 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
     /**
      * Handles the pin create workflow.
      */
-    public function pinCreate(string $categoryId, string $recordId, int $position): void
+    public function pinCreate(CategoryMerchPinCreateRequest $request): void
     {
-        $pin = new CategoryPin($categoryId, $recordId, $position);
+        $pin = new CategoryPin($request->categoryId, $request->recordId, $request->position);
         $this->entityManager->persist($pin);
         $this->entityManager->flush();
     }
@@ -72,9 +73,9 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
     /**
      * Handles the banner publish workflow.
      */
-    public function bannerPublish(string $categoryId, string $title, string $content): string
+    public function bannerPublish(CategoryMerchBannerPublishRequest $request): string
     {
-        $banner = new CategoryBanner($categoryId, $title, $content);
+        $banner = new CategoryBanner($request->categoryId, $request->title, $request->content);
         $banner->publish();
         $this->entityManager->persist($banner);
         $this->entityManager->flush();

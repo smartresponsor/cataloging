@@ -11,6 +11,7 @@ namespace App\Tests\Category;
 
 use App\Policy\CategorySyndicationCategoryGovernanceSummaryPolicy;
 use App\Service\CatalogSyndicationGovernanceSummaryService;
+use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationGovernanceSummaryServiceTest extends TestCase
@@ -19,7 +20,7 @@ final class CatalogSyndicationGovernanceSummaryServiceTest extends TestCase
     {
         $service = new CatalogSyndicationGovernanceSummaryService(new CategorySyndicationCategoryGovernanceSummaryPolicy());
 
-        $event = $service->buildSummary('cat-1', [
+        $event = $service->buildSummary(new CategorySyndicationGovernanceSummaryRequest('cat-1', [
             [
                 'destinationId' => 'dst-1',
                 'deliveryStatus' => 'delivered',
@@ -48,7 +49,7 @@ final class CatalogSyndicationGovernanceSummaryServiceTest extends TestCase
                     'governanceTrailHasDelivered' => false,
                 ],
             ],
-        ], 'actor-1', 'test');
+        ], 'actor-1', 'test'));
 
         $payload = $this->normalizeSummaryPayload($event->payload());
 

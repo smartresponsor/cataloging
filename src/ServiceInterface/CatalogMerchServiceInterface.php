@@ -4,6 +4,10 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface;
+
+use App\ValueObject\CategoryMerchBannerPublishRequest;
+use App\ValueObject\CategoryMerchPinCreateRequest;
+
 /**
  * Defines the contract for catalog merch service.
  */
@@ -12,7 +16,7 @@ interface CatalogMerchServiceInterface
     /**
      * Handles the pin create workflow.
      */
-    public function pinCreate(string $categoryId, string $recordId, int $position): void;
+    public function pinCreate(CategoryMerchPinCreateRequest $request): void;
     /**
      * Handles the pin delete workflow.
      */
@@ -25,7 +29,7 @@ interface CatalogMerchServiceInterface
     /**
      * Handles the banner publish workflow.
      */
-    public function bannerPublish(string $categoryId, string $title, string $content): string;
+    public function bannerPublish(CategoryMerchBannerPublishRequest $request): string;
     /**
      * Handles the html publish workflow.
      */

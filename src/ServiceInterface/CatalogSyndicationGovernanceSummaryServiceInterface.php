@@ -6,16 +6,13 @@ declare(strict_types=1);
 namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
+use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 /**
  * Defines the contract for catalog syndication governance summary service.
  */
 interface CatalogSyndicationGovernanceSummaryServiceInterface
 {
-    /** @param list<array<string, mixed>> $trailPayloads */
     public function buildSummary(
-        string $categoryId,
-        array $trailPayloads,
-        string $actorId,
-        string $reason,
+        CategorySyndicationGovernanceSummaryRequest $request,
     ): CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 }

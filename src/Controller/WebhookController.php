@@ -7,6 +7,7 @@ namespace App\Controller;
 
 use App\Request\WebhookDispatchRequest;
 use App\Service\WebhookDispatcher;
+use App\ValueObject\WebhookDispatchRequest as WebhookDispatchMessageRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -36,7 +37,11 @@ final readonly class WebhookController
             return new JsonResponse(['errors' => $input->getErrors()], 400);
         }
 
-        $this->dispatcher->dispatch($input->event, $input->payload, $input->endpoint);
+        $this->dispatcher->dispatch(new WebhookDispatchMessageRequest(
+            $input->event,
+            $input->endpoint,
+            $input->payload,
+        ));
 
         return new JsonResponse(['status' => 'sent']);
     }

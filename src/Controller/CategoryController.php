@@ -12,6 +12,7 @@ use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
 use App\ValueObject\CategoryCreateRequest;
 use App\ValueObject\CategoryLinkRequest;
 use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategorySlugLookupRequest;
 use App\ValueObject\CategoryTreeRequest;
 
 /**
@@ -54,7 +55,7 @@ final class CategoryController implements CategoryControllerInterface
         $taxonomy = $this->requiredString($route, 'taxonomy');
         $slug = $this->requiredString($route, 'slug');
         $locale = $this->stringFromMap($query, 'locale', 'en');
-        $cat = $this->repo->bySlug($taxonomy, $slug, $locale);
+        $cat = $this->repo->bySlug(new CategorySlugLookupRequest($taxonomy, $slug, $locale));
         $categoryId = $this->requiredString($cat, 'id');
         $crumb = $this->breadcrumb->build($categoryId, $locale);
 

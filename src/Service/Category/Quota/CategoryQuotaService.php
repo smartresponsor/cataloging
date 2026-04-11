@@ -7,6 +7,7 @@ namespace App\Service\Category\Quota;
 
 use App\ServiceInterface\Category\CategoryQuotaServiceInterface;
 use App\ServiceInterface\Quota\CacheStoreInterface;
+use App\ValueObject\CategoryQuotaAllowanceRequest;
 
 /**
  * Provides the category quota service application service.
@@ -26,10 +27,10 @@ final class CategoryQuotaService implements CategoryQuotaServiceInterface
     /**
      * Handles the allow workflow.
      */
-    public function allow(string $scope, string $id, string $op, int $capacity, float $ratePerSec): bool
+    public function allow(CategoryQuotaAllowanceRequest $request): bool
     {
-        $key = 'quota:'.$scope.':'.$id.':'.$op;
-        $bucket = new CategoryTokenBucket($this->store, $key, $capacity, $ratePerSec);
+        $key = 'quota:'.$request->scope().':'.$request->id().':'.$request->operation();
+        $bucket = new CategoryTokenBucket($this->store, $key, $request->capacity(), $request->ratePerSecond());
 
         return $bucket->take();
     }

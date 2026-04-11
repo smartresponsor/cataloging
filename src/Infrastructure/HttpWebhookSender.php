@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\InfrastructureInterface\WebhookSenderInterface;
+use App\ValueObject\WebhookPayloadRequest;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -24,12 +25,10 @@ final readonly class HttpWebhookSender implements WebhookSenderInterface
     }
 
     /**
-     * @param array<string, mixed> $payload
-     *
      * @throws TransportExceptionInterface
      */
-    public function send(array $payload): void
+    public function send(WebhookPayloadRequest $request): void
     {
-        $this->client->request('POST', $this->endpoint, ['json' => $payload, 'timeout' => 5.0]);
+        $this->client->request('POST', $this->endpoint, ['json' => $request->payload, 'timeout' => 5.0]);
     }
 }

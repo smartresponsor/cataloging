@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\WebhookClientInterface;
+use App\ValueObject\WebhookDispatchRequest;
 
 /**
  * Provides the webhook client application service.
@@ -27,17 +28,20 @@ final class WebhookClient implements WebhookClientInterface
     /**
      * Handles the send workflow.
      */
-    public function send(string $endpoint, string $event, array $payload): bool
+    public function send(WebhookDispatchRequest $request): bool
     {
-        if ('' === trim($endpoint)) {
+        if ('' === trim($request->endpoint)) {
             return false;
         }
 
-        $body = json_encode(['event' => $event, 'payload' => $payload], JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+        $body = json_encode(
+            ['event' => $request->event, 'payload' => $request->payload],
+            JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
+        );
         $signature = hash_hmac('sha256', $body, $this->secret);
 
         for ($i = 0; $i < $this->maxRetry; ++$i) {
-            if ($this->dispatch($endpoint, $body, $signature)) {
+            if ($this->dispatch($request->endpoint, $body, $signature)) {
                 return true;
             }
 
@@ -52,7 +56,8 @@ final class WebhookClient implements WebhookClientInterface
         $context = stream_context_create([
             'http' => [
                 'method' => 'POST',
-                'header' => implode("\r\n", [
+                'header' => implode("
+", [
                     'Content-Type: application/json',
                     'X-Webhook-Signature: sha256='.$signature,
                     'Content-Length: '.strlen($body),

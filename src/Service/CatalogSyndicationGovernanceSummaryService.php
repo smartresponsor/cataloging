@@ -9,6 +9,7 @@ use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 
 /**
  * Provides the catalog syndication governance summary service application service.
@@ -23,14 +24,10 @@ final readonly class CatalogSyndicationGovernanceSummaryService implements Catal
     ) {
     }
 
-    /** @param list<array<string, mixed>> $trailPayloads */
     public function buildSummary(
-        string $categoryId,
-        array $trailPayloads,
-        string $actorId,
-        string $reason,
+        CategorySyndicationGovernanceSummaryRequest $request,
     ): CategorySyndicationCategoryGovernanceSummaryBuiltInterface {
-        $summary = $this->policy->buildSummary($categoryId, $trailPayloads);
+        $summary = $this->policy->buildSummary($request->categoryId(), $request->trailPayloads());
 
         return new CategorySyndicationCategoryGovernanceSummaryBuilt(
             [
@@ -47,8 +44,8 @@ final readonly class CatalogSyndicationGovernanceSummaryService implements Catal
                 'policyModeCounts' => $summary->policyModeCounts(),
                 'warningCodes' => $summary->warningCodes(),
                 'checks' => $summary->checks(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
+                'actorId' => trim($request->actorId()),
+                'reason' => trim($request->reason()),
             ],
             new \DateTimeImmutable(),
         );

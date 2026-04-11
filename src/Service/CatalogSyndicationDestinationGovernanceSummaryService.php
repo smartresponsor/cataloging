@@ -9,6 +9,7 @@ use App\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
 use App\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
 use App\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
 
 /**
  * Provides the catalog syndication destination governance summary service application service.
@@ -23,14 +24,10 @@ final readonly class CatalogSyndicationDestinationGovernanceSummaryService imple
     ) {
     }
 
-    /** @param list<array<string, mixed>> $trailPayloads */
     public function buildSummary(
-        string $destinationId,
-        array $trailPayloads,
-        string $actorId,
-        string $reason,
+        CategorySyndicationDestinationGovernanceSummaryRequest $request,
     ): CategorySyndicationDestinationGovernanceSummaryBuiltInterface {
-        $summary = $this->policy->buildSummary($destinationId, $trailPayloads);
+        $summary = $this->policy->buildSummary($request->destinationId(), $request->trailPayloads());
 
         return new CategorySyndicationDestinationGovernanceSummaryBuilt(
             [
@@ -46,8 +43,8 @@ final readonly class CatalogSyndicationDestinationGovernanceSummaryService imple
                 'policyModeCounts' => $summary->policyModeCounts(),
                 'warningCodes' => $summary->warningCodes(),
                 'checks' => $summary->checks(),
-                'actorId' => trim($actorId),
-                'reason' => trim($reason),
+                'actorId' => trim($request->actorId()),
+                'reason' => trim($request->reason()),
             ],
             new \DateTimeImmutable(),
         );

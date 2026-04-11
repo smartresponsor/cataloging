@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -56,12 +57,12 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
-        $event = $this->service->buildSummary(
+        $event = $this->service->buildSummary(new CategorySyndicationDestinationGovernanceSummaryRequest(
             $this->argumentString($input, 'destinationId'),
             $this->decodeTrails($this->optionString($input, 'trails', '[]')),
             $this->argumentString($input, 'actorId'),
             $this->argumentString($input, 'reason'),
-        );
+        ));
 
         $payload = $event->payload();
         $format = $this->optionString($input, 'format', 'json');

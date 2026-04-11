@@ -5,31 +5,19 @@ declare(strict_types=1);
 
 namespace App\ServiceInterface;
 
-use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
 use App\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
+use App\ValueObject\CategorySyndicationHistoryRequest;
 /**
  * Defines the contract for catalog syndication history service.
  */
 interface CatalogSyndicationHistoryServiceInterface
 {
-    /**
-     * @param list<CategorySyndicationDeliveryRecordInterface> $records
-     */
     public function buildDestinationHistory(
-        string $destinationId,
-        array $records,
-        string $actorId,
-        string $reason,
+        CategorySyndicationHistoryRequest $request,
     ): CategorySyndicationDestinationHistoryBuiltInterface;
 
-    /**
-     * @param list<CategorySyndicationDeliveryRecordInterface> $records
-     */
     public function consolidateRecoveryAudit(
-        string $destinationId,
-        array $records,
-        string $actorId,
-        string $reason,
+        CategorySyndicationHistoryRequest $request,
     ): CategorySyndicationRecoveryAuditConsolidatedInterface;
 }

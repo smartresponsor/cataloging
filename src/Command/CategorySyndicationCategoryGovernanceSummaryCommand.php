@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -55,12 +56,12 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
-        $event = $this->service->buildSummary(
+        $event = $this->service->buildSummary(new CategorySyndicationGovernanceSummaryRequest(
             $this->argumentString($input, 'categoryId'),
             $this->decodeTrails($this->optionString($input, 'trails', '[]')),
             $this->argumentString($input, 'actorId'),
             $this->argumentString($input, 'reason'),
-        );
+        ));
 
         $payload = $event->payload();
         $format = $this->optionString($input, 'format', 'json');

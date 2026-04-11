@@ -13,6 +13,7 @@ use App\Policy\CategorySyndicationHistoryPolicy;
 use App\Policy\CategorySyndicationRetryPolicy;
 use App\Service\CatalogSyndicationHistoryService;
 use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\ValueObject\CategorySyndicationHistoryRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationHistoryServiceTest extends TestCase
@@ -31,7 +32,7 @@ final class CatalogSyndicationHistoryServiceTest extends TestCase
             new CategorySyndicationDeliveryRecord('d4', 'p9', 'dest-2', 'c9', new CategorySyndicationDeliveryStatus('delivered'), 1, 200, 'other destination', new \DateTimeImmutable('2025-01-02T00:00:00+00:00')),
         ];
 
-        $event = $service->buildDestinationHistory('dest-1', $records, 'operator-1', 'build history');
+        $event = $service->buildDestinationHistory(new CategorySyndicationHistoryRequest('dest-1', $records, 'operator-1', 'build history'));
         $payload = $event->payload();
 
         self::assertSame('dest-1', $payload['destinationId']);
@@ -57,7 +58,7 @@ final class CatalogSyndicationHistoryServiceTest extends TestCase
             new CategorySyndicationDeliveryRecord('d4', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('failed'), 1, 400, 'bad request', null),
         ];
 
-        $event = $service->consolidateRecoveryAudit('dest-1', $records, 'operator-1', 'consolidate recovery audit');
+        $event = $service->consolidateRecoveryAudit(new CategorySyndicationHistoryRequest('dest-1', $records, 'operator-1', 'consolidate recovery audit'));
         $payload = $event->payload();
 
         self::assertSame(2, $payload['totalFailed']);

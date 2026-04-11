@@ -13,6 +13,7 @@ use App\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
 use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\ValueObject\CategorySyndicationDestinationHistory;
+use App\ValueObject\CategorySyndicationHistoryRequest;
 use App\ValueObject\CategorySyndicationRecoveryAuditSummary;
 
 /**
@@ -33,13 +34,10 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
      * Builds the destination history result for the current workflow.
      */
     public function buildDestinationHistory(
-        string $destinationId,
-        array $records,
-        string $actorId,
-        string $reason,
+        CategorySyndicationHistoryRequest $request,
     ): CategorySyndicationDestinationHistoryBuiltInterface {
-        $this->historyPolicy->assertDestinationId($destinationId);
-        $filtered = $this->historyPolicy->recordsForDestination($destinationId, $records);
+        $this->historyPolicy->assertDestinationId($request->destinationId());
+        $filtered = $this->historyPolicy->recordsForDestination($request->destinationId(), $request->records());
 
         $packageIds = [];
         $categoryIds = [];
@@ -75,7 +73,7 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
         }
 
         $history = new CategorySyndicationDestinationHistory(
-            trim($destinationId),
+            trim($request->destinationId()),
             array_values(array_keys($packageIds)),
             array_values(array_keys($categoryIds)),
             count($filtered),
@@ -100,8 +98,8 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
             'skippedCount' => $history->skippedCount(),
             'maxAttempt' => $history->maxAttempt(),
             'latestDeliveredAt' => $history->latestDeliveredAt()?->format(DATE_ATOM),
-            'actorId' => trim($actorId),
-            'reason' => trim($reason),
+            'actorId' => trim($request->actorId()),
+            'reason' => trim($request->reason()),
         ], new \DateTimeImmutable('now'));
     }
 
@@ -109,13 +107,10 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
      * Handles the consolidate recovery audit workflow.
      */
     public function consolidateRecoveryAudit(
-        string $destinationId,
-        array $records,
-        string $actorId,
-        string $reason,
+        CategorySyndicationHistoryRequest $request,
     ): CategorySyndicationRecoveryAuditConsolidatedInterface {
-        $this->historyPolicy->assertDestinationId($destinationId);
-        $filtered = $this->historyPolicy->recordsForDestination($destinationId, $records);
+        $this->historyPolicy->assertDestinationId($request->destinationId());
+        $filtered = $this->historyPolicy->recordsForDestination($request->destinationId(), $request->records());
 
         $totalFailed = 0;
         $retryableFailed = 0;
@@ -149,7 +144,7 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
         }
 
         $summary = new CategorySyndicationRecoveryAuditSummary(
-            trim($destinationId),
+            trim($request->destinationId()),
             $totalFailed,
             $retryableFailed,
             $nonRetryableFailed,
@@ -168,8 +163,8 @@ final class CatalogSyndicationHistoryService implements CatalogSyndicationHistor
             'deliveredAfterRetry' => $summary->deliveredAfterRetry(),
             'maxAttemptSeen' => $summary->maxAttemptSeen(),
             'affectedCategoryIds' => $summary->affectedCategoryIds(),
-            'actorId' => trim($actorId),
-            'reason' => trim($reason),
+            'actorId' => trim($request->actorId()),
+            'reason' => trim($request->reason()),
         ], new \DateTimeImmutable('now'));
     }
 }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Observability\RequestCorrelationIdProvider;
+use App\ValueObject\WebhookDispatchRequest;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -25,20 +26,16 @@ final readonly class WebhookDispatcher
     }
 
     /**
-     * @param string              $event
-     * @param array<string,mixed> $payload
-     * @param string              $endpoint
-     *
      * @throws TransportExceptionInterface
      * @throws \JsonException
      */
-    public function dispatch(string $event, array $payload, string $endpoint): void
+    public function dispatch(WebhookDispatchRequest $request): void
     {
-        $body = json_encode(['event' => $event, 'payload' => $payload], JSON_THROW_ON_ERROR);
-        $sig = hash_hmac('sha256', $body, $this->secret);
+        $body = json_encode(['event' => $request->event, 'payload' => $request->payload], JSON_THROW_ON_ERROR);
+        $signature = hash_hmac('sha256', $body, $this->secret);
         $headers = [
-            'X-Category-Event' => $event,
-            'X-Category-Signature' => $sig,
+            'X-Category-Event' => $request->event,
+            'X-Category-Signature' => $signature,
             'Content-Type' => 'application/json',
         ];
 
@@ -47,7 +44,7 @@ final readonly class WebhookDispatcher
             $headers[RequestCorrelationIdProvider::HEADER] = $correlationId;
         }
 
-        $this->httpClient->request('POST', $endpoint, [
+        $this->httpClient->request('POST', $request->endpoint, [
             'headers' => $headers,
             'timeout' => 5.0,
             'body' => $body,

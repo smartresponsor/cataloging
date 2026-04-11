@@ -11,6 +11,7 @@ namespace App\Tests\Category\Infrastructure;
 use App\Infrastructure\HttpWebhookSender;
 use App\Infrastructure\OrderWebhookPublisher;
 use App\Infrastructure\ProductWebhookPublisher;
+use App\ValueObject\WebhookPayloadRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -58,7 +59,7 @@ final class WebhookPublisherTest extends TestCase
         });
 
         $sender = new HttpWebhookSender($client, 'http://example');
-        $sender->send(['event' => 'category.changed']);
+        $sender->send(new WebhookPayloadRequest(['event' => 'category.changed']));
 
         self::assertSame(5.0, $capturedOptions['timeout'] ?? null);
     }

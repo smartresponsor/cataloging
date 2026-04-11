@@ -7,6 +7,8 @@ namespace App\Service;
 
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use App\ServiceInterface\CategorySlugGeneratorInterface;
+use App\ValueObject\CategorySlugExistsRequest;
+use App\ValueObject\CategorySlugGenerationRequest;
 
 /**
  * Provides the category slug generator application service.
@@ -20,13 +22,13 @@ final readonly class CategorySlugGenerator implements CategorySlugGeneratorInter
     {
     }
 
-    /** @param array<string,string> $input @return array<string,string> */
-    public function generate(array $input, string $taxonomyId, ?string $parentId): array
+    /** @return array<string,string> */
+    public function generate(CategorySlugGenerationRequest $request): array
     {
         $out = [];
-        foreach ($input as $locale => $slug) {
+        foreach ($request->input() as $locale => $slug) {
             $norm = $this->normalize($slug);
-            $out[$locale] = $this->uniqueForLocale($norm, $taxonomyId, $parentId, $locale);
+            $out[$locale] = $this->uniqueForLocale($norm, $request->taxonomyId(), $request->parentId(), $locale);
         }
 
         return $out;
@@ -46,7 +48,7 @@ final readonly class CategorySlugGenerator implements CategorySlugGeneratorInter
     {
         $candidate = '' !== $base ? $base : 'item';
         $suffix = 1;
-        while ($this->repo->slugExists($candidate, $taxonomyId, $parentId, $locale)) {
+        while ($this->repo->slugExists(new CategorySlugExistsRequest($candidate, $taxonomyId, $parentId, $locale))) {
             ++$suffix;
             $candidate = ('' !== $base ? $base : 'item').'-'.$suffix;
         }

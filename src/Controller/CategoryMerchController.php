@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Service\CatalogMerchService;
+use App\ValueObject\CategoryMerchBannerPublishRequest;
+use App\ValueObject\CategoryMerchPinCreateRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +15,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 /**
  * Handles the category merch controller application flow.
  */
@@ -31,9 +34,11 @@ final class CategoryMerchController extends AbstractController
     #[IsGranted('category.merch')]
     public function pinCreate(string $id, Request $request): JsonResponse
     {
-        $recordId = $this->bagString($request->request, 'recordId');
-        $position = $this->bagInt($request->request, 'position');
-        $this->categoryMerchService->pinCreate($id, $recordId, $position);
+        $this->categoryMerchService->pinCreate(new CategoryMerchPinCreateRequest(
+            $id,
+            $this->bagString($request->request, 'recordId'),
+            $this->bagInt($request->request, 'position'),
+        ));
 
         return $this->json(['ok' => true]);
     }
@@ -68,9 +73,11 @@ final class CategoryMerchController extends AbstractController
     #[IsGranted('category.merch')]
     public function bannerPublish(string $id, Request $request): JsonResponse
     {
-        $title = $this->bagString($request->request, 'title');
-        $content = $this->bagString($request->request, 'content');
-        $bannerId = $this->categoryMerchService->bannerPublish($id, $title, $content);
+        $bannerId = $this->categoryMerchService->bannerPublish(new CategoryMerchBannerPublishRequest(
+            $id,
+            $this->bagString($request->request, 'title'),
+            $this->bagString($request->request, 'content'),
+        ));
 
         return $this->json(['ok' => true, 'id' => $bannerId]);
     }

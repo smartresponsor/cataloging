@@ -15,8 +15,10 @@ use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryServiceInte
 use App\ServiceInterface\CategorySlugGeneratorInterface;
 use App\ValueObject\CategoryCreateRequest;
 use App\ValueObject\CategoryLinkRequest;
+use App\ValueObject\CategoryRepositoryCreateRequest;
 use App\ValueObject\CategoryResolveRequest;
 use App\ValueObject\CategoryServiceMoveRequest;
+use App\ValueObject\CategorySlugGenerationRequest;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -52,15 +54,19 @@ final class CategoryService implements CategoryCategoryServiceInterface
             throw new \RuntimeException('Forbidden');
         }
         $this->policy->validateSlug($request->slug());
-        $slug = $this->slugger->generate($request->slug(), $request->taxonomyId(), $request->parentId());
+        $slug = $this->slugger->generate(new CategorySlugGenerationRequest(
+            $request->slug(),
+            $request->taxonomyId(),
+            $request->parentId(),
+        ));
 
-        $view = $this->repo->create(
+        $view = $this->repo->create(new CategoryRepositoryCreateRequest(
             $request->taxonomyId(),
             $request->parentId(),
             $request->name(),
             $slug,
             $request->meta(),
-        );
+        ));
         $this->dispatcher->dispatch(new CategoryCreated(['id' => $view['id']]));
 
         return $view;

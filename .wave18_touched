@@ -1,0 +1,12 @@
+src/ValueObject/CategoryMerchPinCreateRequest.php
+src/ValueObject/CategoryMerchBannerPublishRequest.php
+src/ValueObject/WebhookDispatchRequest.php
+src/ValueObject/WebhookPayloadRequest.php
+src/ServiceInterface/CatalogMerchServiceInterface.php
+src/Service/CatalogMerchService.php
+src/Controller/CategoryMerchController.php
+src/ServiceInterface/WebhookClientInterface.php
+src/Service/WebhookClient.php
+src/InfrastructureInterface/WebhookSenderInterface.php
+src/Infrastructure/HttpWebhookSender.php
+tests/Category/Infrastructure/WebhookPublisherTest.php

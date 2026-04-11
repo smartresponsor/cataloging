@@ -6,6 +6,7 @@ namespace App\Tests\Service;
 
 use App\Observability\RequestCorrelationIdProvider;
 use App\Service\WebhookDispatcher;
+use App\ValueObject\WebhookDispatchRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,7 +31,7 @@ final class WebhookDispatcherTest extends TestCase
         $stack->push($request);
 
         $dispatcher = new WebhookDispatcher($client, 'secret', new RequestCorrelationIdProvider($stack));
-        $dispatcher->dispatch('catalog.changed', ['id' => 'c-1'], 'http://example/webhook');
+        $dispatcher->dispatch(new WebhookDispatchRequest('catalog.changed', 'http://example/webhook', ['id' => 'c-1']));
 
         self::assertSame('POST', $capturedOptions['method']);
         self::assertSame('http://example/webhook', $capturedOptions['url']);
