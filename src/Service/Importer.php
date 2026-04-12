@@ -30,9 +30,6 @@ final class Importer
                 continue;
             }
             $item = array_combine($header, $row);
-            if (!is_array($item)) {
-                continue;
-            }
             /** @var array<string, scalar|null> $item */
             $this->upsert($item);
             ++$count;

@@ -35,7 +35,7 @@ final readonly class CategoryProjectionRunner implements CategoryProjectionRunne
         $budgetSeconds = max(1, $maxSec);
         $batchLimit = max(1, $maxBatch);
 
-        while ((new \DateTimeImmutable('now'))->getTimestamp() - $startedAt->getTimestamp() < $budgetSeconds
+        while (new \DateTimeImmutable('now')->getTimestamp() - $startedAt->getTimestamp() < $budgetSeconds
             && $processed < $batchLimit) {
             $remaining = $batchLimit - $processed;
             $stepLimit = min(50, $remaining);

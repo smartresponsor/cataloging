@@ -119,7 +119,7 @@ final readonly class CategoryIdempotencyStore implements CategoryIdempotencyStor
      */
     public function purgeExpired(): int
     {
-        $now = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+        $now = new \DateTimeImmutable('now')->format('Y-m-d H:i:s');
 
         return (int) $this->connection->executeStatement(
             'DELETE FROM category_idempotency WHERE expires_at <= :now',

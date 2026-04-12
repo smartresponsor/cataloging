@@ -26,7 +26,7 @@ final class Composer
      */
     private array $participants;
 
-    /** @param iterable<mixed> $participants */
+    /** @param array $participants */
     public function __construct(
         iterable $participants = [],
         ?callable $policyTokenFn = null,
@@ -156,7 +156,7 @@ final class Composer
     }
 
     /**
-     * @param iterable<mixed> $values
+     * @param array $values
      *
      * @return list<string>
      */

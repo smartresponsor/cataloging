@@ -21,13 +21,12 @@ final class BrokenTreeFixtures extends Fixture
     {
         $fakerFactoryClass = 'Faker\\Factory';
         $faker = class_exists($fakerFactoryClass) ? $fakerFactoryClass::create('en_US') : null;
-        $faker?->seed(404);
 
         $root = new CategoryEntity('Catalog Broken Root', 'catalog-broken-root', 'catalog_broken_root', 0);
         $manager->persist($root);
 
-        $slugA = $faker?->slug(1) ?? 'broken';
-        $slugB = $faker?->slug(1) ?? 'node';
+        $slugA = null ?? 'broken';
+        $slugB = null ?? 'node';
         $brokenPath = sprintf('%s.%s.%s', $root->getPath(), $slugA, $slugB);
 
         $broken = new CategoryEntity('Broken Child Node', 'broken-child-node', $brokenPath, 1);

@@ -49,7 +49,7 @@ final class MetricsSubscriber implements EventSubscriberInterface
         $elapsed = (microtime(true) - $this->start) * 1000.0;
         $status = $e->getResponse()->getStatusCode();
         $rec = [
-            'ts' => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'ts' => new \DateTimeImmutable()->format(DATE_ATOM),
             'path' => $e->getRequest()->getPathInfo(),
             'ms' => round($elapsed, 2),
             'status' => $status,

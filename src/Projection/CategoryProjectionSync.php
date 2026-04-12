@@ -7,6 +7,7 @@ namespace App\Projection;
 
 use App\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,7 +23,11 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
     {
     }
 
-    /** @param array<string,mixed> $event */
+    /**
+     * @param array<string,mixed> $event
+     *
+     * @throws Exception
+     */
     public function apply(array $event): void
     {
         $type = $this->stringValue($event['type'] ?? null);
@@ -75,7 +80,7 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
                 'workflowState' => $this->stringValue($row['workflow_state'] ?? 'draft'),
                 'published' => $this->boolValue($row['published'] ?? false),
                 'publishedAt' => $publishedAt,
-                'updatedAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+                'updatedAt' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,

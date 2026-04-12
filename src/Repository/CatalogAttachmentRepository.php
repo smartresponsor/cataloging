@@ -92,7 +92,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'provider' => $provider,
             'external_attachment_id' => $externalAttachmentId,
             'path' => null !== $referenceUri ? $referenceUri : '',
-            'created_at' => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'created_at' => new \DateTimeImmutable()->format(DATE_ATOM),
         ];
 
         $this->connection->insert('category_attachment', $item);
@@ -169,7 +169,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         }
 
         $columns = $schemaManager->tablesExist(['category_attachment'])
-            ? array_change_key_case($schemaManager->listTableColumns('category_attachment'), CASE_LOWER)
+            ? array_change_key_case($schemaManager->listTableColumns('category_attachment'))
             : [];
 
         if (!isset($columns['provider'])) {

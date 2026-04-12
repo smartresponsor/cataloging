@@ -64,7 +64,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             $this->connection->update(
                 'category_access_assignment',
                 $payload,
-                ['assignment_id' => (string) $existing],
+                ['assignment_id' => $existing],
                 [
                     'assignment_id' => ParameterType::STRING,
                     'category_id' => ParameterType::STRING,

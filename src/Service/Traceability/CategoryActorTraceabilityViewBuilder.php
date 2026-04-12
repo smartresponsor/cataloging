@@ -131,7 +131,7 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
             mediaBindings: $mediaBindings,
             workflowHistory: $workflowHistory,
             actorSummary: $actorSummary,
-            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
+            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
         );
     }
 

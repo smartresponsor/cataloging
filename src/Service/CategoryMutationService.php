@@ -330,7 +330,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                         throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
                     }
                     $targetState = CategoryWorkflowState::PUBLISHED;
-                    $publishedAt = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+                    $publishedAt = new \DateTimeImmutable('now')->format('Y-m-d H:i:s');
                     $blockers = $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : []);
                     $warnings = $this->stringList(is_iterable($payload['warnings'] ?? null) ? $payload['warnings'] : []);
                     $checksForResponse = $this->boolMap(is_iterable($payload['checks'] ?? null) ? $payload['checks'] : []);
@@ -560,7 +560,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
             'id' => Uuid::v7()->toRfc4122(),
             'action' => $action,
             'payload' => json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
-            'created_at' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+            'created_at' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
         ], [
             'id' => ParameterType::STRING,
             'action' => ParameterType::STRING,
@@ -590,7 +590,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
-     * @param iterable<mixed> $values
+     * @param array $values
      *
      * @return list<string>
      */
@@ -612,7 +612,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
-     * @param iterable<mixed> $values
+     * @param array $values
      *
      * @return array<string,bool>
      */

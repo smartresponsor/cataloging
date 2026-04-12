@@ -38,7 +38,7 @@ final readonly class OutboxWriter
                 'type' => $type,
                 'payload' => json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
                 'key' => $key,
-                'createdAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
+                'createdAt' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,
