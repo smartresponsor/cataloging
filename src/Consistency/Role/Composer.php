@@ -22,11 +22,19 @@ if (!interface_exists('PolicyInterface\\Role\\PdpV2Interface', false)) {
 final class Composer
 {
     /**
-     * @var list<mixed>
+     * @var array
+     *
+     * @phpstan-var list<mixed>
      */
     private array $participants;
 
-    /** @param array $participants */
+    /**
+     * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
+     *
+     * @param array $participants
+     *
+     * @phpstan-param iterable<mixed> $participants
+     */
     public function __construct(
         iterable $participants = [],
         ?callable $policyTokenFn = null,
@@ -156,11 +164,15 @@ final class Composer
     }
 
     /**
+     * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
+     *
      * @param array $values
+     *
+     * @phpstan-param array<mixed> $values
      *
      * @return list<string>
      */
-    private function normalizeScalarList(iterable $values): array
+    private function normalizeScalarList(array $values): array
     {
         $normalized = [];
 

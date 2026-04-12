@@ -24,6 +24,7 @@ final class ExportCategoryCommand extends Command
      *
      * @throws \JsonException
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $rows = [

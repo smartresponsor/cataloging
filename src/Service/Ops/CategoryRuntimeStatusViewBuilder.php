@@ -43,6 +43,8 @@ final readonly class CategoryRuntimeStatusViewBuilder implements CategoryRuntime
         $workflow = $this->buildWorkflowSummary($categoryId);
         $review = $this->buildReviewSummary($categoryId);
 
+        $generatedAtDateTime = new \DateTimeImmutable('now');
+
         return new CategoryRuntimeStatusView(
             categoryId: $categoryId,
             governance: $governance,
@@ -56,7 +58,7 @@ final readonly class CategoryRuntimeStatusViewBuilder implements CategoryRuntime
                 'workflowReady' => null !== $workflow['currentState'] || $workflow['historyCount'] > 0,
                 'reviewReady' => $review['assignmentCount'] > 0,
             ],
-            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
+            generatedAt: $generatedAtDateTime->format(DATE_ATOM),
         );
     }
 

@@ -56,6 +56,7 @@ final class CategorySyndicationPackagePreviewCommand extends Command
      * @throws \JsonException
      * @throws \Throwable
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $categoryId = $this->argumentString($input, 'categoryId');

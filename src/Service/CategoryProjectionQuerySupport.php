@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\ValueObject\CategoryProjectionValueNormalizer;
 use Doctrine\DBAL\ParameterType;
 
 /**
@@ -119,24 +120,7 @@ final class CategoryProjectionQuerySupport
 
     public function optionalBool(mixed $value): ?bool
     {
-        if (is_bool($value)) {
-            return $value;
-        }
-
-        if (!is_scalar($value)) {
-            return null;
-        }
-
-        $normalized = strtolower(trim((string) $value));
-        if (in_array($normalized, ['1', 'true', 'yes'], true)) {
-            return true;
-        }
-
-        if (in_array($normalized, ['0', 'false', 'no'], true)) {
-            return false;
-        }
-
-        return null;
+        return CategoryProjectionValueNormalizer::boolValue($value);
     }
 
     /**

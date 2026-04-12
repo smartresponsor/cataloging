@@ -56,6 +56,7 @@ final class CategoryMoveCommand extends Command
      *
      * @throws \JsonException
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $result = $this->moveService->move(new CatalogMoveRequest(

@@ -54,6 +54,7 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
     /**
      * Runs the command workflow and returns the process status.
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

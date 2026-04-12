@@ -53,6 +53,7 @@ final class CategoryWorkflowTransitionCommand extends Command
      *
      * @throws \JsonException
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->transitionService->transition(new CategoryWorkflowTransitionRequest(

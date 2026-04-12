@@ -32,6 +32,7 @@ final class CatalogSlugSmokeCommand extends Command
     /**
      * Runs the command workflow and returns the process status.
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $aliasRepository = $this->entityManager->getRepository(CategoryAliasEntity::class);

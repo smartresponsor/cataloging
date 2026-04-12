@@ -42,6 +42,7 @@ final class ProjectionPauseCommand extends Command
     /**
      * Runs the command workflow and returns the process status.
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $state = $this->argumentString($input, 'state');

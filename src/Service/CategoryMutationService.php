@@ -44,7 +44,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      *
      * @return array{
      *     id:string,
-     *     oldParentId:?string,
+     *     oldParentId:string|null,
      *     newParentId:string,
      *     treeId:string,
      *     policy:string,
@@ -258,7 +258,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      *     blockers:list<string>,
      *     warnings:list<string>,
      *     checks:array<string,bool>,
-     *     publishedAt:?string,
+     *     publishedAt:string|null,
      *     reason:string,
      *     duplicate:bool,
      * }
@@ -327,13 +327,14 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                     ));
                     $payload = $gate->payload();
                     if (($payload['publishable'] ?? false) !== true) {
-                        throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
+                        throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_array($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
                     }
                     $targetState = CategoryWorkflowState::PUBLISHED;
-                    $publishedAt = new \DateTimeImmutable('now')->format('Y-m-d H:i:s');
-                    $blockers = $this->stringList(is_iterable($payload['blockers'] ?? null) ? $payload['blockers'] : []);
-                    $warnings = $this->stringList(is_iterable($payload['warnings'] ?? null) ? $payload['warnings'] : []);
-                    $checksForResponse = $this->boolMap(is_iterable($payload['checks'] ?? null) ? $payload['checks'] : []);
+                    $publishedAtDateTime = new \DateTimeImmutable('now');
+                    $publishedAt = $publishedAtDateTime->format('Y-m-d H:i:s');
+                    $blockers = $this->stringList(is_array($payload['blockers'] ?? null) ? $payload['blockers'] : []);
+                    $warnings = $this->stringList(is_array($payload['warnings'] ?? null) ? $payload['warnings'] : []);
+                    $checksForResponse = $this->boolMap(is_array($payload['checks'] ?? null) ? $payload['checks'] : []);
                 } else {
                     $targetState = CategoryWorkflowState::DRAFT;
                     $publishedAt = null;
@@ -556,11 +557,13 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      */
     private function writeAudit(Connection $connection, string $action, array $payload): void
     {
+        $createdAtDateTime = new \DateTimeImmutable('now');
+
         $connection->insert('category_audit', [
             'id' => Uuid::v7()->toRfc4122(),
             'action' => $action,
             'payload' => json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
-            'created_at' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
+            'created_at' => $createdAtDateTime->format('Y-m-d H:i:s'),
         ], [
             'id' => ParameterType::STRING,
             'action' => ParameterType::STRING,
@@ -590,11 +593,15 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
+     * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
+     *
      * @param array $values
+     *
+     * @phpstan-param array<mixed> $values
      *
      * @return list<string>
      */
-    private function stringList(iterable $values): array
+    private function stringList(array $values): array
     {
         $normalized = [];
         foreach ($values as $value) {
@@ -612,11 +619,15 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
+     * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
+     *
      * @param array $values
+     *
+     * @phpstan-param array<mixed> $values
      *
      * @return array<string,bool>
      */
-    private function boolMap(iterable $values): array
+    private function boolMap(array $values): array
     {
         $normalized = [];
         foreach ($values as $key => $value) {

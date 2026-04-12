@@ -55,6 +55,7 @@ final class CategoryCompletenessEvaluateCommand extends Command
      *
      * @throws \JsonException
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $payload = $this->jsonOptionMap($input, 'payload');

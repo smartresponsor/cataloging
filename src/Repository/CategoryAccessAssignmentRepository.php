@@ -245,6 +245,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
     /**
      * @throws \Throwable
      */
+    /** @noinspection PhpSameParameterValueInspection */
     private function dateTimeImmutable(mixed $value, string $field): \DateTimeImmutable
     {
         $normalized = $this->requiredString($value, $field);

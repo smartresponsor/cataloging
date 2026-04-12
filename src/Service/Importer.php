@@ -29,8 +29,11 @@ final class Importer
                 $header = array_values(array_map([$this, 'stringValue'], $row));
                 continue;
             }
+            /** @var array<string, scalar|null>|false $item */
             $item = array_combine($header, $row);
-            /** @var array<string, scalar|null> $item */
+            if (false === $item) {
+                continue;
+            }
             $this->upsert($item);
             ++$count;
         }

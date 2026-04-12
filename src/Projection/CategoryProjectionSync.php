@@ -67,6 +67,8 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
             .'published = VALUES(published), published_at = VALUES(published_at), '
             .'updated_at = VALUES(updated_at)';
 
+        $updatedAtDateTime = new \DateTimeImmutable('now');
+
         $this->infraConnection()->executeStatement(
             $sql,
             [
@@ -80,7 +82,7 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
                 'workflowState' => $this->stringValue($row['workflow_state'] ?? 'draft'),
                 'published' => $this->boolValue($row['published'] ?? false),
                 'publishedAt' => $publishedAt,
-                'updatedAt' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
+                'updatedAt' => $updatedAtDateTime->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,

@@ -57,6 +57,7 @@ final class CategorySyndicationRetryScheduleCommand extends Command
      * @throws \JsonException
      * @throws \Throwable
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $deliveryId = $this->argumentString($input, 'deliveryId');

@@ -30,6 +30,8 @@ final readonly class OutboxWriter
      */
     public function append(string $type, array $payload, string $key): void
     {
+        $createdAtDateTime = new \DateTimeImmutable('now');
+
         $this->connection->executeStatement(
             'INSERT INTO outbox (id, type, payload, "key", created_at) VALUES (:id, :type, :payload, :key, :createdAt) '
             .'ON CONFLICT ("key") DO NOTHING',
@@ -38,7 +40,7 @@ final readonly class OutboxWriter
                 'type' => $type,
                 'payload' => json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
                 'key' => $key,
-                'createdAt' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
+                'createdAt' => $createdAtDateTime->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,

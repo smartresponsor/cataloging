@@ -29,7 +29,13 @@ final readonly class CategoryReviewQueueItem implements CategoryReviewQueueItemI
     ) {
     }
 
-    /** @param list<string> $readinessWarnings */
+    /**
+     * @param list<string> $readinessWarnings
+     *
+     * @phpstan-param list<string> $readinessWarnings
+     *
+     * @noinspection PhpTooManyParametersInspection
+     */
     public static function create(
         string $requestId,
         string $categoryId,

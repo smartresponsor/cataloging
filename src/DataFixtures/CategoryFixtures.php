@@ -22,19 +22,14 @@ final class CategoryFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $fakerFactoryClass = 'Faker\\Factory';
-        $faker = class_exists($fakerFactoryClass) ? $fakerFactoryClass::create('en_US') : null;
-
         $root = new CategoryEntity('Catalog', 'catalog', 'catalog', 0);
         $manager->persist($root);
 
         $branches = [$root];
         for ($index = 1; $index <= 24; ++$index) {
             $parent = $branches[array_rand($branches)];
-            $slug = null !== $faker
-                ? sprintf('%s-%d', $faker->unique()->slug(2), $index)
-                : sprintf('demo-category-%d', $index);
-            $name = null ?? sprintf('Demo category %d', $index);
+            $slug = sprintf('demo-category-%d', $index);
+            $name = sprintf('Demo category %d', $index);
             $path = $parent->getPath().'.'.$slug;
             $depth = $parent->getDepth() + 1;
 
@@ -45,22 +40,22 @@ final class CategoryFixtures extends Fixture
             if (0 === $index % 3) {
                 $manager->persist(new CategoryBanner(
                     $category->getId(),
-                    null ?? sprintf('Demo banner %d', $index),
-                    null ?? 'Demo banner content for catalog category.',
+                    sprintf('Demo banner %d', $index),
+                    'Demo banner content for catalog category.',
                 ));
                 $manager->persist(new CategoryHtmlBlock(
                     $category->getId(),
                     sprintf(
                         '<section class="p-3"><h2>%s</h2><p>%s</p></section>',
-                        null ?? sprintf('Demo block %d', $index),
-                        null ?? 'Demo html block content for category.',
+                        sprintf('Demo block %d', $index),
+                        'Demo html block content for category.',
                     ),
                 ));
             }
 
             if (0 === $index % 5) {
                 $manager->persist(new CategoryAliasEntity(
-                    null ?? sprintf('demo-alias-%d', $index),
+                    sprintf('demo-alias-%d', $index),
                     $category->getId(),
                 ));
             }

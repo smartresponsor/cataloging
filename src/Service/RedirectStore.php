@@ -65,7 +65,11 @@ final readonly class RedirectStore implements RedirectStoreInterface
         return is_scalar($value) ? (string) $value : '';
     }
 
-    /** @param array<string, mixed> $row */
+    /**
+     * @param array<string, mixed> $row
+     *
+     * @noinspection PhpSameParameterValueInspection
+     */
     private function intValue(array $row, string $key): int
     {
         $value = $row[$key] ?? 0;

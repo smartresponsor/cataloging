@@ -34,6 +34,7 @@ final class ExportRedirectNdjsonCommand extends Command
      *
      * @throws \JsonException
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);

@@ -58,6 +58,7 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
      * @throws \DateMalformedStringException
      * @throws \JsonException
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $destinationId = $this->argumentString($input, 'destinationId');

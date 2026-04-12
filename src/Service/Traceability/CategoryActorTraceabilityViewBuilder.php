@@ -123,6 +123,8 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
             sort($summary['roles']);
         }
 
+        $generatedAtDateTime = new \DateTimeImmutable('now');
+
         return new CategoryActorTraceabilityView(
             categoryId: $categoryId,
             accessAssignments: $accessAssignments,
@@ -131,7 +133,7 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
             mediaBindings: $mediaBindings,
             workflowHistory: $workflowHistory,
             actorSummary: $actorSummary,
-            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
+            generatedAt: $generatedAtDateTime->format(DATE_ATOM),
         );
     }
 

@@ -157,7 +157,11 @@ final class CategoryController implements CategoryControllerInterface
         return is_scalar($value) ? (string) $value : $default;
     }
 
-    /** @param array<string, mixed> $map */
+    /**
+     * @param array<string, mixed> $map
+     *
+     * @noinspection PhpSameParameterValueInspection
+     */
     private function nullableStringFromMap(array $map, string $key): ?string
     {
         $value = $map[$key] ?? null;

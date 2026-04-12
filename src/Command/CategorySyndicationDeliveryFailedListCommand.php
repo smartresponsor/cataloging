@@ -51,6 +51,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
      * @throws \JsonException
      * @throws \Throwable
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $format = $this->optionString($input, 'format', 'json');

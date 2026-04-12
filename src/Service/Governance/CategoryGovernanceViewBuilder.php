@@ -42,12 +42,14 @@ final readonly class CategoryGovernanceViewBuilder implements CategoryGovernance
             ];
         }
 
+        $generatedAtDateTime = new \DateTimeImmutable('now');
+
         return new CategoryGovernanceView(
             categoryId: trim($categoryId),
             primaryActorUserId: $primary?->actorUserId(),
             activeAssignments: $assignments,
             roleCapabilities: $this->roleCapabilities(),
-            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
+            generatedAt: $generatedAtDateTime->format(DATE_ATOM),
         );
     }
 

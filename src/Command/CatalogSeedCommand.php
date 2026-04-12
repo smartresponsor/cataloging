@@ -43,6 +43,7 @@ final class CatalogSeedCommand extends Command
     /**
      * Runs the command workflow and returns the process status.
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $totalCount = max(1, $this->argumentInt($input, 'count', 1));

@@ -28,6 +28,7 @@ final readonly class CategoryReviewAssignment implements CategoryReviewAssignmen
     ) {
     }
 
+    /** @noinspection PhpTooManyParametersInspection */
     public static function create(
         string $requestId,
         string $categoryId,

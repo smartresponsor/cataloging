@@ -56,6 +56,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
      * @throws \JsonException
      * @throws \Throwable
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->service->buildSummary(new CategorySyndicationGovernanceSummaryRequest(

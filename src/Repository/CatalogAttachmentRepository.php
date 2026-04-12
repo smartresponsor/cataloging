@@ -8,7 +8,6 @@ namespace App\Repository;
 use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\Index;
 use Symfony\Component\Uid\Ulid;
 
 /**
@@ -85,6 +84,8 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             }
         }
 
+        $createdAtDateTime = new \DateTimeImmutable();
+
         $item = [
             'attachment_id' => (string) new Ulid(),
             'category_id' => $categoryId,
@@ -92,7 +93,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             'provider' => $provider,
             'external_attachment_id' => $externalAttachmentId,
             'path' => null !== $referenceUri ? $referenceUri : '',
-            'created_at' => new \DateTimeImmutable()->format(DATE_ATOM),
+            'created_at' => $createdAtDateTime->format(DATE_ATOM),
         ];
 
         $this->connection->insert('category_attachment', $item);
@@ -168,6 +169,7 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             ));
         }
 
+        /** @noinspection PhpDeprecationInspection */
         $columns = $schemaManager->tablesExist(['category_attachment'])
             ? array_change_key_case($schemaManager->listTableColumns('category_attachment'))
             : [];
@@ -186,12 +188,11 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             );
         }
 
+        /** @var array<string, true> $indexes */
         $indexes = [];
         if ($schemaManager->tablesExist(['category_attachment'])) {
-            foreach ($schemaManager->listTableIndexes('category_attachment') as $indexName => $index) {
-                if ($index instanceof Index) {
-                    $indexes[strtolower((string) $indexName)] = true;
-                }
+            foreach ($schemaManager->introspectTableIndexesByUnquotedName('category_attachment') as $indexName => $index) {
+                $indexes[strtolower((string) $indexName)] = true;
             }
         }
 
@@ -226,8 +227,8 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
      *     type:string,
      *     provider:string,
      *     external_attachment_id:string,
-     *     reference_uri: ?string,
-     *     path: ?string,
+     *     reference_uri:string|null,
+     *     path:string|null,
      *     created_at:string,
      * }|null
      */
