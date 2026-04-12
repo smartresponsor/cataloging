@@ -8,20 +8,23 @@ namespace App\Util;
 /**
  * Provides the rotating file writer implementation.
  */
-final class RotatingFileWriter
+/** @noinspection PhpCSFixerValidationInspection */
+final readonly class RotatingFileWriter
 {
     /**
      * Initializes the rotating file writer service collaborators.
      */
     public function __construct(
-        private readonly string $path,
-        private readonly int $maxBytes = 5242880,
-        private readonly int $maxFiles = 3,
+        private string $path,
+        private int $maxBytes = 5242880,
+        private int $maxFiles = 3,
     ) {
     }
 
     /**
      * Handles the write workflow.
+     *
+     * @throws \RuntimeException
      */
     public function write(string $line): void
     {
@@ -29,12 +32,15 @@ final class RotatingFileWriter
         file_put_contents($this->path, $line, FILE_APPEND);
     }
 
+    /**
+     * @throws \RuntimeException
+     */
     private function rotateIfNeeded(): void
     {
         if (file_exists($this->path) && filesize($this->path) >= $this->maxBytes) {
-            for ($i = $this->maxFiles - 1; $i >= 1; --$i) {
-                $old = $this->path.'.'.$i;
-                $new = $this->path.'.'.($i + 1);
+            for ($fileIndex = $this->maxFiles - 1; $fileIndex >= 1; --$fileIndex) {
+                $old = $this->path.'.'.$fileIndex;
+                $new = $this->path.'.'.($fileIndex + 1);
                 if (file_exists($old) && !rename($old, $new)) {
                     throw new \RuntimeException(sprintf('Unable to rotate log segment from %s to %s.', $old, $new));
                 }

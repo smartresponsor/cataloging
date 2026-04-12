@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category syndication package preview command console workflow.
  */
@@ -23,6 +24,7 @@ final class CategorySyndicationPackagePreviewCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category syndication package preview command service collaborators.
      */
@@ -30,6 +32,7 @@ final class CategorySyndicationPackagePreviewCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -46,12 +49,15 @@ final class CategorySyndicationPackagePreviewCommand extends Command
             ->addOption('reason', null, InputOption::VALUE_REQUIRED, default: 'preview')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
+
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
+     * @throws \Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $categoryId = $this->argumentString($input, 'categoryId');
         $actorId = $this->optionString($input, 'actor-id', 'cli');
         $reason = $this->optionString($input, 'reason', 'preview');
@@ -83,14 +89,20 @@ final class CategorySyndicationPackagePreviewCommand extends Command
                 new CatalogAuditContext($actorId, $reason),
             ),
         );
-        $payload = method_exists($event, 'payload')
-            ? $event->payload()
-            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
+        $payload = $this->eventPayload($event);
 
         if ('ndjson' === $format) {
             return $this->writeStructuredRows($output, [$payload], 'ndjson');
         }
 
         return $this->writeJson($output, $payload);
+    }
+
+    /** @return array<string,mixed> */
+    private function eventPayload(object $event): array
+    {
+        return method_exists($event, 'payload')
+            ? $event->payload()
+            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
     }
 }

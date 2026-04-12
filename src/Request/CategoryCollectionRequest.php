@@ -11,8 +11,8 @@ namespace App\Request;
 final readonly class CategoryCollectionRequest
 {
     /**
-     * @param array        $rules
-     * @param list<string> $errors
+     * @param array<string,mixed> $rules
+     * @param list<string>        $errors
      */
     public function __construct(
         public array $rules,

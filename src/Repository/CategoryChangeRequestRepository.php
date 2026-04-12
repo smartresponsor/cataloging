@@ -8,6 +8,7 @@ namespace App\Repository;
 use App\EntityInterface\CategoryChangeRequestInterface;
 use App\EventInterface\CategoryChangeRequestReviewedInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+
 /**
  * Provides repository services for category change request repository.
  */
@@ -18,6 +19,7 @@ final class CategoryChangeRequestRepository implements CategoryChangeRequestRepo
 
     /** @var array<string,list<CategoryChangeRequestReviewedInterface>> */
     private array $reviewHistory = [];
+
     /**
      * Handles the find by request id workflow.
      */
@@ -34,6 +36,7 @@ final class CategoryChangeRequestRepository implements CategoryChangeRequestRepo
             static fn (CategoryChangeRequestInterface $request): bool => $request->categoryId() === $categoryId,
         ));
     }
+
     /**
      * Handles the save workflow.
      */
@@ -41,6 +44,7 @@ final class CategoryChangeRequestRepository implements CategoryChangeRequestRepo
     {
         $this->requests[$request->requestId()] = $request;
     }
+
     /**
      * Handles the append review history workflow.
      */

@@ -8,6 +8,7 @@ namespace App\EventInterface;
 /**
  * Defines the contract for category syndication category governance summary built.
  */
+/** @noinspection PhpClassNamingConventionInspection */
 interface CategorySyndicationCategoryGovernanceSummaryBuiltInterface
 {
     /** @return array<string,mixed> */

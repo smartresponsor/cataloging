@@ -24,7 +24,7 @@ final class CategoryFixturesTest extends TestCase
 
         $persisted = 0;
         $manager = $this->createMock(ObjectManager::class);
-        $manager->expects(self::exactly(42))
+        $manager->expects(self::exactly(45))
             ->method('persist')
             ->willReturnCallback(static function () use (&$persisted): void {
                 ++$persisted;
@@ -33,6 +33,6 @@ final class CategoryFixturesTest extends TestCase
 
         (new CategoryFixtures())->load($manager);
 
-        self::assertSame(42, $persisted);
+        self::assertSame(45, $persisted);
     }
 }

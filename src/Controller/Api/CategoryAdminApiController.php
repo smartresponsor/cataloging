@@ -31,8 +31,8 @@ final readonly class CategoryAdminApiController
     #[Route('/api/admin/category/list', name: 'api_admin_category_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        return new JsonResponse([
-            'data' => $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
+        try {
+            $data = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
                 'tenant' => $request->query->get('tenant'),
                 'locale' => $request->query->get('locale'),
                 'workflow_state' => $request->query->get('workflow_state'),
@@ -41,8 +41,12 @@ final readonly class CategoryAdminApiController
                 'offset' => $request->query->get('offset') ?? 0,
                 'order' => $request->query->get('order') ?? 'updated_at',
                 'direction' => $request->query->get('direction') ?? 'desc',
-            ])),
-        ]);
+            ]));
+        } catch (\Throwable) {
+            return new JsonResponse(['error' => 'Unable to load admin category list.'], 500);
+        }
+
+        return new JsonResponse(['data' => $data]);
     }
 
     /**
@@ -51,6 +55,12 @@ final readonly class CategoryAdminApiController
     #[Route('/api/admin/category/bulk', name: 'api_admin_category_bulk', methods: ['POST'])]
     public function bulk(Request $request): JsonResponse
     {
-        return new JsonResponse(['ok' => true, 'payload' => json_decode($request->getContent(), true)]);
+        try {
+            $payload = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $exception) {
+            return new JsonResponse(['ok' => false, 'error' => $exception->getMessage()], 400);
+        }
+
+        return new JsonResponse(['ok' => true, 'payload' => $payload]);
     }
 }

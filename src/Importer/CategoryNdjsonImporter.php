@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Importer;
 
 use App\ImporterInterface\CategoryNdjsonImporterInterface;
+use App\Service\MetaPayloadNormalizer;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
 use App\ValueObject\CategoryCreateRequest;
 use App\ValueObject\CategoryLinkRequest;
@@ -13,16 +14,15 @@ use App\ValueObject\CategoryLinkRequest;
 /**
  * Provides the category ndjson importer implementation.
  */
-final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
+final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 {
-    private CatalogCategoryService $service;
-
     /**
      * Initializes the category ndjson importer service collaborators.
      */
-    public function __construct(CatalogCategoryService $service)
-    {
-        $this->service = $service;
+    public function __construct(
+        private CatalogCategoryService $service,
+        private MetaPayloadNormalizer $metaPayloadNormalizer,
+    ) {
     }
 
     /** @return array{ok:int,fail:int,warnings:int,report:list<string>} */
@@ -32,13 +32,13 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
         $fail = 0;
         $warnings = 0;
         $report = [];
-        $h = fopen($path, 'r');
-        if (false === $h) {
+        $handle = fopen($path, 'r');
+        if (false === $handle) {
             throw new \RuntimeException('Cannot open NDJSON: '.$path);
         }
 
         try {
-            while (($line = fgets($h)) !== false) {
+            while (($line = fgets($handle)) !== false) {
                 $line = trim($line);
                 if ('' === $line) {
                     continue;
@@ -72,20 +72,27 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 
                     ++$fail;
                     $report[] = 'Unknown type: '.$type;
-                } catch (\JsonException|\InvalidArgumentException|\RuntimeException|\TypeError $e) {
+                } catch (\JsonException|\InvalidArgumentException|\RuntimeException|\TypeError $exception) {
                     ++$fail;
-                    error_log('[CategoryNdjsonImporter] '.$e->getMessage());
-                    $report[] = 'Error: '.$e->getMessage();
+                    error_log('[CategoryNdjsonImporter] '.$exception->getMessage());
+                    $report[] = 'Error: '.$exception->getMessage();
                 }
             }
         } finally {
-            fclose($h);
+            fclose($handle);
         }
 
         return ['ok' => $ok, 'fail' => $fail, 'warnings' => $warnings, 'report' => $report];
     }
 
-    /** @return array<string,mixed> */
+    /**
+     * @param string $line
+     *
+     * @return array<string,mixed>
+     *
+     * @throws \JsonException
+     * @throws \InvalidArgumentException
+     */
     private function decodeRow(string $line): array
     {
         $data = json_decode($line, true, 512, JSON_THROW_ON_ERROR);
@@ -96,7 +103,11 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
         return $data;
     }
 
-    /** @param array<string,mixed> $data */
+    /**
+     * @param array<string,mixed> $data
+     *
+     * @throws \InvalidArgumentException
+     */
     private function requireType(array $data): string
     {
         $type = $this->requiredStringValue($data, 'type');
@@ -160,49 +171,9 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
      *
      * @return array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null>
      */
-    private function metaMapValue(array $data, string $key): array
+    private function metaMapValue(array $data): array
     {
-        $value = $data[$key] ?? [];
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $normalized = [];
-        foreach ($value as $entryKey => $entryValue) {
-            if (!is_string($entryKey)) {
-                continue;
-            }
-            if (is_array($entryValue)) {
-                $nested = [];
-                foreach ($entryValue as $nestedKey => $nestedValue) {
-                    if (!is_string($nestedKey)) {
-                        continue;
-                    }
-                    if (
-                        is_bool($nestedValue)
-                        || is_float($nestedValue)
-                        || is_int($nestedValue)
-                        || is_string($nestedValue)
-                        || null === $nestedValue
-                    ) {
-                        $nested[$nestedKey] = $nestedValue;
-                    }
-                }
-                $normalized[$entryKey] = $nested;
-                continue;
-            }
-            if (
-                is_bool($entryValue)
-                || is_float($entryValue)
-                || is_int($entryValue)
-                || is_string($entryValue)
-                || null === $entryValue
-            ) {
-                $normalized[$entryKey] = $entryValue;
-            }
-        }
-
-        return $normalized;
+        return $this->metaPayloadNormalizer->normalize($data['meta'] ?? []);
     }
 
     /** @param array<string,mixed> $data */
@@ -214,7 +185,7 @@ final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
             $this->optionalStringValue($data, 'parentId'),
             $this->stringMapValue($data, 'name'),
             $this->stringMapValue($data, 'slug'),
-            $this->metaMapValue($data, 'meta'),
+            $this->metaMapValue($data),
         );
     }
 

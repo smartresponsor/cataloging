@@ -7,8 +7,10 @@ namespace App\Policy;
 
 use App\EntityInterface\CategoryMediaBindingInterface;
 use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
+use App\Service\CategoryMediaInputNormalizer;
 use App\ValueObject\CategoryMediaApplicabilityReport;
 use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
+
 /**
  * Provides the category media applicability policy implementation.
  */
@@ -20,9 +22,9 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
      */
     public function buildReport(array $payload, array $bindings): CategoryMediaApplicabilityReportInterface
     {
-        $channel = $this->stringValue($payload['channel'] ?? null);
-        $locale = $this->stringValue($payload['locale'] ?? null);
-        $requiredRoles = $this->stringList($payload['requiredRoles'] ?? null);
+        $channel = CategoryMediaInputNormalizer::stringValue($payload['channel'] ?? null);
+        $locale = CategoryMediaInputNormalizer::stringValue($payload['locale'] ?? null);
+        $requiredRoles = CategoryMediaInputNormalizer::stringList($payload['requiredRoles'] ?? null);
 
         $matched = [];
         $matchedRoles = [];
@@ -119,44 +121,5 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
         $locales = $binding->locales();
 
         return [] !== $locales && in_array($locale, $locales, true);
-    }
-
-    private function stringValue(mixed $value): string
-    {
-        return is_scalar($value) ? trim((string) $value) : '';
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        $items = [];
-        if (is_array($value)) {
-            $items = $value;
-        } elseif (is_string($value)) {
-            $decoded = json_decode($value, true);
-            if (is_array($decoded)) {
-                $items = $decoded;
-            } else {
-                $items = preg_split('/\s*,\s*/', $value) ?: [];
-            }
-        } elseif (is_scalar($value)) {
-            $items = [(string) $value];
-        } else {
-            return [];
-        }
-
-        $result = [];
-        foreach ($items as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-            $normalized = trim((string) $item);
-            if ('' === $normalized) {
-                continue;
-            }
-            $result[] = $normalized;
-        }
-
-        return array_values(array_unique($result));
     }
 }

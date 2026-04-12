@@ -32,13 +32,18 @@ final class CategoryListController extends AbstractController
     {
         $page = max(1, (int) $request->query->get('page', 1));
         $published = $request->query->getBoolean('published');
-        $items = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
-            'published' => $published ? true : null,
-            'limit' => 100,
-            'offset' => 0,
-            'order' => 'name',
-            'direction' => 'asc',
-        ]));
+
+        try {
+            $items = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
+                'published' => $published ? true : null,
+                'limit' => 100,
+                'offset' => 0,
+                'order' => 'name',
+                'direction' => 'asc',
+            ]));
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException('Unable to load category admin list.', $exception);
+        }
 
         return $this->render('category/admin/list.html.twig', [
             'items' => $items,

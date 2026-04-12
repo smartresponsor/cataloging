@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the circuit breaker application service.
  */
@@ -11,6 +12,7 @@ final class CircuitBreaker
 {
     private int $failCount = 0;
     private bool $open = false;
+
     /**
      * Handles the record success workflow.
      */
@@ -19,6 +21,7 @@ final class CircuitBreaker
         $this->failCount = 0;
         $this->open = false;
     }
+
     /**
      * Handles the record failure workflow.
      */
@@ -29,6 +32,7 @@ final class CircuitBreaker
             $this->open = true;
         }
     }
+
     /**
      * Determines whether the open condition is satisfied.
      */

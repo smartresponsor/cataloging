@@ -7,6 +7,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategoryMoveCommand;
 use App\ServiceInterface\CategoryMoveInterface;
+use App\ValueObject\CatalogMoveRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -18,15 +19,15 @@ final class CategoryMoveCommandTest extends TestCase
             /** @var array<string,mixed> */
             public array $seen = [];
 
-            public function move(string $nodeId, string $newParentId, string $treeId, string $policy, bool $dryRun = false, ?string $locale = null): array
+            public function move(CatalogMoveRequest $request): array
             {
                 $this->seen = [
-                    'nodeId' => $nodeId,
-                    'newParentId' => $newParentId,
-                    'treeId' => $treeId,
-                    'policy' => $policy,
-                    'dryRun' => $dryRun,
-                    'locale' => $locale,
+                    'nodeId' => $request->nodeId(),
+                    'newParentId' => $request->newParentId(),
+                    'treeId' => $request->treeId(),
+                    'policy' => $request->policy(),
+                    'dryRun' => $request->dryRun(),
+                    'locale' => $request->locale(),
                 ];
 
                 return [2, [['from' => '/old', 'to' => '/new']]];

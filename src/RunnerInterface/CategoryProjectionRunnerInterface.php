@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\RunnerInterface;
+
 /**
  * Defines the contract for category projection runner.
  */

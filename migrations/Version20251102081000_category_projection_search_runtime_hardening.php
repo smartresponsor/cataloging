@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -6,14 +7,20 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** @noinspection PhpMissingParentCallCommonInspection */
+/**
+ * Category projection search runtime hardening migration.
+ *
+ * @noinspection PhpClassNamingConventionInspection
+ */
 final class Version20251102081000_category_projection_search_runtime_hardening extends AbstractMigration
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
         return 'Add search-oriented indexes for category projection reads';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE INDEX idx_category_projection_name ON category_projection (name)');
@@ -27,6 +34,7 @@ final class Version20251102081000_category_projection_search_runtime_hardening e
         $this->addSql('CREATE INDEX idx_category_projection_updated_at ON category_projection (updated_at)');
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
         $this->addSql('DROP INDEX idx_category_projection_updated_at');

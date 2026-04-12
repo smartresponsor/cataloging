@@ -10,6 +10,6 @@ namespace App\Service;
  */
 final class MovePolicy
 {
-    public const string PreserveSlug = 'preserveSlug';
-    public const string RebuildSlug = 'rebuildSlug';
+    public const string PRESERVE_SLUG = 'preserveSlug';
+    public const string REBUILD_SLUG = 'rebuildSlug';
 }

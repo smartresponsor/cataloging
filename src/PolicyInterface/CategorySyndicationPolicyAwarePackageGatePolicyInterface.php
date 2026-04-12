@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategorySyndicationPolicyAwarePackageGateReportInterface;
+
 /**
  * Defines the contract for category syndication policy aware package gate policy.
  */

@@ -12,19 +12,19 @@ use App\ValueObject\CategorySyndicationDestinationDefinition;
 /**
  * Represents the category syndication destination domain record.
  */
-final class CategorySyndicationDestination implements CategorySyndicationDestinationInterface
+final readonly class CategorySyndicationDestination implements CategorySyndicationDestinationInterface
 {
-    /**
-     * @param array<string,string> $settings
-     */
     public function __construct(
-        private readonly CategorySyndicationDestinationDefinition $definition,
-        private readonly CategorySyndicationDestinationConfiguration $configuration,
-        private readonly string $createdBy,
-        private readonly \DateTimeImmutable $createdAt,
+        private CategorySyndicationDestinationDefinition $definition,
+        private CategorySyndicationDestinationConfiguration $configuration,
+        private string $createdBy,
+        private \DateTimeImmutable $createdAt,
     ) {
     }
 
+    /**
+     * Registers a new syndication destination.
+     */
     public static function register(
         CategorySyndicationDestinationDefinition $definition,
         CategorySyndicationDestinationConfiguration $configuration,

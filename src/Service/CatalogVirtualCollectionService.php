@@ -18,17 +18,18 @@ final readonly class CatalogVirtualCollectionService
     public function __construct(
         private CatalogCollectionService $collectionService,
         private VirtualCategoryRepositoryInterface $repository,
+        private CategoryCollectionRuleNormalizer $ruleNormalizer,
     ) {
     }
 
     /**
-     * @param array $rules
+     * @param array<string,mixed> $rules
      *
      * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
      */
     public function preview(array $rules): array
     {
-        return $this->collectionService->build($this->normalizeRules($rules));
+        return $this->collectionService->build($this->ruleNormalizer->normalize($rules));
     }
 
     /**
@@ -47,7 +48,7 @@ final readonly class CatalogVirtualCollectionService
             return null;
         }
 
-        $data = $this->collectionService->build($this->normalizeRules($virtualCategory['rule']));
+        $data = $this->collectionService->build($this->ruleNormalizer->normalize($virtualCategory['rule']));
 
         return [
             'id' => $virtualCategory['id'],
@@ -56,36 +57,5 @@ final readonly class CatalogVirtualCollectionService
             'data' => $data,
             'total' => count($data),
         ];
-    }
-
-    /**
-     * @param array $rules
-     *
-     * @return array<string, array<int, bool|float|int|string>|bool|float|int|string>
-     */
-    private function normalizeRules(array $rules): array
-    {
-        $normalized = [];
-        foreach ($rules as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-            if (is_bool($value) || is_float($value) || is_int($value) || is_string($value)) {
-                $normalized[$key] = $value;
-                continue;
-            }
-            if (!is_array($value)) {
-                continue;
-            }
-            $items = [];
-            foreach ($value as $item) {
-                if (is_bool($item) || is_float($item) || is_int($item) || is_string($item)) {
-                    $items[] = $item;
-                }
-            }
-            $normalized[$key] = $items;
-        }
-
-        return $normalized;
     }
 }

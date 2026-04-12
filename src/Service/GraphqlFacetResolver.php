@@ -46,7 +46,15 @@ final readonly class GraphqlFacetResolver implements GraphqlFacetResolverInterfa
         ]));
 
         $items = [];
-        foreach ($search['items'] as $row) {
+        $rows = $search['items'] ?? [];
+        if (!is_iterable($rows)) {
+            return ['items' => [], 'total' => 0];
+        }
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
             $path = $this->stringValue($row, 'path');
             $pathPrefix = $request->pathPrefix();
             if (null !== $pathPrefix && '' !== $pathPrefix && !str_starts_with($path, $pathPrefix)) {

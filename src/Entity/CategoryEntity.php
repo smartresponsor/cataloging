@@ -14,6 +14,7 @@ use Symfony\Component\Uid\Ulid;
 #[ORM\Entity]
 #[ORM\Table(name: 'category')]
 #[ORM\Index(name: 'idx_category_path', columns: ['path'])]
+/** @noinspection PhpPropertyNamingConventionInspection */
 class CategoryEntity
 {
     #[ORM\Id]
@@ -38,7 +39,7 @@ class CategoryEntity
      */
     public function __construct(string $name, string $slug, string $path, int $depth)
     {
-        $this->id = new Ulid()->__toString();
+        $this->id = (string) new Ulid();
         $this->name = $name;
         $this->slug = $slug;
         $this->path = $path;

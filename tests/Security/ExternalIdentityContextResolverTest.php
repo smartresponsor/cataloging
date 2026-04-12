@@ -21,13 +21,13 @@ final class ExternalIdentityContextResolverTest extends TestCase
 
         $resolver = new ExternalIdentityContextResolver(
             $requestStack,
-            new class() implements OidcJwtValidatorInterface {
+            new class implements OidcJwtValidatorInterface {
                 public function validate(string $jwt): array
                 {
                     throw new \RuntimeException('should not be called');
                 }
             },
-            new class() implements SecurityExternalIdentityContextMapperInterface {
+            new class implements SecurityExternalIdentityContextMapperInterface {
                 public function map(array $claims): ExternalIdentityContext
                 {
                     throw new \RuntimeException('should not be called');
@@ -46,7 +46,7 @@ final class ExternalIdentityContextResolverTest extends TestCase
 
         $resolver = new ExternalIdentityContextResolver(
             $requestStack,
-            new class() implements OidcJwtValidatorInterface {
+            new class implements OidcJwtValidatorInterface {
                 public function validate(string $jwt): array
                 {
                     TestCase::assertSame('token-123', $jwt);
@@ -54,7 +54,7 @@ final class ExternalIdentityContextResolverTest extends TestCase
                     return ['sub' => 'actor-1', 'tenant' => 'tenant-a', 'category_roles' => ['publisher']];
                 }
             },
-            new class() implements SecurityExternalIdentityContextMapperInterface {
+            new class implements SecurityExternalIdentityContextMapperInterface {
                 public function map(array $claims): ExternalIdentityContext
                 {
                     TestCase::assertSame('actor-1', $claims['sub']);

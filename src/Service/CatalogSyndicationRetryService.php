@@ -18,18 +18,20 @@ use App\ValueObject\CategorySyndicationRetryPlan;
 /**
  * Provides the catalog syndication retry service application service.
  */
-final class CatalogSyndicationRetryService implements CatalogSyndicationRetryServiceInterface
+final readonly class CatalogSyndicationRetryService implements CatalogSyndicationRetryServiceInterface
 {
     /**
      * Initializes the catalog syndication retry service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationRetryPolicyInterface $policy,
+        private CategorySyndicationRetryPolicyInterface $policy,
     ) {
     }
 
     /**
      * Handles the prepare recovery candidate workflow.
+     *
+     * @throws \InvalidArgumentException
      */
     public function prepareRecoveryCandidate(
         CategorySyndicationDeliveryRecordInterface $record,
@@ -67,6 +69,14 @@ final class CatalogSyndicationRetryService implements CatalogSyndicationRetrySer
 
     /**
      * Schedules the retry workflow for later processing.
+     *
+     * @param CategorySyndicationDeliveryRecordInterface $record
+     * @param string                                     $actorId
+     * @param string                                     $reason
+     *
+     * @return CategorySyndicationRetryScheduledInterface
+     *
+     * @throws \DateMalformedStringException
      */
     public function scheduleRetry(
         CategorySyndicationDeliveryRecordInterface $record,

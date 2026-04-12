@@ -10,18 +10,19 @@ use App\ServiceInterface\OidcJwtVerifierInterface;
 /**
  * Provides the oidc jwt verifier application service.
  */
+/** @noinspection PhpCSFixerValidationInspection */
 final class OidcJwtVerifier implements OidcJwtVerifierInterface
 {
-    private string $issuer;
-    private string $audience;
     /** @var array<string,string> */
     private array $pemByKid = [];
 
-    /** @param array<string,mixed> $jwkSet */
-    public function __construct(string $issuer, string $audience, array $jwkSet)
+    /**
+     * @param array<string,mixed> $jwkSet
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(private readonly string $issuer, private readonly string $audience, array $jwkSet)
     {
-        $this->issuer = $issuer;
-        $this->audience = $audience;
         $converter = new JwkConverter();
         $keys = $jwkSet['keys'] ?? [];
         if (is_array($keys)) {
@@ -30,10 +31,10 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
                     continue;
                 }
                 $kid = $this->scalarString($jwk['kid'] ?? null);
-                $n = $this->scalarString($jwk['n'] ?? null);
-                $e = $this->scalarString($jwk['e'] ?? null);
-                if (($jwk['kty'] ?? null) === 'RSA' && '' !== $kid && '' !== $n && '' !== $e) {
-                    $this->pemByKid[$kid] = $converter->rsaToPem($n, $e);
+                $modulus = $this->scalarString($jwk['n'] ?? null);
+                $exponent = $this->scalarString($jwk['e'] ?? null);
+                if (($jwk['kty'] ?? null) === 'RSA' && '' !== $kid && '' !== $modulus && '' !== $exponent) {
+                    $this->pemByKid[$kid] = $converter->rsaToPem($modulus, $exponent);
                 }
             }
         }
@@ -42,7 +43,15 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
         }
     }
 
-    /** @return array<string,mixed> */
+    /**
+     * @param string $jwt
+     *
+     * @return array<string,mixed>
+     *
+     * @throws \JsonException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     public function verify(string $jwt): array
     {
         $parts = explode('.', $jwt);
@@ -115,7 +124,13 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
         return $decoded;
     }
 
-    /** @return array<string,mixed> */
+    /**
+     * @param string $json
+     *
+     * @return array<string,mixed>
+     *
+     * @throws \JsonException
+     */
     private function decodeJsonObject(string $json): array
     {
         $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
@@ -126,11 +141,19 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
         return $decoded;
     }
 
-    /** @param array<string,mixed> $payload @param callable(int,int):bool $predicate */
+    /**
+     * @param array<string,mixed>    $payload
+     * @param callable(int,int):bool $predicate
+     *
+     * @throws \RuntimeException
+     */
     private function assertTimeClaim(array $payload, string $key, callable $predicate, string $message, int $now): void
     {
         $value = $payload[$key] ?? null;
-        if (null === $value || !is_numeric($value)) {
+        if (null === $value) {
+            return;
+        }
+        if (!is_numeric($value)) {
             return;
         }
         if (!$predicate((int) $value, $now)) {

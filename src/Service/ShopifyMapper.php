@@ -23,7 +23,7 @@ final class ShopifyMapper
 
         return [
             'id' => $this->stringValue($shopify, 'id'),
-            'parentId' => $this->nullableStringValue($shopify, 'parent_id'),
+            'parentId' => $this->parentIdValue($shopify),
             'slug' => $this->stringValue($shopify, 'handle'),
             'name' => $this->stringValue($shopify, 'title'),
             'locale' => 'en',
@@ -41,9 +41,9 @@ final class ShopifyMapper
     }
 
     /** @param array<string,mixed> $input */
-    private function nullableStringValue(array $input, string $key): ?string
+    private function parentIdValue(array $input): ?string
     {
-        $value = $input[$key] ?? null;
+        $value = $input['parent_id'] ?? null;
 
         return is_scalar($value) ? (string) $value : null;
     }

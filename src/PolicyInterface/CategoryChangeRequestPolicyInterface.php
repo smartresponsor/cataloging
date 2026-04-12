@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
+
 /**
  * Defines the contract for category change request policy.
  */
@@ -28,6 +29,7 @@ interface CategoryChangeRequestPolicyInterface
         string $summary,
         array $changes,
     ): void;
+
     /**
      * Determines whether the current workflow can review.
      */
@@ -37,6 +39,7 @@ interface CategoryChangeRequestPolicyInterface
         string $reviewedBy,
         string $decisionReason,
     ): bool;
+
     /**
      * Handles the assert can review workflow.
      */

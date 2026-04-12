@@ -27,47 +27,55 @@ final class CategoryMerchController extends AbstractController
     public function __construct(private readonly CatalogMerchService $categoryMerchService)
     {
     }
+
     /**
      * Handles the pin create workflow.
+     *
+     * @throws \Throwable
      */
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_create', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function pinCreate(string $id, Request $request): JsonResponse
     {
-        $this->categoryMerchService->pinCreate(new CategoryMerchPinCreateRequest(
-            $id,
-            $this->bagString($request->request, 'recordId'),
-            $this->bagInt($request->request, 'position'),
-        ));
+        $this->categoryMerchService->pinCreate($this->pinCreateRequest($id, $request));
 
         return $this->json(['ok' => true]);
     }
+
     /**
      * Handles the pin delete workflow.
+     *
+     * @throws \Throwable
      */
     #[Route('/api/category/{id}/pin', name: 'api_category_pin_delete', methods: ['DELETE'])]
     #[IsGranted('category.merch')]
     public function pinDelete(string $id, Request $request): JsonResponse
     {
-        $recordId = $this->bagString($request->query, 'recordId');
+        $recordId = $this->queryRecordId($request);
         $this->categoryMerchService->pinDelete($id, $recordId);
 
         return $this->json(['ok' => true]);
     }
+
     /**
      * Handles the order set workflow.
+     *
+     * @throws \Throwable
      */
     #[Route('/api/category/{id}/order', name: 'api_category_order_set', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function orderSet(string $id, Request $request): JsonResponse
     {
-        $recordIds = $this->bagStringList($request->request, 'recordId');
+        $recordIds = $this->orderRecordIds($request);
         $this->categoryMerchService->orderSet($id, $recordIds);
 
         return $this->json(['ok' => true]);
     }
+
     /**
      * Handles the banner publish workflow.
+     *
+     * @throws \Throwable
      */
     #[Route('/api/category/{id}/banner/publish', name: 'api_category_banner_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
@@ -75,35 +83,104 @@ final class CategoryMerchController extends AbstractController
     {
         $bannerId = $this->categoryMerchService->bannerPublish(new CategoryMerchBannerPublishRequest(
             $id,
-            $this->bagString($request->request, 'title'),
-            $this->bagString($request->request, 'content'),
+            $this->requestTitle($request),
+            $this->requestContent($request),
         ));
 
         return $this->json(['ok' => true, 'id' => $bannerId]);
     }
+
     /**
      * Handles the html publish workflow.
+     *
+     * @throws \Throwable
      */
     #[Route('/api/category/{id}/html/publish', name: 'api_category_html_publish', methods: ['POST'])]
     #[IsGranted('category.merch')]
     public function htmlPublish(string $id, Request $request): JsonResponse
     {
-        $html = $this->bagString($request->request, 'html');
+        $html = $this->requestHtml($request);
         $htmlBlockId = $this->categoryMerchService->htmlPublish($id, $html);
 
         return $this->json(['ok' => true, 'id' => $htmlBlockId]);
     }
 
-    private function bagString(InputBag|ParameterBag $bag, string $key, string $default = ''): string
+    private function pinCreateRequest(string $categoryId, Request $request): CategoryMerchPinCreateRequest
     {
-        return $this->scalarString($bag->get($key, $default), $default);
+        return new CategoryMerchPinCreateRequest(
+            $categoryId,
+            $this->requestRecordId($request),
+            $this->requestPosition($request),
+        );
     }
 
-    private function bagInt(InputBag|ParameterBag $bag, string $key, int $default = 0): int
+    /** @return list<string> */
+    private function orderRecordIds(Request $request): array
     {
-        $value = $bag->get($key, $default);
+        return $this->requestRecordIds($request);
+    }
 
-        return is_numeric($value) ? (int) $value : $default;
+    private function queryRecordId(Request $request): string
+    {
+        return $this->recordIdFromBag($request->query);
+    }
+
+    private function requestRecordId(Request $request): string
+    {
+        return $this->recordIdFromBag($request->request);
+    }
+
+    private function requestTitle(Request $request): string
+    {
+        return $this->titleFromBag($request->request);
+    }
+
+    private function requestContent(Request $request): string
+    {
+        return $this->contentFromBag($request->request);
+    }
+
+    private function requestHtml(Request $request): string
+    {
+        return $this->htmlFromBag($request->request);
+    }
+
+    private function requestPosition(Request $request): int
+    {
+        return $this->positionFromBag($request->request);
+    }
+
+    /** @return list<string> */
+    private function requestRecordIds(Request $request): array
+    {
+        return $this->recordIdsFromBag($request->request);
+    }
+
+    private function recordIdFromBag(InputBag|ParameterBag $bag): string
+    {
+        return $this->scalarString($bag->get('recordId'));
+    }
+
+    private function titleFromBag(InputBag|ParameterBag $bag): string
+    {
+        return $this->scalarString($bag->get('title'));
+    }
+
+    private function contentFromBag(InputBag|ParameterBag $bag): string
+    {
+        return $this->scalarString($bag->get('content'));
+    }
+
+    private function htmlFromBag(InputBag|ParameterBag $bag): string
+    {
+        return $this->scalarString($bag->get('html'));
+    }
+
+    private function positionFromBag(InputBag|ParameterBag $bag): int
+    {
+        $value = $bag->get('position');
+
+        return is_numeric($value) ? (int) $value : 0;
     }
 
     /**
@@ -111,9 +188,9 @@ final class CategoryMerchController extends AbstractController
      *
      * @return list<string>
      */
-    private function bagStringList(InputBag|ParameterBag $bag, string $key): array
+    private function recordIdsFromBag(InputBag|ParameterBag $bag): array
     {
-        $raw = $bag instanceof InputBag ? $bag->all($key) : $bag->all()[$key] ?? [];
+        $raw = $bag instanceof InputBag ? $bag->all('recordId') : $bag->all()['recordId'] ?? [];
         if (!is_array($raw)) {
             return [];
         }
@@ -130,8 +207,8 @@ final class CategoryMerchController extends AbstractController
         return array_values($items);
     }
 
-    private function scalarString(mixed $value, string $default = ''): string
+    private function scalarString(mixed $value): string
     {
-        return is_scalar($value) ? (string) $value : $default;
+        return is_scalar($value) ? (string) $value : '';
     }
 }

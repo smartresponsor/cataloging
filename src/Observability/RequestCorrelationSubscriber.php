@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+
 /**
  * Provides the request correlation subscriber implementation.
  */
@@ -20,6 +21,7 @@ final class RequestCorrelationSubscriber implements EventSubscriberInterface
             ResponseEvent::class => ['onResponse', -256],
         ];
     }
+
     /**
      * Handles the on request workflow.
      */
@@ -35,6 +37,7 @@ final class RequestCorrelationSubscriber implements EventSubscriberInterface
             $this->resolveCorrelationId($request),
         );
     }
+
     /**
      * Handles the on response workflow.
      */
@@ -68,6 +71,10 @@ final class RequestCorrelationSubscriber implements EventSubscriberInterface
 
     private function generateCorrelationId(): string
     {
-        return bin2hex(random_bytes(16));
+        try {
+            return bin2hex(random_bytes(16));
+        } catch (\Throwable) {
+            return sha1(uniqid('category-correlation-', true));
+        }
     }
 }

@@ -35,8 +35,9 @@ final class MetricsSubscriber implements EventSubscriberInterface
     /**
      * Handles the on request workflow.
      */
-    public function onRequest(RequestEvent $e): void
+    public function onRequest(RequestEvent $requestEvent): void
     {
+        unset($requestEvent);
         $this->start = microtime(true);
     }
 
@@ -48,7 +49,7 @@ final class MetricsSubscriber implements EventSubscriberInterface
         $elapsed = (microtime(true) - $this->start) * 1000.0;
         $status = $e->getResponse()->getStatusCode();
         $rec = [
-            'ts' => new \DateTimeImmutable()->format(DATE_ATOM),
+            'ts' => (new \DateTimeImmutable())->format(DATE_ATOM),
             'path' => $e->getRequest()->getPathInfo(),
             'ms' => round($elapsed, 2),
             'status' => $status,

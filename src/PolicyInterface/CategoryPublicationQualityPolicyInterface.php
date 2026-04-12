@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryPublicationQualityProfileInterface;
+
 /**
  * Defines the contract for category publication quality policy.
  */

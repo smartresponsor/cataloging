@@ -54,16 +54,24 @@ final class CategoryReviewAssignCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $dueAt = $this->optionString($input, 'due-at');
-        $event = $this->assignmentService->assign(new CategoryReviewAssignmentRequest(
-            $this->argumentString($input, 'requestId'),
-            $this->argumentString($input, 'reviewer'),
-            $this->argumentString($input, 'assignedBy'),
-            $this->optionString($input, 'priority', 'normal'),
-            '' !== $dueAt ? new \DateTimeImmutable($dueAt) : null,
-        ));
+        try {
+            $dueAt = $this->optionString($input, 'due-at');
+            $event = $this->assignmentService->assign(new CategoryReviewAssignmentRequest(
+                $this->argumentString($input, 'requestId'),
+                $this->argumentString($input, 'reviewer'),
+                $this->argumentString($input, 'assignedBy'),
+                $this->optionString($input, 'priority', 'normal'),
+                '' !== $dueAt ? new \DateTimeImmutable($dueAt) : null,
+            ));
 
-        return $this->writeJson($output, $event->payload());
+            return $this->writeJson($output, $event->payload());
+        } catch (\Throwable $exception) {
+            $output->writeln((string) json_encode([
+                'ok' => false,
+                'error' => $exception->getMessage(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+            return self::FAILURE;
+        }
     }
 }

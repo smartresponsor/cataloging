@@ -60,7 +60,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
             'revoked_at' => $assignment->revokedAt()?->format('Y-m-d H:i:s'),
         ];
 
-        if (is_scalar($existing)) {
+        if (is_string($existing) && '' !== trim($existing)) {
             $this->connection->update(
                 'category_access_assignment',
                 $payload,
@@ -104,13 +104,11 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
     public function findPrimaryForCategoryId(string $categoryId): ?CategoryAccessAssignmentInterface
     {
         $assignments = $this->findActiveByCategoryId($categoryId);
-        foreach ($assignments as $assignment) {
-            if ($assignment->isPrimary()) {
-                return $assignment;
-            }
-        }
 
-        return null;
+        return array_find(
+            $assignments,
+            static fn (CategoryAccessAssignmentInterface $assignment): bool => $assignment->isPrimary(),
+        );
     }
 
     /**
@@ -118,6 +116,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
      *
      * @throws \Throwable
      */
+    /** @noinspection PhpSameParameterValueInspection */
     public function findActiveByCategoryId(string $categoryId): array
     {
         if (!$this->connection instanceof Connection) {
@@ -179,13 +178,7 @@ final class CategoryAccessAssignmentRepository implements CategoryAccessAssignme
         string $actorUserId,
     ): ?CategoryAccessAssignmentInterface {
         if (!$this->connection instanceof Connection) {
-            foreach ($this->assignments as $assignment) {
-                if ($assignment->categoryId() === $categoryId && $assignment->actorUserId() === $actorUserId) {
-                    return $assignment;
-                }
-            }
-
-            return null;
+            return array_find($this->assignments, fn ($assignment) => $assignment->categoryId() === $categoryId && $assignment->actorUserId() === $actorUserId);
         }
 
         $row = $this->connection->fetchAssociative(

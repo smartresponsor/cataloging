@@ -7,6 +7,7 @@ namespace App\RepositoryInterface;
 
 use App\EntityInterface\CategoryMediaBindingInterface;
 use App\EventInterface\CategoryMediaBoundInterface;
+
 /**
  * Defines the contract for category media binding repository.
  */
@@ -16,6 +17,7 @@ interface CategoryMediaBindingRepositoryInterface
      * Handles the save workflow.
      */
     public function save(CategoryMediaBindingInterface $binding): void;
+
     /**
      * Finds the requested record in the underlying store.
      */
@@ -23,6 +25,7 @@ interface CategoryMediaBindingRepositoryInterface
 
     /** @return list<CategoryMediaBindingInterface> */
     public function bindingsForCategory(string $categoryId): array;
+
     /**
      * Handles the append history workflow.
      */

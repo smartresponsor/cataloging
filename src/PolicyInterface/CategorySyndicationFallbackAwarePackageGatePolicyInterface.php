@@ -6,12 +6,26 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
+
 /**
  * Defines the contract for category syndication fallback aware package gate policy.
  */
+/** @noinspection PhpClassNamingConventionInspection PhpTooManyParametersInspection */
 interface CategorySyndicationFallbackAwarePackageGatePolicyInterface
 {
     /**
+     * @param list<string>       $packageMissingRequiredFields
+     * @param list<string>       $strictMediaRequiredMissing
+     * @param list<string>       $fallbackMediaRequiredMissing
+     * @param list<string>       $warnings
+     * @param array<string,bool> $strictChecks
+     * @param array<string,bool> $fallbackChecks
+     * @param list<string>       $exactMatchedBindingIds
+     * @param list<string>       $fallbackMatchedBindingIds
+     */
+    /**
+     * @noinspection PhpTooManyParametersInspection
+     *
      * @param list<string>       $packageMissingRequiredFields
      * @param list<string>       $strictMediaRequiredMissing
      * @param list<string>       $fallbackMediaRequiredMissing

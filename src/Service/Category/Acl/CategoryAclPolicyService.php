@@ -7,12 +7,14 @@ namespace App\Service\Category\Acl;
 
 use App\ServiceInterface\Acl\AclRepositoryInterface;
 use App\ServiceInterface\Category\CategoryAclPolicyServiceInterface;
+
 /**
  * Provides the category acl policy service application service.
  */
 final class CategoryAclPolicyService implements CategoryAclPolicyServiceInterface
 {
     private AclRepositoryInterface $repo;
+
     /**
      * Initializes the category acl policy service service collaborators.
      */

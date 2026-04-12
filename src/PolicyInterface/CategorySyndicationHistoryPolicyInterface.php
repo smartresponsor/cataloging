@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+
 /**
  * Defines the contract for category syndication history policy.
  */

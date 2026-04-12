@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category completeness report.
  */
@@ -13,6 +14,7 @@ interface CategoryCompletenessReportInterface
      * Handles the score workflow.
      */
     public function score(): int;
+
     /**
      * Determines whether the complete condition is satisfied.
      */

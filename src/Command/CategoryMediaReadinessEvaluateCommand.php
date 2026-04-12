@@ -57,45 +57,53 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $categoryId = $this->argumentString($input, 'categoryId');
-        $actorId = $this->argumentString($input, 'actorId');
-        $reason = $this->argumentString($input, 'reason');
-        $destinationJson = $input->getOption('destination');
-        $destinationId = $this->optionString($input, 'destination-id', 'cli-preview-destination');
-        $format = $this->optionString($input, 'format', 'json');
+        try {
+            $categoryId = $this->argumentString($input, 'categoryId');
+            $actorId = $this->argumentString($input, 'actorId');
+            $reason = $this->argumentString($input, 'reason');
+            $destinationJson = $input->getOption('destination');
+            $destinationId = $this->optionString($input, 'destination-id', 'cli-preview-destination');
+            $format = $this->optionString($input, 'format', 'json');
 
-        /** @var array<string, mixed> $settings */
-        $settings = [];
-        if (is_string($destinationJson) && '' !== $destinationJson) {
-            $decoded = json_decode($destinationJson, true, 512, JSON_THROW_ON_ERROR);
-            $settings = is_array($decoded) ? $decoded : [];
+            /** @var array<string, mixed> $settings */
+            $settings = [];
+            if (is_string($destinationJson) && '' !== $destinationJson) {
+                $decoded = json_decode($destinationJson, true, 512, JSON_THROW_ON_ERROR);
+                $settings = is_array($decoded) ? $decoded : [];
+            }
+
+            if (
+                'cli-preview-destination' === $destinationId
+                && isset($settings['destinationId'])
+                && is_string($settings['destinationId'])
+                && '' !== trim($settings['destinationId'])
+            ) {
+                $destinationId = trim($settings['destinationId']);
+            }
+
+            $report = $this->service->evaluate(
+                new CategoryDestinationMediaEvaluationRequest(
+                    $destinationId,
+                    $categoryId,
+                    new CatalogAuditContext($actorId, $reason),
+                ),
+            );
+            $payload = method_exists($report, 'payload')
+                ? $report->payload()
+                : (method_exists($report, 'toArray') ? $report->toArray() : ['result' => 'ok']);
+
+            if ('ndjson' === $format) {
+                return $this->writeStructuredRows($output, [$payload], 'ndjson');
+            }
+
+            return $this->writeJson($output, $payload);
+        } catch (\Throwable $exception) {
+            $output->writeln((string) json_encode([
+                'ok' => false,
+                'error' => $exception->getMessage(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+            return self::FAILURE;
         }
-
-        if (
-            'cli-preview-destination' === $destinationId
-            && isset($settings['destinationId'])
-            && is_string($settings['destinationId'])
-            && '' !== trim($settings['destinationId'])
-        ) {
-            $destinationId = trim($settings['destinationId']);
-        }
-
-        $report = $this->service->evaluate(
-            new CategoryDestinationMediaEvaluationRequest(
-                $destinationId,
-                $categoryId,
-                new CatalogAuditContext($actorId, $reason),
-            ),
-        );
-        $payload = method_exists($report, 'payload')
-            ? $report->payload()
-            : (method_exists($report, 'toArray') ? $report->toArray() : ['result' => 'ok']);
-
-        if ('ndjson' === $format) {
-            return $this->writeStructuredRows($output, [$payload], 'ndjson');
-        }
-
-        return $this->writeJson($output, $payload);
     }
 }

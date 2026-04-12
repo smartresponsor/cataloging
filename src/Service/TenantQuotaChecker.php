@@ -24,8 +24,10 @@ final readonly class TenantQuotaChecker
      *
      * @return list<string>
      */
-    public function check(string $tenant, array $stats): array
+    public function check(string $tenantId, array $stats): array
     {
+        unset($tenantId);
+
         $violations = [];
         if (($stats['count'] ?? 0) > ($this->limits['max_categories'] ?? 500)) {
             $violations[] = 'max_categories';

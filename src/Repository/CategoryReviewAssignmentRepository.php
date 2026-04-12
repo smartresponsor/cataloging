@@ -7,13 +7,16 @@ namespace App\Repository;
 
 use App\EntityInterface\CategoryReviewAssignmentInterface;
 use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+
 /**
  * Provides repository services for category review assignment repository.
  */
+/** @noinspection PhpCSFixerValidationInspection */
 final class CategoryReviewAssignmentRepository implements CategoryReviewAssignmentRepositoryInterface
 {
     /** @var array<string,CategoryReviewAssignmentInterface> */
     private array $assignments = [];
+
     /**
      * Handles the save workflow.
      */
@@ -21,6 +24,7 @@ final class CategoryReviewAssignmentRepository implements CategoryReviewAssignme
     {
         $this->assignments[$assignment->requestId()] = $assignment;
     }
+
     /**
      * Handles the find by request id workflow.
      */
@@ -28,6 +32,7 @@ final class CategoryReviewAssignmentRepository implements CategoryReviewAssignme
     {
         return $this->assignments[$requestId] ?? null;
     }
+
     /**
      * Handles the find by reviewer workflow.
      */
@@ -35,10 +40,10 @@ final class CategoryReviewAssignmentRepository implements CategoryReviewAssignme
     {
         return array_values(array_filter(
             $this->assignments,
-            static fn (CategoryReviewAssignmentInterface $assignment): bool =>
-                $assignment->assignedReviewer() === $reviewer,
+            static fn (CategoryReviewAssignmentInterface $assignment): bool => $assignment->assignedReviewer() === $reviewer,
         ));
     }
+
     /**
      * Handles the find by category id workflow.
      */
@@ -46,8 +51,7 @@ final class CategoryReviewAssignmentRepository implements CategoryReviewAssignme
     {
         return array_values(array_filter(
             $this->assignments,
-            static fn (CategoryReviewAssignmentInterface $assignment): bool =>
-                $assignment->categoryId() === $categoryId,
+            static fn (CategoryReviewAssignmentInterface $assignment): bool => $assignment->categoryId() === $categoryId,
         ));
     }
 }

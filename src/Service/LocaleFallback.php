@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the locale fallback application service.
  */
@@ -17,17 +18,17 @@ final class LocaleFallback
     public function apply(array $categories, string $preferred, string $fallback = 'en'): array
     {
         $filtered = [];
-        foreach ($categories as $c) {
-            if ($this->localeValue($c, $fallback) === $preferred) {
-                $filtered[] = $c;
+        foreach ($categories as $categoryRow) {
+            if ($this->localeValue($categoryRow, $fallback) === $preferred) {
+                $filtered[] = $categoryRow;
             }
         }
         if ([] !== $filtered) {
             return $filtered;
         }
-        foreach ($categories as $c) {
-            if ($this->localeValue($c, $fallback) === $fallback) {
-                $filtered[] = $c;
+        foreach ($categories as $categoryRow) {
+            if ($this->localeValue($categoryRow, $fallback) === $fallback) {
+                $filtered[] = $categoryRow;
             }
         }
 

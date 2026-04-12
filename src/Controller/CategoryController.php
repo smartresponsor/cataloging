@@ -7,6 +7,7 @@ namespace App\Controller;
 
 use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\Service\MetaPayloadNormalizer;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
 use App\ValueObject\CategoryCreateRequest;
@@ -18,11 +19,13 @@ use App\ValueObject\CategoryTreeRequest;
 /**
  * Handles the category controller application flow.
  */
+/** @noinspection DuplicatedCode */
 final class CategoryController implements CategoryControllerInterface
 {
     private CatalogCategoryService $service;
     private CategoryRepositoryInterface $repo;
     private CategoryBreadcrumbBuilderInterface $breadcrumb;
+    private MetaPayloadNormalizer $metaPayloadNormalizer;
 
     /**
      * Initializes the category controller service collaborators.
@@ -31,10 +34,12 @@ final class CategoryController implements CategoryControllerInterface
         CatalogCategoryService $service,
         CategoryRepositoryInterface $repo,
         CategoryBreadcrumbBuilderInterface $breadcrumb,
+        MetaPayloadNormalizer $metaPayloadNormalizer,
     ) {
         $this->service = $service;
         $this->repo = $repo;
         $this->breadcrumb = $breadcrumb;
+        $this->metaPayloadNormalizer = $metaPayloadNormalizer;
     }
 
     /** @return list<array<string, mixed>> */
@@ -77,7 +82,7 @@ final class CategoryController implements CategoryControllerInterface
             $this->nullableStringFromMap($body, 'parentId'),
             $this->stringMap($body, 'name'),
             $this->stringMap($body, 'slug'),
-            $this->metaMap($body, 'meta'),
+            $this->metaPayload($body),
         ));
     }
 
@@ -92,10 +97,14 @@ final class CategoryController implements CategoryControllerInterface
     {
         $actorId = $this->requiredString($auth, 'actorId');
         $categoryId = $this->requiredString($route, 'id');
-        $parentId = $this->nullableStringFromMap($body, 'parentId');
         $order = $this->intFromMap($body, 'order');
 
-        return $this->service->move(new CategoryServiceMoveRequest($actorId, $categoryId, $parentId, $order));
+        return $this->service->move(new CategoryServiceMoveRequest(
+            $actorId,
+            $categoryId,
+            $this->nullableStringFromMap($body, 'parentId'),
+            $order,
+        ));
     }
 
     /**
@@ -105,13 +114,7 @@ final class CategoryController implements CategoryControllerInterface
      */
     public function attach(array $body, array $route, array $auth): void
     {
-        $this->service->attach(new CategoryLinkRequest(
-            $this->requiredString($auth, 'actorId'),
-            $this->requiredString($route, 'id'),
-            $this->requiredString($body, 'targetDomain'),
-            $this->requiredString($body, 'targetClass'),
-            $this->requiredString($body, 'targetId'),
-        ));
+        $this->service->attach($this->linkRequest($body, $route, $auth));
     }
 
     /**
@@ -121,13 +124,23 @@ final class CategoryController implements CategoryControllerInterface
      */
     public function detach(array $body, array $route, array $auth): void
     {
-        $this->service->detach(new CategoryLinkRequest(
+        $this->service->detach($this->linkRequest($body, $route, $auth));
+    }
+
+    /**
+     * @param array<string, mixed> $body
+     * @param array<string, mixed> $route
+     * @param array<string, mixed> $auth
+     */
+    private function linkRequest(array $body, array $route, array $auth): CategoryLinkRequest
+    {
+        return new CategoryLinkRequest(
             $this->requiredString($auth, 'actorId'),
             $this->requiredString($route, 'id'),
             $this->requiredString($body, 'targetDomain'),
             $this->requiredString($body, 'targetClass'),
             $this->requiredString($body, 'targetId'),
-        ));
+        );
     }
 
     /** @param array<string, mixed> $map */
@@ -191,49 +204,9 @@ final class CategoryController implements CategoryControllerInterface
      *
      * @return array<string, array<string, bool|float|int|string|null>|bool|float|int|string|null>
      */
-    private function metaMap(array $map, string $key): array
+    private function metaPayload(array $map): array
     {
-        $value = $map[$key] ?? [];
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $normalized = [];
-        foreach ($value as $entryKey => $entryValue) {
-            if (!is_string($entryKey)) {
-                continue;
-            }
-            if (is_array($entryValue)) {
-                $nested = [];
-                foreach ($entryValue as $nestedKey => $nestedValue) {
-                    if (!is_string($nestedKey)) {
-                        continue;
-                    }
-                    if (
-                        is_bool($nestedValue)
-                        || is_float($nestedValue)
-                        || is_int($nestedValue)
-                        || is_string($nestedValue)
-                        || null === $nestedValue
-                    ) {
-                        $nested[$nestedKey] = $nestedValue;
-                    }
-                }
-                $normalized[$entryKey] = $nested;
-                continue;
-            }
-            if (
-                is_bool($entryValue)
-                || is_float($entryValue)
-                || is_int($entryValue)
-                || is_string($entryValue)
-                || null === $entryValue
-            ) {
-                $normalized[$entryKey] = $entryValue;
-            }
-        }
-
-        return $normalized;
+        return $this->metaPayloadNormalizer->normalize($map['meta'] ?? []);
     }
 
     /**

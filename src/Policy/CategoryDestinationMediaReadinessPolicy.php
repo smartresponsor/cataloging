@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
+use App\Service\CategoryMediaInputNormalizer;
 use App\ValueObject\CategoryDestinationMediaReadinessContext;
 use App\ValueObject\CategoryDestinationMediaReadinessReport;
 use App\ValueObject\CategoryDestinationMediaReadinessState;
@@ -14,6 +15,7 @@ use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
 /**
  * Provides the category destination media readiness policy implementation.
  */
+/** @noinspection PhpUnusedLocalVariableInspection */
 final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinationMediaReadinessPolicyInterface
 {
     public function buildReport(
@@ -26,9 +28,9 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
         $warnings = $state->warnings();
         $matchedBindingIds = $state->matchedBindingIds();
 
-        $channel = $this->stringValue($destinationSettings['channel'] ?? null);
-        $locale = $this->stringValue($destinationSettings['locale'] ?? null);
-        $requiredRoles = $this->stringList($destinationSettings['requiredMediaRoles'] ?? null);
+        $channel = CategoryMediaInputNormalizer::stringValue($destinationSettings['channel'] ?? null);
+        $locale = CategoryMediaInputNormalizer::stringValue($destinationSettings['locale'] ?? null);
+        $requiredRoles = CategoryMediaInputNormalizer::stringList($destinationSettings['requiredMediaRoles'] ?? null);
 
         $checks['destinationChannelMediaReady'] =
             '' === $channel
@@ -78,44 +80,5 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
             $matchedBindingIds,
             $checks['destinationMediaPublishable'],
         );
-    }
-
-    private function stringValue(mixed $value): string
-    {
-        return is_scalar($value) ? trim((string) $value) : '';
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        $items = [];
-        if (is_array($value)) {
-            $items = $value;
-        } elseif (is_string($value)) {
-            $decoded = json_decode($value, true);
-            if (is_array($decoded)) {
-                $items = $decoded;
-            } else {
-                $items = preg_split('/\s*,\s*/', $value) ?: [];
-            }
-        } elseif (is_scalar($value)) {
-            $items = [(string) $value];
-        } else {
-            return [];
-        }
-
-        $result = [];
-        foreach ($items as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-            $normalized = trim((string) $item);
-            if ('' === $normalized) {
-                continue;
-            }
-            $result[] = $normalized;
-        }
-
-        return array_values(array_unique($result));
     }
 }

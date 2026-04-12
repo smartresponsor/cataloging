@@ -4,12 +4,14 @@
 declare(strict_types=1);
 
 namespace App\Observability;
+
 /**
  * Provides the catalog projection metrics implementation.
  */
 final class CatalogProjectionMetrics
 {
     private int $lag = 0;
+
     /**
      * Updates the lag value.
      */
@@ -17,6 +19,7 @@ final class CatalogProjectionMetrics
     {
         $this->lag = $seconds;
     }
+
     /**
      * Returns the lag value.
      */

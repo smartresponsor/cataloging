@@ -20,6 +20,6 @@ final class SseBroadcaster
      */
     public function format(string $event, array $data): string
     {
-        return "event: {$event}\n".'data: '.json_encode($data, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n\n";
+        return 'event: '.$event."\n".'data: '.json_encode($data, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n\n";
     }
 }

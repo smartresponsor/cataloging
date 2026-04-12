@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Event;
+
 /**
  * Represents the category moved application event.
  */
@@ -14,6 +15,7 @@ final class CategoryMoved
     public string $newParentId;
     public string $treeId;
     public int $changedCount;
+
     /**
      * Initializes the category moved service collaborators.
      */
@@ -23,8 +25,7 @@ final class CategoryMoved
         string $newParentId,
         string $treeId,
         int $changedCount,
-    )
-    {
+    ) {
         $this->nodeId = $nodeId;
         $this->oldParentId = $oldParentId;
         $this->newParentId = $newParentId;

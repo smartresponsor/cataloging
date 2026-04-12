@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
+use App\Service\CategoryMediaInputNormalizer;
 use App\ValueObject\CategoryDestinationMediaPolicyPreference;
 use App\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
 
@@ -36,11 +37,11 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
         ) ?: (
             $fallbackPayload['publishable'] ?? false
         ));
-        $strictMissing = $this->normalizeList($strictPayload['requiredMissing'] ?? null);
-        $fallbackMissing = $this->normalizeList($fallbackPayload['requiredMissing'] ?? null);
-        $warnings = $this->normalizeList(array_merge(
-            $this->normalizeList($strictPayload['warnings'] ?? null),
-            $this->normalizeList($fallbackPayload['warnings'] ?? null),
+        $strictMissing = CategoryMediaInputNormalizer::stringList($strictPayload['requiredMissing'] ?? null);
+        $fallbackMissing = CategoryMediaInputNormalizer::stringList($fallbackPayload['requiredMissing'] ?? null);
+        $warnings = CategoryMediaInputNormalizer::stringList(array_merge(
+            CategoryMediaInputNormalizer::stringList($strictPayload['warnings'] ?? null),
+            CategoryMediaInputNormalizer::stringList($fallbackPayload['warnings'] ?? null),
         ));
         $fallbackChecks = is_array($fallbackPayload['checks'] ?? null) ? $fallbackPayload['checks'] : [];
         $fallbackUsed = (bool) ($fallbackChecks['fallbackUsed'] ?? false);
@@ -52,8 +53,6 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
             'strictPublishable' => $strictPublishable,
             'fallbackPublishable' => $fallbackPublishable,
             'fallbackUsed' => $fallbackUsed,
-            'resolvedPublishable' => false,
-            'fallbackAcceptedByPolicy' => false,
         ];
 
         $requiredMissing = $strictMissing;
@@ -78,6 +77,7 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
             $warnings[] = 'destination_media_policy_strict_exact_rejected_fallback';
         }
 
+        $checks['fallbackAcceptedByPolicy'] = $checks['fallbackAcceptedByPolicy'] ?? false;
         $checks['resolvedPublishable'] = $resolvedPublishable;
 
         return new CategoryDestinationMediaPolicyPreference(
@@ -90,26 +90,5 @@ final class CategoryDestinationMediaPolicyPreferencePolicy implements CategoryDe
             $resolvedPublishable,
             $fallbackUsed,
         );
-    }
-
-    /** @return list<string> */
-    private function normalizeList(mixed $values): array
-    {
-        if (!is_array($values)) {
-            return [];
-        }
-
-        $normalized = [];
-        foreach ($values as $value) {
-            if (!is_scalar($value)) {
-                continue;
-            }
-            $item = trim((string) $value);
-            if ('' !== $item) {
-                $normalized[] = $item;
-            }
-        }
-
-        return array_values(array_unique($normalized));
     }
 }

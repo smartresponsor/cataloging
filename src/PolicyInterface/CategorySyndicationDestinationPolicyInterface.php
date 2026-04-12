@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\PolicyInterface;
+
 /**
  * Defines the contract for category syndication destination policy.
  */
@@ -13,6 +14,7 @@ interface CategorySyndicationDestinationPolicyInterface
      * Handles the assert destination type workflow.
      */
     public function assertDestinationType(string $destinationType): void;
+
     /**
      * Handles the assert delivery mode workflow.
      */

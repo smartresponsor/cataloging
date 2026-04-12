@@ -10,16 +10,16 @@ namespace App\Service;
  */
 final class TreeOperationConcurrency
 {
-    private \PDO $pdo;
-    private TreeLock $lock;
+    private \PDO $databaseConnection;
+    private TreeLock $treeLock;
 
     /**
      * Initializes the tree operation concurrency service collaborators.
      */
-    public function __construct(\PDO $pdo, TreeLock $lock)
+    public function __construct(\PDO $databaseConnection, TreeLock $treeLock)
     {
-        $this->pdo = $pdo;
-        $this->lock = $lock;
+        $this->databaseConnection = $databaseConnection;
+        $this->treeLock = $treeLock;
     }
 
     /**
@@ -31,48 +31,48 @@ final class TreeOperationConcurrency
             throw new \InvalidArgumentException('Node cannot be parent of itself');
         }
 
-        $this->lock->acquire('category_tree');
+        $this->treeLock->acquire('category_tree');
         try {
-            $this->pdo->beginTransaction();
+            $this->databaseConnection->beginTransaction();
 
-            $p = $this->pdo->prepare('SELECT path FROM category_entity WHERE id = :id FOR UPDATE');
-            if (false === $p) {
+            $nodePathStatement = $this->databaseConnection->prepare('SELECT path FROM category_entity WHERE id = :id FOR UPDATE');
+            if (false === $nodePathStatement) {
                 throw new \RuntimeException('Failed to prepare node-path query');
             }
-            $p->bindValue(':id', $nodeId);
-            $p->execute();
-            $rowNode = $p->fetch(\PDO::FETCH_ASSOC);
-            $path = $this->pathFromFetch($rowNode);
+            $nodePathStatement->bindValue(':id', $nodeId);
+            $nodePathStatement->execute();
+            $rowNode = $nodePathStatement->fetch(\PDO::FETCH_ASSOC);
+            $nodePath = $this->pathFromFetch($rowNode);
 
             if (null !== $newParentId) {
-                $pp = $this->pdo->prepare('SELECT path FROM category_entity WHERE id = :pid FOR UPDATE');
-                if (false === $pp) {
+                $parentPathStatement = $this->databaseConnection->prepare('SELECT path FROM category_entity WHERE id = :parentId FOR UPDATE');
+                if (false === $parentPathStatement) {
                     throw new \RuntimeException('Failed to prepare parent-path query');
                 }
-                $pp->bindValue(':pid', $newParentId);
-                $pp->execute();
-                $rowParent = $pp->fetch(\PDO::FETCH_ASSOC);
-                $pPath = $this->pathFromFetch($rowParent);
-                if ('' !== $pPath && '' !== $path && str_starts_with($pPath, $path)) {
+                $parentPathStatement->bindValue(':parentId', $newParentId);
+                $parentPathStatement->execute();
+                $rowParent = $parentPathStatement->fetch(\PDO::FETCH_ASSOC);
+                $parentPath = $this->pathFromFetch($rowParent);
+                if ('' !== $parentPath && '' !== $nodePath && str_starts_with($parentPath, $nodePath)) {
                     throw new \InvalidArgumentException('Cycle detected');
                 }
             }
 
-            $this->pdo->commit();
-        } catch (\Throwable $e) {
-            error_log('[TreeOperationConcurrency] '.$e->getMessage());
+            $this->databaseConnection->commit();
+        } catch (\Throwable $exception) {
+            error_log('[TreeOperationConcurrency] '.$exception->getMessage());
 
-            if ($this->pdo->inTransaction()) {
-                $this->pdo->rollBack();
+            if ($this->databaseConnection->inTransaction()) {
+                $this->databaseConnection->rollBack();
             }
 
-            if ($e instanceof \InvalidArgumentException || $e instanceof \RuntimeException) {
-                throw $e;
+            if ($exception instanceof \InvalidArgumentException || $exception instanceof \RuntimeException) {
+                throw $exception;
             }
 
-            throw new \RuntimeException('Tree move failed: '.$e->getMessage(), 0, $e);
+            throw new \RuntimeException('Tree move failed: '.$exception->getMessage(), 0, $exception);
         } finally {
-            $this->lock->release('category_tree');
+            $this->treeLock->release('category_tree');
         }
     }
 

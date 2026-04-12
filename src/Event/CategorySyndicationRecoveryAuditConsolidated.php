@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
 /**
  * Represents the category syndication recovery audit consolidated application event.
  */
-final class CategorySyndicationRecoveryAuditConsolidated implements CategorySyndicationRecoveryAuditConsolidatedInterface
+final readonly class CategorySyndicationRecoveryAuditConsolidated implements CategorySyndicationRecoveryAuditConsolidatedInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

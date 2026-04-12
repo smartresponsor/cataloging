@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the redirect rule application service.
  */
@@ -12,6 +13,7 @@ final class RedirectRule
     private string $from;
     private string $to;
     private int $status;
+
     /**
      * Initializes the redirect rule service collaborators.
      */
@@ -21,6 +23,7 @@ final class RedirectRule
         $this->to = $to;
         $this->status = $status;
     }
+
     /**
      * Handles the from workflow.
      */
@@ -28,6 +31,7 @@ final class RedirectRule
     {
         return $this->from;
     }
+
     /**
      * Handles the to workflow.
      */
@@ -35,6 +39,7 @@ final class RedirectRule
     {
         return $this->to;
     }
+
     /**
      * Handles the status workflow.
      */

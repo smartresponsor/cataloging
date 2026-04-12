@@ -10,12 +10,12 @@ use App\EventInterface\CategorySyndicationPolicyAwarePackageGatedInterface;
 /**
  * Represents the category syndication policy aware package gated application event.
  */
-final class CategorySyndicationPolicyAwarePackageGated implements CategorySyndicationPolicyAwarePackageGatedInterface
+final readonly class CategorySyndicationPolicyAwarePackageGated implements CategorySyndicationPolicyAwarePackageGatedInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

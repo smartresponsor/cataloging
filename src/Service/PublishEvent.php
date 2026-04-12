@@ -10,12 +10,14 @@ Author: Oleksandr Tishchenко <dev@highhopesamerica.com>
 */
 
 namespace App\Service;
+
 /**
  * Provides the publish event application service.
  */
 final class PublishEvent
 {
     private string $categoryId;
+
     /**
      * Initializes the publish event service collaborators.
      */
@@ -23,6 +25,7 @@ final class PublishEvent
     {
         $this->categoryId = $categoryId;
     }
+
     /**
      * Handles the category id workflow.
      */

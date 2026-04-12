@@ -8,6 +8,7 @@ namespace App\Policy;
 use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
 use App\ValueObject\CategoryPublicationQualityProfile;
 use App\ValueObjectInterface\CategoryPublicationQualityProfileInterface;
+
 /**
  * Provides the category publication quality policy implementation.
  */
@@ -20,8 +21,7 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
         int $score,
         array $publicationChecks,
         array $checks,
-    ): CategoryPublicationQualityProfileInterface
-    {
+    ): CategoryPublicationQualityProfileInterface {
         $normalizedPublicationChecks = [];
         foreach ($publicationChecks as $name => $value) {
             $normalizedPublicationChecks[(string) $name] = (bool) $value;

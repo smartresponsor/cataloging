@@ -15,6 +15,7 @@ use App\ValueObject\CategoryMutationMoveRequest;
 use App\ValueObject\CategoryMutationPublishRequest;
 use App\ValueObject\CategoryProjectionCriteria;
 use App\ValueObject\CategoryReadScopeRequest;
+use Doctrine\DBAL\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,17 +26,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Handles the category api controller application flow.
  */
-final class CategoryApiController
+final readonly class CategoryApiController
 {
     /**
      * Initializes the category api controller service collaborators.
      */
     public function __construct(
-        private readonly CategoryMutationServiceInterface $categoryMutationService,
-        private readonly CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
-        private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
-        private readonly CategoryReadScopeServiceInterface $categoryReadScopeService,
-        private readonly Security $security,
+        private CategoryMutationServiceInterface $categoryMutationService,
+        private CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
+        private CategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private CategoryReadScopeServiceInterface $categoryReadScopeService,
+        private Security $security,
     ) {
     }
 
@@ -59,6 +60,8 @@ final class CategoryApiController
             return new JsonResponse(['data' => $this->categoryProjectionReadService->tree($criteria)]);
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
+        } catch (Exception) {
+            return new JsonResponse(['error' => 'Unable to read category tree.'], 500);
         }
     }
 
@@ -100,6 +103,8 @@ final class CategoryApiController
                 ['error' => $exception->getMessage()],
                 str_contains($exception->getMessage(), 'was not found') ? 404 : 409,
             );
+        } catch (Exception) {
+            return new JsonResponse(['error' => 'Unable to move category.'], 500);
         }
     }
 
@@ -139,6 +144,8 @@ final class CategoryApiController
                 ['error' => $exception->getMessage()],
                 str_contains($exception->getMessage(), 'was not found') ? 404 : 409,
             );
+        } catch (Exception) {
+            return new JsonResponse(['error' => 'Unable to publish category.'], 500);
         }
     }
 

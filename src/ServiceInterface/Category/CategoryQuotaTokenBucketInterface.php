@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category;
+
 /**
  * Defines the contract for category quota token bucket.
  */

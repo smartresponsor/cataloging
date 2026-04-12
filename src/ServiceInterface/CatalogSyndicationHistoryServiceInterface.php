@@ -8,6 +8,7 @@ namespace App\ServiceInterface;
 use App\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
 use App\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
 use App\ValueObject\CategorySyndicationHistoryRequest;
+
 /**
  * Defines the contract for catalog syndication history service.
  */

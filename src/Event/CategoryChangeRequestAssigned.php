@@ -10,19 +10,19 @@ use App\EventInterface\CategoryChangeRequestAssignedInterface;
 /**
  * Represents the category change request assigned application event.
  */
-final class CategoryChangeRequestAssigned implements CategoryChangeRequestAssignedInterface
+final readonly class CategoryChangeRequestAssigned implements CategoryChangeRequestAssignedInterface
 {
     /**
      * Initializes the category change request assigned service collaborators.
      */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $assignedReviewer,
-        private readonly string $assignedBy,
-        private readonly string $priority,
-        private readonly \DateTimeImmutable $assignedAt,
-        private readonly ?\DateTimeImmutable $dueAt,
+        private string $requestId,
+        private string $categoryId,
+        private string $assignedReviewer,
+        private string $assignedBy,
+        private string $priority,
+        private \DateTimeImmutable $assignedAt,
+        private ?\DateTimeImmutable $dueAt,
     ) {
     }
 

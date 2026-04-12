@@ -34,7 +34,13 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
     ) {
     }
 
-    /** @return array<string,mixed>|null */
+    /**
+     * @param CategoryGraphqlNodeRequest $request
+     *
+     * @return array<string,mixed>|null
+     *
+     * @throws Exception
+     */
     public function category(CategoryGraphqlNodeRequest $request): ?array
     {
         $id = $request->id();
@@ -152,7 +158,7 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
 
         return [
             'id' => $this->stringValue($row, 'id'),
-            'parentId' => $this->nullableStringValue($row, 'parent_id'),
+            'parentId' => $this->parentIdValue($row),
             'slug' => $this->stringValue($row, 'slug'),
             'name' => $this->stringValue($row, 'name'),
             'locale' => $this->stringValue($row, 'locale', 'en'),
@@ -186,12 +192,13 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
     }
 
     /** @param array<string,mixed> $input */
-    private function nullableStringValue(array $input, string $key): ?string
+    private function parentIdValue(array $input): ?string
     {
-        if (!array_key_exists($key, $input) || null === $input[$key]) {
+        if (!array_key_exists('parent_id', $input) || null === $input['parent_id']) {
             return null;
         }
-        $value = $input[$key];
+
+        $value = $input['parent_id'];
 
         return is_scalar($value) ? trim((string) $value) : null;
     }

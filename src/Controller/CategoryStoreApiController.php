@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Service\ChannelFilter;
 use App\Service\ReadOptimizer;
 use App\ValueObject\CategoryProjectionCriteria;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,6 +29,13 @@ final readonly class CategoryStoreApiController
 
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     *
+     * @throws Exception
+     * @throws \JsonException
      */
     #[Route('/api/category/store', name: 'api_category_store', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse

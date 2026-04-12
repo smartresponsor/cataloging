@@ -19,14 +19,14 @@ use App\ValueObject\CategorySyndicationRecoveryAuditSummary;
 /**
  * Provides the catalog syndication history service application service.
  */
-final class CatalogSyndicationHistoryService implements CatalogSyndicationHistoryServiceInterface
+final readonly class CatalogSyndicationHistoryService implements CatalogSyndicationHistoryServiceInterface
 {
     /**
      * Initializes the catalog syndication history service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationHistoryPolicyInterface $historyPolicy,
-        private readonly CategorySyndicationRetryPolicyInterface $retryPolicy,
+        private CategorySyndicationHistoryPolicyInterface $historyPolicy,
+        private CategorySyndicationRetryPolicyInterface $retryPolicy,
     ) {
     }
 

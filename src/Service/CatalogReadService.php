@@ -24,12 +24,11 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     public function __construct(
         private CacheInterface $cache,
         private CatalogRepository $catalogRepository,
+        private CatalogCategoryRowNormalizer $rowNormalizer,
     ) {
     }
 
     /**
-     * @param string $id
-     *
      * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
      *
      * @throws Exception
@@ -40,8 +39,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     }
 
     /**
-     * @param string $id
-     *
      * @return array{
      *     id:string,
      *     name:string,
@@ -74,13 +71,11 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
 
         return [
             ...$node,
-            'children' => $this->normalizeCategories($descendants),
+            'children' => $this->rowNormalizer->normalize($descendants),
         ];
     }
 
     /**
-     * @param string $id
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
      * @throws Exception
@@ -98,12 +93,10 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
             fn (): array => $this->catalogRepository->findChildrenRowsByPath($node['path']),
         );
 
-        return $this->normalizeCategories($children);
+        return $this->rowNormalizer->normalize($children);
     }
 
     /**
-     * @param string $id
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
      * @throws Exception
@@ -115,8 +108,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     }
 
     /**
-     * @param string $id
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
      * @throws Exception
@@ -134,13 +125,10 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
             fn (): array => $this->catalogRepository->findAncestorRowsByPath($node['path']),
         );
 
-        return $this->normalizeCategories($ancestors);
+        return $this->rowNormalizer->normalize($ancestors);
     }
 
     /**
-     * @param int    $first
-     * @param string $after
-     *
      * @return array{item:list<array{id:string,name:string,slug:string,path:string,depth:int}>,after:string}
      *
      * @throws Exception
@@ -148,7 +136,7 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     public function list(CategoryCatalogReadPageRequest $request): array
     {
         $rows = $this->catalogRepository->findPageRows($request->first(), $request->after());
-        $normalized = $this->normalizeCategories($rows);
+        $normalized = $this->rowNormalizer->normalize($rows);
 
         $next = '';
         if (count($normalized) === $request->first()) {
@@ -163,8 +151,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     }
 
     /**
-     * @param string $id
-     *
      * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
      *
      * @throws Exception
@@ -177,28 +163,5 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
         }
 
         return $this->catalogRepository->findNodeRowById($normalizedId);
-    }
-
-    /** @param iterable<array<string,mixed>> $categories
-     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
-     */
-    private function normalizeCategories(iterable $categories): array
-    {
-        $result = [];
-        foreach ($categories as $category) {
-            if (!is_array($category)) {
-                continue;
-            }
-
-            $result[] = [
-                'id' => is_scalar($category['id'] ?? null) ? (string) $category['id'] : '',
-                'name' => is_scalar($category['name'] ?? null) ? (string) $category['name'] : '',
-                'slug' => is_scalar($category['slug'] ?? null) ? (string) $category['slug'] : '',
-                'path' => is_scalar($category['path'] ?? null) ? (string) $category['path'] : '',
-                'depth' => is_numeric($category['depth'] ?? null) ? (int) $category['depth'] : 0,
-            ];
-        }
-
-        return $result;
     }
 }

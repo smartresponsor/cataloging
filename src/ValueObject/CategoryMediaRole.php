@@ -14,9 +14,9 @@ final class CategoryMediaRole implements CategoryMediaRoleInterface
 {
     private const string PRIMARY = 'primary';
     private const string BANNER = 'banner';
-    private const string ICON = 'icon';
+    private const string ICON_ROLE = 'icon';
     private const string THUMBNAIL = 'thumbnail';
-    private const string HERO = 'hero';
+    private const string HERO_ROLE = 'hero';
 
     private function __construct(private readonly string $value)
     {
@@ -34,7 +34,7 @@ final class CategoryMediaRole implements CategoryMediaRoleInterface
 
     public static function icon(): self
     {
-        return new self(self::ICON);
+        return new self(self::ICON_ROLE);
     }
 
     public static function thumbnail(): self
@@ -44,7 +44,7 @@ final class CategoryMediaRole implements CategoryMediaRoleInterface
 
     public static function hero(): self
     {
-        return new self(self::HERO);
+        return new self(self::HERO_ROLE);
     }
 
     public static function fromString(string $value): self
@@ -52,9 +52,9 @@ final class CategoryMediaRole implements CategoryMediaRoleInterface
         return match ($value) {
             self::PRIMARY => self::primary(),
             self::BANNER => self::banner(),
-            self::ICON => self::icon(),
+            self::ICON_ROLE => self::icon(),
             self::THUMBNAIL => self::thumbnail(),
-            self::HERO => self::hero(),
+            self::HERO_ROLE => self::hero(),
             default => throw new \InvalidArgumentException(sprintf('Unsupported category media role "%s".', $value)),
         };
     }

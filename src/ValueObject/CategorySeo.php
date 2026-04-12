@@ -10,6 +10,7 @@ final class CategorySeo
 {
     private string $fullSlug;
     private string $title;
+
     /**
      * Initializes the category seo service collaborators.
      */
@@ -18,6 +19,7 @@ final class CategorySeo
         $this->fullSlug = $fullSlug;
         $this->title = $title;
     }
+
     /**
      * Handles the full slug workflow.
      */
@@ -25,6 +27,7 @@ final class CategorySeo
     {
         return $this->fullSlug;
     }
+
     /**
      * Handles the title workflow.
      */

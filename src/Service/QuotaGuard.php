@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the quota guard application service.
  */
@@ -12,6 +13,7 @@ final class QuotaGuard
     private int $limit;
     private int $count = 0;
     private int $windowStart;
+
     /**
      * Initializes the quota guard service collaborators.
      */
@@ -20,6 +22,7 @@ final class QuotaGuard
         $this->limit = $limitPerMinute;
         $this->windowStart = time();
     }
+
     /**
      * Handles the allow workflow.
      */

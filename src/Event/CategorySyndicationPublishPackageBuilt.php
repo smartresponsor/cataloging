@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
 /**
  * Represents the category syndication publish package built application event.
  */
-final class CategorySyndicationPublishPackageBuilt implements CategorySyndicationPublishPackageBuiltInterface
+final readonly class CategorySyndicationPublishPackageBuilt implements CategorySyndicationPublishPackageBuiltInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

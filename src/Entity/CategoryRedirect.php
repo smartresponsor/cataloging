@@ -8,19 +8,19 @@ namespace App\Entity;
 /** Redirect record from old full slug to new one (SEO). */
 final class CategoryRedirect
 {
-    private string $id;
+    private string $redirectId;
     private string $from;
-    private string $to;
+    private string $targetSlug;
     private \DateTimeImmutable $createdAt;
 
     /**
      * Initializes the category redirect service collaborators.
      */
-    public function __construct(string $id, string $from, string $to, \DateTimeImmutable $createdAt)
+    public function __construct(string $redirectId, string $from, string $targetSlug, \DateTimeImmutable $createdAt)
     {
-        $this->id = $id;
+        $this->redirectId = $redirectId;
         $this->from = $from;
-        $this->to = $to;
+        $this->targetSlug = $targetSlug;
         $this->createdAt = $createdAt;
     }
 
@@ -29,7 +29,7 @@ final class CategoryRedirect
      */
     public function id(): string
     {
-        return $this->id;
+        return $this->redirectId;
     }
 
     /**
@@ -45,7 +45,7 @@ final class CategoryRedirect
      */
     public function to(): string
     {
-        return $this->to;
+        return $this->targetSlug;
     }
 
     /**

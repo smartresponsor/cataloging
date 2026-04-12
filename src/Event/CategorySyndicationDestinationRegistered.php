@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationDestinationRegisteredInterface;
 /**
  * Represents the category syndication destination registered application event.
  */
-final class CategorySyndicationDestinationRegistered implements CategorySyndicationDestinationRegisteredInterface
+final readonly class CategorySyndicationDestinationRegistered implements CategorySyndicationDestinationRegisteredInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

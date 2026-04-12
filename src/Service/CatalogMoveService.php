@@ -11,12 +11,12 @@ use App\ValueObject\CatalogMoveRequest;
 /**
  * Provides the catalog move service application service.
  */
-final class CatalogMoveService implements CategoryMoveInterface
+final readonly class CatalogMoveService implements CategoryMoveInterface
 {
     /**
      * Initializes the catalog move service service collaborators.
      */
-    public function __construct(private readonly \PDO $pg)
+    public function __construct(private \PDO $pg)
     {
     }
 
@@ -108,18 +108,18 @@ final class CatalogMoveService implements CategoryMoveInterface
             }
 
             return [$changed, $redirects];
-        } catch (\Throwable $e) {
-            error_log('[CatalogMoveService] '.$e->getMessage());
+        } catch (\Throwable $exception) {
+            error_log('[CatalogMoveService] '.$exception->getMessage());
 
             if ($this->pg->inTransaction()) {
                 $this->pg->rollBack();
             }
 
-            if ($e instanceof \InvalidArgumentException || $e instanceof \RuntimeException) {
-                throw $e;
+            if ($exception instanceof \InvalidArgumentException || $exception instanceof \RuntimeException) {
+                throw $exception;
             }
 
-            throw new \RuntimeException('Move failed: '.$e->getMessage(), 0, $e);
+            throw new \RuntimeException('Move failed: '.$exception->getMessage(), 0, $exception);
         }
     }
 
@@ -127,7 +127,7 @@ final class CatalogMoveService implements CategoryMoveInterface
     private function fetchNode(string $id): ?array
     {
         $statement = $this->pg->prepare('SELECT id, slug, path, depth FROM category WHERE id = :id LIMIT 1');
-        $statement->bindValue(':id', $id, \PDO::PARAM_STR);
+        $statement->bindValue(':id', $id);
         $statement->execute();
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -143,8 +143,8 @@ final class CatalogMoveService implements CategoryMoveInterface
              WHERE CAST(path AS TEXT) = :path OR CAST(path AS TEXT) LIKE :prefix
              ORDER BY depth ASC, id ASC'
         );
-        $statement->bindValue(':path', $path, \PDO::PARAM_STR);
-        $statement->bindValue(':prefix', $path.'.%', \PDO::PARAM_STR);
+        $statement->bindValue(':path', $path);
+        $statement->bindValue(':prefix', $path.'.%');
         $statement->execute();
 
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -155,9 +155,9 @@ final class CatalogMoveService implements CategoryMoveInterface
     private function updateRow(string $id, string $path, int $depth): void
     {
         $statement = $this->pg->prepare('UPDATE category SET path = :path, depth = :depth WHERE id = :id');
-        $statement->bindValue(':path', $path, \PDO::PARAM_STR);
+        $statement->bindValue(':path', $path);
         $statement->bindValue(':depth', $depth, \PDO::PARAM_INT);
-        $statement->bindValue(':id', $id, \PDO::PARAM_STR);
+        $statement->bindValue(':id', $id);
         $statement->execute();
     }
 

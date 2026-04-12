@@ -7,14 +7,20 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** @noinspection PhpMissingParentCallCommonInspection */
+/**
+ * Category access assignment runtime hardening migration.
+ *
+ * @noinspection PhpClassNamingConventionInspection
+ */
 final class Version20251102082500_category_access_assignment_runtime_hardening extends AbstractMigration
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
         return 'Add durable category access assignment storage for policy-based mutation authorization.';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
         $this->addSql(<<<'SQL'
@@ -35,6 +41,7 @@ CREATE TABLE category_access_assignment (
 SQL);
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE category_access_assignment');

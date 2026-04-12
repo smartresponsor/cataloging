@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Projection;
 
 use App\ProjectionInterface\CategoryProjectionSyncInterface;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -74,7 +75,7 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
                 'workflowState' => $this->stringValue($row['workflow_state'] ?? 'draft'),
                 'published' => $this->boolValue($row['published'] ?? false),
                 'publishedAt' => $publishedAt,
-                'updatedAt' => new \DateTimeImmutable('now')->format('Y-m-d H:i:s'),
+                'updatedAt' => (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => ParameterType::STRING,
@@ -92,14 +93,20 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
         );
     }
 
-    private function dataConnection(): object
+    private function dataConnection(): Connection
     {
-        return $this->registry->getConnection('data');
+        /** @var Connection $connection */
+        $connection = $this->registry->getConnection('data');
+
+        return $connection;
     }
 
-    private function infraConnection(): object
+    private function infraConnection(): Connection
     {
-        return $this->registry->getConnection('infra');
+        /** @var Connection $connection */
+        $connection = $this->registry->getConnection('infra');
+
+        return $connection;
     }
 
     private function stringValue(mixed $value): string

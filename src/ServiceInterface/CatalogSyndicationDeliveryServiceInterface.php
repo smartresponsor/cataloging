@@ -7,6 +7,7 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
 use App\ValueObject\CategorySyndicationDeliveryRecordRequest;
+
 /**
  * Defines the contract for catalog syndication delivery service.
  */

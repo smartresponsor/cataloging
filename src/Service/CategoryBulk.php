@@ -14,13 +14,16 @@ use App\ValueObject\CategoryServiceMoveRequest;
 /**
  * Provides the category bulk application service.
  */
-final class CategoryBulk implements CategoryBulkInterface
+/** @noinspection DuplicatedCode */
+final readonly class CategoryBulk implements CategoryBulkInterface
 {
     /**
      * Initializes the category bulk service collaborators.
      */
-    public function __construct(private readonly CategoryCategoryService $service)
-    {
+    public function __construct(
+        private CategoryCategoryService $service,
+        private MetaPayloadNormalizer $metaPayloadNormalizer,
+    ) {
     }
 
     /**
@@ -37,10 +40,10 @@ final class CategoryBulk implements CategoryBulkInterface
             try {
                 $results[] = $this->dispatch($actorId, $op);
                 ++$accepted;
-            } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
+            } catch (\RuntimeException|\InvalidArgumentException|\TypeError $exception) {
                 ++$rejected;
-                error_log('[CategoryBulk] '.$e->getMessage());
-                $results[] = ['index' => $index, 'error' => $e->getMessage()];
+                error_log('[CategoryBulk] '.$exception->getMessage());
+                $results[] = ['index' => $index, 'error' => $exception->getMessage()];
             }
         }
 
@@ -105,7 +108,11 @@ final class CategoryBulk implements CategoryBulkInterface
         return (string) $payload[$key];
     }
 
-    /** @param array<string,mixed> $payload */
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @noinspection PhpSameParameterValueInspection
+     */
     private function optionalString(array $payload, string $key): ?string
     {
         if (!array_key_exists($key, $payload)) {
@@ -116,7 +123,11 @@ final class CategoryBulk implements CategoryBulkInterface
         return is_scalar($value) ? (string) $value : null;
     }
 
-    /** @param array<string,mixed> $payload */
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @noinspection PhpSameParameterValueInspection
+     */
     private function intValue(array $payload, string $key): int
     {
         $value = $payload[$key] ?? 0;
@@ -163,49 +174,19 @@ final class CategoryBulk implements CategoryBulkInterface
      *
      * @return array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null>
      */
-    private function optionalMetaMap(array $payload, string $key): array
+    private function metaMap(array $payload): array
     {
-        $value = $payload[$key] ?? [];
-        if (!is_array($value)) {
-            return [];
-        }
+        return $this->metaPayloadNormalizer->normalize($payload['meta'] ?? []);
+    }
 
-        $normalized = [];
-        foreach ($value as $entryKey => $entryValue) {
-            if (!is_string($entryKey)) {
-                continue;
-            }
-            if (is_array($entryValue)) {
-                $nested = [];
-                foreach ($entryValue as $nestedKey => $nestedValue) {
-                    if (!is_string($nestedKey)) {
-                        continue;
-                    }
-                    if (
-                        is_bool($nestedValue)
-                        || is_float($nestedValue)
-                        || is_int($nestedValue)
-                        || is_string($nestedValue)
-                        || null === $nestedValue
-                    ) {
-                        $nested[$nestedKey] = $nestedValue;
-                    }
-                }
-                $normalized[$entryKey] = $nested;
-                continue;
-            }
-            if (
-                is_bool($entryValue)
-                || is_float($entryValue)
-                || is_int($entryValue)
-                || is_string($entryValue)
-                || null === $entryValue
-            ) {
-                $normalized[$entryKey] = $entryValue;
-            }
-        }
-
-        return $normalized;
+    /**
+     * @param array<string,mixed> $payload
+     *
+     * @return array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null>
+     */
+    private function metaPayload(array $payload): array
+    {
+        return $this->metaMap($payload);
     }
 
     /** @param array<string,mixed> $payload */
@@ -217,7 +198,7 @@ final class CategoryBulk implements CategoryBulkInterface
             $this->optionalString($payload, 'parentId'),
             $this->requiredStringMap($payload, 'name'),
             $this->requiredStringMap($payload, 'slug'),
-            $this->optionalMetaMap($payload, 'meta'),
+            $this->metaPayload($payload),
         );
     }
 

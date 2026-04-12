@@ -11,8 +11,8 @@ namespace App\Request;
 final readonly class CategoryRulePreviewRequest
 {
     /**
-     * @param array|null   $spec
-     * @param list<string> $errors
+     * @param array<string,mixed>|null $spec
+     * @param list<string>             $errors
      */
     public function __construct(
         public ?array $spec,

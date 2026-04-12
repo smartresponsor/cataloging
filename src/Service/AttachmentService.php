@@ -11,28 +11,21 @@ use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 /**
  * Provides the attachment service application service.
  */
-final class AttachmentService
+final readonly class AttachmentService
 {
     /**
      * Initializes the attachment service service collaborators.
      */
     public function __construct(
-        private readonly CatalogAttachmentRepositoryInterface $repository,
-        private readonly AttachmentReferenceGatewayInterface $gateway,
+        private CatalogAttachmentRepositoryInterface $repository,
+        private AttachmentReferenceGatewayInterface $gateway,
     ) {
     }
 
     /**
-     * @return list<array{
-     *     attachment_id:string,
-     *     category_id:string,
-     *     type:string,
-     *     provider:string,
-     *     external_attachment_id:string,
-     *     'reference_uri':?string,
-     *     path:?string,
-     *     created_at:string,
-     * }>
+     * @param string|null $categoryId
+     *
+     * @return list<array<string,mixed>>
      */
     public function list(?string $categoryId = null): array
     {
@@ -48,16 +41,9 @@ final class AttachmentService
     }
 
     /**
-     * @return array{
-     *     attachment_id:string,
-     *     category_id:string,
-     *     type:string,
-     *     provider:string,
-     *     external_attachment_id:string,
-     *     'reference_uri':?string,
-     *     path:?string,
-     *     created_at:string,
-     * }
+     * @return array<string,mixed>
+     *
+     * @throws \InvalidArgumentException
      */
     public function add(
         string $categoryId,
@@ -90,6 +76,8 @@ final class AttachmentService
 
     /**
      * Handles the remove workflow.
+     *
+     * @throws \InvalidArgumentException
      */
     public function remove(string $attachmentId): bool
     {

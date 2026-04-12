@@ -7,6 +7,7 @@ namespace App\Service;
 
 use App\Service\Security\CategoryRole;
 use App\ServiceInterface\TenantRolePolicyInterface;
+
 /**
  * Provides the tenant role policy application service.
  */

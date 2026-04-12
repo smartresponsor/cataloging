@@ -11,16 +11,16 @@ use App\ValueObject\RedirectPutRequest;
 /**
  * Provides the redirect store application service.
  */
-final class RedirectStore implements RedirectStoreInterface
+final readonly class RedirectStore implements RedirectStoreInterface
 {
-    private \PDO $pdo;
+    private \PDO $connection;
 
     /**
      * Initializes the redirect store service collaborators.
      */
-    public function __construct(\PDO $pdo)
+    public function __construct(\PDO $connection)
     {
-        $this->pdo = $pdo;
+        $this->connection = $connection;
     }
 
     /**
@@ -28,32 +28,32 @@ final class RedirectStore implements RedirectStoreInterface
      */
     public function put(RedirectPutRequest $request): void
     {
-        $q = $this->pdo->prepare(
+        $statement = $this->connection->prepare(
             'INSERT INTO seo_redirect(from_path, to_path, status) VALUES(:f,:t,:s) '
             .'ON CONFLICT (from_path) DO UPDATE SET to_path = EXCLUDED.to_path, status = EXCLUDED.status',
         );
-        $q->bindValue(':f', $request->from());
-        $q->bindValue(':t', $request->to());
-        $q->bindValue(':s', $request->status());
-        $q->execute();
+        $statement->bindValue(':f', $request->from());
+        $statement->bindValue(':t', $request->to());
+        $statement->bindValue(':s', $request->status());
+        $statement->execute();
     }
 
     /** @return array{from:string,to:string,status:int}|null */
     public function get(string $from): ?array
     {
-        $q = $this->pdo->prepare('SELECT from_path, to_path, status FROM seo_redirect WHERE from_path = :f LIMIT 1');
-        $q->bindValue(':f', $from);
-        $q->execute();
-        /** @var array<string, mixed>|false $r */
-        $r = $q->fetch(\PDO::FETCH_ASSOC);
-        if (false === $r) {
+        $statement = $this->connection->prepare('SELECT from_path, to_path, status FROM seo_redirect WHERE from_path = :f LIMIT 1');
+        $statement->bindValue(':f', $from);
+        $statement->execute();
+        /** @var array<string, mixed>|false $row */
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        if (false === $row) {
             return null;
         }
 
         return [
-            'from' => $this->stringValue($r, 'from_path'),
-            'to' => $this->stringValue($r, 'to_path'),
-            'status' => $this->intValue($r, 'status'),
+            'from' => $this->stringValue($row, 'from_path'),
+            'to' => $this->stringValue($row, 'to_path'),
+            'status' => $this->intValue($row, 'status'),
         ];
     }
 

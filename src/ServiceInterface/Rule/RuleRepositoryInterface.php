@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Rule;
+
 /**
  * Defines the contract for rule repository.
  */

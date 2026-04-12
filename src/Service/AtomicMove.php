@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\AtomicMoveInterface;
+
 /**
  * Provides the atomic move application service.
  */
@@ -17,6 +18,7 @@ final class AtomicMove implements AtomicMoveInterface
     public function move(string $nodeId, ?string $newParentId): void
     {
     }
+
     /**
      * Handles the swap workflow.
      */

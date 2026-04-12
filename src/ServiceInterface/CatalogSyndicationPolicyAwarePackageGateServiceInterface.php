@@ -7,6 +7,7 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationPolicyAwarePackageGatedInterface;
 use App\ValueObject\CategorySyndicationPackageBuildRequest;
+
 /**
  * Defines the contract for catalog syndication policy aware package gate service.
  */

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\EntityInterface\CategoryChangeRequestInterface;
+
 /**
  * Defines the contract for category review assignment policy.
  */
@@ -20,6 +21,7 @@ interface CategoryReviewAssignmentPolicyInterface
         string $assignedBy,
         string $priority,
     ): bool;
+
     /**
      * Handles the assert can assign workflow.
      */

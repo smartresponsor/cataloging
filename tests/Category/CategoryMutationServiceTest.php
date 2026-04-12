@@ -98,7 +98,7 @@ final class CategoryMutationServiceTest extends TestCase
         self::assertTrue($result['published']);
         self::assertSame('published', $result['workflowState']);
         self::assertSame('approved', $result['previousWorkflowState']);
-        self::assertSame(['mediaReady'], $result['warnings']);
+        self::assertSame(['mediaReady', 'aliasReady'], $result['warnings']);
         self::assertSame([], $result['blockers']);
         self::assertNotNull($result['publishedAt']);
         self::assertFalse($result['duplicate']);

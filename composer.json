@@ -33,7 +33,8 @@
     "symfony/security-bundle": "^8.0",
     "symfony/serializer-pack": "^1.0",
     "symfony/twig-bundle": "^8.0",
-    "symfony/yaml": "^8.0"
+    "symfony/yaml": "^8.0",
+    "ext-openssl": "*"
   },
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^4.3",

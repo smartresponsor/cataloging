@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the projection runner application service.
  */
@@ -16,16 +17,20 @@ final class ProjectionRunner
      */
     public function run(array $nodes): array
     {
-        $out = [];
-        foreach ($nodes as $n) {
-            $n['path'] = $n['path'] ?? '/'.$this->stringValue($n, 'id');
-            $out[] = $n;
+        $output = [];
+        foreach ($nodes as $node) {
+            $node['path'] = $node['path'] ?? '/'.$this->stringValue($node, 'id');
+            $output[] = $node;
         }
 
-        return $out;
+        return $output;
     }
 
-    /** @param array<string,mixed> $node */
+    /**
+     * @param array<string,mixed> $node
+     *
+     * @noinspection PhpSameParameterValueInspection
+     */
     private function stringValue(array $node, string $key): string
     {
         $value = $node[$key] ?? '';

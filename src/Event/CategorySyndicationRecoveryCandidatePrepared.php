@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
 /**
  * Represents the category syndication recovery candidate prepared application event.
  */
-final class CategorySyndicationRecoveryCandidatePrepared implements CategorySyndicationRecoveryCandidatePreparedInterface
+final readonly class CategorySyndicationRecoveryCandidatePrepared implements CategorySyndicationRecoveryCandidatePreparedInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

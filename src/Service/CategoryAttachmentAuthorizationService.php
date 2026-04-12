@@ -7,11 +7,7 @@ namespace App\Service;
 use App\Entity\Category;
 use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use App\Security\CategoryVoter;
-use App\Security\ExternalIdentityContext;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\ServiceInterface\TenantRolePolicyInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -25,15 +21,15 @@ final readonly class CategoryAttachmentAuthorizationService
      */
     public function __construct(
         private Security $security,
-        private ManagerRegistry $registry,
         private CatalogAttachmentRepositoryInterface $attachmentRepository,
-        private SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
-        private TenantRolePolicyInterface $tenantRolePolicy,
+        private CategoryTenantAccessEvaluator $tenantAccessEvaluator,
     ) {
     }
 
     /**
      * Handles the assert can list workflow.
+     *
+     * @throws Exception
      */
     public function assertCanList(?string $categoryId): void
     {
@@ -41,13 +37,7 @@ final readonly class CategoryAttachmentAuthorizationService
             return;
         }
 
-        $normalizedCategoryId = null;
-        if (is_string($categoryId)) {
-            $trimmed = trim($categoryId);
-            if ('' !== $trimmed) {
-                $normalizedCategoryId = $trimmed;
-            }
-        }
+        $normalizedCategoryId = $this->normalizeCategoryId($categoryId);
 
         if (null === $normalizedCategoryId) {
             throw new AccessDeniedHttpException('Listing attachments without category scope is not allowed for the current actor.');
@@ -62,6 +52,8 @@ final readonly class CategoryAttachmentAuthorizationService
 
     /**
      * Handles the assert can attach workflow.
+     *
+     * @throws Exception
      */
     public function assertCanAttach(string $categoryId): void
     {
@@ -74,6 +66,8 @@ final readonly class CategoryAttachmentAuthorizationService
 
     /**
      * Handles the assert can detach workflow.
+     *
+     * @throws Exception
      */
     public function assertCanDetach(string $attachmentId): void
     {
@@ -89,14 +83,28 @@ final readonly class CategoryAttachmentAuthorizationService
         );
     }
 
+    private function normalizeCategoryId(?string $categoryId): ?string
+    {
+        if (null === $categoryId) {
+            return null;
+        }
+
+        $normalizedCategoryId = trim($categoryId);
+
+        return '' !== $normalizedCategoryId ? $normalizedCategoryId : null;
+    }
+
+    /**
+     * @throws Exception
+     */
     private function assertGranted(string $attribute, string $categoryId, string $message): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
         }
 
-        $categoryTenant = $this->categoryTenant($categoryId);
-        $externalIdentityContext = $this->resolveExternalIdentityContext();
+        $categoryTenant = $this->tenantAccessEvaluator->categoryTenant($categoryId);
+        $externalIdentityContext = $this->tenantAccessEvaluator->resolveExternalIdentityContext();
         if (null === $externalIdentityContext || null === $externalIdentityContext->tenant) {
             throw new AccessDeniedHttpException('External tenant identity is required for category attachment operations.');
         }
@@ -111,7 +119,7 @@ final readonly class CategoryAttachmentAuthorizationService
             return;
         }
 
-        if ($this->externalTenantRoleAllows(
+        if ($this->tenantAccessEvaluator->externalTenantRoleAllows(
             $attribute,
             $externalIdentityContext->tenant,
             $externalIdentityContext->categoryRoles,
@@ -121,58 +129,5 @@ final readonly class CategoryAttachmentAuthorizationService
         }
 
         throw new AccessDeniedHttpException($message);
-    }
-
-    private function categoryTenant(string $categoryId): ?string
-    {
-        /** @var Connection $connection */
-        $connection = $this->registry->getConnection('data');
-        $tenant = $connection->fetchOne(
-            'SELECT tenant FROM category WHERE id = :id LIMIT 1',
-            ['id' => trim($categoryId)],
-        );
-
-        if (!is_scalar($tenant)) {
-            return null;
-        }
-
-        $normalized = trim((string) $tenant);
-
-        return '' !== $normalized ? $normalized : 'default';
-    }
-
-    private function resolveExternalIdentityContext(): ?ExternalIdentityContext
-    {
-        try {
-            return $this->externalIdentityContextResolver->resolveFromCurrentRequest();
-        } catch (\Throwable) {
-            throw new AccessDeniedHttpException('External identity context is invalid or could not be resolved.');
-        }
-    }
-
-    /** @param list<string> $categoryRoles */
-    private function externalTenantRoleAllows(
-        string $attribute,
-        string $actorTenant,
-        array $categoryRoles,
-        ?string $categoryTenant,
-    ): bool {
-        if ([] === $categoryRoles) {
-            return false;
-        }
-
-        $tenant = $categoryTenant ?? $actorTenant;
-        $action = match ($attribute) {
-            CategoryVoter::EDIT => 'edit',
-            CategoryVoter::PUBLISH => 'publish',
-            CategoryVoter::VIEW => 'read',
-            CategoryVoter::OWN => 'edit',
-            default => null,
-        };
-        if (null === $action) {
-            return false;
-        }
-
-        return array_any($categoryRoles, fn ($role) => $this->tenantRolePolicy->allow(['org' => $tenant, 'tenant' => $tenant, 'role' => $role], $action));
     }
 }

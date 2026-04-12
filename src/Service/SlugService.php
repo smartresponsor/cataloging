@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 
 /**
  * Provides the slug service application service.
@@ -15,29 +16,34 @@ final readonly class SlugService
     /**
      * Initializes the slug service service collaborators.
      */
-    public function __construct(private Connection $conn)
+    public function __construct(private Connection $connection)
     {
     }
 
     /**
      * Handles the ensure unique workflow.
+     *
+     * @throws Exception
      */
     public function ensureUnique(string $slug): string
     {
-        $base = $slug;
-        $i = 2;
+        $baseSlug = $slug;
+        $suffix = 2;
         while ($this->exists($slug)) {
-            $slug = $base.'-'.$i;
-            ++$i;
+            $slug = $baseSlug.'-'.$suffix;
+            ++$suffix;
         }
 
         return $slug;
     }
 
+    /**
+     * @throws Exception
+     */
     private function exists(string $slug): bool
     {
-        $r = $this->conn->fetchOne('SELECT 1 FROM category WHERE slug = ?', [$slug]);
+        $result = $this->connection->fetchOne('SELECT 1 FROM category WHERE slug = ?', [$slug]);
 
-        return (bool) $r;
+        return (bool) $result;
     }
 }

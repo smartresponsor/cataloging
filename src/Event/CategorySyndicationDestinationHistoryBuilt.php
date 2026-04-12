@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
 /**
  * Represents the category syndication destination history built application event.
  */
-final class CategorySyndicationDestinationHistoryBuilt implements CategorySyndicationDestinationHistoryBuiltInterface
+final readonly class CategorySyndicationDestinationHistoryBuilt implements CategorySyndicationDestinationHistoryBuiltInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

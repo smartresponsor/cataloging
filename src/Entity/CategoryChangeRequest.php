@@ -12,22 +12,22 @@ use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
 /**
  * Represents the category change request domain record.
  */
-final class CategoryChangeRequest implements CategoryChangeRequestInterface
+final readonly class CategoryChangeRequest implements CategoryChangeRequestInterface
 {
     /**
      * @param array<string,mixed> $changes
      */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $submittedBy,
-        private readonly string $summary,
-        private readonly array $changes,
-        private readonly CategoryChangeRequestState $state,
-        private readonly ?string $reviewedBy,
-        private readonly ?string $decisionReason,
-        private readonly \DateTimeImmutable $submittedAt,
-        private readonly ?\DateTimeImmutable $reviewedAt,
+        private string $requestId,
+        private string $categoryId,
+        private string $submittedBy,
+        private string $summary,
+        private array $changes,
+        private CategoryChangeRequestState $state,
+        private ?string $reviewedBy,
+        private ?string $decisionReason,
+        private \DateTimeImmutable $submittedAt,
+        private ?\DateTimeImmutable $reviewedAt,
     ) {
     }
 

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+
 /**
  * Defines the contract for category workflow policy.
  */
@@ -20,6 +21,7 @@ interface CategoryWorkflowPolicyInterface
         string $actorId,
         string $reason,
     ): bool;
+
     /**
      * Handles the assert transition allowed workflow.
      */

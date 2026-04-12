@@ -35,7 +35,7 @@ final class JwkConverter
 
         return sprintf(
             "-----BEGIN PUBLIC KEY-----\n%s-----END PUBLIC KEY-----\n",
-            chunk_split(base64_encode($subjectPublicKeyInfo), 64, "\n")
+            chunk_split(base64_encode($subjectPublicKeyInfo), 64)
         );
     }
 
@@ -74,6 +74,7 @@ final class JwkConverter
         return "\x03".$this->len(strlen($body)).$body;
     }
 
+    /** @noinspection PhpSameParameterValueInspection */
     private function encodeObjectIdentifier(string $oid): string
     {
         $parts = array_map('intval', explode('.', $oid));

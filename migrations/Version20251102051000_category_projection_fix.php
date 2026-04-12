@@ -1,22 +1,26 @@
 <?php
+
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- */
+
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** @noinspection PhpMissingParentCallCommonInspection */
+/**
+ * Category projection alignment migration.
+ *
+ * @noinspection PhpClassNamingConventionInspection
+ */
 final class Version20251102051000_category_projection_fix extends AbstractMigration
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
         return 'Align MySQL and Postgres category projection tables';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
         $this->addSql(
@@ -24,6 +28,7 @@ final class Version20251102051000_category_projection_fix extends AbstractMigrat
         );
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE category_projection_mysql DROP COLUMN channel');

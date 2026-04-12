@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 /**
  * Handles the category rule controller application flow.
  */
@@ -23,6 +24,7 @@ final class CategoryRuleController extends AbstractController
     public function __construct(private readonly CatalogRuleService $categoryRuleService)
     {
     }
+
     /**
      * Handles the preview workflow.
      */
@@ -30,28 +32,33 @@ final class CategoryRuleController extends AbstractController
     #[IsGranted('category.rule')]
     public function preview(Request $request): JsonResponse
     {
-        $input = CategoryRulePreviewRequest::fromJson((string) $request->getContent());
-        if (!$input->isValid()) {
-            return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
-        }
+        try {
+            $input = CategoryRulePreviewRequest::fromJson((string) $request->getContent());
+            if (!$input->isValid()) {
+                return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
+            }
 
-        $preview = $this->categoryRuleService->preview($input->spec ?? []);
-        if (null === $preview) {
-            return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
-        }
+            $preview = $this->categoryRuleService->preview($input->spec ?? []);
+            if (null === $preview) {
+                return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
+            }
 
-        $limit = (int) ($_ENV['RULE_MAX_CARDINALITY'] ?? 100000);
-        if ($preview['count'] > $limit) {
-            return $this->json([
-                'ok' => false,
-                'error' => 'cardinality_exceeds',
-                'limit' => $limit,
-                'count' => $preview['count'],
-            ], 413);
-        }
+            $limit = (int) ($_ENV['RULE_MAX_CARDINALITY'] ?? 100000);
+            if ($preview['count'] > $limit) {
+                return $this->json([
+                    'ok' => false,
+                    'error' => 'cardinality_exceeds',
+                    'limit' => $limit,
+                    'count' => $preview['count'],
+                ], 413);
+            }
 
-        return $this->json(['ok' => true, 'item' => $preview]);
+            return $this->json(['ok' => true, 'item' => $preview]);
+        } catch (\Throwable) {
+            return $this->json(['ok' => false, 'error' => 'rule_preview_failed'], 500);
+        }
     }
+
     /**
      * Handles the apply workflow.
      */
@@ -59,8 +66,12 @@ final class CategoryRuleController extends AbstractController
     #[IsGranted('category.rule')]
     public function apply(string $id): JsonResponse
     {
-        if (!$this->categoryRuleService->apply($id)) {
-            return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+        try {
+            if (!$this->categoryRuleService->apply($id)) {
+                return $this->json(['ok' => false, 'error' => 'not_found'], 404);
+            }
+        } catch (\Throwable) {
+            return $this->json(['ok' => false, 'error' => 'rule_apply_failed'], 500);
         }
 
         return $this->json(['ok' => true]);

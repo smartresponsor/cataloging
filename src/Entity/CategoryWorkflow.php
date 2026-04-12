@@ -12,17 +12,17 @@ use App\ValueObjectInterface\CategoryWorkflowStateInterface;
 /**
  * Represents the category workflow domain record.
  */
-final class CategoryWorkflow implements CategoryWorkflowInterface
+final readonly class CategoryWorkflow implements CategoryWorkflowInterface
 {
     /**
      * Initializes the category workflow service collaborators.
      */
     public function __construct(
-        private readonly string $categoryId,
-        private readonly CategoryWorkflowState $state,
-        private readonly string $actorId,
-        private readonly string $reason,
-        private readonly \DateTimeImmutable $transitionedAt,
+        private string $categoryId,
+        private CategoryWorkflowState $state,
+        private string $actorId,
+        private string $reason,
+        private \DateTimeImmutable $transitionedAt,
     ) {
     }
 

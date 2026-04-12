@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryCanonicalPolicyInterface;
+
 /**
  * Provides the category canonical policy implementation.
  */
@@ -18,6 +19,7 @@ final class CategoryCanonicalPolicy implements CategoryCanonicalPolicyInterface
     {
         return 'en';
     }
+
     /**
      * Creates the redirect result for the current workflow.
      */

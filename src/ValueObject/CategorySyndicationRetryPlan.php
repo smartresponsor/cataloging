@@ -10,20 +10,20 @@ use App\ValueObjectInterface\CategorySyndicationRetryPlanInterface;
 /**
  * Represents the category syndication retry plan value.
  */
-final class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlanInterface
+final readonly class CategorySyndicationRetryPlan implements CategorySyndicationRetryPlanInterface
 {
     /**
      * Initializes the category syndication retry plan service collaborators.
      */
     public function __construct(
-        private readonly string $deliveryId,
-        private readonly string $packageId,
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly int $nextAttempt,
-        private readonly int $delaySeconds,
-        private readonly \DateTimeImmutable $scheduledAt,
-        private readonly bool $retryable,
+        private string $deliveryId,
+        private string $packageId,
+        private string $destinationId,
+        private string $categoryId,
+        private int $nextAttempt,
+        private int $delaySeconds,
+        private \DateTimeImmutable $scheduledAt,
+        private bool $retryable,
     ) {
     }
 

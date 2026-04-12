@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ServiceInterface\Category\Quota;
+
 /**
  * Defines the contract for category token bucket.
  */

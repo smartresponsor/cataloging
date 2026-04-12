@@ -7,8 +7,8 @@ namespace App\Tests\Category;
 
 use App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
 use App\Service\CatalogCollectionService;
-use App\Service\CollectionRuleEngine;
 use App\Service\CollectionBuilder;
+use App\Service\CollectionRuleEngine;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCollectionServiceTest extends TestCase

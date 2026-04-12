@@ -5,12 +5,14 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category syndication delivery failed list command console workflow.
  */
@@ -19,6 +21,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category syndication delivery failed list command service collaborators.
      */
@@ -26,6 +29,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -40,24 +44,20 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
             )
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'ndjson');
     }
+
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
+     * @throws \Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $format = $this->optionString($input, 'format', 'json');
-        $payload = array_map(static fn ($record): array => [
-            'deliveryId' => $record->deliveryId(),
-            'packageId' => $record->packageId(),
-            'destinationId' => $record->destinationId(),
-            'categoryId' => $record->categoryId(),
-            'status' => $record->status()->status(),
-            'attempt' => $record->attempt(),
-            'responseCode' => $record->responseCode(),
-            'responseMessage' => $record->responseMessage(),
-            'deliveredAt' => $record->deliveredAt()?->format(DATE_ATOM),
-        ], $this->repository->failedRecords());
+        $payload = array_map(
+            fn (CategorySyndicationDeliveryRecordInterface $record): array => $this->recordPayload($record),
+            $this->repository->failedRecords(),
+        );
 
         if ('json' === $format) {
             $output->writeln(json_encode($payload, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
@@ -70,5 +70,21 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /** @return array<string,int|string|null> */
+    private function recordPayload(CategorySyndicationDeliveryRecordInterface $record): array
+    {
+        return [
+            'deliveryId' => $record->deliveryId(),
+            'packageId' => $record->packageId(),
+            'destinationId' => $record->destinationId(),
+            'categoryId' => $record->categoryId(),
+            'status' => $record->status()->status(),
+            'attempt' => $record->attempt(),
+            'responseCode' => $record->responseCode(),
+            'responseMessage' => $record->responseMessage(),
+            'deliveredAt' => $record->deliveredAt()?->format(DATE_ATOM),
+        ];
     }
 }

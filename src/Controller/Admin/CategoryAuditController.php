@@ -8,6 +8,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the category audit controller application flow.
  */
@@ -15,6 +16,8 @@ final class CategoryAuditController extends AbstractController
 {
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @throws \JsonException
      */
     #[Route('/admin/category/audit', name: 'admin_category_audit')]
     public function __invoke(): Response

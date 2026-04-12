@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface\Governance;
 
 use App\Projection\CategoryGovernanceView;
+
 /**
  * Defines the contract for category governance view builder.
  */

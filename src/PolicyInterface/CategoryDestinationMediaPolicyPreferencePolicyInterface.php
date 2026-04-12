@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
+
 /**
  * Defines the contract for category destination media policy preference policy.
  */

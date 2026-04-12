@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -6,14 +7,20 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** @noinspection PhpMissingParentCallCommonInspection */
+/**
+ * Category idempotency runtime hardening migration.
+ *
+ * @noinspection PhpClassNamingConventionInspection
+ */
 final class Version20251102075000_category_idempotency_runtime_hardening extends AbstractMigration
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
         return 'Add durable category idempotency store for mutation requests';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
         $this->addSql(<<<'SQL'
@@ -29,6 +36,7 @@ SQL);
         $this->addSql('CREATE INDEX idx_category_idempotency_expiry ON category_idempotency (expires_at)');
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
         $this->addSql('DROP INDEX idx_category_idempotency_expiry');

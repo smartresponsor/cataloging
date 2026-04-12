@@ -65,7 +65,6 @@ final class CategorySyndicationPackageGatePolicy implements CategorySyndicationP
             'packageFieldsReady' => [] === $packageMissingRequiredFields,
             'destinationMediaReady' => [] === $mediaRequiredMissing
                 && ($mediaChecks['destinationMediaPublishable'] ?? false),
-            'packageGatePublishable' => false,
         ];
         foreach ($mediaChecks as $key => $value) {
             $checks[(string) $key] = (bool) $value;

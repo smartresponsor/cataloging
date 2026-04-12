@@ -23,8 +23,12 @@ final class CategoryVoter extends Voter
         private readonly ?CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository = null,
     ) {
     }
+
+    /** @noinspection PhpConstantNamingConventionInspection */
     public const string VIEW = 'category.view';
+    /** @noinspection PhpConstantNamingConventionInspection */
     public const string EDIT = 'category.edit';
+    /** @noinspection PhpConstantNamingConventionInspection */
     public const string OWN = 'category.own';
     public const string PUBLISH = 'category.publish';
 

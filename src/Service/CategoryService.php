@@ -83,7 +83,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
             $this->stringValue($view, 'oldParentId'),
             $request->newParentId() ?? '',
             $this->stringValue($view, 'treeId', 'default'),
-            $this->intValue($view, 'changedCount', 1),
+            $this->changedCountValue($view, 1),
         ));
 
         return $view;
@@ -150,9 +150,9 @@ final class CategoryService implements CategoryCategoryServiceInterface
     }
 
     /** @param array<string, mixed> $input */
-    private function intValue(array $input, string $key, int $default = 0): int
+    private function changedCountValue(array $input, int $default = 0): int
     {
-        $value = $input[$key] ?? $default;
+        $value = $input['changedCount'] ?? $default;
 
         return is_numeric($value) ? (int) $value : $default;
     }

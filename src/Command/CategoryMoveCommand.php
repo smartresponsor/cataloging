@@ -53,10 +53,11 @@ final class CategoryMoveCommand extends Command
 
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $result = $this->moveService->move(new CatalogMoveRequest(
             $this->argumentString($input, 'nodeId'),
             $this->argumentString($input, 'newParentId'),

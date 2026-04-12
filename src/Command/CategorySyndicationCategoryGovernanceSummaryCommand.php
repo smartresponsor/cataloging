@@ -52,10 +52,12 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
 
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
+     * @throws \Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $event = $this->service->buildSummary(new CategorySyndicationGovernanceSummaryRequest(
             $this->argumentString($input, 'categoryId'),
             $this->decodeTrails($this->optionString($input, 'trails', '[]')),
@@ -63,27 +65,18 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
             $this->argumentString($input, 'reason'),
         ));
 
-        $payload = $event->payload();
+        $payload = method_exists($event, 'payload')
+            ? $event->payload()
+            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
         $format = $this->optionString($input, 'format', 'json');
         if ('ndjson' === $format) {
-            $output->writeln($this->encodeJson($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-
-            return self::SUCCESS;
+            return $this->writeStructuredRows($output, [$payload], 'ndjson');
         }
 
-        $output->writeln(
-            $this->encodeJson(
-                $payload,
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
-            ),
-        );
-
-        return self::SUCCESS;
+        return $this->writeJson($output, $payload);
     }
 
     /**
-     * @param string $json
-     *
      * @return list<array<string,mixed>>
      *
      * @throws \JsonException

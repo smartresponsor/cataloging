@@ -19,116 +19,30 @@ final class CategorySyndicationDestinationGovernanceSummaryPolicy implements Cat
         string $destinationId,
         array $trailPayloads,
     ): CategorySyndicationDestinationGovernanceSummaryInterface {
-        $statusCounts = [
-            'pending' => 0,
-            'delivered' => 0,
-            'failed' => 0,
-            'retry_scheduled' => 0,
-            'skipped' => 0,
-        ];
-        $policyModeCounts = [
-            'strict_exact' => 0,
-            'allow_fallback' => 0,
-            'prefer_exact_warn' => 0,
-        ];
-        $warningCodes = [];
-        $resolvedPublishableCount = 0;
-        $fallbackUsedCount = 0;
-        $retryableCount = 0;
-        $retryScheduledCount = 0;
-        $failureTrailCount = 0;
-        $deliveredTrailCount = 0;
-
-        foreach ($trailPayloads as $payload) {
-            $status = $this->scalarString($payload['deliveryStatus'] ?? 'pending');
-            if ('' !== $status) {
-                $statusCounts[$status] = ($statusCounts[$status] ?? 0) + 1;
-            }
-
-            $mode = $this->scalarString($payload['mediaPolicyMode'] ?? 'strict_exact');
-            if ('' !== $mode) {
-                $policyModeCounts[$mode] = ($policyModeCounts[$mode] ?? 0) + 1;
-            }
-
-            if ($payload['resolvedPublishable'] ?? false) {
-                ++$resolvedPublishableCount;
-            }
-            if ($payload['fallbackUsed'] ?? false) {
-                ++$fallbackUsedCount;
-            }
-            if ($payload['retryable'] ?? false) {
-                ++$retryableCount;
-            }
-            if ($payload['retryScheduled'] ?? false) {
-                ++$retryScheduledCount;
-            }
-
-            $checks = is_array($payload['checks'] ?? null) ? $payload['checks'] : [];
-            if ($checks['governanceTrailHasFailures'] ?? false) {
-                ++$failureTrailCount;
-            }
-            if ($checks['governanceTrailHasDelivered'] ?? false) {
-                ++$deliveredTrailCount;
-            }
-
-            foreach ($this->stringList($payload['warnings'] ?? null) as $warning) {
-                if (!in_array($warning, $warningCodes, true)) {
-                    $warningCodes[] = $warning;
-                }
-            }
-        }
-
-        sort($warningCodes);
-
-        $totalTrails = count($trailPayloads);
+        $summary = CategorySyndicationGovernanceSummaryAccumulator::fromPayloads($trailPayloads);
+        $totalTrails = $summary->totalTrails();
         $checks = [
             'destinationGovernanceSummaryHasTrails' => $totalTrails > 0,
-            'destinationGovernanceSummaryHasResolvedPublishable' => $resolvedPublishableCount > 0,
-            'destinationGovernanceSummaryHasFallbackUsage' => $fallbackUsedCount > 0,
-            'destinationGovernanceSummaryHasFailures' => $failureTrailCount > 0,
-            'destinationGovernanceSummaryHasDelivered' => $deliveredTrailCount > 0,
-            'destinationGovernanceSummaryHasRetryScheduled' => $retryScheduledCount > 0,
+            'destinationGovernanceSummaryHasResolvedPublishable' => $summary->resolvedPublishableCount() > 0,
+            'destinationGovernanceSummaryHasFallbackUsage' => $summary->fallbackUsedCount() > 0,
+            'destinationGovernanceSummaryHasFailures' => $summary->failureTrailCount() > 0,
+            'destinationGovernanceSummaryHasDelivered' => $summary->deliveredTrailCount() > 0,
+            'destinationGovernanceSummaryHasRetryScheduled' => $summary->retryScheduledCount() > 0,
         ];
 
         return new CategorySyndicationDestinationGovernanceSummary(
             trim($destinationId),
             $totalTrails,
-            $resolvedPublishableCount,
-            $fallbackUsedCount,
-            $retryableCount,
-            $retryScheduledCount,
-            $failureTrailCount,
-            $deliveredTrailCount,
-            $statusCounts,
-            $policyModeCounts,
-            $warningCodes,
+            $summary->resolvedPublishableCount(),
+            $summary->fallbackUsedCount(),
+            $summary->retryableCount(),
+            $summary->retryScheduledCount(),
+            $summary->failureTrailCount(),
+            $summary->deliveredTrailCount(),
+            $summary->statusCounts(),
+            $summary->policyModeCounts(),
+            $summary->warningCodes(),
             $checks,
         );
-    }
-
-    private function scalarString(mixed $value): string
-    {
-        return is_scalar($value) ? trim((string) $value) : '';
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($value as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-            $normalized = trim((string) $item);
-            if ('' !== $normalized) {
-                $result[] = $normalized;
-            }
-        }
-
-        return array_values($result);
     }
 }

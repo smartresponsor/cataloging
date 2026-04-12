@@ -15,7 +15,12 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
     /** @var list<array{event:array<string, mixed>,attempt:int,runAt:int}> */
     private array $scheduled = [];
 
-    /** @param array<string, mixed> $event */
+    /**
+     * @param array<string, mixed> $event   * @throws \DateMalformedStringException
+     * @param int                  $attempt
+     *
+     * @throws \DateMalformedStringException
+     */
     public function schedule(array $event, int $attempt): void
     {
         $normalizedAttempt = max(1, $attempt);
@@ -40,6 +45,8 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
 
     /**
      * Handles the next run at workflow.
+     *
+     * @throws \DateMalformedStringException
      */
     public function nextRunAt(\DateTimeImmutable $now, int $attempt): \DateTimeImmutable
     {

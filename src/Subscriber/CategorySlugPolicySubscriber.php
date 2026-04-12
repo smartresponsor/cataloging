@@ -20,7 +20,7 @@ final readonly class CategorySlugPolicySubscriber implements EventSubscriber
     /**
      * Initializes the category slug policy subscriber service collaborators.
      */
-    public function __construct(private SlugService $svc)
+    public function __construct(private SlugService $slugService)
     {
     }
 
@@ -34,28 +34,32 @@ final readonly class CategorySlugPolicySubscriber implements EventSubscriber
 
     /**
      * Handles the pre persist workflow.
+     *
+     * @throws \Throwable
      */
     public function prePersist(PrePersistEventArgs $args): void
     {
-        $e = $args->getObject();
-        if (!$e instanceof CategoryEntity) {
+        $entity = $args->getObject();
+        if (!$entity instanceof CategoryEntity) {
             return;
         }
-        $e->setSlug($this->svc->ensureUnique($e->getSlug()));
+        $entity->setSlug($this->slugService->ensureUnique($entity->getSlug()));
     }
 
     /**
      * Handles the pre update workflow.
+     *
+     * @throws \Throwable
      */
     public function preUpdate(PreUpdateEventArgs $args): void
     {
-        $e = $args->getObject();
-        if (!$e instanceof CategoryEntity) {
+        $entity = $args->getObject();
+        if (!$entity instanceof CategoryEntity) {
             return;
         }
         if ($args->hasChangedField('slug')) {
             $newSlug = $args->getNewValue('slug');
-            $e->setSlug($this->svc->ensureUnique(is_string($newSlug) ? $newSlug : $e->getSlug()));
+            $entity->setSlug($this->slugService->ensureUnique(is_string($newSlug) ? $newSlug : $entity->getSlug()));
         }
     }
 }

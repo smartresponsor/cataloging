@@ -102,7 +102,7 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
 
         foreach ($this->workflowRepository->historyForCategoryId($categoryId) as $event) {
             $payload = $event->payload();
-            $actorId = $this->payloadString($payload, 'actorId');
+            $actorId = $this->actorIdFromPayload($payload);
             $row = [
                 'eventName' => $event->eventName(),
                 'actorId' => $actorId,
@@ -131,8 +131,16 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
             mediaBindings: $mediaBindings,
             workflowHistory: $workflowHistory,
             actorSummary: $actorSummary,
-            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
+            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
         );
+    }
+
+    /** @param array<string,mixed> $payload */
+    private function actorIdFromPayload(array $payload): string
+    {
+        $value = $payload['actorId'] ?? null;
+
+        return is_scalar($value) ? trim((string) $value) : '';
     }
 
     /** @param array<string,array{count:int, roles:list<string>}> $actorSummary */
@@ -149,13 +157,5 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
 
         ++$actorSummary[$actorId]['count'];
         $actorSummary[$actorId]['roles'][] = $role;
-    }
-
-    /** @param array<string,mixed> $payload */
-    private function payloadString(array $payload, string $key): string
-    {
-        $value = $payload[$key] ?? '';
-
-        return is_scalar($value) ? (string) $value : '';
     }
 }

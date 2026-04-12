@@ -10,19 +10,21 @@ use App\EntityInterface\CategoryReviewAssignmentInterface;
 /**
  * Represents the category review assignment domain record.
  */
-final class CategoryReviewAssignment implements CategoryReviewAssignmentInterface
+/** @noinspection PhpTooManyParametersInspection */
+final readonly class CategoryReviewAssignment implements CategoryReviewAssignmentInterface
 {
     /**
      * Initializes the category review assignment service collaborators.
      */
+    /** @noinspection PhpTooManyParametersInspection */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $assignedReviewer,
-        private readonly string $assignedBy,
-        private readonly string $priority,
-        private readonly \DateTimeImmutable $assignedAt,
-        private readonly ?\DateTimeImmutable $dueAt,
+        private string $requestId,
+        private string $categoryId,
+        private string $assignedReviewer,
+        private string $assignedBy,
+        private string $priority,
+        private \DateTimeImmutable $assignedAt,
+        private ?\DateTimeImmutable $dueAt,
     ) {
     }
 

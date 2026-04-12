@@ -7,14 +7,20 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** @noinspection PhpMissingParentCallCommonInspection */
+/**
+ * Category attachment external boundary migration.
+ *
+ * @noinspection PhpClassNamingConventionInspection
+ */
 final class Version20251102084000_category_attachment_external_boundary extends AbstractMigration
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
         return 'Harden category attachment binding as external-reference boundary';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
         $this->addSql(
@@ -33,6 +39,7 @@ final class Version20251102084000_category_attachment_external_boundary extends 
         $this->addSql('CREATE INDEX idx_category_attachment_provider ON category_attachment (provider)');
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
         $this->addSql('DROP INDEX IF EXISTS idx_category_attachment_provider');

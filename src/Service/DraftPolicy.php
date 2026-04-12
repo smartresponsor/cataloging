@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the draft policy application service.
  */
@@ -16,6 +17,7 @@ final class DraftPolicy
     {
         return $status->isDraft();
     }
+
     /**
      * Handles the allow edit workflow.
      */

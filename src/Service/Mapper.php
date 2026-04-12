@@ -19,7 +19,7 @@ final class Mapper
     {
         return [
             'id' => $this->stringValue($input, 'id'),
-            'parentId' => $this->nullableStringValue($input, 'parent_id'),
+            'parentId' => $this->parentIdValue($input),
             'slug' => $this->stringValue($input, 'slug', $this->stringValue($input, 'handle')),
             'name' => $this->stringValue($input, 'name', $this->stringValue($input, 'title')),
             'locale' => $this->stringValue($input, 'locale', 'en'),
@@ -35,9 +35,9 @@ final class Mapper
     }
 
     /** @param array<string,mixed> $input */
-    private function nullableStringValue(array $input, string $key): ?string
+    private function parentIdValue(array $input): ?string
     {
-        $value = $input[$key] ?? null;
+        $value = $input['parent_id'] ?? null;
 
         return is_scalar($value) ? (string) $value : null;
     }

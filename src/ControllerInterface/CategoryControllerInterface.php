@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ControllerInterface;
+
 /**
  * Defines the contract for category controller.
  */

@@ -7,6 +7,7 @@ namespace App\Service;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,47 +17,50 @@ use Doctrine\Persistence\ManagerRegistry;
 final readonly class CategoryProjectionReadService implements CategoryProjectionReadServiceInterface
 {
     /**
-     * Initializes the category projection read service service collaborators.
+     * Initializes the category projection read service collaborators.
      */
     public function __construct(
         private ManagerRegistry $registry,
-        private SearchService $searchService,
+        private CategoryProjectionQuerySupport $querySupport,
     ) {
     }
 
     /**
-     * Handles the list workflow.
+     * @return list<array<string,mixed>>
+     *
+     * @throws Exception
      */
     public function list(?CategoryProjectionCriteria $criteria = null): array
     {
-        $result = $this->searchService->search($criteria);
+        $criteriaMap = $this->criteriaMap($criteria);
+        [$whereSql, $params, $types] = $this->querySupport->compileProjectionFilters($criteriaMap);
 
-        return $result['items'];
-    }
-
-    /**
-     * Handles the tree workflow.
-     */
-    public function tree(?CategoryProjectionCriteria $criteria = null): array
-    {
-        $normalized = $this->normalizeCriteria(($criteria ?? CategoryProjectionCriteria::fromArray([]))->toArray());
-        [$whereSql, $params, $types] = $this->compileFilters($normalized);
-        $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
-            .'workflow_state, published, published_at, updated_at FROM category_projection ';
-
-        $rows = $this->infraConnection()->fetchAllAssociative(
-            $selectSql
-            .$whereSql
-            .' ORDER BY path ASC, name ASC, id ASC',
+        $rows = $this->connection()->fetchAllAssociative(
+            'SELECT id, slug, name, parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at '
+            .'FROM category_projection'.$whereSql.' ORDER BY path ASC, slug ASC',
             $params,
             $types,
         );
 
-        return $this->buildTree($this->normalizeRows($rows));
+        return $this->querySupport->normalizeProjectionRows($rows);
     }
 
     /**
-     * Handles the find one workflow.
+     * @return list<array<string,mixed>>
+     *
+     * @throws Exception
+     */
+    public function tree(?CategoryProjectionCriteria $criteria = null): array
+    {
+        $rows = $this->list($criteria);
+
+        return $this->buildTree($rows);
+    }
+
+    /**
+     * @return array<string,mixed>|null
+     *
+     * @throws Exception
      */
     public function findOne(string $id): ?array
     {
@@ -64,11 +68,10 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
         if ('' === $normalizedId) {
             return null;
         }
-        $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
-            .'workflow_state, published, published_at, updated_at FROM category_projection WHERE id = :id LIMIT 1';
 
-        $row = $this->infraConnection()->fetchAssociative(
-            $selectSql,
+        $row = $this->connection()->fetchAssociative(
+            'SELECT id, slug, name, parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at '
+            .'FROM category_projection WHERE id = :id LIMIT 1',
             ['id' => $normalizedId],
             ['id' => ParameterType::STRING],
         );
@@ -77,12 +80,20 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
             return null;
         }
 
-        $rows = $this->normalizeRows([$row]);
+        $normalized = $this->querySupport->normalizeProjectionRows([$row]);
 
-        return $rows[0] ?? null;
+        return $normalized[0] ?? null;
     }
 
-    private function infraConnection(): Connection
+    /**
+     * @return array{tenant: ?string, locale: ?string, workflow_state: ?string, published: ?bool}
+     */
+    private function criteriaMap(?CategoryProjectionCriteria $criteria): array
+    {
+        return $this->querySupport->normalizeProjectionCriteriaMap($criteria?->toArray() ?? []);
+    }
+
+    private function connection(): Connection
     {
         /** @var Connection $connection */
         $connection = $this->registry->getConnection('infra');
@@ -91,146 +102,7 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
     }
 
     /**
-     * @param array<string,mixed> $criteria
-     *
-     * @return array{'tenant':?string,'locale':?string,'workflow_state':?string,'published':?bool}
-     */
-    private function normalizeCriteria(array $criteria): array
-    {
-        return [
-            'tenant' => $this->optionalString($criteria['tenant'] ?? null),
-            'locale' => $this->optionalString($criteria['locale'] ?? null),
-            'workflow_state' => $this->optionalString($criteria['workflow_state'] ?? null),
-            'published' => $this->optionalBool($criteria['published'] ?? null),
-        ];
-    }
-
-    /**
-     * @param array{
-     *     tenant:?string,
-     *     locale:?string,
-     *     workflow_state:?string,
-     *     published:?bool
-     * } $criteria
-     *
-     * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
-     */
-    private function compileFilters(array $criteria): array
-    {
-        $clauses = [];
-        /** @var array<string,mixed> $params */
-        $params = [];
-        /** @var array<string,ParameterType> $types */
-        $types = [];
-
-        if (null !== $criteria['tenant']) {
-            $clauses[] = 'tenant = :tenant';
-            $params['tenant'] = $criteria['tenant'];
-            $types['tenant'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['locale']) {
-            $clauses[] = 'locale = :locale';
-            $params['locale'] = $criteria['locale'];
-            $types['locale'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['workflow_state']) {
-            $clauses[] = 'workflow_state = :workflowState';
-            $params['workflowState'] = $criteria['workflow_state'];
-            $types['workflowState'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['published']) {
-            $clauses[] = 'published = :published';
-            $params['published'] = $criteria['published'];
-            $types['published'] = ParameterType::BOOLEAN;
-        }
-
-        if ([] === $clauses) {
-            return ['', [], []];
-        }
-
-        return [' WHERE '.implode(' AND ', $clauses), $params, $types];
-    }
-
-    private function optionalString(mixed $value): ?string
-    {
-        if (!is_scalar($value)) {
-            return null;
-        }
-
-        $normalized = trim((string) $value);
-
-        return '' === $normalized ? null : $normalized;
-    }
-
-    private function optionalBool(mixed $value): ?bool
-    {
-        if (is_bool($value)) {
-            return $value;
-        }
-
-        if (!is_scalar($value)) {
-            return null;
-        }
-
-        $normalized = strtolower(trim((string) $value));
-        if (in_array($normalized, ['1', 'true', 'yes'], true)) {
-            return true;
-        }
-
-        if (in_array($normalized, ['0', 'false', 'no'], true)) {
-            return false;
-        }
-
-        return null;
-    }
-
-    /**
      * @param list<array<string,mixed>> $rows
-     *
-     * @return array tenant':string,
-     *               workflow_state:string,
-     *               published:bool,
-     *               published_at:?string,
-     *               updated_at:string
-     *               }>
-     */
-    private function normalizeRows(array $rows): array
-    {
-        $result = [];
-        foreach ($rows as $row) {
-            $id = $this->optionalString($row['id'] ?? null);
-            if (null === $id) {
-                continue;
-            }
-
-            $result[] = [
-                'id' => $id,
-                'slug' => $this->optionalString($row['slug'] ?? null) ?? '',
-                'name' => $this->optionalString($row['name'] ?? null) ?? '',
-                'parent_id' => $this->optionalString($row['parent_id'] ?? null),
-                'path' => $this->optionalString($row['path'] ?? null) ?? '',
-                'locale' => $this->optionalString($row['locale'] ?? null) ?? '',
-                'tenant' => $this->optionalString($row['tenant'] ?? null) ?? 'default',
-                'workflow_state' => $this->optionalString($row['workflow_state'] ?? null) ?? 'draft',
-                'published' => $this->optionalBool($row['published'] ?? false) ?? false,
-                'published_at' => $this->optionalString($row['published_at'] ?? null),
-                'updated_at' => $this->optionalString($row['updated_at'] ?? null) ?? '',
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $rows tenant':string,
-     *                    workflow_state:string,
-     *                    published:bool,
-     *                    published_at:?string,
-     *                    updated_at:string
-     *                    }> $rows
      *
      * @return list<array<string,mixed>>
      */
@@ -242,49 +114,51 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
             $nodes[$row['id']] = [...$row, 'children' => []];
         }
 
+        /** @var array<string,string> $parentIndex */
+        $parentIndex = [];
         $roots = [];
-        foreach (array_keys($nodes) as $id) {
-            /** @var array<string,mixed> $node */
-            $node = $nodes[$id];
-            $parentId = $node['parent_id'];
+        foreach ($rows as $row) {
+            $id = $row['id'] ?? null;
+            if (!is_string($id) || '' === $id) {
+                continue;
+            }
+            $parentId = $row['parent_id'];
             if (is_string($parentId) && '' !== $parentId && isset($nodes[$parentId])) {
-                /** @var array<string,mixed> $parent */
-                $parent = $nodes[$parentId];
-                /** @var list<array<string,mixed>> $children */
-                $children = $parent['children'];
-                $children[] = $node;
-                $parent['children'] = $children;
-                $nodes[$parentId] = $parent;
+                $parentIndex[$id] = $parentId;
                 continue;
             }
 
-            $roots[] = $node;
+            $roots[] = $id;
         }
 
-        return $this->rebindChildren($roots, $nodes);
+        return $this->materializeTree($roots, $nodes, $parentIndex);
     }
 
     /**
-     * @param list<array<string,mixed>>         $nodes
-     * @param array<string,array<string,mixed>> $index
+     * @param list<string>                      $ids
+     * @param array<string,array<string,mixed>> $nodes
+     * @param array<string,string>              $parentIndex
      *
      * @return list<array<string,mixed>>
      */
-    private function rebindChildren(array $nodes, array $index): array
+    private function materializeTree(array $ids, array $nodes, array $parentIndex): array
     {
         $result = [];
-        foreach ($nodes as $node) {
-            $id = $node['id'] ?? null;
-            if (!is_string($id) || !isset($index[$id])) {
+        foreach ($ids as $id) {
+            if (!isset($nodes[$id])) {
                 continue;
             }
 
-            /** @var array<string,mixed> $materialized */
-            $materialized = $index[$id];
-            /** @var list<array<string,mixed>> $children */
-            $children = $materialized['children'];
-            $materialized['children'] = $this->rebindChildren($children, $index);
-            $result[] = $materialized;
+            $children = [];
+            foreach ($parentIndex as $childId => $parentId) {
+                if ($parentId === $id) {
+                    $children[] = $childId;
+                }
+            }
+
+            $node = $nodes[$id];
+            $node['children'] = $this->materializeTree($children, $nodes, $parentIndex);
+            $result[] = $node;
         }
 
         return $result;

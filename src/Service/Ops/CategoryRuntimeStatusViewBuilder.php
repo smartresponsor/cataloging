@@ -56,7 +56,7 @@ final readonly class CategoryRuntimeStatusViewBuilder implements CategoryRuntime
                 'workflowReady' => null !== $workflow['currentState'] || $workflow['historyCount'] > 0,
                 'reviewReady' => $review['assignmentCount'] > 0,
             ],
-            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
+            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
         );
     }
 

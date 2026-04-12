@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category syndication category governance summary.
  */
@@ -13,30 +14,37 @@ interface CategorySyndicationCategoryGovernanceSummaryInterface
      * Handles the category id workflow.
      */
     public function categoryId(): string;
+
     /**
      * Handles the total trails workflow.
      */
     public function totalTrails(): int;
+
     /**
      * Resolves the d publishable count result for the current workflow.
      */
     public function resolvedPublishableCount(): int;
+
     /**
      * Handles the fallback used count workflow.
      */
     public function fallbackUsedCount(): int;
+
     /**
      * Handles the retryable count workflow.
      */
     public function retryableCount(): int;
+
     /**
      * Handles the retry scheduled count workflow.
      */
     public function retryScheduledCount(): int;
+
     /**
      * Handles the failure trail count workflow.
      */
     public function failureTrailCount(): int;
+
     /**
      * Handles the delivered trail count workflow.
      */

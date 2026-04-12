@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the cache metrics collector application service.
  */
@@ -13,6 +14,7 @@ final class CacheMetricsCollector
     private array $hits = [];
     /** @var array<string,int> */
     private array $misses = [];
+
     /**
      * Handles the hit workflow.
      */
@@ -20,6 +22,7 @@ final class CacheMetricsCollector
     {
         $this->hits[$locale] = ($this->hits[$locale] ?? 0) + 1;
     }
+
     /**
      * Handles the miss workflow.
      */
@@ -27,14 +30,25 @@ final class CacheMetricsCollector
     {
         $this->misses[$locale] = ($this->misses[$locale] ?? 0) + 1;
     }
+
     /**
      * Handles the dump workflow.
      */
     public function dump(string $file): void
     {
-        file_put_contents(
-            $file,
-            json_encode(['hits' => $this->hits, 'misses' => $this->misses], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
-        );
+        try {
+            $directory = dirname($file);
+            if ('.' !== $directory && !is_dir($directory)) {
+                mkdir($directory, 0777, true);
+            }
+
+            $encoded = json_encode([
+                'hits' => $this->hits,
+                'misses' => $this->misses,
+            ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
+            file_put_contents($file, $encoded);
+        } catch (\Throwable) {
+            // Best-effort metrics only.
+        }
     }
 }

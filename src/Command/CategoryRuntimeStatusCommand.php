@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+
 /**
  * Executes the category runtime status command console workflow.
  */
@@ -25,6 +26,7 @@ final class CategoryRuntimeStatusCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -33,12 +35,12 @@ final class CategoryRuntimeStatusCommand extends Command
         parent::configure();
         $this->addArgument('categoryId', InputArgument::REQUIRED, 'Category id');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $io = new SymfonyStyle($input, $output);
         $arg = $input->getArgument('categoryId');
         $categoryId = is_scalar($arg) ? (string) $arg : '';

@@ -24,6 +24,18 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy implements Categor
      * @param list<string>       $exactMatchedBindingIds
      * @param list<string>       $fallbackMatchedBindingIds
      */
+    /**
+     * @noinspection PhpTooManyParametersInspection
+     *
+     * @param list<string>       $packageMissingRequiredFields
+     * @param list<string>       $strictMediaRequiredMissing
+     * @param list<string>       $fallbackMediaRequiredMissing
+     * @param list<string>       $warnings
+     * @param array<string,bool> $strictChecks
+     * @param array<string,bool> $fallbackChecks
+     * @param list<string>       $exactMatchedBindingIds
+     * @param list<string>       $fallbackMatchedBindingIds
+     */
     public function buildReport(
         array $packageMissingRequiredFields,
         array $strictMediaRequiredMissing,
@@ -58,12 +70,15 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy implements Categor
             'fallbackPackageGatePublishable' => false,
         ];
 
-        foreach ($strictChecks as $key => $value) {
-            $checks['strict:'.$key] = $value;
+        $prefixedStrictChecks = [];
+        foreach ($strictChecks as $checkName => $checkValue) {
+            $prefixedStrictChecks['strict:'.$checkName] = $checkValue;
         }
-        foreach ($fallbackChecks as $key => $value) {
-            $checks['fallback:'.$key] = $value;
+        $prefixedFallbackChecks = [];
+        foreach ($fallbackChecks as $checkName => $checkValue) {
+            $prefixedFallbackChecks['fallback:'.$checkName] = $checkValue;
         }
+        $checks = array_replace($checks, $prefixedStrictChecks, $prefixedFallbackChecks);
 
         if (!$checks['packageFieldsReady']) {
             $warnings[] = 'package_missing_required_fields';
@@ -101,7 +116,9 @@ final class CategorySyndicationFallbackAwarePackageGatePolicy implements Categor
     }
 
     /**
-     * @param list<string> $values
+     * @noinspection PhpTooManyParametersInspection
+     *
+     * @param array<int,string> $values
      *
      * @return list<string>
      */

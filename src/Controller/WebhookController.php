@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * Handles the webhook controller application flow.
@@ -27,6 +28,13 @@ final readonly class WebhookController
 
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     *
+     * @throws \JsonException
+     * @throws TransportExceptionInterface
      */
     #[Route('/api/category/webhook/test', name: 'api_category_webhook_test', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]

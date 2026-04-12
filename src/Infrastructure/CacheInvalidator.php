@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * Provides the cache invalidator implementation.
@@ -24,6 +25,10 @@ final readonly class CacheInvalidator
      */
     public function invalidateSlug(string $slug): void
     {
-        $this->pool->deleteItem('category_'.$slug);
+        try {
+            $this->pool->deleteItem('category_'.$slug);
+        } catch (InvalidArgumentException) {
+            // Best-effort invalidation only.
+        }
     }
 }

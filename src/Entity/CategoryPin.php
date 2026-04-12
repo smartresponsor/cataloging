@@ -27,7 +27,7 @@ class CategoryPin
     private string $recordId;
 
     #[ORM\Column(type: 'integer')]
-    private int $position = 0;
+    private int $position;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;

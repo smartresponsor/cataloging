@@ -11,20 +11,20 @@ namespace App\Cache\Role;
  * The implementation is intentionally tolerant: it accepts a wide range of
  * optional callbacks and delegates to an inner PDP object when available.
  */
-final class ConsistentCachePdpV2
+final readonly class ConsistentCachePdpV2
 {
-    private readonly mixed $inner;
-    private readonly mixed $cacheKeyFn;
-    private readonly mixed $cacheGetFn;
-    private readonly mixed $cacheSetFn;
-    private readonly mixed $cacheInvalidateFn;
-    private readonly mixed $policyTokenFn;
-    private readonly mixed $rebacTokenFn;
-    private readonly mixed $tokenInvalidatorFn;
-    private readonly mixed $composeFn;
+    private mixed $inner;
+    private mixed $cacheKeyFn;
+    private mixed $cacheGetFn;
+    private mixed $cacheSetFn;
+    private mixed $cacheDropFn;
+    private mixed $policyTokenFn;
+    private mixed $rebacTokenFn;
+    private mixed $tokenDropFn;
+    private mixed $composeFn;
 
     /** @var list<mixed> */
-    private readonly array $extraCallbacks;
+    private array $extraCallbacks;
 
     /**
      * Initializes the consistent cache pdp v2 service collaborators.
@@ -34,10 +34,10 @@ final class ConsistentCachePdpV2
         mixed $cacheKeyFn = null,
         mixed $cacheGetFn = null,
         mixed $cacheSetFn = null,
-        mixed $cacheInvalidateFn = null,
+        mixed $cacheDropFn = null,
         mixed $policyTokenFn = null,
         mixed $rebacTokenFn = null,
-        mixed $tokenInvalidatorFn = null,
+        mixed $tokenDropFn = null,
         mixed $composeFn = null,
         mixed ...$extraCallbacks,
     ) {
@@ -45,10 +45,10 @@ final class ConsistentCachePdpV2
         $this->cacheKeyFn = $cacheKeyFn;
         $this->cacheGetFn = $cacheGetFn;
         $this->cacheSetFn = $cacheSetFn;
-        $this->cacheInvalidateFn = $cacheInvalidateFn;
+        $this->cacheDropFn = $cacheDropFn;
         $this->policyTokenFn = $policyTokenFn;
         $this->rebacTokenFn = $rebacTokenFn;
-        $this->tokenInvalidatorFn = $tokenInvalidatorFn;
+        $this->tokenDropFn = $tokenDropFn;
         $this->composeFn = $composeFn;
         $this->extraCallbacks = array_values($extraCallbacks);
     }
@@ -124,12 +124,12 @@ final class ConsistentCachePdpV2
             }
         }
 
-        if (is_callable($this->tokenInvalidatorFn)) {
-            ($this->tokenInvalidatorFn)($tokens, ...$arguments);
+        if (is_callable($this->tokenDropFn)) {
+            ($this->tokenDropFn)($tokens, ...$arguments);
         }
 
-        if (is_callable($this->cacheInvalidateFn)) {
-            ($this->cacheInvalidateFn)($this->resolveCacheKey(...$arguments), $tokens, ...$arguments);
+        if (is_callable($this->cacheDropFn)) {
+            ($this->cacheDropFn)($this->resolveCacheKey(...$arguments), $tokens, ...$arguments);
         }
 
         return [

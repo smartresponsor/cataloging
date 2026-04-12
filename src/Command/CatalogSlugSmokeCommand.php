@@ -12,6 +12,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the catalog slug smoke command console workflow.
  */
@@ -19,34 +20,35 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CatalogSlugSmokeCommand extends Command
 {
     use CategoryCliOutputTrait;
+
     /**
      * Initializes the catalog slug smoke command service collaborators.
      */
-    public function __construct(private readonly EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
         parent::__construct();
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
-        $catRepo = $this->em->getRepository(CategoryEntity::class);
-        $aliases = $aliasRepo->findAll();
-        $ok = 0;
-        $miss = 0;
-        foreach ($aliases as $a) {
-            $cat = $catRepo->find($a->categoryId());
-            if ($cat) {
-                ++$ok;
+        $aliasRepository = $this->entityManager->getRepository(CategoryAliasEntity::class);
+        $categoryRepository = $this->entityManager->getRepository(CategoryEntity::class);
+        $aliases = $aliasRepository->findAll();
+        $foundCount = 0;
+        $missingCount = 0;
+        foreach ($aliases as $alias) {
+            $category = $categoryRepository->find($alias->categoryId());
+            if ($category) {
+                ++$foundCount;
             } else {
-                ++$miss;
+                ++$missingCount;
             }
         }
-        $output->writeln('Alias ok: '.$ok.'; missing target: '.$miss);
+        $output->writeln('Alias ok: '.$foundCount.'; missing target: '.$missingCount);
 
-        return 0 === $miss ? Command::SUCCESS : Command::FAILURE;
+        return 0 === $missingCount ? Command::SUCCESS : Command::FAILURE;
     }
 }

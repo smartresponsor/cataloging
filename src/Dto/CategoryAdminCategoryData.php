@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Dto;
+
 /**
  * Provides the category admin category data implementation.
  */

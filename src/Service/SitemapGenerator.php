@@ -35,7 +35,7 @@ final readonly class SitemapGenerator
         }
         $xml[] = '</urlset>';
 
-        return implode("
-", $xml);
+        return implode('
+', $xml);
     }
 }

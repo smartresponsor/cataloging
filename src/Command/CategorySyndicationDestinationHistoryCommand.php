@@ -54,10 +54,12 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
 
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \DateMalformedStringException
+     * @throws \JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $destinationId = $this->argumentString($input, 'destinationId');
         $actorId = $this->argumentString($input, 'actorId');
         $reason = $this->argumentString($input, 'reason');
@@ -91,14 +93,20 @@ final class CategorySyndicationDestinationHistoryCommand extends Command
             $actorId,
             $reason,
         ));
-        $payload = method_exists($event, 'payload')
-            ? $event->payload()
-            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
+        $payload = $this->eventPayload($event);
 
         if ('ndjson' === $format) {
             return $this->writeStructuredRows($output, [$payload], 'ndjson');
         }
 
         return $this->writeJson($output, $payload);
+    }
+
+    /** @return array<string,mixed> */
+    private function eventPayload(object $event): array
+    {
+        return method_exists($event, 'payload')
+            ? $event->payload()
+            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
     }
 }

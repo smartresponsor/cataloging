@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
+use App\Service\CategoryPayloadValueNormalizer;
 use App\ValueObject\CategorySyndicationCategoryGovernanceSummary;
 use App\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterface;
 
@@ -19,127 +20,42 @@ final class CategorySyndicationCategoryGovernanceSummaryPolicy implements Catego
         string $categoryId,
         array $trailPayloads,
     ): CategorySyndicationCategoryGovernanceSummaryInterface {
-        $statusCounts = [
-            'pending' => 0,
-            'delivered' => 0,
-            'failed' => 0,
-            'retry_scheduled' => 0,
-            'skipped' => 0,
-        ];
-        $policyModeCounts = [
-            'strict_exact' => 0,
-            'allow_fallback' => 0,
-            'prefer_exact_warn' => 0,
-        ];
+        $summary = CategorySyndicationGovernanceSummaryAccumulator::fromPayloads($trailPayloads);
         $destinationIds = [];
-        $warningCodes = [];
-        $resolvedPublishableCount = 0;
-        $fallbackUsedCount = 0;
-        $retryableCount = 0;
-        $retryScheduledCount = 0;
-        $failureTrailCount = 0;
-        $deliveredTrailCount = 0;
-        $totalTrails = 0;
-
         foreach ($trailPayloads as $payload) {
-            ++$totalTrails;
-
-            $destinationId = $this->scalarString($payload['destinationId'] ?? null);
+            $destinationId = CategoryPayloadValueNormalizer::scalarString($payload['destinationId'] ?? null);
             if ('' !== $destinationId && !in_array($destinationId, $destinationIds, true)) {
                 $destinationIds[] = $destinationId;
-            }
-
-            $status = $this->scalarString($payload['deliveryStatus'] ?? 'pending');
-            if ('' !== $status) {
-                $statusCounts[$status] = ($statusCounts[$status] ?? 0) + 1;
-            }
-
-            $mode = $this->scalarString($payload['mediaPolicyMode'] ?? 'strict_exact');
-            if ('' !== $mode) {
-                $policyModeCounts[$mode] = ($policyModeCounts[$mode] ?? 0) + 1;
-            }
-
-            if ($payload['resolvedPublishable'] ?? false) {
-                ++$resolvedPublishableCount;
-            }
-            if ($payload['fallbackUsed'] ?? false) {
-                ++$fallbackUsedCount;
-            }
-            if ($payload['retryable'] ?? false) {
-                ++$retryableCount;
-            }
-            if ($payload['retryScheduled'] ?? false) {
-                ++$retryScheduledCount;
-            }
-
-            $checks = is_array($payload['checks'] ?? null) ? $payload['checks'] : [];
-            if ($checks['governanceTrailHasFailures'] ?? false) {
-                ++$failureTrailCount;
-            }
-            if ($checks['governanceTrailHasDelivered'] ?? false) {
-                ++$deliveredTrailCount;
-            }
-
-            foreach ($this->stringList($payload['warnings'] ?? null) as $warning) {
-                if (!in_array($warning, $warningCodes, true)) {
-                    $warningCodes[] = $warning;
-                }
             }
         }
 
         sort($destinationIds);
-        sort($warningCodes);
+        $totalTrails = $summary->totalTrails();
 
         $checks = [
             'categoryGovernanceSummaryHasTrails' => $totalTrails > 0,
             'categoryGovernanceSummaryHasDestinations' => [] !== $destinationIds,
-            'categoryGovernanceSummaryHasResolvedPublishable' => $resolvedPublishableCount > 0,
-            'categoryGovernanceSummaryHasFallbackUsage' => $fallbackUsedCount > 0,
-            'categoryGovernanceSummaryHasFailures' => $failureTrailCount > 0,
-            'categoryGovernanceSummaryHasDelivered' => $deliveredTrailCount > 0,
-            'categoryGovernanceSummaryHasRetryScheduled' => $retryScheduledCount > 0,
+            'categoryGovernanceSummaryHasResolvedPublishable' => $summary->resolvedPublishableCount() > 0,
+            'categoryGovernanceSummaryHasFallbackUsage' => $summary->fallbackUsedCount() > 0,
+            'categoryGovernanceSummaryHasFailures' => $summary->failureTrailCount() > 0,
+            'categoryGovernanceSummaryHasDelivered' => $summary->deliveredTrailCount() > 0,
+            'categoryGovernanceSummaryHasRetryScheduled' => $summary->retryScheduledCount() > 0,
         ];
 
         return new CategorySyndicationCategoryGovernanceSummary(
             trim($categoryId),
             $totalTrails,
-            $resolvedPublishableCount,
-            $fallbackUsedCount,
-            $retryableCount,
-            $retryScheduledCount,
-            $failureTrailCount,
-            $deliveredTrailCount,
+            $summary->resolvedPublishableCount(),
+            $summary->fallbackUsedCount(),
+            $summary->retryableCount(),
+            $summary->retryScheduledCount(),
+            $summary->failureTrailCount(),
+            $summary->deliveredTrailCount(),
             $destinationIds,
-            $statusCounts,
-            $policyModeCounts,
-            $warningCodes,
+            $summary->statusCounts(),
+            $summary->policyModeCounts(),
+            $summary->warningCodes(),
             $checks,
         );
-    }
-
-    private function scalarString(mixed $value): string
-    {
-        return is_scalar($value) ? trim((string) $value) : '';
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($value as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-            $normalized = trim((string) $item);
-            if ('' !== $normalized) {
-                $result[] = $normalized;
-            }
-        }
-
-        return array_values($result);
     }
 }

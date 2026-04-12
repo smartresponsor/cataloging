@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category syndication mapping profile.
  */
@@ -13,6 +14,7 @@ interface CategorySyndicationMappingProfileInterface
      * Handles the destination id workflow.
      */
     public function destinationId(): string;
+
     /**
      * Handles the version workflow.
      */
@@ -27,6 +29,7 @@ interface CategorySyndicationMappingProfileInterface
      * @return list<string>
      */
     public function requiredFields(): array;
+
     /**
      * Handles the locale mode workflow.
      */

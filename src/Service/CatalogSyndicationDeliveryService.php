@@ -17,14 +17,14 @@ use App\ValueObject\CategorySyndicationDeliveryStatus;
 /**
  * Provides the catalog syndication delivery service application service.
  */
-final class CatalogSyndicationDeliveryService implements CatalogSyndicationDeliveryServiceInterface
+final readonly class CatalogSyndicationDeliveryService implements CatalogSyndicationDeliveryServiceInterface
 {
     /**
      * Initializes the catalog syndication delivery service service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDeliveryPolicyInterface $policy,
-        private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
+        private CategorySyndicationDeliveryPolicyInterface $policy,
+        private CategorySyndicationDeliveryRecordRepositoryInterface $repository,
     ) {
     }
 

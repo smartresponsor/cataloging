@@ -7,6 +7,7 @@ namespace App\ValueObject;
 /**
  * Carries projection/search/list criteria across read-oriented category surfaces.
  */
+/** @noinspection DuplicatedCode */
 final readonly class CategoryProjectionCriteria
 {
     public function __construct(

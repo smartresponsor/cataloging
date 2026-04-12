@@ -12,6 +12,7 @@ use App\ValueObject\CategoryMediaRole;
 /**
  * Provides the category media governance policy implementation.
  */
+/** @noinspection PhpCastIsUnnecessaryInspection */
 final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePolicyInterface
 {
     public function assertBindingAllowed(CategoryMediaBindRequest $request): void
@@ -33,12 +34,12 @@ final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePoli
             throw new \InvalidArgumentException('Category media channels must contain at least one channel.');
         }
         foreach ($scope->channels() as $channel) {
-            if ('' === trim((string) ($channel ?? ''))) {
+            if ('' === trim($channel)) {
                 throw new \InvalidArgumentException('Category media channels must not contain empty values.');
             }
         }
         foreach ($scope->locales() as $locale) {
-            if ('' === trim((string) ($locale ?? ''))) {
+            if ('' === trim($locale)) {
                 throw new \InvalidArgumentException('Category media locales must not contain empty values.');
             }
         }

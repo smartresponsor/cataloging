@@ -7,6 +7,7 @@ namespace App\Tests\Category;
 use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use App\Security\ExternalIdentityContext;
 use App\Service\CategoryAttachmentAuthorizationService;
+use App\Service\CategoryTenantAccessEvaluator;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\ServiceInterface\TenantRolePolicyInterface;
 use Doctrine\DBAL\Connection;
@@ -84,13 +85,17 @@ final class CategoryAttachmentAuthorizationServiceTest extends TestCase
             }
         };
 
-        $tenantRolePolicy = new class() implements TenantRolePolicyInterface {
+        $tenantRolePolicy = new class implements TenantRolePolicyInterface {
             public function allow(array $ctx, string $action): bool
             {
                 return in_array($action, ['read', 'edit', 'publish'], true) && in_array($ctx['role'], ['publisher', 'editor', 'owner', 'reader'], true);
             }
         };
 
-        return new CategoryAttachmentAuthorizationService($security, $registry, $repo, $resolver, $tenantRolePolicy);
+        return new CategoryAttachmentAuthorizationService(
+            $security,
+            $repo,
+            new CategoryTenantAccessEvaluator($registry, $resolver, $tenantRolePolicy),
+        );
     }
 }

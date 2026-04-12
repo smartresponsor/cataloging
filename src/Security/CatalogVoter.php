@@ -12,10 +12,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /** @extends Voter<string, mixed> */
 final class CatalogVoter extends Voter
 {
-public const string OWNER = 'category.owner';
-public const string EDITOR = 'category.editor';
-public const string RULE = 'category.rule';
-public const string MERCH = 'category.merch';
+    public const string OWNER = 'category.owner';
+    public const string EDITOR = 'category.editor';
+
+    /** @noinspection PhpConstantNamingConventionInspection */
+    public const string RULE = 'category.rule';
+
+    public const string MERCH = 'category.merch';
+
     /**
      * Checks whether this service supports the provided input.
      */
@@ -23,6 +27,7 @@ public const string MERCH = 'category.merch';
     {
         return in_array($attribute, [self::OWNER, self::EDITOR, self::RULE, self::MERCH], true);
     }
+
     /**
      * Handles the vote on attribute workflow.
      */
@@ -31,8 +36,7 @@ public const string MERCH = 'category.merch';
         mixed $subject,
         TokenInterface $token,
         ?Vote $vote = null,
-    ): bool
-    {
+    ): bool {
         $user = $token->getUser();
         if (is_object($user) && method_exists($user, 'getRoles')) {
             /** @var list<string> $roles */

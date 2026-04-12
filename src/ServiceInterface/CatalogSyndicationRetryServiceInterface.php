@@ -8,6 +8,7 @@ namespace App\ServiceInterface;
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
 use App\EventInterface\CategorySyndicationRetryScheduledInterface;
+
 /**
  * Defines the contract for catalog syndication retry service.
  */
@@ -21,6 +22,7 @@ interface CatalogSyndicationRetryServiceInterface
         string $actorId,
         string $reason,
     ): CategorySyndicationRecoveryCandidatePreparedInterface;
+
     /**
      * Schedules the retry workflow for later processing.
      */

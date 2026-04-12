@@ -1,22 +1,26 @@
 <?php
+
 declare(strict_types=1);
-/**
- * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
- * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
- */
+
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** @noinspection PhpMissingParentCallCommonInspection */
+/**
+ * Category runtime write baseline migration.
+ *
+ * @noinspection PhpClassNamingConventionInspection
+ */
 final class Version20251102072000_category_runtime_write_baseline extends AbstractMigration
 {
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
         return 'Add category publication state and outbox baseline for runtime write flows';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
         $this->addSql(
@@ -38,6 +42,7 @@ CREATE TABLE outbox (
 SQL);
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE outbox');

@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the sse event application service.
  */
@@ -11,6 +12,7 @@ final class SseEvent
 {
     private string $event;
     private string $data;
+
     /**
      * Initializes the sse event service collaborators.
      */
@@ -19,6 +21,7 @@ final class SseEvent
         $this->event = $event;
         $this->data = $data;
     }
+
     /**
      * Handles the event workflow.
      */
@@ -26,6 +29,7 @@ final class SseEvent
     {
         return $this->event;
     }
+
     /**
      * Handles the data workflow.
      */
@@ -33,11 +37,12 @@ final class SseEvent
     {
         return $this->data;
     }
+
     /**
      * Handles the to stream workflow.
      */
     public function toStream(): string
     {
-        return "event: {$this->event}\ndata: {$this->data}\n\n";
+        return 'event: '.$this->event."\n".'data: '.$this->data."\n\n";
     }
 }

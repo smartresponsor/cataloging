@@ -10,12 +10,12 @@ use App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
 /**
  * Represents the category syndication fallback aware package gated application event.
  */
-final class CategorySyndicationFallbackAwarePackageGated implements CategorySyndicationFallbackAwarePackageGatedInterface
+final readonly class CategorySyndicationFallbackAwarePackageGated implements CategorySyndicationFallbackAwarePackageGatedInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

@@ -10,18 +10,22 @@ use App\ValueObjectInterface\CategoryReviewQueueItemInterface;
 /**
  * Represents the category review queue item value.
  */
-final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
+final readonly class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
 {
-    /** @param list<string> $readinessWarnings */
+    /**
+     * @param list<string> $readinessWarnings
+     *
+     * @noinspection PhpTooManyParametersInspection
+     */
     public function __construct(
-        private readonly string $requestId,
-        private readonly string $categoryId,
-        private readonly string $assignedReviewer,
-        private readonly string $priority,
-        private readonly string $requestState,
-        private readonly bool $readyForReview,
-        private readonly array $readinessWarnings,
-        private readonly ?\DateTimeImmutable $dueAt,
+        private string $requestId,
+        private string $categoryId,
+        private string $assignedReviewer,
+        private string $priority,
+        private string $requestState,
+        private bool $readyForReview,
+        private array $readinessWarnings,
+        private ?\DateTimeImmutable $dueAt,
     ) {
     }
 
@@ -98,6 +102,8 @@ final class CategoryReviewQueueItem implements CategoryReviewQueueItemInterface
 
     /**
      * Handles the readiness warnings workflow.
+     *
+     * @return list<string>
      */
     public function readinessWarnings(): array
     {

@@ -4,39 +4,44 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the webhook endpoint application service.
  */
 final class WebhookEndpoint
 {
-    private string $id;
-    private string $url;
+    private string $endpointId;
+    private string $endpointUrl;
     private string $secret;
     private bool $active;
+
     /**
      * Initializes the webhook endpoint service collaborators.
      */
-    public function __construct(string $id, string $url, string $secret, bool $active)
+    public function __construct(string $endpointId, string $endpointUrl, string $secret, bool $active)
     {
-        $this->id = $id;
-        $this->url = $url;
+        $this->endpointId = $endpointId;
+        $this->endpointUrl = $endpointUrl;
         $this->secret = $secret;
         $this->active = $active;
     }
+
     /**
      * Handles the id workflow.
      */
     public function id(): string
     {
-        return $this->id;
+        return $this->endpointId;
     }
+
     /**
      * Handles the url workflow.
      */
     public function url(): string
     {
-        return $this->url;
+        return $this->endpointUrl;
     }
+
     /**
      * Handles the secret workflow.
      */
@@ -44,6 +49,7 @@ final class WebhookEndpoint
     {
         return $this->secret;
     }
+
     /**
      * Handles the active workflow.
      */

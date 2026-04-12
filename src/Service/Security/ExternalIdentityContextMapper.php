@@ -12,27 +12,37 @@ use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface
  */
 final class ExternalIdentityContextMapper implements SecurityExternalIdentityContextMapperInterface
 {
+    private const array SUBJECT_CLAIM_KEYS = ['sub', 'subject', 'user_id'];
+    private const array TENANT_CLAIM_KEYS = ['tenant_id', 'tenant', 'tenantId'];
+    private const array FRAMEWORK_ROLE_CLAIM_KEYS = ['roles', 'role', 'scope'];
+    private const array CATEGORY_ROLE_CLAIM_KEYS = ['category_roles', 'categoryRoles', 'catalog_roles', 'catalogRoles'];
+
     /** @param array<string,mixed> $claims */
     public function map(array $claims): ExternalIdentityContext
     {
-        $subject = $this->firstScalarString($claims, ['sub', 'subject', 'user_id']);
+        $subject = $this->firstScalarString($claims, self::SUBJECT_CLAIM_KEYS);
         if ('' === $subject) {
             throw new \InvalidArgumentException('External identity claims must include sub.');
         }
 
-        $tenant = $this->nullableScalarString($claims, ['tenant', 'tenant_id', 'org', 'organization_id']);
+        $tenant = $this->firstScalarString($claims, self::TENANT_CLAIM_KEYS);
+        $tenant = '' === $tenant ? null : $tenant;
         $frameworkRoles = $this->normalizeFrameworkRoles($claims);
         $categoryRoles = $this->normalizeCategoryRoles($claims);
 
         return new ExternalIdentityContext($subject, $tenant, $frameworkRoles, $categoryRoles);
     }
 
-    /** @param array<string,mixed> $claims @return list<string> */
+    /**
+     * @param array<string,mixed> $claims
+     *
+     * @return list<string>
+     */
     private function normalizeFrameworkRoles(array $claims): array
     {
         $roles = ['ROLE_USER'];
 
-        foreach ($this->claimValues($claims, ['roles', 'role', 'scope_roles']) as $value) {
+        foreach ($this->claimValues($claims, self::FRAMEWORK_ROLE_CLAIM_KEYS) as $value) {
             $normalized = strtoupper(trim($value));
             if ('' === $normalized) {
                 continue;
@@ -46,11 +56,15 @@ final class ExternalIdentityContextMapper implements SecurityExternalIdentityCon
         return $this->uniqueSorted($roles);
     }
 
-    /** @param array<string,mixed> $claims @return list<string> */
+    /**
+     * @param array<string,mixed> $claims
+     *
+     * @return list<string>
+     */
     private function normalizeCategoryRoles(array $claims): array
     {
         $resolved = [];
-        foreach ($this->claimValues($claims, ['category_roles', 'sr_role', 'catalog_roles']) as $value) {
+        foreach ($this->claimValues($claims, self::CATEGORY_ROLE_CLAIM_KEYS) as $value) {
             $normalized = strtolower(trim($value));
             $mapped = match ($normalized) {
                 'owner', 'category.owner' => CategoryRole::OWNER,
@@ -103,7 +117,10 @@ final class ExternalIdentityContextMapper implements SecurityExternalIdentityCon
         return $values;
     }
 
-    /** @param array<string,mixed> $claims @param list<string> $keys */
+    /**
+     * @param array<string,mixed> $claims
+     * @param list<string>        $keys
+     */
     private function firstScalarString(array $claims, array $keys): string
     {
         foreach ($keys as $key) {
@@ -119,15 +136,11 @@ final class ExternalIdentityContextMapper implements SecurityExternalIdentityCon
         return '';
     }
 
-    /** @param array<string,mixed> $claims @param list<string> $keys */
-    private function nullableScalarString(array $claims, array $keys): ?string
-    {
-        $value = $this->firstScalarString($claims, $keys);
-
-        return '' === $value ? null : $value;
-    }
-
-    /** @param list<string> $values @return list<string> */
+    /**
+     * @param list<string> $values
+     *
+     * @return list<string>
+     */
     private function uniqueSorted(array $values): array
     {
         $values = array_values(array_unique($values));

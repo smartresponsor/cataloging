@@ -11,17 +11,22 @@ use App\Service\ProjectionWorker;
 /**
  * Provides the category projection runner implementation.
  */
-final class CategoryProjectionRunner implements CategoryProjectionRunnerInterface
+final readonly class CategoryProjectionRunner implements CategoryProjectionRunnerInterface
 {
     /**
      * Initializes the category projection runner service collaborators.
      */
-    public function __construct(private readonly ProjectionWorker $worker)
+    public function __construct(private ProjectionWorker $worker)
     {
     }
 
     /**
      * Handles the run workflow.
+     *
+     * @param int $maxSec
+     * @param int $maxBatch
+     *
+     * @throws \Throwable
      */
     public function run(int $maxSec, int $maxBatch): void
     {

@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationRetryScheduledInterface;
 /**
  * Represents the category syndication retry scheduled application event.
  */
-final class CategorySyndicationRetryScheduled implements CategorySyndicationRetryScheduledInterface
+final readonly class CategorySyndicationRetryScheduled implements CategorySyndicationRetryScheduledInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

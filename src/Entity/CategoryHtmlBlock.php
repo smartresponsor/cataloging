@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Represents the category html block domain record.
  */
@@ -26,6 +27,7 @@ class CategoryHtmlBlock
 
     #[ORM\Column(type: 'boolean')]
     private bool $isDraft = true;
+
     /**
      * Initializes the category html block service collaborators.
      */
@@ -34,6 +36,7 @@ class CategoryHtmlBlock
         $this->categoryId = $categoryId;
         $this->html = $html;
     }
+
     /**
      * Handles the id workflow.
      */
@@ -41,6 +44,7 @@ class CategoryHtmlBlock
     {
         return $this->id;
     }
+
     /**
      * Handles the category id workflow.
      */
@@ -48,6 +52,7 @@ class CategoryHtmlBlock
     {
         return $this->categoryId;
     }
+
     /**
      * Handles the html workflow.
      */
@@ -55,6 +60,7 @@ class CategoryHtmlBlock
     {
         return $this->html;
     }
+
     /**
      * Determines whether the draft condition is satisfied.
      */
@@ -62,6 +68,7 @@ class CategoryHtmlBlock
     {
         return $this->isDraft;
     }
+
     /**
      * Handles the publish workflow.
      */

@@ -19,7 +19,7 @@ final class CategoryReadScopeServiceTest extends TestCase
     public function testAnonymousReadDefaultsToPublished(): void
     {
         $service = new CategoryReadScopeService(
-            new class() implements SecurityExternalIdentityContextResolverInterface {
+            new class implements SecurityExternalIdentityContextResolverInterface {
                 public function resolveFromCurrentRequest(): ?ExternalIdentityContext
                 {
                     return null;
@@ -41,7 +41,7 @@ final class CategoryReadScopeServiceTest extends TestCase
     public function testCrossTenantReadIsRejectedForScopedActor(): void
     {
         $service = new CategoryReadScopeService(
-            new class() implements SecurityExternalIdentityContextResolverInterface {
+            new class implements SecurityExternalIdentityContextResolverInterface {
                 public function resolveFromCurrentRequest(): ?ExternalIdentityContext
                 {
                     return null;

@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category destination media fallback report.
  */
@@ -23,10 +24,12 @@ interface CategoryDestinationMediaFallbackReportInterface
 
     /** @return list<string> */
     public function fallbackMatchedBindingIds(): array;
+
     /**
      * Handles the publishable workflow.
      */
     public function publishable(): bool;
+
     /**
      * Handles the publishable with fallback workflow.
      */

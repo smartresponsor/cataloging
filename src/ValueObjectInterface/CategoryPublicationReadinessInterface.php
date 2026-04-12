@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category publication readiness.
  */
@@ -13,10 +14,12 @@ interface CategoryPublicationReadinessInterface
      * Determines whether the publishable condition is satisfied.
      */
     public function isPublishable(): bool;
+
     /**
      * Determines whether the check value is available.
      */
     public function hasCheck(string $name): bool;
+
     /**
      * Handles the check workflow.
      */

@@ -50,10 +50,11 @@ final class CategoryWorkflowTransitionCommand extends Command
 
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $event = $this->transitionService->transition(new CategoryWorkflowTransitionRequest(
             $this->argumentString($input, 'categoryId'),
             $this->argumentString($input, 'targetState'),

@@ -10,12 +10,14 @@ Author: Oleksandr Tishchenко <dev@highhopesamerica.com>
 */
 
 namespace App\Service;
+
 /**
  * Provides the move event application service.
  */
 final class MoveEvent
 {
     private string $categoryId;
+
     /**
      * Initializes the move event service collaborators.
      */
@@ -23,6 +25,7 @@ final class MoveEvent
     {
         $this->categoryId = $categoryId;
     }
+
     /**
      * Handles the category id workflow.
      */

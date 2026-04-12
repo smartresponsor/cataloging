@@ -7,6 +7,7 @@ namespace App\Idempotency;
 
 use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\ParameterType;
 
@@ -16,17 +17,28 @@ use Doctrine\DBAL\ParameterType;
  * Uses a unique key in the primary data store so duplicate mutation requests
  * are suppressed across process restarts and multiple nodes.
  */
-final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterface
+final readonly class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterface
 {
     /**
      * Initializes the category idempotency store service collaborators.
      */
-    public function __construct(private readonly Connection $connection)
+    public function __construct(private Connection $connection)
     {
     }
 
     /**
      * Handles the acquire workflow.
+     *
+     * @param string      $key
+     * @param string      $operation
+     * @param string      $requestHash
+     * @param int         $ttlSec
+     * @param string|null $correlationId
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @throws \DateMalformedStringException
      */
     public function acquire(
         string $key,
@@ -102,6 +114,8 @@ final class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterfac
 
     /**
      * Handles the purge expired workflow.
+     *
+     * @throws Exception
      */
     public function purgeExpired(): int
     {

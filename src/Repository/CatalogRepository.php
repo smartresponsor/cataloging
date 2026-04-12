@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CategoryEntity;
+use App\Service\CatalogCategoryRowNormalizer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -18,14 +19,14 @@ final class CatalogRepository extends ServiceEntityRepository
     /**
      * Initializes the catalog repository service collaborators.
      */
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly CatalogCategoryRowNormalizer $rowNormalizer,
+    ) {
         parent::__construct($registry, CategoryEntity::class);
     }
 
     /**
-     * @param string $id
-     *
      * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
      *
      * @throws Exception
@@ -41,14 +42,12 @@ final class CatalogRepository extends ServiceEntityRepository
             return null;
         }
 
-        $normalized = $this->normalizeRows([$row]);
+        $normalized = $this->rowNormalizer->normalize([$row]);
 
         return $normalized[0] ?? null;
     }
 
     /**
-     * @param string $path
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
      *
      * @throws Exception
@@ -60,12 +59,10 @@ final class CatalogRepository extends ServiceEntityRepository
             [$path],
         )->fetchAllAssociative();
 
-        return $this->normalizeRows($rows);
+        return $this->rowNormalizer->normalize($rows);
     }
 
     /**
-     * @param string $path
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
      *
      * @throws Exception
@@ -77,12 +74,10 @@ final class CatalogRepository extends ServiceEntityRepository
             [$path],
         )->fetchAllAssociative();
 
-        return $this->normalizeRows($rows);
+        return $this->rowNormalizer->normalize($rows);
     }
 
     /**
-     * @param string $path
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
      *
      * @throws Exception
@@ -90,18 +85,14 @@ final class CatalogRepository extends ServiceEntityRepository
     public function findDescendantRowsByPath(string $path): array
     {
         $rows = $this->getConnection()->executeQuery(
-            'SELECT id, name, slug, path, depth FROM category WHERE path <@ ? AND path <> ? '
-            .'ORDER BY depth ASC, slug ASC',
+            'SELECT id, name, slug, path, depth FROM category WHERE path <@ ? AND path <> ? ORDER BY depth ASC, slug ASC',
             [$path, $path],
         )->fetchAllAssociative();
 
-        return $this->normalizeRows($rows);
+        return $this->rowNormalizer->normalize($rows);
     }
 
     /**
-     * @param int    $limit
-     * @param string $after
-     *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
      *
      * @throws Exception
@@ -125,28 +116,7 @@ final class CatalogRepository extends ServiceEntityRepository
 
         $rows = $this->getConnection()->executeQuery($sql, $params, $types)->fetchAllAssociative();
 
-        return $this->normalizeRows($rows);
-    }
-
-    /**
-     * @param list<array<string,mixed>> $rows
-     *
-     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
-     */
-    private function normalizeRows(array $rows): array
-    {
-        $result = [];
-        foreach ($rows as $row) {
-            $result[] = [
-                'id' => is_scalar($row['id'] ?? null) ? (string) $row['id'] : '',
-                'name' => is_scalar($row['name'] ?? null) ? (string) $row['name'] : '',
-                'slug' => is_scalar($row['slug'] ?? null) ? (string) $row['slug'] : '',
-                'path' => is_scalar($row['path'] ?? null) ? (string) $row['path'] : '',
-                'depth' => is_numeric($row['depth'] ?? null) ? (int) $row['depth'] : 0,
-            ];
-        }
-
-        return $result;
+        return $this->rowNormalizer->normalize($rows);
     }
 
     private function getConnection(): Connection

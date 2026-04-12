@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ImporterInterface;
+
 /**
  * Defines the contract for category ndjson importer.
  */

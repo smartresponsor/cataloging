@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\IdempotencyInterface;
+
 /**
  * Defines the contract for category idempotency store.
  */

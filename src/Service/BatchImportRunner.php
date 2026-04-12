@@ -39,18 +39,18 @@ final class BatchImportRunner
     /** @param array<int,array<string,mixed>> $batch */
     private function flush(array $batch): void
     {
-        $ok = 0;
-        $fail = 0;
+        $successfulCount = 0;
+        $failedCount = 0;
         foreach ($batch as $item) {
             try {
                 $this->processItem($item);
-                ++$ok;
+                ++$successfulCount;
             } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
-                ++$fail;
+                ++$failedCount;
                 error_log('[BatchImportRunner] '.$e->getMessage());
             }
         }
-        $this->progress->report($ok, $fail);
+        $this->progress->report($successfulCount, $failedCount);
     }
 
     /** @param array<string,mixed> $item */

@@ -27,23 +27,29 @@ final class CategoryAdminController extends AbstractController
     public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
+
     /**
      * Handles the index workflow.
      */
     #[Route('/admin/category', name: 'admin_category_index')]
     public function index(): Response
     {
-        $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
-            'limit' => 100,
-            'offset' => 0,
-            'order' => 'name',
-            'direction' => 'asc',
-        ]));
+        try {
+            $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
+                'limit' => 100,
+                'offset' => 0,
+                'order' => 'name',
+                'direction' => 'asc',
+            ]));
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException('Unable to load category administration listing.', $exception);
+        }
 
         return $this->render('category/list.html.twig', [
             'categories' => $categories,
         ]);
     }
+
     /**
      * Handles the new workflow.
      */
@@ -65,13 +71,18 @@ final class CategoryAdminController extends AbstractController
             'is_edit' => false,
         ]);
     }
+
     /**
      * Handles the edit workflow.
      */
     #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
     public function edit(int $id, Request $request): Response
     {
-        $category = $this->categoryProjectionReadService->findOne((string) $id);
+        try {
+            $category = $this->categoryProjectionReadService->findOne((string) $id);
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException(sprintf('Unable to load category #%d.', $id), $exception);
+        }
         if (null === $category) {
             throw $this->createNotFoundException(sprintf('Category #%d was not found.', $id));
         }
@@ -91,13 +102,18 @@ final class CategoryAdminController extends AbstractController
             'is_edit' => true,
         ]);
     }
+
     /**
      * Handles the tree workflow.
      */
     #[Route('/admin/category/tree', name: 'admin_category_tree')]
     public function tree(): Response
     {
-        $tree = $this->categoryProjectionReadService->tree();
+        try {
+            $tree = $this->categoryProjectionReadService->tree();
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException('Unable to load category tree.', $exception);
+        }
 
         return $this->render('category/tree.html.twig', [
             'tree' => $tree,

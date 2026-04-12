@@ -7,6 +7,7 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
 use App\ValueObject\CategorySyndicationPackageBuildRequest;
+
 /**
  * Defines the contract for catalog syndication mapping service.
  */

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Service\CategoryPayloadValueNormalizer;
 use App\Service\ProjectionWorker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -46,27 +47,39 @@ final class CategoryProjectionRunCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $limit = max(1, (int) $input->getOption('limit'));
-        if ($input->getOption('once')) {
-            $processed = $this->worker->runOnce($limit);
-            $output->writeln(sprintf('<info>projection batch processed=%d</info>', $processed));
+        try {
+            $limit = max(1, $this->optionInt($input, 'limit', 50));
+            if ($input->getOption('once')) {
+                $processed = $this->worker->runOnce($limit);
+                $output->writeln(sprintf('<info>projection batch processed=%d</info>', $processed));
+
+                return self::SUCCESS;
+            }
+
+            $maxSec = max(1, $this->optionInt($input, 'max-sec', 5));
+            $maxBatch = max(1, $this->optionInt($input, 'max-batch', 100));
+            if (null === $this->runner) {
+                $processed = $this->worker->runOnce(min($limit, $maxBatch));
+                $output->writeln(sprintf('<comment>runner not wired, fallback processed=%d</comment>', $processed));
+
+                return self::SUCCESS;
+            }
+
+            $this->runner->run($maxSec, $maxBatch);
+            $output->writeln(sprintf('<info>projection runner completed maxSec=%d maxBatch=%d</info>', $maxSec, $maxBatch));
 
             return self::SUCCESS;
+        } catch (\Throwable $exception) {
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
+
+            return self::FAILURE;
         }
+    }
 
-        $maxSec = max(1, (int) $input->getOption('max-sec'));
-        $maxBatch = max(1, (int) $input->getOption('max-batch'));
-        if (null === $this->runner) {
-            $processed = $this->worker->runOnce(min($limit, $maxBatch));
-            $output->writeln(sprintf('<comment>runner not wired, fallback processed=%d</comment>', $processed));
+    private function optionInt(InputInterface $input, string $name, int $default): int
+    {
+        $value = CategoryPayloadValueNormalizer::scalarString($input->getOption($name), (string) $default);
 
-            return self::SUCCESS;
-        }
-
-        $this->runner->run($maxSec, $maxBatch);
-        $output->writeln(sprintf('<info>projection runner completed maxSec=%d maxBatch=%d</info>', $maxSec, $maxBatch));
-
-        return self::SUCCESS;
+        return is_numeric($value) ? (int) $value : $default;
     }
 }

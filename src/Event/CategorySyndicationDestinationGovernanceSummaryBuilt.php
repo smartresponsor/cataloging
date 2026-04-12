@@ -10,12 +10,12 @@ use App\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInter
 /**
  * Represents the category syndication destination governance summary built application event.
  */
-final class CategorySyndicationDestinationGovernanceSummaryBuilt implements CategorySyndicationDestinationGovernanceSummaryBuiltInterface
+final readonly class CategorySyndicationDestinationGovernanceSummaryBuilt implements CategorySyndicationDestinationGovernanceSummaryBuiltInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

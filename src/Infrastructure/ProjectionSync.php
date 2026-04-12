@@ -20,18 +20,18 @@ final class ProjectionSync
     {
         $diff = [];
         foreach ($pg as $id => $row) {
-            $m = $mysql[$id] ?? null;
-            if (null === $m) {
+            $mysqlRow = $mysql[$id] ?? null;
+            if (null === $mysqlRow) {
                 $diff[] = ['id' => $id, 'reason' => 'missing-mysql'];
                 continue;
             }
             foreach (['slug', 'locale', 'published', 'channel'] as $field) {
-                if (($row[$field] ?? null) !== ($m[$field] ?? null)) {
+                if (($row[$field] ?? null) !== ($mysqlRow[$field] ?? null)) {
                     $diff[] = [
                         'id' => $id,
                         'field' => $field,
                         'pg' => $row[$field] ?? null,
-                        'mysql' => $m[$field] ?? null,
+                        'mysql' => $mysqlRow[$field] ?? null,
                     ];
                 }
             }
@@ -51,12 +51,11 @@ final class ProjectionSync
     public function sync(array $pg, array $mysql): array
     {
         $diff = $this->diff($pg, $mysql);
-        file_put_contents('report/category-projection-diff.json',
-            json_encode(
-                $diff,
-                JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR,
-            ),
+        $encodedDiff = json_encode(
+            $diff,
+            JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR,
         );
+        file_put_contents('report/category-projection-diff.json', $encodedDiff);
 
         return $diff;
     }

@@ -12,6 +12,8 @@ final class Importer
 {
     /**
      * Handles the import csv workflow.
+     *
+     * @throws \RuntimeException
      */
     public function importCsv(string $path): int
     {
@@ -27,11 +29,11 @@ final class Importer
                 $header = array_values(array_map([$this, 'stringValue'], $row));
                 continue;
             }
-            /** @var array<string, scalar|null>|false $item */
             $item = array_combine($header, $row);
             if (!is_array($item)) {
                 continue;
             }
+            /** @var array<string, scalar|null> $item */
             $this->upsert($item);
             ++$count;
         }
@@ -42,6 +44,9 @@ final class Importer
 
     /**
      * Handles the import json workflow.
+     *
+     * @throws \JsonException
+     * @throws \RuntimeException
      */
     public function importJson(string $path): int
     {

@@ -28,21 +28,26 @@ final class CategoryMerchantController extends AbstractController
         private readonly SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
     ) {
     }
+
     /**
      * Handles the index workflow.
      */
     #[Route('/merchant/category', name: 'merchant_category_index')]
     public function index(Request $request): Response
     {
-        $context = $this->externalIdentityContextResolver->resolveFromRequest($request);
-        $tenant = $context?->tenant ?? 'merchant';
-        $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
-            'tenant' => $tenant,
-            'limit' => 100,
-            'offset' => 0,
-            'order' => 'name',
-            'direction' => 'asc',
-        ]));
+        try {
+            $context = $this->externalIdentityContextResolver->resolveFromRequest($request);
+            $tenant = $context?->tenant ?? 'merchant';
+            $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
+                'tenant' => $tenant,
+                'limit' => 100,
+                'offset' => 0,
+                'order' => 'name',
+                'direction' => 'asc',
+            ]));
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException('Unable to load merchant categories.', $exception);
+        }
 
         return $this->render('category/merchant/list.html.twig', [
             'categories' => $categories,

@@ -63,7 +63,7 @@ final class RequestCorrelationSubscriberTest extends TestCase
 
     private function createKernel(): HttpKernelInterface
     {
-        return new class() implements HttpKernelInterface {
+        return new class implements HttpKernelInterface {
             public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response
             {
                 return new Response();

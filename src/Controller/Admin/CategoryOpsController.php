@@ -21,25 +21,26 @@ final class CategoryOpsController extends AbstractController
     public function __invoke(): Response
     {
         return $this->render('category/admin/ops.html.twig', [
-            'slo' => $this->readJsonFile('report/category-slo-ci.json', []),
-            'dlq' => $this->readJsonFile('report/category-dlq.json', []),
-            'canary' => $this->readJsonFile('report/category-canary-window.json', []),
+            'slo' => $this->readJsonFile('report/category-slo-ci.json'),
+            'dlq' => $this->readJsonFile('report/category-dlq.json'),
+            'canary' => $this->readJsonFile('report/category-canary-window.json'),
         ]);
     }
 
-    private function readJsonFile(string $path, array $default): array
+    /** @return array<string,mixed> */
+    private function readJsonFile(string $path): array
     {
         if (!is_file($path) || !is_readable($path)) {
-            return $default;
+            return [];
         }
 
         $content = file_get_contents($path);
         if (false === $content) {
-            return $default;
+            return [];
         }
 
         $decoded = json_decode($content, true);
 
-        return is_array($decoded) ? $decoded : $default;
+        return is_array($decoded) ? $decoded : [];
     }
 }

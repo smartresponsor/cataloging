@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\ServiceInterface\Traceability;
 
 use App\Projection\CategoryActorTraceabilityView;
+
 /**
  * Defines the contract for category actor traceability view builder.
  */

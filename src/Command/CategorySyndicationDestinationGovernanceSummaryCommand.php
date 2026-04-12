@@ -56,30 +56,38 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $event = $this->service->buildSummary(new CategorySyndicationDestinationGovernanceSummaryRequest(
-            $this->argumentString($input, 'destinationId'),
-            $this->decodeTrails($this->optionString($input, 'trails', '[]')),
-            $this->argumentString($input, 'actorId'),
-            $this->argumentString($input, 'reason'),
-        ));
+        try {
+            $event = $this->service->buildSummary(new CategorySyndicationDestinationGovernanceSummaryRequest(
+                $this->argumentString($input, 'destinationId'),
+                $this->decodeTrails($this->optionString($input, 'trails', '[]')),
+                $this->argumentString($input, 'actorId'),
+                $this->argumentString($input, 'reason'),
+            ));
 
-        $payload = $event->payload();
-        $format = $this->optionString($input, 'format', 'json');
-        if ('ndjson' === $format) {
-            $output->writeln($this->encodeJson($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $payload = $event->payload();
+            $format = $this->optionString($input, 'format', 'json');
+            if ('ndjson' === $format) {
+                $output->writeln($this->encodeJson($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+                return self::SUCCESS;
+            }
+
+            $output->writeln(
+                $this->encodeJson(
+                    $payload,
+                    JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+                ),
+            );
 
             return self::SUCCESS;
+        } catch (\Throwable $exception) {
+            $output->writeln((string) json_encode([
+                'ok' => false,
+                'error' => $exception->getMessage(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+            return self::FAILURE;
         }
-
-        $output->writeln(
-            $this->encodeJson(
-                $payload,
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
-            ),
-        );
-
-        return self::SUCCESS;
     }
 
     /**

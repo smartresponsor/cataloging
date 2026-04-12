@@ -12,7 +12,7 @@ use App\ValueObjectInterface\CategoryMediaRoleInterface;
 /**
  * Represents the category media binding domain record.
  */
-final class CategoryMediaBinding implements CategoryMediaBindingInterface
+final readonly class CategoryMediaBinding implements CategoryMediaBindingInterface
 {
     /**
      * @param list<string>        $channels
@@ -20,17 +20,17 @@ final class CategoryMediaBinding implements CategoryMediaBindingInterface
      * @param array<string,mixed> $metadata
      */
     public function __construct(
-        private readonly string $bindingId,
-        private readonly string $categoryId,
-        private readonly string $assetId,
-        private readonly CategoryMediaRole $role,
-        private readonly array $channels,
-        private readonly array $locales,
-        private readonly bool $requiredForPublish,
-        private readonly bool $active,
-        private readonly array $metadata,
-        private readonly string $actorId,
-        private readonly \DateTimeImmutable $boundAt,
+        private string $bindingId,
+        private string $categoryId,
+        private string $assetId,
+        private CategoryMediaRole $role,
+        private array $channels,
+        private array $locales,
+        private bool $requiredForPublish,
+        private bool $active,
+        private array $metadata,
+        private string $actorId,
+        private \DateTimeImmutable $boundAt,
     ) {
     }
 

@@ -10,12 +10,12 @@ use App\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
 /**
  * Represents the category syndication governance trail recorded application event.
  */
-final class CategorySyndicationGovernanceTrailRecorded implements CategorySyndicationGovernanceTrailRecordedInterface
+final readonly class CategorySyndicationGovernanceTrailRecorded implements CategorySyndicationGovernanceTrailRecordedInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

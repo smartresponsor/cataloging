@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\EntityInterface\CategoryAccessAssignmentInterface;
+use Random\RandomException;
 
 /**
  * Represents the category access assignment domain record.
@@ -27,6 +28,9 @@ final class CategoryAccessAssignment implements CategoryAccessAssignmentInterfac
     ) {
     }
 
+    /**
+     * @throws RandomException
+     */
     public static function create(
         string $categoryId,
         string $actorUserId,

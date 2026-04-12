@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the facet rank application service.
  */
@@ -14,15 +15,15 @@ final class FacetRank
     {
         $name = strtolower($this->stringValue($row, 'name'));
         $slug = strtolower($this->stringValue($row, 'slug'));
-        $t = strtolower($term);
+        $needle = strtolower($term);
         $score = 0.0;
-        if ($name === $t || $slug === $t) {
+        if ($name === $needle || $slug === $needle) {
             $score += 10.0;
         }
-        if (str_starts_with($name, $t) || str_starts_with($slug, $t)) {
+        if (str_starts_with($name, $needle) || str_starts_with($slug, $needle)) {
             $score += 3.0;
         }
-        if (str_contains($name, $t) || str_contains($slug, $t)) {
+        if (str_contains($name, $needle) || str_contains($slug, $needle)) {
             $score += 1.0;
         }
         $depth = substr_count($this->stringValue($row, 'path'), '/');

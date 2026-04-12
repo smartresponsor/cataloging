@@ -38,6 +38,11 @@ final class AttachmentServiceTest extends TestCase
                 ];
             }
 
+            public function findOne(string $attachmentId): ?array
+            {
+                return null;
+            }
+
             public function delete(string $attachmentId): bool
             {
                 return false;
@@ -57,7 +62,7 @@ final class AttachmentServiceTest extends TestCase
     public function testAddTrimsAndDelegatesToRepository(): void
     {
         $repository = new class implements CatalogAttachmentRepositoryInterface {
-            /** @var array{categoryId?:string,type?:string,provider?:string,externalAttachmentId?:string,referenceUri?:?string} */
+            /** @var array{categoryId?:string,type?:string,provider?:string,externalAttachmentId?:string,referenceUri?: ?string} */
             public array $payload = [];
 
             public function list(?string $categoryId = null): array
@@ -87,6 +92,11 @@ final class AttachmentServiceTest extends TestCase
                 ];
             }
 
+            public function findOne(string $attachmentId): ?array
+            {
+                return null;
+            }
+
             public function delete(string $attachmentId): bool
             {
                 return false;
@@ -94,7 +104,7 @@ final class AttachmentServiceTest extends TestCase
         };
 
         $gateway = new class implements AttachmentReferenceGatewayInterface {
-            /** @var array{provider?:string,externalAttachmentId?:string,referenceUri?:?string} */
+            /** @var array{provider?:string,externalAttachmentId?:string,referenceUri?: ?string} */
             public array $payload = [];
 
             public function assertBindable(string $provider, string $externalAttachmentId, ?string $referenceUri = null): void
@@ -163,6 +173,11 @@ final class AttachmentServiceTest extends TestCase
                     'path' => $referenceUri,
                     'created_at' => '2026-03-29T00:00:00+00:00',
                 ];
+            }
+
+            public function findOne(string $attachmentId): ?array
+            {
+                return null;
             }
 
             public function delete(string $attachmentId): bool

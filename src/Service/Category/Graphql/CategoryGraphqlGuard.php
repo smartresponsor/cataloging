@@ -10,12 +10,12 @@ use App\ServiceInterface\Category\CategoryGraphqlGuardInterface;
 /**
  * Provides the category graphql guard application service.
  */
-final class CategoryGraphqlGuard implements CategoryGraphqlGuardInterface
+final readonly class CategoryGraphqlGuard implements CategoryGraphqlGuardInterface
 {
     /**
      * Initializes the category graphql guard service collaborators.
      */
-    public function __construct(private readonly int $maxDepth = 8, private readonly int $maxCost = 5000)
+    public function __construct(private int $maxDepth = 8, private int $maxCost = 5000)
     {
     }
 

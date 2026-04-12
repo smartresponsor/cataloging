@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\RepositoryInterface;
 
 use App\EntityInterface\CategorySyndicationDestinationInterface;
+
 /**
  * Defines the contract for category syndication destination repository.
  */
@@ -15,6 +16,7 @@ interface CategorySyndicationDestinationRepositoryInterface
      * Handles the save workflow.
      */
     public function save(CategorySyndicationDestinationInterface $destination): void;
+
     /**
      * Finds the requested record in the underlying store.
      */

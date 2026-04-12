@@ -58,26 +58,34 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $publicationChecks = $this->decodeJsonMapOption($input, 'publication-checks');
-        $checks = $this->decodeJsonMapOption($input, 'checks');
+        try {
+            $publicationChecks = $this->decodeJsonMapOption($input, 'publication-checks');
+            $checks = $this->decodeJsonMapOption($input, 'checks');
 
-        $event = $this->qualityService->evaluate(
-            new CategoryPublicationQualityEvaluationRequest(
-                new CategoryPublicationQualityInput(
-                    $this->argumentString($input, 'categoryId'),
-                    $this->argumentInt($input, 'score'),
-                    $publicationChecks,
-                    $checks,
+            $event = $this->qualityService->evaluate(
+                new CategoryPublicationQualityEvaluationRequest(
+                    new CategoryPublicationQualityInput(
+                        $this->argumentString($input, 'categoryId'),
+                        $this->argumentInt($input, 'score'),
+                        $publicationChecks,
+                        $checks,
+                    ),
+                    new CatalogAuditContext(
+                        $this->argumentString($input, 'actorId'),
+                        $this->argumentString($input, 'reason'),
+                    ),
                 ),
-                new CatalogAuditContext(
-                    $this->argumentString($input, 'actorId'),
-                    $this->argumentString($input, 'reason'),
-                ),
-            ),
-        );
+            );
 
-        return $this->writeJson($output, $event->payload());
+            return $this->writeJson($output, $event->payload());
+        } catch (\Throwable $exception) {
+            $output->writeln((string) json_encode([
+                'ok' => false,
+                'error' => $exception->getMessage(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+            return self::FAILURE;
+        }
     }
 
     /**

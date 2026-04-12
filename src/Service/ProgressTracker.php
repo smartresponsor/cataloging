@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the progress tracker application service.
  */
@@ -11,6 +12,7 @@ final class ProgressTracker
 {
     private int $ok = 0;
     private int $fail = 0;
+
     /**
      * Handles the report workflow.
      */
@@ -19,6 +21,7 @@ final class ProgressTracker
         $this->ok += $ok;
         $this->fail += $fail;
     }
+
     /**
      * Handles the total ok workflow.
      */
@@ -26,6 +29,7 @@ final class ProgressTracker
     {
         return $this->ok;
     }
+
     /**
      * Handles the total fail workflow.
      */

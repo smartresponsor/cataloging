@@ -9,6 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the export category command console workflow.
  */
@@ -17,12 +18,14 @@ final class ExportCategoryCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $rows = [
             ['id' => '1', 'slug' => 'root'],
         ];

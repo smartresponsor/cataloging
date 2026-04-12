@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category workflow state.
  */
@@ -13,6 +14,7 @@ interface CategoryWorkflowStateInterface
      * Handles the value workflow.
      */
     public function value(): string;
+
     /**
      * Handles the is workflow.
      */

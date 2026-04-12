@@ -7,6 +7,7 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
 use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
+
 /**
  * Defines the contract for catalog publication quality service.
  */

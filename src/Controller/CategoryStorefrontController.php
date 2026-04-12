@@ -9,6 +9,7 @@ use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\CategoryReadScopeServiceInterface;
 use App\ValueObject\CategoryProjectionCriteria;
 use App\ValueObject\CategoryReadScopeRequest;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -52,6 +53,8 @@ final readonly class CategoryStorefrontController
             return new JsonResponse($this->categoryProjectionReadService->list($criteria));
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
+        } catch (Exception) {
+            return new JsonResponse(['error' => 'Unable to read storefront categories.'], 500);
         }
     }
 }

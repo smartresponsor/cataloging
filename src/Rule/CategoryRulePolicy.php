@@ -4,14 +4,15 @@
 declare(strict_types=1);
 
 namespace App\Rule;
+
 /**
  * Provides the category rule policy implementation.
  */
 final class CategoryRulePolicy
 {
-public const int MAX_CONDITIONS = 20;
-public const int PRICE_MIN = 0;
-public const int PRICE_MAX = 1000000;
+    public const int MAX_CONDITIONS = 20;
+    public const int PRICE_MIN = 0;
+    public const int PRICE_MAX = 1000000;
     /** @var string[] */
     public static array $allowedAttrs = ['brand', 'price', 'stock'];
     /** @var string[] */

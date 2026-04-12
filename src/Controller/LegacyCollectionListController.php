@@ -11,9 +11,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 /**
  * Handles the legacy collection list controller application flow.
  */
+/** @noinspection PhpCSFixerValidationInspection */
 final class LegacyCollectionListController extends AbstractController
 {
     /**
@@ -24,6 +26,7 @@ final class LegacyCollectionListController extends AbstractController
         private readonly CatalogCollectionProjectionRepositoryInterface $projectionRepository,
     ) {
     }
+
     /**
      * Executes the invokable workflow for this service.
      */
@@ -76,14 +79,15 @@ final class LegacyCollectionListController extends AbstractController
 
         $tags = array_filter(
             $tagSet,
-            static fn (mixed $value): bool =>
-                is_bool($value)
+            static fn (mixed $value): bool => is_bool($value)
                 || is_float($value)
                 || is_int($value)
                 || is_string($value),
         );
 
-        return array_values($tags);
+        return array_values(array_map(
+            static fn (bool|float|int|string $value): string => (string) $value,
+            $tags,
+        ));
     }
-
 }

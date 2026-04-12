@@ -11,7 +11,7 @@ use App\ValueObject\WebhookDispatchRequest;
 /**
  * Provides the webhook client application service.
  */
-final class WebhookClient implements WebhookClientInterface
+final readonly class WebhookClient implements WebhookClientInterface
 {
     private string $secret;
     private int $maxRetry;
@@ -27,6 +27,8 @@ final class WebhookClient implements WebhookClientInterface
 
     /**
      * Handles the send workflow.
+     *
+     * @throws \JsonException
      */
     public function send(WebhookDispatchRequest $request): bool
     {
@@ -40,12 +42,12 @@ final class WebhookClient implements WebhookClientInterface
         );
         $signature = hash_hmac('sha256', $body, $this->secret);
 
-        for ($i = 0; $i < $this->maxRetry; ++$i) {
+        for ($attemptIndex = 0; $attemptIndex < $this->maxRetry; ++$attemptIndex) {
             if ($this->dispatch($request->endpoint, $body, $signature)) {
                 return true;
             }
 
-            usleep((int) (2 ** $i * 100000));
+            usleep((int) (2 ** $attemptIndex * 100000));
         }
 
         return false;
@@ -56,8 +58,7 @@ final class WebhookClient implements WebhookClientInterface
         $context = stream_context_create([
             'http' => [
                 'method' => 'POST',
-                'header' => implode("
-", [
+                'header' => implode("\r\n", [
                     'Content-Type: application/json',
                     'X-Webhook-Signature: sha256='.$signature,
                     'Content-Length: '.strlen($body),
@@ -69,9 +70,7 @@ final class WebhookClient implements WebhookClientInterface
         ]);
 
         $response = file_get_contents($endpoint, false, $context);
-        /** @var list<string> $headers */
-        $headers = $http_response_header;
-        $statusLine = $headers[0] ?? '';
+        $statusLine = $http_response_header[0] ?? '';
 
         if (preg_match('/\s(\d{3})\s?/', $statusLine, $matches)) {
             $status = (int) $matches[1];

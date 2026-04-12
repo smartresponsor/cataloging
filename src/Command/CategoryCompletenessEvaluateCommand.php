@@ -52,10 +52,11 @@ final class CategoryCompletenessEvaluateCommand extends Command
 
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $payload = $this->jsonOptionMap($input, 'payload');
 
         $event = $this->completenessService->evaluate(

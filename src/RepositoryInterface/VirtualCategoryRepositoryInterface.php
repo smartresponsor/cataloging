@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\RepositoryInterface;
+
 /**
  * Defines the contract for virtual category repository.
  */

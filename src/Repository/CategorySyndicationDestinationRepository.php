@@ -7,6 +7,7 @@ namespace App\Repository;
 
 use App\EntityInterface\CategorySyndicationDestinationInterface;
 use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+
 /**
  * Provides repository services for category syndication destination repository.
  */
@@ -16,6 +17,7 @@ final class CategorySyndicationDestinationRepository implements CategorySyndicat
      * @var array<string,CategorySyndicationDestinationInterface>
      */
     private array $items = [];
+
     /**
      * Handles the save workflow.
      */
@@ -23,6 +25,7 @@ final class CategorySyndicationDestinationRepository implements CategorySyndicat
     {
         $this->items[$destination->destinationId()] = $destination;
     }
+
     /**
      * Finds the requested record in the underlying store.
      */
@@ -30,6 +33,7 @@ final class CategorySyndicationDestinationRepository implements CategorySyndicat
     {
         return $this->items[trim($destinationId)] ?? null;
     }
+
     /**
      * Handles the enabled destinations workflow.
      */

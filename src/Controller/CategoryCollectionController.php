@@ -7,6 +7,7 @@ namespace App\Controller;
 
 use App\Request\CategoryCollectionRequest;
 use App\Service\CatalogCollectionService;
+use App\Service\CategoryCollectionRuleNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,8 +20,10 @@ final readonly class CategoryCollectionController
     /**
      * Initializes the category collection controller service collaborators.
      */
-    public function __construct(private CatalogCollectionService $service)
-    {
+    public function __construct(
+        private CatalogCollectionService $service,
+        private CategoryCollectionRuleNormalizer $ruleNormalizer,
+    ) {
     }
 
     /**
@@ -34,7 +37,7 @@ final readonly class CategoryCollectionController
             return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
         }
 
-        $result = $this->service->build($this->normalizeRules($input->rules));
+        $result = $this->service->build($this->ruleNormalizer->normalize($input->rules));
 
         return new JsonResponse([
             'ok' => true,
@@ -42,36 +45,5 @@ final readonly class CategoryCollectionController
             'data' => $result,
             'total' => count($result),
         ]);
-    }
-
-    /**
-     * @param array $rules
-     *
-     * @return array<string, array<int, bool|float|int|string>|bool|float|int|string>
-     */
-    private function normalizeRules(array $rules): array
-    {
-        $normalized = [];
-        foreach ($rules as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-            if (is_bool($value) || is_float($value) || is_int($value) || is_string($value)) {
-                $normalized[$key] = $value;
-                continue;
-            }
-            if (!is_array($value)) {
-                continue;
-            }
-            $items = [];
-            foreach ($value as $item) {
-                if (is_bool($item) || is_float($item) || is_int($item) || is_string($item)) {
-                    $items[] = $item;
-                }
-            }
-            $normalized[$key] = $items;
-        }
-
-        return $normalized;
     }
 }

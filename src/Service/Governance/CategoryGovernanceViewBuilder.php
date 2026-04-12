@@ -47,7 +47,7 @@ final readonly class CategoryGovernanceViewBuilder implements CategoryGovernance
             primaryActorUserId: $primary?->actorUserId(),
             activeAssignments: $assignments,
             roleCapabilities: $this->roleCapabilities(),
-            generatedAt: new \DateTimeImmutable('now')->format(DATE_ATOM),
+            generatedAt: (new \DateTimeImmutable('now'))->format(DATE_ATOM),
         );
     }
 

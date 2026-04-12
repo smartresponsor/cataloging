@@ -4,28 +4,29 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 /**
  * Provides the version compare application service.
  */
-final class VersionCompare
+final readonly class VersionCompare
 {
     /**
-     * @param array<string, scalar|null> $a
-     * @param array<string, scalar|null> $b
+     * @param array<string,scalar|null> $fromValues
+     * @param array<string,scalar|null> $toValues
      *
      * @return array<string, array{from: scalar|null, to: scalar|null}>
      */
-    public function diff(array $a, array $b): array
+    public function diff(array $fromValues, array $toValues): array
     {
         $result = [];
-        foreach ($a as $k => $v) {
-            if (!array_key_exists($k, $b) || $b[$k] !== $v) {
-                $result[$k] = ['from' => $v, 'to' => $b[$k] ?? null];
+        foreach ($fromValues as $fieldName => $fromValue) {
+            if (!array_key_exists($fieldName, $toValues) || $toValues[$fieldName] !== $fromValue) {
+                $result[$fieldName] = ['from' => $fromValue, 'to' => $toValues[$fieldName] ?? null];
             }
         }
-        foreach ($b as $k => $v) {
-            if (!array_key_exists($k, $a)) {
-                $result[$k] = ['from' => null, 'to' => $v];
+        foreach ($toValues as $fieldName => $toValue) {
+            if (!array_key_exists($fieldName, $fromValues)) {
+                $result[$fieldName] = ['from' => null, 'to' => $toValue];
             }
         }
 

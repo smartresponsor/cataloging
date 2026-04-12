@@ -14,17 +14,17 @@ use Doctrine\DBAL\ParameterType;
 /**
  * Provides the projection worker application service.
  */
-final class ProjectionWorker
+final readonly class ProjectionWorker
 {
     /**
      * Initializes the projection worker service collaborators.
      */
     public function __construct(
-        private readonly Connection $connection,
-        private readonly CategoryProjectionSyncInterface $projectionSync,
-        private readonly CategoryOutboxRetryInterface $retry,
-        private readonly ?CatalogProjectionMetrics $projectionMetrics = null,
-        private readonly int $maxAttempts = 5,
+        private Connection $connection,
+        private CategoryProjectionSyncInterface $projectionSync,
+        private CategoryOutboxRetryInterface $retry,
+        private ?CatalogProjectionMetrics $projectionMetrics = null,
+        private int $maxAttempts = 5,
     ) {
     }
 

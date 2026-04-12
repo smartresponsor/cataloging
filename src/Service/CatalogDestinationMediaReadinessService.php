@@ -44,11 +44,7 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
             throw new \InvalidArgumentException('Unknown destination.');
         }
         $settings = $destination->settings();
-        $payload = [
-            'channel' => $this->stringValue($settings['channel'] ?? null),
-            'locale' => $this->stringValue($settings['locale'] ?? null),
-            'requiredRoles' => $this->stringList($settings['requiredMediaRoles'] ?? null),
-        ];
+        $payload = CategoryMediaInputNormalizer::destinationPayload($settings);
         $applicability = $this->applicabilityService->evaluate(
             new CategoryEvaluationRequest(
                 $categoryId,
@@ -66,18 +62,18 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
                 $payload,
             ),
             new CategoryDestinationMediaReadinessState(
-                $this->boolMap($applicabilityPayload['checks'] ?? null),
-                $this->stringList($applicabilityPayload['requiredMissing'] ?? null),
-                $this->stringList($applicabilityPayload['warnings'] ?? null),
-                $this->stringList($applicabilityPayload['matchedBindingIds'] ?? null),
+                CategoryMediaInputNormalizer::boolMap($applicabilityPayload['checks'] ?? null),
+                CategoryMediaInputNormalizer::stringList($applicabilityPayload['requiredMissing'] ?? null),
+                CategoryMediaInputNormalizer::stringList($applicabilityPayload['warnings'] ?? null),
+                CategoryMediaInputNormalizer::stringList($applicabilityPayload['matchedBindingIds'] ?? null),
             ),
         );
 
         return new CategoryDestinationMediaReadinessEvaluated(
             $destinationId,
             $categoryId,
-            $this->stringValue($settings['channel'] ?? null),
-            $this->stringValue($settings['locale'] ?? null),
+            CategoryMediaInputNormalizer::stringValue($settings['channel'] ?? null),
+            CategoryMediaInputNormalizer::stringValue($settings['locale'] ?? null),
             $report->publishable(),
             $report->requiredMissing(),
             $report->warnings(),
@@ -87,49 +83,5 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
             $request->reason(),
             new \DateTimeImmutable(),
         );
-    }
-
-    private function stringValue(mixed $value): string
-    {
-        return is_scalar($value) ? trim((string) $value) : '';
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($value as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-
-            $normalized = trim((string) $item);
-            if ('' !== $normalized) {
-                $result[] = $normalized;
-            }
-        }
-
-        return array_values($result);
-    }
-
-    /** @return array<string,bool> */
-    private function boolMap(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($value as $key => $item) {
-            if (is_string($key) && '' != trim($key)) {
-                $result[$key] = (bool) $item;
-            }
-        }
-
-        return $result;
     }
 }

@@ -11,21 +11,21 @@ use App\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
 /**
  * Represents the category syndication delivery record domain record.
  */
-final class CategorySyndicationDeliveryRecord implements CategorySyndicationDeliveryRecordInterface
+final readonly class CategorySyndicationDeliveryRecord implements CategorySyndicationDeliveryRecordInterface
 {
     /**
      * Initializes the category syndication delivery record service collaborators.
      */
     public function __construct(
-        private readonly string $deliveryId,
-        private readonly string $packageId,
-        private readonly string $destinationId,
-        private readonly string $categoryId,
-        private readonly CategorySyndicationDeliveryStatusInterface $status,
-        private readonly int $attempt,
-        private readonly ?int $responseCode,
-        private readonly string $responseMessage,
-        private readonly ?\DateTimeImmutable $deliveredAt,
+        private string $deliveryId,
+        private string $packageId,
+        private string $destinationId,
+        private string $categoryId,
+        private CategorySyndicationDeliveryStatusInterface $status,
+        private int $attempt,
+        private ?int $responseCode,
+        private string $responseMessage,
+        private ?\DateTimeImmutable $deliveredAt,
     ) {
     }
 

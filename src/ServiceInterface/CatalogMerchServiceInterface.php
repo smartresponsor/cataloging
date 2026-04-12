@@ -17,6 +17,7 @@ interface CatalogMerchServiceInterface
      * Handles the pin create workflow.
      */
     public function pinCreate(CategoryMerchPinCreateRequest $request): void;
+
     /**
      * Handles the pin delete workflow.
      */
@@ -26,10 +27,12 @@ interface CatalogMerchServiceInterface
      * @param list<string> $recordIds
      */
     public function orderSet(string $categoryId, array $recordIds): void;
+
     /**
      * Handles the banner publish workflow.
      */
     public function bannerPublish(CategoryMerchBannerPublishRequest $request): string;
+
     /**
      * Handles the html publish workflow.
      */

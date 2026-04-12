@@ -7,15 +7,18 @@ namespace App\Repository;
 
 use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+
 /**
  * Provides repository services for category syndication delivery record repository.
  */
+/** @noinspection PhpCSFixerValidationInspection */
 final class CategorySyndicationDeliveryRecordRepository implements CategorySyndicationDeliveryRecordRepositoryInterface
 {
     /**
      * @var array<string,CategorySyndicationDeliveryRecordInterface>
      */
     private array $items = [];
+
     /**
      * Handles the save workflow.
      */
@@ -23,6 +26,7 @@ final class CategorySyndicationDeliveryRecordRepository implements CategorySyndi
     {
         $this->items[$record->deliveryId()] = $record;
     }
+
     /**
      * Finds the requested record in the underlying store.
      */
@@ -30,6 +34,7 @@ final class CategorySyndicationDeliveryRecordRepository implements CategorySyndi
     {
         return $this->items[trim($deliveryId)] ?? null;
     }
+
     /**
      * Handles the records for package workflow.
      */
@@ -37,10 +42,10 @@ final class CategorySyndicationDeliveryRecordRepository implements CategorySyndi
     {
         return array_values(array_filter(
             $this->items,
-            static fn (CategorySyndicationDeliveryRecordInterface $record): bool =>
-                $record->packageId() === trim($packageId),
+            static fn (CategorySyndicationDeliveryRecordInterface $record): bool => $record->packageId() === trim($packageId),
         ));
     }
+
     /**
      * Handles the failed records workflow.
      */
@@ -48,8 +53,7 @@ final class CategorySyndicationDeliveryRecordRepository implements CategorySyndi
     {
         return array_values(array_filter(
             $this->items,
-            static fn (CategorySyndicationDeliveryRecordInterface $record): bool =>
-                'failed' === $record->status()->status(),
+            static fn (CategorySyndicationDeliveryRecordInterface $record): bool => 'failed' === $record->status()->status(),
         ));
     }
 }

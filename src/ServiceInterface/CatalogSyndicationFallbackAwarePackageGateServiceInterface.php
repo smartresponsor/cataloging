@@ -7,9 +7,11 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
 use App\ValueObject\CategorySyndicationPackageBuildRequest;
+
 /**
  * Defines the contract for catalog syndication fallback aware package gate service.
  */
+/** @noinspection PhpClassNamingConventionInspection */
 interface CatalogSyndicationFallbackAwarePackageGateServiceInterface
 {
     /**

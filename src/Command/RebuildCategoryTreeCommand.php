@@ -11,6 +11,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the rebuild category tree command console workflow.
  */
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class RebuildCategoryTreeCommand extends Command
 {
     use CategoryCliOutputTrait;
+
     /**
      * Initializes the rebuild category tree command service collaborators.
      */
@@ -27,12 +29,12 @@ final class RebuildCategoryTreeCommand extends Command
     ) {
         parent::__construct();
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $nodes = [
             ['id' => 1, 'level' => 0],
             ['id' => 2, 'level' => 1, 'parent' => 1],

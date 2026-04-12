@@ -20,7 +20,7 @@ final class CategorySuggestController extends AbstractController
     /**
      * Initializes the category suggest controller service collaborators.
      */
-    public function __construct(private readonly CatalogSuggestService $svc)
+    public function __construct(private readonly CatalogSuggestService $catalogSuggestService)
     {
     }
 
@@ -28,24 +28,28 @@ final class CategorySuggestController extends AbstractController
      * Handles the suggest workflow.
      */
     #[Route('/api/category/suggest', name: 'api_category_suggest', methods: ['POST'])]
-    public function suggest(Request $r): JsonResponse
+    public function suggest(Request $request): JsonResponse
     {
-        $name = $this->requestString($r, 'name');
-        $desc = $this->requestString($r, 'desc');
-        $tags = $this->requestStringList($r, 'tag');
-        $res = $this->svc->suggest($name, $desc, $tags);
-        // simple audit log
-        $logDir = getcwd().'/var/log';
-        $this->ensureDirectory($logDir);
-        $writer = new RotatingFileWriter($logDir.'/category_suggest.log');
-        $writer->write(
-            json_encode(
-                ['name' => $name, 'desc' => $desc, 'tags' => $tags, 'res' => $res],
-                JSON_THROW_ON_ERROR,
-            )."\n",
-        );
+        try {
+            $name = $this->requestString($request, 'name');
+            $description = $this->requestString($request, 'desc');
+            $tags = $this->requestTags($request);
+            $suggestion = $this->catalogSuggestService->suggest($name, $description, $tags);
 
-        return $this->json(['ok' => true, 'item' => $res]);
+            $logDir = getcwd().'/var/log';
+            $this->ensureDirectory($logDir);
+            $writer = new RotatingFileWriter($logDir.'/category_suggest.log');
+            $writer->write(
+                json_encode(
+                    ['name' => $name, 'desc' => $description, 'tags' => $tags, 'res' => $suggestion],
+                    JSON_THROW_ON_ERROR,
+                )."\n",
+            );
+
+            return $this->json(['ok' => true, 'item' => $suggestion]);
+        } catch (\Throwable) {
+            return $this->json(['ok' => false, 'error' => 'category_suggest_failed'], 500);
+        }
     }
 
     private function requestString(Request $request, string $key): string
@@ -56,9 +60,9 @@ final class CategorySuggestController extends AbstractController
     }
 
     /** @return list<string> */
-    private function requestStringList(Request $request, string $key): array
+    private function requestTags(Request $request): array
     {
-        $values = $request->request->all($key);
+        $values = $request->request->all('tag');
 
         $result = [];
         foreach ($values as $value) {

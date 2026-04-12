@@ -7,6 +7,7 @@ namespace App\Service;
 
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ValueObject\CategoryProjectionCriteria;
+use Doctrine\DBAL\Exception;
 
 /**
  * Provides the read optimizer application service.
@@ -15,8 +16,8 @@ final class ReadOptimizer
 {
     /** @var array<string,list<array<string,mixed>>> */
     private array $cache = [];
-    private int $hit = 0;
-    private int $miss = 0;
+    private int $hitCounter = 0;
+    private int $missCounter = 0;
 
     /**
      * Initializes the read optimizer service collaborators.
@@ -26,8 +27,11 @@ final class ReadOptimizer
     }
 
     /**
+     * @param CategoryProjectionCriteria|null $criteria
+     *
      * @return list<array<string,mixed>>
      *
+     * @throws Exception
      * @throws \JsonException
      */
     public function getTree(?CategoryProjectionCriteria $criteria = null): array
@@ -36,12 +40,12 @@ final class ReadOptimizer
         $cacheKey = $this->cacheKey($criteria);
         $cachedTree = $this->cache[$cacheKey] ?? null;
         if (is_array($cachedTree)) {
-            ++$this->hit;
+            ++$this->hitCounter;
 
             return $cachedTree;
         }
 
-        ++$this->miss;
+        ++$this->missCounter;
         $tree = array_map(
             static function (array $row): array {
                 if (!array_key_exists('channel', $row)) {
@@ -61,8 +65,8 @@ final class ReadOptimizer
     public function stats(): array
     {
         return [
-            'hit' => $this->hit,
-            'miss' => $this->miss,
+            'hit' => $this->hitCounter,
+            'miss' => $this->missCounter,
             'size' => count($this->cache),
         ];
     }
@@ -76,8 +80,6 @@ final class ReadOptimizer
     }
 
     /**
-     * @return string
-     *
      * @throws \JsonException
      */
     private function cacheKey(CategoryProjectionCriteria $criteria): string

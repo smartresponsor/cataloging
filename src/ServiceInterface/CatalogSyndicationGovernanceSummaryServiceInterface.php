@@ -7,6 +7,7 @@ namespace App\ServiceInterface;
 
 use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
 use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
+
 /**
  * Defines the contract for catalog syndication governance summary service.
  */

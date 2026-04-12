@@ -6,11 +6,14 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
+use App\Service\CategoryPayloadValueNormalizer;
 use App\ValueObject\CategorySyndicationGovernanceTrailReport;
 use App\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
+
 /**
  * Provides the category syndication governance trail policy implementation.
  */
+/** @noinspection DuplicatedCode */
 final class CategorySyndicationGovernanceTrailPolicy implements CategorySyndicationGovernanceTrailPolicyInterface
 {
     /**
@@ -24,30 +27,29 @@ final class CategorySyndicationGovernanceTrailPolicy implements CategorySyndicat
         array $deliveryPayload,
         array $historyPayload,
         array $recoveryPayload,
-    ): CategorySyndicationGovernanceTrailReportInterface
-    {
-        $mediaPolicyMode = $this->scalarString($policyAwarePayload['mediaPolicyMode'] ?? 'strict_exact');
+    ): CategorySyndicationGovernanceTrailReportInterface {
+        $mediaPolicyMode = CategoryPayloadValueNormalizer::scalarString($policyAwarePayload['mediaPolicyMode'] ?? 'strict_exact');
         $strictPublishable = (bool) ($policyAwarePayload['strictPublishable'] ?? false);
         $fallbackPublishable = (bool) ($policyAwarePayload['fallbackPublishable'] ?? false);
         $resolvedPublishable = (bool) ($policyAwarePayload['resolvedPublishable'] ?? false);
         $fallbackUsed = (bool) ($policyAwarePayload['fallbackUsed'] ?? false);
-        $deliveryStatus = $this->scalarString($deliveryPayload['status'] ?? 'pending');
+        $deliveryStatus = CategoryPayloadValueNormalizer::scalarString($deliveryPayload['status'] ?? 'pending');
         $retryable = (bool) ($deliveryPayload['retryable'] ?? false);
         $retryScheduled = 'retry_scheduled' === $deliveryStatus
-            || ($this->intValue($recoveryPayload['scheduledRetries'] ?? null) > 0);
+            || (CategoryPayloadValueNormalizer::intValue($recoveryPayload['scheduledRetries'] ?? null) > 0);
 
         $historyCounts = [
-            'totalRecords' => $this->intValue($historyPayload['totalRecords'] ?? null),
-            'deliveredCount' => $this->intValue($historyPayload['deliveredCount'] ?? null),
-            'failedCount' => $this->intValue($historyPayload['failedCount'] ?? null),
-            'pendingCount' => $this->intValue($historyPayload['pendingCount'] ?? null),
-            'retryScheduledCount' => $this->intValue($historyPayload['retryScheduledCount'] ?? null),
-            'skippedCount' => $this->intValue($historyPayload['skippedCount'] ?? null),
+            'totalRecords' => CategoryPayloadValueNormalizer::intValue($historyPayload['totalRecords'] ?? null),
+            'deliveredCount' => CategoryPayloadValueNormalizer::intValue($historyPayload['deliveredCount'] ?? null),
+            'failedCount' => CategoryPayloadValueNormalizer::intValue($historyPayload['failedCount'] ?? null),
+            'pendingCount' => CategoryPayloadValueNormalizer::intValue($historyPayload['pendingCount'] ?? null),
+            'retryScheduledCount' => CategoryPayloadValueNormalizer::intValue($historyPayload['retryScheduledCount'] ?? null),
+            'skippedCount' => CategoryPayloadValueNormalizer::intValue($historyPayload['skippedCount'] ?? null),
         ];
 
         $warnings = [];
         foreach ([$policyAwarePayload['warnings'] ?? null, $deliveryPayload['warnings'] ?? null] as $warningList) {
-            foreach ($this->stringList($warningList) as $warning) {
+            foreach (CategoryPayloadValueNormalizer::stringList($warningList) as $warning) {
                 if (!in_array($warning, $warnings, true)) {
                     $warnings[] = $warning;
                 }
@@ -78,13 +80,13 @@ final class CategorySyndicationGovernanceTrailPolicy implements CategorySyndicat
         ];
 
         return new CategorySyndicationGovernanceTrailReport(
-            $this->scalarString(
+            CategoryPayloadValueNormalizer::scalarString(
                 $policyAwarePayload['destinationId']
                 ?? $deliveryPayload['destinationId']
                 ?? $historyPayload['destinationId']
                 ?? null,
             ),
-            $this->scalarString(
+            CategoryPayloadValueNormalizer::scalarString(
                 $policyAwarePayload['categoryId']
                 ?? $deliveryPayload['categoryId']
                 ?? $historyPayload['categoryId']
@@ -102,36 +104,5 @@ final class CategorySyndicationGovernanceTrailPolicy implements CategorySyndicat
             $warnings,
             $checks,
         );
-    }
-
-    private function scalarString(mixed $value): string
-    {
-        return is_scalar($value) ? trim((string) $value) : '';
-    }
-
-    private function intValue(mixed $value): int
-    {
-        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($value as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-            $normalized = trim((string) $item);
-            if ('' !== $normalized) {
-                $result[] = $normalized;
-            }
-        }
-
-        return array_values($result);
     }
 }

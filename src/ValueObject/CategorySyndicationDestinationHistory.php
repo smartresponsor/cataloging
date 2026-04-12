@@ -10,24 +10,24 @@ use App\ValueObjectInterface\CategorySyndicationDestinationHistoryInterface;
 /**
  * Represents the category syndication destination history value.
  */
-final class CategorySyndicationDestinationHistory implements CategorySyndicationDestinationHistoryInterface
+final readonly class CategorySyndicationDestinationHistory implements CategorySyndicationDestinationHistoryInterface
 {
     /**
      * @param list<string> $packageIds
      * @param list<string> $categoryIds
      */
     public function __construct(
-        private readonly string $destinationId,
-        private readonly array $packageIds,
-        private readonly array $categoryIds,
-        private readonly int $totalRecords,
-        private readonly int $deliveredCount,
-        private readonly int $failedCount,
-        private readonly int $pendingCount,
-        private readonly int $retryScheduledCount,
-        private readonly int $skippedCount,
-        private readonly int $maxAttempt,
-        private readonly ?\DateTimeImmutable $latestDeliveredAt,
+        private string $destinationId,
+        private array $packageIds,
+        private array $categoryIds,
+        private int $totalRecords,
+        private int $deliveredCount,
+        private int $failedCount,
+        private int $pendingCount,
+        private int $retryScheduledCount,
+        private int $skippedCount,
+        private int $maxAttempt,
+        private ?\DateTimeImmutable $latestDeliveredAt,
     ) {
     }
 

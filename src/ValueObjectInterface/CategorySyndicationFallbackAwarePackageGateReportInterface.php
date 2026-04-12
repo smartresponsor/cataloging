@@ -4,9 +4,11 @@
 declare(strict_types=1);
 
 namespace App\ValueObjectInterface;
+
 /**
  * Defines the contract for category syndication fallback aware package gate report.
  */
+/** @noinspection PhpClassNamingConventionInspection */
 interface CategorySyndicationFallbackAwarePackageGateReportInterface
 {
     /** @return list<string> */
@@ -29,10 +31,12 @@ interface CategorySyndicationFallbackAwarePackageGateReportInterface
 
     /** @return list<string> */
     public function fallbackMatchedBindingIds(): array;
+
     /**
      * Handles the strict publishable workflow.
      */
     public function strictPublishable(): bool;
+
     /**
      * Handles the fallback publishable workflow.
      */

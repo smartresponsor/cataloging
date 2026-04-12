@@ -10,14 +10,14 @@ use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
 /**
  * Represents the category syndication delivery recorded application event.
  */
-final class CategorySyndicationDeliveryRecorded implements CategorySyndicationDeliveryRecordedInterface
+final readonly class CategorySyndicationDeliveryRecorded implements CategorySyndicationDeliveryRecordedInterface
 {
     /**
      * @param array<string,mixed> $payload
      */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

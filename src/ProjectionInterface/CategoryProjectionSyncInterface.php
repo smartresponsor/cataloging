@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\ProjectionInterface;
+
 /**
  * Defines the contract for category projection sync.
  */

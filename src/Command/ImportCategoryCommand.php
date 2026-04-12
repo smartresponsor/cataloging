@@ -33,25 +33,30 @@ final class ImportCategoryCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $arg = $input->getArgument('file');
-        $file = is_scalar($arg) ? (string) $arg : '';
-        if ('' === $file) {
-            $output->writeln('<error>Missing file.</error>');
+        try {
+            $arg = $input->getArgument('file');
+            $file = is_scalar($arg) ? (string) $arg : '';
+            if ('' === $file) {
+                $output->writeln('<error>Missing file.</error>');
 
-            return self::INVALID;
-        }
-        $lines = file($file);
-        if (false === $lines) {
-            $output->writeln('<error>Cannot read file.</error>');
+                return self::INVALID;
+            }
+            $lines = file($file);
+            if (false === $lines) {
+                $output->writeln('<error>Cannot read file.</error>');
+
+                return self::FAILURE;
+            }
+            foreach ($lines as $line) {
+                json_decode($line, true, 512, JSON_THROW_ON_ERROR);
+            }
+            $output->writeln('<info>Import done</info>');
+
+            return self::SUCCESS;
+        } catch (\Throwable $exception) {
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
 
             return self::FAILURE;
         }
-        foreach ($lines as $line) {
-            $data = json_decode($line, true, 512, JSON_THROW_ON_ERROR);
-        }
-        $output->writeln('<info>Import done</info>');
-
-        return self::SUCCESS;
     }
 }

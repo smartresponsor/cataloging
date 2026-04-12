@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Represents the virtual category entity domain record.
  */
@@ -31,6 +32,7 @@ class VirtualCategoryEntity
         $this->name = $name;
         $this->rule = $rule;
     }
+
     /**
      * Returns the id value.
      */
@@ -38,6 +40,7 @@ class VirtualCategoryEntity
     {
         return $this->id;
     }
+
     /**
      * Returns the name value.
      */

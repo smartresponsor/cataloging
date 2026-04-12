@@ -13,118 +13,77 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Provides the search service application service.
  */
-final class SearchService
+final readonly class SearchService
 {
     private const int DEFAULT_LIMIT = 20;
     private const int MAX_LIMIT = 100;
     private const int MAX_OFFSET = 10000;
 
     /**
-     * Initializes the search service service collaborators.
+     * Initializes the search service collaborators.
      */
-    public function __construct(private readonly ManagerRegistry $registry)
-    {
+    public function __construct(
+        private ManagerRegistry $registry,
+        private CategoryProjectionQuerySupport $querySupport,
+    ) {
     }
 
     /**
-     *
-     * @return array{
-     *   items:list<array{
-     *     id:string,
-     *     slug:string,
-     *     name:string,
-     *     'parent_id':?string,
-     *     path:string,
-     *     locale:string,
-     *     'tenant':string,
-     *     workflow_state:string,
-     *     published:bool,
-     *     published_at:?string,
-     *     updated_at:string
-     *   }>,
-     *   facets:array{
-     *     locale:array<string,int>,
-     *     'tenant':array<string,int>,
-     *     workflow_state:array<string,int>,
-     *     published:array<string,int>
-     *   },
-     *   meta:array{
-     *     total:int,
-     *     limit:int,
-     *     offset:int,
-     *     order:string,
-     *     direction:string,
-     *     criteria:array{
-     *       q:string,
-     *       'tenant':?string,
-     *       locale:?string,
-     *       workflow_state:?string,
-     *       published:?bool
-     *     }
-     *   }
-     * }
+     * @return array<string,mixed>
      *
      * @throws Exception
      */
     public function search(?CategoryProjectionCriteria $criteria = null): array
     {
-        $normalized = $this->normalizeCriteria($criteria ?? CategoryProjectionCriteria::fromArray([]));
-        $connection = $this->infraConnection();
-        [$whereSql, $params, $types] = $this->compileFilters($normalized);
-        $orderSql = $this->orderSql($normalized['order'], $normalized['direction']);
+        $criteriaMap = $criteria?->toArray() ?? [];
+        $projectionCriteria = $this->querySupport->normalizeProjectionCriteriaMap($criteriaMap);
+        [$whereSql, $params, $types] = $this->querySupport->compileProjectionFilters($projectionCriteria);
 
-        $selectSql = 'SELECT id, slug, name, parent_id, path, locale, tenant, '
-            .'workflow_state, published, published_at, updated_at FROM category_projection ';
+        $q = $this->querySupport->optionalString($criteriaMap['q'] ?? null) ?? '';
+        if ('' !== $q) {
+            $whereSql .= '' === $whereSql ? ' WHERE ' : ' AND ';
+            $whereSql .= '(slug LIKE :searchTerm OR name LIKE :searchTerm OR path LIKE :searchTerm)';
+            $params['searchTerm'] = '%'.$q.'%';
+            $types['searchTerm'] = ParameterType::STRING;
+        }
 
-        $rows = $connection->fetchAllAssociative(
-            $selectSql
-            .$whereSql
-            .$orderSql
-            .' LIMIT :limit OFFSET :offset',
-            [
-                ...$params,
-                'limit' => $normalized['limit'],
-                'offset' => $normalized['offset'],
-            ],
-            [
-                ...$types,
-                'limit' => ParameterType::INTEGER,
-                'offset' => ParameterType::INTEGER,
-            ],
+        $limit = $this->boundedInt($criteriaMap['limit'] ?? null, self::DEFAULT_LIMIT, 1, self::MAX_LIMIT);
+        $offset = $this->boundedInt($criteriaMap['offset'] ?? null, 0, 0, self::MAX_OFFSET);
+        $order = $this->allowedString($criteriaMap['order'] ?? null, ['path', 'name', 'slug', 'updated_at'], 'path');
+        $direction = $this->allowedString($criteriaMap['direction'] ?? null, ['asc', 'desc'], 'asc');
+
+        $rows = $this->connection()->fetchAllAssociative(
+            'SELECT id, slug, name, parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at '
+            .'FROM category_projection'.$whereSql.' ORDER BY '.$order.' '.strtoupper($direction).' LIMIT :limit OFFSET :offset',
+            [...$params, 'limit' => $limit, 'offset' => $offset],
+            [...$types, 'limit' => ParameterType::INTEGER, 'offset' => ParameterType::INTEGER],
         );
 
-        $total = $connection->fetchOne(
-            'SELECT COUNT(*) FROM category_projection '.$whereSql,
+        $countValue = $this->connection()->fetchOne(
+            'SELECT COUNT(*) FROM category_projection'.$whereSql,
             $params,
             $types,
         );
 
+        $items = $this->querySupport->normalizeProjectionRows($rows);
+
         return [
-            'items' => $this->normalizeRows($rows),
+            'items' => $items,
+            'total' => is_numeric($countValue) ? (int) $countValue : count($items),
+            'limit' => $limit,
+            'offset' => $offset,
+            'order' => $order,
+            'direction' => $direction,
             'facets' => [
-                'locale' => $this->facetCounts($connection, 'locale', $whereSql, $params, $types),
-                'tenant' => $this->facetCounts($connection, 'tenant', $whereSql, $params, $types),
-                'workflow_state' => $this->facetCounts($connection, 'workflow_state', $whereSql, $params, $types),
-                'published' => $this->facetCounts($connection, 'published', $whereSql, $params, $types),
-            ],
-            'meta' => [
-                'total' => is_numeric($total) ? (int) $total : 0,
-                'limit' => $normalized['limit'],
-                'offset' => $normalized['offset'],
-                'order' => $normalized['order'],
-                'direction' => $normalized['direction'],
-                'criteria' => [
-                    'q' => $normalized['q'],
-                    'tenant' => $normalized['tenant'],
-                    'locale' => $normalized['locale'],
-                    'workflow_state' => $normalized['workflow_state'],
-                    'published' => $normalized['published'],
-                ],
+                'locale' => $this->facetCounts($this->connection(), 'locale', $whereSql, $params, $types),
+                'tenant' => $this->facetCounts($this->connection(), 'tenant', $whereSql, $params, $types),
+                'workflow_state' => $this->facetCounts($this->connection(), 'workflow_state', $whereSql, $params, $types),
+                'published' => $this->facetCounts($this->connection(), 'published', $whereSql, $params, $types),
             ],
         ];
     }
 
-    private function infraConnection(): Connection
+    private function connection(): Connection
     {
         /** @var Connection $connection */
         $connection = $this->registry->getConnection('infra');
@@ -133,158 +92,6 @@ final class SearchService
     }
 
     /**
-     *
-     * @return array{
-     *   q:string,
-     *   'tenant':?string,
-     *   locale:?string,
-     *   workflow_state:?string,
-     *   published:?bool,
-     *   limit:int,
-     *   offset:int,
-     *   order:string,
-     *   direction:string
-     * }
-     */
-    private function normalizeCriteria(CategoryProjectionCriteria $criteria): array
-    {
-        $criteriaMap = $criteria->toArray();
-        $q = $this->optionalString($criteriaMap['q'] ?? null) ?? '';
-        $tenant = $this->optionalString($criteriaMap['tenant'] ?? null);
-        $locale = $this->optionalString($criteriaMap['locale'] ?? null);
-        $workflowState = $this->optionalString($criteriaMap['workflow_state'] ?? null);
-        $published = $this->optionalBool($criteriaMap['published'] ?? null);
-        $limit = $this->boundedInt($criteriaMap['limit'] ?? null, self::DEFAULT_LIMIT, 1, self::MAX_LIMIT);
-        $offset = $this->boundedInt($criteriaMap['offset'] ?? null, 0, 0, self::MAX_OFFSET);
-        $order = $this->allowedString($criteriaMap['order'] ?? null, ['updated_at', 'name', 'published_at'], 'updated_at');
-        $direction = $this->allowedString($criteriaMap['direction'] ?? null, ['asc', 'desc'], 'desc');
-
-        return [
-            'q' => $q,
-            'tenant' => $tenant,
-            'locale' => $locale,
-            'workflow_state' => $workflowState,
-            'published' => $published,
-            'limit' => $limit,
-            'offset' => $offset,
-            'order' => $order,
-            'direction' => $direction,
-        ];
-    }
-
-    /**
-     * @param array{
-     *     q:string,
-     *     tenant:?string,
-     *     locale:?string,
-     *     workflow_state:?string,
-     *     published:?bool,
-     *     limit:int,
-     *     offset:int,
-     *     order:string,
-     *     direction:string
-     * } $criteria
-     *
-     * @return array{0:string,1:array<string,mixed>,2:array<string,ParameterType>}
-     */
-    private function compileFilters(array $criteria): array
-    {
-        $clauses = [];
-        /** @var array<string,mixed> $params */
-        $params = [];
-        /** @var array<string,ParameterType> $types */
-        $types = [];
-
-        if ('' !== $criteria['q']) {
-            $clauses[] = '(LOWER(name) LIKE :term OR LOWER(slug) LIKE :term)';
-            $params['term'] = '%'.strtolower($criteria['q']).'%';
-            $types['term'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['tenant']) {
-            $clauses[] = 'tenant = :tenant';
-            $params['tenant'] = $criteria['tenant'];
-            $types['tenant'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['locale']) {
-            $clauses[] = 'locale = :locale';
-            $params['locale'] = $criteria['locale'];
-            $types['locale'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['workflow_state']) {
-            $clauses[] = 'workflow_state = :workflowState';
-            $params['workflowState'] = $criteria['workflow_state'];
-            $types['workflowState'] = ParameterType::STRING;
-        }
-
-        if (null !== $criteria['published']) {
-            $clauses[] = 'published = :published';
-            $params['published'] = $criteria['published'];
-            $types['published'] = ParameterType::BOOLEAN;
-        }
-
-        if ([] === $clauses) {
-            return ['', [], []];
-        }
-
-        return [' WHERE '.implode(' AND ', $clauses), $params, $types];
-    }
-
-    private function orderSql(string $order, string $direction): string
-    {
-        return sprintf(' ORDER BY %s %s, id ASC', $order, strtoupper($direction));
-    }
-
-    /**
-     * @param list<array<string,mixed>> $rows
-     *
-     * @return list<array{
-     *     id:string,
-     *     slug:string,
-     *     name:string,
-     *     parent_id:?string,
-     *     path:string,
-     *     locale:string,
-     *     tenant:string,
-     *     workflow_state:string,
-     *     published:bool,
-     *     published_at:?string,
-     *     updated_at:string
-     * }>
-     */
-    private function normalizeRows(array $rows): array
-    {
-        $result = [];
-        foreach ($rows as $row) {
-            $id = $this->optionalString($row['id'] ?? null);
-            if (null === $id) {
-                continue;
-            }
-
-            $result[] = [
-                'id' => $id,
-                'slug' => $this->optionalString($row['slug'] ?? null) ?? '',
-                'name' => $this->optionalString($row['name'] ?? null) ?? '',
-                'parent_id' => $this->optionalString($row['parent_id'] ?? null),
-                'path' => $this->optionalString($row['path'] ?? null) ?? '',
-                'locale' => $this->optionalString($row['locale'] ?? null) ?? '',
-                'tenant' => $this->optionalString($row['tenant'] ?? null) ?? 'default',
-                'workflow_state' => $this->optionalString($row['workflow_state'] ?? null) ?? 'draft',
-                'published' => $this->boolValue($row['published'] ?? false),
-                'published_at' => $this->optionalString($row['published_at'] ?? null),
-                'updated_at' => $this->optionalString($row['updated_at'] ?? null) ?? '',
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param Connection                  $connection
-     * @param string                      $field
-     * @param string                      $whereSql
      * @param array<string,mixed>         $params
      * @param array<string,ParameterType> $types
      *
@@ -352,38 +159,7 @@ final class SearchService
             return null;
         }
 
-        return $this->optionalString($value);
-    }
-
-    private function optionalString(mixed $value): ?string
-    {
-        if (!is_scalar($value)) {
-            return null;
-        }
-
-        $normalized = trim((string) $value);
-
-        return '' === $normalized ? null : $normalized;
-    }
-
-    private function optionalBool(mixed $value): ?bool
-    {
-        return match (true) {
-            is_bool($value) => $value,
-            is_int($value) => 0 !== $value,
-            is_string($value) => match (strtolower(trim($value))) {
-                '', 'null' => null,
-                '1', 'true', 'yes', 'on' => true,
-                '0', 'false', 'no', 'off' => false,
-                default => null,
-            },
-            default => null,
-        };
-    }
-
-    private function boolValue(mixed $value): bool
-    {
-        return $this->optionalBool($value) ?? false;
+        return $this->querySupport->optionalString($value);
     }
 
     private function boundedInt(mixed $value, int $default, int $min, int $max): int
@@ -398,7 +174,7 @@ final class SearchService
     /** @param list<string> $allowed */
     private function allowedString(mixed $value, array $allowed, string $default): string
     {
-        $normalized = strtolower($this->optionalString($value) ?? '');
+        $normalized = strtolower($this->querySupport->optionalString($value) ?? '');
 
         return in_array($normalized, $allowed, true) ? $normalized : $default;
     }

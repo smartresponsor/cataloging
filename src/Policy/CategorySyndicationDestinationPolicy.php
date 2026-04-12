@@ -10,6 +10,7 @@ use App\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
 /**
  * Provides the category syndication destination policy implementation.
  */
+/** @noinspection PhpCastIsUnnecessaryInspection */
 final class CategorySyndicationDestinationPolicy implements CategorySyndicationDestinationPolicyInterface
 {
     private const array TYPES = ['marketplace', 'storefront', 'search', 'feed', 'partner'];
@@ -44,7 +45,7 @@ final class CategorySyndicationDestinationPolicy implements CategorySyndicationD
     {
         $normalized = [];
         foreach ($settings as $key => $value) {
-            $normalizedKey = trim((string) $key);
+            $normalizedKey = trim($key);
             if ('' === $normalizedKey) {
                 continue;
             }
@@ -64,7 +65,7 @@ final class CategorySyndicationDestinationPolicy implements CategorySyndicationD
     }
 
     /**
-     * @param array<mixed> $value
+     * @param array<int|string,mixed> $value
      *
      * @return list<string>
      */

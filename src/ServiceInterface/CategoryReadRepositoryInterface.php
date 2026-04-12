@@ -11,14 +11,14 @@ use App\ValueObject\CategoryReadRepositoryListRequest;
 interface CategoryReadRepositoryInterface
 {
     /**
-     * @param array<string, mixed> $opt
+     * @param CategoryReadRepositoryListRequest $request
      *
      * @return array{
- *     edges: array<int, array{id: string, name: string, slug: string, level: int, path: string}>,
- *     pageInfo: array{endCursor?: string, hasNextPage: bool},
- *     total?: int,
- *     approxTotal?: int,
- * }
+     *     edges: array<int, array{id: string, name: string, slug: string, level: int, path: string}>,
+     *     pageInfo: array{endCursor?: string, hasNextPage: bool},
+     *     total?: int,
+     *     approxTotal?: int,
+     * }
      */
     public function list(CategoryReadRepositoryListRequest $request): array;
 

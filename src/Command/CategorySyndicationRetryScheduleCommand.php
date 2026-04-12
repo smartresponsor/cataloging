@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category syndication retry schedule command console workflow.
  */
@@ -21,6 +22,7 @@ final class CategorySyndicationRetryScheduleCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category syndication retry schedule command service collaborators.
      */
@@ -30,6 +32,7 @@ final class CategorySyndicationRetryScheduleCommand extends Command
     ) {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -47,12 +50,15 @@ final class CategorySyndicationRetryScheduleCommand extends Command
             ->addArgument('reason', InputArgument::REQUIRED)
             ->addOption('format', null, InputOption::VALUE_REQUIRED, default: 'json');
     }
+
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
+     * @throws \Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $deliveryId = $this->argumentString($input, 'deliveryId');
         $actorId = $this->argumentString($input, 'actorId');
         $reason = $this->argumentString($input, 'reason');
@@ -66,14 +72,20 @@ final class CategorySyndicationRetryScheduleCommand extends Command
         }
 
         $event = $this->service->scheduleRetry($record, $actorId, $reason);
-        $payload = method_exists($event, 'payload')
-            ? $event->payload()
-            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
+        $payload = $this->eventPayload($event);
 
         if ('ndjson' === $format) {
             return $this->writeStructuredRows($output, [$payload], 'ndjson');
         }
 
         return $this->writeJson($output, $payload);
+    }
+
+    /** @return array<string,mixed> */
+    private function eventPayload(object $event): array
+    {
+        return method_exists($event, 'payload')
+            ? $event->payload()
+            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
     }
 }

@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Request\CategoryAttachmentAddRequest;
 use App\Service\AttachmentService;
 use App\Service\CategoryAttachmentAuthorizationService;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,43 +17,46 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Handles the category attachment controller application flow.
  */
-final class CategoryAttachmentController
+final readonly class CategoryAttachmentController
 {
     /**
      * Initializes the category attachment controller service collaborators.
      */
     public function __construct(
-        private readonly AttachmentService $service,
-        private readonly CategoryAttachmentAuthorizationService $authorizationService,
+        private AttachmentService $attachmentService,
+        private CategoryAttachmentAuthorizationService $authorizationService,
     ) {
     }
 
     /**
      * Handles the list workflow.
      */
-    #[Route('/api/category/attachment', name: 'api_category_attachment_list', methods: ['GET'])]
+    #[Route('/api/category/attachments', name: 'api_category_attachment_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $categoryId = $request->query->get('category_id');
-        $normalizedCategoryId = is_string($categoryId) ? trim($categoryId) : '';
+        $categoryId = is_scalar($categoryId) ? trim((string) $categoryId) : '';
+        $categoryId = '' !== $categoryId ? $categoryId : null;
 
         try {
-            $this->authorizationService->assertCanList('' !== $normalizedCategoryId ? $normalizedCategoryId : null);
+            $this->authorizationService->assertCanList($categoryId);
 
             return new JsonResponse([
                 'ok' => true,
-                'items' => $this->service->list('' !== $normalizedCategoryId ? $normalizedCategoryId : null),
+                'items' => $this->attachmentService->list($categoryId),
             ]);
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 403);
+        } catch (Exception) {
+            return new JsonResponse(['ok' => false, 'errors' => ['Unable to list attachments.']], 500);
         }
     }
 
     /**
-     * Handles the add workflow.
+     * Handles the attach workflow.
      */
-    #[Route('/api/category/attachment', name: 'api_category_attachment_add', methods: ['POST'])]
-    public function add(Request $request): JsonResponse
+    #[Route('/api/category/attachments', name: 'api_category_attachment_attach', methods: ['POST'])]
+    public function attach(Request $request): JsonResponse
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
         if (!$input->isValid()) {
@@ -60,40 +64,53 @@ final class CategoryAttachmentController
         }
 
         try {
-            $this->authorizationService->assertCanAttach($input->categoryId ?? '');
+            $categoryId = $input->categoryId;
+            $provider = $input->provider;
+            $externalAttachmentId = $input->externalAttachmentId;
+            if (null === $categoryId || null === $provider || null === $externalAttachmentId) {
+                return new JsonResponse(['ok' => false, 'errors' => ['Invalid attachment payload.']], 400);
+            }
 
-            $item = $this->service->add(
-                $input->categoryId ?? '',
+            $this->authorizationService->assertCanAttach($categoryId);
+
+            $item = $this->attachmentService->add(
+                $categoryId,
                 $input->type,
-                $input->provider ?? '',
-                $input->externalAttachmentId ?? '',
+                $provider,
+                $externalAttachmentId,
                 $input->referenceUri,
             );
+
+            $attachmentId = $item['attachment_id'] ?? null;
+
+            return new JsonResponse([
+                'ok' => true,
+                'attachment_id' => is_scalar($attachmentId) ? trim((string) $attachmentId) : '',
+            ], 201);
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
+        } catch (Exception) {
+            return new JsonResponse(['ok' => false, 'errors' => ['Unable to attach media.']], 500);
         }
-
-        return new JsonResponse([
-            'ok' => true,
-            'item' => $item,
-        ], 201);
     }
 
     /**
-     * Deletes the requested target from the underlying store.
+     * Handles the detach workflow.
      */
-    #[Route('/api/category/attachment/{attachmentId}', name: 'api_category_attachment_delete', methods: ['DELETE'])]
-    public function delete(string $attachmentId): JsonResponse
+    #[Route('/api/category/attachments/{attachmentId}', name: 'api_category_attachment_detach', methods: ['DELETE'])]
+    public function detach(string $attachmentId): JsonResponse
     {
         try {
             $this->authorizationService->assertCanDetach($attachmentId);
-            $deleted = $this->service->remove($attachmentId);
+            $deleted = $this->attachmentService->remove($attachmentId);
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 403);
         } catch (\InvalidArgumentException $exception) {
             return new JsonResponse(['ok' => false, 'errors' => [$exception->getMessage()]], 400);
+        } catch (Exception) {
+            return new JsonResponse(['ok' => false, 'errors' => ['Unable to detach media.']], 500);
         }
 
         if (!$deleted) {

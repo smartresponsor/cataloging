@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\ServiceInterface\CategoryHttpCacheInterface;
+
 /**
  * Provides the category http cache application service.
  */
@@ -18,6 +19,7 @@ final class CategoryHttpCache implements CategoryHttpCacheInterface
 
         return '"'.sha1($key).'"';
     }
+
     /**
      * Determines whether the not modified condition is satisfied.
      */

@@ -7,6 +7,7 @@ namespace App\PolicyInterface;
 
 use App\ValueObjectInterface\CategoryPublicationReadinessInterface;
 use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+
 /**
  * Defines the contract for category publication gate policy.
  */
@@ -21,6 +22,7 @@ interface CategoryPublicationGatePolicyInterface
         string $actorId,
         string $reason,
     ): bool;
+
     /**
      * Handles the assert can publish workflow.
      */

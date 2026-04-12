@@ -20,6 +20,16 @@ if (!is_dir($configRoot)) {
 
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configRoot));
 $fail = 0;
+$allowedNames = [
+    'api_platform.yaml',
+    'framework.yaml',
+    'monolog.yaml',
+    'nelmio_api_doc.yaml',
+    'routes.yaml',
+    'services.yaml',
+    'twig.yaml',
+    'web_profiler.yaml',
+];
 
 foreach ($rii as $file) {
     if (!$file->isFile()) {
@@ -32,7 +42,7 @@ foreach ($rii as $file) {
     }
 
     $name = basename($path);
-    if (str_starts_with($name, 'catalog_')) {
+    if (str_starts_with($name, 'catalog_') || in_array($name, $allowedNames, true)) {
         continue;
     }
 

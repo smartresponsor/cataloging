@@ -23,6 +23,12 @@ use App\Service\CatalogSyndicationDestinationService;
 use App\Service\CatalogSyndicationMappingService;
 use App\Service\CatalogSyndicationPackageGateService;
 use App\ValueObject\CatalogAuditContext;
+use App\ValueObject\CategoryMediaBindingScope;
+use App\ValueObject\CategoryMediaBindingState;
+use App\ValueObject\CategoryMediaBindRequest;
+use App\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use App\ValueObject\CategorySyndicationPackageBuildRequest;
 use App\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
@@ -44,16 +50,19 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
         $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-primary', 'category-1501', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'primary')));
         $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-hero', 'category-1501', 'asset-hero', 'hero', ['storefront'], ['en_US']), new CategoryMediaBindingState(false, true, []), new CatalogAuditContext('operator-1', 'hero')));
 
-        $destinationService->register(
-            'destination-1501',
-            'Storefront US',
-            'storefront',
-            'push',
-            true,
-            ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => '["primary","hero"]'],
-            'operator-1',
-            'register destination'
-        );
+        $destinationService->register(new CategorySyndicationDestinationRegisterRequest(
+            new CategorySyndicationDestinationDefinition(
+                'destination-1501',
+                'Storefront US',
+                'storefront',
+                'push',
+            ),
+            new CategorySyndicationDestinationConfiguration(
+                true,
+                ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => '["primary","hero"]'],
+            ),
+            new CatalogAuditContext('operator-1', 'register destination'),
+        ));
 
         $event = $service->buildGatedPublishPackage(
             new CategorySyndicationPackageBuildRequest(

@@ -8,19 +8,20 @@ namespace App\Service;
 /**
  * Provides the import pipeline application service.
  */
-final class ImportPipeline
+final readonly class ImportPipeline
 {
-    private string $dlqPath;
-
     /**
      * Initializes the import pipeline service collaborators.
      */
-    public function __construct(string $dlqPath)
+    public function __construct(private string $dlqPath)
     {
-        $this->dlqPath = $dlqPath;
     }
 
-    /** @param array<string, mixed> $item */
+    /**
+     * @param array<string, mixed> $item
+     *
+     * @return bool
+     */
     public function process(array $item): bool
     {
         return 'ok' === $this->processResult($item)['status'];
@@ -30,6 +31,8 @@ final class ImportPipeline
      * @param array<string, mixed> $item
      *
      * @return array{status:'ok'|'failed', key:string, reason:?string}
+     *
+     * @throws \RuntimeException
      */
     public function processResult(array $item): array
     {
@@ -39,22 +42,29 @@ final class ImportPipeline
             $this->assertProcessable($item);
 
             return ['status' => 'ok', 'key' => $key, 'reason' => null];
-        } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
-            error_log('[ImportPipeline] '.$e->getMessage());
-            $reason = $e->getMessage();
+        } catch (\InvalidArgumentException|\TypeError $exception) {
+            error_log('[ImportPipeline] '.$exception->getMessage());
+            $reason = $exception->getMessage();
 
             try {
                 $this->toDlq($item, $reason);
             } catch (\RuntimeException $dlqException) {
                 error_log('[ImportPipeline][DLQ] '.$dlqException->getMessage());
                 $reason .= ' | DLQ write failed: '.$dlqException->getMessage();
+            } catch (\JsonException) {
             }
 
             return ['status' => 'failed', 'key' => $key, 'reason' => $reason];
         }
     }
 
-    /** @param array<string, mixed> $item */
+    /**
+     * @param array<string, mixed> $item
+     * @param string               $reason
+     *
+     * @throws \RuntimeException
+     * @throws \JsonException
+     */
     private function toDlq(array $item, string $reason): void
     {
         if (!is_dir($this->dlqPath)) {
@@ -70,7 +80,12 @@ final class ImportPipeline
             JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES,
         );
         $target = $this->dlqPath.'/dlq.ndjson';
-        $written = @file_put_contents($target, $line."\n", FILE_APPEND);
+        set_error_handler(static fn (): bool => true);
+        try {
+            $written = file_put_contents($target, $line."\n", FILE_APPEND);
+        } finally {
+            restore_error_handler();
+        }
         if (false === $written) {
             throw new \RuntimeException('Failed to append to DLQ file: '.$target);
         }
@@ -99,8 +114,8 @@ final class ImportPipeline
         }
     }
 
-    private function scalarString(mixed $value, string $default = ''): string
+    private function scalarString(mixed $value): string
     {
-        return is_scalar($value) ? trim((string) $value) : $default;
+        return is_scalar($value) ? trim((string) $value) : '';
     }
 }

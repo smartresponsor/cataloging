@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the category review queue list command console workflow.
  */
@@ -22,6 +23,7 @@ final class CategoryReviewQueueListCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the category review queue list command service collaborators.
      */
@@ -29,6 +31,7 @@ final class CategoryReviewQueueListCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -44,22 +47,31 @@ final class CategoryReviewQueueListCommand extends Command
             ->addArgument('reviewer', InputArgument::REQUIRED)
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'ndjson|json', 'ndjson');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $reviewer = $this->argumentString($input, 'reviewer');
-        $format = $this->optionString($input, 'format', 'json');
-        $items = $this->queueService->queueForReviewer(new CategoryReviewQueueRequest($reviewer));
+        try {
+            $reviewer = $this->argumentString($input, 'reviewer');
+            $format = $this->optionString($input, 'format', 'json');
+            $items = $this->queueService->queueForReviewer(new CategoryReviewQueueRequest($reviewer));
 
-        $payload = array_map(
-            static fn (CategoryReviewQueueItemInterface $item): array => self::normalizeItem($item),
-            $items,
-        );
+            $payload = array_map(
+                static fn (CategoryReviewQueueItemInterface $item): array => self::normalizeItem($item),
+                $items,
+            );
 
-        return $this->writeStructuredRows($output, $payload, $format);
+            return $this->writeStructuredRows($output, $payload, $format);
+        } catch (\Throwable $exception) {
+            $output->writeln((string) json_encode([
+                'ok' => false,
+                'error' => $exception->getMessage(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+            return self::FAILURE;
+        }
     }
 
     /** @return array<string,mixed> */

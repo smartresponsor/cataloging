@@ -13,6 +13,7 @@ use App\ValueObject\CategoryMutationPublishRequest;
 use App\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\ValueObject\CategoryWorkflowState;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\Uid\Uuid;
 
@@ -39,6 +40,21 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * Handles the move workflow.
      *
+     * @param CategoryMutationMoveRequest $request
+     *
+     * @return array{
+     *     id:string,
+     *     oldParentId:?string,
+     *     newParentId:string,
+     *     treeId:string,
+     *     policy:string,
+     *     changedCount:int,
+     *     dryRun:bool,
+     *     redirects:list<array{id:string,from:string,to:string}>,
+     *     duplicate:bool,
+     * }
+     *
+     * @throws \JsonException
      * @throws \Throwable
      */
     public function move(CategoryMutationMoveRequest $request): array
@@ -68,20 +84,6 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         if ($normalizedCategoryId === $normalizedNewParentId) {
             throw new \InvalidArgumentException('A node cannot be moved under itself.');
         }
-
-        /**
-         * @var array{
-         *     id:string,
-         *     'oldParentId':?string,
-         *     'newParentId':string,
-         *     'treeId':string,
-         *     policy:string,
-         *     changedCount:int,
-         *     dryRun:bool,
-         *     redirects:list<array{id:string,from:string,to:string}>,
-         *     duplicate:bool
-         * } $result
-         */
         $result = $this->connection->transactional(
             function (Connection $connection) use (
                 $normalizedActorId,
@@ -246,6 +248,22 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * Handles the publish workflow.
      *
+     * @param CategoryMutationPublishRequest $request
+     *
+     * @return array{
+     *     id:string,
+     *     published:bool,
+     *     workflowState:string,
+     *     previousWorkflowState:string,
+     *     blockers:list<string>,
+     *     warnings:list<string>,
+     *     checks:array<string,bool>,
+     *     publishedAt:?string,
+     *     reason:string,
+     *     duplicate:bool,
+     * }
+     *
+     * @throws \JsonException
      * @throws \Throwable
      */
     public function publish(CategoryMutationPublishRequest $request): array
@@ -267,21 +285,6 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         );
         $commandKey = $this->publishIdempotencyKey($normalizedRequest);
         $requestHash = $this->publishRequestHash($normalizedRequest);
-
-        /**
-         * @var array{
-         *     id:string,
-         *     published:bool,
-         *     workflowState:string,
-         *     previousWorkflowState:string,
-         *     blockers:list<string>,
-         *     warnings:list<string>,
-         *     checks:array<string,bool>,
-         *     'publishedAt':?string,
-         *     reason:string,
-         *     duplicate:bool,
-         * } $result
-         */
         $result = $this->connection->transactional(
             function (Connection $connection) use (
                 $normalizedCategoryId,
@@ -409,17 +412,25 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
+     * @param Connection $connection
+     * @param string     $categoryId
+     * @param string     $newParentId
+     * @param string     $treeId
+     * @param string     $policy
+     *
      * @return array{
      *     id:string,
-     *     'oldParentId':?string,
-     *     'newParentId':string,
-     *     'treeId':string,
+     *     oldParentId: ?string,
+     *     newParentId:string,
+     *     treeId:string,
      *     policy:string,
      *     changedCount:int,
      *     dryRun:bool,
      *     redirects:list<array{id:string,from:string,to:string}>,
      *     duplicate:bool,
      * }
+     *
+     * @throws \Throwable
      */
     private function duplicateMoveResult(
         Connection $connection,
@@ -444,7 +455,10 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
+     * @param Connection         $connection
+     * @param string             $categoryId
      * @param array<string,bool> $checks
+     * @param string             $reason
      *
      * @return array{
      *     id:string,
@@ -454,10 +468,15 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      *     blockers:list<string>,
      *     warnings:list<string>,
      *     checks:array<string,bool>,
-     *     'publishedAt':?string,
+     *     publishedAt: ?string,
      *     reason:string,
      *     duplicate:bool,
      * }
+     *
+     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \ValueError
      */
     private function duplicatePublishResult(
         Connection $connection,
@@ -485,7 +504,8 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * @return array<string,mixed>
      *
-     * @throws \Throwable
+     * @throws Exception
+     * @throws \RuntimeException
      */
     private function fetchCategory(Connection $connection, string $categoryId): array
     {
@@ -505,7 +525,14 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return $row;
     }
 
-    /** @return list<array<string,mixed>> */
+    /**
+     * @param Connection $connection
+     * @param string     $path
+     *
+     * @return list<array<string,mixed>>
+     *
+     * @throws Exception
+     */
     private function fetchSubtree(Connection $connection, string $path): array
     {
         $rows = $connection->fetchAllAssociative(
@@ -518,13 +545,14 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
             ['path' => ParameterType::STRING, 'prefix' => ParameterType::STRING],
         );
 
-        return array_values(array_filter($rows, 'is_array'));
+        return array_values(array_filter($rows, static fn (mixed $row): bool => is_array($row)));
     }
 
     /**
      * @param array<string,mixed> $payload
      *
-     * @throws \Throwable
+     * @throws Exception
+     * @throws \JsonException
      */
     private function writeAudit(Connection $connection, string $action, array $payload): void
     {
@@ -604,7 +632,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
-     * @throws \Throwable
+     * @throws \ValueError
      */
     private function workflowStateValue(mixed $value): string
     {
@@ -616,7 +644,8 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
-     * @throws \Throwable
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     private function requiredPath(mixed $value): string
     {
@@ -629,7 +658,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     }
 
     /**
-     * @throws \Throwable
+     * @throws \InvalidArgumentException
      */
     private function requiredString(mixed $value, string $field): string
     {
@@ -696,6 +725,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return substr_count($path, '.');
     }
 
+    /**
+     * @throws \JsonException
+     */
     private function moveIdempotencyKey(CategoryMutationMoveRequest $request): string
     {
         $providedKey = $this->normalizeOptionalString($request->idempotencyKey());
@@ -706,6 +738,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return sprintf('category.move:auto:%s', $this->moveRequestHash($request));
     }
 
+    /**
+     * @throws \JsonException
+     */
     private function publishIdempotencyKey(CategoryMutationPublishRequest $request): string
     {
         $providedKey = $this->normalizeOptionalString($request->idempotencyKey());
@@ -716,6 +751,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         return sprintf('category.publish:auto:%s', $this->publishRequestHash($request));
     }
 
+    /**
+     * @throws \JsonException
+     */
     private function moveRequestHash(CategoryMutationMoveRequest $request): string
     {
         return sha1(json_encode([
@@ -729,6 +767,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
 
+    /**
+     * @throws \JsonException
+     */
     private function publishRequestHash(CategoryMutationPublishRequest $request): string
     {
         return sha1(json_encode([

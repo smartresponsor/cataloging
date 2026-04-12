@@ -133,7 +133,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
             '--destination' => '{"destinationId":"dest-1","channel":"web","locale":"en_US"}',
         ]);
 
-        self::assertStringContainsString('"packageId":"pkg-1"', str_replace(["", "
-", ' '], '', $tester->getDisplay()));
+        self::assertStringContainsString('"packageId":"pkg-1"', str_replace(['', '
+', ' '], '', $tester->getDisplay()));
     }
 }

@@ -23,8 +23,8 @@ final class CategoryPolicy implements CategoryPolicyInterface
      */
     public function validateSlug(array $slug): void
     {
-        foreach ($slug as $locale => $s) {
-            if (strlen($s) > 120) {
+        foreach ($slug as $locale => $slugValue) {
+            if (strlen($slugValue) > 120) {
                 throw new \InvalidArgumentException('Slug too long for locale: '.$locale);
             }
         }

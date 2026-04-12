@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\Ai;
+
 /**
  * Provides the catalog suggest service implementation.
  */

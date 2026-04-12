@@ -10,12 +10,12 @@ use App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterfac
 /**
  * Represents the category destination media policy preference evaluated application event.
  */
-final class CategoryDestinationMediaPolicyPreferenceEvaluated implements CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
+final readonly class CategoryDestinationMediaPolicyPreferenceEvaluated implements CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
 {
     /** @param array<string,mixed> $payload */
     public function __construct(
-        private readonly array $payload,
-        private readonly \DateTimeImmutable $occurredAt,
+        private array $payload,
+        private \DateTimeImmutable $occurredAt,
     ) {
     }
 

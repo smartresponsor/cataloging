@@ -31,10 +31,11 @@ final class ExportRedirectNdjsonCommand extends Command
 
     /**
      * Runs the command workflow and returns the process status.
+     *
+     * @throws \JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
         $catRepo = $this->em->getRepository(CategoryEntity::class);
         $aliases = $aliasRepo->findAll();

@@ -11,6 +11,7 @@ use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use App\ServiceInterface\CatalogAccessAssignmentServiceInterface;
 use App\ValueObject\CategoryAccessAssignmentRequest;
 use App\ValueObject\CategoryAccessAssignmentSelection;
+use Random\RandomException;
 
 /**
  * Provides the catalog access assignment service application service.
@@ -69,12 +70,16 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
             $this->clearPrimaryForCategory($request->categoryId());
         }
 
-        $assignment = CategoryAccessAssignment::create(
-            $request->categoryId(),
-            $request->actorUserId(),
-            $request->role(),
-            $request->isPrimary(),
-        );
+        try {
+            $assignment = CategoryAccessAssignment::create(
+                $request->categoryId(),
+                $request->actorUserId(),
+                $request->role(),
+                $request->isPrimary(),
+            );
+        } catch (RandomException $exception) {
+            throw new \RuntimeException('Unable to create category access assignment identifier.', 0, $exception);
+        }
         $this->repository->save($assignment);
 
         return $assignment;

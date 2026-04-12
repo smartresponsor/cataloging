@@ -8,11 +8,11 @@ namespace App\Policy;
 use App\PolicyInterface\CategorySyndicationPolicyAwarePackageGatePolicyInterface;
 use App\ValueObject\CategorySyndicationPolicyAwarePackageGateReport;
 use App\ValueObjectInterface\CategorySyndicationPolicyAwarePackageGateReportInterface;
+
 /**
  * Provides the category syndication policy aware package gate policy implementation.
  */
-final class CategorySyndicationPolicyAwarePackageGatePolicy
-    implements CategorySyndicationPolicyAwarePackageGatePolicyInterface
+final class CategorySyndicationPolicyAwarePackageGatePolicy implements CategorySyndicationPolicyAwarePackageGatePolicyInterface
 {
     /**
      * @param list<string>        $packageMissingRequiredFields
@@ -23,8 +23,7 @@ final class CategorySyndicationPolicyAwarePackageGatePolicy
         array $packageMissingRequiredFields,
         array $policyPayload,
         array $fallbackGatePayload,
-    ): CategorySyndicationPolicyAwarePackageGateReportInterface
-    {
+    ): CategorySyndicationPolicyAwarePackageGateReportInterface {
         $packageMissingRequiredFields = $this->normalizeList($packageMissingRequiredFields);
         $requiredMissing = $this->normalizeList($policyPayload['requiredMissing'] ?? null);
         $warnings = $this->normalizeList(array_merge(
@@ -53,12 +52,15 @@ final class CategorySyndicationPolicyAwarePackageGatePolicy
             'policyFallbackUsed' => $fallbackUsed,
             'policyAwarePackageGatePublishable' => false,
         ];
-        foreach ($this->boolMap($policyPayload['checks'] ?? null) as $key => $value) {
-            $checks['policy:'.$key] = $value;
+        $policyChecks = [];
+        foreach ($this->boolMap($policyPayload['checks'] ?? null) as $checkName => $checkValue) {
+            $policyChecks['policy:'.$checkName] = $checkValue;
         }
-        foreach ($this->boolMap($fallbackGatePayload['checks'] ?? null) as $key => $value) {
-            $checks['fallbackGate:'.$key] = $value;
+        $fallbackChecks = [];
+        foreach ($this->boolMap($fallbackGatePayload['checks'] ?? null) as $checkName => $checkValue) {
+            $fallbackChecks['fallbackGate:'.$checkName] = $checkValue;
         }
+        $checks = array_replace($checks, $policyChecks, $fallbackChecks);
 
         if (!$checks['packageFieldsReady']) {
             $warnings[] = 'package_missing_required_fields';

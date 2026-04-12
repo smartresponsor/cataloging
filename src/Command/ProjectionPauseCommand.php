@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Executes the projection pause command console workflow.
  */
@@ -20,6 +21,7 @@ final class ProjectionPauseCommand extends Command
 {
     use CategoryCliOutputTrait;
     use CategoryCliInputTrait;
+
     /**
      * Initializes the projection pause command service collaborators.
      */
@@ -27,6 +29,7 @@ final class ProjectionPauseCommand extends Command
     {
         parent::__construct();
     }
+
     /**
      * Configures the command definition and available options.
      */
@@ -35,12 +38,12 @@ final class ProjectionPauseCommand extends Command
         parent::configure();
         $this->addArgument('state', InputArgument::REQUIRED, 'on|off');
     }
+
     /**
      * Runs the command workflow and returns the process status.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $state = $this->argumentString($input, 'state');
         $repo = $this->em->getRepository(ProjectionControlEntity::class);
         $ctrl = $repo->find('category') ?? new ProjectionControlEntity();

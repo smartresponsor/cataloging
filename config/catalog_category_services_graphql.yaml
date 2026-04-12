@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\Service\GraphqlResolver: ~
+    App\Service\GraphqlFacetResolver: ~
+    App\Service\Category\Graphql\CategoryGraphqlGuard: ~
+    App\Service\Category\Graphql\CategoryLoader: ~

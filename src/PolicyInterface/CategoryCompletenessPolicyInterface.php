@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 namespace App\PolicyInterface;
+
 /**
  * Defines the contract for category completeness policy.
  */
