@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\ValueObject;
 
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\ValueObjectInterface\CatalogCategoryWorkflowStateInterface;
 
 /**
  * Represents the category workflow state value.
  */
-final class CategoryWorkflowState implements CategoryWorkflowStateInterface
+final class CatalogCategoryWorkflowState implements CatalogCategoryWorkflowStateInterface
 {
     public const string DRAFT = 'draft';
     public const string IN_REVIEW = 'in_review';

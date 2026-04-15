@@ -40,6 +40,15 @@ final class BoundaryRequestDtoTest extends TestCase
         self::assertSame('publish', $input->action);
     }
 
+    public function testBulkRequestTrimsActionWhenStringProvided(): void
+    {
+        $input = CategoryBulkRequest::fromJson('{"ids":[1,"2"],"action":"  unpublish  "}');
+
+        self::assertTrue($input->isValid());
+        self::assertSame([1, '2'], $input->ids);
+        self::assertSame('unpublish', $input->action);
+    }
+
     public function testWebhookRequestUsesDefaultsForEmptyPayload(): void
     {
         $input = WebhookDispatchRequest::fromJson('');
@@ -48,6 +57,16 @@ final class BoundaryRequestDtoTest extends TestCase
         self::assertSame('category.updated', $input->event);
         self::assertSame('http://localhost:8081/hook', $input->endpoint);
         self::assertSame(['id' => 1], $input->payload);
+    }
+
+    public function testWebhookRequestTrimsEventAndEndpointWhenProvided(): void
+    {
+        $input = WebhookDispatchRequest::fromJson('{"event":"  category.created  ","endpoint":"  https://hook.example.test/in  ","payload":{"id":10}}');
+
+        self::assertTrue($input->isValid());
+        self::assertSame('category.created', $input->event);
+        self::assertSame('https://hook.example.test/in', $input->endpoint);
+        self::assertSame(['id' => 10], $input->payload);
     }
 
     public function testAttachmentRequestValidatesExternalReferenceFields(): void

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\ValueObjectInterface\CatalogCategoryWorkflowStateInterface;
 
 /**
  * Defines the contract for category workflow.
@@ -20,7 +20,7 @@ interface CategoryWorkflowInterface
     /**
      * Handles the state workflow.
      */
-    public function state(): CategoryWorkflowStateInterface;
+    public function state(): CatalogCategoryWorkflowStateInterface;
 
     /**
      * Handles the actor id workflow.

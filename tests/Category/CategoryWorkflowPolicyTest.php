@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Tests\Category;
 
 use App\Policy\CategoryWorkflowPolicy;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryWorkflowPolicyTest extends TestCase
@@ -19,8 +19,8 @@ final class CategoryWorkflowPolicyTest extends TestCase
         $policy = new CategoryWorkflowPolicy();
 
         self::assertTrue($policy->canTransition(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::DRAFT),
-            CategoryWorkflowState::fromString(CategoryWorkflowState::IN_REVIEW),
+            CatalogCategoryWorkflowState::fromString(CatalogCategoryWorkflowState::DRAFT),
+            CatalogCategoryWorkflowState::fromString(CatalogCategoryWorkflowState::IN_REVIEW),
             'operator-1',
             'ready for moderation',
         ));
@@ -31,8 +31,8 @@ final class CategoryWorkflowPolicyTest extends TestCase
         $policy = new CategoryWorkflowPolicy();
 
         self::assertFalse($policy->canTransition(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::DRAFT),
-            CategoryWorkflowState::fromString(CategoryWorkflowState::PUBLISHED),
+            CatalogCategoryWorkflowState::fromString(CatalogCategoryWorkflowState::DRAFT),
+            CatalogCategoryWorkflowState::fromString(CatalogCategoryWorkflowState::PUBLISHED),
             'operator-1',
             'trying to bypass review',
         ));
@@ -43,8 +43,8 @@ final class CategoryWorkflowPolicyTest extends TestCase
         $policy = new CategoryWorkflowPolicy();
 
         self::assertFalse($policy->canTransition(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::APPROVED),
-            CategoryWorkflowState::fromString(CategoryWorkflowState::PUBLISHED),
+            CatalogCategoryWorkflowState::fromString(CatalogCategoryWorkflowState::APPROVED),
+            CatalogCategoryWorkflowState::fromString(CatalogCategoryWorkflowState::PUBLISHED),
             'operator-1',
             '   ',
         ));

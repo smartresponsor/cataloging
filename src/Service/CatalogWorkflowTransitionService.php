@@ -10,7 +10,7 @@ use App\Event\CategoryWorkflowTransitioned;
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use App\ValueObject\CategoryWorkflowTransitionRequest;
 
 /**
@@ -36,7 +36,7 @@ final readonly class CatalogWorkflowTransitionService implements CatalogWorkflow
         $currentWorkflow = $current instanceof CategoryWorkflow
             ? $current
             : CategoryWorkflow::initialize($request->categoryId(), $request->actorId());
-        $toState = CategoryWorkflowState::fromString($request->targetState());
+        $toState = CatalogCategoryWorkflowState::fromString($request->targetState());
 
         $this->policy->assertTransitionAllowed(
             $currentWorkflow->state(),

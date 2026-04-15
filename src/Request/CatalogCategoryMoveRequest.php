@@ -1,14 +1,16 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Request;
 
+use App\Request\Support\RequestValueNormalizer;
+use App\ValueObject\CatalogCategoryMutationPolicy;
+
 /**
- * Provides the move category request implementation.
+ * Canonical request DTO for moving a catalog category.
  */
-final readonly class MoveCategoryRequest
+final readonly class CatalogCategoryMoveRequest
 {
     /** @param list<string> $errors */
     public function __construct(
@@ -35,34 +37,20 @@ final readonly class MoveCategoryRequest
             $parentId = null;
         }
 
-        $treeId = is_scalar($data['tree_id'] ?? null) ? trim((string) $data['tree_id']) : 'catalog';
-        if ('' === $treeId) {
-            $treeId = 'catalog';
+        $treeId = RequestValueNormalizer::trimmedStringOrDefault($data['tree_id'] ?? null, 'catalog');
+        $policy = RequestValueNormalizer::trimmedStringOrDefault($data['policy'] ?? null, 'strict');
+        try {
+            $policy = CatalogCategoryMutationPolicy::fromString($policy)->value;
+        } catch (\InvalidArgumentException) {
+            $errors[] = 'policy must be one of: strict';
         }
 
-        $policy = is_scalar($data['policy'] ?? null) ? trim((string) $data['policy']) : 'strict';
-        if ('' === $policy) {
-            $policy = 'strict';
-        }
-
-        $dryRun = match (true) {
-            is_bool($data['dry_run'] ?? null) => (bool) $data['dry_run'],
-            is_int($data['dry_run'] ?? null) => 0 !== $data['dry_run'],
-            is_string($data['dry_run'] ?? null) => filter_var($data['dry_run'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? false,
-            default => false,
-        };
-
-        $locale = is_scalar($data['locale'] ?? null) ? trim((string) $data['locale']) : null;
-        if ('' === $locale) {
-            $locale = null;
-        }
+        $dryRun = RequestValueNormalizer::boolFromMixed($data['dry_run'] ?? null, false);
+        $locale = RequestValueNormalizer::optionalTrimmedString($data['locale'] ?? null);
 
         return new self($parentId, $treeId, $policy, $dryRun, $locale, $errors);
     }
 
-    /**
-     * Determines whether the valid condition is satisfied.
-     */
     public function isValid(): bool
     {
         return [] === $this->errors;

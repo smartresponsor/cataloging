@@ -11,7 +11,7 @@ namespace App\Tests\Category;
 use App\Policy\CategoryWorkflowPolicy;
 use App\Repository\CategoryWorkflowRepository;
 use App\Service\CatalogWorkflowTransitionService;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use App\ValueObject\CategoryWorkflowTransitionRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -24,14 +24,14 @@ final class CatalogWorkflowTransitionServiceTest extends TestCase
 
         $event = $service->transition(new CategoryWorkflowTransitionRequest(
             'category-100',
-            CategoryWorkflowState::IN_REVIEW,
+            CatalogCategoryWorkflowState::IN_REVIEW,
             'operator-1',
             'ready for moderation',
         ));
 
         $current = $repository->findByCategoryId('category-100');
         self::assertNotNull($current);
-        self::assertSame(CategoryWorkflowState::IN_REVIEW, $current->state()->value());
+        self::assertSame(CatalogCategoryWorkflowState::IN_REVIEW, $current->state()->value());
         self::assertSame('operator-1', $current->actorId());
         self::assertSame('ready for moderation', $current->reason());
 
@@ -53,7 +53,7 @@ final class CatalogWorkflowTransitionServiceTest extends TestCase
 
         $service->transition(new CategoryWorkflowTransitionRequest(
             'category-101',
-            CategoryWorkflowState::PUBLISHED,
+            CatalogCategoryWorkflowState::PUBLISHED,
             'operator-1',
             'skipping review',
         ));

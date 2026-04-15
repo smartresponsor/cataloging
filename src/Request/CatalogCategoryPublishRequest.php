@@ -1,14 +1,15 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Request;
 
+use App\Request\Support\RequestValueNormalizer;
+
 /**
- * Provides the publish category request implementation.
+ * Canonical request DTO for publishing/unpublishing a catalog category.
  */
-final readonly class PublishCategoryRequest
+final readonly class CatalogCategoryPublishRequest
 {
     /**
      * @param array<string,bool> $checks
@@ -29,13 +30,7 @@ final readonly class PublishCategoryRequest
         if (!array_key_exists('published', $data)) {
             return new self(null, [], 'api publish request', ['published is required']);
         }
-        $raw = $data['published'];
-        $published = match (true) {
-            is_bool($raw) => $raw,
-            is_int($raw) => 0 !== $raw,
-            is_string($raw) => filter_var($raw, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE),
-            default => null,
-        };
+        $published = RequestValueNormalizer::nullableBoolFromMixed($data['published']);
         if (null === $published) {
             $errors[] = 'published must be boolean';
         }
@@ -50,10 +45,7 @@ final readonly class PublishCategoryRequest
             }
         }
 
-        $reason = is_scalar($data['reason'] ?? null) ? trim((string) $data['reason']) : 'api publish request';
-        if ('' === $reason) {
-            $reason = 'api publish request';
-        }
+        $reason = RequestValueNormalizer::trimmedStringOrDefault($data['reason'] ?? null, 'api publish request');
 
         if (true === $published && [] === $checks) {
             $errors[] = 'checks are required when published is true';
@@ -62,9 +54,6 @@ final readonly class PublishCategoryRequest
         return new self($published, $checks, $reason, $errors);
     }
 
-    /**
-     * Determines whether the valid condition is satisfied.
-     */
     public function isValid(): bool
     {
         return [] === $this->errors;

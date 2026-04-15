@@ -8,7 +8,7 @@ namespace App\ValueObjectInterface;
 /**
  * Defines the contract for category workflow state.
  */
-interface CategoryWorkflowStateInterface
+interface CatalogCategoryWorkflowStateInterface
 {
     /**
      * Handles the value workflow.

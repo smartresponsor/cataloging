@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryPublicationGatePolicyInterface;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use App\ValueObjectInterface\CategoryPublicationReadinessInterface;
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\ValueObjectInterface\CatalogCategoryWorkflowStateInterface;
 
 /**
  * Provides the category publication gate policy implementation.
@@ -19,7 +19,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
      * Determines whether the current workflow can publish.
      */
     public function canPublish(
-        CategoryWorkflowStateInterface $workflowState,
+        CatalogCategoryWorkflowStateInterface $workflowState,
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
@@ -28,7 +28,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
             return false;
         }
 
-        if (!$workflowState->is(CategoryWorkflowState::APPROVED)) {
+        if (!$workflowState->is(CatalogCategoryWorkflowState::APPROVED)) {
             return false;
         }
 
@@ -39,7 +39,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
      * Handles the assert can publish workflow.
      */
     public function assertCanPublish(
-        CategoryWorkflowStateInterface $workflowState,
+        CatalogCategoryWorkflowStateInterface $workflowState,
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
@@ -49,7 +49,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
         }
 
         $details = [];
-        if (!$workflowState->is(CategoryWorkflowState::APPROVED)) {
+        if (!$workflowState->is(CatalogCategoryWorkflowState::APPROVED)) {
             $details[] = 'workflowState='.$workflowState->value();
         }
         if ([] !== $readiness->blockers()) {

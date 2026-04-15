@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Category;
 
 use App\Security\ExternalIdentityContext;
-use App\Service\CategoryMutationAuthorizationService;
+use App\Service\CatalogCategoryMutationAuthorizationService;
 use App\Service\CategoryTenantAccessEvaluator;
 use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\ServiceInterface\TenantRolePolicyInterface;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-final class CategoryMutationAuthorizationServiceTest extends TestCase
+final class CatalogCategoryMutationAuthorizationServiceTest extends TestCase
 {
     public function testAdminCanMoveAndPublish(): void
     {
@@ -63,7 +63,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
     }
 
     /** @param list<string> $roles */
-    private function service(Security $security, string $tenant, array $roles): CategoryMutationAuthorizationService
+    private function service(Security $security, string $tenant, array $roles): CatalogCategoryMutationAuthorizationService
     {
         $connection = $this->createMock(Connection::class);
         $connection->method('fetchOne')->willReturn('tenant-a');
@@ -96,7 +96,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
             }
         };
 
-        return new CategoryMutationAuthorizationService(
+        return new CatalogCategoryMutationAuthorizationService(
             $security,
             new CategoryTenantAccessEvaluator($registry, $resolver, $tenantRolePolicy),
         );
