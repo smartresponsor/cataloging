@@ -9,15 +9,17 @@ use App\Policy\CategoryPublicationGatePolicy;
 use App\Policy\CategoryWorkflowPolicy;
 use App\Service\CacheInvalidationRecorder;
 use App\Service\CatalogPublicationGateService;
-use App\Service\CategoryMutationService;
+use App\Service\CatalogCategoryMutationService;
 use App\Service\OutboxWriter;
-use App\ValueObject\CategoryMutationMoveRequest;
-use App\ValueObject\CategoryMutationPublishRequest;
+use App\ValueObject\CatalogCategoryMutationMoveRequest;
+use App\ValueObject\CatalogCategoryMutationPolicy;
+use App\ValueObject\CatalogCategoryMutationPublishRequest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
-final class CategoryMutationServiceTest extends TestCase
+final class CatalogCategoryMutationServiceTest extends TestCase
 {
     public function testMoveRebasesSubtreeUpdatesParentAndWritesAuditAndOutbox(): void
     {
@@ -26,7 +28,7 @@ final class CategoryMutationServiceTest extends TestCase
         $this->seedCategoryTree($connection);
 
         $service = $this->createService($connection);
-        $result = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict'));
+        $result = $service->move(new CatalogCategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', CatalogCategoryMutationPolicy::STRICT))->toArray();
 
         self::assertSame('electronics', $result['id']);
         self::assertSame('fashion', $result['newParentId']);
@@ -63,8 +65,8 @@ final class CategoryMutationServiceTest extends TestCase
         $this->seedCategoryTree($connection);
 
         $service = $this->createService($connection);
-        $first = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
-        $second = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
+        $first = $service->move(new CatalogCategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', CatalogCategoryMutationPolicy::STRICT, false, null, 'move-1', 'corr-1'))->toArray();
+        $second = $service->move(new CatalogCategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', CatalogCategoryMutationPolicy::STRICT, false, null, 'move-1', 'corr-1'))->toArray();
 
         self::assertFalse($first['duplicate']);
         self::assertTrue($second['duplicate']);
@@ -79,6 +81,65 @@ final class CategoryMutationServiceTest extends TestCase
         self::assertSame(1, (int) $moveOutboxCount);
     }
 
+    public function testMoveIdempotencyKeyReuseWithDifferentPayloadThrowsDomainException(): void
+    {
+        $connection = $this->createConnection();
+        $this->createSchema($connection);
+        $this->seedFromFixture($connection, 'mutation_idempotency_replay.yaml');
+
+        $service = $this->createService($connection);
+        $service->move(new CatalogCategoryMutationMoveRequest(
+            'electronics',
+            'fashion',
+            'oleksandr',
+            'catalog',
+            CatalogCategoryMutationPolicy::STRICT,
+            false,
+            null,
+            'move-reuse-key',
+            'corr-1',
+        ));
+
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('cannot be reused for a different request payload');
+
+        $service->move(new CatalogCategoryMutationMoveRequest(
+            'electronics',
+            'root',
+            'oleksandr',
+            'catalog',
+            CatalogCategoryMutationPolicy::STRICT,
+            false,
+            null,
+            'move-reuse-key',
+            'corr-1',
+        ));
+    }
+
+    public function testMoveRebasesDeepTreeLoadedFromFixture(): void
+    {
+        $connection = $this->createConnection();
+        $this->createSchema($connection);
+        $this->seedFromFixture($connection, 'mutation_deep_tree.yaml');
+
+        $service = $this->createService($connection);
+        $result = $service->move(new CatalogCategoryMutationMoveRequest(
+            'a',
+            'x',
+            'oleksandr',
+            'catalog',
+            CatalogCategoryMutationPolicy::STRICT,
+        ))->toArray();
+
+        self::assertSame(5, $result['changedCount']);
+
+        $deepest = $connection->fetchAssociative('SELECT path, level FROM category WHERE id = :id', ['id' => 'd']);
+        self::assertIsArray($deepest);
+        self::assertSame('root.x.a.b.c.d', $deepest['path']);
+        self::assertTrue(is_scalar($deepest['level']));
+        self::assertSame(5, (int) $deepest['level']);
+    }
+
     public function testPublishUpdatesPublicationStateAndWritesAuditAndOutbox(): void
     {
         $connection = $this->createConnection();
@@ -87,13 +148,13 @@ final class CategoryMutationServiceTest extends TestCase
         $connection->update('category', ['workflow_state' => 'approved'], ['id' => 'electronics']);
 
         $service = $this->createService($connection);
-        $result = $service->publish(new CategoryMutationPublishRequest('electronics', true, [
+        $result = $service->publish(new CatalogCategoryMutationPublishRequest('electronics', true, [
             'slugReady' => true,
             'seoReady' => true,
             'contentReady' => true,
             'localeReady' => true,
             'mediaReady' => false,
-        ], 'oleksandr', 'manual publish'));
+        ], 'oleksandr', 'manual publish'))->toArray();
 
         self::assertTrue($result['published']);
         self::assertSame('published', $result['workflowState']);
@@ -134,8 +195,8 @@ final class CategoryMutationServiceTest extends TestCase
             'localeReady' => true,
         ];
 
-        $first = $service->publish(new CategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
-        $second = $service->publish(new CategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
+        $first = $service->publish(new CatalogCategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'))->toArray();
+        $second = $service->publish(new CatalogCategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'))->toArray();
 
         self::assertFalse($first['duplicate']);
         self::assertTrue($second['duplicate']);
@@ -156,9 +217,9 @@ final class CategoryMutationServiceTest extends TestCase
         return DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
     }
 
-    private function createService(Connection $connection): CategoryMutationService
+    private function createService(Connection $connection): CatalogCategoryMutationService
     {
-        return new CategoryMutationService(
+        return new CatalogCategoryMutationService(
             $connection,
             new OutboxWriter($connection),
             new CacheInvalidationRecorder(),
@@ -187,6 +248,19 @@ final class CategoryMutationServiceTest extends TestCase
         ];
 
         foreach ($rows as $row) {
+            $connection->insert('category', $row);
+        }
+    }
+
+    private function seedFromFixture(Connection $connection, string $fixtureFile): void
+    {
+        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/Category/'.$fixtureFile);
+        $rows = is_array($payload['rows'] ?? null) ? $payload['rows'] : [];
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
             $connection->insert('category', $row);
         }
     }

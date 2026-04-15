@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Request;
 
+use App\Request\Support\RequestValueNormalizer;
+
 /**
  * Provides the category collection request implementation.
  */
@@ -22,7 +24,7 @@ final readonly class CategoryCollectionRequest
 
     public static function fromJson(string $json): self
     {
-        if ('' === trim($json)) {
+        if (null === RequestValueNormalizer::optionalTrimmedString($json)) {
             return new self([]);
         }
 

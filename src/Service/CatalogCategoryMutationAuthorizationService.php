@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * Provides the category mutation authorization service application service.
  */
-final readonly class CategoryMutationAuthorizationService
+final readonly class CatalogCategoryMutationAuthorizationService
 {
     /**
      * Initializes the category mutation authorization service service collaborators.

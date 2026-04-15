@@ -15,7 +15,7 @@ use App\Service\CatalogPublicationGateService;
 use App\ValueObject\CatalogAuditContext;
 use App\ValueObject\CategoryEvaluationRequest;
 use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryPublicationCompletenessBridgeTest extends TestCase
@@ -51,7 +51,7 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
         $completenessPayload = $completenessEvent->payload();
         $gateEvent = $gate->evaluate(new CategoryPublicationGateEvaluationRequest(
             'category-603',
-            CategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowState::APPROVED,
             $completenessPayload['publicationChecks'],
             'operator-3',
             'approval handoff',

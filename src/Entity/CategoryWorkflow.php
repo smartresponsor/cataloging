@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\EntityInterface\CategoryWorkflowInterface;
-use App\ValueObject\CategoryWorkflowState;
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\ValueObject\CatalogCategoryWorkflowState;
+use App\ValueObjectInterface\CatalogCategoryWorkflowStateInterface;
 
 /**
  * Represents the category workflow domain record.
@@ -19,7 +19,7 @@ final readonly class CategoryWorkflow implements CategoryWorkflowInterface
      */
     public function __construct(
         private string $categoryId,
-        private CategoryWorkflowState $state,
+        private CatalogCategoryWorkflowState $state,
         private string $actorId,
         private string $reason,
         private \DateTimeImmutable $transitionedAt,
@@ -30,7 +30,7 @@ final readonly class CategoryWorkflow implements CategoryWorkflowInterface
     {
         return new self(
             $categoryId,
-            CategoryWorkflowState::draft(),
+            CatalogCategoryWorkflowState::draft(),
             $actorId,
             'workflow initialized',
             new \DateTimeImmutable('now'),
@@ -40,7 +40,7 @@ final readonly class CategoryWorkflow implements CategoryWorkflowInterface
     /**
      * Handles the transition to workflow.
      */
-    public function transitionTo(CategoryWorkflowState $state, string $actorId, string $reason): self
+    public function transitionTo(CatalogCategoryWorkflowState $state, string $actorId, string $reason): self
     {
         return new self(
             $this->categoryId,
@@ -62,7 +62,7 @@ final readonly class CategoryWorkflow implements CategoryWorkflowInterface
     /**
      * Handles the state workflow.
      */
-    public function state(): CategoryWorkflowStateInterface
+    public function state(): CatalogCategoryWorkflowStateInterface
     {
         return $this->state;
     }

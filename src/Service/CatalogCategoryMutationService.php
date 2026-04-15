@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Dto\CatalogCategoryMoveMutationResult;
+use App\Dto\CatalogCategoryPublishMutationResult;
+use App\Exception\CatalogCategoryNotFoundException;
 use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
-use App\ServiceInterface\CategoryMutationServiceInterface;
-use App\ValueObject\CategoryMutationMoveRequest;
-use App\ValueObject\CategoryMutationPublishRequest;
+use App\ServiceInterface\CatalogCategoryMutationServiceInterface;
+use App\ValueObject\CatalogCategoryMutationPolicy;
+use App\ValueObject\CatalogCategoryMutationMoveRequest;
+use App\ValueObject\CatalogCategoryMutationPublishRequest;
 use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
@@ -20,7 +24,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Provides the category mutation service application service.
  */
-final class CategoryMutationService implements CategoryMutationServiceInterface
+final class CatalogCategoryMutationService implements CatalogCategoryMutationServiceInterface
 {
     private const int IDEMPOTENCY_TTL_SEC = 86400;
 
@@ -40,39 +44,27 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * Handles the move workflow.
      *
-     * @param CategoryMutationMoveRequest $request
-     *
-     * @return array{
-     *     id:string,
-     *     oldParentId:string|null,
-     *     newParentId:string,
-     *     treeId:string,
-     *     policy:string,
-     *     changedCount:int,
-     *     dryRun:bool,
-     *     redirects:list<array{id:string,from:string,to:string}>,
-     *     duplicate:bool,
-     * }
+     * @param CatalogCategoryMutationMoveRequest $request
      *
      * @throws \JsonException
      * @throws \Throwable
      */
-    public function move(CategoryMutationMoveRequest $request): array
+    public function move(CatalogCategoryMutationMoveRequest $request): CatalogCategoryMoveMutationResult
     {
         $normalizedCategoryId = $this->requiredString($request->categoryId(), 'categoryId');
         $normalizedNewParentId = $this->requiredString($request->newParentId(), 'newParentId');
         $normalizedActorId = $this->requiredString($request->actorId(), 'actorId');
         $normalizedTreeId = $this->requiredString($request->treeId(), 'treeId');
-        $normalizedPolicy = $this->requiredString($request->policy(), 'policy');
+        $normalizedPolicy = CatalogCategoryMutationPolicy::fromString($request->policy()->value)->value;
         $dryRun = $request->dryRun();
         $normalizedLocale = null !== $request->locale() ? trim($request->locale()) : null;
         $normalizedCorrelationId = $this->normalizeOptionalString($request->correlationId());
-        $normalizedRequest = new CategoryMutationMoveRequest(
+        $normalizedRequest = new CatalogCategoryMutationMoveRequest(
             $normalizedCategoryId,
             $normalizedNewParentId,
             $normalizedActorId,
             $normalizedTreeId,
-            $normalizedPolicy,
+            CatalogCategoryMutationPolicy::fromString($normalizedPolicy),
             $dryRun,
             $normalizedLocale,
             $request->idempotencyKey(),
@@ -95,7 +87,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                 $commandKey,
                 $requestHash,
                 $normalizedCorrelationId,
-            ): array {
+            ): CatalogCategoryMoveMutationResult {
                 if (
                     !$dryRun
                     && !$this->idempotencyStore->acquire(
@@ -127,17 +119,17 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
 
                 $oldParentId = $this->nullableScalarToString($node['parent_id'] ?? null);
                 if ($oldParentId === $normalizedNewParentId) {
-                    return [
-                        'id' => $normalizedCategoryId,
-                        'oldParentId' => $oldParentId,
-                        'newParentId' => $normalizedNewParentId,
-                        'treeId' => $normalizedTreeId,
-                        'policy' => $normalizedPolicy,
-                        'changedCount' => 0,
-                        'dryRun' => $dryRun,
-                        'redirects' => [],
-                        'duplicate' => false,
-                    ];
+                    return new CatalogCategoryMoveMutationResult(
+                        $normalizedCategoryId,
+                        $oldParentId,
+                        $normalizedNewParentId,
+                        $normalizedTreeId,
+                        $normalizedPolicy,
+                        0,
+                        $dryRun,
+                        [],
+                        false,
+                    );
                 }
 
                 $leafSegment = $this->lastSegment($oldPath);
@@ -180,17 +172,17 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                 }
 
                 if ($dryRun) {
-                    return [
-                        'id' => $normalizedCategoryId,
-                        'oldParentId' => $oldParentId,
-                        'newParentId' => $normalizedNewParentId,
-                        'treeId' => $normalizedTreeId,
-                        'policy' => $normalizedPolicy,
-                        'changedCount' => $changedCount,
-                        'dryRun' => true,
-                        'redirects' => $redirects,
-                        'duplicate' => false,
-                    ];
+                    return new CatalogCategoryMoveMutationResult(
+                        $normalizedCategoryId,
+                        $oldParentId,
+                        $normalizedNewParentId,
+                        $normalizedTreeId,
+                        $normalizedPolicy,
+                        $changedCount,
+                        true,
+                        $redirects,
+                        false,
+                    );
                 }
 
                 $this->writeAudit($connection, 'category.move', [
@@ -225,21 +217,21 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                     ),
                 );
 
-                return [
-                    'id' => $normalizedCategoryId,
-                    'oldParentId' => $oldParentId,
-                    'newParentId' => $normalizedNewParentId,
-                    'treeId' => $normalizedTreeId,
-                    'policy' => $normalizedPolicy,
-                    'changedCount' => $changedCount,
-                    'dryRun' => false,
-                    'redirects' => $redirects,
-                    'duplicate' => false,
-                ];
+                return new CatalogCategoryMoveMutationResult(
+                    $normalizedCategoryId,
+                    $oldParentId,
+                    $normalizedNewParentId,
+                    $normalizedTreeId,
+                    $normalizedPolicy,
+                    $changedCount,
+                    false,
+                    $redirects,
+                    false,
+                );
             });
 
-        if (!$result['dryRun'] && !$result['duplicate']) {
-            $this->cacheInvalidationRecorder->invalidate($result['id']);
+        if (!$result->dryRun() && !$result->duplicate()) {
+            $this->cacheInvalidationRecorder->invalidate($result->id());
         }
 
         return $result;
@@ -248,25 +240,12 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * Handles the publish workflow.
      *
-     * @param CategoryMutationPublishRequest $request
-     *
-     * @return array{
-     *     id:string,
-     *     published:bool,
-     *     workflowState:string,
-     *     previousWorkflowState:string,
-     *     blockers:list<string>,
-     *     warnings:list<string>,
-     *     checks:array<string,bool>,
-     *     publishedAt:string|null,
-     *     reason:string,
-     *     duplicate:bool,
-     * }
+     * @param CatalogCategoryMutationPublishRequest $request
      *
      * @throws \JsonException
      * @throws \Throwable
      */
-    public function publish(CategoryMutationPublishRequest $request): array
+    public function publish(CatalogCategoryMutationPublishRequest $request): CatalogCategoryPublishMutationResult
     {
         $normalizedCategoryId = $this->requiredString($request->categoryId(), 'categoryId');
         $published = $request->published();
@@ -274,7 +253,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         $normalizedReason = $this->requiredString($request->reason(), 'reason');
         $normalizedChecks = $this->normalizeChecks($request->checks());
         $normalizedCorrelationId = $this->normalizeOptionalString($request->correlationId());
-        $normalizedRequest = new CategoryMutationPublishRequest(
+        $normalizedRequest = new CatalogCategoryMutationPublishRequest(
             $normalizedCategoryId,
             $published,
             $normalizedChecks,
@@ -295,7 +274,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                 $commandKey,
                 $requestHash,
                 $normalizedCorrelationId,
-            ): array {
+            ): CatalogCategoryPublishMutationResult {
                 if (
                     !$this->idempotencyStore->acquire(
                         $commandKey,
@@ -329,22 +308,22 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                     if (($payload['publishable'] ?? false) !== true) {
                         throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_array($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
                     }
-                    $targetState = CategoryWorkflowState::PUBLISHED;
+                    $targetState = CatalogCategoryWorkflowState::PUBLISHED;
                     $publishedAtDateTime = new \DateTimeImmutable('now');
                     $publishedAt = $publishedAtDateTime->format('Y-m-d H:i:s');
                     $blockers = $this->stringList(is_array($payload['blockers'] ?? null) ? $payload['blockers'] : []);
                     $warnings = $this->stringList(is_array($payload['warnings'] ?? null) ? $payload['warnings'] : []);
                     $checksForResponse = $this->boolMap(is_array($payload['checks'] ?? null) ? $payload['checks'] : []);
                 } else {
-                    $targetState = CategoryWorkflowState::DRAFT;
+                    $targetState = CatalogCategoryWorkflowState::DRAFT;
                     $publishedAt = null;
                     $blockers = [];
                     $warnings = [];
                     $checksForResponse = [];
                 }
 
-                $from = CategoryWorkflowState::fromString($currentWorkflowState);
-                $to = CategoryWorkflowState::fromString($targetState);
+                $from = CatalogCategoryWorkflowState::fromString($currentWorkflowState);
+                $to = CatalogCategoryWorkflowState::fromString($targetState);
                 $this->workflowPolicy->assertTransitionAllowed($from, $to, $normalizedActorId, $normalizedReason);
 
                 $connection->update(
@@ -391,22 +370,22 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
                     ),
                 );
 
-                return [
-                    'id' => $normalizedCategoryId,
-                    'published' => $published,
-                    'workflowState' => $targetState,
-                    'previousWorkflowState' => $currentWorkflowState,
-                    'blockers' => $blockers,
-                    'warnings' => $warnings,
-                    'checks' => $checksForResponse,
-                    'publishedAt' => $publishedAt,
-                    'reason' => $normalizedReason,
-                    'duplicate' => false,
-                ];
+                return new CatalogCategoryPublishMutationResult(
+                    $normalizedCategoryId,
+                    $published,
+                    $targetState,
+                    $currentWorkflowState,
+                    $blockers,
+                    $warnings,
+                    $checksForResponse,
+                    $publishedAt,
+                    $normalizedReason,
+                    false,
+                );
             });
 
-        if (!$result['duplicate']) {
-            $this->cacheInvalidationRecorder->invalidate($result['id']);
+        if (!$result->duplicate()) {
+            $this->cacheInvalidationRecorder->invalidate($result->id());
         }
 
         return $result;
@@ -419,18 +398,6 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      * @param string     $treeId
      * @param string     $policy
      *
-     * @return array{
-     *     id:string,
-     *     oldParentId: ?string,
-     *     newParentId:string,
-     *     treeId:string,
-     *     policy:string,
-     *     changedCount:int,
-     *     dryRun:bool,
-     *     redirects:list<array{id:string,from:string,to:string}>,
-     *     duplicate:bool,
-     * }
-     *
      * @throws \Throwable
      */
     private function duplicateMoveResult(
@@ -439,20 +406,20 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         string $newParentId,
         string $treeId,
         string $policy,
-    ): array {
+    ): CatalogCategoryMoveMutationResult {
         $category = $this->fetchCategory($connection, $categoryId);
 
-        return [
-            'id' => $categoryId,
-            'oldParentId' => $this->nullableScalarToString($category['parent_id'] ?? null),
-            'newParentId' => $newParentId,
-            'treeId' => $treeId,
-            'policy' => $policy,
-            'changedCount' => 0,
-            'dryRun' => false,
-            'redirects' => [],
-            'duplicate' => true,
-        ];
+        return new CatalogCategoryMoveMutationResult(
+            $categoryId,
+            $this->nullableScalarToString($category['parent_id'] ?? null),
+            $newParentId,
+            $treeId,
+            $policy,
+            0,
+            false,
+            [],
+            true,
+        );
     }
 
     /**
@@ -460,19 +427,6 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      * @param string             $categoryId
      * @param array<string,bool> $checks
      * @param string             $reason
-     *
-     * @return array{
-     *     id:string,
-     *     published:bool,
-     *     workflowState:string,
-     *     previousWorkflowState:string,
-     *     blockers:list<string>,
-     *     warnings:list<string>,
-     *     checks:array<string,bool>,
-     *     publishedAt: ?string,
-     *     reason:string,
-     *     duplicate:bool,
-     * }
      *
      * @throws Exception
      * @throws \InvalidArgumentException
@@ -484,22 +438,22 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         string $categoryId,
         array $checks,
         string $reason,
-    ): array {
+    ): CatalogCategoryPublishMutationResult {
         $category = $this->fetchCategory($connection, $categoryId);
         $workflowState = $this->workflowStateValue($category['workflow_state'] ?? null);
 
-        return [
-            'id' => $categoryId,
-            'published' => (bool) ($category['published'] ?? false),
-            'workflowState' => $workflowState,
-            'previousWorkflowState' => $workflowState,
-            'blockers' => [],
-            'warnings' => [],
-            'checks' => $checks,
-            'publishedAt' => $this->nullableScalarToString($category['published_at'] ?? null),
-            'reason' => $reason,
-            'duplicate' => true,
-        ];
+        return new CatalogCategoryPublishMutationResult(
+            $categoryId,
+            (bool) ($category['published'] ?? false),
+            $workflowState,
+            $workflowState,
+            [],
+            [],
+            $checks,
+            $this->nullableScalarToString($category['published_at'] ?? null),
+            $reason,
+            true,
+        );
     }
 
     /**
@@ -520,7 +474,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         );
 
         if (!is_array($row)) {
-            throw new \RuntimeException(sprintf('Category "%s" was not found.', $categoryId));
+            throw new CatalogCategoryNotFoundException(sprintf('Category "%s" was not found.', $categoryId));
         }
 
         return $row;
@@ -648,10 +602,10 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     private function workflowStateValue(mixed $value): string
     {
         if (!is_scalar($value) || '' === trim((string) $value)) {
-            return CategoryWorkflowState::DRAFT;
+            return CatalogCategoryWorkflowState::DRAFT;
         }
 
-        return CategoryWorkflowState::fromString(trim((string) $value))->value();
+        return CatalogCategoryWorkflowState::fromString(trim((string) $value))->value();
     }
 
     /**
@@ -739,7 +693,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * @throws \JsonException
      */
-    private function moveIdempotencyKey(CategoryMutationMoveRequest $request): string
+    private function moveIdempotencyKey(CatalogCategoryMutationMoveRequest $request): string
     {
         $providedKey = $this->normalizeOptionalString($request->idempotencyKey());
         if (null !== $providedKey) {
@@ -752,7 +706,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * @throws \JsonException
      */
-    private function publishIdempotencyKey(CategoryMutationPublishRequest $request): string
+    private function publishIdempotencyKey(CatalogCategoryMutationPublishRequest $request): string
     {
         $providedKey = $this->normalizeOptionalString($request->idempotencyKey());
         if (null !== $providedKey) {
@@ -765,14 +719,14 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * @throws \JsonException
      */
-    private function moveRequestHash(CategoryMutationMoveRequest $request): string
+    private function moveRequestHash(CatalogCategoryMutationMoveRequest $request): string
     {
         return sha1(json_encode([
             'categoryId' => $request->categoryId(),
             'newParentId' => $request->newParentId(),
             'actorId' => $request->actorId(),
             'treeId' => $request->treeId(),
-            'policy' => $request->policy(),
+            'policy' => $request->policy()->value,
             'dryRun' => $request->dryRun(),
             'locale' => $request->locale(),
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
@@ -781,7 +735,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     /**
      * @throws \JsonException
      */
-    private function publishRequestHash(CategoryMutationPublishRequest $request): string
+    private function publishRequestHash(CatalogCategoryMutationPublishRequest $request): string
     {
         return sha1(json_encode([
             'categoryId' => $request->categoryId(),

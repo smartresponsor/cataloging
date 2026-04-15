@@ -8,7 +8,7 @@ namespace App\ValueObject;
 /**
  * Carries the full input surface for category mutation publish workflows.
  */
-final readonly class CategoryMutationPublishRequest
+final readonly class CatalogCategoryMutationPublishRequest
 {
     /**
      * @param array<string,bool> $checks

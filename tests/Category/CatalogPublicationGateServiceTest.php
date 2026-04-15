@@ -12,7 +12,7 @@ use App\Policy\CategoryPublicationGatePolicy;
 use App\Service\CatalogPublicationGateService;
 use App\ValueObject\CategoryPublicationGateAssertionRequest;
 use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationGateServiceTest extends TestCase
@@ -23,7 +23,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
 
         $event = $service->evaluate(new CategoryPublicationGateEvaluationRequest(
             'category-200',
-            CategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowState::APPROVED,
             [
                 'slugReady' => true,
                 'seoReady' => true,
@@ -50,7 +50,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
         $this->expectException(\DomainException::class);
 
         $service->assertCanPublish(new CategoryPublicationGateAssertionRequest(
-            CategoryWorkflowState::DRAFT,
+            CatalogCategoryWorkflowState::DRAFT,
             [
                 'slugReady' => true,
                 'seoReady' => true,
@@ -69,7 +69,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
         $this->expectException(\DomainException::class);
 
         $service->assertCanPublish(new CategoryPublicationGateAssertionRequest(
-            CategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowState::APPROVED,
             [
                 'slugReady' => true,
                 'seoReady' => false,

@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
-use App\ValueObject\CategoryWorkflowState;
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\ValueObject\CatalogCategoryWorkflowState;
+use App\ValueObjectInterface\CatalogCategoryWorkflowStateInterface;
 
 /**
  * Provides the category workflow policy implementation.
@@ -16,27 +16,27 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
 {
     /** @var array<string,list<string>> */
     private const array TRANSITIONS = [
-        CategoryWorkflowState::DRAFT => [
-            CategoryWorkflowState::IN_REVIEW,
-            CategoryWorkflowState::APPROVED,
-            CategoryWorkflowState::ARCHIVED,
+        CatalogCategoryWorkflowState::DRAFT => [
+            CatalogCategoryWorkflowState::IN_REVIEW,
+            CatalogCategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowState::ARCHIVED,
         ],
-        CategoryWorkflowState::IN_REVIEW => [
-            CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::APPROVED,
-            CategoryWorkflowState::ARCHIVED,
+        CatalogCategoryWorkflowState::IN_REVIEW => [
+            CatalogCategoryWorkflowState::DRAFT,
+            CatalogCategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowState::ARCHIVED,
         ],
-        CategoryWorkflowState::APPROVED => [
-            CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::PUBLISHED,
-            CategoryWorkflowState::ARCHIVED,
+        CatalogCategoryWorkflowState::APPROVED => [
+            CatalogCategoryWorkflowState::DRAFT,
+            CatalogCategoryWorkflowState::PUBLISHED,
+            CatalogCategoryWorkflowState::ARCHIVED,
         ],
-        CategoryWorkflowState::PUBLISHED => [
-            CategoryWorkflowState::DRAFT,
-            CategoryWorkflowState::ARCHIVED,
+        CatalogCategoryWorkflowState::PUBLISHED => [
+            CatalogCategoryWorkflowState::DRAFT,
+            CatalogCategoryWorkflowState::ARCHIVED,
         ],
-        CategoryWorkflowState::ARCHIVED => [
-            CategoryWorkflowState::DRAFT,
+        CatalogCategoryWorkflowState::ARCHIVED => [
+            CatalogCategoryWorkflowState::DRAFT,
         ],
     ];
 
@@ -44,8 +44,8 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
      * Determines whether the current workflow can transition.
      */
     public function canTransition(
-        CategoryWorkflowStateInterface $from,
-        CategoryWorkflowStateInterface $to,
+        CatalogCategoryWorkflowStateInterface $from,
+        CatalogCategoryWorkflowStateInterface $to,
         string $actorId,
         string $reason,
     ): bool {
@@ -69,8 +69,8 @@ final class CategoryWorkflowPolicy implements CategoryWorkflowPolicyInterface
      * Handles the assert transition allowed workflow.
      */
     public function assertTransitionAllowed(
-        CategoryWorkflowStateInterface $from,
-        CategoryWorkflowStateInterface $to,
+        CatalogCategoryWorkflowStateInterface $from,
+        CatalogCategoryWorkflowStateInterface $to,
         string $actorId,
         string $reason,
     ): void {

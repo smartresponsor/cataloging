@@ -8,7 +8,7 @@ namespace App\ValueObject;
 /**
  * Carries the full input surface for category mutation move workflows.
  */
-final readonly class CategoryMutationMoveRequest
+final readonly class CatalogCategoryMutationMoveRequest
 {
     /**
      * Initializes the category mutation move request value object.
@@ -18,7 +18,7 @@ final readonly class CategoryMutationMoveRequest
         private string $newParentId,
         private string $actorId,
         private string $treeId = 'catalog',
-        private string $policy = 'strict',
+        private CatalogCategoryMutationPolicy $policy = CatalogCategoryMutationPolicy::STRICT,
         private bool $dryRun = false,
         private ?string $locale = null,
         private ?string $idempotencyKey = null,
@@ -46,7 +46,7 @@ final readonly class CategoryMutationMoveRequest
         return $this->treeId;
     }
 
-    public function policy(): string
+    public function policy(): CatalogCategoryMutationPolicy
     {
         return $this->policy;
     }

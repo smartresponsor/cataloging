@@ -1,0 +1,7 @@
+rows:
+  - { id: root, slug: root, name: Root, parent_id: ~, level: 0, path: root }
+  - { id: a, slug: a, name: A, parent_id: root, level: 1, path: root.a }
+  - { id: b, slug: b, name: B, parent_id: a, level: 2, path: root.a.b }
+  - { id: c, slug: c, name: C, parent_id: b, level: 3, path: root.a.b.c }
+  - { id: d, slug: d, name: D, parent_id: c, level: 4, path: root.a.b.c.d }
+  - { id: x, slug: x, name: X, parent_id: root, level: 1, path: root.x }

@@ -12,7 +12,7 @@ use App\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\ValueObject\CategoryPublicationGateAssertionRequest;
 use App\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\ValueObject\CategoryPublicationReadiness;
-use App\ValueObject\CategoryWorkflowState;
+use App\ValueObject\CatalogCategoryWorkflowState;
 
 /**
  * Provides the catalog publication gate service application service.
@@ -31,7 +31,7 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
      */
     public function evaluate(CategoryPublicationGateEvaluationRequest $request): CategoryPublicationGateEvaluatedInterface
     {
-        $state = CategoryWorkflowState::fromString($request->workflowState());
+        $state = CatalogCategoryWorkflowState::fromString($request->workflowState());
         $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
         return new CategoryPublicationGateEvaluated(
@@ -52,7 +52,7 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
      */
     public function assertCanPublish(CategoryPublicationGateAssertionRequest $request): void
     {
-        $state = CategoryWorkflowState::fromString($request->workflowState());
+        $state = CatalogCategoryWorkflowState::fromString($request->workflowState());
         $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
         $this->policy->assertCanPublish($state, $readiness, $request->actorId(), $request->reason());
