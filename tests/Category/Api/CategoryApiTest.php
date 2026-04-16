@@ -14,6 +14,6 @@ final class CategoryApiTest extends TestCase
 {
     public function testDummy(): void
     {
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

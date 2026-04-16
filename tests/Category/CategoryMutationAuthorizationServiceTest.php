@@ -29,7 +29,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
         $service->assertCanMove('cat-1');
         $service->assertCanPublish('cat-1');
 
-        self::assertTrue(true);
+        self::addToAssertionCount(1);
     }
 
     public function testEditorGrantAllowsMove(): void
@@ -45,7 +45,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
         $service = $this->service($security, 'tenant-a', ['editor']);
         $service->assertCanMove('cat-1');
 
-        self::assertTrue(true);
+        self::addToAssertionCount(1);
     }
 
     public function testPublishDeniedWhenNeitherAdminNorPublisher(): void
@@ -77,12 +77,12 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
             {
             }
 
-            public function resolveFromCurrentRequest(): ?ExternalIdentityContext
+            public function resolveFromCurrentRequest(): ExternalIdentityContext
             {
                 return new ExternalIdentityContext('actor-1', $this->tenant, ['ROLE_USER'], $this->roles);
             }
 
-            public function resolveFromRequest(\Symfony\Component\HttpFoundation\Request $request): ?ExternalIdentityContext
+            public function resolveFromRequest(\Symfony\Component\HttpFoundation\Request $request): ExternalIdentityContext
             {
                 return $this->resolveFromCurrentRequest();
             }

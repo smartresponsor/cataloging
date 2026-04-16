@@ -17,7 +17,7 @@ final class WebhookDispatcherTest extends TestCase
 {
     public function testDispatchAddsSignatureCorrelationIdAndTimeout(): void
     {
-        /** @var array{method:string,url:string,options:array{timeout:float,headers:array<string,string>}} $capturedOptions */
+        /** @var array{method:string,url:string,options:array{timeout:float,headers:array<string,string>,normalized_headers:array<string,list<string>>}} $capturedOptions */
         $capturedOptions = [];
         $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$capturedOptions): MockResponse {
             $capturedOptions = ['method' => $method, 'url' => $url, 'options' => $options];

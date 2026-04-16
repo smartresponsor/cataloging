@@ -42,9 +42,8 @@ trait CategoryCliInputTrait
         if ('' === trim($raw)) {
             return [];
         }
-        $decoded = json_decode($raw, true);
 
-        return is_array($decoded) ? $decoded : [];
+        return CategoryPayloadValueNormalizer::nestedMap(json_decode($raw, true));
     }
 
     private function nonEmptyString(mixed $value, string $default = ''): string

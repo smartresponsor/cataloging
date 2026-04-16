@@ -14,6 +14,6 @@ final class CategoryGraphQLTest extends TestCase
 {
     public function testSchemaPresent(): void
     {
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

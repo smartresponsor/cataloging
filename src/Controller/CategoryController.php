@@ -227,7 +227,7 @@ final class CategoryController implements CategoryControllerInterface
         $normalized = [];
         foreach ($value as $entry) {
             if (is_array($entry)) {
-                $normalized[] = $entry;
+                $normalized[] = \App\Service\CategoryPayloadValueNormalizer::nestedMap($entry);
             }
         }
 

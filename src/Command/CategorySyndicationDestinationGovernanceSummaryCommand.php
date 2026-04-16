@@ -105,6 +105,9 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
             return [];
         }
 
-        return array_values(array_filter($decoded, static fn (mixed $row): bool => is_array($row)));
+        return array_values(array_map(
+            static fn (mixed $row): array => is_array($row) ? $row : [],
+            array_filter($decoded, static fn (mixed $row): bool => is_array($row)),
+        ));
     }
 }

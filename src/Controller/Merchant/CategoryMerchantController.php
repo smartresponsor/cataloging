@@ -37,7 +37,7 @@ final class CategoryMerchantController extends AbstractController
     {
         try {
             $context = $this->externalIdentityContextResolver->resolveFromRequest($request);
-            $tenant = $context?->tenant ?? 'merchant';
+            $tenant = $context->tenant ?? 'merchant';
             $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
                 'tenant' => $tenant,
                 'limit' => 100,

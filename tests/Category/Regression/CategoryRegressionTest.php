@@ -14,6 +14,6 @@ final class CategoryRegressionTest extends TestCase
 {
     public function testBasicApiEndpoints(): void
     {
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

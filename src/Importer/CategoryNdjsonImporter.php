@@ -100,7 +100,7 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
             throw new \InvalidArgumentException('Invalid row');
         }
 
-        return $data;
+        return $this->metaPayloadNormalizer->normalizeMap($data);
     }
 
     /**

@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\CategoryReviewAssignCommand;
-use App\Entity\CategoryChangeRequest;
+use App\Entity\CatalogCategoryChangeRequest;
 use App\Policy\CategoryReviewAssignmentPolicy;
 use App\Repository\CategoryChangeRequestRepository;
 use App\Repository\CategoryReviewAssignmentRepository;
@@ -23,7 +23,7 @@ final class CategoryReviewAssignCommandTest extends TestCase
     public function testExecutePrintsAssignmentPayload(): void
     {
         $requestRepository = new CategoryChangeRequestRepository();
-        $requestRepository->save(CategoryChangeRequest::open('req-100', 'cat-100', 'submitter-1', 'Promote category', ['title' => 'Garden']));
+        $requestRepository->save(CatalogCategoryChangeRequest::open('req-100', 'cat-100', 'submitter-1', 'Promote category', ['title' => 'Garden']));
 
         $service = new CatalogReviewAssignmentService(
             $requestRepository,

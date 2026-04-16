@@ -39,7 +39,6 @@ final class CreateMovePublishTest extends TestCase
         $currentUrl = $client->getCurrentURL();
 
         self::assertSame(200, $client->getInternalResponse()->getStatusCode());
-        self::assertIsString($currentUrl);
         self::assertStringContainsString('/status', $currentUrl);
     }
 

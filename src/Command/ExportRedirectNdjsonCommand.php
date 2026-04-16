@@ -49,10 +49,6 @@ final class ExportRedirectNdjsonCommand extends Command
         }
 
         foreach ($aliases as $alias) {
-            if (!$alias instanceof CategoryAliasEntity) {
-                continue;
-            }
-
             $category = $catRepo->find($alias->categoryId());
             if (!$category instanceof CategoryEntity) {
                 continue;

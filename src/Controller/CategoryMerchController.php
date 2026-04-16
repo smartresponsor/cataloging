@@ -204,7 +204,7 @@ final class CategoryMerchController extends AbstractController
             }
         }
 
-        return array_values($items);
+        return $items;
     }
 
     private function scalarString(mixed $value): string

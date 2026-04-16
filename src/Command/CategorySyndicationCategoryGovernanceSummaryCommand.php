@@ -66,9 +66,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
             $this->argumentString($input, 'reason'),
         ));
 
-        $payload = method_exists($event, 'payload')
-            ? $event->payload()
-            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
+        $payload = $this->nestedMap($event->payload());
         $format = $this->optionString($input, 'format', 'json');
         if ('ndjson' === $format) {
             return $this->writeStructuredRows($output, [$payload], 'ndjson');
@@ -89,6 +87,9 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
             return [];
         }
 
-        return array_values(array_filter($decoded, static fn (mixed $row): bool => is_array($row)));
+        return array_values(array_map(
+            static fn (mixed $row): array => is_array($row) ? $row : [],
+            array_filter($decoded, static fn (mixed $row): bool => is_array($row)),
+        ));
     }
 }

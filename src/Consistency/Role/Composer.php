@@ -50,7 +50,7 @@ final class Composer
         }
 
         $this->participants = is_array($participants)
-            ? array_values($participants)
+            ? $participants
             : array_values(iterator_to_array($participants, false));
 
         $participants = [

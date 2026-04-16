@@ -27,7 +27,7 @@ final class CategoryAuditController extends AbstractController
         if (is_file($file)) {
             $lines = file($file, FILE_IGNORE_NEW_LINES);
             foreach (is_array($lines) ? $lines : [] as $line) {
-                if (!is_string($line) || '' === trim($line)) {
+                if ('' === trim($line)) {
                     continue;
                 }
                 $decoded = json_decode($line, true, 512, JSON_THROW_ON_ERROR);

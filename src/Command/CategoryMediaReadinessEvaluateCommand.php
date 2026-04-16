@@ -89,15 +89,13 @@ final class CategoryMediaReadinessEvaluateCommand extends Command
                     new CatalogAuditContext($actorId, $reason),
                 ),
             );
-            $payload = method_exists($report, 'payload')
-                ? $report->payload()
-                : (method_exists($report, 'toArray') ? $report->toArray() : ['result' => 'ok']);
+            $payload = $report->payload();
 
             if ('ndjson' === $format) {
-                return $this->writeStructuredRows($output, [$payload], 'ndjson');
+                return $this->writeStructuredRows($output, [$this->nestedMap($payload)], 'ndjson');
             }
 
-            return $this->writeJson($output, $payload);
+            return $this->writeJson($output, $this->nestedMap($payload));
         } catch (\Throwable $exception) {
             $output->writeln((string) json_encode([
                 'ok' => false,

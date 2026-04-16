@@ -28,7 +28,7 @@ final class GraphqlResolverTest extends TestCase
                 return [];
             }
 
-            public function findOne(string $id): ?array
+            public function findOne(string $id): array
             {
                 return [
                     'id' => $id,
@@ -68,7 +68,7 @@ final class GraphqlResolverTest extends TestCase
                 return [];
             }
 
-            public function findOne(string $id): ?array
+            public function findOne(string $id): array
             {
                 return [
                     'id' => $id,

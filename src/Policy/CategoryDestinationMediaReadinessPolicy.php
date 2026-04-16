@@ -60,8 +60,8 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
             $warnings[] = 'destination_exact_match_missing';
         }
 
-        $requiredMissing = array_values(array_unique($requiredMissing));
-        $warnings = array_values(array_unique($warnings));
+        $requiredMissing = array_unique($requiredMissing);
+        $warnings = array_unique($warnings);
         $matchedBindingIds = array_values(
             array_unique(
                 array_filter(

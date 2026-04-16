@@ -26,7 +26,15 @@ final class Kernel extends BaseKernel
     public function registerBundles(): iterable
     {
         $contents = require self::BUNDLES_CONFIG_PATH;
+        if (!is_iterable($contents)) {
+            return;
+        }
+
         foreach ($contents as $class => $envs) {
+            if (!is_string($class) || !is_array($envs)) {
+                continue;
+            }
+
             if (!($envs[$this->getEnvironment()] ?? $envs['all'] ?? false)) {
                 continue;
             }

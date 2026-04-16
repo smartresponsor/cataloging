@@ -24,7 +24,7 @@ final class CategoryRuleAdminServiceTest extends TestCase
                     return 'rule-1';
                 }
 
-                public function find(string $id): ?array
+                public function find(string $id): array
                 {
                     return [
                         'id' => $id,

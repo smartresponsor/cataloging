@@ -46,7 +46,7 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
         ];
 
         foreach ($bindings as $binding) {
-            if (!$binding instanceof CategoryMediaBindingInterface || !$binding->active()) {
+            if (!$binding->active()) {
                 continue;
             }
             $role = $binding->role()->value();

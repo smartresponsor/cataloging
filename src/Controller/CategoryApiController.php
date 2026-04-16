@@ -152,9 +152,7 @@ final readonly class CategoryApiController
     /** @return array<string,mixed> */
     private function decodeMap(Request $request): array
     {
-        $decoded = json_decode($request->getContent(), true);
-
-        return is_array($decoded) ? $decoded : [];
+        return \App\Service\CategoryPayloadValueNormalizer::nestedMap(json_decode($request->getContent(), true));
     }
 
     private function resolveIdempotencyKey(Request $request): ?string

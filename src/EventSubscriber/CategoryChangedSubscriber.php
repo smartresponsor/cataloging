@@ -35,7 +35,7 @@ final readonly class CategoryChangedSubscriber implements EventSubscriberInterfa
     public function onChanged(object $event): void
     {
         $id = $event->id ?? null;
-        if (null !== $id) {
+        if (is_int($id) || is_string($id)) {
             $this->invalidator->invalidate($id);
         }
     }

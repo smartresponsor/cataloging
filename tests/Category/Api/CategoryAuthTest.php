@@ -14,6 +14,6 @@ final class CategoryAuthTest extends TestCase
 {
     public function testAuthConfigPresent(): void
     {
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

@@ -85,8 +85,14 @@ final class CategorySyndicationRetryScheduleCommand extends Command
     /** @return array<string,mixed> */
     private function eventPayload(object $event): array
     {
-        return method_exists($event, 'payload')
-            ? $event->payload()
-            : (method_exists($event, 'toArray') ? $event->toArray() : ['result' => 'ok']);
+        if (method_exists($event, 'payload')) {
+            return $this->nestedMap($event->payload());
+        }
+
+        if (method_exists($event, 'toArray')) {
+            return $this->nestedMap($event->toArray());
+        }
+
+        return ['result' => 'ok'];
     }
 }

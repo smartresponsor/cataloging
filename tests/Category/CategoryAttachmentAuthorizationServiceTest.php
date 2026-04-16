@@ -23,7 +23,7 @@ final class CategoryAttachmentAuthorizationServiceTest extends TestCase
         $service = $this->service('tenant-a', ['publisher']);
         $service->assertCanAttach('cat-1');
 
-        self::assertTrue(true);
+        self::addToAssertionCount(1);
     }
 
     public function testAttachDeniedAcrossTenantBoundary(): void
@@ -74,12 +74,12 @@ final class CategoryAttachmentAuthorizationServiceTest extends TestCase
             {
             }
 
-            public function resolveFromCurrentRequest(): ?ExternalIdentityContext
+            public function resolveFromCurrentRequest(): ExternalIdentityContext
             {
                 return new ExternalIdentityContext('actor-1', $this->tenant, ['ROLE_USER'], $this->roles);
             }
 
-            public function resolveFromRequest(\Symfony\Component\HttpFoundation\Request $request): ?ExternalIdentityContext
+            public function resolveFromRequest(\Symfony\Component\HttpFoundation\Request $request): ExternalIdentityContext
             {
                 return $this->resolveFromCurrentRequest();
             }

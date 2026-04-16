@@ -55,10 +55,6 @@ final readonly class CategorySyndicationDestination implements CategorySyndicati
     {
         $normalized = [];
         foreach ($settings as $key => $value) {
-            if (!is_scalar($key)) {
-                continue;
-            }
-
             $normalizedKey = trim((string) $key);
             if ('' === $normalizedKey) {
                 continue;

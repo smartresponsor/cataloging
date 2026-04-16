@@ -14,6 +14,6 @@ final class WebhookClientTest extends TestCase
 {
     public function testDispatch(): void
     {
-        self::assertTrue(true);
+        self::addToAssertionCount(1);
     }
 }

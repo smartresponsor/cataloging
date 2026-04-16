@@ -36,7 +36,7 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
             ),
         );
 
-        self::assertTrue(true);
+        self::addToAssertionCount(1);
     }
 
     public function testAssertBindingAllowedRejectsMissingChannels(): void

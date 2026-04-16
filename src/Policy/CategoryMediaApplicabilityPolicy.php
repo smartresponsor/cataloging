@@ -30,7 +30,7 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
         $matchedRoles = [];
         $exactMatches = [];
         foreach ($bindings as $binding) {
-            if (!$binding instanceof CategoryMediaBindingInterface || !$binding->active()) {
+            if (!$binding->active()) {
                 continue;
             }
             if (!$this->matchesChannel($binding, $channel) || !$this->matchesLocale($binding, $locale)) {
@@ -76,10 +76,10 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
             $checks,
             array_values(array_unique($requiredMissing)),
             $warnings,
-            array_values(array_map(
+            array_map(
                 static fn (CategoryMediaBindingInterface $binding): string => $binding->bindingId(),
                 $matched,
-            )),
+            ),
         );
     }
 

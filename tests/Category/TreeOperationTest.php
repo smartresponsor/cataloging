@@ -17,6 +17,6 @@ final class TreeOperationTest extends TestCase
     {
         $op = new TreeOperation();
         $op->move('3', '2');
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

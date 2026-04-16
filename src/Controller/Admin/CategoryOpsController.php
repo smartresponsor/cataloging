@@ -39,8 +39,6 @@ final class CategoryOpsController extends AbstractController
             return [];
         }
 
-        $decoded = json_decode($content, true);
-
-        return is_array($decoded) ? $decoded : [];
+        return \App\Service\CategoryPayloadValueNormalizer::nestedMap(json_decode($content, true));
     }
 }

@@ -76,7 +76,7 @@ final class CategorySuggestController extends AbstractController
             }
         }
 
-        return array_values($result);
+        return $result;
     }
 
     private function ensureDirectory(string $path): void

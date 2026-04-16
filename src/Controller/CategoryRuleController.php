@@ -43,7 +43,8 @@ final class CategoryRuleController extends AbstractController
                 return $this->json(['ok' => false, 'error' => 'bad_spec'], 400);
             }
 
-            $limit = (int) ($_ENV['RULE_MAX_CARDINALITY'] ?? 100000);
+            $limitValue = $_ENV['RULE_MAX_CARDINALITY'] ?? 100000;
+            $limit = is_numeric($limitValue) ? (int) $limitValue : 100000;
             if ($preview['count'] > $limit) {
                 return $this->json([
                     'ok' => false,
