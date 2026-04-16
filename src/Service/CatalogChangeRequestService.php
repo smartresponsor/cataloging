@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\CategoryChangeRequest;
+use App\Entity\CatalogCategoryChangeRequest;
 use App\Event\CategoryChangeRequestReviewed;
 use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
 use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
@@ -31,7 +31,7 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
     /**
      * Handles the submit workflow.
      */
-    public function submit(CategoryChangeRequestSubmitRequest $request): CategoryChangeRequest
+    public function submit(CategoryChangeRequestSubmitRequest $request): CatalogCategoryChangeRequest
     {
         $this->policy->assertCanSubmit(
             $request->requestId(),
@@ -41,7 +41,7 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
             $request->changes(),
         );
 
-        $entity = CategoryChangeRequest::open(
+        $entity = CatalogCategoryChangeRequest::open(
             $request->requestId(),
             $request->categoryId(),
             $request->submittedBy(),
@@ -60,7 +60,7 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
     {
         $entity = $this->repository->findByRequestId($request->requestId());
 
-        if (!$entity instanceof CategoryChangeRequest) {
+        if (!$entity instanceof CatalogCategoryChangeRequest) {
             throw new \DomainException(sprintf('Category change request not found: %s', $request->requestId()));
         }
 

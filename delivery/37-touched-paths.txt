@@ -1,3 +1,0 @@
-src/ControllerInterface/CategoryControllerInterface.php
-src/Controller/CategoryController.php
-src/Controller/CategoryMerchController.php

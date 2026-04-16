@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\CategoryChangeRequest;
 use App\Entity\CategoryReviewAssignment;
 use App\Event\CategoryChangeRequestAssigned;
 use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;

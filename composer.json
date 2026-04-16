@@ -1,7 +1,7 @@
 {
   "name": "cataloging/catalog",
   "description": "Cataloging component",
-  "type": "project",
+  "type": "symfony-bundle",
   "license": "proprietary",
   "authors": [
     {
@@ -16,7 +16,7 @@
     "api-platform/doctrine-orm": "^4.3",
     "api-platform/graphql": "^4.3",
     "api-platform/symfony": "^4.3",
-    "doctrine/dbal": "^4.2",
+    "doctrine/dbal": "^4.3",
     "doctrine/doctrine-bundle": "^3.2",
     "doctrine/orm": "^3.3",
     "nelmio/api-doc-bundle": "^5.0",
@@ -31,17 +31,17 @@
     "symfony/routing": "^8.0",
     "symfony/runtime": "^8.0",
     "symfony/security-bundle": "^8.0",
-    "symfony/serializer-pack": "^1.0",
     "symfony/twig-bundle": "^8.0",
     "symfony/yaml": "^8.0",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "symfony/serializer": "^8.0"
   },
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^4.3",
-    "doctrine/doctrine-migrations-bundle": "^3.4",
+    "doctrine/doctrine-migrations-bundle": "^4.0",
     "friendsofphp/php-cs-fixer": "^3.94",
-    "phpstan/phpstan": "^1.12",
-    "phpunit/phpunit": "^10.5",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^11.5",
     "symfony/panther": "^2.4"
   },
   "autoload": {

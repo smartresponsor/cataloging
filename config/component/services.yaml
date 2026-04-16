@@ -1,0 +1,41 @@
+parameters:
+  catalog.oidc_jwk_set: []
+  catalog.oidc_audience: '%env(default:catalog-dev:CATALOG_OIDC_AUDIENCE)%'
+  catalog.oidc_issuer: '%env(default:catalog-dev:CATALOG_OIDC_ISSUER)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    bind:
+      array $jwkSet: '%catalog.oidc_jwk_set%'
+      string $audience: '%catalog.oidc_audience%'
+      string $issuer: '%catalog.oidc_issuer%'
+
+  # Symfony-native component export surface.
+  # The host application may import this file from the component root.
+  App\:
+    resource: '../../src/'
+    exclude:
+      - '../../src/Kernel.php'
+      - '../../src/DependencyInjection/'
+      - '../../src/Entity/'
+      - '../../src/Tests/'
+  PDO:
+    class: PDO
+    factory: ['@doctrine.dbal.default_connection', 'getNativeConnection']
+
+  App\Service\CatalogMoveService:
+    arguments:
+      $pg: '@PDO'
+  App\RepositoryInterface\CategoryChangeRequestRepositoryInterface:
+    alias: App\Repository\CategoryChangeRequestRepository
+
+  App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface:
+    alias: App\Repository\CategoryReviewAssignmentRepository
+  App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface:
+    alias: App\Repository\CategoryAccessAssignmentRepository
+  App\RepositoryInterface\CategoryMediaBindingRepositoryInterface:
+    alias: App\Repository\CategoryMediaBindingRepository
+  App\RepositoryInterface\CategoryWorkflowRepositoryInterface:
+    alias: App\Repository\CategoryWorkflowRepository

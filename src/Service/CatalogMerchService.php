@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\CategoryBanner;
-use App\Entity\CategoryHtmlBlock;
-use App\Entity\CategoryPin;
+use App\Entity\CatalogCategoryBanner;
+use App\Entity\CatalogCategoryHtmlBlock;
+use App\Entity\CatalogCategoryPin;
 use App\ServiceInterface\CatalogMerchServiceInterface;
 use App\ValueObject\CategoryMerchBannerPublishRequest;
 use App\ValueObject\CategoryMerchPinCreateRequest;
@@ -47,7 +47,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function pinCreate(CategoryMerchPinCreateRequest $request): void
     {
-        $pin = new CategoryPin($request->categoryId, $request->recordId, $request->position);
+        $pin = new CatalogCategoryPin($request->categoryId, $request->recordId, $request->position);
         $this->entityManager->persist($pin);
         $this->entityManager->flush();
     }
@@ -57,7 +57,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function pinDelete(string $categoryId, string $recordId): void
     {
-        $pin = $this->entityManager->getRepository(CategoryPin::class)->findOneBy([
+        $pin = $this->entityManager->getRepository(CatalogCategoryPin::class)->findOneBy([
             'categoryId' => $categoryId,
             'recordId' => $recordId,
         ]);
@@ -75,7 +75,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function bannerPublish(CategoryMerchBannerPublishRequest $request): string
     {
-        $banner = new CategoryBanner($request->categoryId, $request->title, $request->content);
+        $banner = new CatalogCategoryBanner($request->categoryId, $request->title, $request->content);
         $banner->publish();
         $this->entityManager->persist($banner);
         $this->entityManager->flush();
@@ -88,7 +88,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function htmlPublish(string $categoryId, string $html): string
     {
-        $htmlBlock = new CategoryHtmlBlock($categoryId, $html);
+        $htmlBlock = new CatalogCategoryHtmlBlock($categoryId, $html);
         $htmlBlock->publish();
         $this->entityManager->persist($htmlBlock);
         $this->entityManager->flush();

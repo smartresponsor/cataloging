@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\CatalogCategoryBanner;
+use App\Entity\CatalogCategoryHtmlBlock;
 use App\Entity\CategoryAliasEntity;
-use App\Entity\CategoryBanner;
 use App\Entity\CategoryEntity;
-use App\Entity\CategoryHtmlBlock;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -38,12 +38,12 @@ final class CategoryFixtures extends Fixture
             $branches[] = $category;
 
             if (0 === $index % 3) {
-                $manager->persist(new CategoryBanner(
+                $manager->persist(new CatalogCategoryBanner(
                     $category->getId(),
                     sprintf('Demo banner %d', $index),
                     'Demo banner content for catalog category.',
                 ));
-                $manager->persist(new CategoryHtmlBlock(
+                $manager->persist(new CatalogCategoryHtmlBlock(
                     $category->getId(),
                     sprintf(
                         '<section class="p-3"><h2>%s</h2><p>%s</p></section>',

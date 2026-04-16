@@ -12,7 +12,7 @@ use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
 /**
  * Represents the category change request domain record.
  */
-final readonly class CategoryChangeRequest implements CategoryChangeRequestInterface
+final readonly class CatalogCategoryChangeRequest implements CategoryChangeRequestInterface
 {
     /**
      * @param array<string,mixed> $changes

@@ -8,11 +8,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Represents the category html block domain record.
+ * Represents the category banner domain record.
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'category_html_block')]
-class CategoryHtmlBlock
+#[ORM\Table(name: 'catalog_category_banner')]
+class CatalogCategoryBanner
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,19 +22,26 @@ class CategoryHtmlBlock
     #[ORM\Column(type: 'string', length: 26)]
     private string $categoryId;
 
+    #[ORM\Column(type: 'string', length: 160)]
+    private string $title;
+
     #[ORM\Column(type: 'text')]
-    private string $html;
+    private string $content;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isDraft = true;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $publishedAt = null;
+
     /**
-     * Initializes the category html block service collaborators.
+     * Initializes the category banner service collaborators.
      */
-    public function __construct(string $categoryId, string $html)
+    public function __construct(string $categoryId, string $title, string $content)
     {
         $this->categoryId = $categoryId;
-        $this->html = $html;
+        $this->title = $title;
+        $this->content = $content;
     }
 
     /**
@@ -54,11 +61,19 @@ class CategoryHtmlBlock
     }
 
     /**
-     * Handles the html workflow.
+     * Handles the title workflow.
      */
-    public function html(): string
+    public function title(): string
     {
-        return $this->html;
+        return $this->title;
+    }
+
+    /**
+     * Handles the content workflow.
+     */
+    public function content(): string
+    {
+        return $this->content;
     }
 
     /**
@@ -70,10 +85,19 @@ class CategoryHtmlBlock
     }
 
     /**
+     * Handles the published at workflow.
+     */
+    public function publishedAt(): ?\DateTimeImmutable
+    {
+        return $this->publishedAt;
+    }
+
+    /**
      * Handles the publish workflow.
      */
     public function publish(): void
     {
         $this->isDraft = false;
+        $this->publishedAt = new \DateTimeImmutable('now');
     }
 }
