@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
 use App\Service\CategoryMutationAuthorizationService;
+use App\Service\CategoryPayloadValueNormalizer;
 use App\ServiceInterface\CategoryMutationServiceInterface;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\ServiceInterface\CategoryReadScopeServiceInterface;
@@ -152,7 +153,7 @@ final readonly class CategoryApiController
     /** @return array<string,mixed> */
     private function decodeMap(Request $request): array
     {
-        return \App\Service\CategoryPayloadValueNormalizer::nestedMap(json_decode($request->getContent(), true));
+        return CategoryPayloadValueNormalizer::nestedMap(json_decode($request->getContent(), true));
     }
 
     private function resolveIdempotencyKey(Request $request): ?string

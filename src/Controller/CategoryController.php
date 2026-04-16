@@ -7,6 +7,7 @@ namespace App\Controller;
 
 use App\ControllerInterface\CategoryControllerInterface;
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\Service\CategoryPayloadValueNormalizer;
 use App\Service\MetaPayloadNormalizer;
 use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
@@ -227,7 +228,7 @@ final class CategoryController implements CategoryControllerInterface
         $normalized = [];
         foreach ($value as $entry) {
             if (is_array($entry)) {
-                $normalized[] = \App\Service\CategoryPayloadValueNormalizer::nestedMap($entry);
+                $normalized[] = CategoryPayloadValueNormalizer::nestedMap($entry);
             }
         }
 

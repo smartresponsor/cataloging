@@ -110,10 +110,9 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
      */
     private function normalizeMap(array $data): array
     {
-        $normalized = [];
-        foreach ($data as $key => $value) {
-            $normalized[$key] = $value;
-        }
+        $normalized = array_map(function ($value) {
+            return $value;
+        }, $data);
 
         return $normalized;
     }

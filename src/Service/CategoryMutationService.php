@@ -548,10 +548,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
 
         $normalizedRows = [];
         foreach ($rows as $row) {
-            $normalized = [];
-            foreach ($row as $key => $value) {
-                $normalized[$key] = $value;
-            }
+            $normalized = array_map(function ($value) {
+                return $value;
+            }, $row);
 
             $normalizedRows[] = $normalized;
         }
@@ -589,10 +588,9 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
      */
     private function normalizeChecks(array $checks): array
     {
-        $normalized = [];
-        foreach ($checks as $name => $value) {
-            $normalized[$name] = (bool) $value;
-        }
+        $normalized = array_map(function ($value) {
+            return (bool) $value;
+        }, $checks);
 
         ksort($normalized);
 

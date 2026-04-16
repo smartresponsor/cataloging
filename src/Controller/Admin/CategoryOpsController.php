@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Service\CategoryPayloadValueNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,6 +40,6 @@ final class CategoryOpsController extends AbstractController
             return [];
         }
 
-        return \App\Service\CategoryPayloadValueNormalizer::nestedMap(json_decode($content, true));
+        return CategoryPayloadValueNormalizer::nestedMap(json_decode($content, true));
     }
 }
