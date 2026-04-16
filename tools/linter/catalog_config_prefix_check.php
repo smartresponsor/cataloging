@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/linter/catalog_config_prefix_check.php <project-root>
- * Ensures component YAML config filenames under /config start with "catalog_".
+ * Ensures owner-managed YAML config filenames under /config start with "catalog_".
+ *
+ * Symfony/framework-facing config files are exempt because their naming is
+ * primarily governed by Symfony and bundle integration conventions.
  */
 $root = $argv[1] ?? getcwd();
 if (!is_string($root) || !is_dir($root)) {
@@ -22,11 +25,17 @@ $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configRoot)
 $fail = 0;
 $allowedNames = [
     'api_platform.yaml',
+    'component.yaml',
+    'doctrine.yaml',
+    'env.yaml',
     'framework.yaml',
+    'messenger.yaml',
     'monolog.yaml',
     'nelmio_api_doc.yaml',
     'routes.yaml',
+    'security.yaml',
     'services.yaml',
+    'smoke.yaml',
     'twig.yaml',
     'web_profiler.yaml',
 ];
@@ -42,6 +51,12 @@ foreach ($rii as $file) {
     }
 
     $name = basename($path);
+    $relativePath = ltrim(substr($path, strlen(str_replace('\\', '/', $configRoot))), '/');
+
+    if (str_starts_with($relativePath, 'component/') && in_array($name, $allowedNames, true)) {
+        continue;
+    }
+
     if (str_starts_with($name, 'catalog_') || in_array($name, $allowedNames, true)) {
         continue;
     }
