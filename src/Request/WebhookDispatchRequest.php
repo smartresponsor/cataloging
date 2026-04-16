@@ -58,7 +58,7 @@ final readonly class WebhookDispatchRequest
             $payload = ['id' => 1];
         }
 
-        return new self($event, $endpoint, $payload, $errors);
+        return new self($event, $endpoint, self::normalizeMap($payload), $errors);
     }
 
     /**
@@ -75,5 +75,24 @@ final readonly class WebhookDispatchRequest
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * @param array<int|string,mixed> $input
+     *
+     * @return array<string,mixed>
+     */
+    private static function normalizeMap(array $input): array
+    {
+        $normalized = [];
+        foreach ($input as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 }

@@ -138,6 +138,7 @@ final class OidcJwtVerifier implements OidcJwtVerifierInterface
             throw new \InvalidArgumentException('Invalid JSON object');
         }
 
+        /** @var array<string, mixed> $decoded */
         return $decoded;
     }
 

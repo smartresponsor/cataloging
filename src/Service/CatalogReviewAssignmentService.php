@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\CatalogCategoryChangeRequest;
 use App\Entity\CategoryReviewAssignment;
 use App\Event\CategoryChangeRequestAssigned;
 use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
@@ -35,7 +36,7 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
     {
         $changeRequest = $this->changeRequestRepository->findByRequestId($request->requestId());
 
-        if (!$changeRequest instanceof CategoryChangeRequest) {
+        if (!$changeRequest instanceof CatalogCategoryChangeRequest) {
             throw new \DomainException(sprintf('Category change request not found: %s', $request->requestId()));
         }
 

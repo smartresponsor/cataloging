@@ -112,14 +112,18 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
         }
     }
 
-    /** @param list<string|int|float|bool|null> $row */
+    /**
+     * @param list<string|int|float|bool|null> $row
+     * @param array<string,int>                $idx
+     */
     private function cell(array $row, array $idx, string $column): ?string
     {
         if (!isset($idx[$column])) {
             return null;
         }
 
-        $value = $row[$idx[$column]] ?? null;
+        $offset = $idx[$column];
+        $value = $row[$offset] ?? null;
 
         return is_scalar($value) ? (string) $value : null;
     }

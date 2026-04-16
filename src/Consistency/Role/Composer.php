@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Consistency\Role;
 
-if (!interface_exists('PolicyInterface\\Role\\PdpV2Interface', false)) {
+if (!interface_exists('PolicyInterface\Role\PdpV2Interface', false)) {
     /**
      * Defines the contract for pdp v2.
      */
-    eval('namespace PolicyInterface\\Role; interface PdpV2Interface {}');
+    eval('namespace PolicyInterface\Role; interface PdpV2Interface {}');
 }
 
 /**
@@ -49,9 +49,12 @@ final class Composer
             $extraCallbacks = array_slice(func_get_args(), 6);
         }
 
-        $this->participants = is_array($participants)
-            ? $participants
+        /** @var list<mixed> $participantList */
+        $participantList = is_array($participants)
+            ? array_values([...$participants])
             : array_values(iterator_to_array($participants, false));
+
+        $this->participants = $participantList;
 
         $participants = [
             $composeFn,
@@ -116,36 +119,14 @@ final class Composer
                         $tokenEvents[] = (string) $value;
                     }
                 }
-
-                continue;
-            }
-
-            if (is_scalar($result) || $result instanceof \Stringable) {
-                $tokenEvents[] = (string) $result;
             }
         }
 
         return [
-            'tokenEvents' => array_values(array_unique($this->normalizeScalarList($tokenEvents))),
-            'cacheKeys' => array_values(array_unique($this->normalizeScalarList($cacheKeys))),
+            'tokenEvents' => $tokenEvents,
+            'cacheKeys' => $cacheKeys,
             'results' => $results,
         ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function __invoke(mixed ...$arguments): array
-    {
-        return $this->compose(...$arguments);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function invalidate(mixed ...$arguments): array
-    {
-        return $this->compose(...$arguments);
     }
 
     private function runParticipant(mixed $participant, mixed ...$arguments): mixed
@@ -154,34 +135,14 @@ final class Composer
             return $participant(...$arguments);
         }
 
-        foreach (['compose', 'invalidate', 'apply', 'run', 'execute', '__invoke'] as $method) {
-            if (is_object($participant) && method_exists($participant, $method)) {
-                return $participant->{$method}(...$arguments);
-            }
+        if (is_object($participant) && method_exists($participant, 'compose')) {
+            return $participant->compose(...$arguments);
         }
 
-        return $participant;
-    }
-
-    /**
-     * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
-     *
-     * @param array $values
-     *
-     * @phpstan-param array<mixed> $values
-     *
-     * @return list<string>
-     */
-    private function normalizeScalarList(array $values): array
-    {
-        $normalized = [];
-
-        foreach ($values as $value) {
-            if (is_scalar($value) || $value instanceof \Stringable) {
-                $normalized[] = (string) $value;
-            }
+        if (is_object($participant) && method_exists($participant, '__invoke')) {
+            return $participant(...$arguments);
         }
 
-        return $normalized;
+        return null;
     }
 }

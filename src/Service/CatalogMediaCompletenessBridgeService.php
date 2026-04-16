@@ -34,10 +34,8 @@ final readonly class CatalogMediaCompletenessBridgeService implements CatalogMed
     {
         $baseChecks = $this->completenessPolicy->buildChecks($request->payload());
         $mediaPayload = $this->mediaCoverageService->evaluate($request)->payload();
-        $mergedChecks = array_merge(
-            $baseChecks,
-            is_array($mediaPayload['checks'] ?? null) ? $mediaPayload['checks'] : [],
-        );
+        $mediaChecks = CategoryPayloadValueNormalizer::boolMap($mediaPayload['checks'] ?? null);
+        $mergedChecks = array_merge($baseChecks, $mediaChecks);
 
         $report = CategoryCompletenessReport::fromChecks($mergedChecks);
 

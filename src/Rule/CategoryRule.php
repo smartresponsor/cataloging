@@ -58,7 +58,16 @@ final class CategoryRule
                 throw new \InvalidArgumentException('Unsupported condition object.');
             }
 
-            $normalized[] = $cond;
+            $normalizedCondition = [];
+            foreach ($cond as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
+
+                $normalizedCondition[$key] = $value;
+            }
+
+            $normalized[] = $normalizedCondition;
         }
 
         return ['all' => $normalized];

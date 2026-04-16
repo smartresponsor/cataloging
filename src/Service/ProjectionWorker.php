@@ -55,10 +55,6 @@ final readonly class ProjectionWorker
 
         $processed = 0;
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
             $outboxId = $this->stringValue($row['id'] ?? null);
             if ('' === $outboxId) {
                 continue;
@@ -192,8 +188,12 @@ final readonly class ProjectionWorker
             return [];
         }
         $decoded = json_decode($payload, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
 
-        return is_array($decoded) ? $decoded : [];
+        /** @var array<string, mixed> $decoded */
+        return $decoded;
     }
 
     private function stringValue(mixed $value): string

@@ -83,6 +83,6 @@ final class CategorySyndicationDestinationPolicy implements CategorySyndicationD
             $result[] = $normalized;
         }
 
-        return array_values($result);
+        return $result;
     }
 }

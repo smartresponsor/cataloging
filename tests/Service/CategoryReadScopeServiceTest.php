@@ -47,8 +47,12 @@ final class CategoryReadScopeServiceTest extends TestCase
                     return null;
                 }
 
-                public function resolveFromRequest(Request $request): ExternalIdentityContext
+                public function resolveFromRequest(Request $request): ?ExternalIdentityContext
                 {
+                    if ($request->query->has('_return_null')) {
+                        return null;
+                    }
+
                     return new ExternalIdentityContext('actor-1', 'tenant-a', ['ROLE_USER'], []);
                 }
             },

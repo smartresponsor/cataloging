@@ -62,14 +62,10 @@ final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinati
 
         $requiredMissing = array_unique($requiredMissing);
         $warnings = array_unique($warnings);
-        $matchedBindingIds = array_values(
-            array_unique(
-                array_filter(
-                    $matchedBindingIds,
-                    static fn (mixed $v): bool => is_string($v) && '' !== trim($v),
-                ),
-            ),
-        );
+        $matchedBindingIds = array_values(array_unique(array_filter(
+            $matchedBindingIds,
+            static fn (mixed $v): bool => is_string($v) && '' !== trim($v),
+        )));
         sort($requiredMissing);
         sort($warnings);
 

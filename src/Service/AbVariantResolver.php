@@ -64,6 +64,28 @@ final class AbVariantResolver
         }
         $decoded = json_decode($json, true);
 
-        return is_array($decoded) ? array_values(array_filter($decoded, 'is_array')) : [];
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $items = [];
+        foreach ($decoded as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $item = [];
+            foreach ($row as $key => $value) {
+                if (!is_string($key) || !is_string($value)) {
+                    continue;
+                }
+
+                $item[$key] = $value;
+            }
+
+            $items[] = $item;
+        }
+
+        return $items;
     }
 }

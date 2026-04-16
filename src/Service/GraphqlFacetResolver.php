@@ -55,6 +55,8 @@ final readonly class GraphqlFacetResolver implements GraphqlFacetResolverInterfa
             if (!is_array($row)) {
                 continue;
             }
+
+            /** @var array<string, mixed> $row */
             $path = $this->stringValue($row, 'path');
             $pathPrefix = $request->pathPrefix();
             if (null !== $pathPrefix && '' !== $pathPrefix && !str_starts_with($path, $pathPrefix)) {

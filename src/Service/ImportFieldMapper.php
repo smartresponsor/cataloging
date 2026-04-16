@@ -60,7 +60,9 @@ final class ImportFieldMapper
             if (!is_array($row)) {
                 continue;
             }
+            /** @var array<string, mixed> $in */
             $in = is_array($row['in'] ?? null) ? $row['in'] : [];
+            /** @var array<string, mixed> $mapped */
             $mapped = is_array($row['out'] ?? null) ? $row['out'] : [];
             $out[] = ['in' => $in, 'out' => $mapped];
         }

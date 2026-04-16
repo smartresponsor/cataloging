@@ -51,19 +51,17 @@ final readonly class CatalogSyndicationFallbackAwarePackageGateService implement
         $fallbackMedia = $this->destinationMediaFallbackService->evaluate($destinationRequest)->payload();
 
         $report = $this->policy->buildReport(
-            is_array($packagePayload['missingRequiredFields'] ?? null) ? $packagePayload['missingRequiredFields'] : [],
-            is_array($strictMedia['requiredMissing'] ?? null) ? $strictMedia['requiredMissing'] : [],
-            is_array($fallbackMedia['requiredMissing'] ?? null) ? $fallbackMedia['requiredMissing'] : [],
+            CategoryPayloadValueNormalizer::stringList($packagePayload['missingRequiredFields'] ?? null),
+            CategoryPayloadValueNormalizer::stringList($strictMedia['requiredMissing'] ?? null),
+            CategoryPayloadValueNormalizer::stringList($fallbackMedia['requiredMissing'] ?? null),
             array_merge(
-                is_array($strictMedia['warnings'] ?? null) ? $strictMedia['warnings'] : [],
-                is_array($fallbackMedia['warnings'] ?? null) ? $fallbackMedia['warnings'] : [],
+                CategoryPayloadValueNormalizer::stringList($strictMedia['warnings'] ?? null),
+                CategoryPayloadValueNormalizer::stringList($fallbackMedia['warnings'] ?? null),
             ),
-            is_array($strictMedia['checks'] ?? null) ? $strictMedia['checks'] : [],
-            is_array($fallbackMedia['checks'] ?? null) ? $fallbackMedia['checks'] : [],
-            is_array($fallbackMedia['exactMatchedBindingIds'] ?? null) ? $fallbackMedia['exactMatchedBindingIds'] : [],
-            is_array($fallbackMedia['fallbackMatchedBindingIds'] ?? null)
-                ? $fallbackMedia['fallbackMatchedBindingIds']
-                : [],
+            CategoryPayloadValueNormalizer::boolMap($strictMedia['checks'] ?? null),
+            CategoryPayloadValueNormalizer::boolMap($fallbackMedia['checks'] ?? null),
+            CategoryPayloadValueNormalizer::stringList($fallbackMedia['exactMatchedBindingIds'] ?? null),
+            CategoryPayloadValueNormalizer::stringList($fallbackMedia['fallbackMatchedBindingIds'] ?? null),
         );
 
         return new CategorySyndicationFallbackAwarePackageGated(

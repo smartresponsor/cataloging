@@ -34,7 +34,20 @@ final readonly class CatalogCacheService
         if ($item->isHit()) {
             $value = $item->get();
 
-            return is_array($value) ? $value : [];
+            if (!is_array($value)) {
+                return [];
+            }
+
+            $tree = [];
+            foreach ($value as $key => $entry) {
+                if (!is_string($key)) {
+                    continue;
+                }
+
+                $tree[$key] = $entry;
+            }
+
+            return $tree;
         }
         $tree = [];
         $item->set($tree);

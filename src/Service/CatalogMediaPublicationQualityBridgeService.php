@@ -39,10 +39,8 @@ final readonly class CatalogMediaPublicationQualityBridgeService implements Cata
                 new CategoryPublicationQualityInput(
                     $request->categoryId(),
                     $this->scalarInt($completenessPayload['score'] ?? 0),
-                    is_array($completenessPayload['publicationChecks'] ?? null)
-                        ? $completenessPayload['publicationChecks']
-                        : [],
-                    is_array($completenessPayload['checks'] ?? null) ? $completenessPayload['checks'] : [],
+                    CategoryPayloadValueNormalizer::boolMap($completenessPayload['publicationChecks'] ?? null),
+                    CategoryPayloadValueNormalizer::boolMap($completenessPayload['checks'] ?? null),
                 ),
                 $request->auditContext(),
             ),

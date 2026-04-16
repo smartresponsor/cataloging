@@ -26,10 +26,10 @@ final class Importer
         $header = null;
         while (($row = fgetcsv($fh)) !== false) {
             if (null === $header) {
-                $header = array_values(array_map([$this, 'stringValue'], $row));
+                $header = array_map([$this, 'stringValue'], $row);
                 continue;
             }
-            /** @var array<string, scalar|null>|false $item */
+            /** @var array<string, bool|float|int|string|null>|false $item */
             $item = array_combine($header, $row);
             if (false === $item) {
                 continue;

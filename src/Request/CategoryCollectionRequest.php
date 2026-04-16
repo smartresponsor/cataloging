@@ -31,7 +31,7 @@ final readonly class CategoryCollectionRequest
             return new self([], ['rules payload must be a JSON object or array']);
         }
 
-        return new self($decoded);
+        return new self(self::normalizeMap($decoded));
     }
 
     /**
@@ -48,5 +48,24 @@ final readonly class CategoryCollectionRequest
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * @param array<int|string,mixed> $input
+     *
+     * @return array<string,mixed>
+     */
+    private static function normalizeMap(array $input): array
+    {
+        $normalized = [];
+        foreach ($input as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 }

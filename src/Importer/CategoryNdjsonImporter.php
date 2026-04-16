@@ -100,7 +100,26 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
             throw new \InvalidArgumentException('Invalid row');
         }
 
-        return $this->metaPayloadNormalizer->normalizeMap($data);
+        return $this->normalizeMap($this->metaPayloadNormalizer->normalize($data));
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     *
+     * @return array<string,mixed>
+     */
+    private function normalizeMap(array $data): array
+    {
+        $normalized = [];
+        foreach ($data as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 
     /**
@@ -111,7 +130,7 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
     private function requireType(array $data): string
     {
         $type = $this->requiredStringValue($data, 'type');
-        if ('' === trim($type)) {
+        if ('' === $type) {
             throw new \InvalidArgumentException('Invalid row');
         }
 

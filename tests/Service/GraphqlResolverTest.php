@@ -28,8 +28,12 @@ final class GraphqlResolverTest extends TestCase
                 return [];
             }
 
-            public function findOne(string $id): array
+            public function findOne(string $id): ?array
             {
+                if ('' === $id) {
+                    return null;
+                }
+
                 return [
                     'id' => $id,
                     'parent_id' => null,
@@ -68,8 +72,12 @@ final class GraphqlResolverTest extends TestCase
                 return [];
             }
 
-            public function findOne(string $id): array
+            public function findOne(string $id): ?array
             {
+                if ('' === $id) {
+                    return null;
+                }
+
                 return [
                     'id' => $id,
                     'parent_id' => 'cat-root',

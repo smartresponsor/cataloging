@@ -22,7 +22,7 @@ final readonly class CatalogCollectionService
     }
 
     /**
-     * @param array<string,array<int,bool|float|int|string>|bool|float|int|string> $rules
+     * @param array<string,bool|float|int|list<bool|float|int|string>|string|null> $rules
      *
      * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
      */

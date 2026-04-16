@@ -105,9 +105,24 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
             return [];
         }
 
-        return array_values(array_map(
-            static fn (mixed $row): array => is_array($row) ? $row : [],
-            array_filter($decoded, static fn (mixed $row): bool => is_array($row)),
-        ));
+        $trails = [];
+        foreach ($decoded as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $normalized = [];
+            foreach ($row as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
+
+                $normalized[$key] = $value;
+            }
+
+            $trails[] = $normalized;
+        }
+
+        return $trails;
     }
 }

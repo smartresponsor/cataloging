@@ -45,7 +45,16 @@ final readonly class VirtualCategoryRepository implements VirtualCategoryReposit
 
         $rawRule = $row['rule'] ?? null;
         $decodedRule = is_string($rawRule) ? json_decode($rawRule, true) : $rawRule;
-        $rule = is_array($decodedRule) ? $decodedRule : [];
+        $rule = [];
+        if (is_array($decodedRule)) {
+            foreach ($decodedRule as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
+
+                $rule[$key] = $value;
+            }
+        }
 
         return [
             'id' => is_scalar($row['id'] ?? null) ? (string) $row['id'] : '',

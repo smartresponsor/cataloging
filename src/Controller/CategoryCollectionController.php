@@ -37,7 +37,8 @@ final readonly class CategoryCollectionController
             return new JsonResponse(['ok' => false, 'errors' => $input->getErrors()], 400);
         }
 
-        $result = $this->service->build($this->ruleNormalizer->normalize($input->rules));
+        $rules = $this->ruleNormalizer->normalize($input->rules);
+        $result = $this->service->build($rules);
 
         return new JsonResponse([
             'ok' => true,

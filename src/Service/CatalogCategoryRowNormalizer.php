@@ -18,10 +18,6 @@ final class CatalogCategoryRowNormalizer
     {
         $result = [];
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
             $result[] = [
                 'id' => is_scalar($row['id'] ?? null) ? (string) $row['id'] : '',
                 'name' => is_scalar($row['name'] ?? null) ? (string) $row['name'] : '',

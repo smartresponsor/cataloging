@@ -131,7 +131,20 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
         $statement->execute();
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        return is_array($row) ? $row : null;
+        if (!is_array($row)) {
+            return null;
+        }
+
+        $normalized = [];
+        foreach ($row as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 
     /** @return list<array<string, mixed>> */
@@ -149,7 +162,25 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
 
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return array_values(array_filter($rows, 'is_array'));
+        $normalizedRows = [];
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $normalized = [];
+            foreach ($row as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
+
+                $normalized[$key] = $value;
+            }
+
+            $normalizedRows[] = $normalized;
+        }
+
+        return $normalizedRows;
     }
 
     private function updateRow(string $id, string $path, int $depth): void

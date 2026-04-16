@@ -28,6 +28,21 @@ final class EtagMiddleware
             return ['status' => 304, 'headers' => ['ETag' => $etag], 'body' => ''];
         }
 
-        return $next($request, $response);
+        $result = $next($request, $response);
+
+        if (!is_array($result)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($result as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 }

@@ -169,6 +169,6 @@ final class CategorySyndicationGovernanceSummaryAccumulator
             }
         }
 
-        return array_values($result);
+        return $result;
     }
 }

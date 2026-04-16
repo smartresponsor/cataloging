@@ -12,7 +12,7 @@ final class CategoryCollectionRuleNormalizer
     /**
      * @param array<string,mixed> $rules
      *
-     * @return array<string, array<int, bool|float|int|string>|bool|float|int|string>
+     * @return array<string, list<bool|float|int|string>|bool|float|int|string|null>
      */
     public function normalize(array $rules): array
     {

@@ -168,7 +168,7 @@ final readonly class CategoryBulk implements CategoryBulkInterface
         $map = $this->requiredMap($payload, $key);
         $normalized = [];
         foreach ($map as $entryKey => $entryValue) {
-            if (!is_string($entryKey) || !is_scalar($entryValue)) {
+            if (!is_scalar($entryValue)) {
                 continue;
             }
             $normalized[$entryKey] = (string) $entryValue;

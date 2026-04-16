@@ -36,14 +36,16 @@ final class WebhookDispatcherTest extends TestCase
         self::assertSame('POST', $capturedOptions['method']);
         self::assertSame('http://example/webhook', $capturedOptions['url']);
         self::assertSame(5.0, $capturedOptions['options']['timeout']);
+        $normalizedHeaders = $capturedOptions['options']['normalized_headers'] ?? [];
+        self::assertIsArray($normalizedHeaders);
         self::assertSame(
             ['X-Correlation-ID: corr-dispatcher'],
-            $capturedOptions['options']['normalized_headers']['x-correlation-id'] ?? null,
+            is_array($normalizedHeaders['x-correlation-id'] ?? null) ? $normalizedHeaders['x-correlation-id'] : null,
         );
         self::assertSame(
             ['X-Category-Event: catalog.changed'],
-            $capturedOptions['options']['normalized_headers']['x-category-event'] ?? null,
+            is_array($normalizedHeaders['x-category-event'] ?? null) ? $normalizedHeaders['x-category-event'] : null,
         );
-        self::assertArrayHasKey('x-category-signature', $capturedOptions['options']['normalized_headers']);
+        self::assertArrayHasKey('x-category-signature', $normalizedHeaders);
     }
 }

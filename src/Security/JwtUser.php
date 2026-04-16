@@ -35,14 +35,6 @@ final readonly class JwtUser implements UserInterface
     {
     }
 
-    /**
-     * Returns the password value.
-     */
-    public function getPassword(): ?string
-    {
-        return null;
-    }
-
     /** @return non-empty-string */
     public function getUserIdentifier(): string
     {

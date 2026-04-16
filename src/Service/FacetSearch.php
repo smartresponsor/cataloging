@@ -33,17 +33,19 @@ final class FacetSearch
         $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
         $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
         $stmt->execute();
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
 
-        return array_map(
-            fn (array $r): array => [
+        return array_values(array_map(
+            /** @param array<string, mixed> $r */
+            static fn (array $r): array => [
                 'id' => (string) $r['id'],
                 'slug' => (string) $r['slug'],
                 'name' => (string) $r['name'],
                 'path' => (string) ($r['path'] ?? ''),
                 'locale' => (string) $r['locale'],
             ],
-            $rows ?: []
-        );
+            $rows
+        ));
     }
 }
