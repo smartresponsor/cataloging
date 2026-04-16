@@ -111,7 +111,12 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
         /** @var array<string,array<string,mixed>> $nodes */
         $nodes = [];
         foreach ($rows as $row) {
-            $nodes[$row['id']] = [...$row, 'children' => []];
+            $id = $row['id'] ?? null;
+            if (!is_string($id) || '' === $id) {
+                continue;
+            }
+
+            $nodes[$id] = [...$row, 'children' => []];
         }
 
         /** @var array<string,string> $parentIndex */
@@ -122,7 +127,7 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
             if (!is_string($id) || '' === $id) {
                 continue;
             }
-            $parentId = $row['parent_id'];
+            $parentId = $row['parent_id'] ?? null;
             if (is_string($parentId) && '' !== $parentId && isset($nodes[$parentId])) {
                 $parentIndex[$id] = $parentId;
                 continue;

@@ -89,7 +89,15 @@ final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterfac
             throw new \InvalidArgumentException('definition is required');
         }
 
-        return $definition;
+        $normalized = [];
+        foreach ($definition as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 
     /**

@@ -74,8 +74,8 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
 
         $history = new CategorySyndicationDestinationHistory(
             trim($request->destinationId()),
-            array_values(array_keys($packageIds)),
-            array_values(array_keys($categoryIds)),
+            array_keys($packageIds),
+            array_keys($categoryIds),
             count($filtered),
             $delivered,
             $failed,
@@ -151,7 +151,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
             $scheduledRetries,
             $deliveredAfterRetry,
             $maxAttemptSeen,
-            array_values(array_keys($affectedCategoryIds)),
+            array_keys($affectedCategoryIds),
         );
 
         return new CategorySyndicationRecoveryAuditConsolidated([

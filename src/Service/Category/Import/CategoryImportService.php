@@ -33,16 +33,16 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
         if (!$head) {
             throw new \RuntimeException('empty file');
         }
-        $idx = array_flip($head);
+        $idx = array_flip(array_values(array_filter($head, static fn (mixed $value): bool => is_string($value) && '' !== $value)));
         $importedCount = 0;
         try {
             while (($row = fgetcsv($handle)) !== false) {
                 $payload = [
-                    'id' => $row[$idx['id']] ?? null,
-                    'name' => $row[$idx['name']] ?? null,
-                    'slug' => $row[$idx['slug']] ?? null,
-                    'parentId' => $row[$idx['parent_id']] ?? null,
-                    'path' => $row[$idx['path']] ?? null,
+                    'id' => $this->cell($row, $idx, 'id'),
+                    'name' => $this->cell($row, $idx, 'name'),
+                    'slug' => $this->cell($row, $idx, 'slug'),
+                    'parentId' => $this->cell($row, $idx, 'parent_id'),
+                    'path' => $this->cell($row, $idx, 'path'),
                     'level' => isset($idx['level']) ? (int) ($row[$idx['level']] ?? 0) : null,
                 ];
                 $this->validateCategory($payload);
@@ -69,15 +69,16 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
         try {
             while (($line = fgets($handle)) !== false) {
                 $json = json_decode($line, true);
-                if (!is_array($json)) {
+                $row = $this->normalizeMap($json);
+                if ([] === $row) {
                     continue;
                 }
-                if (isset($json['definition'])) {
-                    $this->validateRule($json);
-                    $this->repo->upsertRule($json);
+                if (isset($row['definition'])) {
+                    $this->validateRule($row);
+                    $this->repo->upsertRule($row);
                 } else {
-                    $this->validateCategory($json);
-                    $this->repo->upsertCategory($json);
+                    $this->validateCategory($row);
+                    $this->repo->upsertCategory($row);
                 }
                 ++$importedCount;
             }
@@ -109,5 +110,35 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
         if (!is_array($row['definition'])) {
             throw new \InvalidArgumentException('rule definition must be object');
         }
+    }
+
+    /** @param list<string|int|float|bool|null> $row */
+    private function cell(array $row, array $idx, string $column): ?string
+    {
+        if (!isset($idx[$column])) {
+            return null;
+        }
+
+        $value = $row[$idx[$column]] ?? null;
+
+        return is_scalar($value) ? (string) $value : null;
+    }
+
+    /** @return array<string,mixed> */
+    private function normalizeMap(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $key => $item) {
+            if (!is_string($key)) {
+                continue;
+            }
+            $normalized[$key] = $item;
+        }
+
+        return $normalized;
     }
 }

@@ -18,9 +18,7 @@ final class CategoryRuleEngine implements CategoryRuleEngineInterface
      */
     public function match(array $rule, array $payload): bool
     {
-        $condition = $rule['condition'] ?? [];
-
-        return is_array($condition) && $this->evalNode($condition, $payload);
+        return $this->evalNode($this->map($rule['condition'] ?? null), $payload);
     }
 
     /**
@@ -29,21 +27,21 @@ final class CategoryRuleEngine implements CategoryRuleEngineInterface
      */
     private function evalNode(array $node, array $payload): bool
     {
-        if (array_any($this->nodeList($node, 'all'), fn ($child) => !$this->evalNode($child, $payload))) {
+        if (array_any($this->nodeList($node, 'all'), fn (array $child): bool => !$this->evalNode($child, $payload))) {
             return false;
         }
         if (isset($node['all'])) {
             return true;
         }
 
-        if (array_any($this->nodeList($node, 'any'), fn ($child) => $this->evalNode($child, $payload))) {
+        if (array_any($this->nodeList($node, 'any'), fn (array $child): bool => $this->evalNode($child, $payload))) {
             return true;
         }
         if (isset($node['any'])) {
             return false;
         }
 
-        if (array_any($this->nodeList($node, 'none'), fn ($child) => $this->evalNode($child, $payload))) {
+        if (array_any($this->nodeList($node, 'none'), fn (array $child): bool => $this->evalNode($child, $payload))) {
             return false;
         }
         if (isset($node['none'])) {
@@ -82,11 +80,31 @@ final class CategoryRuleEngine implements CategoryRuleEngineInterface
         if (!is_array($value)) {
             return [];
         }
+
         $normalized = [];
         foreach ($value as $child) {
-            if (is_array($child)) {
-                $normalized[] = $child;
+            $childNode = $this->map($child);
+            if ([] !== $childNode) {
+                $normalized[] = $childNode;
             }
+        }
+
+        return $normalized;
+    }
+
+    /** @return array<string,mixed> */
+    private function map(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $key => $item) {
+            if (!is_string($key)) {
+                continue;
+            }
+            $normalized[$key] = $item;
         }
 
         return $normalized;

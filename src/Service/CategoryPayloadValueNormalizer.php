@@ -42,7 +42,7 @@ final class CategoryPayloadValueNormalizer
             }
         }
 
-        return array_values($items);
+        return $items;
     }
 
     /** @return array<string,string> */
@@ -68,7 +68,21 @@ final class CategoryPayloadValueNormalizer
     /** @return array<string,mixed> */
     public static function nestedMap(mixed $value): array
     {
-        return is_array($value) ? $value : [];
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $items = [];
+        foreach ($value as $key => $item) {
+            $normalizedKey = self::scalarString($key);
+            if ('' === $normalizedKey) {
+                continue;
+            }
+
+            $items[$normalizedKey] = $item;
+        }
+
+        return $items;
     }
 
     /** @return array<string,bool> */

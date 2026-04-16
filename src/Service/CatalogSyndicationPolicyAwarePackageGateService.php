@@ -43,9 +43,7 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
             ),
         )->payload();
         $report = $this->policy->buildReport(
-            is_array($fallbackAware['packageMissingRequiredFields'] ?? null)
-                ? $fallbackAware['packageMissingRequiredFields']
-                : [],
+            $this->stringList($fallbackAware['packageMissingRequiredFields'] ?? null),
             $preference,
             $fallbackAware,
         );
@@ -71,5 +69,26 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
             'actorId' => trim($audit->actorId()),
             'reason' => trim($audit->reason()),
         ], new \DateTimeImmutable());
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $item) {
+            if (!is_scalar($item)) {
+                continue;
+            }
+            $trimmed = trim((string) $item);
+            if ('' !== $trimmed) {
+                $normalized[] = $trimmed;
+            }
+        }
+
+        return $normalized;
     }
 }

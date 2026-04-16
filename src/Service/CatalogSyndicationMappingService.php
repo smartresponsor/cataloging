@@ -100,7 +100,7 @@ final readonly class CatalogSyndicationMappingService implements CatalogSyndicat
     {
         $normalized = [];
         foreach ($fieldMap as $sourceField => $targetField) {
-            if (!is_string($sourceField) || !is_scalar($targetField)) {
+            if (!is_scalar($targetField)) {
                 continue;
             }
             $normalized[$sourceField] = (string) $targetField;

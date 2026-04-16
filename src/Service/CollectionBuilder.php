@@ -19,7 +19,7 @@ final readonly class CollectionBuilder
 
     /**
      * @param list<array<string, list<bool|float|int|string>|bool|float|int|string|null>> $all
-     * @param array<string,array<int,bool|float|int|string>|bool|float|int|string>        $rules
+     * @param array<string,list<bool|float|int|string>|bool|float|int|string|null>        $rules
      *
      * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
      */

@@ -37,23 +37,20 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
     ): CategorySyndicationPackageGatedInterface {
         $context = $request->context();
         $audit = $request->auditContext();
-        $packageBuilt = $this->mappingService->buildPublishPackage($request);
-        $packagePayload = $packageBuilt->payload();
+        $packagePayload = $this->mappingService->buildPublishPackage($request)->payload();
         $destinationRequest = new CategoryDestinationMediaEvaluationRequest(
             $context->destinationId(),
             $context->categoryId(),
             $audit,
         );
 
-        $mediaReadiness = $this->destinationMediaReadinessService->evaluate($destinationRequest);
-        $mediaPayload = $mediaReadiness->payload();
-
+        $mediaPayload = $this->destinationMediaReadinessService->evaluate($destinationRequest)->payload();
         $report = $this->policy->buildReport(
-            is_array($packagePayload['missingRequiredFields'] ?? null) ? $packagePayload['missingRequiredFields'] : [],
-            is_array($mediaPayload['requiredMissing'] ?? null) ? $mediaPayload['requiredMissing'] : [],
-            is_array($mediaPayload['warnings'] ?? null) ? $mediaPayload['warnings'] : [],
-            is_array($mediaPayload['checks'] ?? null) ? $mediaPayload['checks'] : [],
-            is_array($mediaPayload['matchedBindingIds'] ?? null) ? $mediaPayload['matchedBindingIds'] : [],
+            $this->stringList($packagePayload['missingRequiredFields'] ?? null),
+            $this->stringList($mediaPayload['requiredMissing'] ?? null),
+            $this->stringList($mediaPayload['warnings'] ?? null),
+            $this->boolMap($mediaPayload['checks'] ?? null),
+            $this->stringList($mediaPayload['matchedBindingIds'] ?? null),
         );
 
         return new CategorySyndicationPackageGated(
@@ -63,11 +60,9 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
                 'categoryId' => trim($context->categoryId()),
                 'version' => trim($context->version()),
                 'localeMode' => trim($context->localeMode()),
-                'payload' => is_array($packagePayload['payload'] ?? null) ? $packagePayload['payload'] : [],
-                'fieldMap' => is_array($packagePayload['fieldMap'] ?? null) ? $packagePayload['fieldMap'] : [],
-                'requiredFields' => is_array($packagePayload['requiredFields'] ?? null)
-                ? $packagePayload['requiredFields']
-                : [],
+                'payload' => $this->map($packagePayload['payload'] ?? null),
+                'fieldMap' => $this->map($packagePayload['fieldMap'] ?? null),
+                'requiredFields' => $this->stringList($packagePayload['requiredFields'] ?? null),
                 'packageMissingRequiredFields' => $report->packageMissingRequiredFields(),
                 'mediaRequiredMissing' => $report->mediaRequiredMissing(),
                 'warnings' => $report->warnings(),
@@ -79,5 +74,63 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
             ],
             new \DateTimeImmutable(),
         );
+    }
+
+    /** @return list<string> */
+    private function stringList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $item) {
+            if (!is_scalar($item)) {
+                continue;
+            }
+
+            $trimmed = trim((string) $item);
+            if ('' !== $trimmed) {
+                $normalized[] = $trimmed;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /** @return array<string,bool> */
+    private function boolMap(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $key => $item) {
+            if (!is_string($key)) {
+                continue;
+            }
+            $normalized[$key] = (bool) $item;
+        }
+
+        return $normalized;
+    }
+
+    /** @return array<string,mixed> */
+    private function map(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $key => $item) {
+            if (!is_string($key)) {
+                continue;
+            }
+            $normalized[$key] = $item;
+        }
+
+        return $normalized;
     }
 }

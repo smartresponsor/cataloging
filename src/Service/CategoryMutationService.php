@@ -546,7 +546,20 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
             ['path' => ParameterType::STRING, 'prefix' => ParameterType::STRING],
         );
 
-        return array_values(array_filter($rows, static fn (mixed $row): bool => is_array($row)));
+        return array_map(
+            static function (array $row): array {
+                $normalized = [];
+                foreach ($row as $key => $value) {
+                    if (!is_string($key)) {
+                        continue;
+                    }
+                    $normalized[$key] = $value;
+                }
+
+                return $normalized;
+            },
+            array_filter($rows, static fn (mixed $row): bool => is_array($row)),
+        );
     }
 
     /**
@@ -581,9 +594,6 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
     {
         $normalized = [];
         foreach ($checks as $name => $value) {
-            if (!is_string($name)) {
-                continue;
-            }
             $normalized[$name] = (bool) $value;
         }
 
@@ -615,7 +625,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
             $normalized[] = $trimmed;
         }
 
-        return array_values($normalized);
+        return $normalized;
     }
 
     /**

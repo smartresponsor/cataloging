@@ -29,8 +29,23 @@ final class DlqService
             return [];
         }
 
-        /* @var list<array<string, mixed>> $decoded */
-        return $decoded;
+        $normalized = [];
+        foreach ($decoded as $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            $row = [];
+            foreach ($entry as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
+                $row[$key] = $value;
+            }
+            $normalized[] = $row;
+        }
+
+        return $normalized;
     }
 
     /**

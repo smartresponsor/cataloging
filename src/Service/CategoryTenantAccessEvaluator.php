@@ -94,9 +94,14 @@ final readonly class CategoryTenantAccessEvaluator
      */
     private function normalizeCategoryRoles(array $categoryRoles): array
     {
-        return array_values(array_filter(
-            $categoryRoles,
-            static fn (mixed $role): bool => is_string($role) && '' !== trim($role),
-        ));
+        $normalized = [];
+        foreach ($categoryRoles as $role) {
+            $trimmed = trim($role);
+            if ('' !== $trimmed) {
+                $normalized[] = $trimmed;
+            }
+        }
+
+        return $normalized;
     }
 }

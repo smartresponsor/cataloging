@@ -39,8 +39,8 @@ final class CategoryTokenBucket implements CategoryQuotaTokenBucketInterface
         $stateRaw = $this->store->get($this->key);
         $decoded = is_string($stateRaw) ? json_decode($stateRaw, true) : null;
         $state = is_array($decoded) ? $decoded : ['t' => $now, 'v' => $this->capacity];
-        $elapsed = max(0.0, $now - (float) ($state['t'] ?? $now));
-        $refill = (float) ($state['v'] ?? $this->capacity) + $elapsed * $this->ratePerSec;
+        $elapsed = max(0.0, $now - $this->floatValue($state['t'] ?? $now, $now));
+        $refill = $this->floatValue($state['v'] ?? $this->capacity, (float) $this->capacity) + $elapsed * $this->ratePerSec;
         $value = (int) min($this->capacity, floor($refill));
         if ($value < $n) {
             $encoded = json_encode(['t' => $now, 'v' => $value]);
@@ -53,5 +53,10 @@ final class CategoryTokenBucket implements CategoryQuotaTokenBucketInterface
         $this->store->set($this->key, false === $encoded ? '{"t":0,"v":0}' : $encoded, 60);
 
         return true;
+    }
+
+    private function floatValue(mixed $value, float $default): float
+    {
+        return is_numeric($value) ? (float) $value : $default;
     }
 }

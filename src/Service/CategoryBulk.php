@@ -147,7 +147,15 @@ final readonly class CategoryBulk implements CategoryBulkInterface
             throw new \InvalidArgumentException('Missing payload key: '.$key);
         }
 
-        return $value;
+        $normalized = [];
+        foreach ($value as $entryKey => $entryValue) {
+            if (!is_string($entryKey)) {
+                continue;
+            }
+            $normalized[$entryKey] = $entryValue;
+        }
+
+        return $normalized;
     }
 
     /**

@@ -18,9 +18,6 @@ final class CategoryCollectionRuleNormalizer
     {
         $normalized = [];
         foreach ($rules as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
             if (is_bool($value) || is_float($value) || is_int($value) || is_string($value)) {
                 $normalized[$key] = $value;
                 continue;

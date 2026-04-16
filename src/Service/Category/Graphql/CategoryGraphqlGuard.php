@@ -77,9 +77,18 @@ final readonly class CategoryGraphqlGuard implements CategoryGraphqlGuardInterfa
         }
         $normalized = [];
         foreach ($children as $child) {
-            if (is_array($child)) {
-                $normalized[] = $child;
+            if (!is_array($child)) {
+                continue;
             }
+
+            $node = [];
+            foreach ($child as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
+                $node[$key] = $value;
+            }
+            $normalized[] = $node;
         }
 
         return $normalized;
