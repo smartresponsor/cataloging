@@ -546,18 +546,17 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
             ['path' => ParameterType::STRING, 'prefix' => ParameterType::STRING],
         );
 
-        return array_values(array_map(
-            /** @param array<string, mixed> $row */
-            static function (array $row): array {
-                $normalized = [];
-                foreach ($row as $key => $value) {
-                    $normalized[$key] = $value;
-                }
+        $normalizedRows = [];
+        foreach ($rows as $row) {
+            $normalized = [];
+            foreach ($row as $key => $value) {
+                $normalized[$key] = $value;
+            }
 
-                return $normalized;
-            },
-            array_filter($rows, static fn (mixed $row): bool => is_array($row)),
-        ));
+            $normalizedRows[] = $normalized;
+        }
+
+        return $normalizedRows;
     }
 
     /**

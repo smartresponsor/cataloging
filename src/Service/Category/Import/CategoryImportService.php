@@ -33,7 +33,8 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
         if (!$head) {
             throw new \RuntimeException('empty file');
         }
-        $idx = array_flip(array_values(array_filter($head, static fn (mixed $value): bool => is_string($value) && '' !== $value)));
+        $headers = array_filter($head, static fn (mixed $value): bool => is_string($value) && '' !== $value);
+        $idx = array_flip($headers);
         $importedCount = 0;
         try {
             while (($row = fgetcsv($handle)) !== false) {

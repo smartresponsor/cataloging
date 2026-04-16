@@ -51,8 +51,8 @@ final class Composer
 
         /** @var list<mixed> $participantList */
         $participantList = is_array($participants)
-            ? array_values([...$participants])
-            : array_values(iterator_to_array($participants, false));
+            ? [...$participants]
+            : iterator_to_array($participants, false);
 
         $this->participants = $participantList;
 

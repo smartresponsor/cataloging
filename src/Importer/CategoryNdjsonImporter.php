@@ -112,10 +112,6 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
     {
         $normalized = [];
         foreach ($data as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-
             $normalized[$key] = $value;
         }
 

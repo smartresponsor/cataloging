@@ -36,16 +36,23 @@ final class FacetSearch
         /** @var list<array<string, mixed>> $rows */
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
 
-        return array_values(array_map(
-            /** @param array<string, mixed> $r */
-            static fn (array $r): array => [
-                'id' => (string) $r['id'],
-                'slug' => (string) $r['slug'],
-                'name' => (string) $r['name'],
-                'path' => (string) ($r['path'] ?? ''),
-                'locale' => (string) $r['locale'],
-            ],
-            $rows
-        ));
+        $result = [];
+        foreach ($rows as $row) {
+            $id = $row['id'] ?? null;
+            $slug = $row['slug'] ?? null;
+            $name = $row['name'] ?? null;
+            $path = $row['path'] ?? '';
+            $rowLocale = $row['locale'] ?? null;
+
+            $result[] = [
+                'id' => is_scalar($id) ? (string) $id : '',
+                'slug' => is_scalar($slug) ? (string) $slug : '',
+                'name' => is_scalar($name) ? (string) $name : '',
+                'path' => is_scalar($path) ? (string) $path : '',
+                'locale' => is_scalar($rowLocale) ? (string) $rowLocale : '',
+            ];
+        }
+
+        return $result;
     }
 }

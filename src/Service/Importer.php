@@ -29,11 +29,8 @@ final class Importer
                 $header = array_map([$this, 'stringValue'], $row);
                 continue;
             }
-            /** @var array<string, bool|float|int|string|null>|false $item */
+            /** @var array<string, bool|float|int|string|null> $item */
             $item = array_combine($header, $row);
-            if (false === $item) {
-                continue;
-            }
             $this->upsert($item);
             ++$count;
         }
