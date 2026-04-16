@@ -23,10 +23,10 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
      * Initializes the catalog syndication policy aware package gate service service collaborators.
      */
     public function __construct(
-        private ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
         private CatalogSyndicationFallbackAwarePackageGateServiceInterface $fallbackAwareGateService,
         private CatalogDestinationMediaPolicyPreferenceServiceInterface $preferenceService,
         private CategorySyndicationPolicyAwarePackageGatePolicyInterface $policy,
+        private ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
     ) {
     }
 

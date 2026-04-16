@@ -23,10 +23,10 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
      * Initializes the catalog syndication package gate service service collaborators.
      */
     public function __construct(
-        private ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
         private CatalogSyndicationMappingServiceInterface $mappingService,
         private CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
         private CategorySyndicationPackageGatePolicyInterface $policy,
+        private ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
     ) {
     }
 

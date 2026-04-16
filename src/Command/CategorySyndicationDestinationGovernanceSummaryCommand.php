@@ -28,8 +28,8 @@ final class CategorySyndicationDestinationGovernanceSummaryCommand extends Comma
      * Initializes the category syndication destination governance summary command service collaborators.
      */
     public function __construct(
-        private readonly ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
         private readonly CatalogSyndicationDestinationGovernanceSummaryServiceInterface $service,
+        private readonly ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
     ) {
         parent::__construct();
     }

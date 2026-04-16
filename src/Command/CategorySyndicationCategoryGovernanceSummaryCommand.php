@@ -29,7 +29,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
      */
     public function __construct(
         private readonly CatalogSyndicationGovernanceSummaryServiceInterface $service,
-        private readonly ArrayValueNormalizer $arrayValueNormalizer,
+        private readonly ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
     ) {
         parent::__construct();
     }

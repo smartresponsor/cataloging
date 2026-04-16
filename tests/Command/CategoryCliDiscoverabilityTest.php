@@ -19,6 +19,7 @@ use App\Command\CategorySyndicationPackagePreviewCommand;
 use App\Command\CategorySyndicationRetryScheduleCommand;
 use App\Command\CategoryWorkflowTransitionCommand;
 use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Service\ArrayValueNormalizer;
 use App\ServiceInterface\CatalogCompletenessServiceInterface;
 use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
@@ -53,7 +54,7 @@ final class CategoryCliDiscoverabilityTest extends TestCase
             ),
             new CategorySyndicationDestinationHistoryCommand($this->createMock(CatalogSyndicationHistoryServiceInterface::class)),
             new CategorySyndicationDestinationGovernanceSummaryCommand($this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class)),
-            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class)),
+            new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class), new ArrayValueNormalizer()),
         ];
 
         foreach ($commands as $command) {
