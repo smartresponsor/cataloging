@@ -23,6 +23,7 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
      * Initializes the catalog syndication policy aware package gate service service collaborators.
      */
     public function __construct(
+        private ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
         private CatalogSyndicationFallbackAwarePackageGateServiceInterface $fallbackAwareGateService,
         private CatalogDestinationMediaPolicyPreferenceServiceInterface $preferenceService,
         private CategorySyndicationPolicyAwarePackageGatePolicyInterface $policy,
@@ -43,7 +44,7 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
             ),
         )->payload();
         $report = $this->policy->buildReport(
-            $this->stringList($fallbackAware['packageMissingRequiredFields'] ?? null),
+            $this->arrayValueNormalizer->stringList($fallbackAware['packageMissingRequiredFields'] ?? null),
             $preference,
             $fallbackAware,
         );
@@ -69,26 +70,5 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
             'actorId' => trim($audit->actorId()),
             'reason' => trim($audit->reason()),
         ], new \DateTimeImmutable());
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $normalized = [];
-        foreach ($value as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-            $trimmed = trim((string) $item);
-            if ('' !== $trimmed) {
-                $normalized[] = $trimmed;
-            }
-        }
-
-        return $normalized;
     }
 }

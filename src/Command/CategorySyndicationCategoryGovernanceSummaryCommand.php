@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Service\ArrayValueNormalizer;
 use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -26,8 +27,10 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
     /**
      * Initializes the category syndication category governance summary command service collaborators.
      */
-    public function __construct(private readonly CatalogSyndicationGovernanceSummaryServiceInterface $service)
-    {
+    public function __construct(
+        private readonly CatalogSyndicationGovernanceSummaryServiceInterface $service,
+        private readonly ArrayValueNormalizer $arrayValueNormalizer,
+    ) {
         parent::__construct();
     }
 
@@ -82,29 +85,8 @@ final class CategorySyndicationCategoryGovernanceSummaryCommand extends Command
      */
     private function decodeTrails(string $json): array
     {
-        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        if (!is_array($decoded)) {
-            return [];
-        }
-
-        $trails = [];
-        foreach ($decoded as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
-            $normalized = [];
-            foreach ($row as $key => $value) {
-                if (!is_string($key)) {
-                    continue;
-                }
-
-                $normalized[$key] = $value;
-            }
-
-            $trails[] = $normalized;
-        }
-
-        return $trails;
+        return $this->arrayValueNormalizer->stringKeyedRowList(
+            json_decode($json, true, 512, JSON_THROW_ON_ERROR),
+        );
     }
 }

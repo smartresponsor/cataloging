@@ -18,6 +18,8 @@ final class CatalogingBundle extends Bundle
 {
     public function getContainerExtension(): ExtensionInterface
     {
-        return new CatalogingExtension();
+        $extension = parent::getContainerExtension();
+
+        return $extension instanceof ExtensionInterface ? $extension : new CatalogingExtension();
     }
 }

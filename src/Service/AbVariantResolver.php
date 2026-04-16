@@ -16,8 +16,10 @@ final class AbVariantResolver
     private array $flags;
 
     /** @param array<string,bool> $flags */
-    public function __construct(array $flags = [])
-    {
+    public function __construct(
+        array $flags = [],
+        private readonly JsonArrayReader $jsonArrayReader = new JsonArrayReader(),
+    ) {
         $this->flags = $flags;
     }
 
@@ -55,21 +57,8 @@ final class AbVariantResolver
     /** @return list<array<string,string>> */
     private function readJsonList(string $path): array
     {
-        if (!is_file($path)) {
-            return [];
-        }
-        $json = file_get_contents($path);
-        if (!is_string($json) || '' === $json) {
-            return [];
-        }
-        $decoded = json_decode($json, true);
-
-        if (!is_array($decoded)) {
-            return [];
-        }
-
         $items = [];
-        foreach ($decoded as $row) {
+        foreach ($this->jsonArrayReader->read($path) as $row) {
             if (!is_array($row)) {
                 continue;
             }

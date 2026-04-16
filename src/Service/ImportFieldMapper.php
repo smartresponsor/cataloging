@@ -10,6 +10,10 @@ namespace App\Service;
  */
 final class ImportFieldMapper
 {
+    public function __construct(private readonly JsonArrayReader $jsonArrayReader = new JsonArrayReader())
+    {
+    }
+
     /** @var array<string,string> */
     private array $map = [
         'external_id' => 'id',
@@ -43,20 +47,8 @@ final class ImportFieldMapper
     /** @return list<array{in:array<string,mixed>,out:array<string,mixed>}> */
     private function readLog(string $path): array
     {
-        if (!is_file($path)) {
-            return [];
-        }
-        $json = file_get_contents($path);
-        if (!is_string($json) || '' === $json) {
-            return [];
-        }
-        $decoded = json_decode($json, true);
-        if (!is_array($decoded)) {
-            return [];
-        }
-
         $out = [];
-        foreach ($decoded as $row) {
+        foreach ($this->jsonArrayReader->read($path) as $row) {
             if (!is_array($row)) {
                 continue;
             }

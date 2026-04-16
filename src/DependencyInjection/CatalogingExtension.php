@@ -16,7 +16,6 @@ final class CatalogingExtension extends Extension
 {
     /**
      * @param array<int, array<string, mixed>> $configs
-     * @param ContainerBuilder                 $container
      *
      * @throws \Exception
      */

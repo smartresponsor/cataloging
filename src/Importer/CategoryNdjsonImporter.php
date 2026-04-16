@@ -110,11 +110,7 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
      */
     private function normalizeMap(array $data): array
     {
-        $normalized = array_map(function ($value) {
-            return $value;
-        }, $data);
-
-        return $normalized;
+        return $data;
     }
 
     /**
@@ -171,7 +167,7 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
         }
         $normalized = [];
         foreach ($value as $entryKey => $entryValue) {
-            if (!is_string($entryKey) || !is_scalar($entryValue)) {
+            if (!is_scalar($entryValue)) {
                 continue;
             }
             $normalized[$entryKey] = trim((string) $entryValue);

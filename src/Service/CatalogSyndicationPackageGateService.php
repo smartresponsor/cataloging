@@ -23,6 +23,7 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
      * Initializes the catalog syndication package gate service service collaborators.
      */
     public function __construct(
+        private ArrayValueNormalizer $arrayValueNormalizer = new ArrayValueNormalizer(),
         private CatalogSyndicationMappingServiceInterface $mappingService,
         private CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
         private CategorySyndicationPackageGatePolicyInterface $policy,
@@ -46,11 +47,11 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
 
         $mediaPayload = $this->destinationMediaReadinessService->evaluate($destinationRequest)->payload();
         $report = $this->policy->buildReport(
-            $this->stringList($packagePayload['missingRequiredFields'] ?? null),
-            $this->stringList($mediaPayload['requiredMissing'] ?? null),
-            $this->stringList($mediaPayload['warnings'] ?? null),
+            $this->arrayValueNormalizer->stringList($packagePayload['missingRequiredFields'] ?? null),
+            $this->arrayValueNormalizer->stringList($mediaPayload['requiredMissing'] ?? null),
+            $this->arrayValueNormalizer->stringList($mediaPayload['warnings'] ?? null),
             $this->boolMap($mediaPayload['checks'] ?? null),
-            $this->stringList($mediaPayload['matchedBindingIds'] ?? null),
+            $this->arrayValueNormalizer->stringList($mediaPayload['matchedBindingIds'] ?? null),
         );
 
         return new CategorySyndicationPackageGated(
@@ -62,7 +63,7 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
                 'localeMode' => trim($context->localeMode()),
                 'payload' => $this->map($packagePayload['payload'] ?? null),
                 'fieldMap' => $this->map($packagePayload['fieldMap'] ?? null),
-                'requiredFields' => $this->stringList($packagePayload['requiredFields'] ?? null),
+                'requiredFields' => $this->arrayValueNormalizer->stringList($packagePayload['requiredFields'] ?? null),
                 'packageMissingRequiredFields' => $report->packageMissingRequiredFields(),
                 'mediaRequiredMissing' => $report->mediaRequiredMissing(),
                 'warnings' => $report->warnings(),
@@ -74,28 +75,6 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
             ],
             new \DateTimeImmutable(),
         );
-    }
-
-    /** @return list<string> */
-    private function stringList(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        $normalized = [];
-        foreach ($value as $item) {
-            if (!is_scalar($item)) {
-                continue;
-            }
-
-            $trimmed = trim((string) $item);
-            if ('' !== $trimmed) {
-                $normalized[] = $trimmed;
-            }
-        }
-
-        return $normalized;
     }
 
     /** @return array<string,bool> */

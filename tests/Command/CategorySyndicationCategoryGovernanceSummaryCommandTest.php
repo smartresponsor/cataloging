@@ -11,6 +11,7 @@ namespace App\Tests\Command;
 
 use App\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
 use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
+use App\Service\ArrayValueNormalizer;
 use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -26,7 +27,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommandTest extends Test
             'destinationIds' => ['dest-1', 'dest-2'],
         ], new \DateTimeImmutable()));
 
-        $tester = new CommandTester(new CategorySyndicationCategoryGovernanceSummaryCommand($service));
+        $tester = new CommandTester(new CategorySyndicationCategoryGovernanceSummaryCommand($service, new ArrayValueNormalizer()));
         $exitCode = $tester->execute([
             'categoryId' => 'cat-1',
             'actorId' => 'ops',

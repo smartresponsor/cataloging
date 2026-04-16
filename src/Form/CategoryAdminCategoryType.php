@@ -19,7 +19,7 @@ final class CategoryAdminCategoryType extends AbstractType
     /** @param array<string,mixed> $options */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        unset($options);
+        parent::buildForm($builder, $options);
 
         $builder
             ->add('name', TextType::class, [
@@ -37,6 +37,8 @@ final class CategoryAdminCategoryType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => CategoryAdminCategoryData::class,
             'csrf_protection' => true,
