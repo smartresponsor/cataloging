@@ -1,6 +1,6 @@
 {
   "name": "cataloging/catalog",
-  "description": "Cataloging component",
+  "description": "Cataloging processing app",
   "type": "symfony-bundle",
   "license": "proprietary",
   "authors": [

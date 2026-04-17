@@ -17,15 +17,16 @@ final class CreateMovePublishTest extends TestCase
 
     public function testStatusEndpointIsReachableThroughBrowser(): void
     {
-        if (!$this->hasGeckodriver()) {
-            self::markTestSkipped('geckodriver is not available in this environment.');
+        $browser = $this->supportedBrowser();
+        if (null === $browser) {
+            self::markTestSkipped('Chromium/Edge WebDriver is not available in this environment.');
         }
 
         $webServerPort = $this->freeLocalPort();
         $browserDriverPort = $this->freeLocalPort();
 
         $client = self::createPantherClient([
-            'browser' => 'firefox',
+            'browser' => $browser,
             'webServerDir' => dirname(__DIR__, 3).'/public',
             'router' => dirname(__DIR__, 3).'/public/index.php',
             'hostname' => '127.0.0.1',
@@ -56,9 +57,24 @@ final class CreateMovePublishTest extends TestCase
         return (int) end($parts);
     }
 
-    private function hasGeckodriver(): bool
+    private function supportedBrowser(): ?string
     {
-        $command = '\\' === DIRECTORY_SEPARATOR ? 'where geckodriver 2>NUL' : 'command -v geckodriver 2>/dev/null';
+        if ($this->hasExecutable('chromedriver')) {
+            return 'chrome';
+        }
+
+        if ($this->hasExecutable('msedgedriver')) {
+            return 'msedge';
+        }
+
+        return null;
+    }
+
+    private function hasExecutable(string $name): bool
+    {
+        $command = '\\' === DIRECTORY_SEPARATOR
+            ? sprintf('where %s 2>NUL', escapeshellarg($name))
+            : sprintf('command -v %s 2>/dev/null', escapeshellarg($name));
         $result = shell_exec($command);
 
         return is_string($result) && '' !== trim($result);
