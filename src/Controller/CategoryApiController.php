@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Request\MoveCategoryRequest;
 use App\Request\PublishCategoryRequest;
 use App\Service\CategoryMutationAuthorizationService;
+use App\Service\CategoryMutationRequestContextResolver;
 use App\Service\CategoryPayloadValueNormalizer;
 use App\ServiceInterface\CategoryMutationServiceInterface;
 use App\ServiceInterface\CategoryProjectionReadServiceInterface;
@@ -17,12 +18,10 @@ use App\ValueObject\CategoryMutationPublishRequest;
 use App\ValueObject\CategoryProjectionCriteria;
 use App\ValueObject\CategoryReadScopeRequest;
 use Doctrine\DBAL\Exception;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Handles the category api controller application flow.
@@ -37,7 +36,7 @@ final readonly class CategoryApiController
         private CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
         private CategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private CategoryReadScopeServiceInterface $categoryReadScopeService,
-        private Security $security,
+        private CategoryMutationRequestContextResolver $requestContextResolver,
     ) {
     }
 
@@ -77,36 +76,21 @@ final readonly class CategoryApiController
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
 
-        try {
-            $this->categoryMutationAuthorizationService->assertCanMove($id);
+        $this->categoryMutationAuthorizationService->assertCanMove($id);
 
-            $result = $this->categoryMutationService->move(new CategoryMutationMoveRequest(
-                $id,
-                (string) $dto->parentId,
-                $this->resolveActorId($request),
-                $dto->treeId,
-                $dto->policy,
-                $dto->dryRun,
-                $dto->locale,
-                $this->resolveIdempotencyKey($request),
-                $this->resolveCorrelationId($request),
-            ));
+        $result = $this->categoryMutationService->move(new CategoryMutationMoveRequest(
+            $id,
+            (string) $dto->parentId,
+            $this->requestContextResolver->actorId($request),
+            $dto->treeId,
+            $dto->policy,
+            $dto->dryRun,
+            $dto->locale,
+            $this->requestContextResolver->idempotencyKey($request),
+            $this->requestContextResolver->correlationId($request),
+        ));
 
-            return new JsonResponse(['data' => $result], 200);
-        } catch (AccessDeniedHttpException $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 403);
-        } catch (\InvalidArgumentException $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 400);
-        } catch (\DomainException $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 409);
-        } catch (\RuntimeException $exception) {
-            return new JsonResponse(
-                ['error' => $exception->getMessage()],
-                str_contains($exception->getMessage(), 'was not found') ? 404 : 409,
-            );
-        } catch (Exception) {
-            return new JsonResponse(['error' => 'Unable to move category.'], 500);
-        }
+        return new JsonResponse(['data' => $result], 200);
     }
 
     /**
@@ -120,71 +104,24 @@ final readonly class CategoryApiController
             return new JsonResponse(['error' => $dto->getErrors()], 400);
         }
 
-        try {
-            $this->categoryMutationAuthorizationService->assertCanPublish($id);
+        $this->categoryMutationAuthorizationService->assertCanPublish($id);
 
-            $result = $this->categoryMutationService->publish(new CategoryMutationPublishRequest(
-                $id,
-                (bool) $dto->published,
-                $dto->checks,
-                $this->resolveActorId($request),
-                $dto->reason,
-                $this->resolveIdempotencyKey($request),
-                $this->resolveCorrelationId($request),
-            ));
+        $result = $this->categoryMutationService->publish(new CategoryMutationPublishRequest(
+            $id,
+            (bool) $dto->published,
+            $dto->checks,
+            $this->requestContextResolver->actorId($request),
+            $dto->reason,
+            $this->requestContextResolver->idempotencyKey($request),
+            $this->requestContextResolver->correlationId($request),
+        ));
 
-            return new JsonResponse(['data' => $result], 200);
-        } catch (AccessDeniedHttpException $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 403);
-        } catch (\InvalidArgumentException $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 400);
-        } catch (\DomainException $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 409);
-        } catch (\RuntimeException $exception) {
-            return new JsonResponse(
-                ['error' => $exception->getMessage()],
-                str_contains($exception->getMessage(), 'was not found') ? 404 : 409,
-            );
-        } catch (Exception) {
-            return new JsonResponse(['error' => 'Unable to publish category.'], 500);
-        }
+        return new JsonResponse(['data' => $result], 200);
     }
 
     /** @return array<string,mixed> */
     private function decodeMap(Request $request): array
     {
         return CategoryPayloadValueNormalizer::nestedMap(json_decode($request->getContent(), true));
-    }
-
-    private function resolveIdempotencyKey(Request $request): ?string
-    {
-        $headerValue = trim((string) $request->headers->get('X-Idempotency-Key', ''));
-
-        return '' !== $headerValue ? $headerValue : null;
-    }
-
-    private function resolveCorrelationId(Request $request): ?string
-    {
-        $headerValue = trim((string) $request->headers->get('X-Correlation-ID', ''));
-
-        return '' !== $headerValue ? $headerValue : null;
-    }
-
-    private function resolveActorId(Request $request): string
-    {
-        $user = $this->security->getUser();
-        if ($user instanceof UserInterface) {
-            $identifier = trim($user->getUserIdentifier());
-            if ('' !== $identifier) {
-                return $identifier;
-            }
-        }
-
-        $headerActorId = trim((string) $request->headers->get('X-Actor-Id', ''));
-        if ('' !== $headerActorId) {
-            return $headerActorId;
-        }
-
-        return 'category-api';
     }
 }

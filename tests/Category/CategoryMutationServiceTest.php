@@ -16,6 +16,7 @@ use App\ValueObject\CategoryMutationPublishRequest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 final class CategoryMutationServiceTest extends TestCase
 {
@@ -54,6 +55,65 @@ final class CategoryMutationServiceTest extends TestCase
         $moveOutboxCount = $connection->fetchOne('SELECT COUNT(*) FROM outbox WHERE type = :type', ['type' => 'category.moved']);
         self::assertTrue(is_scalar($moveOutboxCount));
         self::assertSame(1, (int) $moveOutboxCount);
+    }
+
+    public function testMoveIdempotencyKeyReuseWithDifferentPayloadThrowsDomainException(): void
+    {
+        $connection = $this->createConnection();
+        $this->createSchema($connection);
+        $this->seedFromFixture($connection, 'mutation_idempotency_replay.yaml');
+
+        $service = $this->createService($connection);
+        $service->move(new CategoryMutationMoveRequest(
+            'electronics',
+            'fashion',
+            'oleksandr',
+            'catalog',
+            'strict',
+            false,
+            null,
+            'move-reuse-key',
+            'corr-1',
+        ));
+
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('cannot be reused for a different request payload');
+
+        $service->move(new CategoryMutationMoveRequest(
+            'electronics',
+            'root',
+            'oleksandr',
+            'catalog',
+            'strict',
+            false,
+            null,
+            'move-reuse-key',
+            'corr-1',
+        ));
+    }
+
+    public function testMoveRebasesDeepTreeLoadedFromFixture(): void
+    {
+        $connection = $this->createConnection();
+        $this->createSchema($connection);
+        $this->seedFromFixture($connection, 'mutation_deep_tree.yaml');
+
+        $service = $this->createService($connection);
+        $result = $service->move(new CategoryMutationMoveRequest(
+            'a',
+            'x',
+            'oleksandr',
+            'catalog',
+            'strict',
+        ));
+
+        self::assertSame(5, $result['changedCount']);
+
+        $deepest = $connection->fetchAssociative('SELECT path, level FROM category WHERE id = :id', ['id' => 'd']);
+        self::assertIsArray($deepest);
+        self::assertSame('root.x.a.b.c.d', $deepest['path']);
+        self::assertTrue(is_scalar($deepest['level']));
+        self::assertSame(5, (int) $deepest['level']);
     }
 
     public function testMoveDuplicateCommandDoesNotWriteSecondOutboxRow(): void
@@ -187,6 +247,19 @@ final class CategoryMutationServiceTest extends TestCase
         ];
 
         foreach ($rows as $row) {
+            $connection->insert('category', $row);
+        }
+    }
+
+    private function seedFromFixture(Connection $connection, string $fixtureFile): void
+    {
+        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/Category/'.$fixtureFile);
+        $rows = is_array($payload['rows'] ?? null) ? $payload['rows'] : [];
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
             $connection->insert('category', $row);
         }
     }

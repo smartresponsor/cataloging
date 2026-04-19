@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Request;
 
+use App\Request\Support\RequestValueNormalizer;
+
 /**
  * Provides the webhook dispatch request implementation.
  */
@@ -40,16 +42,14 @@ final readonly class WebhookDispatchRequest
 
         $errors = [];
 
-        $event = $decoded['event'] ?? 'category.updated';
-        if (!is_string($event) || '' === trim($event)) {
+        $event = RequestValueNormalizer::trimmedStringOrDefault($decoded['event'] ?? null, 'category.updated');
+        if ('category.updated' === $event && array_key_exists('event', $decoded) && !is_scalar($decoded['event'])) {
             $errors[] = 'event must be a non-empty string';
-            $event = 'category.updated';
         }
 
-        $endpoint = $decoded['endpoint'] ?? 'http://localhost:8081/hook';
-        if (!is_string($endpoint) || '' === trim($endpoint)) {
+        $endpoint = RequestValueNormalizer::trimmedStringOrDefault($decoded['endpoint'] ?? null, 'http://localhost:8081/hook');
+        if ('http://localhost:8081/hook' === $endpoint && array_key_exists('endpoint', $decoded) && !is_scalar($decoded['endpoint'])) {
             $errors[] = 'endpoint must be a non-empty string';
-            $endpoint = 'http://localhost:8081/hook';
         }
 
         $payload = $decoded['payload'] ?? ['id' => 1];

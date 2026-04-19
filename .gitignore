@@ -21,6 +21,7 @@ composer.lock
 /.idea/
 /.vscode/
 *.iml
+*.zip
 
 # OS files
 .DS_Store

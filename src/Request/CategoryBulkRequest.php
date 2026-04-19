@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Request;
 
+use App\Request\Support\RequestValueNormalizer;
+
 /**
  * Provides the category bulk request implementation.
  */
@@ -39,10 +41,9 @@ final readonly class CategoryBulkRequest
             $ids = [];
         }
 
-        $action = $decoded['action'] ?? 'publish';
-        if (!is_string($action) || '' === trim($action)) {
+        $action = RequestValueNormalizer::trimmedStringOrDefault($decoded['action'] ?? null, 'publish');
+        if ('publish' === $action && array_key_exists('action', $decoded) && !is_scalar($decoded['action'])) {
             $errors[] = 'action must be a non-empty string';
-            $action = 'publish';
         }
 
         return new self(self::normalizeIds($ids), $action, $errors);

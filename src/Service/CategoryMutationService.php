@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Exception\CategoryNotFoundException;
 use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use App\PolicyInterface\CategoryWorkflowPolicyInterface;
 use App\ServiceInterface\CatalogPublicationGateServiceInterface;
@@ -520,7 +521,7 @@ final class CategoryMutationService implements CategoryMutationServiceInterface
         );
 
         if (!is_array($row)) {
-            throw new \RuntimeException(sprintf('Category "%s" was not found.', $categoryId));
+            throw new CategoryNotFoundException(sprintf('Category "%s" was not found.', $categoryId));
         }
 
         return $row;

@@ -31,7 +31,11 @@ final readonly class CategoryCollectionRequest
             return new self([], ['rules payload must be a JSON object or array']);
         }
 
-        return new self(self::normalizeMap($decoded));
+        $rules = array_key_exists('rules', $decoded) && is_array($decoded['rules'])
+            ? self::normalizeMap($decoded['rules'])
+            : self::normalizeMap($decoded);
+
+        return new self($rules);
     }
 
     /**
