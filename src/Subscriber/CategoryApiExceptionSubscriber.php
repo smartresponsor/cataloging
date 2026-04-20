@@ -27,7 +27,8 @@ final class CategoryApiExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event): void
     {
         $request = $event->getRequest();
-        $routeName = (string) $request->attributes->get('_route', '');
+        $routeAttribute = $request->attributes->get('_route', '');
+        $routeName = is_string($routeAttribute) ? $routeAttribute : '';
         if (!str_starts_with($routeName, 'api_category_')) {
             return;
         }

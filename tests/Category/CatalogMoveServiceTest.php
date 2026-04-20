@@ -32,9 +32,6 @@ final class CatalogMoveServiceTest extends TestCase
         $rows = $connection->fetchAllAssociative('SELECT id, path, depth FROM category ORDER BY id ASC');
         $indexed = [];
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
             $fromId = $row['id'] ?? null;
             $fromPath = $row['path'] ?? null;
             $fromDepth = $row['depth'] ?? null;

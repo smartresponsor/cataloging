@@ -9,6 +9,7 @@ use App\Cataloging\Subscriber\CategoryApiExceptionSubscriber;
 use Doctrine\DBAL\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -33,7 +34,9 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(403, $event->getResponse()?->getStatusCode());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(403, $response->getStatusCode());
     }
 
     public function testMapsRuntimeNotFoundTo404(): void
@@ -43,7 +46,9 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(404, $event->getResponse()?->getStatusCode());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(404, $response->getStatusCode());
     }
 
     public function testMapsRuntimeConflictTo409(): void
@@ -53,7 +58,9 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(409, $event->getResponse()?->getStatusCode());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(409, $response->getStatusCode());
     }
 
     public function testMapsInvalidArgumentTo400(): void
@@ -63,7 +70,9 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(400, $event->getResponse()?->getStatusCode());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(400, $response->getStatusCode());
     }
 
     public function testMapsDomainExceptionTo409(): void
@@ -73,7 +82,9 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(409, $event->getResponse()?->getStatusCode());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(409, $response->getStatusCode());
     }
 
     public function testMapsDbalExceptionTo500(): void
@@ -83,8 +94,10 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(500, $event->getResponse()?->getStatusCode());
-        self::assertSame('{"error":"Category API runtime failure."}', $event->getResponse()?->getContent());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('{"error":"Category API runtime failure."}', $response->getContent());
     }
 
     public function testMapsUnexpectedThrowableTo500(): void
@@ -94,8 +107,10 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
 
         $subscriber->onKernelException($event);
 
-        self::assertSame(500, $event->getResponse()?->getStatusCode());
-        self::assertSame('{"error":"Category API unexpected failure."}', $event->getResponse()?->getContent());
+        $response = $event->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('{"error":"Category API unexpected failure."}', $response->getContent());
     }
 
     private function event(string $route, \Throwable $throwable): ExceptionEvent
