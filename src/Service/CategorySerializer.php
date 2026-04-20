@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategorySerializerInterface;
-use App\ValueObject\CategorySerializationRequest;
+use App\Cataloging\ServiceInterface\CategorySerializerInterface;
+use App\Cataloging\ValueObject\CategorySerializationRequest;
 
 /**
  * Provides the category serializer application service.

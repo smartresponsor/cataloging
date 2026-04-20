@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
-use App\ValueObject\CategorySyndicationFallbackAwarePackageGateReport;
-use App\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
+use App\Cataloging\ValueObject\CategorySyndicationFallbackAwarePackageGateReport;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationFallbackAwarePackageGateReportInterface;
 
 /**
  * Provides the category syndication fallback aware package gate policy implementation.

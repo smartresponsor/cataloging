@@ -64,8 +64,8 @@ if (Test-Path $src) {
     foreach ($file in $phpFiles) {
         $path = $file.FullName
 
-        Replace-In-File $path 'App\\Entity\\CategoryHtmlBlock' 'App\Entity\CatalogCategoryHtmlBlock'
-        Replace-In-File $path 'use\s+App\\Entity\\CategoryHtmlBlock;' 'use App\Entity\CatalogCategoryHtmlBlock;'
+        Replace-In-File $path 'App\Cataloging\\Entity\\CategoryHtmlBlock' 'App\Cataloging\Entity\CatalogCategoryHtmlBlock'
+        Replace-In-File $path 'use\s+App\Cataloging\\Entity\\CategoryHtmlBlock;' 'use App\Cataloging\Entity\CatalogCategoryHtmlBlock;'
         Replace-In-File $path '\bCategoryHtmlBlock::class\b' 'CatalogCategoryHtmlBlock::class'
         Replace-In-File $path '\bnew\s+CategoryHtmlBlock\s*\(' 'new CatalogCategoryHtmlBlock('
         Replace-In-File $path '\bCategoryHtmlBlock\s+\$categoryHtmlBlock\b' 'CatalogCategoryHtmlBlock $categoryHtmlBlock'

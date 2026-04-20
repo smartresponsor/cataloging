@@ -11,7 +11,7 @@ This wave introduces a narrow bridge that combines:
 ## Canonical fit
 
 - single Symfony-oriented application/component
-- `App\` namespace under `src/`
+- `App\Cataloging\` namespace under `src/`
 - no `Port`, `Adaptor`, or hexagonal wrapper trees
 - service/policy/value-object/event layering kept flat and responsibility-oriented
 

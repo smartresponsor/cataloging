@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Cataloging\Tests\Service;
 
-use App\Service\ReadOptimizer;
-use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\Service\ReadOptimizer;
+use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use PHPUnit\Framework\TestCase;
 
 final class ReadOptimizerTest extends TestCase

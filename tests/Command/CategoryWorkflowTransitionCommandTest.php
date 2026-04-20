@@ -7,12 +7,12 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryWorkflowTransitionCommand;
-use App\Policy\CategoryWorkflowPolicy;
-use App\Repository\CategoryWorkflowRepository;
-use App\Service\CatalogWorkflowTransitionService;
+use App\Cataloging\Command\CategoryWorkflowTransitionCommand;
+use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\Repository\CategoryWorkflowRepository;
+use App\Cataloging\Service\CatalogWorkflowTransitionService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

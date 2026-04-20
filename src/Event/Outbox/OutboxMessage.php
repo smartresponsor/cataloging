@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Event\Outbox;
+namespace App\Cataloging\Event\Outbox;
 
 /**
  * Represents the outbox message application event.

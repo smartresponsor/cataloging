@@ -3,15 +3,15 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationPublishPackageBuilt;
-use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
-use App\PolicyInterface\CategorySyndicationMappingPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
-use App\ValueObject\CategorySyndicationMappingProfile;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
-use App\ValueObject\CategorySyndicationPublishPackage;
+use App\Cataloging\Event\CategorySyndicationPublishPackageBuilt;
+use App\Cataloging\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationMappingPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationMappingServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationMappingProfile;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPublishPackage;
 
 /**
  * Provides the catalog syndication mapping service application service.

@@ -26,7 +26,7 @@ The previous completeness/publication gates already said whether a category was 
 ## Guardrails preserved
 
 - single Symfony-oriented application root
-- `App\ -> src/`
+- `App\Cataloging\ -> src/`
 - no `Port` / `Adaptor` / hexagonal skeleton
 - no parallel application tree
 - no domain-root wrapper restoration

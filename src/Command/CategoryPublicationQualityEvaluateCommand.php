@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Cataloging\Command;
 
-use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
-use App\ValueObject\CategoryPublicationQualityInput;
+use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryPublicationQualityEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryPublicationQualityInput;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

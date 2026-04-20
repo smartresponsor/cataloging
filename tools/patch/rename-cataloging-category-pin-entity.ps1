@@ -64,8 +64,8 @@ if (Test-Path $src) {
     foreach ($file in $phpFiles) {
         $path = $file.FullName
 
-        Replace-In-File $path 'App\\Entity\\CategoryPin' 'App\Entity\CatalogCategoryPin'
-        Replace-In-File $path 'use\s+App\\Entity\\CategoryPin;' 'use App\Entity\CatalogCategoryPin;'
+        Replace-In-File $path 'App\Cataloging\\Entity\\CategoryPin' 'App\Cataloging\Entity\CatalogCategoryPin'
+        Replace-In-File $path 'use\s+App\Cataloging\\Entity\\CategoryPin;' 'use App\Cataloging\Entity\CatalogCategoryPin;'
         Replace-In-File $path '\bCategoryPin::class\b' 'CatalogCategoryPin::class'
         Replace-In-File $path '\bnew\s+CategoryPin\s*\(' 'new CatalogCategoryPin('
         Replace-In-File $path '\bCategoryPin\s+\$categoryPin\b' 'CatalogCategoryPin $categoryPin'

@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Cataloging\ValueObject;
 
-use App\ValueObjectInterface\CategoryMediaCoverageReportInterface;
+use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 
 /**
  * Represents the category media coverage report value.

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Cataloging\Tests\Service;
 
-use App\Exception\CategoryNotFoundException;
-use App\Subscriber\CategoryApiExceptionSubscriber;
+use App\Cataloging\Exception\CategoryNotFoundException;
+use App\Cataloging\Subscriber\CategoryApiExceptionSubscriber;
 use Doctrine\DBAL\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;

@@ -6,9 +6,9 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryPublicationQualityPolicy;
+use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryPublicationQualityPolicyTest extends TestCase

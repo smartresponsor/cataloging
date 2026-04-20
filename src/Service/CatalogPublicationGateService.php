@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryPublicationGateEvaluated;
-use App\EventInterface\CategoryPublicationGateEvaluatedInterface;
-use App\PolicyInterface\CategoryPublicationGatePolicyInterface;
-use App\ServiceInterface\CatalogPublicationGateServiceInterface;
-use App\ValueObject\CategoryPublicationGateAssertionRequest;
-use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryPublicationReadiness;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Event\CategoryPublicationGateEvaluated;
+use App\Cataloging\EventInterface\CategoryPublicationGateEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryPublicationGatePolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
+use App\Cataloging\ValueObject\CategoryPublicationGateAssertionRequest;
+use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryPublicationReadiness;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 
 /**
  * Provides the catalog publication gate service application service.

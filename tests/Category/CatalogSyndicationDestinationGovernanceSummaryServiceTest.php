@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategorySyndicationDestinationGovernanceSummaryPolicy;
-use App\Service\CatalogSyndicationDestinationGovernanceSummaryService;
-use App\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
+use App\Cataloging\Policy\CategorySyndicationDestinationGovernanceSummaryPolicy;
+use App\Cataloging\Service\CatalogSyndicationDestinationGovernanceSummaryService;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDestinationGovernanceSummaryServiceTest extends TestCase

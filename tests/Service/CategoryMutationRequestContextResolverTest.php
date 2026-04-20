@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Cataloging\Tests\Service;
 
-use App\Service\CategoryMutationRequestContextResolver;
+use App\Cataloging\Service\CategoryMutationRequestContextResolver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;

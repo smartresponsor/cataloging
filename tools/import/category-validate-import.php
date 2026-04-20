@@ -4,7 +4,7 @@ declare(strict_types=1);
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
-use App\Service\ImportValidator;
+use App\Cataloging\Service\ImportValidator;
 require_once __DIR__.'/../../vendor/autoload.php';
 $file = $argv[1] ?? 'report/category-import-from-csv.json';
 if (!is_file($file)) {

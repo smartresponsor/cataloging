@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CategoryProjectionCriteria;
-use App\ValueObject\CategoryReadScopeRequest;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 
 /**
  * Defines the contract for category read scope service.

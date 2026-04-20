@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategoryPublicationGateEvaluatedInterface;
-use App\ValueObject\CategoryPublicationGateAssertionRequest;
-use App\ValueObject\CategoryPublicationGateEvaluationRequest;
+use App\Cataloging\EventInterface\CategoryPublicationGateEvaluatedInterface;
+use App\Cataloging\ValueObject\CategoryPublicationGateAssertionRequest;
+use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
 
 /**
  * Defines the contract for catalog publication gate service.

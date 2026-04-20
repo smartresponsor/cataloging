@@ -10,8 +10,8 @@ The host application should only enable the bundle and import route configuratio
 
 == Runtime entry points
 
-* Bundle class: `App\CatalogingBundle`
-* Extension class: `App\DependencyInjection\CatalogingExtension`
+* Bundle class: `App\Cataloging\CatalogingBundle`
+* Extension class: `App\Cataloging\DependencyInjection\CatalogingExtension`
 * Service export: `config/component/services.yaml`
 * Route export: `config/component/routes.yaml`
 
@@ -20,7 +20,7 @@ The host application should only enable the bundle and import route configuratio
 [source,php]
 ----
 // config/bundles.php
-App\CatalogingBundle::class => ['all' => true],
+App\Cataloging\CatalogingBundle::class => ['all' => true],
 ----
 
 If the component exports HTTP routes, the host imports the route file using the bundle resource path or the package path agreed for the installation mode.

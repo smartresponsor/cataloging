@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\Entity\CategoryAccessAssignment;
-use App\EntityInterface\CategoryAccessAssignmentInterface;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\Entity\CategoryAccessAssignment;
+use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 

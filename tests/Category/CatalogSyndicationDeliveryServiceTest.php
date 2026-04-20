@@ -6,15 +6,15 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategorySyndicationDeliveryPolicy;
-use App\Repository\CategorySyndicationDeliveryRecordRepository;
-use App\Service\CatalogSyndicationDeliveryService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategorySyndicationDeliveryAttempt;
-use App\ValueObject\CategorySyndicationDeliveryContext;
-use App\ValueObject\CategorySyndicationDeliveryRecordRequest;
+use App\Cataloging\Policy\CategorySyndicationDeliveryPolicy;
+use App\Cataloging\Repository\CategorySyndicationDeliveryRecordRepository;
+use App\Cataloging\Service\CatalogSyndicationDeliveryService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryAttempt;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryContext;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryRecordRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDeliveryServiceTest extends TestCase

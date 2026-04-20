@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Runner;
+namespace App\Cataloging\Runner;
 
-use App\RunnerInterface\CategoryProjectionRunnerInterface;
-use App\Service\ProjectionWorker;
+use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Cataloging\Service\ProjectionWorker;
 
 /**
  * Provides the category projection runner implementation.

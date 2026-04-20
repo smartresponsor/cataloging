@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Event;
+namespace App\Cataloging\Event;
 
-use App\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+use App\Cataloging\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
 
 /**
  * Represents the category destination media fallback evaluated application event.

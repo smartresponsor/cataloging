@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category\E2E;
+namespace App\Cataloging\Tests\Category\E2E;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Panther\PantherTestCaseTrait;

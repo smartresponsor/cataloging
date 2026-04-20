@@ -3,18 +3,18 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryDestinationMediaReadinessEvaluated;
-use App\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
-use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
-use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
-use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\ValueObject\CategoryDestinationMediaReadinessContext;
-use App\ValueObject\CategoryDestinationMediaReadinessState;
-use App\ValueObject\CategoryEvaluationRequest;
+use App\Cataloging\Event\CategoryDestinationMediaReadinessEvaluated;
+use App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessState;
+use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
 /**
  * Provides the catalog destination media readiness service application service.

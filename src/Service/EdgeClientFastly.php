@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\EdgeClientInterface;
+use App\Cataloging\ServiceInterface\EdgeClientInterface;
 
 /**
  * Provides the edge client fastly application service.

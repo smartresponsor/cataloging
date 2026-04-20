@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\RepositoryInterface\VirtualCategoryRepositoryInterface;
+use App\Cataloging\RepositoryInterface\VirtualCategoryRepositoryInterface;
 
 /**
  * Provides the catalog virtual collection service application service.

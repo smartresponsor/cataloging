@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryEntity;
-use App\ServiceInterface\CatalogMovePreviewServiceInterface;
+use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\ServiceInterface\CatalogMovePreviewServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

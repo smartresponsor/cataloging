@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\Category;
-use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
-use App\Security\CategoryVoter;
+use App\Cataloging\Entity\Category;
+use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\Security\CategoryVoter;
 use Doctrine\DBAL\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

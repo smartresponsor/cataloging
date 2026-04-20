@@ -7,16 +7,16 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategorySyndicationPolicyAwarePackageGatePolicy;
-use App\Service\CatalogSyndicationPolicyAwarePackageGateService;
-use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
-use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
-use App\ValueObject\CategorySyndicationPackageContext;
+use App\Cataloging\Policy\CategorySyndicationPolicyAwarePackageGatePolicy;
+use App\Cataloging\Service\CatalogSyndicationPolicyAwarePackageGateService;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
@@ -24,11 +24,11 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
     public function testBuildGatedPublishPackageResolvesPublishabilityViaPolicy(): void
     {
         $fallbackAwareGateService = new class implements CatalogSyndicationFallbackAwarePackageGateServiceInterface {
-            public function buildGatedPublishPackage(CategorySyndicationPackageBuildRequest $request): \App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
+            public function buildGatedPublishPackage(CategorySyndicationPackageBuildRequest $request): \App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
             {
                 $context = $request->context();
 
-                return new \App\Event\CategorySyndicationFallbackAwarePackageGated([
+                return new \App\Cataloging\Event\CategorySyndicationFallbackAwarePackageGated([
                     'packageId' => $context->packageId(),
                     'destinationId' => $context->destinationId(),
                     'categoryId' => $context->categoryId(),
@@ -47,9 +47,9 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
         };
 
         $preferenceService = new class implements CatalogDestinationMediaPolicyPreferenceServiceInterface {
-            public function evaluate(CategoryDestinationMediaEvaluationRequest $request): \App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
+            public function evaluate(CategoryDestinationMediaEvaluationRequest $request): \App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
             {
-                return new \App\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
+                return new \App\Cataloging\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
                     'destinationId' => $request->destinationId(),
                     'categoryId' => $request->categoryId(),
                     'mediaPolicyMode' => 'allow_fallback',

@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Ops;
+namespace App\Cataloging\Service\Ops;
 
-use App\Projection\CategoryRuntimeStatusView;
-use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
-use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
-use App\Service\Governance\CategoryGovernanceViewBuilder;
-use App\Service\Traceability\CategoryActorTraceabilityViewBuilder;
-use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
+use App\Cataloging\Projection\CategoryRuntimeStatusView;
+use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface;
+use App\Cataloging\Service\Governance\CategoryGovernanceViewBuilder;
+use App\Cataloging\Service\Traceability\CategoryActorTraceabilityViewBuilder;
+use App\Cataloging\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 
 /**
  * Provides the category runtime status view builder application service.

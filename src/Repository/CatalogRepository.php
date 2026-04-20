@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\Entity\CategoryEntity;
-use App\Service\CatalogCategoryRowNormalizer;
+use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Service\CatalogCategoryRowNormalizer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;

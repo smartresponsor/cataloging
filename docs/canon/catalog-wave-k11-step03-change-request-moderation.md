@@ -17,7 +17,7 @@ Add a backend-only change-request and moderation foundation without disturbing t
 
 The wave stays canonical because it:
 
-- keeps `App\ -> src/`,
+- keeps `App\Cataloging\ -> src/`,
 - extends existing layer roots only,
 - uses `src/[Layer]` and `src/[Layer]Interface`,
 - does not introduce `Port`, `Adaptor`, `Infra`, or parallel app trees,

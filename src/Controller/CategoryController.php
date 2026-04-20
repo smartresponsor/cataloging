@@ -3,19 +3,19 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\ControllerInterface\CategoryControllerInterface;
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\Service\CategoryPayloadValueNormalizer;
-use App\Service\MetaPayloadNormalizer;
-use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
-use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
-use App\ValueObject\CategoryCreateRequest;
-use App\ValueObject\CategoryLinkRequest;
-use App\ValueObject\CategoryServiceMoveRequest;
-use App\ValueObject\CategorySlugLookupRequest;
-use App\ValueObject\CategoryTreeRequest;
+use App\Cataloging\ControllerInterface\CategoryControllerInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\Service\CategoryPayloadValueNormalizer;
+use App\Cataloging\Service\MetaPayloadNormalizer;
+use App\Cataloging\ServiceInterface\CategoryBreadcrumbBuilderInterface;
+use App\Cataloging\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\Cataloging\ValueObject\CategoryCreateRequest;
+use App\Cataloging\ValueObject\CategoryLinkRequest;
+use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
+use App\Cataloging\ValueObject\CategorySlugLookupRequest;
+use App\Cataloging\ValueObject\CategoryTreeRequest;
 
 /**
  * Handles the category controller application flow.

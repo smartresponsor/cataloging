@@ -3,17 +3,17 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
-use App\Event\CategorySyndicationRecoveryCandidatePrepared;
-use App\Event\CategorySyndicationRetryScheduled;
-use App\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
-use App\EventInterface\CategorySyndicationRetryScheduledInterface;
-use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
-use App\ValueObject\CategorySyndicationRecoveryCandidate;
-use App\ValueObject\CategorySyndicationRetryPlan;
+use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\Event\CategorySyndicationRecoveryCandidatePrepared;
+use App\Cataloging\Event\CategorySyndicationRetryScheduled;
+use App\Cataloging\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
+use App\Cataloging\EventInterface\CategorySyndicationRetryScheduledInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationRetryPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationRecoveryCandidate;
+use App\Cataloging\ValueObject\CategorySyndicationRetryPlan;
 
 /**
  * Provides the catalog syndication retry service application service.

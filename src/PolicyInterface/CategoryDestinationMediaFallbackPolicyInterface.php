@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\PolicyInterface;
+namespace App\Cataloging\PolicyInterface;
 
-use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
+use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
 
 /**
  * Defines the contract for category destination media fallback policy.

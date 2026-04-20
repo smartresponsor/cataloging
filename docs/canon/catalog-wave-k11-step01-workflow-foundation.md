@@ -17,7 +17,7 @@ K11 Step01 adds a backend workflow foundation without changing the canonical Sym
 
 This step keeps the current clean structure intact:
 
-- single `App\ -> src/` application root,
+- single `App\Cataloging\ -> src/` application root,
 - no domain wrapper trees,
 - no port/adaptor skeleton,
 - no parallel API stack.

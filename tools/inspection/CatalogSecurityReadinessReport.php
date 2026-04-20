@@ -210,7 +210,7 @@ $items = [
     ],
     [
         'check' => 'access-assignment-repository-durable',
-        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\\RepositoryInterface\\CategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
+        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\CategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
         'details' => [
             'file' => 'src/Repository/CategoryAccessAssignmentRepository.php',
         ],

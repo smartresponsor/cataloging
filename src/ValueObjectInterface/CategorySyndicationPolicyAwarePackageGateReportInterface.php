@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ValueObjectInterface;
+namespace App\Cataloging\ValueObjectInterface;
 
 /**
  * Defines the contract for category syndication policy aware package gate report.

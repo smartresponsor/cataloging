@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
 /**
  * Reads JSON files into normalized array payloads.

@@ -3,9 +3,9 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\DataFixtures;
+namespace App\Cataloging\DataFixtures;
 
-use App\Entity\CategoryEntity;
+use App\Cataloging\Entity\CategoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

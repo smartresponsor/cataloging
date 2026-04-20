@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Cataloging\Entity;
 
-use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
-use App\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
+use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
 
 /**
  * Represents the category syndication delivery record domain record.

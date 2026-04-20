@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Exporter;
+namespace App\Cataloging\Exporter;
 
-use App\ExporterInterface\CategoryNdjsonExporterInterface;
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ValueObject\CategoryTreeRequest;
+use App\Cataloging\ExporterInterface\CategoryNdjsonExporterInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\ValueObject\CategoryTreeRequest;
 
 /**
  * Provides the category ndjson exporter implementation.

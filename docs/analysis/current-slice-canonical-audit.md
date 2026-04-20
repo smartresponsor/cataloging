@@ -1,7 +1,7 @@
 # Current Slice Canonical Audit
 
 ## 1) canonical/compliant areas
-- Namespace mapping App\ -> src/ is configured in composer autoload.
+- Namespace mapping App\Cataloging\ -> src/ is configured in composer autoload.
 - Runtime target is PHP ^8.4.
 - Doctrine ORM is on major 3 as required.
 - No forbidden Catalog/Cataloging, Port, Adaptor, Infra, or opr paths found under src/ and tests/.

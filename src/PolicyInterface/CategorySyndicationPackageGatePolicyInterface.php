@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\PolicyInterface;
+namespace App\Cataloging\PolicyInterface;
 
-use App\ValueObjectInterface\CategorySyndicationPackageGateReportInterface;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationPackageGateReportInterface;
 
 /**
  * Defines the contract for category syndication package gate policy.

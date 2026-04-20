@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryDestinationMediaPolicyPreferenceEvaluated;
-use App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
-use App\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
-use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
-use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
-use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\Event\CategoryDestinationMediaPolicyPreferenceEvaluated;
+use App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
 /**
  * Provides the catalog destination media policy preference service application service.

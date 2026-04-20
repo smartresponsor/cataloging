@@ -7,5 +7,5 @@ doctrine:
         type: attribute
         is_bundle: false
         dir: '%kernel.project_dir%/vendor/cataloging/catalog/src/Entity'
-        prefix: 'App\Entity'
+        prefix: 'App\Cataloging\Entity'
         alias: Cataloging

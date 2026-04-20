@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Event;
+namespace App\Cataloging\Event;
 
-use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
+use App\Cataloging\EventInterface\CategoryMediaCoverageEvaluatedInterface;
 
 /**
  * Represents the category media coverage evaluated application event.

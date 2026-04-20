@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\EntityInterface\CategoryReviewAssignmentInterface;
-use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\EntityInterface\CategoryReviewAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 
 /**
  * Provides repository services for category review assignment repository.

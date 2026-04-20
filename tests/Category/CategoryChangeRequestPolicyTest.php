@@ -6,10 +6,10 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryChangeRequestPolicy;
-use App\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\Policy\CategoryChangeRequestPolicy;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryChangeRequestPolicyTest extends TestCase

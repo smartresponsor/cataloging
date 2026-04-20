@@ -1,42 +1,61 @@
+parameters:
+    catalog.oidc_jwk_set: []
+    catalog.oidc_audience: '%env(default:catalog-dev:CATALOG_OIDC_AUDIENCE)%'
+    catalog.oidc_issuer: '%env(default:catalog-dev:CATALOG_OIDC_ISSUER)%'
+
 services:
     _defaults:
         autowire: true
         autoconfigure: true
 
-    App\Form\:
+    App\Cataloging\Form\:
         resource: '../src/Form/'
 
-    App\Controller\StatusController:
+
+    App\Cataloging\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Cataloging\Controller\StatusController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Controller\Admin\CategoryAdminController:
+    App\Cataloging\Controller\Admin\CategoryAdminController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Controller\CategorySitemapController:
+    App\Cataloging\Controller\CategorySitemapController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Security\JwtUserProvider:
+    App\Cataloging\Security\JwtUserProvider:
         arguments:
             $defaultRoles: [ 'ROLE_USER' ]
             $adminIdentifiers: '%env(csv:CATEGORY_API_ADMIN_IDENTIFIERS)%'
 
-    App\ServiceInterface\CategoryMutationServiceInterface: '@App\Service\CategoryMutationService'
+    App\Cataloging\ServiceInterface\CategoryMutationServiceInterface: '@App\Cataloging\Service\CategoryMutationService'
 
-    App\ServiceInterface\CategoryProjectionReadServiceInterface: '@App\Service\CategoryProjectionReadService'
-    App\ServiceInterface\CategoryReadScopeServiceInterface: '@App\Service\CategoryReadScopeService'
+    App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CategoryProjectionReadService'
+    App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface: '@App\Cataloging\Service\CategoryReadScopeService'
 
-    App\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Idempotency\CategoryIdempotencyStore'
+    App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Cataloging\Idempotency\CategoryIdempotencyStore'
 
-    App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface:
-        '@App\Repository\CategoryAccessAssignmentRepository'
+    App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface:
+        '@App\Cataloging\Repository\CategoryAccessAssignmentRepository'
 
 
-    App\AttachmentInterface\AttachmentReferenceGatewayInterface: '@App\Attachment\NullAttachmentReferenceGateway'
-    App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface:
-        '@App\Service\Security\ExternalIdentityContextMapper'
-    App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface:
-        '@App\Service\Security\ExternalIdentityContextResolver'
+    App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface: '@App\Cataloging\Attachment\NullAttachmentReferenceGateway'
+    App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface:
+        '@App\Cataloging\Service\Security\ExternalIdentityContextMapper'
+    App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface:
+        '@App\Cataloging\Service\Security\ExternalIdentityContextResolver'
 
-    App\Attachment\NullAttachmentReferenceGateway: ~
-    App\Service\Security\ExternalIdentityContextMapper: ~
-    App\Service\Security\ExternalIdentityContextResolver: ~
+    App\Cataloging\Attachment\NullAttachmentReferenceGateway: ~
+    App\Cataloging\Service\Security\ExternalIdentityContextMapper: ~
+    App\Cataloging\Service\Security\ExternalIdentityContextResolver: ~
+
+    App\Cataloging\Service\OidcJwtVerifier:
+        arguments:
+            $jwkSet: '%catalog.oidc_jwk_set%'
+            $audience: '%catalog.oidc_audience%'
+            $issuer: '%catalog.oidc_issuer%'

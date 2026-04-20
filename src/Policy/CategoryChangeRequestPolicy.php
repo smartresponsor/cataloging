@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
-use App\ValueObject\CategoryChangeRequestState;
-use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
+use App\Cataloging\PolicyInterface\CategoryChangeRequestPolicyInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\ValueObjectInterface\CategoryChangeRequestStateInterface;
 
 /**
  * Provides the category change request policy implementation.

@@ -3,10 +3,10 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Rule;
+namespace App\Cataloging\Service\Category\Rule;
 
-use App\ServiceInterface\Category\CategoryRuleAdminServiceInterface;
-use App\ServiceInterface\Rule\RuleRepositoryInterface;
+use App\Cataloging\ServiceInterface\Category\CategoryRuleAdminServiceInterface;
+use App\Cataloging\ServiceInterface\Rule\RuleRepositoryInterface;
 
 /**
  * Provides the category rule admin service application service.

@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Cataloging\Controller\Admin;
 
-use App\Service\CategoryPayloadValueNormalizer;
+use App\Cataloging\Service\CategoryPayloadValueNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

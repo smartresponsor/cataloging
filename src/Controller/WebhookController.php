@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Request\WebhookDispatchRequest;
-use App\Service\WebhookDispatcher;
-use App\ValueObject\WebhookDispatchRequest as WebhookDispatchMessageRequest;
+use App\Cataloging\Request\WebhookDispatchRequest;
+use App\Cataloging\Service\WebhookDispatcher;
+use App\Cataloging\ValueObject\WebhookDispatchRequest as WebhookDispatchMessageRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Cataloging\Command;
 
-use App\Service\ArrayValueNormalizer;
-use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
-use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
+use App\Cataloging\Service\ArrayValueNormalizer;
+use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

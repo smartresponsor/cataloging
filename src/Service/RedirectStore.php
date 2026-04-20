@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\RedirectStoreInterface;
-use App\ValueObject\RedirectPutRequest;
+use App\Cataloging\ServiceInterface\RedirectStoreInterface;
+use App\Cataloging\ValueObject\RedirectPutRequest;
 
 /**
  * Provides the redirect store application service.

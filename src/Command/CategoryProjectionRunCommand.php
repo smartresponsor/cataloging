@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Cataloging\Command;
 
-use App\RunnerInterface\CategoryProjectionRunnerInterface;
-use App\Service\CategoryPayloadValueNormalizer;
-use App\Service\ProjectionWorker;
+use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Cataloging\Service\CategoryPayloadValueNormalizer;
+use App\Cataloging\Service\ProjectionWorker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

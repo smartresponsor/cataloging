@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CategoryEntity;
+use App\Cataloging\Entity\CategoryEntity;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryEntityTreePathTest extends TestCase

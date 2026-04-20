@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Outbox;
+namespace App\Cataloging\Outbox;
 
-use App\OutboxInterface\CategoryOutboxRetryInterface;
+use App\Cataloging\OutboxInterface\CategoryOutboxRetryInterface;
 
 /**
  * Provides the category outbox retry implementation.

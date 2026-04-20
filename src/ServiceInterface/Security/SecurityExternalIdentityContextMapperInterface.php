@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\ServiceInterface\Security;
+namespace App\Cataloging\ServiceInterface\Security;
 
-use App\Security\ExternalIdentityContext;
+use App\Cataloging\Security\ExternalIdentityContext;
 
 /**
  * Defines the contract for security external identity context mapper.

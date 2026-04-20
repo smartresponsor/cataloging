@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/linter/app_namespace_check.php <project-root>
- * Enforces canonical Symfony namespace root: App\\ => src/
+ * Enforces canonical Symfony namespace root: App\Cataloging\\ => src/
  * and forbids Smartresponsor/SmartResponsor namespace usage.
  */
 $root = $argv[1] ?? getcwd();
@@ -30,12 +30,12 @@ $composer = json_decode($composerJson, true, 512, JSON_THROW_ON_ERROR);
 $autoload = $composer['autoload']['psr-4'] ?? [];
 $autoloadDev = $composer['autoload-dev']['psr-4'] ?? [];
 
-if (!is_array($autoload) || count($autoload) !== 1 || ($autoload['App\\'] ?? null) !== 'src/') {
-    fwrite(STDERR, "Invalid autoload psr-4 root. Expected only App\\\\ => src/\n");
+if (!is_array($autoload) || count($autoload) !== 1 || ($autoload['App\Cataloging\\'] ?? null) !== 'src/') {
+    fwrite(STDERR, "Invalid autoload psr-4 root. Expected only App\Cataloging\\\\ => src/\n");
     $fail++;
 }
-if (!is_array($autoloadDev) || count($autoloadDev) !== 1 || ($autoloadDev['App\\Tests\\'] ?? null) !== 'tests/') {
-    fwrite(STDERR, "Invalid autoload-dev psr-4 root. Expected only App\\\\Tests\\\\ => tests/\n");
+if (!is_array($autoloadDev) || count($autoloadDev) !== 1 || ($autoloadDev['App\Cataloging\\Tests\\'] ?? null) !== 'tests/') {
+    fwrite(STDERR, "Invalid autoload-dev psr-4 root. Expected only App\Cataloging\\\\Tests\\\\ => tests/\n");
     $fail++;
 }
 if (preg_match('/"Smartresponsor\\\\\\\\|"SmartResponsor\\\\\\\\/u', $composerJson) === 1) {

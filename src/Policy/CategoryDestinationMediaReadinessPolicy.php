@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
-use App\Service\CategoryMediaInputNormalizer;
-use App\ValueObject\CategoryDestinationMediaReadinessContext;
-use App\ValueObject\CategoryDestinationMediaReadinessReport;
-use App\ValueObject\CategoryDestinationMediaReadinessState;
-use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
+use App\Cataloging\Service\CategoryMediaInputNormalizer;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessReport;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessState;
+use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
 
 /**
  * Provides the category destination media readiness policy implementation.

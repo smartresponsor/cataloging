@@ -1,6 +1,6 @@
 = Cataloging CategoryHtmlBlock Entity Rename
 
-This patch removes the generic `App\Entity\CategoryHtmlBlock` runtime class from `Cataloging`.
+This patch removes the generic `App\Cataloging\Entity\CategoryHtmlBlock` runtime class from `Cataloging`.
 
 == Refactor
 
@@ -21,7 +21,7 @@ and the class is renamed from `CategoryHtmlBlock` to `CatalogCategoryHtmlBlock`.
 The combined App Kernel cannot load multiple components that declare the same FQCN:
 
 ----
-App\Entity\CategoryHtmlBlock
+App\Cataloging\Entity\CategoryHtmlBlock
 ----
 
 Both Cataloging and Vendoring now use component-scoped class names.

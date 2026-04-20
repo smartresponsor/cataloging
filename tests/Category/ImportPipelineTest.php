@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Service\ImportPipeline;
+use App\Cataloging\Service\ImportPipeline;
 use PHPUnit\Framework\TestCase;
 
 final class ImportPipelineTest extends TestCase

@@ -3,7 +3,7 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Tools;
+namespace App\Cataloging\Tests\Tools;
 
 use PHPUnit\Framework\TestCase;
 
@@ -93,8 +93,8 @@ final class CategoryLinterScriptsTest extends TestCase
         mkdir($projectRoot.'/src', 0777, true);
         mkdir($projectRoot.'/tests', 0777, true);
         file_put_contents($projectRoot.'/composer.json', json_encode([
-            'autoload' => ['psr-4' => ['App\\' => 'src/']],
-            'autoload-dev' => ['psr-4' => ['App\\Tests\\' => 'tests/']],
+            'autoload' => ['psr-4' => ['App\Cataloging\\' => 'src/']],
+            'autoload-dev' => ['psr-4' => ['App\Cataloging\\Tests\\' => 'tests/']],
         ], JSON_THROW_ON_ERROR));
 
         self::assertSame(0, $this->runScript('tools/linter/app_namespace_check.php', $projectRoot));
@@ -106,8 +106,8 @@ final class CategoryLinterScriptsTest extends TestCase
         mkdir($projectRoot.'/src', 0777, true);
         mkdir($projectRoot.'/tests', 0777, true);
         file_put_contents($projectRoot.'/composer.json', json_encode([
-            'autoload' => ['psr-4' => ['App\\' => 'src/', 'Smartresponsor\\' => 'src/']],
-            'autoload-dev' => ['psr-4' => ['App\\Tests\\' => 'tests/']],
+            'autoload' => ['psr-4' => ['App\Cataloging\\' => 'src/', 'Smartresponsor\\' => 'src/']],
+            'autoload-dev' => ['psr-4' => ['App\Cataloging\\Tests\\' => 'tests/']],
         ], JSON_THROW_ON_ERROR));
 
         self::assertSame(1, $this->runScript('tools/linter/app_namespace_check.php', $projectRoot));

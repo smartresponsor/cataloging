@@ -7,28 +7,28 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CategoryMediaBinding;
-use App\Entity\CategorySyndicationDestination;
-use App\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Policy\CategoryMediaApplicabilityPolicy;
-use App\Policy\CategorySyndicationFallbackAwarePackageGatePolicy;
-use App\Policy\CategorySyndicationMappingPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaFallbackService;
-use App\Service\CatalogDestinationMediaReadinessService;
-use App\Service\CatalogMediaApplicabilityService;
-use App\Service\CatalogSyndicationFallbackAwarePackageGateService;
-use App\Service\CatalogSyndicationMappingService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryMediaRole;
-use App\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\ValueObject\CategorySyndicationDestinationDefinition;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
-use App\ValueObject\CategorySyndicationPackageContext;
+use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Entity\CategorySyndicationDestination;
+use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
+use App\Cataloging\Policy\CategorySyndicationFallbackAwarePackageGatePolicy;
+use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
+use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\Service\CatalogSyndicationFallbackAwarePackageGateService;
+use App\Cataloging\Service\CatalogSyndicationMappingService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryMediaRole;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCase

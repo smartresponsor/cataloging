@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\EntityInterface\CategoryMediaBindingInterface;
-use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
-use App\Service\CategoryMediaInputNormalizer;
-use App\ValueObject\CategoryMediaApplicabilityReport;
-use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
+use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
+use App\Cataloging\Service\CategoryMediaInputNormalizer;
+use App\Cataloging\ValueObject\CategoryMediaApplicabilityReport;
+use App\Cataloging\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
 
 /**
  * Provides the category media applicability policy implementation.

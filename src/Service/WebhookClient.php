@@ -3,10 +3,10 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\WebhookClientInterface;
-use App\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\ServiceInterface\WebhookClientInterface;
+use App\Cataloging\ValueObject\WebhookDispatchRequest;
 
 /**
  * Provides the webhook client application service.

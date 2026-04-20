@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
 /**
  * Normalizes category collection rule payloads into scalar-or-list maps.

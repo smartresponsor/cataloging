@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryPublicationQualityEvaluated;
-use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
-use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
-use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
-use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
+use App\Cataloging\Event\CategoryPublicationQualityEvaluated;
+use App\Cataloging\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryPublicationQualityPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\Cataloging\ValueObject\CategoryPublicationQualityEvaluationRequest;
 
 /**
  * Provides the catalog publication quality service application service.

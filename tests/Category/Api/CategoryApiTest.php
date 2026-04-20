@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category\Api;
+namespace App\Cataloging\Tests\Category\Api;
 
 use PHPUnit\Framework\TestCase;
 

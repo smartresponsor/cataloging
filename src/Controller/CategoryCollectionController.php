@@ -3,11 +3,11 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Request\CategoryCollectionRequest;
-use App\Service\CatalogCollectionService;
-use App\Service\CategoryCollectionRuleNormalizer;
+use App\Cataloging\Request\CategoryCollectionRequest;
+use App\Cataloging\Service\CatalogCollectionService;
+use App\Cataloging\Service\CategoryCollectionRuleNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

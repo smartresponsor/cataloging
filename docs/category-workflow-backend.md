@@ -35,12 +35,12 @@ The first workflow state set is:
 
 ## Contracts introduced
 
-- `App\ValueObject\CategoryWorkflowState`
-- `App\Entity\CategoryWorkflow`
-- `App\Policy\CategoryWorkflowPolicy`
-- `App\Repository\CategoryWorkflowRepository`
-- `App\Service\CategoryWorkflowTransitionService`
-- `App\Event\CategoryWorkflowTransitioned`
+- `App\Cataloging\ValueObject\CategoryWorkflowState`
+- `App\Cataloging\Entity\CategoryWorkflow`
+- `App\Cataloging\Policy\CategoryWorkflowPolicy`
+- `App\Cataloging\Repository\CategoryWorkflowRepository`
+- `App\Cataloging\Service\CategoryWorkflowTransitionService`
+- `App\Cataloging\Event\CategoryWorkflowTransitioned`
 
 ## Why the repository is intentionally simple
 

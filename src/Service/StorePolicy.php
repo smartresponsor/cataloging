@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ValueObject\CategoryStorePolicyEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryStorePolicyEvaluationRequest;
 
 /**
  * Provides the store policy application service.

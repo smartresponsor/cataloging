@@ -3,22 +3,22 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryCreated;
-use App\Event\CategoryLinked;
-use App\Event\CategoryMoved;
-use App\Event\CategoryUnlinked;
-use App\PolicyInterface\CategoryPolicyInterface;
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryServiceInterface;
-use App\ServiceInterface\CategorySlugGeneratorInterface;
-use App\ValueObject\CategoryCreateRequest;
-use App\ValueObject\CategoryLinkRequest;
-use App\ValueObject\CategoryRepositoryCreateRequest;
-use App\ValueObject\CategoryResolveRequest;
-use App\ValueObject\CategoryServiceMoveRequest;
-use App\ValueObject\CategorySlugGenerationRequest;
+use App\Cataloging\Event\CategoryCreated;
+use App\Cataloging\Event\CategoryLinked;
+use App\Cataloging\Event\CategoryMoved;
+use App\Cataloging\Event\CategoryUnlinked;
+use App\Cataloging\PolicyInterface\CategoryPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\ServiceInterface\CategoryServiceInterface as CategoryCategoryServiceInterface;
+use App\Cataloging\ServiceInterface\CategorySlugGeneratorInterface;
+use App\Cataloging\ValueObject\CategoryCreateRequest;
+use App\Cataloging\ValueObject\CategoryLinkRequest;
+use App\Cataloging\ValueObject\CategoryRepositoryCreateRequest;
+use App\Cataloging\ValueObject\CategoryResolveRequest;
+use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
+use App\Cataloging\ValueObject\CategorySlugGenerationRequest;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**

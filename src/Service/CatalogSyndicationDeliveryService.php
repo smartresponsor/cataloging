@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\Event\CategorySyndicationDeliveryRecorded;
-use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
-use App\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
-use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
-use App\ValueObject\CategorySyndicationDeliveryRecordRequest;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\Event\CategorySyndicationDeliveryRecorded;
+use App\Cataloging\EventInterface\CategorySyndicationDeliveryRecordedInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryRecordRequest;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 
 /**
  * Provides the catalog syndication delivery service application service.

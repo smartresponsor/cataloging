@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\Uid\Ulid;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\AttachmentInterface;
+namespace App\Cataloging\AttachmentInterface;
 
 /**
  * Defines the contract for attachment reference gateway.

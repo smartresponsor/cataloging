@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationPackageGated;
-use App\EventInterface\CategorySyndicationPackageGatedInterface;
-use App\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
-use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
-use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\Event\CategorySyndicationPackageGated;
+use App\Cataloging\EventInterface\CategorySyndicationPackageGatedInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationMappingServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
  * Provides the catalog syndication package gate service application service.

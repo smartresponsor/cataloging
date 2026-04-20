@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
-use App\Service\CatalogCollectionService;
-use App\Service\CollectionBuilder;
-use App\Service\CollectionRuleEngine;
+use App\Cataloging\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
+use App\Cataloging\Service\CatalogCollectionService;
+use App\Cataloging\Service\CollectionBuilder;
+use App\Cataloging\Service\CollectionRuleEngine;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCollectionServiceTest extends TestCase

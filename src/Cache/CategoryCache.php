@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cache;
+namespace App\Cataloging\Cache;
 
-use App\CacheInterface\CategoryCacheInterface;
+use App\Cataloging\CacheInterface\CategoryCacheInterface;
 
 /**
  * Provides the category cache implementation.

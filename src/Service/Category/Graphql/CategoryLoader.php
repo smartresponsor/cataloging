@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Graphql;
+namespace App\Cataloging\Service\Category\Graphql;
 
-use App\ServiceInterface\Category\CategoryLoaderInterface;
+use App\Cataloging\ServiceInterface\Category\CategoryLoaderInterface;
 
 /**
  * Provides the category loader application service.

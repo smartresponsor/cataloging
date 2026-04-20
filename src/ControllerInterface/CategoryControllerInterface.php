@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ControllerInterface;
+namespace App\Cataloging\ControllerInterface;
 
 /**
  * Defines the contract for category controller.

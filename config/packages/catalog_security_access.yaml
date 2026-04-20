@@ -10,3 +10,6 @@ security:
         - { path: ^/api/admin/category, roles: ROLE_ADMIN }
         - { path: ^/api/category/webhook/test, roles: ROLE_ADMIN }
         - { path: ^/api/category/.+/publish, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/category/tree, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/category/.+/move, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/category/attachment, roles: IS_AUTHENTICATED_FULLY }

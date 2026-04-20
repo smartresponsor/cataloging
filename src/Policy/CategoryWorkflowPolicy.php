@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryWorkflowPolicyInterface;
-use App\ValueObject\CategoryWorkflowState;
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\Cataloging\PolicyInterface\CategoryWorkflowPolicyInterface;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
+use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
 
 /**
  * Provides the category workflow policy implementation.

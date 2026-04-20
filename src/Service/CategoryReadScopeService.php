@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategoryReadScopeServiceInterface;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\ValueObject\CategoryProjectionCriteria;
-use App\ValueObject\CategoryReadScopeRequest;
+use App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 

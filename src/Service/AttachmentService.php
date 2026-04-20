@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\AttachmentInterface\AttachmentReferenceGatewayInterface;
-use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
+use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
 
 /**
  * Provides the attachment service application service.

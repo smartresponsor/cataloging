@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\RedirectPutRequest;
+use App\Cataloging\ValueObject\RedirectPutRequest;
 
 /**
  * Defines the contract for redirect store.

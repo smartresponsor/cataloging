@@ -6,7 +6,7 @@ This wave adds channel-scoped and locale-scoped media applicability evaluation w
 
 ## Canon alignment
 
-- stays inside `src/` with `App\ -> src/`
+- stays inside `src/` with `App\Cataloging\ -> src/`
 - uses canonical layer roots and matching interface roots
 - keeps Symfony-oriented service / policy / event / value-object layout
 - introduces no `Port`, `Adaptor`, `Infra`, `Catalog`, or `Cataloging` wrapper trees

@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Entity\Role;
+namespace App\Cataloging\Entity\Role;
 
 /**
  * Represents the subject id domain record.

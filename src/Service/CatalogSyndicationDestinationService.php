@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategorySyndicationDestination;
-use App\Event\CategorySyndicationDestinationRegistered;
-use App\EventInterface\CategorySyndicationDestinationRegisteredInterface;
-use App\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
-use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
-use App\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
-use App\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
+use App\Cataloging\Entity\CategorySyndicationDestination;
+use App\Cataloging\Event\CategorySyndicationDestinationRegistered;
+use App\Cataloging\EventInterface\CategorySyndicationDestinationRegisteredInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationRegisterRequest;
 
 /**
  * Provides the catalog syndication destination service application service.

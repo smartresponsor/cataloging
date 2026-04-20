@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Security;
+namespace App\Cataloging\Tests\Security;
 
-use App\Security\JwtUser;
-use App\Security\JwtUserProvider;
+use App\Cataloging\Security\JwtUser;
+use App\Cataloging\Security\JwtUserProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 

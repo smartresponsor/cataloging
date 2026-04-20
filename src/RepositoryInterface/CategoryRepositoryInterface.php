@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\RepositoryInterface;
+namespace App\Cataloging\RepositoryInterface;
 
-use App\ValueObject\CategoryRepositoryCreateRequest;
-use App\ValueObject\CategoryResolveRequest;
-use App\ValueObject\CategoryServiceMoveRequest;
-use App\ValueObject\CategorySlugExistsRequest;
-use App\ValueObject\CategorySlugLookupRequest;
-use App\ValueObject\CategoryTreeRequest;
+use App\Cataloging\ValueObject\CategoryRepositoryCreateRequest;
+use App\Cataloging\ValueObject\CategoryResolveRequest;
+use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
+use App\Cataloging\ValueObject\CategorySlugExistsRequest;
+use App\Cataloging\ValueObject\CategorySlugLookupRequest;
+use App\Cataloging\ValueObject\CategoryTreeRequest;
 
 /**
  * Defines the contract for category repository.

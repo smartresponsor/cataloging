@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 
 /**
  * Provides the category breadcrumb builder application service.

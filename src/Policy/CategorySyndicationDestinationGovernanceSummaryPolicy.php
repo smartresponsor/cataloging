@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
-use App\ValueObject\CategorySyndicationDestinationGovernanceSummary;
-use App\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummary;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInterface;
 
 /**
  * Provides the category syndication destination governance summary policy implementation.

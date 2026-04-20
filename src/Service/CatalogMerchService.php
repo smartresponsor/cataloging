@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CatalogCategoryBanner;
-use App\Entity\CatalogCategoryHtmlBlock;
-use App\Entity\CatalogCategoryPin;
-use App\ServiceInterface\CatalogMerchServiceInterface;
-use App\ValueObject\CategoryMerchBannerPublishRequest;
-use App\ValueObject\CategoryMerchPinCreateRequest;
+use App\Cataloging\Entity\CatalogCategoryBanner;
+use App\Cataloging\Entity\CatalogCategoryHtmlBlock;
+use App\Cataloging\Entity\CatalogCategoryPin;
+use App\Cataloging\ServiceInterface\CatalogMerchServiceInterface;
+use App\Cataloging\ValueObject\CategoryMerchBannerPublishRequest;
+use App\Cataloging\ValueObject\CategoryMerchPinCreateRequest;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 

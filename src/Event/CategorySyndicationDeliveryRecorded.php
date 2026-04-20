@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Event;
+namespace App\Cataloging\Event;
 
-use App\EventInterface\CategorySyndicationDeliveryRecordedInterface;
+use App\Cataloging\EventInterface\CategorySyndicationDeliveryRecordedInterface;
 
 /**
  * Represents the category syndication delivery recorded application event.

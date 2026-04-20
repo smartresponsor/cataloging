@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Security;
+namespace App\Cataloging\Security;
 
-use App\Entity\Category;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
-use App\Service\Security\CategoryRole;
+use App\Cataloging\Entity\Category;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\Service\Security\CategoryRole;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

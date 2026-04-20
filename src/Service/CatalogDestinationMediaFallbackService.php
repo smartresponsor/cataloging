@@ -3,15 +3,15 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryDestinationMediaFallbackEvaluated;
-use App\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
-use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
-use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-use App\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
-use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\Event\CategoryDestinationMediaFallbackEvaluated;
+use App\Cataloging\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
 /**
  * Provides the catalog destination media fallback service application service.

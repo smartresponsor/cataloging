@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Subscriber;
+namespace App\Cataloging\Subscriber;
 
-use App\Exception\CategoryNotFoundException;
+use App\Cataloging\Exception\CategoryNotFoundException;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -7,12 +7,12 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
-use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
-use App\Service\ArrayValueNormalizer;
-use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\Cataloging\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
+use App\Cataloging\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
+use App\Cataloging\Service\ArrayValueNormalizer;
+use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

@@ -3,9 +3,9 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Dto;
+namespace App\Cataloging\Tests\Dto;
 
-use App\Dto\CategoryAdminCategoryData;
+use App\Cataloging\Dto\CategoryAdminCategoryData;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryAdminCategoryDataTest extends TestCase

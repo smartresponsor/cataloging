@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Cataloging\Entity;
 
-use App\EntityInterface\CategoryMediaBindingInterface;
-use App\ValueObject\CategoryMediaRole;
-use App\ValueObjectInterface\CategoryMediaRoleInterface;
+use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\ValueObject\CategoryMediaRole;
+use App\Cataloging\ValueObjectInterface\CategoryMediaRoleInterface;
 
 /**
  * Represents the category media binding domain record.

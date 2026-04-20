@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Observability;
+namespace App\Cataloging\Tests\Observability;
 
-use App\Observability\MonologCorrelationProcessor;
-use App\Observability\RequestCorrelationIdProvider;
+use App\Cataloging\Observability\MonologCorrelationProcessor;
+use App\Cataloging\Observability\RequestCorrelationIdProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

@@ -3,15 +3,15 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryMediaBinding;
-use App\Event\CategoryMediaBound;
-use App\PolicyInterface\CategoryMediaGovernancePolicyInterface;
-use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-use App\ServiceInterface\CatalogMediaGovernanceServiceInterface;
-use App\ValueObject\CategoryMediaBindRequest;
-use App\ValueObject\CategoryMediaRole;
+use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Event\CategoryMediaBound;
+use App\Cataloging\PolicyInterface\CategoryMediaGovernancePolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogMediaGovernanceServiceInterface;
+use App\Cataloging\ValueObject\CategoryMediaBindRequest;
+use App\Cataloging\ValueObject\CategoryMediaRole;
 
 /**
  * Provides the catalog media governance service application service.

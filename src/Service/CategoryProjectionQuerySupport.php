@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ValueObject\CategoryProjectionValueNormalizer;
+use App\Cataloging\ValueObject\CategoryProjectionValueNormalizer;
 use Doctrine\DBAL\ParameterType;
 
 /**

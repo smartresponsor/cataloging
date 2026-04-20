@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\EntityInterface\CategoryMediaBindingInterface;
-use App\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
-use App\Service\CategoryMediaInputNormalizer;
-use App\ValueObject\CategoryDestinationMediaFallbackReport;
-use App\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
+use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
+use App\Cataloging\Service\CategoryMediaInputNormalizer;
+use App\Cataloging\ValueObject\CategoryDestinationMediaFallbackReport;
+use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaFallbackReportInterface;
 
 /**
  * Provides the category destination media fallback policy implementation.

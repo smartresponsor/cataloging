@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Security;
+namespace App\Cataloging\Service\Security;
 
-use App\Security\ExternalIdentityContext;
-use App\ServiceInterface\OidcJwtValidatorInterface;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\ServiceInterface\OidcJwtValidatorInterface;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

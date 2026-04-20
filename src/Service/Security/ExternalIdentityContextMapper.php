@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Security;
+namespace App\Cataloging\Service\Security;
 
-use App\Security\ExternalIdentityContext;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
 
 /**
  * Provides the external identity context mapper application service.

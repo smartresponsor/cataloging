@@ -3,11 +3,11 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryMoveCommand;
-use App\ServiceInterface\CategoryMoveInterface;
-use App\ValueObject\CatalogMoveRequest;
+use App\Cataloging\Command\CategoryMoveCommand;
+use App\Cataloging\ServiceInterface\CategoryMoveInterface;
+use App\Cataloging\ValueObject\CatalogMoveRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

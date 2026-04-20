@@ -4,7 +4,7 @@ services:
         autoconfigure: true
         public: false
 
-    App\Service\GraphqlResolver: ~
-    App\Service\GraphqlFacetResolver: ~
-    App\Service\Category\Graphql\CategoryGraphqlGuard: ~
-    App\Service\Category\Graphql\CategoryLoader: ~
+    App\Cataloging\Service\GraphqlResolver: ~
+    App\Cataloging\Service\GraphqlFacetResolver: ~
+    App\Cataloging\Service\Category\Graphql\CategoryGraphqlGuard: ~
+    App\Cataloging\Service\Category\Graphql\CategoryLoader: ~

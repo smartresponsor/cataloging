@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Cataloging\Tests\Service;
 
-use App\Security\ExternalIdentityContext;
-use App\Service\CategoryReadScopeService;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\ValueObject\CategoryProjectionCriteria;
-use App\ValueObject\CategoryReadScopeRequest;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\Service\CategoryReadScopeService;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;

@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface\Api;
+namespace App\Cataloging\ServiceInterface\Api;
 
-use App\ServiceInterface\GraphqlResolverInterface;
+use App\Cataloging\ServiceInterface\GraphqlResolverInterface;
 
 /**
  * Defines the contract for api graphql resolver.

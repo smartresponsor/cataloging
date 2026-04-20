@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Observability\RequestCorrelationIdProvider;
-use App\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\Observability\RequestCorrelationIdProvider;
+use App\Cataloging\ValueObject\WebhookDispatchRequest;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Request\Support;
+namespace App\Cataloging\Request\Support;
 
 final class RequestValueNormalizer
 {

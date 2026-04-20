@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Cataloging\Controller\Admin;
 
-use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

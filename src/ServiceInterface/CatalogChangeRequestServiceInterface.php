@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\Entity\CatalogCategoryChangeRequest;
-use App\Event\CategoryChangeRequestReviewed;
-use App\ValueObject\CategoryChangeRequestReviewRequest;
-use App\ValueObject\CategoryChangeRequestSubmitRequest;
+use App\Cataloging\Entity\CatalogCategoryChangeRequest;
+use App\Cataloging\Event\CategoryChangeRequestReviewed;
+use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
+use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;
 
 /**
  * Defines the contract for catalog change request service.

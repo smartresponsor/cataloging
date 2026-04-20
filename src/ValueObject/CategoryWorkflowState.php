@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Cataloging\ValueObject;
 
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
 
 /**
  * Represents the category workflow state value.

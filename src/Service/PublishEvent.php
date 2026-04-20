@@ -9,7 +9,7 @@ Owner: Marketing America Corp
 Author: Oleksandr Tishchenко <dev@highhopesamerica.com>
 */
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
 /**
  * Provides the publish event application service.

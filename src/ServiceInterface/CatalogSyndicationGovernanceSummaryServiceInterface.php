@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
-use App\ValueObject\CategorySyndicationGovernanceSummaryRequest;
+use App\Cataloging\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
+use App\Cataloging\ValueObject\CategorySyndicationGovernanceSummaryRequest;
 
 /**
  * Defines the contract for catalog syndication governance summary service.

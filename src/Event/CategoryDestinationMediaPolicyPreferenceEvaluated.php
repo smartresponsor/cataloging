@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Event;
+namespace App\Cataloging\Event;
 
-use App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
+use App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
 
 /**
  * Represents the category destination media policy preference evaluated application event.

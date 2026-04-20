@@ -3,15 +3,15 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Traceability;
+namespace App\Cataloging\Service\Traceability;
 
-use App\Projection\CategoryActorTraceabilityView;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
-use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
-use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
-use App\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface;
+use App\Cataloging\Projection\CategoryActorTraceabilityView;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface;
+use App\Cataloging\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface;
 
 /**
  * Provides the category actor traceability view builder application service.

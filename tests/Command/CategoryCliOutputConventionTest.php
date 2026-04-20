@@ -6,11 +6,11 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryReviewQueueListCommand;
-use App\ServiceInterface\CatalogReviewQueueServiceInterface;
-use App\ValueObject\CategoryReviewQueueRequest;
+use App\Cataloging\Command\CategoryReviewQueueListCommand;
+use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\Cataloging\ValueObject\CategoryReviewQueueRequest;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;

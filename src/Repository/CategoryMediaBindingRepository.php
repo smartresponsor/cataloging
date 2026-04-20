@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\EntityInterface\CategoryMediaBindingInterface;
-use App\EventInterface\CategoryMediaBoundInterface;
-use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\EventInterface\CategoryMediaBoundInterface;
+use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
 
 /**
  * Provides repository services for category media binding repository.

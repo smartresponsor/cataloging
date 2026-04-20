@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
-use App\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
-use App\EventInterface\CategorySyndicationRetryScheduledInterface;
+use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
+use App\Cataloging\EventInterface\CategorySyndicationRetryScheduledInterface;
 
 /**
  * Defines the contract for catalog syndication retry service.

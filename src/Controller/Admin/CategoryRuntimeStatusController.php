@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Cataloging\Controller\Admin;
 
-use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
+use App\Cataloging\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 

@@ -24,7 +24,7 @@ The component already has workflow, review, and publication quality foundations.
 ## Guardrails preserved
 
 - single Symfony-oriented application root
-- `App\ -> src/`
+- `App\Cataloging\ -> src/`
 - no `Port` / `Adaptor` / hexagonal skeleton
 - no parallel application tree
 - no domain-root wrapper restoration

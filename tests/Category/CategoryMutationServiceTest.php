@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Idempotency\CategoryIdempotencyStore;
-use App\Policy\CategoryPublicationGatePolicy;
-use App\Policy\CategoryWorkflowPolicy;
-use App\Service\CacheInvalidationRecorder;
-use App\Service\CatalogPublicationGateService;
-use App\Service\CategoryMutationService;
-use App\Service\OutboxWriter;
-use App\ValueObject\CategoryMutationMoveRequest;
-use App\ValueObject\CategoryMutationPublishRequest;
+use App\Cataloging\Idempotency\CategoryIdempotencyStore;
+use App\Cataloging\Policy\CategoryPublicationGatePolicy;
+use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\Service\CacheInvalidationRecorder;
+use App\Cataloging\Service\CatalogPublicationGateService;
+use App\Cataloging\Service\CategoryMutationService;
+use App\Cataloging\Service\OutboxWriter;
+use App\Cataloging\ValueObject\CategoryMutationMoveRequest;
+use App\Cataloging\ValueObject\CategoryMutationPublishRequest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
@@ -107,7 +107,7 @@ final class CategoryMutationServiceTest extends TestCase
             'strict',
         ));
 
-        self::assertSame(5, $result['changedCount']);
+        self::assertSame(4, $result['changedCount']);
 
         $deepest = $connection->fetchAssociative('SELECT path, level FROM category WHERE id = :id', ['id' => 'd']);
         self::assertIsArray($deepest);

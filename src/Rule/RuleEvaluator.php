@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Rule;
+namespace App\Cataloging\Rule;
 
 /**
  * Provides the rule evaluator implementation.

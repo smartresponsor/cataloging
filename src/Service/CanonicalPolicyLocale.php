@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ValueObject\CategoryLocaleCanonicalUrlRequest;
+use App\Cataloging\ValueObject\CategoryLocaleCanonicalUrlRequest;
 
 /**
  * Provides the canonical policy locale application service.

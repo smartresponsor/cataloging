@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Cataloging\ValueObject;
 
-use App\ValueObjectInterface\CategoryMediaRoleInterface;
+use App\Cataloging\ValueObjectInterface\CategoryMediaRoleInterface;
 
 /**
  * Represents the category media role value.

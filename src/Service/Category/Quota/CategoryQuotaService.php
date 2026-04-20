@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Quota;
+namespace App\Cataloging\Service\Category\Quota;
 
-use App\ServiceInterface\Category\CategoryQuotaServiceInterface;
-use App\ServiceInterface\Quota\CacheStoreInterface;
-use App\ValueObject\CategoryQuotaAllowanceRequest;
+use App\Cataloging\ServiceInterface\Category\CategoryQuotaServiceInterface;
+use App\Cataloging\ServiceInterface\Quota\CacheStoreInterface;
+use App\Cataloging\ValueObject\CategoryQuotaAllowanceRequest;
 
 /**
  * Provides the category quota service application service.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
 /**
  * Provides reusable array normalization helpers for command and service layers.

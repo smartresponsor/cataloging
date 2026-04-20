@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Cataloging\Entity;
 
-use App\EntityInterface\CategoryChangeRequestInterface;
-use App\ValueObject\CategoryChangeRequestState;
-use App\ValueObjectInterface\CategoryChangeRequestStateInterface;
+use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\ValueObjectInterface\CategoryChangeRequestStateInterface;
 
 /**
  * Represents the category change request domain record.

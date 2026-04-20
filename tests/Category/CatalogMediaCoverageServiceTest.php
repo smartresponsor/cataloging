@@ -6,18 +6,18 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryMediaCoveragePolicy;
-use App\Policy\CategoryMediaGovernancePolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Service\CatalogMediaCoverageService;
-use App\Service\CatalogMediaGovernanceService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryEvaluationRequest;
-use App\ValueObject\CategoryMediaBindingScope;
-use App\ValueObject\CategoryMediaBindingState;
-use App\ValueObject\CategoryMediaBindRequest;
+use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
+use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Service\CatalogMediaCoverageService;
+use App\Cataloging\Service\CatalogMediaGovernanceService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryMediaBindingScope;
+use App\Cataloging\ValueObject\CategoryMediaBindingState;
+use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaCoverageServiceTest extends TestCase

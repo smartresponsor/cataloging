@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CategoryGraphqlMoveRequest;
-use App\ValueObject\CategoryGraphqlNodeRequest;
-use App\ValueObject\CategoryGraphqlPublishRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlMoveRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlPublishRequest;
 
 /**
  * Defines the contract for graphql resolver.

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\Kernel;
+use App\Cataloging\Kernel;
 use Symfony\Component\Routing\RouteCollection;
 
 require dirname(__DIR__, 2) . '/vendor/autoload.php';

@@ -23,7 +23,7 @@ doctrine:
                         is_bundle: false
                         type: attribute
                         dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity'
+                        prefix: 'App\Cataloging\Entity'
                         alias: App
             infra:
                 connection: infra
@@ -33,5 +33,5 @@ doctrine:
                         is_bundle: false
                         type: attribute
                         dir: '%kernel.project_dir%/src/Projection'
-                        prefix: 'App\Projection'
+                        prefix: 'App\Cataloging\Projection'
                         alias: AppInfra

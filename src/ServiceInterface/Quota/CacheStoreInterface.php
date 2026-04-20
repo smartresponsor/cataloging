@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface\Quota;
+namespace App\Cataloging\ServiceInterface\Quota;
 
 /**
  * Defines the contract for cache store.

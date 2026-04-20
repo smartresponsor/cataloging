@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryCompletenessEvaluateCommand;
-use App\Policy\CategoryCompletenessPolicy;
-use App\Service\CatalogCompletenessService;
+use App\Cataloging\Command\CategoryCompletenessEvaluateCommand;
+use App\Cataloging\Policy\CategoryCompletenessPolicy;
+use App\Cataloging\Service\CatalogCompletenessService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

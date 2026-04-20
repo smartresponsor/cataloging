@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryMediaReadinessEvaluateCommand;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\Command\CategoryMediaReadinessEvaluateCommand;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -23,7 +23,7 @@ final class CategoryMediaReadinessEvaluateCommandTest extends TestCase
         $service->expects(self::once())
             ->method('evaluate')
             ->with(self::callback(static fn (mixed $request): bool => $request instanceof CategoryDestinationMediaEvaluationRequest && 'cli-preview-destination' === $request->destinationId() && 'cat-1' === $request->categoryId() && 'ops' === $request->actorId() && 'check' === $request->reason()))
-            ->willReturn(new class implements \App\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface {
+            ->willReturn(new class implements \App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface {
                 /**
                  * @param array{publishable: bool, checks: array{destinationMediaPublishable: bool}} $payload
                  */

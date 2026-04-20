@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CategorySlugGeneratorInterface;
-use App\ValueObject\CategorySlugExistsRequest;
-use App\ValueObject\CategorySlugGenerationRequest;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\ServiceInterface\CategorySlugGeneratorInterface;
+use App\Cataloging\ValueObject\CategorySlugExistsRequest;
+use App\Cataloging\ValueObject\CategorySlugGenerationRequest;
 
 /**
  * Provides the category slug generator application service.

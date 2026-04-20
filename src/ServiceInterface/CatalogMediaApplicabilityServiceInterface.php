@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
-use App\ValueObject\CategoryEvaluationRequest;
+use App\Cataloging\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
+use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
 /**
  * Defines the contract for catalog media applicability service.

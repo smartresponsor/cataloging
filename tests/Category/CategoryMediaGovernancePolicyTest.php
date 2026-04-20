@@ -6,13 +6,13 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryMediaGovernancePolicy;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryMediaBindingScope;
-use App\ValueObject\CategoryMediaBindingState;
-use App\ValueObject\CategoryMediaBindRequest;
+use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryMediaBindingScope;
+use App\Cataloging\ValueObject\CategoryMediaBindingState;
+use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryMediaGovernancePolicyTest extends TestCase

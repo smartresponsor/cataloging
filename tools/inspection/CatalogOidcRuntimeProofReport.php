@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Service\OidcJwtVerifier;
-use App\Service\OidcJwtValidator;
+use App\Cataloging\Service\OidcJwtVerifier;
+use App\Cataloging\Service\OidcJwtValidator;
 
 require dirname(__DIR__, 2) . '/vendor/autoload.php';
 

@@ -6,13 +6,13 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryPublicationQualityPolicy;
-use App\Service\CatalogPublicationQualityService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryPublicationQualityEvaluationRequest;
-use App\ValueObject\CategoryPublicationQualityInput;
+use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
+use App\Cataloging\Service\CatalogPublicationQualityService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryPublicationQualityEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryPublicationQualityInput;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationQualityServiceTest extends TestCase

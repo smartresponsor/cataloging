@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
-use App\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
-use App\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
-use App\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
+use App\Cataloging\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
+use App\Cataloging\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
 
 /**
  * Provides the catalog syndication destination governance summary service application service.

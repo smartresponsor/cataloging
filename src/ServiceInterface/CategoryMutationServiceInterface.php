@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CategoryMutationMoveRequest;
-use App\ValueObject\CategoryMutationPublishRequest;
+use App\Cataloging\ValueObject\CategoryMutationMoveRequest;
+use App\Cataloging\ValueObject\CategoryMutationPublishRequest;
 
 /**
  * Defines the contract for category mutation service.

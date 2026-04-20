@@ -6,12 +6,12 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryCompletenessPolicy;
-use App\Service\CatalogCompletenessService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryEvaluationRequest;
+use App\Cataloging\Policy\CategoryCompletenessPolicy;
+use App\Cataloging\Service\CatalogCompletenessService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCompletenessServiceTest extends TestCase

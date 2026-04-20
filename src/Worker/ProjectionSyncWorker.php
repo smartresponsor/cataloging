@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Worker;
+namespace App\Cataloging\Worker;
 
-use App\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
 
 /**
  * Provides the projection sync worker implementation.

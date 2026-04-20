@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\PolicyInterface;
+namespace App\Cataloging\PolicyInterface;
 
-use App\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInterface;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationDestinationGovernanceSummaryInterface;
 
 /**
  * Defines the contract for category syndication destination governance summary policy.

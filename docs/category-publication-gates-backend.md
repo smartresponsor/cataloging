@@ -21,10 +21,10 @@ Optional-but-tracked warnings:
 
 ## Backend contracts
 
-- `App\ValueObject\CategoryPublicationReadiness`
-- `App\Policy\CategoryPublicationGatePolicy`
-- `App\Service\CategoryPublicationGateService`
-- `App\Event\CategoryPublicationGateEvaluated`
+- `App\Cataloging\ValueObject\CategoryPublicationReadiness`
+- `App\Cataloging\Policy\CategoryPublicationGatePolicy`
+- `App\Cataloging\Service\CategoryPublicationGateService`
+- `App\Cataloging\Event\CategoryPublicationGateEvaluated`
 
 ## Current scope
 

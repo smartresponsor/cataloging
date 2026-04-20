@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Observability;
+namespace App\Cataloging\Observability;
 
 /**
  * Provides the monolog correlation processor implementation.

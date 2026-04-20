@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Cataloging;
 
-use App\DependencyInjection\CatalogingExtension;
+use App\Cataloging\DependencyInjection\CatalogingExtension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

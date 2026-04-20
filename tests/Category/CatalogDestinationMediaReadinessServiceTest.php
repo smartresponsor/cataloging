@@ -6,26 +6,26 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Policy\CategoryMediaApplicabilityPolicy;
-use App\Policy\CategoryMediaGovernancePolicy;
-use App\Policy\CategorySyndicationDestinationPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaReadinessService;
-use App\Service\CatalogMediaApplicabilityService;
-use App\Service\CatalogMediaGovernanceService;
-use App\Service\CatalogSyndicationDestinationService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\ValueObject\CategoryMediaBindingScope;
-use App\ValueObject\CategoryMediaBindingState;
-use App\ValueObject\CategoryMediaBindRequest;
-use App\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\ValueObject\CategorySyndicationDestinationDefinition;
-use App\ValueObject\CategorySyndicationDestinationRegisterRequest;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
+use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
+use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\Service\CatalogMediaGovernanceService;
+use App\Cataloging\Service\CatalogSyndicationDestinationService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryMediaBindingScope;
+use App\Cataloging\ValueObject\CategoryMediaBindingState;
+use App\Cataloging\ValueObject\CategoryMediaBindRequest;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaReadinessServiceTest extends TestCase

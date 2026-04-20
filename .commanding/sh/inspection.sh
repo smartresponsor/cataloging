@@ -536,47 +536,47 @@ deptrac:
     - name: Controller
       collectors:
         - type: className
-          regex: '^App\\Controller\\.*'
+          regex: '^App\Cataloging\\Controller\\.*'
 
     - name: Http
       collectors:
         - type: className
-          regex: '^App\\(Request|Response|Dto|Command)\\.*'
+          regex: '^App\Cataloging\\(Request|Response|Dto|Command)\\.*'
 
     - name: ServiceInterface
       collectors:
         - type: className
-          regex: '^App\\ServiceInterface\\.*'
+          regex: '^App\Cataloging\\ServiceInterface\\.*'
 
     - name: Service
       collectors:
         - type: className
-          regex: '^App\\Service\\.*'
+          regex: '^App\Cataloging\\Service\\.*'
 
     - name: RepositoryInterface
       collectors:
         - type: className
-          regex: '^App\\RepositoryInterface\\.*'
+          regex: '^App\Cataloging\\RepositoryInterface\\.*'
 
     - name: Repository
       collectors:
         - type: className
-          regex: '^App\\Repository\\.*'
+          regex: '^App\Cataloging\\Repository\\.*'
 
     - name: Entity
       collectors:
         - type: className
-          regex: '^App\\Entity\\.*'
+          regex: '^App\Cataloging\\Entity\\.*'
 
     - name: InfrastructureInterface
       collectors:
         - type: className
-          regex: '^App\\InfrastructureInterface\\.*'
+          regex: '^App\Cataloging\\InfrastructureInterface\\.*'
 
     - name: Infrastructure
       collectors:
         - type: className
-          regex: '^App\\Infrastructure\\.*'
+          regex: '^App\Cataloging\\Infrastructure\\.*'
 
   ruleset:
     Controller:
@@ -614,7 +614,7 @@ declare(strict_types=1);
 
 // Managed by Commanding inspection
 
-use App\Kernel;
+use App\Cataloging\Kernel;
 use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -639,7 +639,7 @@ declare(strict_types=1);
 
 // Managed by Commanding inspection
 
-use App\Kernel;
+use App\Cataloging\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 

@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
-use App\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
-use App\ValueObject\CategorySyndicationHistoryRequest;
+use App\Cataloging\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
+use App\Cataloging\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
+use App\Cataloging\ValueObject\CategorySyndicationHistoryRequest;
 
 /**
  * Defines the contract for catalog syndication history service.

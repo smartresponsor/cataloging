@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Cataloging\ValueObject;
 
 /**
  * Value object describing category merch pin creation input.

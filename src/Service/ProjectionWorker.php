@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Observability\CatalogProjectionMetrics;
-use App\OutboxInterface\CategoryOutboxRetryInterface;
-use App\ProjectionInterface\CategoryProjectionSyncInterface;
+use App\Cataloging\Observability\CatalogProjectionMetrics;
+use App\Cataloging\OutboxInterface\CategoryOutboxRetryInterface;
+use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 

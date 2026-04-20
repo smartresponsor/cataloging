@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Security\CategoryVoter;
-use App\Security\ExternalIdentityContext;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\ServiceInterface\TenantRolePolicyInterface;
+use App\Cataloging\Security\CategoryVoter;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;

@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Importer;
+namespace App\Cataloging\Importer;
 
-use App\ImporterInterface\CategoryNdjsonImporterInterface;
-use App\Service\MetaPayloadNormalizer;
-use App\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
-use App\ValueObject\CategoryCreateRequest;
-use App\ValueObject\CategoryLinkRequest;
+use App\Cataloging\ImporterInterface\CategoryNdjsonImporterInterface;
+use App\Cataloging\Service\MetaPayloadNormalizer;
+use App\Cataloging\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\Cataloging\ValueObject\CategoryCreateRequest;
+use App\Cataloging\ValueObject\CategoryLinkRequest;
 
 /**
  * Provides the category ndjson importer implementation.

@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
-use App\Service\CategoryMediaInputNormalizer;
-use App\ValueObject\CategoryDestinationMediaPolicyPreference;
-use App\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
+use App\Cataloging\Service\CategoryMediaInputNormalizer;
+use App\Cataloging\ValueObject\CategoryDestinationMediaPolicyPreference;
+use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaPolicyPreferenceInterface;
 
 /**
  * Provides the category destination media policy preference policy implementation.

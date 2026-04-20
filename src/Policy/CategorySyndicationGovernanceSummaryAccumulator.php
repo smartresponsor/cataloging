@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\Service\ArrayValueNormalizer;
+use App\Cataloging\Service\ArrayValueNormalizer;
 
 /**
  * Accumulates governance trail counters shared by governance summary policies.

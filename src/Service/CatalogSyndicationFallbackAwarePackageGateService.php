@@ -3,17 +3,17 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationFallbackAwarePackageGated;
-use App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
-use App\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
-use App\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
-use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
-use App\ServiceInterface\CatalogSyndicationMappingServiceInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\Event\CategorySyndicationFallbackAwarePackageGated;
+use App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationMappingServiceInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
  * Provides the catalog syndication fallback aware package gate service application service.

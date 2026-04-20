@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Idempotency;
+namespace App\Cataloging\Idempotency;
 
-use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
+use App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;

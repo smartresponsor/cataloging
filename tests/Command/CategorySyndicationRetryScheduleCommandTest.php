@@ -7,14 +7,14 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategorySyndicationRetryScheduleCommand;
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\Event\CategorySyndicationRetryScheduled;
-use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\Command\CategorySyndicationRetryScheduleCommand;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\Event\CategorySyndicationRetryScheduled;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

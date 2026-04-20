@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\EntityInterface\CategoryChangeRequestInterface;
-use App\EventInterface\CategoryChangeRequestReviewedInterface;
-use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\EventInterface\CategoryChangeRequestReviewedInterface;
+use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
 
 /**
  * Provides repository services for category change request repository.

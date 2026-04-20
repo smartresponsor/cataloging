@@ -6,12 +6,12 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category\Infrastructure;
+namespace App\Cataloging\Tests\Category\Infrastructure;
 
-use App\Infrastructure\HttpWebhookSender;
-use App\Infrastructure\OrderWebhookPublisher;
-use App\Infrastructure\ProductWebhookPublisher;
-use App\ValueObject\WebhookPayloadRequest;
+use App\Cataloging\Infrastructure\HttpWebhookSender;
+use App\Cataloging\Infrastructure\OrderWebhookPublisher;
+use App\Cataloging\Infrastructure\ProductWebhookPublisher;
+use App\Cataloging\ValueObject\WebhookPayloadRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;

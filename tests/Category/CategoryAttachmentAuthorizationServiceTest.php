@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
-use App\Security\ExternalIdentityContext;
-use App\Service\CategoryAttachmentAuthorizationService;
-use App\Service\CategoryTenantAccessEvaluator;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\ServiceInterface\TenantRolePolicyInterface;
+use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\Service\CategoryAttachmentAuthorizationService;
+use App\Cataloging\Service\CategoryTenantAccessEvaluator;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;

@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Cataloging\Entity;
 
-use App\EntityInterface\CategoryWorkflowInterface;
-use App\ValueObject\CategoryWorkflowState;
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\Cataloging\EntityInterface\CategoryWorkflowInterface;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
+use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
 
 /**
  * Represents the category workflow domain record.

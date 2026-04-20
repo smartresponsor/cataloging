@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Security;
+namespace App\Cataloging\Security;
 
 /**
  * Provides the external identity context implementation.

@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ImporterInterface;
+namespace App\Cataloging\ImporterInterface;
 
 /**
  * Defines the contract for category ndjson importer.

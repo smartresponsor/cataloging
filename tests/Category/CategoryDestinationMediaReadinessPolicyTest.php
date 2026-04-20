@@ -6,11 +6,11 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\ValueObject\CategoryDestinationMediaReadinessContext;
-use App\ValueObject\CategoryDestinationMediaReadinessState;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryDestinationMediaReadinessPolicyTest extends TestCase

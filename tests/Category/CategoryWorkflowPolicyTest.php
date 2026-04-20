@@ -6,10 +6,10 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryWorkflowPolicy;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryWorkflowPolicyTest extends TestCase

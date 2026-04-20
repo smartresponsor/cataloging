@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
 
 /**
  * Provides the category syndication destination policy implementation.

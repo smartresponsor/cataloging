@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\ServiceInterface\GraphqlResolverInterface;
-use App\ValueObject\CategoryGraphqlMoveRequest;
-use App\ValueObject\CategoryGraphqlNodeRequest;
-use App\ValueObject\CategoryGraphqlPublishRequest;
+use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\GraphqlResolverInterface;
+use App\Cataloging\ValueObject\CategoryGraphqlMoveRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlPublishRequest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;

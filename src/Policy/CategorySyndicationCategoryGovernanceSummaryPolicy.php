@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
-use App\Service\CategoryPayloadValueNormalizer;
-use App\ValueObject\CategorySyndicationCategoryGovernanceSummary;
-use App\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
+use App\Cataloging\Service\CategoryPayloadValueNormalizer;
+use App\Cataloging\ValueObject\CategorySyndicationCategoryGovernanceSummary;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationCategoryGovernanceSummaryInterface;
 
 /**
  * Provides the category syndication category governance summary policy implementation.

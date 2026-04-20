@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Cataloging\Tests\Service;
 
-use App\Observability\RequestCorrelationIdProvider;
-use App\Service\WebhookDispatcher;
-use App\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\Observability\RequestCorrelationIdProvider;
+use App\Cataloging\Service\WebhookDispatcher;
+use App\Cataloging\ValueObject\WebhookDispatchRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;

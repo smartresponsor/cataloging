@@ -3,15 +3,15 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryWorkflow;
-use App\Event\CategoryWorkflowTransitioned;
-use App\PolicyInterface\CategoryWorkflowPolicyInterface;
-use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
-use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\ValueObject\CategoryWorkflowState;
-use App\ValueObject\CategoryWorkflowTransitionRequest;
+use App\Cataloging\Entity\CategoryWorkflow;
+use App\Cataloging\Event\CategoryWorkflowTransitioned;
+use App\Cataloging\PolicyInterface\CategoryWorkflowPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
+use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
 
 /**
  * Provides the catalog workflow transition service application service.

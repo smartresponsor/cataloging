@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Idempotency\CategoryIdempotencyStore;
+use App\Cataloging\Idempotency\CategoryIdempotencyStore;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;

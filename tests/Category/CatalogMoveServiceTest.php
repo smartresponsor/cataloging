@@ -3,18 +3,20 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Service\CatalogMoveService;
-use App\ValueObject\CatalogMoveRequest;
+use App\Cataloging\Service\CatalogMoveService;
+use App\Cataloging\ValueObject\CatalogMoveRequest;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMoveServiceTest extends TestCase
 {
     public function testMoveRebasesSubtreeAndReturnsRedirects(): void
     {
-        $pdo = $this->createPdo();
-        $service = new CatalogMoveService($pdo);
+        $connection = $this->createConnection();
+        $service = new CatalogMoveService($connection);
 
         /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
         $result = $service->move(new CatalogMoveRequest('electronics', 'fashion', 'main-tree', 'strict'));
@@ -27,9 +29,7 @@ final class CatalogMoveServiceTest extends TestCase
         self::assertSame('root.electronics.phones', $redirects[1]['from']);
         self::assertSame('root.fashion.electronics.phones', $redirects[1]['to']);
 
-        $statement = $pdo->query('SELECT id, path, depth FROM category ORDER BY id ASC');
-        self::assertInstanceOf(\PDOStatement::class, $statement);
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $connection->fetchAllAssociative('SELECT id, path, depth FROM category ORDER BY id ASC');
         $indexed = [];
         foreach ($rows as $row) {
             if (!is_array($row)) {
@@ -52,8 +52,8 @@ final class CatalogMoveServiceTest extends TestCase
 
     public function testMoveDryRunRollsBackChanges(): void
     {
-        $pdo = $this->createPdo();
-        $service = new CatalogMoveService($pdo);
+        $connection = $this->createConnection();
+        $service = new CatalogMoveService($connection);
 
         /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
         $result = $service->move(new CatalogMoveRequest('electronics', 'fashion', 'main-tree', 'strict', true, 'en_US'));
@@ -62,16 +62,15 @@ final class CatalogMoveServiceTest extends TestCase
         self::assertSame(2, $changed);
         self::assertCount(2, $redirects);
 
-        $statement = $pdo->query("SELECT path FROM category WHERE id = 'electronics'");
-        self::assertInstanceOf(\PDOStatement::class, $statement);
-        $path = $statement->fetchColumn();
-        self::assertSame('root.electronics', $path);
+        $path = $connection->fetchOne("SELECT path FROM category WHERE id = 'electronics'");
+        self::assertIsScalar($path);
+        self::assertSame('root.electronics', (string) $path);
     }
 
     public function testMoveRejectsCycles(): void
     {
-        $pdo = $this->createPdo();
-        $service = new CatalogMoveService($pdo);
+        $connection = $this->createConnection();
+        $service = new CatalogMoveService($connection);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot move a node under its own descendant.');
@@ -79,18 +78,17 @@ final class CatalogMoveServiceTest extends TestCase
         $service->move(new CatalogMoveRequest('electronics', 'phones', 'main-tree', 'strict'));
     }
 
-    private function createPdo(): \PDO
+    private function createConnection(): Connection
     {
-        $pdo = new \PDO('sqlite::memory:');
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $pdo->exec('CREATE TABLE category (id TEXT PRIMARY KEY, slug TEXT NOT NULL, path TEXT NOT NULL, depth INTEGER NOT NULL)');
-        $pdo->exec("INSERT INTO category (id, slug, path, depth) VALUES
+        $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
+        $connection->executeStatement('CREATE TABLE category (id TEXT PRIMARY KEY, slug TEXT NOT NULL, path TEXT NOT NULL, depth INTEGER NOT NULL)');
+        $connection->executeStatement("INSERT INTO category (id, slug, path, depth) VALUES
             ('root', 'root', 'root', 0),
             ('electronics', 'electronics', 'root.electronics', 1),
             ('phones', 'phones', 'root.electronics.phones', 2),
             ('fashion', 'fashion', 'root.fashion', 1)
         ");
 
-        return $pdo;
+        return $connection;
     }
 }

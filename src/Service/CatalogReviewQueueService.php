@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\EntityInterface\CategoryChangeRequestInterface;
-use App\EntityInterface\CategoryReviewAssignmentInterface;
-use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
-use App\ServiceInterface\CatalogReviewQueueServiceInterface;
-use App\ValueObject\CategoryChangeRequestState;
-use App\ValueObject\CategoryReviewQueueItem;
-use App\ValueObject\CategoryReviewQueueRequest;
+use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\EntityInterface\CategoryReviewAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\ValueObject\CategoryReviewQueueItem;
+use App\Cataloging\ValueObject\CategoryReviewQueueRequest;
 
 /**
  * Provides the catalog review queue service application service.

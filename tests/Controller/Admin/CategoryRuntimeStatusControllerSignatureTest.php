@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Controller\Admin;
+namespace App\Cataloging\Tests\Controller\Admin;
 
-use App\Controller\Admin\CategoryRuntimeStatusController;
-use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
+use App\Cataloging\Controller\Admin\CategoryRuntimeStatusController;
+use App\Cataloging\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryRuntimeStatusControllerSignatureTest extends TestCase

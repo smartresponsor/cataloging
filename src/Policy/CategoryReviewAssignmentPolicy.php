@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\EntityInterface\CategoryChangeRequestInterface;
-use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
-use App\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
 
 /**
  * Provides the category review assignment policy implementation.

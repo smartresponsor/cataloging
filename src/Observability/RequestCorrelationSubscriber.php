@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Observability;
+namespace App\Cataloging\Observability;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;

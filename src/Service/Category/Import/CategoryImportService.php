@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Import;
+namespace App\Cataloging\Service\Category\Import;
 
-use App\ServiceInterface\Category\CategoryImportServiceInterface;
-use App\ServiceInterface\Import\ImportRepositoryInterface;
+use App\Cataloging\ServiceInterface\Category\CategoryImportServiceInterface;
+use App\Cataloging\ServiceInterface\Import\ImportRepositoryInterface;
 
 /**
  * Provides the category import service application service.

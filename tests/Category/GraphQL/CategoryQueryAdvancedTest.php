@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Category\GraphQL;
+namespace App\Cataloging\Tests\Category\GraphQL;
 
 use PHPUnit\Framework\TestCase;
 

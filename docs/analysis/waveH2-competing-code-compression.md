@@ -3,23 +3,23 @@
 Base: current slice + G2 + voter compatibility fix.
 
 Applied in this wave:
-- Api GraphqlResolver collapsed into wrapper over canonical App\Service\GraphqlResolver
-- Integration QuotaGuard collapsed into wrapper over App\Service\QuotaGuard
-- Integration SseBroadcaster collapsed into wrapper over App\Service\SseBroadcaster
-- Security TenantRolePolicy collapsed into wrapper over App\Service\TenantRolePolicy
-- Security JwkConverter collapsed into wrapper over App\Service\JwkConverter
-- Seo CanonicalPolicy collapsed into wrapper over App\Service\CanonicalPolicy
-- Seo RedirectRule collapsed into wrapper over App\Service\RedirectRule
-- Seo SlugVersionPolicy collapsed into wrapper over App\Service\SlugVersionPolicy
+- Api GraphqlResolver collapsed into wrapper over canonical App\Cataloging\Service\GraphqlResolver
+- Integration QuotaGuard collapsed into wrapper over App\Cataloging\Service\QuotaGuard
+- Integration SseBroadcaster collapsed into wrapper over App\Cataloging\Service\SseBroadcaster
+- Security TenantRolePolicy collapsed into wrapper over App\Cataloging\Service\TenantRolePolicy
+- Security JwkConverter collapsed into wrapper over App\Cataloging\Service\JwkConverter
+- Seo CanonicalPolicy collapsed into wrapper over App\Cataloging\Service\CanonicalPolicy
+- Seo RedirectRule collapsed into wrapper over App\Cataloging\Service\RedirectRule
+- Seo SlugVersionPolicy collapsed into wrapper over App\Cataloging\Service\SlugVersionPolicy
 - Interface duplicates normalized to alias-extensions:
-  - App\ServiceInterface\Api\GraphqlResolverInterface
-  - App\ServiceInterface\Security\TenantRolePolicyInterface
-  - App\ServiceInterface\Integration\WebhookClientInterface
-  - App\ServiceInterface\Seo\CanonicalPolicyInterface
+  - App\Cataloging\ServiceInterface\Api\GraphqlResolverInterface
+  - App\Cataloging\ServiceInterface\Security\TenantRolePolicyInterface
+  - App\Cataloging\ServiceInterface\Integration\WebhookClientInterface
+  - App\Cataloging\ServiceInterface\Seo\CanonicalPolicyInterface
 
 Intentionally left for a later semantic wave:
-- App\Api\Graphql\CategoryResolver vs App\GraphQl\CategoryResolver
-- App\Projection\CategoryProjectionRunner vs App\Runner\CategoryProjectionRunner
-- App\Service\WebhookClient vs App\Service\Integration\WebhookClient
-- App\Service\OidcJwtVerifier vs App\Service\Security\OidcJwtVerifier
-- App\Service\SitemapGenerator vs App\Service\Seo\SitemapGenerator
+- App\Cataloging\Api\Graphql\CategoryResolver vs App\Cataloging\GraphQl\CategoryResolver
+- App\Cataloging\Projection\CategoryProjectionRunner vs App\Cataloging\Runner\CategoryProjectionRunner
+- App\Cataloging\Service\WebhookClient vs App\Cataloging\Service\Integration\WebhookClient
+- App\Cataloging\Service\OidcJwtVerifier vs App\Cataloging\Service\Security\OidcJwtVerifier
+- App\Cataloging\Service\SitemapGenerator vs App\Cataloging\Service\Seo\SitemapGenerator

@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryAccessAssignment;
-use App\EntityInterface\CategoryAccessAssignmentInterface;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
-use App\ServiceInterface\CatalogAccessAssignmentServiceInterface;
-use App\ValueObject\CategoryAccessAssignmentRequest;
-use App\ValueObject\CategoryAccessAssignmentSelection;
+use App\Cataloging\Entity\CategoryAccessAssignment;
+use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogAccessAssignmentServiceInterface;
+use App\Cataloging\ValueObject\CategoryAccessAssignmentRequest;
+use App\Cataloging\ValueObject\CategoryAccessAssignmentSelection;
 use Random\RandomException;
 
 /**

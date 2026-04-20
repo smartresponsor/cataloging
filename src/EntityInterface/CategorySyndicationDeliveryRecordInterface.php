@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\EntityInterface;
+namespace App\Cataloging\EntityInterface;
 
-use App\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
 
 /**
  * Defines the contract for category syndication delivery record.

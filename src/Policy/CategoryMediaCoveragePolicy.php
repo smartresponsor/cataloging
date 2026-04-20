@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\EntityInterface\CategoryMediaBindingInterface;
-use App\PolicyInterface\CategoryMediaCoveragePolicyInterface;
-use App\ValueObject\CategoryMediaCoverageReport;
-use App\ValueObjectInterface\CategoryMediaCoverageReportInterface;
+use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\PolicyInterface\CategoryMediaCoveragePolicyInterface;
+use App\Cataloging\ValueObject\CategoryMediaCoverageReport;
+use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 
 /**
  * Provides the category media coverage policy implementation.

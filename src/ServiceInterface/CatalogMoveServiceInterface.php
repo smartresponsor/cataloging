@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CatalogMoveRequest;
+use App\Cataloging\ValueObject\CatalogMoveRequest;
 
 /**
  * Defines the contract for catalog move service.

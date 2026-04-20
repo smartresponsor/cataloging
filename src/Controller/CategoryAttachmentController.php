@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Request\CategoryAttachmentAddRequest;
-use App\Service\AttachmentService;
-use App\Service\CategoryAttachmentAuthorizationService;
+use App\Cataloging\Request\CategoryAttachmentAddRequest;
+use App\Cataloging\Service\AttachmentService;
+use App\Cataloging\Service\CategoryAttachmentAuthorizationService;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

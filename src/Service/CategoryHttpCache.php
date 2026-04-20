@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategoryHttpCacheInterface;
+use App\Cataloging\ServiceInterface\CategoryHttpCacheInterface;
 
 /**
  * Provides the category http cache application service.

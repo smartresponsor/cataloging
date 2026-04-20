@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Projection;
+namespace App\Cataloging\Projection;
 
-use App\ProjectionInterface\CategoryProjectionSyncInterface;
+use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;

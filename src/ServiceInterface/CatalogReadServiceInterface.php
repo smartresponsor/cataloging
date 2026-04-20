@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CategoryCatalogReadNodeRequest;
-use App\ValueObject\CategoryCatalogReadPageRequest;
+use App\Cataloging\ValueObject\CategoryCatalogReadNodeRequest;
+use App\Cataloging\ValueObject\CategoryCatalogReadPageRequest;
 
 /**
  * Defines the contract for catalog read service.

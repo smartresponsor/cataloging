@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategorySyndicationDestinationHistoryCommand;
-use App\Event\CategorySyndicationDestinationHistoryBuilt;
-use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
+use App\Cataloging\Command\CategorySyndicationDestinationHistoryCommand;
+use App\Cataloging\Event\CategorySyndicationDestinationHistoryBuilt;
+use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

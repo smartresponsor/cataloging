@@ -6,9 +6,9 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategorySyndicationDestinationPolicy;
+use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategorySyndicationDestinationPolicyTest extends TestCase

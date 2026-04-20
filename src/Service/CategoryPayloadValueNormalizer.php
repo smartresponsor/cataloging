@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
 /**
  * Provides shared payload scalar and collection normalization helpers.

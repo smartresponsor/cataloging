@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Cataloging\ValueObject;
 
-use App\ValueObjectInterface\CategorySyndicationRecoveryAuditSummaryInterface;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationRecoveryAuditSummaryInterface;
 
 /**
  * Represents the category syndication recovery audit summary value.

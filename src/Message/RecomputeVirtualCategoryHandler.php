@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Message;
+namespace App\Cataloging\Message;
 
-use App\Entity\VirtualCategoryEntity;
-use App\Rule\CategoryRule;
-use App\Rule\RuleEvaluator;
+use App\Cataloging\Entity\VirtualCategoryEntity;
+use App\Cataloging\Rule\CategoryRule;
+use App\Cataloging\Rule\RuleEvaluator;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

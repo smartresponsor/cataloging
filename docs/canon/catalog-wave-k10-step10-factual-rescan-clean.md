@@ -12,7 +12,7 @@ Result:
 - no residual forbidden roots detected under `src/`;
 - no residual forbidden nested `Catalog` / `Cataloging` wrappers detected under `src/`;
 - no residual `Port` / `Adaptor` / `Infra` / `opr` structural traces detected under production code paths;
-- canonical layer roots remain aligned with `App\\ -> src/` and `src/[Layer]`, `src/[Layer]Interface`.
+- canonical layer roots remain aligned with `App\Cataloging\\ -> src/` and `src/[Layer]`, `src/[Layer]Interface`.
 
 Files changed in this step:
 - this checkpoint note;

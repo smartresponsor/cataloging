@@ -6,9 +6,9 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Service\CollectionRuleEngine;
+use App\Cataloging\Service\CollectionRuleEngine;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryRuleEngineTest extends TestCase

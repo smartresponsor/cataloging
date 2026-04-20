@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Service\SearchService;
-use App\ServiceInterface\CategoryReadScopeServiceInterface;
-use App\ValueObject\CategoryProjectionCriteria;
-use App\ValueObject\CategoryReadScopeRequest;
+use App\Cataloging\Service\SearchService;
+use App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

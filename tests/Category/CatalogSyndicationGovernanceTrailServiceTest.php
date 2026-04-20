@@ -7,13 +7,13 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategorySyndicationGovernanceTrailPolicy;
-use App\Service\CatalogSyndicationGovernanceTrailService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategorySyndicationGovernanceTrailPayloadSet;
-use App\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
+use App\Cataloging\Policy\CategorySyndicationGovernanceTrailPolicy;
+use App\Cataloging\Service\CatalogSyndicationGovernanceTrailService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategorySyndicationGovernanceTrailPayloadSet;
+use App\Cataloging\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationGovernanceTrailServiceTest extends TestCase

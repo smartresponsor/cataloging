@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
 /**
  * Normalizes catalog category DB row payloads into stable read-model arrays.

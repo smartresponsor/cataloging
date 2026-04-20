@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Cataloging\Entity;
 
-use App\EntityInterface\CategorySyndicationDestinationInterface;
-use App\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\Cataloging\EntityInterface\CategorySyndicationDestinationInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
 
 /**
  * Represents the category syndication destination domain record.

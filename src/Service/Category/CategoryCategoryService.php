@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category;
+namespace App\Cataloging\Service\Category;
 
-use App\ServiceInterface\CategoryReadRepositoryInterface;
-use App\ValueObject\CategoryReadRepositoryListRequest;
+use App\Cataloging\ServiceInterface\CategoryReadRepositoryInterface;
+use App\Cataloging\ValueObject\CategoryReadRepositoryListRequest;
 
 /**
  * Provides the category category service application service.

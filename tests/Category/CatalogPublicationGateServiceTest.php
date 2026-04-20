@@ -6,13 +6,13 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryPublicationGatePolicy;
-use App\Service\CatalogPublicationGateService;
-use App\ValueObject\CategoryPublicationGateAssertionRequest;
-use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Policy\CategoryPublicationGatePolicy;
+use App\Cataloging\Service\CatalogPublicationGateService;
+use App\Cataloging\ValueObject\CategoryPublicationGateAssertionRequest;
+use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationGateServiceTest extends TestCase

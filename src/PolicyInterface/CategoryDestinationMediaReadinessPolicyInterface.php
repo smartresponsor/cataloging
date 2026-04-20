@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\PolicyInterface;
+namespace App\Cataloging\PolicyInterface;
 
-use App\ValueObject\CategoryDestinationMediaReadinessContext;
-use App\ValueObject\CategoryDestinationMediaReadinessState;
-use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessState;
+use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
 
 /**
  * Defines the contract for category destination media readiness policy.

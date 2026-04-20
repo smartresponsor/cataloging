@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CategoryMerchBannerPublishRequest;
-use App\ValueObject\CategoryMerchPinCreateRequest;
+use App\Cataloging\ValueObject\CategoryMerchBannerPublishRequest;
+use App\Cataloging\ValueObject\CategoryMerchPinCreateRequest;
 
 /**
  * Defines the contract for catalog merch service.

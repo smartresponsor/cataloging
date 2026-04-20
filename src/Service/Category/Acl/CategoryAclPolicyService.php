@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Acl;
+namespace App\Cataloging\Service\Category\Acl;
 
-use App\ServiceInterface\Acl\AclRepositoryInterface;
-use App\ServiceInterface\Category\CategoryAclPolicyServiceInterface;
+use App\Cataloging\ServiceInterface\Acl\AclRepositoryInterface;
+use App\Cataloging\ServiceInterface\Category\CategoryAclPolicyServiceInterface;
 
 /**
  * Provides the category acl policy service application service.

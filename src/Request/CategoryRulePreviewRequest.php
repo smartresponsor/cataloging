@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Request;
+namespace App\Cataloging\Request;
 
 /**
  * Provides the category rule preview request implementation.

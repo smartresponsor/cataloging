@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
 /**
  * Defines the contract for catalog destination media fallback service.

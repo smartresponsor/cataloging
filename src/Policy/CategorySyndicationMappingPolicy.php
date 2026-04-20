@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategorySyndicationMappingPolicyInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationMappingPolicyInterface;
 
 /**
  * Provides the category syndication mapping policy implementation.

@@ -6,9 +6,9 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category\Infrastructure;
+namespace App\Cataloging\Tests\Category\Infrastructure;
 
-use App\Infrastructure\CategoryAuditLogger;
+use App\Cataloging\Infrastructure\CategoryAuditLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\AbstractLogger;
 

@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryPublicationQualityEvaluateCommand;
-use App\Policy\CategoryPublicationQualityPolicy;
-use App\Service\CatalogPublicationQualityService;
+use App\Cataloging\Command\CategoryPublicationQualityEvaluateCommand;
+use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
+use App\Cataloging\Service\CatalogPublicationQualityService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

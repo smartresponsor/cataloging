@@ -6,12 +6,12 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\Policy\CategorySyndicationRetryPolicy;
-use App\Service\CatalogSyndicationRetryService;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\Policy\CategorySyndicationRetryPolicy;
+use App\Cataloging\Service\CatalogSyndicationRetryService;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationRetryServiceTest extends TestCase

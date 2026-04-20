@@ -6,13 +6,13 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategorySyndicationMappingPolicy;
-use App\Service\CatalogSyndicationMappingService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
-use App\ValueObject\CategorySyndicationPackageContext;
+use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
+use App\Cataloging\Service\CatalogSyndicationMappingService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationMappingServiceTest extends TestCase

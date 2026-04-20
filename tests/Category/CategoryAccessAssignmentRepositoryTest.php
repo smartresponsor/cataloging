@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CategoryAccessAssignment;
-use App\Repository\CategoryAccessAssignmentRepository;
+use App\Cataloging\Entity\CategoryAccessAssignment;
+use App\Cataloging\Repository\CategoryAccessAssignmentRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;

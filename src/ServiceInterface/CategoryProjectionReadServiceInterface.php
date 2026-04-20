@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Exception;
 
 /**

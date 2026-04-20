@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Quota;
+namespace App\Cataloging\Service\Category\Quota;
 
-use App\ServiceInterface\Category\CategoryQuotaTokenBucketInterface;
-use App\ServiceInterface\Quota\CacheStoreInterface;
+use App\Cataloging\ServiceInterface\Category\CategoryQuotaTokenBucketInterface;
+use App\Cataloging\ServiceInterface\Quota\CacheStoreInterface;
 
 /**
  * Provides the category token bucket application service.

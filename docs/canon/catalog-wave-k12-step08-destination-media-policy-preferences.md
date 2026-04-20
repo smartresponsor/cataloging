@@ -14,6 +14,6 @@ Introduce destination-level policy preferences for media coverage resolution wit
 ## Canon status
 
 - single Symfony-oriented application preserved
-- `App\ -> src/` preserved
+- `App\Cataloging\ -> src/` preserved
 - no `Port` / `Adaptor` / hexagonal scaffolding introduced
 - additions stay within canonical layer roots

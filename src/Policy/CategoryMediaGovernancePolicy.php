@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryMediaGovernancePolicyInterface;
-use App\ValueObject\CategoryMediaBindRequest;
-use App\ValueObject\CategoryMediaRole;
+use App\Cataloging\PolicyInterface\CategoryMediaGovernancePolicyInterface;
+use App\Cataloging\ValueObject\CategoryMediaBindRequest;
+use App\Cataloging\ValueObject\CategoryMediaRole;
 
 /**
  * Provides the category media governance policy implementation.

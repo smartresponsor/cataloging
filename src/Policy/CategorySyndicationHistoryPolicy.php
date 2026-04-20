@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\EntityInterface\CategorySyndicationDeliveryRecordInterface;
-use App\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
+use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
 
 /**
  * Provides the category syndication history policy implementation.

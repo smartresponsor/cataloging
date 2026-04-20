@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Cataloging\ValueObject;
 
 /**
  * Carries projection/search/list criteria across read-oriented category surfaces.

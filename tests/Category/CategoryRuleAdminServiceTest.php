@@ -6,11 +6,11 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Service\Category\Rule\CategoryRuleAdminService;
-use App\Service\Category\Rule\CategoryRuleEngine;
-use App\ServiceInterface\Rule\RuleRepositoryInterface;
+use App\Cataloging\Service\Category\Rule\CategoryRuleAdminService;
+use App\Cataloging\Service\Category\Rule\CategoryRuleEngine;
+use App\Cataloging\ServiceInterface\Rule\RuleRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryRuleAdminServiceTest extends TestCase

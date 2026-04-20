@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 

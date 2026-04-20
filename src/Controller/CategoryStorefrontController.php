@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\ServiceInterface\CategoryReadScopeServiceInterface;
-use App\ValueObject\CategoryProjectionCriteria;
-use App\ValueObject\CategoryReadScopeRequest;
+use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

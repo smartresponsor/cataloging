@@ -4,7 +4,7 @@ declare(strict_types=1);
  * Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
-use App\Service\ImportFieldMapper;
+use App\Cataloging\Service\ImportFieldMapper;
 require_once __DIR__.'/../../vendor/autoload.php';
 $mapper = new ImportFieldMapper();
 $data = [

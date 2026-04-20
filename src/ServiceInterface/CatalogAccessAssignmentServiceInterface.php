@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EntityInterface\CategoryAccessAssignmentInterface;
-use App\ValueObject\CategoryAccessAssignmentRequest;
-use App\ValueObject\CategoryAccessAssignmentSelection;
+use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
+use App\Cataloging\ValueObject\CategoryAccessAssignmentRequest;
+use App\Cataloging\ValueObject\CategoryAccessAssignmentSelection;
 
 /**
  * Defines the contract for catalog access assignment service.

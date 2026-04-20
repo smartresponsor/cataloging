@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\EntityInterface\CategoryWorkflowInterface;
-use App\EventInterface\CategoryWorkflowTransitionedInterface;
-use App\RepositoryInterface\CategoryWorkflowRepositoryInterface;
+use App\Cataloging\EntityInterface\CategoryWorkflowInterface;
+use App\Cataloging\EventInterface\CategoryWorkflowTransitionedInterface;
+use App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 
 /**
  * Provides repository services for category workflow repository.

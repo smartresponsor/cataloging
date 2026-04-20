@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Governance;
+namespace App\Cataloging\Service\Governance;
 
-use App\Projection\CategoryGovernanceView;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
-use App\Service\Security\CategoryRole;
-use App\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
+use App\Cataloging\Projection\CategoryGovernanceView;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\Service\Security\CategoryRole;
+use App\Cataloging\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
 
 /**
  * Provides the category governance view builder application service.

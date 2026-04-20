@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Request\Support;
+namespace App\Cataloging\Tests\Request\Support;
 
-use App\Request\Support\RequestValueNormalizer;
+use App\Cataloging\Request\Support\RequestValueNormalizer;
 use PHPUnit\Framework\TestCase;
 
 final class RequestValueNormalizerTest extends TestCase

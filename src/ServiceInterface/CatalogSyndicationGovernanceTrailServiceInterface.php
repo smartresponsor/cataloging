@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
-use App\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
+use App\Cataloging\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
+use App\Cataloging\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
 
 /**
  * Defines the contract for catalog syndication governance trail service.

@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\AttachmentInterface\AttachmentReferenceGatewayInterface;
-use App\RepositoryInterface\CatalogAttachmentRepositoryInterface;
-use App\Service\AttachmentService;
+use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
+use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\Service\AttachmentService;
 use PHPUnit\Framework\TestCase;
 
 final class AttachmentServiceTest extends TestCase

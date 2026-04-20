@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Request;
+namespace App\Cataloging\Request;
 
-use App\Request\Support\RequestValueNormalizer;
+use App\Cataloging\Request\Support\RequestValueNormalizer;
 
 /**
  * Provides the webhook dispatch request implementation.

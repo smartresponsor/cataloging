@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Cataloging\Command;
 
-use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\ValueObject\CategoryWorkflowTransitionRequest;
+use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

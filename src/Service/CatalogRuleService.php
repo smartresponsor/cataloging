@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\VirtualCategoryEntity;
-use App\Message\RecomputeVirtualCategoryMessage;
-use App\Rule\CategoryRule;
-use App\Rule\RuleEvaluator;
-use App\ServiceInterface\CatalogRuleServiceInterface;
+use App\Cataloging\Entity\VirtualCategoryEntity;
+use App\Cataloging\Message\RecomputeVirtualCategoryMessage;
+use App\Cataloging\Rule\CategoryRule;
+use App\Cataloging\Rule\RuleEvaluator;
+use App\Cataloging\ServiceInterface\CatalogRuleServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;

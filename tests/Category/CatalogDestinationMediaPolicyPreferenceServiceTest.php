@@ -6,24 +6,24 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CategoryMediaBinding;
-use App\Entity\CategorySyndicationDestination;
-use App\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaFallbackService;
-use App\Service\CatalogDestinationMediaPolicyPreferenceService;
-use App\Service\CatalogDestinationMediaReadinessService;
-use App\Service\CatalogMediaApplicabilityService;
-use App\ValueObject\CatalogAuditContext;
-use App\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\ValueObject\CategoryMediaRole;
-use App\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\ValueObject\CategorySyndicationDestinationDefinition;
+use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Entity\CategorySyndicationDestination;
+use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
+use App\Cataloging\Service\CatalogDestinationMediaPolicyPreferenceService;
+use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryMediaRole;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
@@ -69,7 +69,7 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
             $destinationRepository,
             new CatalogDestinationMediaReadinessService(
                 $destinationRepository,
-                new CatalogMediaApplicabilityService($bindingRepository, new \App\Policy\CategoryMediaApplicabilityPolicy()),
+                new CatalogMediaApplicabilityService($bindingRepository, new \App\Cataloging\Policy\CategoryMediaApplicabilityPolicy()),
                 new CategoryDestinationMediaReadinessPolicy(),
             ),
             new CatalogDestinationMediaFallbackService($destinationRepository, $bindingRepository, new CategoryDestinationMediaFallbackPolicy()),

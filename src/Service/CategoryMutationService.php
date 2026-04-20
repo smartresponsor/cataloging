@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Exception\CategoryNotFoundException;
-use App\IdempotencyInterface\CategoryIdempotencyStoreInterface;
-use App\PolicyInterface\CategoryWorkflowPolicyInterface;
-use App\ServiceInterface\CatalogPublicationGateServiceInterface;
-use App\ServiceInterface\CategoryMutationServiceInterface;
-use App\ValueObject\CategoryMutationMoveRequest;
-use App\ValueObject\CategoryMutationPublishRequest;
-use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Exception\CategoryNotFoundException;
+use App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface;
+use App\Cataloging\PolicyInterface\CategoryWorkflowPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
+use App\Cataloging\ServiceInterface\CategoryMutationServiceInterface;
+use App\Cataloging\ValueObject\CategoryMutationMoveRequest;
+use App\Cataloging\ValueObject\CategoryMutationPublishRequest;
+use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;

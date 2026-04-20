@@ -6,20 +6,20 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Policy\CategoryChangeRequestPolicy;
-use App\Policy\CategoryPublicationGatePolicy;
-use App\Policy\CategoryWorkflowPolicy;
-use App\Repository\CategoryChangeRequestRepository;
-use App\Repository\CategoryWorkflowRepository;
-use App\Service\CatalogChangeRequestService;
-use App\Service\CatalogPublicationGateService;
-use App\Service\CatalogReviewDecisionCouplingService;
-use App\Service\CatalogWorkflowTransitionService;
-use App\ValueObject\CategoryChangeRequestReviewRequest;
-use App\ValueObject\CategoryChangeRequestSubmitRequest;
-use App\ValueObject\CategoryReviewDecisionCouplingRequest;
+use App\Cataloging\Policy\CategoryChangeRequestPolicy;
+use App\Cataloging\Policy\CategoryPublicationGatePolicy;
+use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Repository\CategoryWorkflowRepository;
+use App\Cataloging\Service\CatalogChangeRequestService;
+use App\Cataloging\Service\CatalogPublicationGateService;
+use App\Cataloging\Service\CatalogReviewDecisionCouplingService;
+use App\Cataloging\Service\CatalogWorkflowTransitionService;
+use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
+use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;
+use App\Cataloging\ValueObject\CategoryReviewDecisionCouplingRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogReviewDecisionCouplingServiceTest extends TestCase

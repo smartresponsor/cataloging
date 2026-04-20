@@ -3,18 +3,18 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryReviewDecisionCoupled;
-use App\EventInterface\CategoryReviewDecisionCoupledInterface;
-use App\ServiceInterface\CatalogChangeRequestServiceInterface;
-use App\ServiceInterface\CatalogPublicationGateServiceInterface;
-use App\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
-use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\ValueObject\CategoryChangeRequestReviewRequest;
-use App\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\ValueObject\CategoryReviewDecisionCouplingRequest;
-use App\ValueObject\CategoryWorkflowTransitionRequest;
+use App\Cataloging\Event\CategoryReviewDecisionCoupled;
+use App\Cataloging\EventInterface\CategoryReviewDecisionCoupledInterface;
+use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
+use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
+use App\Cataloging\ValueObject\CategoryReviewDecisionCouplingRequest;
+use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
 
 /**
  * Provides the catalog review decision coupling service application service.

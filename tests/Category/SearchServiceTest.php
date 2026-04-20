@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Service\SearchService;
+use App\Cataloging\Service\SearchService;
 use PHPUnit\Framework\TestCase;
 
 final class SearchServiceTest extends TestCase

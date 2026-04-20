@@ -3,35 +3,35 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\Command;
+namespace App\Cataloging\Tests\Command;
 
-use App\Command\CategoryCompletenessEvaluateCommand;
-use App\Command\CategoryMediaReadinessEvaluateCommand;
-use App\Command\CategoryMoveCommand;
-use App\Command\CategoryPublicationQualityEvaluateCommand;
-use App\Command\CategoryReviewAssignCommand;
-use App\Command\CategoryReviewQueueListCommand;
-use App\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
-use App\Command\CategorySyndicationDeliveryFailedListCommand;
-use App\Command\CategorySyndicationDestinationGovernanceSummaryCommand;
-use App\Command\CategorySyndicationDestinationHistoryCommand;
-use App\Command\CategorySyndicationPackagePreviewCommand;
-use App\Command\CategorySyndicationRetryScheduleCommand;
-use App\Command\CategoryWorkflowTransitionCommand;
-use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\Service\ArrayValueNormalizer;
-use App\ServiceInterface\CatalogCompletenessServiceInterface;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
-use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
-use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
-use App\ServiceInterface\CatalogReviewQueueServiceInterface;
-use App\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
-use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
-use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
-use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
-use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
-use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\ServiceInterface\CategoryMoveInterface;
+use App\Cataloging\Command\CategoryCompletenessEvaluateCommand;
+use App\Cataloging\Command\CategoryMediaReadinessEvaluateCommand;
+use App\Cataloging\Command\CategoryMoveCommand;
+use App\Cataloging\Command\CategoryPublicationQualityEvaluateCommand;
+use App\Cataloging\Command\CategoryReviewAssignCommand;
+use App\Cataloging\Command\CategoryReviewQueueListCommand;
+use App\Cataloging\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
+use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
+use App\Cataloging\Command\CategorySyndicationDestinationGovernanceSummaryCommand;
+use App\Cataloging\Command\CategorySyndicationDestinationHistoryCommand;
+use App\Cataloging\Command\CategorySyndicationPackagePreviewCommand;
+use App\Cataloging\Command\CategorySyndicationRetryScheduleCommand;
+use App\Cataloging\Command\CategoryWorkflowTransitionCommand;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\Service\ArrayValueNormalizer;
+use App\Cataloging\ServiceInterface\CatalogCompletenessServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewAssignmentServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\Cataloging\ServiceInterface\CategoryMoveInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryCliDiscoverabilityTest extends TestCase

@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\ServiceInterface\CatalogReadServiceInterface;
-use App\ValueObject\CategoryCatalogReadPageRequest;
+use App\Cataloging\ServiceInterface\CatalogReadServiceInterface;
+use App\Cataloging\ValueObject\CategoryCatalogReadPageRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

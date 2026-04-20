@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryCompletenessPolicyInterface;
-use App\Service\CategoryPayloadValueNormalizer;
+use App\Cataloging\PolicyInterface\CategoryCompletenessPolicyInterface;
+use App\Cataloging\Service\CategoryPayloadValueNormalizer;
 
 /**
  * Provides the category completeness policy implementation.

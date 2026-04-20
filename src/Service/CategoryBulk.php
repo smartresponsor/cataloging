@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategoryBulkInterface;
-use App\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
-use App\ValueObject\CategoryCreateRequest;
-use App\ValueObject\CategoryLinkRequest;
-use App\ValueObject\CategoryServiceMoveRequest;
+use App\Cataloging\ServiceInterface\CategoryBulkInterface;
+use App\Cataloging\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
+use App\Cataloging\ValueObject\CategoryCreateRequest;
+use App\Cataloging\ValueObject\CategoryLinkRequest;
+use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
 
 /**
  * Provides the category bulk application service.

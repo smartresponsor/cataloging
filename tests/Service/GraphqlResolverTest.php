@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Cataloging\Tests\Service;
 
-use App\Service\GraphqlResolver;
-use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\ValueObject\CategoryGraphqlNodeRequest;
-use App\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\Service\GraphqlResolver;
+use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;

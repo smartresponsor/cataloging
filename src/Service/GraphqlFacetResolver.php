@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\GraphqlFacetResolverInterface;
-use App\ValueObject\CategoryGraphqlFacetRequest;
-use App\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ServiceInterface\GraphqlFacetResolverInterface;
+use App\Cataloging\ValueObject\CategoryGraphqlFacetRequest;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Exception;
 
 /**

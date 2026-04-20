@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Cataloging\Controller\Admin;
 
-use App\ServiceInterface\CategoryMoveInterface;
-use App\ValueObject\CatalogMoveRequest;
+use App\Cataloging\ServiceInterface\CategoryMoveInterface;
+use App\Cataloging\ValueObject\CatalogMoveRequest;
 
 /**
  * Handles the category move controller application flow.

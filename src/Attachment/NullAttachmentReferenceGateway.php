@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Attachment;
+namespace App\Cataloging\Attachment;
 
-use App\AttachmentInterface\AttachmentReferenceGatewayInterface;
+use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
 
 /**
  * Provides the null attachment reference gateway implementation.

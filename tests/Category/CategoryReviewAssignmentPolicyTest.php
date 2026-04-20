@@ -6,11 +6,11 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CatalogCategoryChangeRequest;
-use App\Policy\CategoryReviewAssignmentPolicy;
-use App\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\Entity\CatalogCategoryChangeRequest;
+use App\Cataloging\Policy\CategoryReviewAssignmentPolicy;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryReviewAssignmentPolicyTest extends TestCase

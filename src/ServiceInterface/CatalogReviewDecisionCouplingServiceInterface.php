@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategoryReviewDecisionCoupledInterface;
-use App\ValueObject\CategoryReviewDecisionCouplingRequest;
+use App\Cataloging\EventInterface\CategoryReviewDecisionCoupledInterface;
+use App\Cataloging\ValueObject\CategoryReviewDecisionCouplingRequest;
 
 /**
  * Defines the contract for catalog review decision coupling service.

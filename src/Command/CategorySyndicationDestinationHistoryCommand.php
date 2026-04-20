@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Cataloging\Command;
 
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
-use App\ValueObject\CategorySyndicationHistoryRequest;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\ValueObject\CategorySyndicationHistoryRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

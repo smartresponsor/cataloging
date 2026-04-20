@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\OidcJwtValidatorInterface;
-use App\ServiceInterface\OidcJwtVerifierInterface;
+use App\Cataloging\ServiceInterface\OidcJwtValidatorInterface;
+use App\Cataloging\ServiceInterface\OidcJwtVerifierInterface;
 
 /**
  * Provides the oidc jwt validator application service.

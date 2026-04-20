@@ -3,10 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategoryMoveInterface;
-use App\ValueObject\CatalogMoveRequest;
+use App\Cataloging\ServiceInterface\CategoryMoveInterface;
+use App\Cataloging\ValueObject\CatalogMoveRequest;
+use Doctrine\DBAL\Connection;
 
 /**
  * Provides the catalog move service application service.
@@ -16,7 +17,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /**
      * Initializes the catalog move service service collaborators.
      */
-    public function __construct(private \PDO $pg)
+    public function __construct(private Connection $connection)
     {
     }
 
@@ -50,7 +51,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
         }
         unset($normalizedLocale);
 
-        $this->pg->beginTransaction();
+        $this->connection->beginTransaction();
 
         try {
             $node = $this->fetchNode($normalizedNodeId);
@@ -71,8 +72,8 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
 
             $oldParentPath = $this->parentPath($oldPath);
             if ($oldParentPath === $newParentPath) {
-                if ($this->pg->inTransaction()) {
-                    $this->pg->rollBack();
+                if ($this->connection->isTransactionActive()) {
+                    $this->connection->rollBack();
                 }
 
                 return [0, []];
@@ -100,19 +101,19 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
                 ];
             }
 
-            if ($dryRun && $this->pg->inTransaction()) {
-                $this->pg->rollBack();
+            if ($dryRun && $this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
             }
             if (!$dryRun) {
-                $this->pg->commit();
+                $this->connection->commit();
             }
 
             return [$changed, $redirects];
         } catch (\Throwable $exception) {
             error_log('[CatalogMoveService] '.$exception->getMessage());
 
-            if ($this->pg->inTransaction()) {
-                $this->pg->rollBack();
+            if ($this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
             }
 
             if ($exception instanceof \InvalidArgumentException || $exception instanceof \RuntimeException) {
@@ -126,31 +127,18 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /** @return array<string, mixed>|null */
     private function fetchNode(string $id): ?array
     {
-        $statement = $this->pg->prepare('SELECT id, slug, path, depth FROM category WHERE id = :id LIMIT 1');
+        $statement = $this->connection->prepare('SELECT id, slug, path, depth FROM category WHERE id = :id LIMIT 1');
         $statement->bindValue(':id', $id);
-        $statement->execute();
-        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        $result = $statement->executeQuery();
+        $row = $result->fetchAssociative();
 
-        if (!is_array($row)) {
-            return null;
-        }
-
-        $normalized = [];
-        foreach ($row as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-
-            $normalized[$key] = $value;
-        }
-
-        return $normalized;
+        return false === $row ? null : $row;
     }
 
     /** @return list<array<string, mixed>> */
     private function fetchSubtree(string $path): array
     {
-        $statement = $this->pg->prepare(
+        $statement = $this->connection->prepare(
             'SELECT id, path, depth
              FROM category
              WHERE CAST(path AS TEXT) = :path OR CAST(path AS TEXT) LIKE :prefix
@@ -158,38 +146,18 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
         );
         $statement->bindValue(':path', $path);
         $statement->bindValue(':prefix', $path.'.%');
-        $statement->execute();
+        $result = $statement->executeQuery();
 
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $normalizedRows = [];
-        foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
-            $normalized = [];
-            foreach ($row as $key => $value) {
-                if (!is_string($key)) {
-                    continue;
-                }
-
-                $normalized[$key] = $value;
-            }
-
-            $normalizedRows[] = $normalized;
-        }
-
-        return $normalizedRows;
+        return $result->fetchAllAssociative();
     }
 
     private function updateRow(string $id, string $path, int $depth): void
     {
-        $statement = $this->pg->prepare('UPDATE category SET path = :path, depth = :depth WHERE id = :id');
+        $statement = $this->connection->prepare('UPDATE category SET path = :path, depth = :depth WHERE id = :id');
         $statement->bindValue(':path', $path);
-        $statement->bindValue(':depth', $depth, \PDO::PARAM_INT);
+        $statement->bindValue(':depth', $depth);
         $statement->bindValue(':id', $id);
-        $statement->execute();
+        $statement->executeStatement();
     }
 
     private function parentPath(string $path): ?string

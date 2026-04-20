@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CatalogCategoryChangeRequest;
-use App\Entity\CategoryReviewAssignment;
-use App\Event\CategoryChangeRequestAssigned;
-use App\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
-use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
-use App\ServiceInterface\CatalogReviewAssignmentServiceInterface;
-use App\ValueObject\CategoryReviewAssignmentRequest;
+use App\Cataloging\Entity\CatalogCategoryChangeRequest;
+use App\Cataloging\Entity\CategoryReviewAssignment;
+use App\Cataloging\Event\CategoryChangeRequestAssigned;
+use App\Cataloging\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewAssignmentServiceInterface;
+use App\Cataloging\ValueObject\CategoryReviewAssignmentRequest;
 
 /**
  * Provides the catalog review assignment service application service.

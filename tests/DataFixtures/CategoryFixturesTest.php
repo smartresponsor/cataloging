@@ -3,9 +3,9 @@
 # Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Tests\DataFixtures;
+namespace App\Cataloging\Tests\DataFixtures;
 
-use App\DataFixtures\CategoryFixtures;
+use App\Cataloging\DataFixtures\CategoryFixtures;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
 

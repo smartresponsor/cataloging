@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
-use App\ValueObject\CategorySyndicationPackageBuildRequest;
+use App\Cataloging\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
+use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
  * Defines the contract for catalog syndication mapping service.

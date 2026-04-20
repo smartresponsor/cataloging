@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Service\Security\CategoryRole;
-use App\ServiceInterface\TenantRolePolicyInterface;
+use App\Cataloging\Service\Security\CategoryRole;
+use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
 
 /**
  * Provides the tenant role policy application service.

@@ -7,7 +7,7 @@ Applied against the latest current slice as the only base.
 - removed nested public/public/index.php entrypoint
 - repaired PSR-4/file-integrity defects in CategoryMoveController, CategoryMoved, CategoryPathRebased
 - repaired broken Rule classes (CategoryRule, RuleEvaluator)
-- normalized GraphQl namespace usage to App\GraphQl for files physically under src/GraphQl
+- normalized GraphQl namespace usage to App\Cataloging\GraphQl for files physically under src/GraphQl
 - aligned Category service namespaces with their physical paths
 - removed report backup artifacts from the repository snapshot
 

@@ -6,11 +6,11 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Tests\Category;
+namespace App\Cataloging\Tests\Category;
 
-use App\Entity\CategoryMediaBinding;
-use App\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\ValueObject\CategoryMediaRole;
+use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
+use App\Cataloging\ValueObject\CategoryMediaRole;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryDestinationMediaFallbackPolicyTest extends TestCase

@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller\Merchant;
+namespace App\Cataloging\Controller\Merchant;
 
-use App\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\ValueObject\CategoryProjectionCriteria;
+use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

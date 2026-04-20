@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\EventInterface\CategoryMediaBoundInterface;
-use App\ValueObject\CategoryMediaBindRequest;
+use App\Cataloging\EventInterface\CategoryMediaBoundInterface;
+use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 
 /**
  * Defines the contract for catalog media governance service.

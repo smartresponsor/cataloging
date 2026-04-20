@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
-use App\ValueObject\CategoryPublicationQualityProfile;
-use App\ValueObjectInterface\CategoryPublicationQualityProfileInterface;
+use App\Cataloging\PolicyInterface\CategoryPublicationQualityPolicyInterface;
+use App\Cataloging\ValueObject\CategoryPublicationQualityProfile;
+use App\Cataloging\ValueObjectInterface\CategoryPublicationQualityProfileInterface;
 
 /**
  * Provides the category publication quality policy implementation.
