@@ -27,8 +27,8 @@ class CategoryEntity
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $slug;
 
-    // Stored in Postgres as ltree; mapped as string (mapping_types in doctrine.yaml).
-    #[ORM\Column(type: 'string', length: 2048, options: ['comment' => 'ltree'], columnDefinition: 'ltree')]
+    // Stored in Postgres as ltree via a custom Doctrine type.
+    #[ORM\Column(type: 'ltree')]
     private string $path;
 
     #[ORM\Column(type: 'integer')]

@@ -8,6 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\ServiceInterface\CategoryMoveInterface;
 use App\Cataloging\ValueObject\CatalogMoveRequest;
 use Doctrine\DBAL\Connection;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Provides the catalog move service application service.
@@ -17,8 +18,10 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /**
      * Initializes the catalog move service service collaborators.
      */
-    public function __construct(private Connection $connection)
-    {
+    public function __construct(
+        private ManagerRegistry $registry,
+        private string $connectionName = 'data',
+    ) {
     }
 
     /**
@@ -51,7 +54,9 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
         }
         unset($normalizedLocale);
 
-        $this->connection->beginTransaction();
+        $connection = $this->connection();
+
+        $connection->beginTransaction();
 
         try {
             $node = $this->fetchNode($normalizedNodeId);
@@ -72,8 +77,8 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
 
             $oldParentPath = $this->parentPath($oldPath);
             if ($oldParentPath === $newParentPath) {
-                if ($this->connection->isTransactionActive()) {
-                    $this->connection->rollBack();
+                if ($connection->isTransactionActive()) {
+                    $connection->rollBack();
                 }
 
                 return [0, []];
@@ -101,19 +106,19 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
                 ];
             }
 
-            if ($dryRun && $this->connection->isTransactionActive()) {
-                $this->connection->rollBack();
+            if ($dryRun && $connection->isTransactionActive()) {
+                $connection->rollBack();
             }
             if (!$dryRun) {
-                $this->connection->commit();
+                $connection->commit();
             }
 
             return [$changed, $redirects];
         } catch (\Throwable $exception) {
             error_log('[CatalogMoveService] '.$exception->getMessage());
 
-            if ($this->connection->isTransactionActive()) {
-                $this->connection->rollBack();
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
             }
 
             if ($exception instanceof \InvalidArgumentException || $exception instanceof \RuntimeException) {
@@ -127,7 +132,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /** @return array<string, mixed>|null */
     private function fetchNode(string $id): ?array
     {
-        $statement = $this->connection->prepare('SELECT id, slug, path, depth FROM category WHERE id = :id LIMIT 1');
+        $statement = $this->connection()->prepare('SELECT id, slug, path, depth FROM category WHERE id = :id LIMIT 1');
         $statement->bindValue(':id', $id);
         $result = $statement->executeQuery();
         $row = $result->fetchAssociative();
@@ -138,7 +143,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /** @return list<array<string, mixed>> */
     private function fetchSubtree(string $path): array
     {
-        $statement = $this->connection->prepare(
+        $statement = $this->connection()->prepare(
             'SELECT id, path, depth
              FROM category
              WHERE CAST(path AS TEXT) = :path OR CAST(path AS TEXT) LIKE :prefix
@@ -153,11 +158,37 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
 
     private function updateRow(string $id, string $path, int $depth): void
     {
-        $statement = $this->connection->prepare('UPDATE category SET path = :path, depth = :depth WHERE id = :id');
+        $statement = $this->connection()->prepare('UPDATE category SET path = :path, depth = :depth WHERE id = :id');
         $statement->bindValue(':path', $path);
         $statement->bindValue(':depth', $depth);
         $statement->bindValue(':id', $id);
         $statement->executeStatement();
+    }
+
+    private function connection(): Connection
+    {
+        $candidates = array_values(array_unique(array_filter([
+            trim($this->connectionName),
+            'data',
+            'app_data',
+            'user_data',
+            null,
+        ], static fn (mixed $name): bool => is_string($name) && '' !== $name)));
+
+        foreach ($candidates as $candidate) {
+            try {
+                /** @var Connection $connection */
+                $connection = $this->registry->getConnection($candidate);
+
+                return $connection;
+            } catch (\Throwable) {
+            }
+        }
+
+        /** @var Connection $connection */
+        $connection = $this->registry->getConnection();
+
+        return $connection;
     }
 
     private function parentPath(string $path): ?string

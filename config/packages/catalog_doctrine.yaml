@@ -1,13 +1,15 @@
 doctrine:
     dbal:
         default_connection: data
+        types:
+            ltree: App\Cataloging\Doctrine\Type\LtreeType
         connections:
             data:
                 url: '%env(PG_DSN)%'
                 driver: 'pdo_pgsql'
                 server_version: '16'
                 mapping_types:
-                    ltree: string
+                    ltree: ltree
             infra:
                 url: '%env(MYSQL_DSN)%'
                 driver: 'pdo_mysql'

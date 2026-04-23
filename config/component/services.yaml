@@ -2,15 +2,12 @@ parameters:
   catalog.oidc_jwk_set: []
   catalog.oidc_audience: '%env(default:catalog-dev:CATALOG_OIDC_AUDIENCE)%'
   catalog.oidc_issuer: '%env(default:catalog-dev:CATALOG_OIDC_ISSUER)%'
+  catalog.move_connection_name: 'data'
 
 services:
   _defaults:
     autowire: true
     autoconfigure: true
-    bind:
-      array $jwkSet: '%catalog.oidc_jwk_set%'
-      string $audience: '%catalog.oidc_audience%'
-      string $issuer: '%catalog.oidc_issuer%'
 
   # Symfony-native component export surface.
   # The host application may import this file from the component root.
@@ -23,7 +20,7 @@ services:
       - '../../src/Tests/'
   App\Cataloging\Service\CatalogMoveService:
     arguments:
-      $connection: '@doctrine.dbal.default_connection'
+      $connectionName: '%catalog.move_connection_name%'
 
   App\Cataloging\Service\OidcJwtVerifier:
     arguments:
