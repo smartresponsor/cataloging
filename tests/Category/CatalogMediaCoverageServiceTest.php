@@ -10,13 +10,13 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
 use App\Cataloging\Service\CatalogMediaCoverageService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityScope;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityState;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
-use App\Cataloging\ValueObject\CategoryMediaBindingScope;
-use App\Cataloging\ValueObject\CategoryMediaBindingState;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -24,12 +24,12 @@ final class CatalogMediaCoverageServiceTest extends TestCase
 {
     public function testEvaluateReturnsGovernedMediaChecks(): void
     {
-        $repository = new CategoryMediaBindingRepository();
+        $repository = new CatalogCategoryMediaBindingEntityRepository();
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
 
-        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-1', 'category-901', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'bind primary')));
-        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-2', 'category-901', 'asset-banner', 'banner', ['storefront'], ['en_US']), new CategoryMediaBindingState(false, true, []), new CatalogAuditContext('operator-1', 'bind banner')));
+        $governance->bind(new CategoryMediaBindRequest(new CatalogCategoryMediaBindingEntityScope('bind-1', 'category-901', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CatalogCategoryMediaBindingEntityState(true, true, []), new CatalogAuditContext('operator-1', 'bind primary')));
+        $governance->bind(new CategoryMediaBindRequest(new CatalogCategoryMediaBindingEntityScope('bind-2', 'category-901', 'asset-banner', 'banner', ['storefront'], ['en_US']), new CatalogCategoryMediaBindingEntityState(false, true, []), new CatalogAuditContext('operator-1', 'bind banner')));
 
         $payload = $this->normalizePayload($coverage->evaluate(new CategoryEvaluationRequest('category-901', [
             'media' => ['primaryAssetId' => ''],

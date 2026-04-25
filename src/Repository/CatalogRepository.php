@@ -5,15 +5,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
-use App\Cataloging\Entity\CategoryEntity;
-use App\Cataloging\Service\CatalogCategoryRowNormalizer;
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
-/** @extends ServiceEntityRepository<CategoryEntity> */
+/** @extends ServiceEntityRepository<CatalogCategoryEntity> */
 final class CatalogRepository extends ServiceEntityRepository
 {
     /**
@@ -21,106 +17,127 @@ final class CatalogRepository extends ServiceEntityRepository
      */
     public function __construct(
         ManagerRegistry $registry,
-        private readonly CatalogCategoryRowNormalizer $rowNormalizer,
     ) {
-        parent::__construct($registry, CategoryEntity::class);
+        parent::__construct($registry, CatalogCategoryEntity::class);
     }
 
     /**
      * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
-     *
-     * @throws Exception
      */
     public function findNodeRowById(string $id): ?array
     {
-        $row = $this->getConnection()->fetchAssociative(
-            'SELECT id, name, slug, path, depth FROM category WHERE id = :id LIMIT 1',
-            ['id' => $id],
-        );
+        $entity = $this->find($id);
 
-        if (!is_array($row)) {
-            return null;
-        }
-
-        $normalized = $this->rowNormalizer->normalize([$row]);
-
-        return $normalized[0] ?? null;
+        return $entity instanceof CatalogCategoryEntity ? $this->rowFromEntity($entity) : null;
     }
 
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
-     *
-     * @throws Exception
      */
     public function findChildrenRowsByPath(string $path): array
     {
-        $rows = $this->getConnection()->executeQuery(
-            "SELECT id, name, slug, path, depth FROM category WHERE path ~ (? || '.*{1}') ORDER BY slug ASC",
-            [$path],
-        )->fetchAllAssociative();
+        $entities = $this->createQueryBuilder('c')
+            ->where('c.depth = :depth')
+            ->andWhere('c.path LIKE :pathPattern')
+            ->setParameter('depth', $this->pathDepth($path) + 1)
+            ->setParameter('pathPattern', $path.'.%')
+            ->orderBy('c.slug', 'ASC')
+            ->getQuery()
+            ->getResult();
 
-        return $this->rowNormalizer->normalize($rows);
+        return is_array($entities) ? $this->rowsFromEntities($entities) : [];
     }
 
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
-     *
-     * @throws Exception
      */
     public function findAncestorRowsByPath(string $path): array
     {
-        $rows = $this->getConnection()->executeQuery(
-            'SELECT id, name, slug, path, depth FROM category WHERE path @> ? ORDER BY depth ASC',
-            [$path],
-        )->fetchAllAssociative();
+        $entities = $this->createQueryBuilder('c')
+            ->where('c.path = :path OR :path LIKE CONCAT(c.path, , ' % ') OR c.path = :path')
+            ->setParameter('path', $path)
+            ->orderBy('c.depth', 'ASC')
+            ->getQuery()
+            ->getResult();
 
-        return $this->rowNormalizer->normalize($rows);
+        if (!is_array($entities)) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            $this->rowsFromEntities($entities),
+            fn (array $row): bool => $path === $row['path'] || str_starts_with($path, $row['path'].'.')
+        ));
     }
 
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
-     *
-     * @throws Exception
      */
     public function findDescendantRowsByPath(string $path): array
     {
-        $rows = $this->getConnection()->executeQuery(
-            'SELECT id, name, slug, path, depth FROM category WHERE path <@ ? AND path <> ? ORDER BY depth ASC, slug ASC',
-            [$path, $path],
-        )->fetchAllAssociative();
+        $entities = $this->createQueryBuilder('c')
+            ->where('c.path LIKE :pathPattern')
+            ->andWhere('c.path <> :path')
+            ->setParameter('pathPattern', $path.'.%')
+            ->setParameter('path', $path)
+            ->orderBy('c.depth', 'ASC')
+            ->addOrderBy('c.slug', 'ASC')
+            ->getQuery()
+            ->getResult();
 
-        return $this->rowNormalizer->normalize($rows);
+        return is_array($entities) ? $this->rowsFromEntities($entities) : [];
     }
 
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
-     *
-     * @throws Exception
      */
     public function findPageRows(int $limit, string $after): array
     {
         $normalizedAfter = '' !== $after ? (base64_decode($after, true) ?: '') : '';
-        $params = [];
-        $types = [];
-        $sql = 'SELECT id, name, slug, path, depth FROM category';
+
+        $queryBuilder = $this->createQueryBuilder('c')
+            ->orderBy('c.path', 'ASC')
+            ->setMaxResults($limit);
 
         if ('' !== $normalizedAfter) {
-            $sql .= ' WHERE path > :cursor';
-            $params['cursor'] = $normalizedAfter;
-            $types['cursor'] = ParameterType::STRING;
+            $queryBuilder->where('c.path > :cursor')->setParameter('cursor', $normalizedAfter);
         }
 
-        $sql .= ' ORDER BY path ASC LIMIT :limit';
-        $params['limit'] = $limit;
-        $types['limit'] = ParameterType::INTEGER;
+        $entities = $queryBuilder->getQuery()->getResult();
 
-        $rows = $this->getConnection()->executeQuery($sql, $params, $types)->fetchAllAssociative();
-
-        return $this->rowNormalizer->normalize($rows);
+        return is_array($entities) ? $this->rowsFromEntities($entities) : [];
     }
 
-    private function getConnection(): Connection
+    /**
+     * @param list<CatalogCategoryEntity> $entities
+     *
+     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     */
+    private function rowsFromEntities(array $entities): array
     {
-        return $this->getEntityManager()->getConnection();
+        return array_map(fn (CatalogCategoryEntity $entity): array => $this->rowFromEntity($entity), $entities);
+    }
+
+    /**
+     * @return array{id:string,name:string,slug:string,path:string,depth:int}
+     */
+    private function rowFromEntity(CatalogCategoryEntity $entity): array
+    {
+        return [
+            'id' => $entity->getId(),
+            'name' => $entity->getName(),
+            'slug' => $entity->getSlug(),
+            'path' => $entity->getPath(),
+            'depth' => $entity->getDepth(),
+        ];
+    }
+
+    private function pathDepth(string $path): int
+    {
+        if ('' === trim($path)) {
+            return 0;
+        }
+
+        return substr_count($path, '.');
     }
 }

@@ -44,7 +44,7 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
                     'slug' => $this->cell($row, $idx, 'slug'),
                     'parentId' => $this->cell($row, $idx, 'parent_id'),
                     'path' => $this->cell($row, $idx, 'path'),
-                    'level' => isset($idx['level']) ? (int) ($row[$idx['level']] ?? 0) : null,
+                    'depth' => $this->depthCell($row, $idx),
                 ];
                 $this->validateCategory($payload);
                 $this->repo->upsertCategory($payload);
@@ -127,6 +127,26 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
         $value = $row[$offset] ?? null;
 
         return is_scalar($value) ? (string) $value : null;
+    }
+
+    /**
+     * @param list<string|int|float|bool|null> $row
+     * @param array<string,int>                $idx
+     */
+    private function depthCell(array $row, array $idx): ?int
+    {
+        foreach (['depth', 'level'] as $column) {
+            if (!isset($idx[$column])) {
+                continue;
+            }
+
+            $value = $row[$idx[$column]] ?? null;
+            if (is_numeric($value)) {
+                return (int) $value;
+            }
+        }
+
+        return null;
     }
 
     /** @return array<string,mixed> */

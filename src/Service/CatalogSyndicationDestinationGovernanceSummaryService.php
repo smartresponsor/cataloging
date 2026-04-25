@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
-use App\Cataloging\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
-use App\Cataloging\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface;
+use App\Cataloging\Event\CatalogSyndicationDestinationGovernanceSummaryBuilt;
+use App\Cataloging\EventInterface\CatalogSyndicationDestinationGovernanceSummaryBuiltInterface;
+use App\Cataloging\PolicyInterface\CatalogSyndicationDestinationGovernanceSummaryPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationGovernanceSummaryRequest;
 
 /**
  * Provides the catalog syndication destination governance summary service application service.
@@ -20,16 +20,16 @@ final readonly class CatalogSyndicationDestinationGovernanceSummaryService imple
      * Initializes the catalog syndication destination governance summary service service collaborators.
      */
     public function __construct(
-        private CategorySyndicationDestinationGovernanceSummaryPolicyInterface $policy,
+        private CatalogSyndicationDestinationGovernanceSummaryPolicyInterface $policy,
     ) {
     }
 
     public function buildSummary(
-        CategorySyndicationDestinationGovernanceSummaryRequest $request,
-    ): CategorySyndicationDestinationGovernanceSummaryBuiltInterface {
+        CatalogSyndicationDestinationGovernanceSummaryRequest $request,
+    ): CatalogSyndicationDestinationGovernanceSummaryBuiltInterface {
         $summary = $this->policy->buildSummary($request->destinationId(), $request->trailPayloads());
 
-        return new CategorySyndicationDestinationGovernanceSummaryBuilt(
+        return new CatalogSyndicationDestinationGovernanceSummaryBuilt(
             [
                 'destinationId' => $summary->destinationId(),
                 'totalTrails' => $summary->totalTrails(),

@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CategoryAccessAssignment;
-use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
-use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
+use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogAccessAssignmentServiceInterface;
-use App\Cataloging\ValueObject\CategoryAccessAssignmentRequest;
-use App\Cataloging\ValueObject\CategoryAccessAssignmentSelection;
+use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntityRequest;
+use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntitySelection;
 use Random\RandomException;
 
 /**
@@ -21,16 +21,16 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Initializes the catalog access assignment service service collaborators.
      */
-    public function __construct(private CategoryAccessAssignmentRepositoryInterface $repository)
+    public function __construct(private CatalogCategoryAccessAssignmentEntityRepositoryInterface $repository)
     {
     }
 
     /**
      * Handles the assign owner workflow.
      */
-    public function assignOwner(CategoryAccessAssignmentSelection $selection): CategoryAccessAssignmentInterface
+    public function assignOwner(CatalogCategoryAccessAssignmentEntitySelection $selection): CatalogCategoryAccessAssignmentEntityInterface
     {
-        return $this->assignRole(new CategoryAccessAssignmentRequest(
+        return $this->assignRole(new CatalogCategoryAccessAssignmentEntityRequest(
             $selection->categoryId(),
             $selection->actorUserId(),
             'owner',
@@ -41,14 +41,14 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Handles the assign role workflow.
      */
-    public function assignRole(CategoryAccessAssignmentRequest $request): CategoryAccessAssignmentInterface
+    public function assignRole(CatalogCategoryAccessAssignmentEntityRequest $request): CatalogCategoryAccessAssignmentEntityInterface
     {
         $existing = $this->repository->findOneByCategoryIdAndActorUserId(
             $request->categoryId(),
             $request->actorUserId(),
         );
 
-        if ($existing instanceof CategoryAccessAssignmentInterface) {
+        if ($existing instanceof CatalogCategoryAccessAssignmentEntityInterface) {
             if (method_exists($existing, 'activate')) {
                 $existing->activate();
             }
@@ -71,7 +71,7 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
         }
 
         try {
-            $assignment = CategoryAccessAssignment::create(
+            $assignment = CatalogCategoryAccessAssignmentEntity::create(
                 $request->categoryId(),
                 $request->actorUserId(),
                 $request->role(),
@@ -88,13 +88,13 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Handles the revoke workflow.
      */
-    public function revoke(CategoryAccessAssignmentSelection $selection): void
+    public function revoke(CatalogCategoryAccessAssignmentEntitySelection $selection): void
     {
         $assignment = $this->repository->findOneByCategoryIdAndActorUserId(
             $selection->categoryId(),
             $selection->actorUserId(),
         );
-        if (!$assignment instanceof CategoryAccessAssignmentInterface) {
+        if (!$assignment instanceof CatalogCategoryAccessAssignmentEntityInterface) {
             return;
         }
 
@@ -108,13 +108,13 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Updates the primary value.
      */
-    public function setPrimary(CategoryAccessAssignmentSelection $selection): void
+    public function setPrimary(CatalogCategoryAccessAssignmentEntitySelection $selection): void
     {
         $assignment = $this->repository->findOneByCategoryIdAndActorUserId(
             $selection->categoryId(),
             $selection->actorUserId(),
         );
-        if (!$assignment instanceof CategoryAccessAssignmentInterface) {
+        if (!$assignment instanceof CatalogCategoryAccessAssignmentEntityInterface) {
             return;
         }
 

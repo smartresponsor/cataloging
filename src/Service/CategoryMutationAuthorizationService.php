@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\Category;
+use App\Cataloging\Security\CategoryAuthorizationSubject;
 use App\Cataloging\Security\CategoryVoter;
-use Doctrine\DBAL\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -26,8 +25,6 @@ final readonly class CategoryMutationAuthorizationService
 
     /**
      * Handles the assert can move workflow.
-     *
-     * @throws Exception
      */
     public function assertCanMove(string $categoryId): void
     {
@@ -36,8 +33,6 @@ final readonly class CategoryMutationAuthorizationService
 
     /**
      * Handles the assert can publish workflow.
-     *
-     * @throws Exception
      */
     public function assertCanPublish(string $categoryId): void
     {
@@ -48,9 +43,6 @@ final readonly class CategoryMutationAuthorizationService
         );
     }
 
-    /**
-     * @throws Exception
-     */
     private function assertGranted(string $attribute, string $categoryId, string $message): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -68,8 +60,7 @@ final readonly class CategoryMutationAuthorizationService
             throw new AccessDeniedHttpException('Cross-tenant category mutation is not allowed for the current actor.');
         }
 
-        $subject = new Category();
-        $subject->id = trim($categoryId);
+        $subject = new CategoryAuthorizationSubject(trim($categoryId));
 
         if ($this->security->isGranted($attribute, $subject)) {
             return;

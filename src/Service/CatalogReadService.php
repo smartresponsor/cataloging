@@ -9,7 +9,6 @@ use App\Cataloging\Repository\CatalogRepository;
 use App\Cataloging\ServiceInterface\CatalogReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryCatalogReadNodeRequest;
 use App\Cataloging\ValueObject\CategoryCatalogReadPageRequest;
-use Doctrine\DBAL\Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -30,8 +29,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
 
     /**
      * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
-     *
-     * @throws Exception
      */
     public function byId(CategoryCatalogReadNodeRequest $request): ?array
     {
@@ -54,7 +51,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
      *     }>,
      * }|null
      *
-     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function descendantsTree(CategoryCatalogReadNodeRequest $request): ?array
@@ -78,7 +74,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
-     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function childList(CategoryCatalogReadNodeRequest $request): ?array
@@ -99,7 +94,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
-     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function childrenList(CategoryCatalogReadNodeRequest $request): ?array
@@ -110,7 +104,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
     /**
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>|null
      *
-     * @throws Exception
      * @throws InvalidArgumentException
      */
     public function ancestorList(CategoryCatalogReadNodeRequest $request): ?array
@@ -130,8 +123,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
 
     /**
      * @return array{item:list<array{id:string,name:string,slug:string,path:string,depth:int}>,after:string}
-     *
-     * @throws Exception
      */
     public function list(CategoryCatalogReadPageRequest $request): array
     {
@@ -152,8 +143,6 @@ final readonly class CatalogReadService implements CatalogReadServiceInterface
 
     /**
      * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
-     *
-     * @throws Exception
      */
     private function findCategory(CategoryCatalogReadNodeRequest $request): ?array
     {

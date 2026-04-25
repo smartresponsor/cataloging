@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use App\Cataloging\ServiceInterface\CatalogMovePreviewServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -26,17 +26,17 @@ final readonly class CatalogMovePreviewService implements CatalogMovePreviewServ
      */
     public function preview(string $sourceId, string $targetParentId): ?array
     {
-        /** @var CategoryEntity|null $source */
-        $source = $this->entityManager->getRepository(CategoryEntity::class)->find($sourceId);
-        /** @var CategoryEntity|null $target */
-        $target = $this->entityManager->getRepository(CategoryEntity::class)->find($targetParentId);
+        /** @var CatalogCategoryEntity|null $source */
+        $source = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($sourceId);
+        /** @var CatalogCategoryEntity|null $target */
+        $target = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($targetParentId);
         if (null === $source || null === $target) {
             return null;
         }
 
         $newPath = $target->getPath().'.'.basename(str_replace('.', '/', $source->getPath()));
         $newDepth = $target->getDepth() + 1;
-        $duplicate = $this->entityManager->getRepository(CategoryEntity::class)->findOneBy([
+        $duplicate = $this->entityManager->getRepository(CatalogCategoryEntity::class)->findOneBy([
             'slug' => $source->getSlug(),
             'depth' => $newDepth,
         ]);

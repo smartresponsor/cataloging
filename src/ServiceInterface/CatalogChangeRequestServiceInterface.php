@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequest;
+use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\Event\CategoryChangeRequestReviewed;
 use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;
@@ -15,7 +15,7 @@ use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;
  */
 interface CatalogChangeRequestServiceInterface
 {
-    public function submit(CategoryChangeRequestSubmitRequest $request): CatalogCategoryChangeRequest;
+    public function submit(CategoryChangeRequestSubmitRequest $request): CatalogCategoryChangeRequestEntity;
 
     /**
      * Handles the review workflow.

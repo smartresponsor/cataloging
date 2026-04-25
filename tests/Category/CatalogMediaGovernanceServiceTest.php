@@ -9,11 +9,11 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
-use App\Cataloging\ValueObject\CategoryMediaBindingScope;
-use App\Cataloging\ValueObject\CategoryMediaBindingState;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityScope;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityState;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -21,12 +21,12 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
 {
     public function testBindReturnsMediaBindingEventWithNormalizedPayload(): void
     {
-        $repository = new CategoryMediaBindingRepository();
+        $repository = new CatalogCategoryMediaBindingEntityRepository();
         $service = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
 
         $payload = $this->normalizePayload($service->bind(
             new CategoryMediaBindRequest(
-                new CategoryMediaBindingScope(
+                new CatalogCategoryMediaBindingEntityScope(
                     'binding-201',
                     'category-701',
                     'asset-501',
@@ -34,7 +34,7 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
                     ['storefront', 'storefront', 'mobile'],
                     ['en_US', 'en_US', 'uk_UA'],
                 ),
-                new CategoryMediaBindingState(true, true, ['format' => 'webp']),
+                new CatalogCategoryMediaBindingEntityState(true, true, ['format' => 'webp']),
                 new CatalogAuditContext('operator-1', 'bind category banner asset'),
             ),
         )->payload());

@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Command;
 
+use App\Cataloging\Command\CatalogSyndicationDestinationGovernanceSummaryCommand;
+use App\Cataloging\Command\CatalogSyndicationDestinationHistoryCommand;
 use App\Cataloging\Command\CategoryCompletenessEvaluateCommand;
 use App\Cataloging\Command\CategoryMediaReadinessEvaluateCommand;
 use App\Cataloging\Command\CategoryMoveCommand;
@@ -13,12 +15,10 @@ use App\Cataloging\Command\CategoryReviewAssignCommand;
 use App\Cataloging\Command\CategoryReviewQueueListCommand;
 use App\Cataloging\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
 use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
-use App\Cataloging\Command\CategorySyndicationDestinationGovernanceSummaryCommand;
-use App\Cataloging\Command\CategorySyndicationDestinationHistoryCommand;
 use App\Cataloging\Command\CategorySyndicationPackagePreviewCommand;
 use App\Cataloging\Command\CategorySyndicationRetryScheduleCommand;
 use App\Cataloging\Command\CategoryWorkflowTransitionCommand;
-use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\Service\ArrayValueNormalizer;
 use App\Cataloging\ServiceInterface\CatalogCompletenessServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
@@ -47,13 +47,13 @@ final class CategoryCliDiscoverabilityTest extends TestCase
             new CategoryPublicationQualityEvaluateCommand($this->createMock(CatalogPublicationQualityServiceInterface::class)),
             new CategoryMediaReadinessEvaluateCommand($this->createMock(CatalogDestinationMediaReadinessServiceInterface::class)),
             new CategorySyndicationPackagePreviewCommand($this->createMock(CatalogSyndicationPackageGateServiceInterface::class)),
-            new CategorySyndicationDeliveryFailedListCommand($this->createMock(CategorySyndicationDeliveryRecordRepositoryInterface::class)),
+            new CategorySyndicationDeliveryFailedListCommand($this->createMock(CatalogSyndicationDeliveryRecordRepositoryInterface::class)),
             new CategorySyndicationRetryScheduleCommand(
-                $this->createMock(CategorySyndicationDeliveryRecordRepositoryInterface::class),
+                $this->createMock(CatalogSyndicationDeliveryRecordRepositoryInterface::class),
                 $this->createMock(CatalogSyndicationRetryServiceInterface::class),
             ),
-            new CategorySyndicationDestinationHistoryCommand($this->createMock(CatalogSyndicationHistoryServiceInterface::class)),
-            new CategorySyndicationDestinationGovernanceSummaryCommand($this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class)),
+            new CatalogSyndicationDestinationHistoryCommand($this->createMock(CatalogSyndicationHistoryServiceInterface::class)),
+            new CatalogSyndicationDestinationGovernanceSummaryCommand($this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class)),
             new CategorySyndicationCategoryGovernanceSummaryCommand($this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class), new ArrayValueNormalizer()),
         ];
 

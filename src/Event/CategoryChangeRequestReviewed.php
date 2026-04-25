@@ -41,4 +41,9 @@ final readonly class CategoryChangeRequestReviewed implements CategoryChangeRequ
             'reviewedAt' => $this->reviewedAt->format(DATE_ATOM),
         ];
     }
+
+    public function requestId(): string
+    {
+        return $this->requestId;
+    }
 }

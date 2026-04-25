@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace App\Cataloging\Policy;
 
 use App\Cataloging\PolicyInterface\CategoryPublicationGatePolicyInterface;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
+use App\Cataloging\ValueObjectInterface\CatalogCategoryWorkflowEntityStateInterface;
 use App\Cataloging\ValueObjectInterface\CategoryPublicationReadinessInterface;
-use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
 
 /**
  * Provides the category publication gate policy implementation.
@@ -19,7 +19,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
      * Determines whether the current workflow can publish.
      */
     public function canPublish(
-        CategoryWorkflowStateInterface $workflowState,
+        CatalogCategoryWorkflowEntityStateInterface $workflowState,
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
@@ -28,7 +28,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
             return false;
         }
 
-        if (!$workflowState->is(CategoryWorkflowState::APPROVED)) {
+        if (!$workflowState->is(CatalogCategoryWorkflowEntityState::APPROVED)) {
             return false;
         }
 
@@ -39,7 +39,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
      * Handles the assert can publish workflow.
      */
     public function assertCanPublish(
-        CategoryWorkflowStateInterface $workflowState,
+        CatalogCategoryWorkflowEntityStateInterface $workflowState,
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
@@ -49,7 +49,7 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
         }
 
         $details = [];
-        if (!$workflowState->is(CategoryWorkflowState::APPROVED)) {
+        if (!$workflowState->is(CatalogCategoryWorkflowEntityState::APPROVED)) {
             $details[] = 'workflowState='.$workflowState->value();
         }
         if ([] !== $readiness->blockers()) {

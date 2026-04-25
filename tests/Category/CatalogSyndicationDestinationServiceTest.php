@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
-use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
+use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogSyndicationDestinationService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationRegisterRequest;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationDefinition;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationRegisterRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDestinationServiceTest extends TestCase
@@ -22,19 +22,19 @@ final class CatalogSyndicationDestinationServiceTest extends TestCase
     public function testRegisterBuildsDestinationEventPayload(): void
     {
         $service = new CatalogSyndicationDestinationService(
-            new CategorySyndicationDestinationPolicy(),
-            new CategorySyndicationDestinationRepository(),
+            new CatalogSyndicationDestinationPolicy(),
+            new CatalogSyndicationDestinationRepository(),
         );
 
         $event = $service->register(
-            new CategorySyndicationDestinationRegisterRequest(
-                new CategorySyndicationDestinationDefinition(
+            new CatalogSyndicationDestinationRegisterRequest(
+                new CatalogSyndicationDestinationDefinition(
                     'destination-01',
                     'US Search Feed',
                     'search',
                     'export',
                 ),
-                new CategorySyndicationDestinationConfiguration(
+                new CatalogSyndicationDestinationConfiguration(
                     true,
                     [
                         'feedCode' => 'search-us',

@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries the full input surface for category access assignment workflows.
  */
-final readonly class CategoryAccessAssignmentRequest
+final readonly class CatalogCategoryAccessAssignmentEntityRequest
 {
     /**
      * Initializes the category access assignment request value object.
@@ -40,4 +40,7 @@ final readonly class CategoryAccessAssignmentRequest
     {
         return $this->isPrimary;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryAccessAssignmentRequest', false)) {
+    class_alias(CatalogCategoryAccessAssignmentEntityRequest::class, __NAMESPACE__.'\\CategoryAccessAssignmentRequest');
 }

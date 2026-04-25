@@ -146,3 +146,6 @@ final class Composer
         return null;
     }
 }
+if (!class_exists(__NAMESPACE__.'\\Composer', false)) {
+    class_alias(PdpV2Interface::class, __NAMESPACE__.'\\Composer');
+}

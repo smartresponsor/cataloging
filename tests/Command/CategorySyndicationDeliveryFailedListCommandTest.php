@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
-use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
-use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -20,8 +20,8 @@ final class CategorySyndicationDeliveryFailedListCommandTest extends TestCase
 {
     public function testExecutePrintsNdjsonForFailedRecords(): void
     {
-        $record = new CategorySyndicationDeliveryRecord('d-1', 'p-1', 'dest-1', 'cat-1', new CategorySyndicationDeliveryStatus('failed'), 2, 503, 'boom', null);
-        $repo = $this->createMock(CategorySyndicationDeliveryRecordRepositoryInterface::class);
+        $record = new CatalogSyndicationDeliveryRecordEntity('d-1', 'p-1', 'dest-1', 'cat-1', new CategorySyndicationDeliveryStatus('failed'), 2, 503, 'boom', null);
+        $repo = $this->createMock(CatalogSyndicationDeliveryRecordRepositoryInterface::class);
         $repo->method('failedRecords')->willReturn([$record]);
 
         $tester = new CommandTester(new CategorySyndicationDeliveryFailedListCommand($repo));

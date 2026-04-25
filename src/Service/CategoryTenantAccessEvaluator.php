@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use App\Cataloging\Security\CategoryVoter;
 use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -25,23 +26,37 @@ final readonly class CategoryTenantAccessEvaluator
     ) {
     }
 
-    /** @throws Exception */
     public function categoryTenant(string $categoryId): ?string
     {
-        /** @var Connection $connection */
-        $connection = $this->registry->getConnection('data');
-        $tenant = $connection->fetchOne(
-            'SELECT tenant FROM category WHERE id = :id LIMIT 1',
-            ['id' => trim($categoryId)],
-        );
+        $normalizedId = trim($categoryId);
+        $entityManager = $this->categoryEntityManager();
+        if ($entityManager instanceof EntityManagerInterface) {
+            $entity = $entityManager->find(CatalogCategoryEntity::class, $normalizedId);
+            if ($entity instanceof CatalogCategoryEntity) {
+                $tenant = trim($entity->getTenant());
 
-        if (!is_scalar($tenant)) {
+                return '' !== $tenant ? $tenant : 'default';
+            }
+        }
+
+        try {
+            $connection = $this->registry->getConnection('data');
+        } catch (\Throwable) {
             return null;
         }
 
-        $normalized = trim((string) $tenant);
+        if (!$connection instanceof Connection) {
+            return null;
+        }
 
-        return '' !== $normalized ? $normalized : 'default';
+        $tenant = $connection->fetchOne('SELECT tenant FROM category WHERE id = ?', [$normalizedId]);
+        if (!is_string($tenant)) {
+            return null;
+        }
+
+        $normalizedTenant = trim($tenant);
+
+        return '' !== $normalizedTenant ? $normalizedTenant : 'default';
     }
 
     public function resolveExternalIdentityContext(): ?ExternalIdentityContext
@@ -77,6 +92,13 @@ final readonly class CategoryTenantAccessEvaluator
                 $action,
             ),
         );
+    }
+
+    private function categoryEntityManager(): ?EntityManagerInterface
+    {
+        $manager = $this->registry->getManagerForClass(CatalogCategoryEntity::class);
+
+        return $manager instanceof EntityManagerInterface ? $manager : null;
     }
 
     private function actionForAttribute(string $attribute): ?string

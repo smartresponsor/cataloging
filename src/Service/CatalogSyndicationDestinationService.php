@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CategorySyndicationDestination;
-use App\Cataloging\Event\CategorySyndicationDestinationRegistered;
-use App\Cataloging\EventInterface\CategorySyndicationDestinationRegisteredInterface;
-use App\Cataloging\PolicyInterface\CategorySyndicationDestinationPolicyInterface;
-use App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+use App\Cataloging\Entity\CatalogSyndicationDestinationEntity;
+use App\Cataloging\Event\CatalogSyndicationDestinationRegistered;
+use App\Cataloging\EventInterface\CatalogSyndicationDestinationRegisteredInterface;
+use App\Cataloging\PolicyInterface\CatalogSyndicationDestinationPolicyInterface;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationRegisterRequest;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationRegisterRequest;
 
 /**
  * Provides the catalog syndication destination service application service.
@@ -23,14 +23,14 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
      * Initializes the catalog syndication destination service service collaborators.
      */
     public function __construct(
-        private CategorySyndicationDestinationPolicyInterface $policy,
-        private CategorySyndicationDestinationRepositoryInterface $repository,
+        private CatalogSyndicationDestinationPolicyInterface $policy,
+        private CatalogSyndicationDestinationRepositoryInterface $repository,
     ) {
     }
 
     public function register(
-        CategorySyndicationDestinationRegisterRequest $request,
-    ): CategorySyndicationDestinationRegisteredInterface {
+        CatalogSyndicationDestinationRegisterRequest $request,
+    ): CatalogSyndicationDestinationRegisteredInterface {
         $definition = $request->definition();
         $configuration = $request->configuration();
         $audit = $request->auditContext();
@@ -38,19 +38,19 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
         $this->policy->assertDestinationType($definition->destinationType());
         $this->policy->assertDeliveryMode($definition->deliveryMode());
 
-        $normalizedConfiguration = new CategorySyndicationDestinationConfiguration(
+        $normalizedConfiguration = new CatalogSyndicationDestinationConfiguration(
             $configuration->enabled(),
             $this->policy->normalizeSettings($configuration->settings()),
         );
 
-        $destination = CategorySyndicationDestination::register(
+        $destination = CatalogSyndicationDestinationEntity::register(
             $definition,
             $normalizedConfiguration,
             $audit->actorId(),
         );
         $this->repository->save($destination);
 
-        return new CategorySyndicationDestinationRegistered(
+        return new CatalogSyndicationDestinationRegistered(
             [
                 'destinationId' => $destination->destinationId(),
                 'name' => $destination->name(),

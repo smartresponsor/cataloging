@@ -136,7 +136,7 @@ $rules = accessControlRules([
 $providerSource = $root . '/src/Security/JwtUserProvider.php';
 $servicesSource = $root . '/config/services.yaml';
 $securityApiSource = $root . '/config/packages/catalog_category_security_api.yaml';
-$accessAssignmentRepository = $root . '/src/Repository/CategoryAccessAssignmentRepository.php';
+$accessAssignmentRepository = $root . '/src/Repository/CatalogCategoryAccessAssignmentEntityRepository.php';
 $mutationAuthorizationService = $root . '/src/Service/CategoryMutationAuthorizationService.php';
 $adminController = $root . '/src/Controller/Admin/CategoryAdminController.php';
 $adminApiController = $root . '/src/Controller/Api/CategoryAdminApiController.php';
@@ -210,9 +210,9 @@ $items = [
     ],
     [
         'check' => 'access-assignment-repository-durable',
-        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\CategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
+        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\CatalogCategoryAccessAssignmentEntityRepositoryInterface") ? 'pass' : 'warn',
         'details' => [
-            'file' => 'src/Repository/CategoryAccessAssignmentRepository.php',
+            'file' => 'src/Repository/CatalogCategoryAccessAssignmentEntityRepository.php',
         ],
     ],
     [

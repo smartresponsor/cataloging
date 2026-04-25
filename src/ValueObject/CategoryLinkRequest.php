@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries the full input surface for category link and unlink workflows.
  */
-final readonly class CategoryLinkRequest
+final readonly class CatalogCategoryLinkEntityRequest
 {
     /**
      * Initializes the category link request value object.
@@ -46,4 +46,7 @@ final readonly class CategoryLinkRequest
     {
         return $this->targetId;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryLinkRequest', false)) {
+    class_alias(CatalogCategoryLinkEntityRequest::class, __NAMESPACE__.'\\CategoryLinkRequest');
 }

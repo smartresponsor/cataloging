@@ -5,14 +5,15 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
 use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\Cataloging\ServiceInterface\GraphqlResolverInterface;
 use App\Cataloging\ValueObject\CategoryGraphqlMoveRequest;
 use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
 use App\Cataloging\ValueObject\CategoryGraphqlPublishRequest;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,8 +39,6 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
      * @param CategoryGraphqlNodeRequest $request
      *
      * @return array<string,mixed>|null
-     *
-     * @throws Exception
      */
     public function category(CategoryGraphqlNodeRequest $request): ?array
     {
@@ -58,8 +57,6 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
 
     /**
      * @return list<array<string,mixed>>
-     *
-     * @throws Exception
      */
     public function categoryPath(CategoryGraphqlNodeRequest $request): array
     {
@@ -83,23 +80,7 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
             return [$this->normalizeNode($row)];
         }
 
-        $placeholders = [];
-        $params = [];
-        $types = [];
-        foreach ($prefixes as $index => $prefix) {
-            $key = 'path'.$index;
-            $placeholders[] = ':'.$key;
-            $params[$key] = $prefix;
-            $types[$key] = ParameterType::STRING;
-        }
-
-        $rows = $this->infraConnection()->fetchAllAssociative(
-            'SELECT id, parent_id, slug, name, locale, workflow_state, published, path '
-            .'FROM category_projection WHERE path IN ('.implode(', ', $placeholders).') '
-            .'ORDER BY LENGTH(path) ASC, path ASC',
-            $params,
-            $types,
-        );
+        $rows = $this->loadPathRowsDoctrineFirst($prefixes);
 
         $result = [];
         foreach ($rows as $pathRow) {
@@ -138,12 +119,120 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
         return true;
     }
 
-    private function infraConnection(): Connection
+    /**
+     * @param list<string> $prefixes
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function loadPathRowsDoctrineFirst(array $prefixes): array
     {
-        /** @var Connection $connection */
-        $connection = $this->registry->getConnection('infra');
+        $rows = $this->loadPathRowsFromConnection($prefixes);
+        if ([] !== $rows) {
+            return $rows;
+        }
 
-        return $connection;
+        $entityManager = $this->entityManager();
+        if (!$entityManager instanceof EntityManagerInterface) {
+            return [];
+        }
+
+        $entities = $entityManager->createQueryBuilder()
+            ->select('projection')
+            ->from(CatalogCategoryProjectionEntity::class, 'projection')
+            ->where('projection.path IN (:paths)')
+            ->setParameter('paths', $prefixes)
+            ->orderBy('projection.path', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $rows = [];
+        foreach ($entities as $entity) {
+            if (!$entity instanceof CatalogCategoryProjectionEntity) {
+                continue;
+            }
+
+            $rows[] = [
+                'id' => $entity->getId(),
+                'parent_id' => $entity->getParentId(),
+                'slug' => $entity->getSlug(),
+                'name' => $entity->getName(),
+                'locale' => $entity->getLocale(),
+                'workflow_state' => $entity->getWorkflowState(),
+                'published' => $entity->isPublished(),
+                'path' => $entity->getPath(),
+            ];
+        }
+
+        usort(
+            $rows,
+            static fn (array $left, array $right): int => [strlen((string) ($left['path'] ?? '')), (string) ($left['path'] ?? '')]
+                <=> [strlen((string) ($right['path'] ?? '')), (string) ($right['path'] ?? '')],
+        );
+
+        return $rows;
+    }
+
+    /**
+     * @param list<string> $prefixes
+     *
+     * @return list<array<string,mixed>>
+     */
+    private function loadPathRowsFromConnection(array $prefixes): array
+    {
+        try {
+            $connection = $this->registry->getConnection('infra');
+        } catch (\Throwable) {
+            return [];
+        }
+
+        if (!$connection instanceof Connection) {
+            return [];
+        }
+
+        $rows = $connection->fetchAllAssociative(
+            'SELECT id, parent_id, slug, name, locale, workflow_state, published, path
+             FROM category_projection
+             WHERE path IN (?) ORDER BY path ASC',
+            [$prefixes],
+            [ArrayParameterType::STRING],
+        );
+
+        $normalized = [];
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $normalized[] = [
+                'id' => $row['id'] ?? '',
+                'parent_id' => $row['parent_id'] ?? null,
+                'slug' => $row['slug'] ?? '',
+                'name' => $row['name'] ?? '',
+                'locale' => $row['locale'] ?? 'en',
+                'workflow_state' => $row['workflow_state'] ?? 'draft',
+                'published' => $row['published'] ?? false,
+                'path' => $row['path'] ?? '',
+            ];
+        }
+
+        usort(
+            $normalized,
+            static fn (array $left, array $right): int => [strlen((string) ($left['path'] ?? '')), (string) ($left['path'] ?? '')]
+                <=> [strlen((string) ($right['path'] ?? '')), (string) ($right['path'] ?? '')],
+        );
+
+        return $normalized;
+    }
+
+    private function entityManager(): ?EntityManagerInterface
+    {
+        try {
+            $manager = $this->registry->getManager();
+        } catch (\Throwable) {
+            return null;
+        }
+
+        return $manager instanceof EntityManagerInterface ? $manager : null;
     }
 
     /**

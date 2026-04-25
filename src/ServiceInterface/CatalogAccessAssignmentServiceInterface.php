@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
-use App\Cataloging\ValueObject\CategoryAccessAssignmentRequest;
-use App\Cataloging\ValueObject\CategoryAccessAssignmentSelection;
+use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
+use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntityRequest;
+use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntitySelection;
 
 /**
  * Defines the contract for catalog access assignment service.
@@ -17,23 +17,23 @@ interface CatalogAccessAssignmentServiceInterface
     /**
      * Handles the assign owner workflow.
      */
-    public function assignOwner(CategoryAccessAssignmentSelection $selection): CategoryAccessAssignmentInterface;
+    public function assignOwner(CatalogCategoryAccessAssignmentEntitySelection $selection): CatalogCategoryAccessAssignmentEntityInterface;
 
     /**
      * Handles the assign role workflow.
      */
-    public function assignRole(CategoryAccessAssignmentRequest $request): CategoryAccessAssignmentInterface;
+    public function assignRole(CatalogCategoryAccessAssignmentEntityRequest $request): CatalogCategoryAccessAssignmentEntityInterface;
 
     /**
      * Handles the revoke workflow.
      */
-    public function revoke(CategoryAccessAssignmentSelection $selection): void;
+    public function revoke(CatalogCategoryAccessAssignmentEntitySelection $selection): void;
 
     /**
      * Updates the primary value.
      */
-    public function setPrimary(CategoryAccessAssignmentSelection $selection): void;
+    public function setPrimary(CatalogCategoryAccessAssignmentEntitySelection $selection): void;
 
-    /** @return list<CategoryAccessAssignmentInterface> */
+    /** @return list<CatalogCategoryAccessAssignmentEntityInterface> */
     public function listActiveForCategory(string $categoryId): array;
 }

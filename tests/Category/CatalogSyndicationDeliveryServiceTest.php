@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategorySyndicationDeliveryPolicy;
-use App\Cataloging\Repository\CategorySyndicationDeliveryRecordRepository;
+use App\Cataloging\Repository\CatalogSyndicationDeliveryRecordRepository;
 use App\Cataloging\Service\CatalogSyndicationDeliveryService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CatalogSyndicationDeliveryRecordRequest;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryAttempt;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryContext;
-use App\Cataloging\ValueObject\CategorySyndicationDeliveryRecordRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDeliveryServiceTest extends TestCase
@@ -23,11 +23,11 @@ final class CatalogSyndicationDeliveryServiceTest extends TestCase
     {
         $service = new CatalogSyndicationDeliveryService(
             new CategorySyndicationDeliveryPolicy(),
-            new CategorySyndicationDeliveryRecordRepository(),
+            new CatalogSyndicationDeliveryRecordRepository(),
         );
 
         $event = $service->recordDelivery(
-            new CategorySyndicationDeliveryRecordRequest(
+            new CatalogSyndicationDeliveryRecordRequest(
                 new CategorySyndicationDeliveryContext(
                     'delivery-100',
                     'pkg-100',

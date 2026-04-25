@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
 use App\Cataloging\Policy\CategorySyndicationRetryPolicy;
 use App\Cataloging\Service\CatalogSyndicationRetryService;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
@@ -19,7 +19,7 @@ final class CatalogSyndicationRetryServiceTest extends TestCase
     public function testPrepareRecoveryCandidateReturnsRetryablePayload(): void
     {
         $service = new CatalogSyndicationRetryService(new CategorySyndicationRetryPolicy());
-        $record = new CategorySyndicationDeliveryRecord(
+        $record = new CatalogSyndicationDeliveryRecordEntity(
             'delivery-11',
             'package-11',
             'destination-11',
@@ -42,7 +42,7 @@ final class CatalogSyndicationRetryServiceTest extends TestCase
     public function testScheduleRetryReturnsNextAttemptPlan(): void
     {
         $service = new CatalogSyndicationRetryService(new CategorySyndicationRetryPolicy());
-        $record = new CategorySyndicationDeliveryRecord(
+        $record = new CatalogSyndicationDeliveryRecordEntity(
             'delivery-12',
             'package-12',
             'destination-12',

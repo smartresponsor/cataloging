@@ -37,8 +37,8 @@ final class RebuildCategoryTreeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $nodes = [
-            ['id' => 1, 'level' => 0],
-            ['id' => 2, 'level' => 1, 'parent' => 1],
+            ['id' => 1, 'depth' => 0],
+            ['id' => 2, 'depth' => 1, 'parent' => 1],
         ];
         $errors = $this->checker->check($nodes);
         $rebuilt = $this->runner->run($nodes);

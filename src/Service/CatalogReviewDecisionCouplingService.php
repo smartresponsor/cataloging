@@ -11,10 +11,10 @@ use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
 use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\Cataloging\ValueObject\CategoryReviewDecisionCouplingRequest;
-use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
 
 /**
  * Provides the catalog review decision coupling service application service.
@@ -53,7 +53,7 @@ final readonly class CatalogReviewDecisionCouplingService implements CatalogRevi
             throw new \DomainException(sprintf('Review event for request %s does not contain categoryId.', $request->requestId()));
         }
         if ('accepted' === $normalizedTargetState) {
-            $workflowEvent = $this->workflowTransitionService->transition(new CategoryWorkflowTransitionRequest(
+            $workflowEvent = $this->workflowTransitionService->transition(new CatalogCategoryWorkflowEntityTransitionRequest(
                 $categoryId,
                 'approved',
                 $request->reviewedBy(),
@@ -83,7 +83,7 @@ final readonly class CatalogReviewDecisionCouplingService implements CatalogRevi
                 new \DateTimeImmutable('now'),
             );
         }
-        $workflowEvent = $this->workflowTransitionService->transition(new CategoryWorkflowTransitionRequest(
+        $workflowEvent = $this->workflowTransitionService->transition(new CatalogCategoryWorkflowEntityTransitionRequest(
             $categoryId,
             'draft',
             $request->reviewedBy(),

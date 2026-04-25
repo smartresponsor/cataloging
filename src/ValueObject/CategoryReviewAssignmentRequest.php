@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries the full input surface for category review assignment workflows.
  */
-final readonly class CategoryReviewAssignmentRequest
+final readonly class CatalogCategoryReviewAssignmentEntityRequest
 {
     public function __construct(
         private string $requestId,
@@ -43,4 +43,7 @@ final readonly class CategoryReviewAssignmentRequest
     {
         return $this->dueAt;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentRequest', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityRequest::class, __NAMESPACE__.'\\CategoryReviewAssignmentRequest');
 }

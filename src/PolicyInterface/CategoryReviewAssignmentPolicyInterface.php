@@ -10,7 +10,7 @@ use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
 /**
  * Defines the contract for category review assignment policy.
  */
-interface CategoryReviewAssignmentPolicyInterface
+interface CatalogCategoryReviewAssignmentEntityPolicyInterface
 {
     /**
      * Determines whether the current workflow can assign.
@@ -31,4 +31,7 @@ interface CategoryReviewAssignmentPolicyInterface
         string $assignedBy,
         string $priority,
     ): void;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentPolicyInterface', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityPolicyInterface::class, __NAMESPACE__.'\\CategoryReviewAssignmentPolicyInterface');
 }

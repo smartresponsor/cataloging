@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
 use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
 use App\Cataloging\ValueObject\CategoryMediaRole;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ final class CategoryDestinationMediaFallbackPolicyTest extends TestCase
             'category-1801',
             ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => ['primary']],
             [
-                new CategoryMediaBinding('binding-shared', 'category-1801', 'asset-shared', CategoryMediaRole::primary(), [], [], true, true, [], 'operator-1', new \DateTimeImmutable()),
+                new CatalogCategoryMediaBindingEntity('binding-shared', 'category-1801', 'asset-shared', CategoryMediaRole::primary(), [], [], true, true, [], 'operator-1', new \DateTimeImmutable()),
             ],
         );
 

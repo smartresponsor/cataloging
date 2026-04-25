@@ -9,10 +9,10 @@ use App\Cataloging\Event\CategoryPublicationGateEvaluated;
 use App\Cataloging\EventInterface\CategoryPublicationGateEvaluatedInterface;
 use App\Cataloging\PolicyInterface\CategoryPublicationGatePolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObject\CategoryPublicationGateAssertionRequest;
 use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
 use App\Cataloging\ValueObject\CategoryPublicationReadiness;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
 
 /**
  * Provides the catalog publication gate service application service.
@@ -31,7 +31,7 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
      */
     public function evaluate(CategoryPublicationGateEvaluationRequest $request): CategoryPublicationGateEvaluatedInterface
     {
-        $state = CategoryWorkflowState::fromString($request->workflowState());
+        $state = CatalogCategoryWorkflowEntityState::fromString($request->workflowState());
         $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
         return new CategoryPublicationGateEvaluated(
@@ -52,7 +52,7 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
      */
     public function assertCanPublish(CategoryPublicationGateAssertionRequest $request): void
     {
-        $state = CategoryWorkflowState::fromString($request->workflowState());
+        $state = CatalogCategoryWorkflowEntityState::fromString($request->workflowState());
         $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
         $this->policy->assertCanPublish($state, $readiness, $request->actorId(), $request->reason());

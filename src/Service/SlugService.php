@@ -5,8 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Provides the slug service application service.
@@ -16,8 +17,9 @@ final readonly class SlugService
     /**
      * Initializes the slug service service collaborators.
      */
-    public function __construct(private Connection $connection)
-    {
+    public function __construct(
+        private ManagerRegistry $registry,
+    ) {
     }
 
     /**
@@ -37,13 +39,22 @@ final readonly class SlugService
         return $slug;
     }
 
-    /**
-     * @throws Exception
-     */
+    private function categoryEntityManager(): ?EntityManagerInterface
+    {
+        $manager = $this->registry->getManagerForClass(CatalogCategoryEntity::class);
+
+        return $manager instanceof EntityManagerInterface ? $manager : null;
+    }
+
     private function exists(string $slug): bool
     {
-        $result = $this->connection->fetchOne('SELECT 1 FROM category WHERE slug = ?', [$slug]);
+        $entityManager = $this->categoryEntityManager();
+        if (!$entityManager instanceof EntityManagerInterface) {
+            return false;
+        }
 
-        return (bool) $result;
+        $entity = $entityManager->getRepository(CatalogCategoryEntity::class)->findOneBy(['slug' => $slug]);
+
+        return $entity instanceof CatalogCategoryEntity;
     }
 }

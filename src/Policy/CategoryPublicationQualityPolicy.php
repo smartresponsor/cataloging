@@ -44,7 +44,7 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
         }
 
         $softWarnings = [];
-        foreach (['mediaReady', 'aliasReady'] as $name) {
+        foreach (['mediaReady', 'slugHistoryReady'] as $name) {
             if (($normalizedPublicationChecks[$name] ?? true) !== true) {
                 $softWarnings[] = $name;
             }

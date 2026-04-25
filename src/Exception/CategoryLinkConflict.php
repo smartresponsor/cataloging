@@ -8,7 +8,7 @@ namespace App\Cataloging\Exception;
 /**
  * Provides the category link conflict implementation.
  */
-final class CategoryLinkConflict extends \RuntimeException
+final class CatalogCategoryLinkEntityConflict extends \RuntimeException
 {
     /**
      * Initializes the category link conflict service collaborators.
@@ -17,4 +17,7 @@ final class CategoryLinkConflict extends \RuntimeException
     {
         parent::__construct('Link already exists'.('' !== $detail ? ': '.$detail : ''));
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryLinkConflict', false)) {
+    class_alias(CatalogCategoryLinkEntityConflict::class, __NAMESPACE__.'\\CategoryLinkConflict');
 }

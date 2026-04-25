@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\VirtualCategoryEntity;
+use App\Cataloging\Entity\CatalogRecordIndexEntity;
+use App\Cataloging\Entity\CatalogVirtualCategoryEntity;
 use App\Cataloging\Message\RecomputeVirtualCategoryMessage;
 use App\Cataloging\Rule\CategoryRule;
 use App\Cataloging\Rule\RuleEvaluator;
 use App\Cataloging\ServiceInterface\CatalogRuleServiceInterface;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -24,7 +24,6 @@ final readonly class CatalogRuleService implements CatalogRuleServiceInterface
      */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private Connection $connection,
         private MessageBusInterface $messageBus,
         private RuleEvaluator $ruleEvaluator = new RuleEvaluator(),
     ) {
@@ -42,15 +41,33 @@ final readonly class CatalogRuleService implements CatalogRuleServiceInterface
         }
         $rule = new CategoryRule($spec);
         $compiled = $this->ruleEvaluator->compile($rule);
-        $sql = 'SELECT COUNT(*) AS c FROM record_index WHERE '.$compiled['sql'];
-        $statement = $this->connection->prepare($sql);
-        foreach ($compiled['params'] as $key => $value) {
-            $statement->bindValue($key, $value);
-        }
-        $rawCount = $statement->executeQuery()->fetchOne();
-        $count = is_numeric($rawCount) ? (int) $rawCount : 0;
 
-        return ['count' => $count, 'sql' => $compiled['sql']];
+        try {
+            /** @var list<CatalogRecordIndexEntity> $records */
+            $records = $this->entityManager->createQueryBuilder()
+                ->select('record')
+                ->from(CatalogRecordIndexEntity::class, 'record')
+                ->getQuery()
+                ->getResult();
+
+            $count = 0;
+            foreach ($records as $record) {
+                $normalizedRecord = [
+                    'brand' => $record->getBrand(),
+                    'price' => $record->getPrice(),
+                    'stock' => $record->getStock(),
+                    'tag_set' => $record->getTagSet() ?? [],
+                ];
+
+                if ($this->ruleEvaluator->matches($normalizedRecord, $rule)) {
+                    ++$count;
+                }
+            }
+
+            return ['count' => $count, 'sql' => $compiled['sql']];
+        } catch (\Throwable $exception) {
+            throw new \RuntimeException('Catalog rule preview requires Doctrine ORM mapping for record index.', 0, $exception);
+        }
     }
 
     /**
@@ -60,8 +77,8 @@ final readonly class CatalogRuleService implements CatalogRuleServiceInterface
      */
     public function apply(string $id): bool
     {
-        /** @var VirtualCategoryEntity|null $virtualCategory */
-        $virtualCategory = $this->entityManager->getRepository(VirtualCategoryEntity::class)->find($id);
+        /** @var CatalogVirtualCategoryEntity|null $virtualCategory */
+        $virtualCategory = $this->entityManager->getRepository(CatalogVirtualCategoryEntity::class)->find($id);
         if (null === $virtualCategory) {
             return false;
         }

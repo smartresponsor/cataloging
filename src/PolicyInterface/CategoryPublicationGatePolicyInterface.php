@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\PolicyInterface;
 
+use App\Cataloging\ValueObjectInterface\CatalogCategoryWorkflowEntityStateInterface;
 use App\Cataloging\ValueObjectInterface\CategoryPublicationReadinessInterface;
-use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
 
 /**
  * Defines the contract for category publication gate policy.
@@ -17,7 +17,7 @@ interface CategoryPublicationGatePolicyInterface
      * Determines whether the current workflow can publish.
      */
     public function canPublish(
-        CategoryWorkflowStateInterface $workflowState,
+        CatalogCategoryWorkflowEntityStateInterface $workflowState,
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,
@@ -27,7 +27,7 @@ interface CategoryPublicationGatePolicyInterface
      * Handles the assert can publish workflow.
      */
     public function assertCanPublish(
-        CategoryWorkflowStateInterface $workflowState,
+        CatalogCategoryWorkflowEntityStateInterface $workflowState,
         CategoryPublicationReadinessInterface $readiness,
         string $actorId,
         string $reason,

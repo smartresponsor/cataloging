@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
+use App\Cataloging\EventInterface\CatalogSyndicationDestinationGovernanceSummaryBuiltInterface;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationGovernanceSummaryRequest;
 
 /**
  * Defines the contract for catalog syndication destination governance summary service.
@@ -15,6 +15,6 @@ use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummaryRe
 interface CatalogSyndicationDestinationGovernanceSummaryServiceInterface
 {
     public function buildSummary(
-        CategorySyndicationDestinationGovernanceSummaryRequest $request,
-    ): CategorySyndicationDestinationGovernanceSummaryBuiltInterface;
+        CatalogSyndicationDestinationGovernanceSummaryRequest $request,
+    ): CatalogSyndicationDestinationGovernanceSummaryBuiltInterface;
 }

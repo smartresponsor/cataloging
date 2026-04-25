@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Command;
 
 use App\Cataloging\ServiceInterface\CatalogReviewAssignmentServiceInterface;
-use App\Cataloging\ValueObject\CategoryReviewAssignmentRequest;
+use App\Cataloging\ValueObject\CatalogCategoryReviewAssignmentEntityRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -57,7 +57,7 @@ final class CategoryReviewAssignCommand extends Command
     {
         try {
             $dueAt = $this->optionString($input, 'due-at');
-            $event = $this->assignmentService->assign(new CategoryReviewAssignmentRequest(
+            $event = $this->assignmentService->assign(new CatalogCategoryReviewAssignmentEntityRequest(
                 $this->argumentString($input, 'requestId'),
                 $this->argumentString($input, 'reviewer'),
                 $this->argumentString($input, 'assignedBy'),

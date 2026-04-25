@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
+use App\Cataloging\Entity\CatalogRecordIndexEntity;
 use App\Cataloging\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Provides repository services for catalog collection projection repository.
@@ -17,8 +17,9 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
     /**
      * Initializes the catalog collection projection repository service collaborators.
      */
-    public function __construct(private ManagerRegistry $registry)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
     /**
@@ -26,49 +27,42 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
      */
     public function list(): array
     {
-        try {
-            /** @var Connection $connection */
-            $connection = $this->registry->getConnection('infra');
-            $rows = $connection->fetchAllAssociative(
-                'SELECT id, brand, price, stock, tag_set FROM record_index ORDER BY id ASC'
-            );
-        } catch (\Throwable) {
-            return [];
-        }
+        /** @var list<CatalogRecordIndexEntity> $entities */
+        $entities = $this->entityManager->createQueryBuilder()
+            ->select('recordIndex')
+            ->from(CatalogRecordIndexEntity::class, 'recordIndex')
+            ->orderBy('recordIndex.id', 'ASC')
+            ->getQuery()
+            ->getResult();
 
         return array_values(array_filter(array_map(
-            function (array $row): ?array {
-                $id = $row['id'] ?? null;
-                if (!is_scalar($id)) {
-                    return null;
-                }
-
-                $item = [
-                    'id' => (string) $id,
-                    'brand' => is_scalar($row['brand'] ?? null) ? (string) $row['brand'] : null,
-                    'price' => is_numeric($row['price'] ?? null) ? (float) $row['price'] : null,
-                    'stock' => is_numeric($row['stock'] ?? null) ? (int) $row['stock'] : null,
-                ];
-
-                $rawTagSet = $row['tag_set'] ?? null;
-                if (is_string($rawTagSet) && '' !== trim($rawTagSet)) {
-                    $decoded = json_decode($rawTagSet, true);
-                    if (is_array($decoded)) {
-                        $tags = [];
-                        foreach ($decoded as $value) {
-                            if (is_bool($value) || is_float($value) || is_int($value) || is_string($value)) {
-                                $tags[] = $value;
-                            }
-                        }
-                        if ([] !== $tags) {
-                            $item['tag_set'] = $tags;
-                        }
-                    }
-                }
-
-                return $item;
-            },
-            $rows,
+            fn (CatalogRecordIndexEntity $entity): ?array => $this->normalizeRecordIndexEntity($entity),
+            $entities,
         )));
+    }
+
+    /**
+     * @return array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}|null
+     */
+    private function normalizeRecordIndexEntity(CatalogRecordIndexEntity $entity): ?array
+    {
+        $id = $entity->getId();
+        if ('' === $id) {
+            return null;
+        }
+
+        $item = [
+            'id' => $id,
+            'brand' => $entity->getBrand(),
+            'price' => $entity->getPrice(),
+            'stock' => $entity->getStock(),
+        ];
+
+        $tagSet = $entity->getTagSet();
+        if (is_array($tagSet) && [] !== $tagSet) {
+            $item['tag_set'] = $tagSet;
+        }
+
+        return $item;
     }
 }

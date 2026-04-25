@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries canonical scope identifiers for category media binding workflows.
  */
-final readonly class CategoryMediaBindingScope
+final readonly class CatalogCategoryMediaBindingEntityScope
 {
     /**
      * @param list<string> $channels
@@ -55,4 +55,7 @@ final readonly class CategoryMediaBindingScope
     {
         return $this->locales;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryMediaBindingScope', false)) {
+    class_alias(CatalogCategoryMediaBindingEntityScope::class, __NAMESPACE__.'\\CategoryMediaBindingScope');
 }

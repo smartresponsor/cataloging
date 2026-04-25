@@ -8,7 +8,7 @@ namespace App\Cataloging\EventInterface;
 /**
  * Defines the contract for category workflow transitioned.
  */
-interface CategoryWorkflowTransitionedInterface
+interface CatalogCategoryWorkflowEntityTransitionedInterface
 {
     /**
      * Handles the event name workflow.
@@ -17,4 +17,7 @@ interface CategoryWorkflowTransitionedInterface
 
     /** @return array<string,mixed> */
     public function payload(): array;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryWorkflowTransitionedInterface', false)) {
+    class_alias(CatalogCategoryWorkflowEntityTransitionedInterface::class, __NAMESPACE__.'\\CategoryWorkflowTransitionedInterface');
 }

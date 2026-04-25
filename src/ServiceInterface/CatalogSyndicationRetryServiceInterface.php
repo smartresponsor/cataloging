@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
 use App\Cataloging\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
 use App\Cataloging\EventInterface\CategorySyndicationRetryScheduledInterface;
 
@@ -18,7 +18,7 @@ interface CatalogSyndicationRetryServiceInterface
      * Handles the prepare recovery candidate workflow.
      */
     public function prepareRecoveryCandidate(
-        CategorySyndicationDeliveryRecordInterface $record,
+        CatalogSyndicationDeliveryRecordInterface $record,
         string $actorId,
         string $reason,
     ): CategorySyndicationRecoveryCandidatePreparedInterface;
@@ -27,7 +27,7 @@ interface CatalogSyndicationRetryServiceInterface
      * Schedules the retry workflow for later processing.
      */
     public function scheduleRetry(
-        CategorySyndicationDeliveryRecordInterface $record,
+        CatalogSyndicationDeliveryRecordInterface $record,
         string $actorId,
         string $reason,
     ): CategorySyndicationRetryScheduledInterface;

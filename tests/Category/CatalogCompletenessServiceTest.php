@@ -35,7 +35,7 @@ final class CatalogCompletenessServiceTest extends TestCase
             'media' => [
                 'primaryAssetId' => 'asset-1',
             ],
-            'aliases' => ['garden-lights'],
+            'slugHistories' => ['garden-lights'],
             'presentation' => [
                 'bannerId' => 'banner-1',
                 'htmlBlockId' => 'html-1',
@@ -69,7 +69,7 @@ final class CatalogCompletenessServiceTest extends TestCase
             'media' => [
                 'primaryAssetId' => '',
             ],
-            'aliases' => [],
+            'slugHistories' => [],
             'presentation' => [
                 'bannerId' => '',
                 'htmlBlockId' => '',

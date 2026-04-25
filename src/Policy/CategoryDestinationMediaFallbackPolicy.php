@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\Cataloging\Service\CategoryMediaInputNormalizer;
 use App\Cataloging\ValueObject\CategoryDestinationMediaFallbackReport;
@@ -18,8 +18,8 @@ use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaFallbackReportIn
 final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinationMediaFallbackPolicyInterface
 {
     /**
-     * @param array<string,mixed>                      $destinationSettings
-     * @param array<int,CategoryMediaBindingInterface> $bindings
+     * @param array<string,mixed>                                   $destinationSettings
+     * @param array<int,CatalogCategoryMediaBindingEntityInterface> $bindings
      */
     public function buildReport(
         string $destinationId,
@@ -124,7 +124,7 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
         );
     }
 
-    private function channelKind(CategoryMediaBindingInterface $binding, string $channel): ?string
+    private function channelKind(CatalogCategoryMediaBindingEntityInterface $binding, string $channel): ?string
     {
         if ('' === $channel) {
             return 'exact';
@@ -137,7 +137,7 @@ final class CategoryDestinationMediaFallbackPolicy implements CategoryDestinatio
         return in_array($channel, $channels, true) ? 'exact' : null;
     }
 
-    private function localeKind(CategoryMediaBindingInterface $binding, string $locale): ?string
+    private function localeKind(CatalogCategoryMediaBindingEntityInterface $binding, string $locale): ?string
     {
         if ('' === $locale) {
             return 'exact';

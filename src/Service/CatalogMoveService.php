@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use App\Cataloging\ServiceInterface\CategoryMoveInterface;
 use App\Cataloging\ValueObject\CatalogMoveRequest;
-use Doctrine\DBAL\Connection;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Provides the catalog move service application service.
@@ -19,8 +19,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
      * Initializes the catalog move service service collaborators.
      */
     public function __construct(
-        private ManagerRegistry $registry,
-        private string $connectionName = 'data',
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -54,9 +53,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
         }
         unset($normalizedLocale);
 
-        $connection = $this->connection();
-
-        $connection->beginTransaction();
+        $this->entityManager->beginTransaction();
 
         try {
             $node = $this->fetchNode($normalizedNodeId);
@@ -77,9 +74,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
 
             $oldParentPath = $this->parentPath($oldPath);
             if ($oldParentPath === $newParentPath) {
-                if ($connection->isTransactionActive()) {
-                    $connection->rollBack();
-                }
+                $this->entityManager->rollback();
 
                 return [0, []];
             }
@@ -91,35 +86,35 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
             $changed = 0;
             $redirects = [];
             foreach ($subtree as $row) {
-                $currentPath = $this->pathValue($row['path'] ?? null);
+                $currentPath = $row['path'];
                 $rebasedPath = $this->rebasePath($currentPath, $oldPath, $newPath);
                 if ($rebasedPath === $currentPath) {
                     continue;
                 }
 
-                $this->updateRow($this->idValue($row['id'] ?? null), $rebasedPath, $this->depthFromPath($rebasedPath));
+                $this->updateRow($row['id'], $rebasedPath, $this->depthFromPath($rebasedPath));
                 ++$changed;
                 $redirects[] = [
-                    'id' => $this->idValue($row['id'] ?? null),
+                    'id' => $row['id'],
                     'from' => $currentPath,
                     'to' => $rebasedPath,
                 ];
             }
 
-            if ($dryRun && $connection->isTransactionActive()) {
-                $connection->rollBack();
+            if ($dryRun) {
+                $this->entityManager->rollback();
+
+                return [$changed, $redirects];
             }
-            if (!$dryRun) {
-                $connection->commit();
-            }
+
+            $this->entityManager->flush();
+            $this->entityManager->commit();
 
             return [$changed, $redirects];
         } catch (\Throwable $exception) {
             error_log('[CatalogMoveService] '.$exception->getMessage());
 
-            if ($connection->isTransactionActive()) {
-                $connection->rollBack();
-            }
+            $this->entityManager->rollback();
 
             if ($exception instanceof \InvalidArgumentException || $exception instanceof \RuntimeException) {
                 throw $exception;
@@ -132,63 +127,68 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /** @return array<string, mixed>|null */
     private function fetchNode(string $id): ?array
     {
-        $statement = $this->connection()->prepare('SELECT id, slug, path, depth FROM category WHERE id = :id LIMIT 1');
-        $statement->bindValue(':id', $id);
-        $result = $statement->executeQuery();
-        $row = $result->fetchAssociative();
+        $entity = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($id);
+        if (!$entity instanceof CatalogCategoryEntity) {
+            return null;
+        }
 
-        return false === $row ? null : $row;
+        return [
+            'id' => $entity->getId(),
+            'slug' => $entity->getSlug(),
+            'path' => $entity->getPath(),
+            'depth' => $entity->getDepth(),
+        ];
     }
 
-    /** @return list<array<string, mixed>> */
+    /** @return list<array{id:string,path:string,depth:int}> */
     private function fetchSubtree(string $path): array
     {
-        $statement = $this->connection()->prepare(
-            'SELECT id, path, depth
-             FROM category
-             WHERE CAST(path AS TEXT) = :path OR CAST(path AS TEXT) LIKE :prefix
-             ORDER BY depth ASC, id ASC'
-        );
-        $statement->bindValue(':path', $path);
-        $statement->bindValue(':prefix', $path.'.%');
-        $result = $statement->executeQuery();
+        $rows = $this->entityManager->createQuery(
+            'SELECT c.id AS id, c.path AS path, c.depth AS depth
+             FROM App\Cataloging\Entity\CatalogCategoryEntity c
+             WHERE c.path = :path OR c.path LIKE :prefix
+             ORDER BY c.depth ASC, c.id ASC'
+        )->setParameter('path', $path)
+         ->setParameter('prefix', $path.'.%')
+         ->getArrayResult();
 
-        return $result->fetchAllAssociative();
+        $result = [];
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $result[] = $this->normalizeSubtreeRow($row);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<array-key, mixed> $row
+     *
+     * @return array{id:string,path:string,depth:int}
+     */
+    private function normalizeSubtreeRow(array $row): array
+    {
+        $path = $this->pathValue($row['path']);
+
+        return [
+            'id' => $this->idValue($row['id']),
+            'path' => $path,
+            'depth' => $this->depthFromPath($path),
+        ];
     }
 
     private function updateRow(string $id, string $path, int $depth): void
     {
-        $statement = $this->connection()->prepare('UPDATE category SET path = :path, depth = :depth WHERE id = :id');
-        $statement->bindValue(':path', $path);
-        $statement->bindValue(':depth', $depth);
-        $statement->bindValue(':id', $id);
-        $statement->executeStatement();
-    }
-
-    private function connection(): Connection
-    {
-        $candidates = array_values(array_unique(array_filter([
-            trim($this->connectionName),
-            'data',
-            'app_data',
-            'user_data',
-            null,
-        ], static fn (mixed $name): bool => is_string($name) && '' !== $name)));
-
-        foreach ($candidates as $candidate) {
-            try {
-                /** @var Connection $connection */
-                $connection = $this->registry->getConnection($candidate);
-
-                return $connection;
-            } catch (\Throwable) {
-            }
+        $entity = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($id);
+        if (!$entity instanceof CatalogCategoryEntity) {
+            throw new \RuntimeException(sprintf('Category node "%s" was not found for ORM update.', $id));
         }
 
-        /** @var Connection $connection */
-        $connection = $this->registry->getConnection();
-
-        return $connection;
+        $entity->setPath($path);
+        $entity->setDepth($depth);
     }
 
     private function parentPath(string $path): ?string

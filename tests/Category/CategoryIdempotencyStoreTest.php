@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Idempotency\CategoryIdempotencyStore;
+use App\Cataloging\Tests\Support\CategoryDoctrineEntityManagerFactory;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryIdempotencyStoreTest extends TestCase
@@ -14,8 +15,9 @@ final class CategoryIdempotencyStoreTest extends TestCase
     public function testAcquireReturnsFalseForDuplicateRequestAndThrowsOnPayloadMismatch(): void
     {
         $connection = $this->createConnection();
+        $entityManager = $this->createEntityManager($connection);
         $this->createSchema($connection);
-        $store = new CategoryIdempotencyStore($connection);
+        $store = new CategoryIdempotencyStore($entityManager);
 
         self::assertTrue($store->acquire('key-1', 'category.move', 'hash-a', 3600, 'corr-1'));
         self::assertFalse($store->acquire('key-1', 'category.move', 'hash-a', 3600, 'corr-1'));
@@ -27,8 +29,9 @@ final class CategoryIdempotencyStoreTest extends TestCase
     public function testPurgeExpiredDeletesExpiredRows(): void
     {
         $connection = $this->createConnection();
+        $entityManager = $this->createEntityManager($connection);
         $this->createSchema($connection);
-        $store = new CategoryIdempotencyStore($connection);
+        $store = new CategoryIdempotencyStore($entityManager);
 
         $connection->insert('category_idempotency', [
             'idempotency_key' => 'expired-1',
@@ -47,7 +50,12 @@ final class CategoryIdempotencyStoreTest extends TestCase
 
     private function createConnection(): Connection
     {
-        return DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
+        return CategoryDoctrineEntityManagerFactory::createConnection();
+    }
+
+    private function createEntityManager(Connection $connection): EntityManagerInterface
+    {
+        return CategoryDoctrineEntityManagerFactory::createEntityManager($connection);
     }
 
     private function createSchema(Connection $connection): void

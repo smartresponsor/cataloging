@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Provides the search service application service.
+ *
+ * category_projection-backed read model.
  */
 final readonly class SearchService
 {
@@ -23,118 +24,194 @@ final readonly class SearchService
      * Initializes the search service collaborators.
      */
     public function __construct(
-        private ManagerRegistry $registry,
+        private EntityManagerInterface $entityManager,
         private CategoryProjectionQuerySupport $querySupport,
     ) {
     }
 
     /**
      * @return array<string,mixed>
-     *
-     * @throws Exception
      */
     public function search(?CategoryProjectionCriteria $criteria = null): array
     {
         $criteriaMap = $criteria?->toArray() ?? [];
-        $projectionCriteria = $this->querySupport->normalizeProjectionCriteriaMap($criteriaMap);
-        [$whereSql, $params, $types] = $this->querySupport->compileProjectionFilters($projectionCriteria);
-
-        $q = $this->querySupport->optionalString($criteriaMap['q'] ?? null) ?? '';
-        if ('' !== $q) {
-            $whereSql .= '' === $whereSql ? ' WHERE ' : ' AND ';
-            $whereSql .= '(slug LIKE :searchTerm OR name LIKE :searchTerm OR path LIKE :searchTerm)';
-            $params['searchTerm'] = '%'.$q.'%';
-            $types['searchTerm'] = ParameterType::STRING;
-        }
-
         $limit = $this->boundedInt($criteriaMap['limit'] ?? null, self::DEFAULT_LIMIT, 1, self::MAX_LIMIT);
         $offset = $this->boundedInt($criteriaMap['offset'] ?? null, 0, 0, self::MAX_OFFSET);
         $order = $this->allowedString($criteriaMap['order'] ?? null, ['path', 'name', 'slug', 'updated_at'], 'path');
-        $direction = $this->allowedString($criteriaMap['direction'] ?? null, ['asc', 'desc'], 'asc');
+        $direction = strtoupper($this->allowedString($criteriaMap['direction'] ?? null, ['asc', 'desc'], 'asc'));
 
-        $rows = $this->connection()->fetchAllAssociative(
-            'SELECT id, slug, name, parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at '
-            .'FROM category_projection'.$whereSql.' ORDER BY '.$order.' '.strtoupper($direction).' LIMIT :limit OFFSET :offset',
-            [...$params, 'limit' => $limit, 'offset' => $offset],
-            [...$types, 'limit' => ParameterType::INTEGER, 'offset' => ParameterType::INTEGER],
-        );
+        return $this->searchOrmOnly($criteriaMap, $limit, $offset, $order, $direction);
+    }
 
-        $countValue = $this->connection()->fetchOne(
-            'SELECT COUNT(*) FROM category_projection'.$whereSql,
-            $params,
-            $types,
-        );
+    /**
+     * @param array<string,mixed> $criteriaMap
+     *
+     * @return array<string,mixed>
+     */
+    private function searchOrmOnly(array $criteriaMap, int $limit, int $offset, string $order, string $direction): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder
+            ->select('projection')
+            ->from(CatalogCategoryProjectionEntity::class, 'projection');
 
-        $items = $this->querySupport->normalizeProjectionRows($rows);
+        $this->applyOrmProjectionFilters($queryBuilder, $criteriaMap);
+
+        $orderField = match ($order) {
+            'name' => 'projection.name',
+            'slug' => 'projection.slug',
+            'updated_at' => 'projection.updatedAt',
+            default => 'projection.path',
+        };
+
+        $queryBuilder
+            ->orderBy($orderField, $direction)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        /** @var list<CatalogCategoryProjectionEntity> $entities */
+        $entities = $queryBuilder->getQuery()->getResult();
+        $items = array_map(fn (CatalogCategoryProjectionEntity $entity): array => $this->normalizeProjectionEntity($entity), $entities);
+
+        $countBuilder = $this->entityManager->createQueryBuilder();
+        $countBuilder
+            ->select('COUNT(projection.id)')
+            ->from(CatalogCategoryProjectionEntity::class, 'projection');
+        $this->applyOrmProjectionFilters($countBuilder, $criteriaMap);
+
+        $totalValue = $countBuilder->getQuery()->getSingleScalarResult();
+        $total = is_numeric($totalValue) ? (int) $totalValue : count($items);
 
         return [
             'items' => $items,
-            'total' => is_numeric($countValue) ? (int) $countValue : count($items),
+            'total' => $total,
             'limit' => $limit,
             'offset' => $offset,
-            'order' => $order,
-            'direction' => $direction,
+            'order' => strtolower($order),
+            'direction' => strtolower($direction),
             'facets' => [
-                'locale' => $this->facetCounts($this->connection(), 'locale', $whereSql, $params, $types),
-                'tenant' => $this->facetCounts($this->connection(), 'tenant', $whereSql, $params, $types),
-                'workflow_state' => $this->facetCounts($this->connection(), 'workflow_state', $whereSql, $params, $types),
-                'published' => $this->facetCounts($this->connection(), 'published', $whereSql, $params, $types),
+                'locale' => $this->facetCountsOrm('locale', $criteriaMap),
+                'tenant' => $this->facetCountsOrm('tenant', $criteriaMap),
+                'workflow_state' => $this->facetCountsOrm('workflow_state', $criteriaMap),
+                'published' => $this->facetCountsOrm('published', $criteriaMap),
             ],
         ];
     }
 
-    private function connection(): Connection
+    /**
+     * @param array<string,mixed> $criteriaMap
+     */
+    private function applyOrmProjectionFilters(QueryBuilder $queryBuilder, array $criteriaMap): void
     {
-        /** @var Connection $connection */
-        $connection = $this->registry->getConnection('infra');
+        $projectionCriteria = $this->querySupport->normalizeProjectionCriteriaMap($criteriaMap);
 
-        return $connection;
+        if (null !== $projectionCriteria['tenant']) {
+            $queryBuilder
+                ->andWhere('projection.tenant = :tenant')
+                ->setParameter('tenant', $projectionCriteria['tenant']);
+        }
+
+        if (null !== $projectionCriteria['locale']) {
+            $queryBuilder
+                ->andWhere('projection.locale = :locale')
+                ->setParameter('locale', $projectionCriteria['locale']);
+        }
+
+        if (null !== $projectionCriteria['workflow_state']) {
+            $queryBuilder
+                ->andWhere('projection.workflowState = :workflowState')
+                ->setParameter('workflowState', $projectionCriteria['workflow_state']);
+        }
+
+        if (null !== $projectionCriteria['published']) {
+            $queryBuilder
+                ->andWhere('projection.published = :published')
+                ->setParameter('published', $projectionCriteria['published']);
+        }
+
+        $q = $this->querySupport->optionalString($criteriaMap['q'] ?? null) ?? '';
+        if ('' !== $q) {
+            $queryBuilder
+                ->andWhere('(projection.slug LIKE :searchTerm OR projection.name LIKE :searchTerm OR projection.path LIKE :searchTerm)')
+                ->setParameter('searchTerm', '%'.$q.'%');
+        }
     }
 
     /**
-     * @param array<string,mixed>         $params
-     * @param array<string,ParameterType> $types
+     * @param array<string,mixed> $criteriaMap
      *
      * @return array<string,int>
-     *
-     * @throws Exception
      */
-    private function facetCounts(
-        Connection $connection,
-        string $field,
-        string $whereSql,
-        array $params,
-        array $types,
-    ): array {
+    private function facetCountsOrm(string $field, array $criteriaMap): array
+    {
         if (!in_array($field, ['locale', 'tenant', 'workflow_state', 'published'], true)) {
             return [];
         }
 
-        $rows = $connection->fetchAllAssociative(
-            sprintf(
-                'SELECT %1$s AS facet_value, COUNT(*) AS facet_count '
-                .'FROM category_projection%2$s '
-                .'GROUP BY %1$s '
-                .'ORDER BY facet_count DESC, %1$s ASC',
-                $field,
-                $whereSql,
-            ),
-            $params,
-            $types,
-        );
+        $selectField = match ($field) {
+            'workflow_state' => 'projection.workflowState',
+            default => 'projection.'.$field,
+        };
 
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder
+            ->select($selectField.' AS facetValue, COUNT(projection.id) AS facetCount')
+            ->from(CatalogCategoryProjectionEntity::class, 'projection');
+
+        $this->applyOrmProjectionFilters($queryBuilder, $criteriaMap);
+
+        $queryBuilder
+            ->groupBy($selectField)
+            ->orderBy('facetCount', 'DESC')
+            ->addOrderBy('facetValue', 'ASC');
+
+        /** @var list<array{facetValue:mixed, facetCount:mixed}> $rows */
+        $rows = $queryBuilder->getQuery()->getArrayResult();
         $result = [];
+
         foreach ($rows as $row) {
-            $key = $this->facetKey($row['facet_value'] ?? null, $field);
+            $key = $this->facetKey($row['facetValue'] ?? null, $field);
             if (null === $key) {
                 continue;
             }
 
-            $count = $row['facet_count'] ?? null;
+            $count = $row['facetCount'] ?? null;
             $result[$key] = is_numeric($count) ? (int) $count : 0;
         }
 
         return $result;
+    }
+
+    /**
+     * @return array{
+     *     id:string,
+     *     slug:string,
+     *     name:string,
+     *     parent_id:?string,
+     *     path:string,
+     *     locale:string,
+     *     tenant:string,
+     *     workflow_state:string,
+     *     published:bool,
+     *     published_at:?string,
+     *     updated_at:string,
+     * }
+     */
+    private function normalizeProjectionEntity(CatalogCategoryProjectionEntity $entity): array
+    {
+        return [
+            'id' => $entity->getId(),
+            'slug' => $entity->getSlug(),
+            'name' => $entity->getName(),
+            'parent_id' => $entity->getParentId(),
+            'path' => $entity->getPath(),
+            'locale' => $entity->getLocale() ?? '',
+            'tenant' => $entity->getTenant(),
+            'workflow_state' => $entity->getWorkflowState(),
+            'published' => $entity->isPublished(),
+            'published_at' => $entity->getPublishedAt()?->format(DATE_ATOM),
+            'updated_at' => $entity->getUpdatedAt()->format(DATE_ATOM),
+        ];
     }
 
     private function facetKey(mixed $value, string $field): ?string

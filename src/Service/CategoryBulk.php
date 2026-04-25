@@ -7,8 +7,8 @@ namespace App\Cataloging\Service;
 
 use App\Cataloging\ServiceInterface\CategoryBulkInterface;
 use App\Cataloging\ServiceInterface\CategoryServiceInterface as CategoryCategoryService;
+use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
-use App\Cataloging\ValueObject\CategoryLinkRequest;
 use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
 
 /**
@@ -211,9 +211,9 @@ final readonly class CategoryBulk implements CategoryBulkInterface
     }
 
     /** @param array<string,mixed> $payload */
-    private function linkRequest(string $actorId, array $payload): CategoryLinkRequest
+    private function linkRequest(string $actorId, array $payload): CatalogCategoryLinkEntityRequest
     {
-        return new CategoryLinkRequest(
+        return new CatalogCategoryLinkEntityRequest(
             $actorId,
             $this->requiredString($payload, 'id'),
             $this->requiredString($payload, 'targetDomain'),

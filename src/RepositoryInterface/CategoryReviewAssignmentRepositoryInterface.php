@@ -5,26 +5,29 @@ declare(strict_types=1);
 
 namespace App\Cataloging\RepositoryInterface;
 
-use App\Cataloging\EntityInterface\CategoryReviewAssignmentInterface;
+use App\Cataloging\EntityInterface\CatalogCategoryReviewAssignmentEntityInterface;
 
 /**
  * Defines the contract for category review assignment repository.
  */
-interface CategoryReviewAssignmentRepositoryInterface
+interface CatalogCategoryReviewAssignmentEntityRepositoryInterface
 {
     /**
      * Handles the save workflow.
      */
-    public function save(CategoryReviewAssignmentInterface $assignment): void;
+    public function save(CatalogCategoryReviewAssignmentEntityInterface $assignment): void;
 
     /**
      * Handles the find by request id workflow.
      */
-    public function findByRequestId(string $requestId): ?CategoryReviewAssignmentInterface;
+    public function findByRequestId(string $requestId): ?CatalogCategoryReviewAssignmentEntityInterface;
 
-    /** @return list<CategoryReviewAssignmentInterface> */
+    /** @return list<CatalogCategoryReviewAssignmentEntityInterface> */
     public function findByReviewer(string $reviewer): array;
 
-    /** @return list<CategoryReviewAssignmentInterface> */
+    /** @return list<CatalogCategoryReviewAssignmentEntityInterface> */
     public function findByCategoryId(string $categoryId): array;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentRepositoryInterface', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityRepositoryInterface::class, __NAMESPACE__.'\\CategoryReviewAssignmentRepositoryInterface');
 }

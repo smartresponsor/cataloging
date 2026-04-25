@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
 use App\Cataloging\Service\CategoryMediaInputNormalizer;
 use App\Cataloging\ValueObject\CategoryMediaApplicabilityReport;
@@ -17,8 +17,8 @@ use App\Cataloging\ValueObjectInterface\CategoryMediaApplicabilityReportInterfac
 final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabilityPolicyInterface
 {
     /**
-     * @param array<string,mixed>                      $payload
-     * @param array<int,CategoryMediaBindingInterface> $bindings
+     * @param array<string,mixed>                                   $payload
+     * @param array<int,CatalogCategoryMediaBindingEntityInterface> $bindings
      */
     public function buildReport(array $payload, array $bindings): CategoryMediaApplicabilityReportInterface
     {
@@ -77,13 +77,13 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
             array_values(array_unique($requiredMissing)),
             $warnings,
             array_map(
-                static fn (CategoryMediaBindingInterface $binding): string => $binding->bindingId(),
+                static fn (CatalogCategoryMediaBindingEntityInterface $binding): string => $binding->bindingId(),
                 $matched,
             ),
         );
     }
 
-    private function matchesChannel(CategoryMediaBindingInterface $binding, string $channel): bool
+    private function matchesChannel(CatalogCategoryMediaBindingEntityInterface $binding, string $channel): bool
     {
         if ('' === $channel) {
             return true;
@@ -93,7 +93,7 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
         return [] === $channels || in_array($channel, $channels, true);
     }
 
-    private function matchesLocale(CategoryMediaBindingInterface $binding, string $locale): bool
+    private function matchesLocale(CatalogCategoryMediaBindingEntityInterface $binding, string $locale): bool
     {
         if ('' === $locale) {
             return true;
@@ -103,7 +103,7 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
         return [] === $locales || in_array($locale, $locales, true);
     }
 
-    private function isExactChannelMatch(CategoryMediaBindingInterface $binding, string $channel): bool
+    private function isExactChannelMatch(CatalogCategoryMediaBindingEntityInterface $binding, string $channel): bool
     {
         if ('' === $channel) {
             return true;
@@ -113,7 +113,7 @@ final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabili
         return [] !== $channels && in_array($channel, $channels, true);
     }
 
-    private function isExactLocaleMatch(CategoryMediaBindingInterface $binding, string $locale): bool
+    private function isExactLocaleMatch(CatalogCategoryMediaBindingEntityInterface $binding, string $locale): bool
     {
         if ('' === $locale) {
             return true;

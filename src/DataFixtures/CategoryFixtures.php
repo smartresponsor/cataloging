@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\DataFixtures;
 
-use App\Cataloging\Entity\CatalogCategoryBanner;
-use App\Cataloging\Entity\CatalogCategoryHtmlBlock;
-use App\Cataloging\Entity\CategoryAliasEntity;
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryBannerEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryHtmlBlockEntity;
+use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -22,7 +22,7 @@ final class CategoryFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $root = new CategoryEntity('Catalog', 'catalog', 'catalog', 0);
+        $root = new CatalogCategoryEntity('Catalog', 'catalog', 'catalog', 0);
         $manager->persist($root);
 
         $branches = [$root];
@@ -33,17 +33,17 @@ final class CategoryFixtures extends Fixture
             $path = $parent->getPath().'.'.$slug;
             $depth = $parent->getDepth() + 1;
 
-            $category = new CategoryEntity($name, $slug, $path, $depth);
+            $category = new CatalogCategoryEntity($name, $slug, $path, $depth);
             $manager->persist($category);
             $branches[] = $category;
 
             if (0 === $index % 3) {
-                $manager->persist(new CatalogCategoryBanner(
+                $manager->persist(new CatalogCategoryBannerEntity(
                     $category->getId(),
                     sprintf('Demo banner %d', $index),
                     'Demo banner content for catalog category.',
                 ));
-                $manager->persist(new CatalogCategoryHtmlBlock(
+                $manager->persist(new CatalogCategoryHtmlBlockEntity(
                     $category->getId(),
                     sprintf(
                         '<section class="p-3"><h2>%s</h2><p>%s</p></section>',
@@ -54,8 +54,8 @@ final class CategoryFixtures extends Fixture
             }
 
             if (0 === $index % 5) {
-                $manager->persist(new CategoryAliasEntity(
-                    sprintf('demo-alias-%d', $index),
+                $manager->persist(new CatalogCategorySlugHistoryEntity(
+                    sprintf('demo-slug-history-%d', $index),
                     $category->getId(),
                 ));
             }

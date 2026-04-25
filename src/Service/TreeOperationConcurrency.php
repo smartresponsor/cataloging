@@ -1,30 +1,21 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-/**
- * Provides the tree operation concurrency application service.
- */
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\EntityManagerInterface;
+
 final class TreeOperationConcurrency
 {
-    private \PDO $databaseConnection;
-    private TreeLock $treeLock;
-
-    /**
-     * Initializes the tree operation concurrency service collaborators.
-     */
-    public function __construct(\PDO $databaseConnection, TreeLock $treeLock)
-    {
-        $this->databaseConnection = $databaseConnection;
-        $this->treeLock = $treeLock;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TreeLock $treeLock,
+    ) {
     }
 
-    /**
-     * Handles the move workflow.
-     */
     public function move(string $nodeId, ?string $newParentId): void
     {
         if ($nodeId === $newParentId) {
@@ -33,57 +24,32 @@ final class TreeOperationConcurrency
 
         $this->treeLock->acquire('category_tree');
         try {
-            $this->databaseConnection->beginTransaction();
-
-            $nodePathStatement = $this->databaseConnection->prepare('SELECT path FROM category_entity WHERE id = :id FOR UPDATE');
-            if (false === $nodePathStatement) {
-                throw new \RuntimeException('Failed to prepare node-path query');
-            }
-            $nodePathStatement->bindValue(':id', $nodeId);
-            $nodePathStatement->execute();
-            $rowNode = $nodePathStatement->fetch(\PDO::FETCH_ASSOC);
-            $nodePath = $this->pathFromFetch($rowNode);
+            $this->entityManager->beginTransaction();
+            $nodePath = $this->pathFromEntity($this->entityManager->find(CatalogCategoryEntity::class, $nodeId, LockMode::PESSIMISTIC_WRITE));
 
             if (null !== $newParentId) {
-                $parentPathStatement = $this->databaseConnection->prepare('SELECT path FROM category_entity WHERE id = :parentId FOR UPDATE');
-                if (false === $parentPathStatement) {
-                    throw new \RuntimeException('Failed to prepare parent-path query');
-                }
-                $parentPathStatement->bindValue(':parentId', $newParentId);
-                $parentPathStatement->execute();
-                $rowParent = $parentPathStatement->fetch(\PDO::FETCH_ASSOC);
-                $parentPath = $this->pathFromFetch($rowParent);
+                $parentPath = $this->pathFromEntity($this->entityManager->find(CatalogCategoryEntity::class, $newParentId, LockMode::PESSIMISTIC_WRITE));
                 if ('' !== $parentPath && '' !== $nodePath && str_starts_with($parentPath, $nodePath)) {
                     throw new \InvalidArgumentException('Cycle detected');
                 }
             }
 
-            $this->databaseConnection->commit();
+            $this->entityManager->commit();
         } catch (\Throwable $exception) {
-            error_log('[TreeOperationConcurrency] '.$exception->getMessage());
-
-            if ($this->databaseConnection->inTransaction()) {
-                $this->databaseConnection->rollBack();
+            if ($this->entityManager->getConnection()->isTransactionActive()) {
+                $this->entityManager->rollback();
             }
-
             if ($exception instanceof \InvalidArgumentException || $exception instanceof \RuntimeException) {
                 throw $exception;
             }
-
             throw new \RuntimeException('Tree move failed: '.$exception->getMessage(), 0, $exception);
         } finally {
             $this->treeLock->release('category_tree');
         }
     }
 
-    private function pathFromFetch(mixed $row): string
+    private function pathFromEntity(?CatalogCategoryEntity $entity): string
     {
-        if (!is_array($row)) {
-            return '';
-        }
-
-        $path = $row['path'] ?? '';
-
-        return is_string($path) ? $path : '';
+        return $entity instanceof CatalogCategoryEntity ? $entity->getPath() : '';
     }
 }

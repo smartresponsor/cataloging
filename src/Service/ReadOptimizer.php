@@ -7,7 +7,6 @@ namespace App\Cataloging\Service;
 
 use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
-use Doctrine\DBAL\Exception;
 
 /**
  * Provides the read optimizer application service.
@@ -31,7 +30,6 @@ final class ReadOptimizer
      *
      * @return list<array<string,mixed>>
      *
-     * @throws Exception
      * @throws \JsonException
      */
     public function getTree(?CategoryProjectionCriteria $criteria = null): array

@@ -49,8 +49,8 @@ final readonly class CategoryPublicationReadiness implements CategoryPublication
         if (($normalized['mediaReady'] ?? false) !== true) {
             $warnings[] = 'mediaReady';
         }
-        if (($normalized['aliasReady'] ?? false) !== true) {
-            $warnings[] = 'aliasReady';
+        if (($normalized['slugHistoryReady'] ?? false) !== true) {
+            $warnings[] = 'slugHistoryReady';
         }
 
         return new self($normalized, $blockers, $warnings);

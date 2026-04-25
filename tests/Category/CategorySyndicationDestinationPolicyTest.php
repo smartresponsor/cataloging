@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
+use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategorySyndicationDestinationPolicyTest extends TestCase
 {
     public function testNormalizeSettingsReturnsSortedTrimmedMap(): void
     {
-        $policy = new CategorySyndicationDestinationPolicy();
+        $policy = new CatalogSyndicationDestinationPolicy();
 
         self::assertSame(
             [

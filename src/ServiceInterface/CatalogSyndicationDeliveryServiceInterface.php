@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategorySyndicationDeliveryRecordedInterface;
-use App\Cataloging\ValueObject\CategorySyndicationDeliveryRecordRequest;
+use App\Cataloging\EventInterface\CatalogSyndicationDeliveryRecordedInterface;
+use App\Cataloging\ValueObject\CatalogSyndicationDeliveryRecordRequest;
 
 /**
  * Defines the contract for catalog syndication delivery service.
@@ -17,6 +17,6 @@ interface CatalogSyndicationDeliveryServiceInterface
      * Handles the record delivery workflow.
      */
     public function recordDelivery(
-        CategorySyndicationDeliveryRecordRequest $request,
-    ): CategorySyndicationDeliveryRecordedInterface;
+        CatalogSyndicationDeliveryRecordRequest $request,
+    ): CatalogSyndicationDeliveryRecordedInterface;
 }

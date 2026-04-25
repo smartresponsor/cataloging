@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\CategoryAliasEntity;
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -37,9 +37,9 @@ final class ExportRedirectNdjsonCommand extends Command
     /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
-        $catRepo = $this->em->getRepository(CategoryEntity::class);
-        $aliases = $aliasRepo->findAll();
+        $slugHistoryRepo = $this->em->getRepository(CatalogCategorySlugHistoryEntity::class);
+        $catRepo = $this->em->getRepository(CatalogCategoryEntity::class);
+        $slugHistories = $slugHistoryRepo->findAll();
 
         $path = getcwd().'/var/export/category_redirects_301.ndjson';
         $this->ensureDirectory(dirname($path));
@@ -48,15 +48,15 @@ final class ExportRedirectNdjsonCommand extends Command
             throw new \RuntimeException(sprintf('Unable to open file for writing: %s', $path));
         }
 
-        foreach ($aliases as $alias) {
-            $category = $catRepo->find($alias->categoryId());
-            if (!$category instanceof CategoryEntity) {
+        foreach ($slugHistories as $slugHistory) {
+            $category = $catRepo->find($slugHistory->categoryId());
+            if (!$category instanceof CatalogCategoryEntity) {
                 continue;
             }
             $row = [
-                'from' => $alias->oldSlug(),
+                'from' => $slugHistory->slug(),
                 'to' => $category->getSlug(),
-                'ts' => $alias->createdAt()->format(DATE_ATOM),
+                'ts' => $slugHistory->createdAt()->format(DATE_ATOM),
             ];
             $written = fwrite($stream, json_encode($row, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE).'
 ');

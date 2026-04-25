@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\CategoryAliasEntity;
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -35,20 +35,20 @@ final class CatalogSlugSmokeCommand extends Command
     /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $aliasRepository = $this->entityManager->getRepository(CategoryAliasEntity::class);
-        $categoryRepository = $this->entityManager->getRepository(CategoryEntity::class);
-        $aliases = $aliasRepository->findAll();
+        $slugHistoryRepository = $this->entityManager->getRepository(CatalogCategorySlugHistoryEntity::class);
+        $categoryRepository = $this->entityManager->getRepository(CatalogCategoryEntity::class);
+        $slugHistories = $slugHistoryRepository->findAll();
         $foundCount = 0;
         $missingCount = 0;
-        foreach ($aliases as $alias) {
-            $category = $categoryRepository->find($alias->categoryId());
+        foreach ($slugHistories as $slugHistory) {
+            $category = $categoryRepository->find($slugHistory->categoryId());
             if ($category) {
                 ++$foundCount;
             } else {
                 ++$missingCount;
             }
         }
-        $output->writeln('Alias ok: '.$foundCount.'; missing target: '.$missingCount);
+        $output->writeln('Slug history ok: '.$foundCount.'; missing target: '.$missingCount);
 
         return 0 === $missingCount ? Command::SUCCESS : Command::FAILURE;
     }

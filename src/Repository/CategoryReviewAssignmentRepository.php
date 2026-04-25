@@ -1,57 +1,68 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
-use App\Cataloging\EntityInterface\CategoryReviewAssignmentInterface;
-use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\Entity\CatalogCategoryReviewAssignmentEntity;
+use App\Cataloging\EntityInterface\CatalogCategoryReviewAssignmentEntityInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Provides repository services for category review assignment repository.
- */
-/** @noinspection PhpCSFixerValidationInspection */
-final class CategoryReviewAssignmentRepository implements CategoryReviewAssignmentRepositoryInterface
+final class CatalogCategoryReviewAssignmentEntityRepository implements CatalogCategoryReviewAssignmentEntityRepositoryInterface
 {
-    /** @var array<string,CategoryReviewAssignmentInterface> */
+    /** @var array<string,CatalogCategoryReviewAssignmentEntityInterface> */
     private array $assignments = [];
 
-    /**
-     * Handles the save workflow.
-     */
-    public function save(CategoryReviewAssignmentInterface $assignment): void
+    public function __construct(private readonly ?EntityManagerInterface $entityManager = null)
     {
+    }
+
+    public function save(CatalogCategoryReviewAssignmentEntityInterface $assignment): void
+    {
+        if ($this->entityManager instanceof EntityManagerInterface && $assignment instanceof CatalogCategoryReviewAssignmentEntity) {
+            $this->entityManager->persist($assignment);
+            $this->entityManager->flush();
+
+            return;
+        }
+
         $this->assignments[$assignment->requestId()] = $assignment;
     }
 
-    /**
-     * Handles the find by request id workflow.
-     */
-    public function findByRequestId(string $requestId): ?CategoryReviewAssignmentInterface
+    public function findByRequestId(string $requestId): ?CatalogCategoryReviewAssignmentEntityInterface
     {
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->find(CatalogCategoryReviewAssignmentEntity::class, trim($requestId));
+        }
+
         return $this->assignments[$requestId] ?? null;
     }
 
-    /**
-     * Handles the find by reviewer workflow.
-     */
     public function findByReviewer(string $reviewer): array
     {
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->getRepository(CatalogCategoryReviewAssignmentEntity::class)->findBy(['assignedReviewer' => trim($reviewer)]);
+        }
+
         return array_values(array_filter(
             $this->assignments,
-            static fn (CategoryReviewAssignmentInterface $assignment): bool => $assignment->assignedReviewer() === $reviewer,
+            static fn (CatalogCategoryReviewAssignmentEntityInterface $assignment): bool => $assignment->assignedReviewer() === $reviewer,
         ));
     }
 
-    /**
-     * Handles the find by category id workflow.
-     */
     public function findByCategoryId(string $categoryId): array
     {
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->getRepository(CatalogCategoryReviewAssignmentEntity::class)->findBy(['categoryId' => trim($categoryId)]);
+        }
+
         return array_values(array_filter(
             $this->assignments,
-            static fn (CategoryReviewAssignmentInterface $assignment): bool => $assignment->categoryId() === $categoryId,
+            static fn (CatalogCategoryReviewAssignmentEntityInterface $assignment): bool => $assignment->categoryId() === $categoryId,
         ));
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentRepository', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityRepository::class, __NAMESPACE__.'\\CategoryReviewAssignmentRepository');
 }

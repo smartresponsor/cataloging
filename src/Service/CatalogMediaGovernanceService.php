@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
 use App\Cataloging\Event\CategoryMediaBound;
 use App\Cataloging\PolicyInterface\CategoryMediaGovernancePolicyInterface;
-use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaGovernanceServiceInterface;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use App\Cataloging\ValueObject\CategoryMediaRole;
@@ -22,7 +22,7 @@ final readonly class CatalogMediaGovernanceService implements CatalogMediaGovern
      * Initializes the catalog media governance service service collaborators.
      */
     public function __construct(
-        private CategoryMediaBindingRepositoryInterface $repository,
+        private CatalogCategoryMediaBindingEntityRepositoryInterface $repository,
         private CategoryMediaGovernancePolicyInterface $policy,
     ) {
     }
@@ -47,7 +47,7 @@ final readonly class CatalogMediaGovernanceService implements CatalogMediaGovern
             $scope->locales(),
         )));
 
-        $binding = new CategoryMediaBinding(
+        $binding = new CatalogCategoryMediaBindingEntity(
             $scope->bindingId(),
             $scope->categoryId(),
             $scope->assetId(),

@@ -15,9 +15,9 @@ final class CategoryTreeBrokenTest extends TestCase
     public function testDetectsBroken(): void
     {
         $data = [
-            ['id' => 1, 'level' => 0],
-            ['id' => 2, 'level' => -1],
+            ['id' => 1, 'depth' => 0],
+            ['id' => 2, 'depth' => -1],
         ];
-        $this->assertNotEmpty(array_filter($data, static fn ($n) => $n['level'] < 0));
+        $this->assertNotEmpty(array_filter($data, static fn ($n) => $n['depth'] < 0));
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaCoveragePolicyInterface;
 use App\Cataloging\ValueObject\CategoryMediaCoverageReport;
 use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
@@ -16,8 +16,8 @@ use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyInterface
 {
     /**
-     * @param array<string,mixed>                      $payload
-     * @param array<int,CategoryMediaBindingInterface> $bindings
+     * @param array<string,mixed>                                   $payload
+     * @param array<int,CatalogCategoryMediaBindingEntityInterface> $bindings
      */
     public function buildReport(array $payload, array $bindings): CategoryMediaCoverageReportInterface
     {
@@ -26,7 +26,7 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
 
         $activeBindings = array_values(array_filter(
             $bindings,
-            static fn (CategoryMediaBindingInterface $binding): bool => $binding->active(),
+            static fn (CatalogCategoryMediaBindingEntityInterface $binding): bool => $binding->active(),
         ));
 
         $hasPrimaryBinding = $this->hasRole($activeBindings, 'primary');
@@ -34,7 +34,7 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
         $hasHeroBinding = $this->hasRole($activeBindings, 'hero');
         $requiredBindings = array_values(array_filter(
             $activeBindings,
-            static fn (CategoryMediaBindingInterface $binding): bool => $binding->requiredForPublish(),
+            static fn (CatalogCategoryMediaBindingEntityInterface $binding): bool => $binding->requiredForPublish(),
         ));
 
         $hasInlinePrimary = '' !== $this->scalarString($media['primaryAssetId'] ?? null);
@@ -66,13 +66,13 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
         return new CategoryMediaCoverageReport($checks, $requiredMissing, $warnings);
     }
 
-    /** @param list<CategoryMediaBindingInterface> $bindings */
+    /** @param list<CatalogCategoryMediaBindingEntityInterface> $bindings */
     private function hasRole(array $bindings, string $role): bool
     {
         return array_any($bindings, fn ($binding) => $binding->role()->value() === $role);
     }
 
-    /** @param list<CategoryMediaBindingInterface> $bindings */
+    /** @param list<CatalogCategoryMediaBindingEntityInterface> $bindings */
     private function allRequiredBindingsCovered(array $bindings): bool
     {
         if (array_any($bindings, fn ($binding) => '' === trim($binding->assetId()))) {

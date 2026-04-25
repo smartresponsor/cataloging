@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Subscriber;
 
-use App\Cataloging\Entity\CategoryAliasEntity;
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -38,7 +38,7 @@ final readonly class CategorySlugSubscriber implements EventSubscriber
     public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
-        if (!$entity instanceof CategoryEntity) {
+        if (!$entity instanceof CatalogCategoryEntity) {
             return;
         }
 
@@ -48,12 +48,12 @@ final readonly class CategorySlugSubscriber implements EventSubscriber
             if ($old === $new) {
                 return;
             }
-            $repo = $this->em->getRepository(CategoryAliasEntity::class);
-            if ($repo->findOneBy(['oldSlug' => $old])) {
+            $repo = $this->em->getRepository(CatalogCategorySlugHistoryEntity::class);
+            if ($repo->findOneBy(['slug' => $old])) {
                 return;
             }
-            $alias = new CategoryAliasEntity($old, $entity->getId());
-            $this->em->persist($alias);
+            $slugHistory = new CatalogCategorySlugHistoryEntity($old, $entity->getId());
+            $this->em->persist($slugHistory);
         }
     }
 

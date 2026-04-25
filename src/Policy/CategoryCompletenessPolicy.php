@@ -33,7 +33,7 @@ final class CategoryCompletenessPolicy implements CategoryCompletenessPolicyInte
             'contentReady' => '' !== CategoryPayloadValueNormalizer::scalarString($content['body'] ?? null),
             'localeCoverageReady' => count(array_filter(CategoryPayloadValueNormalizer::stringList($locale['enabled'] ?? null))) > 0,
             'mediaReady' => '' !== CategoryPayloadValueNormalizer::scalarString($media['primaryAssetId'] ?? null),
-            'aliasReady' => is_array($payload['aliases'] ?? null) && [] !== $payload['aliases'],
+            'slugHistoryReady' => is_array($payload['slugHistories'] ?? null) && [] !== $payload['slugHistories'],
             'bannerReady' => '' !== CategoryPayloadValueNormalizer::scalarString($presentation['bannerId'] ?? null),
             'htmlBlockReady' => '' !== CategoryPayloadValueNormalizer::scalarString($presentation['htmlBlockId'] ?? null),
         ];

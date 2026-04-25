@@ -10,7 +10,7 @@ use App\Cataloging\ValueObjectInterface\CategoryMediaRoleInterface;
 /**
  * Defines the contract for category media binding.
  */
-interface CategoryMediaBindingInterface
+interface CatalogCategoryMediaBindingEntityInterface
 {
     /**
      * Handles the binding id workflow.
@@ -60,4 +60,7 @@ interface CategoryMediaBindingInterface
      * Handles the bound at workflow.
      */
     public function boundAt(): \DateTimeImmutable;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryMediaBindingInterface', false)) {
+    class_alias(CatalogCategoryMediaBindingEntityInterface::class, __NAMESPACE__.'\\CategoryMediaBindingInterface');
 }

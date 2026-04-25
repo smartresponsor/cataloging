@@ -1,65 +1,31 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
+use App\Cataloging\Entity\CatalogVirtualCategoryEntity;
 use App\Cataloging\RepositoryInterface\VirtualCategoryRepositoryInterface;
-use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Provides repository services for virtual category repository.
- */
 final readonly class VirtualCategoryRepository implements VirtualCategoryRepositoryInterface
 {
-    /**
-     * Initializes the virtual category repository service collaborators.
-     */
-    public function __construct(private Connection $connection)
+    public function __construct(private ?EntityManagerInterface $entityManager = null)
     {
     }
 
-    /**
-     * Handles the find by id workflow.
-     */
     public function findById(string $id): ?array
     {
         $normalizedId = trim($id);
-        if ('' === $normalizedId) {
+        if ('' === $normalizedId || !$this->entityManager instanceof EntityManagerInterface) {
             return null;
         }
 
-        try {
-            $row = $this->connection->fetchAssociative(
-                'SELECT id, name, rule FROM virtual_category WHERE id = :id LIMIT 1',
-                ['id' => $normalizedId],
-            );
-        } catch (\Throwable) {
+        $entity = $this->entityManager->find(CatalogVirtualCategoryEntity::class, $normalizedId);
+        if (!$entity instanceof CatalogVirtualCategoryEntity) {
             return null;
         }
 
-        if (!is_array($row)) {
-            return null;
-        }
-
-        $rawRule = $row['rule'] ?? null;
-        $decodedRule = is_string($rawRule) ? json_decode($rawRule, true) : $rawRule;
-        $rule = [];
-        if (is_array($decodedRule)) {
-            foreach ($decodedRule as $key => $value) {
-                if (!is_string($key)) {
-                    continue;
-                }
-
-                $rule[$key] = $value;
-            }
-        }
-
-        return [
-            'id' => is_scalar($row['id'] ?? null) ? (string) $row['id'] : '',
-            'name' => is_scalar($row['name'] ?? null) ? (string) $row['name'] : '',
-            'rule' => $rule,
-        ];
+        return ['id' => $entity->getId(), 'name' => $entity->getName(), 'rule' => $entity->getRule()];
     }
 }

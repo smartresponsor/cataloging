@@ -10,9 +10,9 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
 use App\Cataloging\Service\CatalogPublicationGateService;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObject\CategoryPublicationGateAssertionRequest;
 use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationGateServiceTest extends TestCase
@@ -23,14 +23,14 @@ final class CatalogPublicationGateServiceTest extends TestCase
 
         $event = $service->evaluate(new CategoryPublicationGateEvaluationRequest(
             'category-200',
-            CategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowEntityState::APPROVED,
             [
                 'slugReady' => true,
                 'seoReady' => true,
                 'contentReady' => true,
                 'localeReady' => true,
                 'mediaReady' => false,
-                'aliasReady' => false,
+                'slugHistoryReady' => false,
             ],
             'operator-1',
             'release candidate approved',
@@ -39,7 +39,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
         $payload = $event->payload();
         self::assertTrue($payload['publishable']);
         self::assertSame([], $payload['blockers']);
-        self::assertSame(['mediaReady', 'aliasReady'], $payload['warnings']);
+        self::assertSame(['mediaReady', 'slugHistoryReady'], $payload['warnings']);
         self::assertSame('approved', $payload['workflowState']);
     }
 
@@ -50,7 +50,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
         $this->expectException(\DomainException::class);
 
         $service->assertCanPublish(new CategoryPublicationGateAssertionRequest(
-            CategoryWorkflowState::DRAFT,
+            CatalogCategoryWorkflowEntityState::DRAFT,
             [
                 'slugReady' => true,
                 'seoReady' => true,
@@ -69,7 +69,7 @@ final class CatalogPublicationGateServiceTest extends TestCase
         $this->expectException(\DomainException::class);
 
         $service->assertCanPublish(new CategoryPublicationGateAssertionRequest(
-            CategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowEntityState::APPROVED,
             [
                 'slugReady' => true,
                 'seoReady' => false,

@@ -11,18 +11,18 @@ namespace App\Cataloging\ValueObject;
 final readonly class CategoryMediaBindRequest
 {
     public function __construct(
-        private CategoryMediaBindingScope $scope,
-        private CategoryMediaBindingState $state,
+        private CatalogCategoryMediaBindingEntityScope $scope,
+        private CatalogCategoryMediaBindingEntityState $state,
         private CatalogAuditContext $auditContext,
     ) {
     }
 
-    public function scope(): CategoryMediaBindingScope
+    public function scope(): CatalogCategoryMediaBindingEntityScope
     {
         return $this->scope;
     }
 
-    public function state(): CategoryMediaBindingState
+    public function state(): CatalogCategoryMediaBindingEntityState
     {
         return $this->state;
     }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
+use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
-use App\Cataloging\ValueObject\CategoryLinkRequest;
 use App\Cataloging\ValueObject\CategoryResolveRequest;
 use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
 
@@ -24,12 +24,12 @@ interface CategoryServiceInterface
     /**
      * Handles the attach workflow.
      */
-    public function attach(CategoryLinkRequest $request): void;
+    public function attach(CatalogCategoryLinkEntityRequest $request): void;
 
     /**
      * Handles the detach workflow.
      */
-    public function detach(CategoryLinkRequest $request): void;
+    public function detach(CatalogCategoryLinkEntityRequest $request): void;
 
     /** @return list<array<string,mixed>> */
     public function resolve(CategoryResolveRequest $request): array;

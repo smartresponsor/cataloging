@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
-use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +25,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
     /**
      * Initializes the category syndication delivery failed list command service collaborators.
      */
-    public function __construct(private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository)
+    public function __construct(private readonly CatalogSyndicationDeliveryRecordRepositoryInterface $repository)
     {
         parent::__construct();
     }
@@ -56,7 +56,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
     {
         $format = $this->optionString($input, 'format', 'json');
         $payload = array_map(
-            fn (CategorySyndicationDeliveryRecordInterface $record): array => $this->recordPayload($record),
+            fn (CatalogSyndicationDeliveryRecordInterface $record): array => $this->recordPayload($record),
             $this->repository->failedRecords(),
         );
 
@@ -74,7 +74,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
     }
 
     /** @return array<string,int|string|null> */
-    private function recordPayload(CategorySyndicationDeliveryRecordInterface $record): array
+    private function recordPayload(CatalogSyndicationDeliveryRecordInterface $record): array
     {
         return [
             'deliveryId' => $record->deliveryId(),

@@ -6,16 +6,16 @@ Add a narrow backend foundation for destination-aware category syndication.
 
 ## Added elements
 
-- `src/Entity/CategorySyndicationDestination.php`
-- `src/EntityInterface/CategorySyndicationDestinationInterface.php`
-- `src/Policy/CategorySyndicationDestinationPolicy.php`
-- `src/PolicyInterface/CategorySyndicationDestinationPolicyInterface.php`
-- `src/Repository/CategorySyndicationDestinationRepository.php`
-- `src/RepositoryInterface/CategorySyndicationDestinationRepositoryInterface.php`
-- `src/Service/CategorySyndicationDestinationService.php`
-- `src/ServiceInterface/CategorySyndicationDestinationServiceInterface.php`
-- `src/Event/CategorySyndicationDestinationRegistered.php`
-- `src/EventInterface/CategorySyndicationDestinationRegisteredInterface.php`
+- `src/Entity/CatalogSyndicationDestinationEntity.php`
+- `src/EntityInterface/CatalogSyndicationDestinationEntityInterface.php`
+- `src/Policy/CatalogSyndicationDestinationPolicy.php`
+- `src/PolicyInterface/CatalogSyndicationDestinationPolicyInterface.php`
+- `src/Repository/CatalogSyndicationDestinationRepository.php`
+- `src/RepositoryInterface/CatalogSyndicationDestinationRepositoryInterface.php`
+- `src/Service/CatalogSyndicationDestinationEntityService.php`
+- `src/ServiceInterface/CatalogSyndicationDestinationEntityServiceInterface.php`
+- `src/Event/CatalogSyndicationDestinationRegistered.php`
+- `src/EventInterface/CatalogSyndicationDestinationRegisteredInterface.php`
 
 ## Why this wave exists
 

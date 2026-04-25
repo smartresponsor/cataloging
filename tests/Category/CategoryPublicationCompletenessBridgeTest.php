@@ -13,9 +13,9 @@ use App\Cataloging\Policy\CategoryPublicationGatePolicy;
 use App\Cataloging\Service\CatalogCompletenessService;
 use App\Cataloging\Service\CatalogPublicationGateService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryPublicationCompletenessBridgeTest extends TestCase
@@ -40,7 +40,7 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
             'media' => [
                 'primaryAssetId' => '',
             ],
-            'aliases' => [],
+            'slugHistories' => [],
             'presentation' => [
                 'bannerId' => '',
                 'htmlBlockId' => '',
@@ -51,7 +51,7 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
         $completenessPayload = $completenessEvent->payload();
         $gateEvent = $gate->evaluate(new CategoryPublicationGateEvaluationRequest(
             'category-603',
-            CategoryWorkflowState::APPROVED,
+            CatalogCategoryWorkflowEntityState::APPROVED,
             $completenessPayload['publicationChecks'],
             'operator-3',
             'approval handoff',
@@ -60,6 +60,6 @@ final class CategoryPublicationCompletenessBridgeTest extends TestCase
         /** @var array{publishable:bool,warnings:list<string>} $payload */
         $payload = $gateEvent->payload();
         self::assertTrue($payload['publishable']);
-        self::assertSame(['mediaReady', 'aliasReady'], $payload['warnings']);
+        self::assertSame(['mediaReady', 'slugHistoryReady'], $payload['warnings']);
     }
 }

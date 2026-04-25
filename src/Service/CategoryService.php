@@ -5,16 +5,16 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Event\CatalogCategoryLinkEntityed;
 use App\Cataloging\Event\CategoryCreated;
-use App\Cataloging\Event\CategoryLinked;
 use App\Cataloging\Event\CategoryMoved;
 use App\Cataloging\Event\CategoryUnlinked;
 use App\Cataloging\PolicyInterface\CategoryPolicyInterface;
 use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
 use App\Cataloging\ServiceInterface\CategoryServiceInterface as CategoryCategoryServiceInterface;
 use App\Cataloging\ServiceInterface\CategorySlugGeneratorInterface;
+use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
-use App\Cataloging\ValueObject\CategoryLinkRequest;
 use App\Cataloging\ValueObject\CategoryRepositoryCreateRequest;
 use App\Cataloging\ValueObject\CategoryResolveRequest;
 use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
@@ -92,7 +92,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
     /**
      * Handles the attach workflow.
      */
-    public function attach(CategoryLinkRequest $request): void
+    public function attach(CatalogCategoryLinkEntityRequest $request): void
     {
         $this->repo->attach(
             $request->actorId(),
@@ -102,7 +102,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
             $request->targetId(),
         );
         $this->dispatcher->dispatch(
-            new CategoryLinked([
+            new CatalogCategoryLinkEntityed([
                 'categoryId' => $request->categoryId(),
                 'targetDomain' => $request->targetDomain(),
                 'targetId' => $request->targetId(),
@@ -113,7 +113,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
     /**
      * Handles the detach workflow.
      */
-    public function detach(CategoryLinkRequest $request): void
+    public function detach(CatalogCategoryLinkEntityRequest $request): void
     {
         $this->repo->detach(
             $request->actorId(),

@@ -11,14 +11,14 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\Policy\CategoryCompletenessPolicy;
 use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
 use App\Cataloging\Service\CatalogMediaCompletenessBridgeService;
 use App\Cataloging\Service\CatalogMediaCoverageService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityScope;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityState;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
-use App\Cataloging\ValueObject\CategoryMediaBindingScope;
-use App\Cataloging\ValueObject\CategoryMediaBindingState;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -26,12 +26,12 @@ final class CatalogMediaCompletenessBridgeServiceTest extends TestCase
 {
     public function testEvaluateUsesGovernedMediaBindingsForCompletenessChecks(): void
     {
-        $repository = new CategoryMediaBindingRepository();
+        $repository = new CatalogCategoryMediaBindingEntityRepository();
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
         $service = new CatalogMediaCompletenessBridgeService(new CategoryCompletenessPolicy(), $coverage);
 
-        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-11', 'category-902', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'bind primary')));
+        $governance->bind(new CategoryMediaBindRequest(new CatalogCategoryMediaBindingEntityScope('bind-11', 'category-902', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CatalogCategoryMediaBindingEntityState(true, true, []), new CatalogAuditContext('operator-1', 'bind primary')));
 
         $event = $service->evaluate(new CategoryEvaluationRequest('category-902', [
             'slug' => 'winter-coats',
@@ -39,7 +39,7 @@ final class CatalogMediaCompletenessBridgeServiceTest extends TestCase
             'content' => ['body' => 'Cold weather outerwear'],
             'locale' => ['enabled' => ['en_US']],
             'media' => ['primaryAssetId' => ''],
-            'aliases' => ['coats-winter'],
+            'slugHistories' => ['coats-winter'],
             'presentation' => ['bannerId' => '', 'htmlBlockId' => 'html-1'],
         ], new CatalogAuditContext('operator-2', 'completeness with governed media')));
 

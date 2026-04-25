@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Cataloging\Service\Traceability;
 
 use App\Cataloging\Projection\CategoryActorTraceabilityView;
-use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryWorkflowEntityRepositoryInterface;
 use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface;
 use App\Cataloging\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface;
 
 /**
@@ -22,11 +22,11 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
      * Initializes the category actor traceability view builder service collaborators.
      */
     public function __construct(
-        private CategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository,
+        private CatalogCategoryAccessAssignmentEntityRepositoryInterface $accessAssignmentRepository,
         private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private CategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
-        private CategoryMediaBindingRepositoryInterface $mediaBindingRepository,
-        private CategoryWorkflowRepositoryInterface $workflowRepository,
+        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $reviewAssignmentRepository,
+        private CatalogCategoryMediaBindingEntityRepositoryInterface $mediaBindingRepository,
+        private CatalogCategoryWorkflowEntityRepositoryInterface $workflowRepository,
     ) {
     }
 

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Event;
 
 /** Emitted after link attach. */
-final class CategoryLinked
+final class CatalogCategoryLinkEntityed
 {
     /** @var array<string,mixed> */
     private array $payload;
@@ -22,4 +22,7 @@ final class CategoryLinked
     {
         return $this->payload;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryLinked', false)) {
+    class_alias(CatalogCategoryLinkEntityed::class, __NAMESPACE__.'\\CategoryLinked');
 }

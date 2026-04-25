@@ -8,8 +8,8 @@ namespace App\Cataloging\Importer;
 use App\Cataloging\ImporterInterface\CategoryNdjsonImporterInterface;
 use App\Cataloging\Service\MetaPayloadNormalizer;
 use App\Cataloging\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
-use App\Cataloging\ValueObject\CategoryLinkRequest;
 
 /**
  * Provides the category ndjson importer implementation.
@@ -200,9 +200,9 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
     }
 
     /** @param array<string,mixed> $data */
-    private function linkRequest(array $data): CategoryLinkRequest
+    private function linkRequest(array $data): CatalogCategoryLinkEntityRequest
     {
-        return new CategoryLinkRequest(
+        return new CatalogCategoryLinkEntityRequest(
             $this->optionalStringValue($data, 'actorId') ?? 'system',
             $this->requiredStringValue($data, 'categoryId'),
             $this->requiredStringValue($data, 'targetDomain'),

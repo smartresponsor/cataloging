@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
 use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,28 +26,29 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
 
     /**
      * @return list<array<string,mixed>>
-     *
-     * @throws Exception
      */
     public function list(?CategoryProjectionCriteria $criteria = null): array
     {
         $criteriaMap = $this->criteriaMap($criteria);
-        [$whereSql, $params, $types] = $this->querySupport->compileProjectionFilters($criteriaMap);
 
-        $rows = $this->connection()->fetchAllAssociative(
-            'SELECT id, slug, name, parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at '
-            .'FROM category_projection'.$whereSql.' ORDER BY path ASC, slug ASC',
-            $params,
-            $types,
-        );
+        $entityManager = $this->entityManager();
+        $entities = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->findBy([], ['path' => 'ASC', 'slug' => 'ASC']);
+        $rows = [];
+        foreach ($entities as $entity) {
+            if (!$entity instanceof CatalogCategoryProjectionEntity) {
+                continue;
+            }
+            $row = $this->mapEntityToRow($entity);
+            if ($this->matchesCriteria($row, $criteriaMap)) {
+                $rows[] = $row;
+            }
+        }
 
-        return $this->querySupport->normalizeProjectionRows($rows);
+        return $rows;
     }
 
     /**
      * @return list<array<string,mixed>>
-     *
-     * @throws Exception
      */
     public function tree(?CategoryProjectionCriteria $criteria = null): array
     {
@@ -59,8 +59,6 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
 
     /**
      * @return array<string,mixed>|null
-     *
-     * @throws Exception
      */
     public function findOne(string $id): ?array
     {
@@ -69,20 +67,10 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
             return null;
         }
 
-        $row = $this->connection()->fetchAssociative(
-            'SELECT id, slug, name, parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at '
-            .'FROM category_projection WHERE id = :id LIMIT 1',
-            ['id' => $normalizedId],
-            ['id' => ParameterType::STRING],
-        );
+        $entityManager = $this->entityManager();
+        $entity = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->find($normalizedId);
 
-        if (!is_array($row)) {
-            return null;
-        }
-
-        $normalized = $this->querySupport->normalizeProjectionRows([$row]);
-
-        return $normalized[0] ?? null;
+        return $entity instanceof CatalogCategoryProjectionEntity ? $this->mapEntityToRow($entity) : null;
     }
 
     /**
@@ -93,12 +81,14 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
         return $this->querySupport->normalizeProjectionCriteriaMap($criteria?->toArray() ?? []);
     }
 
-    private function connection(): Connection
+    private function entityManager(): EntityManagerInterface
     {
-        /** @var Connection $connection */
-        $connection = $this->registry->getConnection('infra');
+        $manager = $this->registry->getManager();
+        if (!$manager instanceof EntityManagerInterface) {
+            throw new \RuntimeException('Doctrine entity manager is not available for category projection reads.');
+        }
 
-        return $connection;
+        return $manager;
     }
 
     /**
@@ -167,5 +157,44 @@ final readonly class CategoryProjectionReadService implements CategoryProjection
         }
 
         return $result;
+    }
+
+    /**
+     * @param array{tenant: ?string, locale: ?string, workflow_state: ?string, published: ?bool} $criteriaMap
+     * @param array<string,mixed>                                                                $row
+     */
+    private function matchesCriteria(array $row, array $criteriaMap): bool
+    {
+        foreach ($criteriaMap as $field => $value) {
+            if (null === $value) {
+                continue;
+            }
+
+            if (($row[$field] ?? null) !== $value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private function mapEntityToRow(CatalogCategoryProjectionEntity $entity): array
+    {
+        return [
+            'id' => $entity->getId(),
+            'slug' => $entity->getSlug(),
+            'name' => $entity->getName(),
+            'parent_id' => $entity->getParentId(),
+            'path' => $entity->getPath(),
+            'locale' => $entity->getLocale() ?? '',
+            'tenant' => $entity->getTenant(),
+            'workflow_state' => $entity->getWorkflowState(),
+            'published' => $entity->isPublished(),
+            'published_at' => $entity->getPublishedAt()?->format('Y-m-d H:i:s'),
+            'updated_at' => $entity->getUpdatedAt()->format('Y-m-d H:i:s'),
+        ];
     }
 }

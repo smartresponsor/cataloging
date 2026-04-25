@@ -48,7 +48,7 @@ final readonly class CategoryCompletenessReport implements CategoryCompletenessR
         }
 
         $warnings = [];
-        foreach (['mediaReady', 'aliasReady', 'bannerReady', 'htmlBlockReady'] as $name) {
+        foreach (['mediaReady', 'slugHistoryReady', 'bannerReady', 'htmlBlockReady'] as $name) {
             if (($normalized[$name] ?? false) !== true) {
                 $warnings[] = $name;
             }
@@ -113,7 +113,7 @@ final readonly class CategoryCompletenessReport implements CategoryCompletenessR
             'contentReady' => ($this->checks['contentReady'] ?? false) === true,
             'localeReady' => ($this->checks['localeCoverageReady'] ?? false) === true,
             'mediaReady' => ($this->checks['mediaReady'] ?? false) === true,
-            'aliasReady' => ($this->checks['aliasReady'] ?? false) === true,
+            'slugHistoryReady' => ($this->checks['slugHistoryReady'] ?? false) === true,
             'requiredMediaCoverageReady' => ($this->checks['requiredMediaCoverageReady'] ?? true) === true,
         ];
     }

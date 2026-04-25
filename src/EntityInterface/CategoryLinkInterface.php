@@ -8,7 +8,7 @@ namespace App\Cataloging\EntityInterface;
 /**
  * Defines the contract for category link.
  */
-interface CategoryLinkInterface
+interface CatalogCategoryLinkEntityInterface
 {
     /**
      * Handles the id workflow.
@@ -44,4 +44,7 @@ interface CategoryLinkInterface
      * Creates the d at result for the current workflow.
      */
     public function createdAt(): \DateTimeImmutable;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryLinkInterface', false)) {
+    class_alias(CatalogCategoryLinkEntityInterface::class, __NAMESPACE__.'\\CategoryLinkInterface');
 }

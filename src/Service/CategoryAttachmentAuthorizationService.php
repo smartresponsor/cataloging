@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\Category;
 use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\Security\CategoryAuthorizationSubject;
 use App\Cataloging\Security\CategoryVoter;
-use Doctrine\DBAL\Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -28,8 +27,6 @@ final readonly class CategoryAttachmentAuthorizationService
 
     /**
      * Handles the assert can list workflow.
-     *
-     * @throws Exception
      */
     public function assertCanList(?string $categoryId): void
     {
@@ -52,8 +49,6 @@ final readonly class CategoryAttachmentAuthorizationService
 
     /**
      * Handles the assert can attach workflow.
-     *
-     * @throws Exception
      */
     public function assertCanAttach(string $categoryId): void
     {
@@ -66,8 +61,6 @@ final readonly class CategoryAttachmentAuthorizationService
 
     /**
      * Handles the assert can detach workflow.
-     *
-     * @throws Exception
      */
     public function assertCanDetach(string $attachmentId): void
     {
@@ -94,9 +87,6 @@ final readonly class CategoryAttachmentAuthorizationService
         return '' !== $normalizedCategoryId ? $normalizedCategoryId : null;
     }
 
-    /**
-     * @throws Exception
-     */
     private function assertGranted(string $attribute, string $categoryId, string $message): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -112,8 +102,7 @@ final readonly class CategoryAttachmentAuthorizationService
             throw new AccessDeniedHttpException('Cross-tenant category attachment operation is not allowed for the current actor.');
         }
 
-        $subject = new Category();
-        $subject->id = trim($categoryId);
+        $subject = new CategoryAuthorizationSubject(trim($categoryId));
 
         if ($this->security->isGranted($attribute, $subject)) {
             return;

@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Command;
 
-use App\Cataloging\Command\CategorySyndicationDestinationGovernanceSummaryCommand;
-use App\Cataloging\Event\CategorySyndicationDestinationGovernanceSummaryBuilt;
+use App\Cataloging\Command\CatalogSyndicationDestinationGovernanceSummaryCommand;
+use App\Cataloging\Event\CatalogSyndicationDestinationGovernanceSummaryBuilt;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -20,13 +20,13 @@ final class CategorySyndicationDestinationGovernanceSummaryCommandTest extends T
     public function testExecutePrintsDestinationGovernanceSummary(): void
     {
         $service = $this->createMock(CatalogSyndicationDestinationGovernanceSummaryServiceInterface::class);
-        $service->method('buildSummary')->willReturn(new CategorySyndicationDestinationGovernanceSummaryBuilt([
+        $service->method('buildSummary')->willReturn(new CatalogSyndicationDestinationGovernanceSummaryBuilt([
             'destinationId' => 'dest-1',
             'totalTrails' => 2,
             'resolvedPublishableCount' => 1,
         ], new \DateTimeImmutable()));
 
-        $tester = new CommandTester(new CategorySyndicationDestinationGovernanceSummaryCommand($service));
+        $tester = new CommandTester(new CatalogSyndicationDestinationGovernanceSummaryCommand($service));
         $exitCode = $tester->execute([
             'destinationId' => 'dest-1',
             'actorId' => 'ops',

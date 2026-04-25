@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ValueObject;
 
-use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
 
 /**
  * Carries the destination syndication history and recovery audit request surface.
@@ -13,7 +13,7 @@ use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
 final readonly class CategorySyndicationHistoryRequest
 {
     /**
-     * @param list<CategorySyndicationDeliveryRecordInterface> $records
+     * @param list<CatalogSyndicationDeliveryRecordInterface> $records
      */
     public function __construct(
         private string $destinationId,
@@ -29,7 +29,7 @@ final readonly class CategorySyndicationHistoryRequest
     }
 
     /**
-     * @return list<CategorySyndicationDeliveryRecordInterface>
+     * @return list<CatalogSyndicationDeliveryRecordInterface>
      */
     public function records(): array
     {

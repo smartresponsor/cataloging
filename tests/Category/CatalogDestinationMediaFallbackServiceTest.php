@@ -8,30 +8,30 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
+use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
-use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
 use App\Cataloging\Service\CatalogSyndicationDestinationService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationDefinition;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationRegisterRequest;
 use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaFallbackServiceTest extends TestCase
 {
     public function testEvaluateBuildsFallbackAwareDestinationMediaReport(): void
     {
-        $bindingRepository = new CategoryMediaBindingRepository();
-        $destinationRepository = new CategorySyndicationDestinationRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $destinationRepository = new CatalogSyndicationDestinationRepository();
 
-        $destinationService = new CatalogSyndicationDestinationService(new CategorySyndicationDestinationPolicy(), $destinationRepository);
+        $destinationService = new CatalogSyndicationDestinationService(new CatalogSyndicationDestinationPolicy(), $destinationRepository);
         $service = new CatalogDestinationMediaFallbackService($destinationRepository, $bindingRepository, new CategoryDestinationMediaFallbackPolicy());
 
-        $bindingRepository->save(new \App\Cataloging\Entity\CategoryMediaBinding(
+        $bindingRepository->save(new \App\Cataloging\Entity\CatalogCategoryMediaBindingEntity(
             'bind-global-primary',
             'category-1802',
             'asset-primary',
@@ -46,14 +46,14 @@ final class CatalogDestinationMediaFallbackServiceTest extends TestCase
         ));
 
         $destinationService->register(
-            new CategorySyndicationDestinationRegisterRequest(
-                new CategorySyndicationDestinationDefinition(
+            new CatalogSyndicationDestinationRegisterRequest(
+                new CatalogSyndicationDestinationDefinition(
                     'destination-1802',
                     'Storefront CA French',
                     'storefront',
                     'push',
                 ),
-                new CategorySyndicationDestinationConfiguration(
+                new CatalogSyndicationDestinationConfiguration(
                     true,
                     ['channel' => 'storefront', 'locale' => 'fr_CA', 'requiredMediaRoles' => ['primary']],
                 ),

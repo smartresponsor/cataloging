@@ -11,7 +11,7 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\Policy\CategoryCompletenessPolicy;
 use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
 use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
 use App\Cataloging\Service\CatalogMediaCompletenessBridgeService;
 use App\Cataloging\Service\CatalogMediaCoverageService;
 use App\Cataloging\Service\CatalogMediaPublicationQualityBridgeService;
@@ -24,7 +24,7 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
 {
     public function testEvaluatePromotesMissingRequiredMediaCoverageToHardBlocker(): void
     {
-        $repository = new CategoryMediaBindingRepository();
+        $repository = new CatalogCategoryMediaBindingEntityRepository();
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
         $completenessBridge = new CatalogMediaCompletenessBridgeService(new CategoryCompletenessPolicy(), $coverage);
         $qualityBridge = new CatalogMediaPublicationQualityBridgeService($completenessBridge, new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy()));
@@ -35,7 +35,7 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
             'content' => ['body' => 'Discounted products'],
             'locale' => ['enabled' => ['en_US']],
             'media' => ['primaryAssetId' => 'asset-inline'],
-            'aliases' => ['sale'],
+            'slugHistories' => ['sale'],
             'presentation' => ['bannerId' => '', 'htmlBlockId' => 'html-9'],
         ], new CatalogAuditContext('operator-3', 'quality with missing governed required media')))->payload());
 

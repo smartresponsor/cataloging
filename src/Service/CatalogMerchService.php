@@ -5,13 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryBanner;
-use App\Cataloging\Entity\CatalogCategoryHtmlBlock;
-use App\Cataloging\Entity\CatalogCategoryPin;
+use App\Cataloging\Entity\CatalogCategoryBannerEntity;
+use App\Cataloging\Entity\CatalogCategoryHtmlBlockEntity;
+use App\Cataloging\Entity\CatalogCategoryPinEntity;
 use App\Cataloging\ServiceInterface\CatalogMerchServiceInterface;
 use App\Cataloging\ValueObject\CategoryMerchBannerPublishRequest;
 use App\Cataloging\ValueObject\CategoryMerchPinCreateRequest;
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -28,18 +27,26 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
 
     /**
      * @param list<string> $recordIds
-     *
-     * @throws Exception
      */
     public function orderSet(string $categoryId, array $recordIds): void
     {
         $position = 0;
+        $repository = $this->entityManager->getRepository(CatalogCategoryPinEntity::class);
+
         foreach ($recordIds as $recordId) {
-            $this->entityManager->getConnection()->executeStatement(
-                'UPDATE category_pin SET position = ? WHERE category_id = ? AND record_id = ?',
-                [$position++, $categoryId, $recordId],
-            );
+            $pin = $repository->findOneBy([
+                'categoryId' => $categoryId,
+                'recordId' => $recordId,
+            ]);
+
+            if (!$pin instanceof CatalogCategoryPinEntity) {
+                continue;
+            }
+
+            $pin->setPosition($position++);
         }
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -47,7 +54,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function pinCreate(CategoryMerchPinCreateRequest $request): void
     {
-        $pin = new CatalogCategoryPin($request->categoryId, $request->recordId, $request->position);
+        $pin = new CatalogCategoryPinEntity($request->categoryId, $request->recordId, $request->position);
         $this->entityManager->persist($pin);
         $this->entityManager->flush();
     }
@@ -57,7 +64,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function pinDelete(string $categoryId, string $recordId): void
     {
-        $pin = $this->entityManager->getRepository(CatalogCategoryPin::class)->findOneBy([
+        $pin = $this->entityManager->getRepository(CatalogCategoryPinEntity::class)->findOneBy([
             'categoryId' => $categoryId,
             'recordId' => $recordId,
         ]);
@@ -75,7 +82,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function bannerPublish(CategoryMerchBannerPublishRequest $request): string
     {
-        $banner = new CatalogCategoryBanner($request->categoryId, $request->title, $request->content);
+        $banner = new CatalogCategoryBannerEntity($request->categoryId, $request->title, $request->content);
         $banner->publish();
         $this->entityManager->persist($banner);
         $this->entityManager->flush();
@@ -88,7 +95,7 @@ final readonly class CatalogMerchService implements CatalogMerchServiceInterface
      */
     public function htmlPublish(string $categoryId, string $html): string
     {
-        $htmlBlock = new CatalogCategoryHtmlBlock($categoryId, $html);
+        $htmlBlock = new CatalogCategoryHtmlBlockEntity($categoryId, $html);
         $htmlBlock->publish();
         $this->entityManager->persist($htmlBlock);
         $this->entityManager->flush();

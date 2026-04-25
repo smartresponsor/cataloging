@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Event;
 
-use App\Cataloging\EventInterface\CategoryWorkflowTransitionedInterface;
+use App\Cataloging\EventInterface\CatalogCategoryWorkflowEntityTransitionedInterface;
 
 /**
  * Represents the category workflow transitioned application event.
  */
-final readonly class CategoryWorkflowTransitioned implements CategoryWorkflowTransitionedInterface
+final readonly class CatalogCategoryWorkflowEntityTransitioned implements CatalogCategoryWorkflowEntityTransitionedInterface
 {
     /**
      * Initializes the category workflow transitioned service collaborators.
@@ -45,4 +45,7 @@ final readonly class CategoryWorkflowTransitioned implements CategoryWorkflowTra
             'occurredAt' => $this->occurredAt->format(DATE_ATOM),
         ];
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryWorkflowTransitioned', false)) {
+    class_alias(CatalogCategoryWorkflowEntityTransitioned::class, __NAMESPACE__.'\\CategoryWorkflowTransitioned');
 }

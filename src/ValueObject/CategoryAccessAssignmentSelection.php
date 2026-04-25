@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries category and actor coordinates for access assignment selection workflows.
  */
-final readonly class CategoryAccessAssignmentSelection
+final readonly class CatalogCategoryAccessAssignmentEntitySelection
 {
     /**
      * Initializes the category access assignment selection value object.
@@ -28,4 +28,7 @@ final readonly class CategoryAccessAssignmentSelection
     {
         return trim($this->actorUserId);
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryAccessAssignmentSelection', false)) {
+    class_alias(CatalogCategoryAccessAssignmentEntitySelection::class, __NAMESPACE__.'\\CategoryAccessAssignmentSelection');
 }

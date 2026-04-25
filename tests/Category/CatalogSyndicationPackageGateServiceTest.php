@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
+use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
 use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
 use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
 use App\Cataloging\Policy\CategorySyndicationPackageGatePolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
-use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
 use App\Cataloging\Service\CatalogMediaApplicabilityService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
@@ -23,12 +23,12 @@ use App\Cataloging\Service\CatalogSyndicationDestinationService;
 use App\Cataloging\Service\CatalogSyndicationMappingService;
 use App\Cataloging\Service\CatalogSyndicationPackageGateService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
-use App\Cataloging\ValueObject\CategoryMediaBindingScope;
-use App\Cataloging\ValueObject\CategoryMediaBindingState;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityScope;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityState;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationDefinition;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationRegisterRequest;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationRegisterRequest;
 use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
 use App\Cataloging\ValueObject\CategorySyndicationPackageContext;
 use PHPUnit\Framework\TestCase;
@@ -37,27 +37,27 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
 {
     public function testBuildGatedPublishPackageCombinesMappingAndDestinationMediaReadiness(): void
     {
-        $bindingRepository = new CategoryMediaBindingRepository();
-        $destinationRepository = new CategorySyndicationDestinationRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $destinationRepository = new CatalogSyndicationDestinationRepository();
 
         $governance = new CatalogMediaGovernanceService($bindingRepository, new CategoryMediaGovernancePolicy());
-        $destinationService = new CatalogSyndicationDestinationService(new CategorySyndicationDestinationPolicy(), $destinationRepository);
+        $destinationService = new CatalogSyndicationDestinationService(new CatalogSyndicationDestinationPolicy(), $destinationRepository);
         $applicabilityService = new CatalogMediaApplicabilityService($bindingRepository, new CategoryMediaApplicabilityPolicy());
         $destinationMediaReadiness = new CatalogDestinationMediaReadinessService($destinationRepository, $applicabilityService, new CategoryDestinationMediaReadinessPolicy());
         $mappingService = new CatalogSyndicationMappingService(new CategorySyndicationMappingPolicy());
         $service = new CatalogSyndicationPackageGateService($mappingService, $destinationMediaReadiness, new CategorySyndicationPackageGatePolicy());
 
-        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-primary', 'category-1501', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CategoryMediaBindingState(true, true, []), new CatalogAuditContext('operator-1', 'primary')));
-        $governance->bind(new CategoryMediaBindRequest(new CategoryMediaBindingScope('bind-hero', 'category-1501', 'asset-hero', 'hero', ['storefront'], ['en_US']), new CategoryMediaBindingState(false, true, []), new CatalogAuditContext('operator-1', 'hero')));
+        $governance->bind(new CategoryMediaBindRequest(new CatalogCategoryMediaBindingEntityScope('bind-primary', 'category-1501', 'asset-primary', 'primary', ['storefront'], ['en_US']), new CatalogCategoryMediaBindingEntityState(true, true, []), new CatalogAuditContext('operator-1', 'primary')));
+        $governance->bind(new CategoryMediaBindRequest(new CatalogCategoryMediaBindingEntityScope('bind-hero', 'category-1501', 'asset-hero', 'hero', ['storefront'], ['en_US']), new CatalogCategoryMediaBindingEntityState(false, true, []), new CatalogAuditContext('operator-1', 'hero')));
 
-        $destinationService->register(new CategorySyndicationDestinationRegisterRequest(
-            new CategorySyndicationDestinationDefinition(
+        $destinationService->register(new CatalogSyndicationDestinationRegisterRequest(
+            new CatalogSyndicationDestinationDefinition(
                 'destination-1501',
                 'Storefront US',
                 'storefront',
                 'push',
             ),
-            new CategorySyndicationDestinationConfiguration(
+            new CatalogSyndicationDestinationConfiguration(
                 true,
                 ['channel' => 'storefront', 'locale' => 'en_US', 'requiredMediaRoles' => '["primary","hero"]'],
             ),

@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
-use App\Cataloging\Event\CategorySyndicationDeliveryRecorded;
-use App\Cataloging\EventInterface\CategorySyndicationDeliveryRecordedInterface;
+use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\Event\CatalogSyndicationDeliveryRecorded;
+use App\Cataloging\EventInterface\CatalogSyndicationDeliveryRecordedInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
-use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
-use App\Cataloging\ValueObject\CategorySyndicationDeliveryRecordRequest;
+use App\Cataloging\ValueObject\CatalogSyndicationDeliveryRecordRequest;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 
 /**
@@ -24,7 +24,7 @@ final readonly class CatalogSyndicationDeliveryService implements CatalogSyndica
      */
     public function __construct(
         private CategorySyndicationDeliveryPolicyInterface $policy,
-        private CategorySyndicationDeliveryRecordRepositoryInterface $repository,
+        private CatalogSyndicationDeliveryRecordRepositoryInterface $repository,
     ) {
     }
 
@@ -32,8 +32,8 @@ final readonly class CatalogSyndicationDeliveryService implements CatalogSyndica
      * Handles the record delivery workflow.
      */
     public function recordDelivery(
-        CategorySyndicationDeliveryRecordRequest $request,
-    ): CategorySyndicationDeliveryRecordedInterface {
+        CatalogSyndicationDeliveryRecordRequest $request,
+    ): CatalogSyndicationDeliveryRecordedInterface {
         $context = $request->context();
         $attempt = $request->attempt();
         $audit = $request->auditContext();
@@ -44,7 +44,7 @@ final readonly class CatalogSyndicationDeliveryService implements CatalogSyndica
         $normalizedResponseMessage = $this->policy->normalizeResponseMessage($attempt->responseMessage());
         $deliveredAt = 'delivered' === $normalizedStatus->status() ? new \DateTimeImmutable('now') : null;
 
-        $record = new CategorySyndicationDeliveryRecord(
+        $record = new CatalogSyndicationDeliveryRecordEntity(
             trim($context->deliveryId()),
             trim($context->packageId()),
             trim($context->destinationId()),
@@ -58,7 +58,7 @@ final readonly class CatalogSyndicationDeliveryService implements CatalogSyndica
 
         $this->repository->save($record);
 
-        return new CategorySyndicationDeliveryRecorded(
+        return new CatalogSyndicationDeliveryRecorded(
             [
                 'deliveryId' => $record->deliveryId(),
                 'packageId' => $record->packageId(),

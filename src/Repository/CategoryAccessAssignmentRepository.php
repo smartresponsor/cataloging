@@ -1,292 +1,153 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
-use App\Cataloging\Entity\CategoryAccessAssignment;
-use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
-use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
+use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ParameterType;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Provides repository services for category access assignment repository.
- */
-final class CategoryAccessAssignmentRepository implements CategoryAccessAssignmentRepositoryInterface
+final class CatalogCategoryAccessAssignmentEntityRepository implements CatalogCategoryAccessAssignmentEntityRepositoryInterface
 {
-    /** @var array<string,CategoryAccessAssignmentInterface> */
+    /** @var array<string,CatalogCategoryAccessAssignmentEntityInterface> */
     private array $assignments = [];
 
-    /**
-     * Initializes the category access assignment repository service collaborators.
-     */
-    public function __construct(private readonly ?Connection $connection = null)
-    {
+    public function __construct(
+        private readonly Connection|EntityManagerInterface|null $entityManager = null,
+    ) {
     }
 
-    /**
-     * Handles the save workflow.
-     *
-     * @throws \Throwable
-     */
-    public function save(CategoryAccessAssignmentInterface $assignment): void
+    public function save(CatalogCategoryAccessAssignmentEntityInterface $assignment): void
     {
-        if (!$this->connection instanceof Connection) {
+        if ($this->entityManager instanceof EntityManagerInterface && $assignment instanceof CatalogCategoryAccessAssignmentEntity) {
+            $this->entityManager->persist($assignment);
+            $this->entityManager->flush();
+
+            return;
+        }
+
+        if ($this->entityManager instanceof Connection && $assignment instanceof CatalogCategoryAccessAssignmentEntity) {
+            $payload = [
+                'assignment_id' => $assignment->assignmentId(),
+                'category_id' => trim($assignment->categoryId()),
+                'actor_user_id' => trim($assignment->actorUserId()),
+                'role' => trim($assignment->role()),
+                'status' => trim($assignment->status()),
+                'is_primary' => $assignment->isPrimary() ? 1 : 0,
+                'granted_at' => $assignment->grantedAt()->format(DATE_ATOM),
+                'revoked_at' => $assignment->revokedAt()?->format(DATE_ATOM),
+            ];
+
+            $this->entityManager->insert('category_access_assignment', $payload);
             $this->assignments[$assignment->assignmentId()] = $assignment;
 
             return;
         }
 
-        $existing = $this->connection->fetchOne(
-            'SELECT assignment_id FROM category_access_assignment '
-            .'WHERE category_id = :categoryId AND actor_user_id = :actorUserId',
-            [
-                'categoryId' => $assignment->categoryId(),
-                'actorUserId' => $assignment->actorUserId(),
-            ],
-            ['categoryId' => ParameterType::STRING, 'actorUserId' => ParameterType::STRING],
-        );
-
-        $payload = [
-            'assignment_id' => $assignment->assignmentId(),
-            'category_id' => $assignment->categoryId(),
-            'actor_user_id' => $assignment->actorUserId(),
-            'role' => $assignment->role(),
-            'status' => $assignment->status(),
-            'is_primary' => $assignment->isPrimary() ? 1 : 0,
-            'granted_at' => $assignment->grantedAt()->format('Y-m-d H:i:s'),
-            'revoked_at' => $assignment->revokedAt()?->format('Y-m-d H:i:s'),
-        ];
-
-        if (is_string($existing) && '' !== trim($existing)) {
-            $this->connection->update(
-                'category_access_assignment',
-                $payload,
-                ['assignment_id' => $existing],
-                [
-                    'assignment_id' => ParameterType::STRING,
-                    'category_id' => ParameterType::STRING,
-                    'actor_user_id' => ParameterType::STRING,
-                    'role' => ParameterType::STRING,
-                    'status' => ParameterType::STRING,
-                    'is_primary' => ParameterType::INTEGER,
-                    'granted_at' => ParameterType::STRING,
-                    'revoked_at' => null === $payload['revoked_at'] ? ParameterType::NULL : ParameterType::STRING,
-                ],
-            );
-
-            return;
-        }
-
-        $this->connection->insert(
-            'category_access_assignment',
-            $payload,
-            [
-                'assignment_id' => ParameterType::STRING,
-                'category_id' => ParameterType::STRING,
-                'actor_user_id' => ParameterType::STRING,
-                'role' => ParameterType::STRING,
-                'status' => ParameterType::STRING,
-                'is_primary' => ParameterType::INTEGER,
-                'granted_at' => ParameterType::STRING,
-                'revoked_at' => null === $payload['revoked_at'] ? ParameterType::NULL : ParameterType::STRING,
-            ],
-        );
+        $this->assignments[$assignment->assignmentId()] = $assignment;
     }
 
-    /**
-     * Handles the find primary for category id workflow.
-     *
-     * @throws \Throwable
-     */
-    public function findPrimaryForCategoryId(string $categoryId): ?CategoryAccessAssignmentInterface
+    public function findPrimaryForCategoryId(string $categoryId): ?CatalogCategoryAccessAssignmentEntityInterface
     {
         $assignments = $this->findActiveByCategoryId($categoryId);
 
-        return array_find(
-            $assignments,
-            static fn (CategoryAccessAssignmentInterface $assignment): bool => $assignment->isPrimary(),
-        );
+        return array_find($assignments, static fn (CatalogCategoryAccessAssignmentEntityInterface $assignment): bool => $assignment->isPrimary());
     }
 
-    /**
-     * Handles the find active by category id workflow.
-     *
-     * @throws \Throwable
-     */
-    /** @noinspection PhpSameParameterValueInspection */
     public function findActiveByCategoryId(string $categoryId): array
     {
-        if (!$this->connection instanceof Connection) {
-            return array_values(array_filter(
-                $this->assignments,
-                static fn (CategoryAccessAssignmentInterface $assignment): bool => $assignment->categoryId() === $categoryId
-                    && 'active' === $assignment->status(),
-            ));
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->getRepository(CatalogCategoryAccessAssignmentEntity::class)->findBy(['categoryId' => trim($categoryId), 'status' => 'active'], ['isPrimary' => 'DESC', 'grantedAt' => 'ASC']);
         }
 
-        return $this->hydrateMany(
-            $this->connection->fetchAllAssociative(
-                'SELECT assignment_id, category_id, actor_user_id, role, status, is_primary, granted_at, revoked_at
-                 FROM category_access_assignment
-                 WHERE category_id = :categoryId
-                   AND status = :status
-                 ORDER BY is_primary DESC, granted_at ASC',
-                ['categoryId' => $categoryId, 'status' => 'active'],
-                ['categoryId' => ParameterType::STRING, 'status' => ParameterType::STRING],
-            ),
-        );
+        if ($this->entityManager instanceof Connection) {
+            $rows = $this->entityManager->fetchAllAssociative(
+                'SELECT * FROM category_access_assignment WHERE category_id = ? AND status = ? ORDER BY is_primary DESC, granted_at ASC',
+                [trim($categoryId), 'active'],
+            );
+
+            return array_values(array_map([$this, 'hydrateEntityFromRow'], $rows));
+        }
+
+        return array_values(array_filter($this->assignments, static fn (CatalogCategoryAccessAssignmentEntityInterface $assignment): bool => $assignment->categoryId() === $categoryId && 'active' === $assignment->status()));
     }
 
-    /**
-     * Handles the find active by actor user id workflow.
-     *
-     * @throws \Throwable
-     */
     public function findActiveByActorUserId(string $actorUserId): array
     {
-        if (!$this->connection instanceof Connection) {
-            return array_values(array_filter(
-                $this->assignments,
-                static fn (CategoryAccessAssignmentInterface $assignment): bool => $assignment->actorUserId() === $actorUserId
-                    && 'active' === $assignment->status(),
-            ));
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->getRepository(CatalogCategoryAccessAssignmentEntity::class)->findBy(['actorUserId' => trim($actorUserId), 'status' => 'active'], ['grantedAt' => 'ASC']);
         }
 
-        return $this->hydrateMany(
-            $this->connection->fetchAllAssociative(
-                'SELECT assignment_id, category_id, actor_user_id, role, status, is_primary, granted_at, revoked_at
-                 FROM category_access_assignment
-                 WHERE actor_user_id = :actorUserId
-                   AND status = :status
-                 ORDER BY granted_at ASC',
-                ['actorUserId' => $actorUserId, 'status' => 'active'],
-                ['actorUserId' => ParameterType::STRING, 'status' => ParameterType::STRING],
-            ),
-        );
-    }
+        if ($this->entityManager instanceof Connection) {
+            $rows = $this->entityManager->fetchAllAssociative(
+                'SELECT * FROM category_access_assignment WHERE actor_user_id = ? AND status = ? ORDER BY granted_at ASC',
+                [trim($actorUserId), 'active'],
+            );
 
-    /**
-     * Handles the find one by category id and actor user id workflow.
-     *
-     * @throws \Throwable
-     */
-    public function findOneByCategoryIdAndActorUserId(
-        string $categoryId,
-        string $actorUserId,
-    ): ?CategoryAccessAssignmentInterface {
-        if (!$this->connection instanceof Connection) {
-            return array_find($this->assignments, fn ($assignment) => $assignment->categoryId() === $categoryId && $assignment->actorUserId() === $actorUserId);
+            return array_values(array_map([$this, 'hydrateEntityFromRow'], $rows));
         }
 
-        $row = $this->connection->fetchAssociative(
-            'SELECT assignment_id, category_id, actor_user_id, role, status, is_primary, granted_at, revoked_at
-             FROM category_access_assignment
-             WHERE category_id = :categoryId
-               AND actor_user_id = :actorUserId
-             LIMIT 1',
-            ['categoryId' => $categoryId, 'actorUserId' => $actorUserId],
-            ['categoryId' => ParameterType::STRING, 'actorUserId' => ParameterType::STRING],
-        );
-
-        return is_array($row) ? $this->hydrateOne($row) : null;
+        return array_values(array_filter($this->assignments, static fn (CatalogCategoryAccessAssignmentEntityInterface $assignment): bool => $assignment->actorUserId() === $actorUserId && 'active' === $assignment->status()));
     }
 
-    /**
-     * @param list<array<string,mixed>> $rows
-     *
-     * @return list<CategoryAccessAssignmentInterface>
-     *
-     * @throws \Throwable
-     */
-    private function hydrateMany(array $rows): array
+    public function findOneByCategoryIdAndActorUserId(string $categoryId, string $actorUserId): ?CatalogCategoryAccessAssignmentEntityInterface
     {
-        $result = [];
-        foreach ($rows as $row) {
-            $result[] = $this->hydrateOne($row);
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->getRepository(CatalogCategoryAccessAssignmentEntity::class)->findOneBy(['categoryId' => trim($categoryId), 'actorUserId' => trim($actorUserId)]);
         }
 
-        return $result;
+        if ($this->entityManager instanceof Connection) {
+            $row = $this->entityManager->fetchAssociative(
+                'SELECT * FROM category_access_assignment WHERE category_id = ? AND actor_user_id = ? LIMIT 1',
+                [trim($categoryId), trim($actorUserId)],
+            );
+
+            return is_array($row) ? $this->hydrateEntityFromRow($row) : null;
+        }
+
+        return array_find($this->assignments, fn ($assignment) => $assignment->categoryId() === $categoryId && $assignment->actorUserId() === $actorUserId);
     }
 
     /**
      * @param array<string,mixed> $row
-     *
-     * @throws \Throwable
      */
-    private function hydrateOne(array $row): CategoryAccessAssignmentInterface
+    private function hydrateEntityFromRow(array $row): CatalogCategoryAccessAssignmentEntityInterface
     {
-        return new CategoryAccessAssignment(
-            $this->requiredString($row['assignment_id'] ?? null, 'assignment_id'),
-            $this->requiredString($row['category_id'] ?? null, 'category_id'),
-            $this->requiredString($row['actor_user_id'] ?? null, 'actor_user_id'),
-            $this->requiredString($row['role'] ?? null, 'role'),
-            $this->requiredString($row['status'] ?? null, 'status'),
-            $this->boolValue($row['is_primary'] ?? 0),
-            $this->dateTimeImmutable($row['granted_at'] ?? null, 'granted_at'),
-            $this->optionalDateTimeImmutable($row['revoked_at'] ?? null),
+        return new CatalogCategoryAccessAssignmentEntity(
+            (string) ($row['assignment_id'] ?? ''),
+            (string) ($row['category_id'] ?? ''),
+            (string) ($row['actor_user_id'] ?? ''),
+            (string) ($row['role'] ?? ''),
+            (string) ($row['status'] ?? 'active'),
+            $this->boolFromRow($row['is_primary'] ?? false),
+            $this->dateTimeFromRow($row['granted_at'] ?? null) ?? new \DateTimeImmutable('now'),
+            $this->dateTimeFromRow($row['revoked_at'] ?? null),
         );
     }
 
-    private function boolValue(mixed $value): bool
+    private function boolFromRow(mixed $value): bool
     {
-        if (is_bool($value)) {
-            return $value;
-        }
-        if (is_int($value) || is_float($value) || is_string($value)) {
-            return (bool) $value;
-        }
-
-        return false;
+        return match (true) {
+            is_bool($value) => $value,
+            is_int($value) => 0 !== $value,
+            is_numeric($value) => 0 !== (int) $value,
+            is_string($value) => in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true),
+            default => false,
+        };
     }
 
-    /**
-     * @throws \Throwable
-     */
-    /** @noinspection PhpSameParameterValueInspection */
-    private function dateTimeImmutable(mixed $value, string $field): \DateTimeImmutable
+    private function dateTimeFromRow(mixed $value): ?\DateTimeImmutable
     {
-        $normalized = $this->requiredString($value, $field);
-
-        return new \DateTimeImmutable($normalized);
-    }
-
-    /**
-     * @throws \Throwable
-     */
-    private function optionalDateTimeImmutable(mixed $value): ?\DateTimeImmutable
-    {
-        if (null === $value) {
-            return null;
-        }
-        if (!is_scalar($value)) {
-            throw new \RuntimeException('Missing scalar value for revoked_at.');
-        }
-
-        $normalized = trim((string) $value);
-        if ('' === $normalized) {
+        if (!is_string($value) || '' === trim($value)) {
             return null;
         }
 
-        return new \DateTimeImmutable($normalized);
+        return new \DateTimeImmutable($value);
     }
-
-    /**
-     * @throws \Throwable
-     */
-    private function requiredString(mixed $value, string $field): string
-    {
-        if (!is_scalar($value)) {
-            throw new \RuntimeException(sprintf('Missing scalar value for %s.', $field));
-        }
-
-        $normalized = trim((string) $value);
-        if ('' === $normalized) {
-            throw new \RuntimeException(sprintf('Missing non-empty value for %s.', $field));
-        }
-
-        return $normalized;
-    }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryAccessAssignmentRepository', false)) {
+    class_alias(CatalogCategoryAccessAssignmentEntityRepository::class, __NAMESPACE__.'\\CategoryAccessAssignmentRepository');
 }

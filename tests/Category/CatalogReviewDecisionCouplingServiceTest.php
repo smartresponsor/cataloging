@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
+use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
-use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\Repository\CatalogCategoryWorkflowEntityRepository;
 use App\Cataloging\Repository\CategoryChangeRequestRepository;
-use App\Cataloging\Repository\CategoryWorkflowRepository;
 use App\Cataloging\Service\CatalogChangeRequestService;
 use App\Cataloging\Service\CatalogPublicationGateService;
 use App\Cataloging\Service\CatalogReviewDecisionCouplingService;
@@ -27,10 +27,10 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
     public function testAcceptedReviewTransitionsWorkflowAndEvaluatesReadiness(): void
     {
         $changeRequestRepository = new CategoryChangeRequestRepository();
-        $workflowRepository = new CategoryWorkflowRepository();
+        $workflowRepository = new CatalogCategoryWorkflowEntityRepository();
 
         $changeRequestService = new CatalogChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
-        $workflowService = new CatalogWorkflowTransitionService($workflowRepository, new CategoryWorkflowPolicy());
+        $workflowService = new CatalogWorkflowTransitionService($workflowRepository, new CatalogCategoryWorkflowEntityPolicy());
         $publicationGateService = new CatalogPublicationGateService(new CategoryPublicationGatePolicy());
 
         $service = new CatalogReviewDecisionCouplingService(
@@ -59,7 +59,7 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
                 'contentReady' => true,
                 'localeReady' => true,
                 'mediaReady' => false,
-                'aliasReady' => true,
+                'slugHistoryReady' => true,
             ],
         ));
 
@@ -75,10 +75,10 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
     public function testRejectedReviewReturnsCategoryToDraftAndMarksNotPublishable(): void
     {
         $changeRequestRepository = new CategoryChangeRequestRepository();
-        $workflowRepository = new CategoryWorkflowRepository();
+        $workflowRepository = new CatalogCategoryWorkflowEntityRepository();
 
         $changeRequestService = new CatalogChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
-        $workflowService = new CatalogWorkflowTransitionService($workflowRepository, new CategoryWorkflowPolicy());
+        $workflowService = new CatalogWorkflowTransitionService($workflowRepository, new CatalogCategoryWorkflowEntityPolicy());
         $publicationGateService = new CatalogPublicationGateService(new CategoryPublicationGatePolicy());
 
         $service = new CatalogReviewDecisionCouplingService(
@@ -91,8 +91,8 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
             'req-511',
             'category-511',
             'author-1',
-            'Remove deprecated alias',
-            ['alias' => 'old-path'],
+            'Remove deprecated slugHistory',
+            ['slugHistory' => 'old-path'],
         ));
         $changeRequestService->review(new CategoryChangeRequestReviewRequest('req-511', 'in_review', 'reviewer-0', 'Entered moderation'));
 

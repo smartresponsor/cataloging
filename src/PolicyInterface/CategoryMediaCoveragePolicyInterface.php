@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\PolicyInterface;
 
-use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 
 /**
@@ -14,8 +14,8 @@ use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 interface CategoryMediaCoveragePolicyInterface
 {
     /**
-     * @param array<string,mixed>                 $payload
-     * @param list<CategoryMediaBindingInterface> $bindings
+     * @param array<string,mixed>                              $payload
+     * @param list<CatalogCategoryMediaBindingEntityInterface> $bindings
      */
     public function buildReport(array $payload, array $bindings): CategoryMediaCoverageReportInterface;
 }

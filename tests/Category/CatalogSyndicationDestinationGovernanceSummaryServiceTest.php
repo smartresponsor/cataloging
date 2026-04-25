@@ -9,18 +9,18 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Policy\CategorySyndicationDestinationGovernanceSummaryPolicy;
+use App\Cataloging\Policy\CatalogSyndicationDestinationGovernanceSummaryPolicy;
 use App\Cataloging\Service\CatalogSyndicationDestinationGovernanceSummaryService;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationGovernanceSummaryRequest;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationGovernanceSummaryRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDestinationGovernanceSummaryServiceTest extends TestCase
 {
     public function testBuildSummaryAggregatesDestinationGovernanceTrailPayloads(): void
     {
-        $service = new CatalogSyndicationDestinationGovernanceSummaryService(new CategorySyndicationDestinationGovernanceSummaryPolicy());
+        $service = new CatalogSyndicationDestinationGovernanceSummaryService(new CatalogSyndicationDestinationGovernanceSummaryPolicy());
 
-        $event = $service->buildSummary(new CategorySyndicationDestinationGovernanceSummaryRequest('dst-1', [
+        $event = $service->buildSummary(new CatalogSyndicationDestinationGovernanceSummaryRequest('dst-1', [
             [
                 'deliveryStatus' => 'delivered',
                 'mediaPolicyMode' => 'strict_exact',

@@ -15,7 +15,7 @@ composer.lock
 
 # PHPUnit
 .phpunit.result.cache
-.phpunit.cache/
+/.phpunit.cache/
 
 # IDE and editors
 /.idea/

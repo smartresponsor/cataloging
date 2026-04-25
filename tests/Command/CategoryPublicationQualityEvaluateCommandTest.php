@@ -34,7 +34,7 @@ final class CategoryPublicationQualityEvaluateCommandTest extends TestCase
                 'contentReady' => true,
                 'localeReady' => true,
                 'mediaReady' => false,
-                'aliasReady' => false,
+                'slugHistoryReady' => false,
             ], JSON_THROW_ON_ERROR),
             '--checks' => json_encode([
                 'bannerReady' => false,

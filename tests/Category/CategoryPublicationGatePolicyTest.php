@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObject\CategoryPublicationReadiness;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryPublicationGatePolicyTest extends TestCase
@@ -27,7 +27,7 @@ final class CategoryPublicationGatePolicyTest extends TestCase
         ]);
 
         self::assertTrue($policy->canPublish(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::APPROVED),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::APPROVED),
             $readiness,
             'operator-1',
             'ready for release',
@@ -45,7 +45,7 @@ final class CategoryPublicationGatePolicyTest extends TestCase
         ]);
 
         self::assertFalse($policy->canPublish(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::APPROVED),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::APPROVED),
             $readiness,
             'operator-1',
             'trying to publish incomplete category',
@@ -63,7 +63,7 @@ final class CategoryPublicationGatePolicyTest extends TestCase
         ]);
 
         self::assertFalse($policy->canPublish(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::IN_REVIEW),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::IN_REVIEW),
             $readiness,
             'operator-1',
             'approval still missing',

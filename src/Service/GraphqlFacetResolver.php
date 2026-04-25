@@ -8,7 +8,6 @@ namespace App\Cataloging\Service;
 use App\Cataloging\ServiceInterface\GraphqlFacetResolverInterface;
 use App\Cataloging\ValueObject\CategoryGraphqlFacetRequest;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
-use Doctrine\DBAL\Exception;
 
 /**
  * Secondary GraphQL facet adapter over the canonical search/read services.
@@ -29,8 +28,6 @@ final readonly class GraphqlFacetResolver implements GraphqlFacetResolverInterfa
      *     items:list<array{id:string,slug:string,name:string,path:string,locale:string,score:null}>,
      *     total:int,
      * }
-     *
-     * @throws Exception
      */
     public function categoryFacet(CategoryGraphqlFacetRequest $request): array
     {

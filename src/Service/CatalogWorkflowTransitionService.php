@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CategoryWorkflow;
-use App\Cataloging\Event\CategoryWorkflowTransitioned;
-use App\Cataloging\PolicyInterface\CategoryWorkflowPolicyInterface;
-use App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface;
+use App\Cataloging\Entity\CatalogCategoryWorkflowEntity;
+use App\Cataloging\Event\CatalogCategoryWorkflowEntityTransitioned;
+use App\Cataloging\PolicyInterface\CatalogCategoryWorkflowEntityPolicyInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryWorkflowEntityRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
-use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
 
 /**
  * Provides the catalog workflow transition service application service.
@@ -22,21 +22,21 @@ final readonly class CatalogWorkflowTransitionService implements CatalogWorkflow
      * Initializes the catalog workflow transition service service collaborators.
      */
     public function __construct(
-        private CategoryWorkflowRepositoryInterface $repository,
-        private CategoryWorkflowPolicyInterface $policy,
+        private CatalogCategoryWorkflowEntityRepositoryInterface $repository,
+        private CatalogCategoryWorkflowEntityPolicyInterface $policy,
     ) {
     }
 
     /**
      * Handles the transition workflow.
      */
-    public function transition(CategoryWorkflowTransitionRequest $request): CategoryWorkflowTransitioned
+    public function transition(CatalogCategoryWorkflowEntityTransitionRequest $request): CatalogCategoryWorkflowEntityTransitioned
     {
         $current = $this->repository->findByCategoryId($request->categoryId());
-        $currentWorkflow = $current instanceof CategoryWorkflow
+        $currentWorkflow = $current instanceof CatalogCategoryWorkflowEntity
             ? $current
-            : CategoryWorkflow::initialize($request->categoryId(), $request->actorId());
-        $toState = CategoryWorkflowState::fromString($request->targetState());
+            : CatalogCategoryWorkflowEntity::initialize($request->categoryId(), $request->actorId());
+        $toState = CatalogCategoryWorkflowEntityState::fromString($request->targetState());
 
         $this->policy->assertTransitionAllowed(
             $currentWorkflow->state(),
@@ -48,7 +48,7 @@ final readonly class CatalogWorkflowTransitionService implements CatalogWorkflow
         $updated = $currentWorkflow->transitionTo($toState, $request->actorId(), $request->reason());
         $this->repository->save($updated);
 
-        $event = new CategoryWorkflowTransitioned(
+        $event = new CatalogCategoryWorkflowEntityTransitioned(
             $request->categoryId(),
             $currentWorkflow->state()->value(),
             $toState->value(),

@@ -33,7 +33,7 @@ final class CategoryCompletenessEvaluateCommandTest extends TestCase
                 'content' => ['body' => 'Merch copy'],
                 'locale' => ['enabled' => ['en_US']],
                 'media' => ['primaryAssetId' => 'asset-1'],
-                'aliases' => ['garden-lights'],
+                'slugHistories' => ['garden-lights'],
                 'presentation' => ['bannerId' => 'banner-1', 'htmlBlockId' => 'html-1'],
             ], JSON_THROW_ON_ERROR),
         ]);

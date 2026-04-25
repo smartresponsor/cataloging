@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Command;
 
 use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
-use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -56,7 +56,7 @@ final class CategoryWorkflowTransitionCommand extends Command
     /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $event = $this->transitionService->transition(new CategoryWorkflowTransitionRequest(
+        $event = $this->transitionService->transition(new CatalogCategoryWorkflowEntityTransitionRequest(
             $this->argumentString($input, 'categoryId'),
             $this->argumentString($input, 'targetState'),
             $this->argumentString($input, 'actorId'),

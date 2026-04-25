@@ -5,39 +5,23 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Idempotency;
 
+use App\Cataloging\Entity\CatalogCategoryIdempotencyEntity;
 use App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\DBAL\ParameterType;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Durable DB-backed idempotency store.
  *
- * Uses a unique key in the primary data store so duplicate mutation requests
- * are suppressed across process restarts and multiple nodes.
+ * Uses Doctrine ORM as the durable model.
  */
 final readonly class CategoryIdempotencyStore implements CategoryIdempotencyStoreInterface
 {
-    /**
-     * Initializes the category idempotency store service collaborators.
-     */
-    public function __construct(private Connection $connection)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
     /**
-     * Handles the acquire workflow.
-     *
-     * @param string      $key
-     * @param string      $operation
-     * @param string      $requestHash
-     * @param int         $ttlSec
-     * @param string|null $correlationId
-     *
-     * @return bool
-     *
-     * @throws Exception
      * @throws \DateMalformedStringException
      */
     public function acquire(
@@ -62,70 +46,70 @@ final readonly class CategoryIdempotencyStore implements CategoryIdempotencyStor
 
         $now = new \DateTimeImmutable('now');
         $expiresAt = $now->modify(sprintf('+%d seconds', max(1, $ttlSec)));
-        $nowValue = $now->format('Y-m-d H:i:s');
-        $expiresAtValue = $expiresAt->format('Y-m-d H:i:s');
         $normalizedCorrelationId = null !== $correlationId ? trim($correlationId) : null;
         if ('' === $normalizedCorrelationId) {
             $normalizedCorrelationId = null;
         }
 
-        $this->connection->executeStatement(
-            'DELETE FROM category_idempotency WHERE idempotency_key = :key AND expires_at <= :now',
-            ['key' => $normalizedKey, 'now' => $nowValue],
-            ['key' => ParameterType::STRING, 'now' => ParameterType::STRING],
+        return $this->acquireWithDoctrine(
+            $normalizedKey,
+            $normalizedOperation,
+            $normalizedRequestHash,
+            $now,
+            $expiresAt,
+            $normalizedCorrelationId,
         );
-
-        try {
-            $this->connection->insert('category_idempotency', [
-                'idempotency_key' => $normalizedKey,
-                'operation' => $normalizedOperation,
-                'request_hash' => $normalizedRequestHash,
-                'created_at' => $nowValue,
-                'expires_at' => $expiresAtValue,
-                'correlation_id' => $normalizedCorrelationId,
-            ], [
-                'idempotency_key' => ParameterType::STRING,
-                'operation' => ParameterType::STRING,
-                'request_hash' => ParameterType::STRING,
-                'created_at' => ParameterType::STRING,
-                'expires_at' => ParameterType::STRING,
-                'correlation_id' => null === $normalizedCorrelationId ? ParameterType::NULL : ParameterType::STRING,
-            ]);
-
-            return true;
-        } catch (UniqueConstraintViolationException) {
-            $existing = $this->connection->fetchAssociative(
-                'SELECT operation, request_hash FROM category_idempotency WHERE idempotency_key = :key LIMIT 1',
-                ['key' => $normalizedKey],
-                ['key' => ParameterType::STRING],
-            );
-
-            if (
-                is_array($existing)
-                && ($existing['operation'] ?? null) === $normalizedOperation
-                && ($existing['request_hash'] ?? null) === $normalizedRequestHash
-            ) {
-                return false;
-            }
-
-            throw new \DomainException(sprintf('Idempotency key "%s" cannot be reused for a different request payload.', $normalizedKey));
-        }
     }
 
-    /**
-     * Handles the purge expired workflow.
-     *
-     * @throws Exception
-     */
     public function purgeExpired(): int
     {
-        $nowDateTime = new \DateTimeImmutable('now');
-        $now = $nowDateTime->format('Y-m-d H:i:s');
+        $now = new \DateTimeImmutable('now');
 
-        return (int) $this->connection->executeStatement(
-            'DELETE FROM category_idempotency WHERE expires_at <= :now',
-            ['now' => $now],
-            ['now' => ParameterType::STRING],
-        );
+        $expired = $this->entityManager->createQuery('SELECT i FROM App\\Cataloging\\Entity\\CatalogCategoryIdempotencyEntity i WHERE i.expiresAt <= :now')
+            ->setParameter('now', $now)
+            ->toIterable();
+
+        $deleted = 0;
+        foreach ($expired as $entity) {
+            if (!$entity instanceof CatalogCategoryIdempotencyEntity) {
+                continue;
+            }
+
+            $this->entityManager->remove($entity);
+            ++$deleted;
+        }
+
+        if ($deleted > 0) {
+            $this->entityManager->flush();
+        }
+
+        return $deleted;
+    }
+
+    private function acquireWithDoctrine(
+        string $key,
+        string $operation,
+        string $requestHash,
+        \DateTimeImmutable $now,
+        \DateTimeImmutable $expiresAt,
+        ?string $correlationId,
+    ): bool {
+        $existing = $this->entityManager->find(CatalogCategoryIdempotencyEntity::class, $key);
+        if ($existing instanceof CatalogCategoryIdempotencyEntity) {
+            if ($existing->isExpiredAt($now)) {
+                $this->entityManager->remove($existing);
+                $this->entityManager->flush();
+            } elseif ($existing->getOperation() === $operation && $existing->getRequestHash() === $requestHash) {
+                return false;
+            } else {
+                throw new \DomainException(sprintf('Idempotency key "%s" cannot be reused for a different request payload.', $key));
+            }
+        }
+
+        $entity = new CatalogCategoryIdempotencyEntity($key, $operation, $requestHash, $now, $expiresAt, $correlationId);
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+
+        return true;
     }
 }

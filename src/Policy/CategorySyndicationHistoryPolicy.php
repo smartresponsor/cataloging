@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
 
 /**
@@ -32,7 +32,7 @@ final class CategorySyndicationHistoryPolicy implements CategorySyndicationHisto
 
         return array_values(array_filter(
             $records,
-            static fn (CategorySyndicationDeliveryRecordInterface $record): bool => $record->destinationId() === $normalized,
+            static fn (CatalogSyndicationDeliveryRecordInterface $record): bool => $record->destinationId() === $normalized,
         ));
     }
 }

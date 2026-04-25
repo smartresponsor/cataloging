@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\CategoryAliasEntity;
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -35,19 +35,19 @@ final class ExportRedirectCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
-        $aliasRepo = $this->em->getRepository(CategoryAliasEntity::class);
-        $catRepo = $this->em->getRepository(CategoryEntity::class);
-        $aliases = $aliasRepo->findAll();
+        $slugHistoryRepo = $this->em->getRepository(CatalogCategorySlugHistoryEntity::class);
+        $catRepo = $this->em->getRepository(CatalogCategoryEntity::class);
+        $slugHistories = $slugHistoryRepo->findAll();
 
         $lines = [];
-        foreach ($aliases as $alias) {
-            /** @var CategoryEntity|null $cat */
-            $cat = $catRepo->find($alias->categoryId());
+        foreach ($slugHistories as $slugHistory) {
+            /** @var CatalogCategoryEntity|null $cat */
+            $cat = $catRepo->find($slugHistory->categoryId());
             if (!$cat) {
                 continue;
             }
-            // format: oldSlug,newSlug
-            $lines[] = $alias->oldSlug().','.$cat->getSlug();
+            // format: historicalSlug,newSlug
+            $lines[] = $slugHistory->slug().','.$cat->getSlug();
         }
 
         $path = getcwd().'/var/export/category_redirects_301.csv';

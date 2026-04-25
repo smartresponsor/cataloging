@@ -25,7 +25,7 @@ final class ProjectionSync
                 $diff[] = ['id' => $id, 'reason' => 'missing-mysql'];
                 continue;
             }
-            foreach (['slug', 'locale', 'published', 'channel'] as $field) {
+            foreach (['slug', 'locale', 'tenant', 'workflow_state', 'published'] as $field) {
                 if (($row[$field] ?? null) !== ($mysqlRow[$field] ?? null)) {
                     $diff[] = [
                         'id' => $id,

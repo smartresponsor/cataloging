@@ -6,7 +6,7 @@ $checks = [
     'doctrine-config' => $root . '/config/packages/catalog_doctrine.yaml',
     'schema-check' => $root . '/tools/migration/check-category-schema.php',
     'entity-category' => $root . '/src/Entity/Category.php',
-    'entity-taxonomy' => $root . '/src/Entity/CategoryTaxonomy.php',
+    'entity-taxonomy' => $root . '/src/Entity/CatalogCategoryTaxonomyEntity.php',
 ];
 $missing = [];
 foreach ($checks as $label => $path) {

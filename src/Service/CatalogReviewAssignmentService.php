@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequest;
-use App\Cataloging\Entity\CategoryReviewAssignment;
+use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Entity\CatalogCategoryReviewAssignmentEntity;
 use App\Cataloging\Event\CategoryChangeRequestAssigned;
-use App\Cataloging\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
+use App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
 use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogReviewAssignmentServiceInterface;
-use App\Cataloging\ValueObject\CategoryReviewAssignmentRequest;
+use App\Cataloging\ValueObject\CatalogCategoryReviewAssignmentEntityRequest;
 
 /**
  * Provides the catalog review assignment service application service.
@@ -24,19 +24,19 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
      */
     public function __construct(
         private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private CategoryReviewAssignmentRepositoryInterface $assignmentRepository,
-        private CategoryReviewAssignmentPolicyInterface $policy,
+        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $assignmentRepository,
+        private CatalogCategoryReviewAssignmentEntityPolicyInterface $policy,
     ) {
     }
 
     /**
      * Handles the assign workflow.
      */
-    public function assign(CategoryReviewAssignmentRequest $request): CategoryChangeRequestAssigned
+    public function assign(CatalogCategoryReviewAssignmentEntityRequest $request): CategoryChangeRequestAssigned
     {
         $changeRequest = $this->changeRequestRepository->findByRequestId($request->requestId());
 
-        if (!$changeRequest instanceof CatalogCategoryChangeRequest) {
+        if (!$changeRequest instanceof CatalogCategoryChangeRequestEntity) {
             throw new \DomainException(sprintf('Category change request not found: %s', $request->requestId()));
         }
 
@@ -47,7 +47,7 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
             $request->priority(),
         );
 
-        $assignment = CategoryReviewAssignment::create(
+        $assignment = CatalogCategoryReviewAssignmentEntity::create(
             $changeRequest->requestId(),
             $changeRequest->categoryId(),
             $request->assignedReviewer(),

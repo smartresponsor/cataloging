@@ -8,8 +8,11 @@ namespace App\Cataloging\EventInterface;
 /**
  * Defines the contract for category linked.
  */
-interface CategoryLinkedInterface
+interface CatalogCategoryLinkEntityedInterface
 {
     /** @return array<string,mixed> */
     public function payload(): array;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryLinkedInterface', false)) {
+    class_alias(CatalogCategoryLinkEntityedInterface::class, __NAMESPACE__.'\\CategoryLinkedInterface');
 }

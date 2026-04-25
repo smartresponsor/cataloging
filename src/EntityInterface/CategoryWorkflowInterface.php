@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\EntityInterface;
 
-use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\Cataloging\ValueObjectInterface\CatalogCategoryWorkflowEntityStateInterface;
 
 /**
  * Defines the contract for category workflow.
  */
-interface CategoryWorkflowInterface
+interface CatalogCategoryWorkflowEntityInterface
 {
     /**
      * Handles the category id workflow.
@@ -20,7 +20,7 @@ interface CategoryWorkflowInterface
     /**
      * Handles the state workflow.
      */
-    public function state(): CategoryWorkflowStateInterface;
+    public function state(): CatalogCategoryWorkflowEntityStateInterface;
 
     /**
      * Handles the actor id workflow.
@@ -36,4 +36,7 @@ interface CategoryWorkflowInterface
      * Handles the transitioned at workflow.
      */
     public function transitionedAt(): \DateTimeImmutable;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryWorkflowInterface', false)) {
+    class_alias(CatalogCategoryWorkflowEntityInterface::class, __NAMESPACE__.'\\CategoryWorkflowInterface');
 }

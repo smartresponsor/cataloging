@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\DataFixtures;
 
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -19,14 +19,14 @@ final class BrokenTreeFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $root = new CategoryEntity('Catalog Broken Root', 'catalog-broken-root', 'catalog_broken_root', 0);
+        $root = new CatalogCategoryEntity('Catalog Broken Root', 'catalog-broken-root', 'catalog_broken_root', 0);
         $manager->persist($root);
 
         $slugA = 'broken';
         $slugB = 'node';
         $brokenPath = sprintf('%s.%s.%s', $root->getPath(), $slugA, $slugB);
 
-        $broken = new CategoryEntity('Broken Child Node', 'broken-child-node', $brokenPath, 1);
+        $broken = new CatalogCategoryEntity('Broken Child Node', 'broken-child-node', $brokenPath, 1);
         $manager->persist($broken);
 
         $manager->flush();

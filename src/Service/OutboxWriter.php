@@ -1,54 +1,34 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
+use App\Cataloging\Entity\CatalogOutboxMessageEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
-/**
- * Provides the outbox writer application service.
- */
 final readonly class OutboxWriter
 {
-    /**
-     * Initializes the outbox writer service collaborators.
-     */
-    public function __construct(private Connection $connection)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
-    /**
-     * @param array<string,mixed> $payload
-     *
-     * @throws Exception
-     * @throws \JsonException
-     */
+    /** @param array<string,mixed> $payload */
     public function append(string $type, array $payload, string $key): void
     {
         $createdAtDateTime = new \DateTimeImmutable('now');
+        $payloadJson = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
-        $this->connection->executeStatement(
-            'INSERT INTO outbox (id, type, payload, "key", created_at) VALUES (:id, :type, :payload, :key, :createdAt) '
-            .'ON CONFLICT ("key") DO NOTHING',
-            [
-                'id' => Uuid::v7()->toRfc4122(),
-                'type' => $type,
-                'payload' => json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
-                'key' => $key,
-                'createdAt' => $createdAtDateTime->format('Y-m-d H:i:s'),
-            ],
-            [
-                'id' => ParameterType::STRING,
-                'type' => ParameterType::STRING,
-                'payload' => ParameterType::STRING,
-                'key' => ParameterType::STRING,
-                'createdAt' => ParameterType::STRING,
-            ],
-        );
+        $repository = $this->entityManager->getRepository(CatalogOutboxMessageEntity::class);
+        $existing = $repository->findOneBy(['messageKey' => $key]);
+        if ($existing instanceof CatalogOutboxMessageEntity) {
+            return;
+        }
+
+        $entity = new CatalogOutboxMessageEntity(Uuid::v7()->toRfc4122(), $type, $payloadJson, $key, $createdAtDateTime);
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
     }
 }

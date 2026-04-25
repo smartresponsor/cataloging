@@ -8,16 +8,16 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
+use App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy;
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;
-use App\Cataloging\Policy\CategoryReviewAssignmentPolicy;
+use App\Cataloging\Repository\CatalogCategoryReviewAssignmentEntityRepository;
 use App\Cataloging\Repository\CategoryChangeRequestRepository;
-use App\Cataloging\Repository\CategoryReviewAssignmentRepository;
 use App\Cataloging\Service\CatalogChangeRequestService;
 use App\Cataloging\Service\CatalogReviewAssignmentService;
 use App\Cataloging\Service\CatalogReviewQueueService;
+use App\Cataloging\ValueObject\CatalogCategoryReviewAssignmentEntityRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;
-use App\Cataloging\ValueObject\CategoryReviewAssignmentRequest;
 use App\Cataloging\ValueObject\CategoryReviewQueueRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -26,12 +26,12 @@ final class CatalogReviewQueueServiceTest extends TestCase
     public function testBuildsReadyQueueItemForAssignedReviewer(): void
     {
         $changeRepository = new CategoryChangeRequestRepository();
-        $assignmentRepository = new CategoryReviewAssignmentRepository();
+        $assignmentRepository = new CatalogCategoryReviewAssignmentEntityRepository();
         $requestService = new CatalogChangeRequestService($changeRepository, new CategoryChangeRequestPolicy());
         $assignmentService = new CatalogReviewAssignmentService(
             $changeRepository,
             $assignmentRepository,
-            new CategoryReviewAssignmentPolicy(),
+            new CatalogCategoryReviewAssignmentEntityPolicy(),
         );
         $queueService = new CatalogReviewQueueService($changeRepository, $assignmentRepository);
 
@@ -43,7 +43,7 @@ final class CatalogReviewQueueServiceTest extends TestCase
             ['parentId' => 'garden'],
         ));
         $requestService->review(new CategoryChangeRequestReviewRequest('req-410', 'in_review', 'moderator-1', 'Opened for review'));
-        $assignmentService->assign(new CategoryReviewAssignmentRequest('req-410', 'reviewer-1', 'lead-1', 'urgent'));
+        $assignmentService->assign(new CatalogCategoryReviewAssignmentEntityRequest('req-410', 'reviewer-1', 'lead-1', 'urgent'));
 
         $queue = $queueService->queueForReviewer(new CategoryReviewQueueRequest('reviewer-1'));
 
@@ -57,12 +57,12 @@ final class CatalogReviewQueueServiceTest extends TestCase
     public function testFlagsNotStartedRequestAsNotReady(): void
     {
         $changeRepository = new CategoryChangeRequestRepository();
-        $assignmentRepository = new CategoryReviewAssignmentRepository();
+        $assignmentRepository = new CatalogCategoryReviewAssignmentEntityRepository();
         $requestService = new CatalogChangeRequestService($changeRepository, new CategoryChangeRequestPolicy());
         $assignmentService = new CatalogReviewAssignmentService(
             $changeRepository,
             $assignmentRepository,
-            new CategoryReviewAssignmentPolicy(),
+            new CatalogCategoryReviewAssignmentEntityPolicy(),
         );
         $queueService = new CatalogReviewQueueService($changeRepository, $assignmentRepository);
 
@@ -73,7 +73,7 @@ final class CatalogReviewQueueServiceTest extends TestCase
             'Update seasonal sorting',
             ['sort' => 'seasonal'],
         ));
-        $assignmentService->assign(new CategoryReviewAssignmentRequest('req-411', 'reviewer-1', 'lead-1', 'normal'));
+        $assignmentService->assign(new CatalogCategoryReviewAssignmentEntityRequest('req-411', 'reviewer-1', 'lead-1', 'normal'));
 
         $queue = $queueService->queueForReviewer(new CategoryReviewQueueRequest('reviewer-1'));
 

@@ -40,7 +40,7 @@ services:
 
     App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Cataloging\Idempotency\CategoryIdempotencyStore'
 
-    App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface:
+    App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface:
         '@App\Cataloging\Repository\CategoryAccessAssignmentRepository'
 
 

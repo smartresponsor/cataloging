@@ -6,13 +6,13 @@ declare(strict_types=1);
 namespace App\Cataloging\Policy;
 
 use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
-use App\Cataloging\PolicyInterface\CategoryReviewAssignmentPolicyInterface;
+use App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 
 /**
  * Provides the category review assignment policy implementation.
  */
-final class CategoryReviewAssignmentPolicy implements CategoryReviewAssignmentPolicyInterface
+final class CatalogCategoryReviewAssignmentEntityPolicy implements CatalogCategoryReviewAssignmentEntityPolicyInterface
 {
     private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
 
@@ -52,4 +52,7 @@ final class CategoryReviewAssignmentPolicy implements CategoryReviewAssignmentPo
             throw new \DomainException(sprintf('Category review assignment is not allowed for request state: %s', $request->state()->value()));
         }
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentPolicy', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityPolicy::class, __NAMESPACE__.'\\CategoryReviewAssignmentPolicy');
 }

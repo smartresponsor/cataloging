@@ -11,8 +11,8 @@ use App\Cataloging\Service\CategoryPayloadValueNormalizer;
 use App\Cataloging\Service\MetaPayloadNormalizer;
 use App\Cataloging\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 use App\Cataloging\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
-use App\Cataloging\ValueObject\CategoryLinkRequest;
 use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
 use App\Cataloging\ValueObject\CategorySlugLookupRequest;
 use App\Cataloging\ValueObject\CategoryTreeRequest;
@@ -133,9 +133,9 @@ final class CategoryController implements CategoryControllerInterface
      * @param array<string, mixed> $route
      * @param array<string, mixed> $auth
      */
-    private function linkRequest(array $body, array $route, array $auth): CategoryLinkRequest
+    private function linkRequest(array $body, array $route, array $auth): CatalogCategoryLinkEntityRequest
     {
-        return new CategoryLinkRequest(
+        return new CatalogCategoryLinkEntityRequest(
             $this->requiredString($auth, 'actorId'),
             $this->requiredString($route, 'id'),
             $this->requiredString($body, 'targetDomain'),

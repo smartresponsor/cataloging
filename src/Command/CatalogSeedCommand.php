@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -49,7 +49,7 @@ final class CatalogSeedCommand extends Command
         $totalCount = max(1, $this->argumentInt($input, 'count', 1));
         $branchingFactor = max(2, $this->argumentInt($input, 'branching', 5));
 
-        $root = new CategoryEntity('Root', 'root', 'root', 0);
+        $root = new CatalogCategoryEntity('Root', 'root', 'root', 0);
         $this->em->persist($root);
         $list = [$root];
         $created = 1;
@@ -60,7 +60,7 @@ final class CatalogSeedCommand extends Command
             for ($childIndex = 0; $childIndex < $branchingFactor && $created < $totalCount; ++$childIndex) {
                 $slug = $parent->getSlug().'-'.dechex($created);
                 $path = $parent->getPath().'.'.$slug;
-                $child = new CategoryEntity('Node '.$created, $slug, $path, $parent->getDepth() + 1);
+                $child = new CatalogCategoryEntity('Node '.$created, $slug, $path, $parent->getDepth() + 1);
                 $this->em->persist($child);
                 $list[] = $child;
                 ++$created;

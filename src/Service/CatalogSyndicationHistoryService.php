@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationDestinationHistoryBuilt;
+use App\Cataloging\Event\CatalogSyndicationDestinationHistoryBuilt;
 use App\Cataloging\Event\CategorySyndicationRecoveryAuditConsolidated;
-use App\Cataloging\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
+use App\Cataloging\EventInterface\CatalogSyndicationDestinationHistoryBuiltInterface;
 use App\Cataloging\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationHistory;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationHistory;
 use App\Cataloging\ValueObject\CategorySyndicationHistoryRequest;
 use App\Cataloging\ValueObject\CategorySyndicationRecoveryAuditSummary;
 
@@ -35,7 +35,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
      */
     public function buildDestinationHistory(
         CategorySyndicationHistoryRequest $request,
-    ): CategorySyndicationDestinationHistoryBuiltInterface {
+    ): CatalogSyndicationDestinationHistoryBuiltInterface {
         $this->historyPolicy->assertDestinationId($request->destinationId());
         $filtered = $this->historyPolicy->recordsForDestination($request->destinationId(), $request->records());
 
@@ -72,7 +72,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
             }
         }
 
-        $history = new CategorySyndicationDestinationHistory(
+        $history = new CatalogSyndicationDestinationHistory(
             trim($request->destinationId()),
             array_keys($packageIds),
             array_keys($categoryIds),
@@ -86,7 +86,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
             $latestDeliveredAt,
         );
 
-        return new CategorySyndicationDestinationHistoryBuilt([
+        return new CatalogSyndicationDestinationHistoryBuilt([
             'destinationId' => $history->destinationId(),
             'packageIds' => $history->packageIds(),
             'categoryIds' => $history->categoryIds(),

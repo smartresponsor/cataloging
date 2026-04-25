@@ -5,27 +5,27 @@ declare(strict_types=1);
 
 namespace App\Cataloging\RepositoryInterface;
 
-use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
+use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
 
 /**
  * Defines the contract for category access assignment repository.
  */
-interface CategoryAccessAssignmentRepositoryInterface
+interface CatalogCategoryAccessAssignmentEntityRepositoryInterface
 {
     /**
      * Handles the save workflow.
      */
-    public function save(CategoryAccessAssignmentInterface $assignment): void;
+    public function save(CatalogCategoryAccessAssignmentEntityInterface $assignment): void;
 
     /**
      * Handles the find primary for category id workflow.
      */
-    public function findPrimaryForCategoryId(string $categoryId): ?CategoryAccessAssignmentInterface;
+    public function findPrimaryForCategoryId(string $categoryId): ?CatalogCategoryAccessAssignmentEntityInterface;
 
-    /** @return list<CategoryAccessAssignmentInterface> */
+    /** @return list<CatalogCategoryAccessAssignmentEntityInterface> */
     public function findActiveByCategoryId(string $categoryId): array;
 
-    /** @return list<CategoryAccessAssignmentInterface> */
+    /** @return list<CatalogCategoryAccessAssignmentEntityInterface> */
     public function findActiveByActorUserId(string $actorUserId): array;
 
     /**
@@ -34,5 +34,8 @@ interface CategoryAccessAssignmentRepositoryInterface
     public function findOneByCategoryIdAndActorUserId(
         string $categoryId,
         string $actorUserId,
-    ): ?CategoryAccessAssignmentInterface;
+    ): ?CatalogCategoryAccessAssignmentEntityInterface;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryAccessAssignmentRepositoryInterface', false)) {
+    class_alias(CatalogCategoryAccessAssignmentEntityRepositoryInterface::class, __NAMESPACE__.'\\CategoryAccessAssignmentRepositoryInterface');
 }

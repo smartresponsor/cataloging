@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\EntityInterface\CatalogCategoryReviewAssignmentEntityInterface;
 use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
-use App\Cataloging\EntityInterface\CategoryReviewAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
 use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use App\Cataloging\ValueObject\CategoryReviewQueueItem;
@@ -24,7 +24,7 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
      */
     public function __construct(
         private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private CategoryReviewAssignmentRepositoryInterface $assignmentRepository,
+        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $assignmentRepository,
     ) {
     }
 
@@ -53,7 +53,7 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
     }
 
     private function buildQueueItem(
-        CategoryReviewAssignmentInterface $assignment,
+        CatalogCategoryReviewAssignmentEntityInterface $assignment,
         CategoryChangeRequestInterface $changeRequest,
     ): CategoryReviewQueueItem {
         $warnings = [];

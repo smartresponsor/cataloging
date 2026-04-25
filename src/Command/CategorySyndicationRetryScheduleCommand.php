@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -27,7 +27,7 @@ final class CategorySyndicationRetryScheduleCommand extends Command
      * Initializes the category syndication retry schedule command service collaborators.
      */
     public function __construct(
-        private readonly CategorySyndicationDeliveryRecordRepositoryInterface $repository,
+        private readonly CatalogSyndicationDeliveryRecordRepositoryInterface $repository,
         private readonly CatalogSyndicationRetryServiceInterface $service,
     ) {
         parent::__construct();

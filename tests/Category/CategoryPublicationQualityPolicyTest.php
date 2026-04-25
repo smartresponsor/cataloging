@@ -23,7 +23,7 @@ final class CategoryPublicationQualityPolicyTest extends TestCase
             'contentReady' => true,
             'localeReady' => true,
             'mediaReady' => true,
-            'aliasReady' => true,
+            'slugHistoryReady' => true,
         ], [
             'bannerReady' => true,
             'htmlBlockReady' => true,
@@ -46,7 +46,7 @@ final class CategoryPublicationQualityPolicyTest extends TestCase
             'contentReady' => true,
             'localeReady' => false,
             'mediaReady' => false,
-            'aliasReady' => false,
+            'slugHistoryReady' => false,
         ], [
             'bannerReady' => false,
             'htmlBlockReady' => false,

@@ -8,7 +8,7 @@ namespace App\Cataloging\EntityInterface;
 /**
  * Defines the contract for category access assignment.
  */
-interface CategoryAccessAssignmentInterface
+interface CatalogCategoryAccessAssignmentEntityInterface
 {
     /**
      * Handles the assignment id workflow.
@@ -49,4 +49,7 @@ interface CategoryAccessAssignmentInterface
      * Handles the revoked at workflow.
      */
     public function revokedAt(): ?\DateTimeImmutable;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryAccessAssignmentInterface', false)) {
+    class_alias(CatalogCategoryAccessAssignmentEntityInterface::class, __NAMESPACE__.'\\CategoryAccessAssignmentInterface');
 }

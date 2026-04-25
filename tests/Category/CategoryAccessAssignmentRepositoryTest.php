@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CategoryAccessAssignment;
-use App\Cataloging\Repository\CategoryAccessAssignmentRepository;
+use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
+use App\Cataloging\Repository\CatalogCategoryAccessAssignmentEntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
@@ -17,8 +17,8 @@ final class CategoryAccessAssignmentRepositoryTest extends TestCase
         $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
         $this->createSchema($connection);
 
-        $repository = new CategoryAccessAssignmentRepository($connection);
-        $assignment = CategoryAccessAssignment::create('category-1', 'oleksandr', 'owner', true);
+        $repository = new CatalogCategoryAccessAssignmentEntityRepository($connection);
+        $assignment = CatalogCategoryAccessAssignmentEntity::create('category-1', 'oleksandr', 'owner', true);
         $repository->save($assignment);
 
         $found = $repository->findOneByCategoryIdAndActorUserId('category-1', 'oleksandr');

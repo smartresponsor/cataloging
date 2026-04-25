@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\EntityInterface\CategorySyndicationDeliveryRecordInterface;
+use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
 use App\Cataloging\Event\CategorySyndicationRecoveryCandidatePrepared;
 use App\Cataloging\Event\CategorySyndicationRetryScheduled;
 use App\Cataloging\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
@@ -34,7 +34,7 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
      * @throws \InvalidArgumentException
      */
     public function prepareRecoveryCandidate(
-        CategorySyndicationDeliveryRecordInterface $record,
+        CatalogSyndicationDeliveryRecordInterface $record,
         string $actorId,
         string $reason,
     ): CategorySyndicationRecoveryCandidatePreparedInterface {
@@ -70,16 +70,16 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
     /**
      * Schedules the retry workflow for later processing.
      *
-     * @param CategorySyndicationDeliveryRecordInterface $record
-     * @param string                                     $actorId
-     * @param string                                     $reason
+     * @param CatalogSyndicationDeliveryRecordInterface $record
+     * @param string                                    $actorId
+     * @param string                                    $reason
      *
      * @return CategorySyndicationRetryScheduledInterface
      *
      * @throws \DateMalformedStringException
      */
     public function scheduleRetry(
-        CategorySyndicationDeliveryRecordInterface $record,
+        CatalogSyndicationDeliveryRecordInterface $record,
         string $actorId,
         string $reason,
     ): CategorySyndicationRetryScheduledInterface {

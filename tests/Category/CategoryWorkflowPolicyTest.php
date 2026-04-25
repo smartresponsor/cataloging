@@ -8,19 +8,19 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Policy\CategoryWorkflowPolicy;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryWorkflowPolicyTest extends TestCase
 {
     public function testDraftCanMoveToReviewWithActorAndReason(): void
     {
-        $policy = new CategoryWorkflowPolicy();
+        $policy = new CatalogCategoryWorkflowEntityPolicy();
 
         self::assertTrue($policy->canTransition(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::DRAFT),
-            CategoryWorkflowState::fromString(CategoryWorkflowState::IN_REVIEW),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::DRAFT),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::IN_REVIEW),
             'operator-1',
             'ready for moderation',
         ));
@@ -28,11 +28,11 @@ final class CategoryWorkflowPolicyTest extends TestCase
 
     public function testDraftCannotPublishDirectly(): void
     {
-        $policy = new CategoryWorkflowPolicy();
+        $policy = new CatalogCategoryWorkflowEntityPolicy();
 
         self::assertFalse($policy->canTransition(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::DRAFT),
-            CategoryWorkflowState::fromString(CategoryWorkflowState::PUBLISHED),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::DRAFT),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::PUBLISHED),
             'operator-1',
             'trying to bypass review',
         ));
@@ -40,11 +40,11 @@ final class CategoryWorkflowPolicyTest extends TestCase
 
     public function testTransitionRequiresNonEmptyReason(): void
     {
-        $policy = new CategoryWorkflowPolicy();
+        $policy = new CatalogCategoryWorkflowEntityPolicy();
 
         self::assertFalse($policy->canTransition(
-            CategoryWorkflowState::fromString(CategoryWorkflowState::APPROVED),
-            CategoryWorkflowState::fromString(CategoryWorkflowState::PUBLISHED),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::APPROVED),
+            CatalogCategoryWorkflowEntityState::fromString(CatalogCategoryWorkflowEntityState::PUBLISHED),
             'operator-1',
             '   ',
         ));

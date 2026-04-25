@@ -14,7 +14,7 @@ interface CategoryReadRepositoryInterface
      * @param CategoryReadRepositoryListRequest $request
      *
      * @return array{
-     *     edges: array<int, array{id: string, name: string, slug: string, level: int, path: string}>,
+     *     edges: array<int, array{id: string, name: string, slug: string, depth: int, path: string}>,
      *     pageInfo: array{endCursor?: string, hasNextPage: bool},
      *     total?: int,
      *     approxTotal?: int,

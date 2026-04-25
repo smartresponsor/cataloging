@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
 use App\Cataloging\Policy\CategorySyndicationHistoryPolicy;
 use App\Cataloging\Policy\CategorySyndicationRetryPolicy;
 use App\Cataloging\Service\CatalogSyndicationHistoryService;
@@ -26,10 +26,10 @@ final class CatalogSyndicationHistoryServiceTest extends TestCase
         );
 
         $records = [
-            new CategorySyndicationDeliveryRecord('d1', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('delivered'), 1, 200, 'ok', new \DateTimeImmutable('2025-01-01T00:00:00+00:00')),
-            new CategorySyndicationDeliveryRecord('d2', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('failed'), 1, 503, 'temporary outage', null),
-            new CategorySyndicationDeliveryRecord('d3', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('retry_scheduled'), 2, null, 'retry planned', null),
-            new CategorySyndicationDeliveryRecord('d4', 'p9', 'dest-2', 'c9', new CategorySyndicationDeliveryStatus('delivered'), 1, 200, 'other destination', new \DateTimeImmutable('2025-01-02T00:00:00+00:00')),
+            new CatalogSyndicationDeliveryRecordEntity('d1', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('delivered'), 1, 200, 'ok', new \DateTimeImmutable('2025-01-01T00:00:00+00:00')),
+            new CatalogSyndicationDeliveryRecordEntity('d2', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('failed'), 1, 503, 'temporary outage', null),
+            new CatalogSyndicationDeliveryRecordEntity('d3', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('retry_scheduled'), 2, null, 'retry planned', null),
+            new CatalogSyndicationDeliveryRecordEntity('d4', 'p9', 'dest-2', 'c9', new CategorySyndicationDeliveryStatus('delivered'), 1, 200, 'other destination', new \DateTimeImmutable('2025-01-02T00:00:00+00:00')),
         ];
 
         $event = $service->buildDestinationHistory(new CategorySyndicationHistoryRequest('dest-1', $records, 'operator-1', 'build history'));
@@ -52,10 +52,10 @@ final class CatalogSyndicationHistoryServiceTest extends TestCase
         );
 
         $records = [
-            new CategorySyndicationDeliveryRecord('d1', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('failed'), 1, 503, 'temporary outage', null),
-            new CategorySyndicationDeliveryRecord('d2', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('retry_scheduled'), 2, null, 'retry planned', null),
-            new CategorySyndicationDeliveryRecord('d3', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('delivered'), 2, 200, 'recovered', new \DateTimeImmutable('2025-01-03T00:00:00+00:00')),
-            new CategorySyndicationDeliveryRecord('d4', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('failed'), 1, 400, 'bad request', null),
+            new CatalogSyndicationDeliveryRecordEntity('d1', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('failed'), 1, 503, 'temporary outage', null),
+            new CatalogSyndicationDeliveryRecordEntity('d2', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('retry_scheduled'), 2, null, 'retry planned', null),
+            new CatalogSyndicationDeliveryRecordEntity('d3', 'p1', 'dest-1', 'c1', new CategorySyndicationDeliveryStatus('delivered'), 2, 200, 'recovered', new \DateTimeImmutable('2025-01-03T00:00:00+00:00')),
+            new CatalogSyndicationDeliveryRecordEntity('d4', 'p2', 'dest-1', 'c2', new CategorySyndicationDeliveryStatus('failed'), 1, 400, 'bad request', null),
         ];
 
         $event = $service->consolidateRecoveryAudit(new CategorySyndicationHistoryRequest('dest-1', $records, 'operator-1', 'consolidate recovery audit'));

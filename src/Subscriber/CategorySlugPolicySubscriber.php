@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Subscriber;
 
-use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Entity\CatalogCategoryEntity;
 use App\Cataloging\Service\SlugService;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PrePersistEventArgs;
@@ -40,7 +40,7 @@ final readonly class CategorySlugPolicySubscriber implements EventSubscriber
     public function prePersist(PrePersistEventArgs $args): void
     {
         $entity = $args->getObject();
-        if (!$entity instanceof CategoryEntity) {
+        if (!$entity instanceof CatalogCategoryEntity) {
             return;
         }
         $entity->setSlug($this->slugService->ensureUnique($entity->getSlug()));
@@ -54,7 +54,7 @@ final readonly class CategorySlugPolicySubscriber implements EventSubscriber
     public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
-        if (!$entity instanceof CategoryEntity) {
+        if (!$entity instanceof CatalogCategoryEntity) {
             return;
         }
         if ($args->hasChangedField('slug')) {

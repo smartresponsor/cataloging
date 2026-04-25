@@ -17,37 +17,47 @@ final class Version20251102072000_category_runtime_write_baseline extends Abstra
     /** @noinspection PhpMissingParentCallCommonInspection */
     public function getDescription(): string
     {
-        return 'Add category publication state and outbox baseline for runtime write flows';
+        return 'Add category publication state and outbox baseline for runtime write flows when missing from baseline schema';
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     public function up(Schema $schema): void
     {
-        $this->addSql(
-            "ALTER TABLE category ADD COLUMN workflow_state VARCHAR(32) NOT NULL DEFAULT 'draft'"
-        );
-        $this->addSql('ALTER TABLE category ADD COLUMN published BOOLEAN NOT NULL DEFAULT FALSE');
-        $this->addSql(
-            'ALTER TABLE category ADD COLUMN published_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL'
-        );
-        $this->addSql(<<<'SQL'
-CREATE TABLE outbox (
-    id UUID PRIMARY KEY,
-    type VARCHAR(190) NOT NULL,
-    payload JSONB NOT NULL,
-    "key" VARCHAR(190) NOT NULL UNIQUE,
-    created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-    processed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL
-)
-SQL);
+        $publishedType = 'postgresql' === $this->connection->getDatabasePlatform()->getName()
+            ? 'TIMESTAMP(0) WITHOUT TIME ZONE'
+            : 'DATETIME';
+
+        if (!$this->hasColumn('category', 'workflow_state')) {
+            $this->addSql("ALTER TABLE category ADD COLUMN workflow_state VARCHAR(32) NOT NULL DEFAULT 'draft'");
+        }
+
+        if (!$this->hasColumn('category', 'published')) {
+            $this->addSql('ALTER TABLE category ADD COLUMN published BOOLEAN NOT NULL DEFAULT FALSE');
+        }
+
+        if (!$this->hasColumn('category', 'published_at')) {
+            $this->addSql(sprintf('ALTER TABLE category ADD COLUMN published_at %s DEFAULT NULL', $publishedType));
+        }
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE outbox');
-        $this->addSql('ALTER TABLE category DROP COLUMN published_at');
-        $this->addSql('ALTER TABLE category DROP COLUMN published');
-        $this->addSql('ALTER TABLE category DROP COLUMN workflow_state');
+        if ($this->hasColumn('category', 'published_at')) {
+            $this->addSql('ALTER TABLE category DROP COLUMN published_at');
+        }
+
+        if ($this->hasColumn('category', 'published')) {
+            $this->addSql('ALTER TABLE category DROP COLUMN published');
+        }
+
+        if ($this->hasColumn('category', 'workflow_state')) {
+            $this->addSql('ALTER TABLE category DROP COLUMN workflow_state');
+        }
+    }
+
+    private function hasColumn(string $table, string $column): bool
+    {
+        return $this->connection->createSchemaManager()->introspectTable($table)->hasColumn($column);
     }
 }

@@ -1,4 +1,4 @@
 rows:
-  - { id: 'root', slug: 'root', name: 'Root', parent_id: null, level: 0, path: 'root' }
-  - { id: 'electronics', slug: 'electronics', name: 'Electronics', parent_id: 'root', level: 1, path: 'root.electronics' }
-  - { id: 'fashion', slug: 'fashion', name: 'Fashion', parent_id: 'root', level: 1, path: 'root.fashion' }
+  - { id: 'root', slug: 'root', name: 'Root', parent_id: null, depth: 0, path: 'root' }
+  - { id: 'electronics', slug: 'electronics', name: 'Electronics', parent_id: 'root', depth: 1, path: 'root.electronics' }
+  - { id: 'fashion', slug: 'fashion', name: 'Fashion', parent_id: 'root', depth: 1, path: 'root.fashion' }

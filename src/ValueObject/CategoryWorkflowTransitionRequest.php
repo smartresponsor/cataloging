@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries the full input surface for category workflow transition workflows.
  */
-final readonly class CategoryWorkflowTransitionRequest
+final readonly class CatalogCategoryWorkflowEntityTransitionRequest
 {
     public function __construct(
         private string $categoryId,
@@ -37,4 +37,7 @@ final readonly class CategoryWorkflowTransitionRequest
     {
         return $this->reason;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryWorkflowTransitionRequest', false)) {
+    class_alias(CatalogCategoryWorkflowEntityTransitionRequest::class, __NAMESPACE__.'\\CategoryWorkflowTransitionRequest');
 }

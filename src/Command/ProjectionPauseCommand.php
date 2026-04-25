@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\ProjectionControlEntity;
+use App\Cataloging\Entity\CatalogProjectionControlEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -46,8 +46,8 @@ final class ProjectionPauseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $state = $this->argumentString($input, 'state');
-        $repo = $this->em->getRepository(ProjectionControlEntity::class);
-        $ctrl = $repo->find('category') ?? new ProjectionControlEntity();
+        $repo = $this->em->getRepository(CatalogProjectionControlEntity::class);
+        $ctrl = $repo->find('category') ?? new CatalogProjectionControlEntity();
         $ctrl->setPaused('on' === $state);
         $this->em->persist($ctrl);
         $this->em->flush();

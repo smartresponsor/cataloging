@@ -8,30 +8,30 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Policy\CategoryWorkflowPolicy;
-use App\Cataloging\Repository\CategoryWorkflowRepository;
+use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
+use App\Cataloging\Repository\CatalogCategoryWorkflowEntityRepository;
 use App\Cataloging\Service\CatalogWorkflowTransitionService;
-use App\Cataloging\ValueObject\CategoryWorkflowState;
-use App\Cataloging\ValueObject\CategoryWorkflowTransitionRequest;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
+use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogWorkflowTransitionServiceTest extends TestCase
 {
     public function testTransitionStoresCurrentStateAndAppendsAuditEvent(): void
     {
-        $repository = new CategoryWorkflowRepository();
-        $service = new CatalogWorkflowTransitionService($repository, new CategoryWorkflowPolicy());
+        $repository = new CatalogCategoryWorkflowEntityRepository();
+        $service = new CatalogWorkflowTransitionService($repository, new CatalogCategoryWorkflowEntityPolicy());
 
-        $event = $service->transition(new CategoryWorkflowTransitionRequest(
+        $event = $service->transition(new CatalogCategoryWorkflowEntityTransitionRequest(
             'category-100',
-            CategoryWorkflowState::IN_REVIEW,
+            CatalogCategoryWorkflowEntityState::IN_REVIEW,
             'operator-1',
             'ready for moderation',
         ));
 
         $current = $repository->findByCategoryId('category-100');
         self::assertNotNull($current);
-        self::assertSame(CategoryWorkflowState::IN_REVIEW, $current->state()->value());
+        self::assertSame(CatalogCategoryWorkflowEntityState::IN_REVIEW, $current->state()->value());
         self::assertSame('operator-1', $current->actorId());
         self::assertSame('ready for moderation', $current->reason());
 
@@ -46,14 +46,14 @@ final class CatalogWorkflowTransitionServiceTest extends TestCase
 
     public function testTransitionRejectsInvalidStateJump(): void
     {
-        $repository = new CategoryWorkflowRepository();
-        $service = new CatalogWorkflowTransitionService($repository, new CategoryWorkflowPolicy());
+        $repository = new CatalogCategoryWorkflowEntityRepository();
+        $service = new CatalogWorkflowTransitionService($repository, new CatalogCategoryWorkflowEntityPolicy());
 
         $this->expectException(\DomainException::class);
 
-        $service->transition(new CategoryWorkflowTransitionRequest(
+        $service->transition(new CatalogCategoryWorkflowEntityTransitionRequest(
             'category-101',
-            CategoryWorkflowState::PUBLISHED,
+            CatalogCategoryWorkflowEntityState::PUBLISHED,
             'operator-1',
             'skipping review',
         ));

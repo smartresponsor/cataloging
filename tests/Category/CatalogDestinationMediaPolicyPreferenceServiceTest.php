@@ -8,37 +8,37 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CategoryMediaBinding;
-use App\Cataloging\Entity\CategorySyndicationDestination;
+use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
+use App\Cataloging\Entity\CatalogSyndicationDestinationEntity;
 use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Cataloging\Repository\CategoryMediaBindingRepository;
-use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
 use App\Cataloging\Service\CatalogDestinationMediaPolicyPreferenceService;
 use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
 use App\Cataloging\Service\CatalogMediaApplicabilityService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
+use App\Cataloging\ValueObject\CatalogSyndicationDestinationDefinition;
 use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 use App\Cataloging\ValueObject\CategoryMediaRole;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationConfiguration;
-use App\Cataloging\ValueObject\CategorySyndicationDestinationDefinition;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
 {
     public function testEvaluateResolvesPublishableViaFallbackWhenDestinationAllowsIt(): void
     {
-        $destinationRepository = new CategorySyndicationDestinationRepository();
-        $destinationRepository->save(CategorySyndicationDestination::register(
-            new CategorySyndicationDestinationDefinition(
+        $destinationRepository = new CatalogSyndicationDestinationRepository();
+        $destinationRepository->save(CatalogSyndicationDestinationEntity::register(
+            new CatalogSyndicationDestinationDefinition(
                 'destination-1901',
                 'Storefront Feed',
                 'storefront',
                 'push',
             ),
-            new CategorySyndicationDestinationConfiguration(
+            new CatalogSyndicationDestinationConfiguration(
                 true,
                 [
                     'channel' => 'storefront',
@@ -50,8 +50,8 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
             'operator-1',
         ));
 
-        $bindingRepository = new CategoryMediaBindingRepository();
-        $bindingRepository->save(new CategoryMediaBinding(
+        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $bindingRepository->save(new CatalogCategoryMediaBindingEntity(
             'binding-global-primary',
             'category-1901',
             'asset-global-primary',

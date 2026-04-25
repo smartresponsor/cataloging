@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Event\CategoryDestinationMediaPolicyPreferenceEvaluated;
 use App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
-use App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
@@ -23,7 +23,7 @@ final readonly class CatalogDestinationMediaPolicyPreferenceService implements C
      * Initializes the catalog destination media policy preference service service collaborators.
      */
     public function __construct(
-        private CategorySyndicationDestinationRepositoryInterface $destinationRepository,
+        private CatalogSyndicationDestinationRepositoryInterface $destinationRepository,
         private CatalogDestinationMediaReadinessServiceInterface $destinationMediaReadinessService,
         private CatalogDestinationMediaFallbackServiceInterface $destinationMediaFallbackService,
         private CategoryDestinationMediaPolicyPreferencePolicyInterface $policy,

@@ -8,7 +8,7 @@ namespace App\Cataloging\ValueObject;
 /**
  * Carries mutable state flags for category media binding workflows.
  */
-final readonly class CategoryMediaBindingState
+final readonly class CatalogCategoryMediaBindingEntityState
 {
     /**
      * @param array<string,mixed> $metadata
@@ -35,4 +35,7 @@ final readonly class CategoryMediaBindingState
     {
         return $this->metadata;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryMediaBindingState', false)) {
+    class_alias(CatalogCategoryMediaBindingEntityState::class, __NAMESPACE__.'\\CategoryMediaBindingState');
 }

@@ -10,8 +10,8 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
 use App\Cataloging\ValueObject\CatalogAuditContext;
-use App\Cataloging\ValueObject\CategoryMediaBindingScope;
-use App\Cataloging\ValueObject\CategoryMediaBindingState;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityScope;
+use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityState;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +23,7 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
 
         $policy->assertBindingAllowed(
             new CategoryMediaBindRequest(
-                new CategoryMediaBindingScope(
+                new CatalogCategoryMediaBindingEntityScope(
                     'binding-1',
                     'category-1',
                     'asset-1',
@@ -31,7 +31,7 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
                     ['storefront'],
                     ['en_US'],
                 ),
-                new CategoryMediaBindingState(true, true, []),
+                new CatalogCategoryMediaBindingEntityState(true, true, []),
                 new CatalogAuditContext('operator-1', 'bind primary category image'),
             ),
         );
@@ -46,7 +46,7 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
         $policy = new CategoryMediaGovernancePolicy();
         $policy->assertBindingAllowed(
             new CategoryMediaBindRequest(
-                new CategoryMediaBindingScope(
+                new CatalogCategoryMediaBindingEntityScope(
                     'binding-1',
                     'category-1',
                     'asset-1',
@@ -54,7 +54,7 @@ final class CategoryMediaGovernancePolicyTest extends TestCase
                     [],
                     ['en_US'],
                 ),
-                new CategoryMediaBindingState(true, true, []),
+                new CatalogCategoryMediaBindingEntityState(true, true, []),
                 new CatalogAuditContext('operator-1', 'bind primary category image'),
             ),
         );

@@ -25,8 +25,8 @@ final class CatalogChangeRequestServiceTest extends TestCase
             'req-200',
             'category-200',
             'author-1',
-            'Retitle category and update alias',
-            ['title' => 'Outdoor furniture', 'alias' => 'patio-furniture'],
+            'Retitle category and update slugHistory',
+            ['title' => 'Outdoor furniture', 'slugHistory' => 'patio-furniture'],
         ));
 
         self::assertSame('req-200', $request->requestId());

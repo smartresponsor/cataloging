@@ -6,9 +6,10 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Service\CatalogMoveService;
+use App\Cataloging\Tests\Support\CategoryDoctrineEntityManagerFactory;
 use App\Cataloging\ValueObject\CatalogMoveRequest;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMoveServiceTest extends TestCase
@@ -16,7 +17,8 @@ final class CatalogMoveServiceTest extends TestCase
     public function testMoveRebasesSubtreeAndReturnsRedirects(): void
     {
         $connection = $this->createConnection();
-        $service = new CatalogMoveService($connection);
+        $entityManager = $this->createEntityManager($connection);
+        $service = new CatalogMoveService($entityManager);
 
         /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
         $result = $service->move(new CatalogMoveRequest('electronics', 'fashion', 'main-tree', 'strict'));
@@ -50,7 +52,8 @@ final class CatalogMoveServiceTest extends TestCase
     public function testMoveDryRunRollsBackChanges(): void
     {
         $connection = $this->createConnection();
-        $service = new CatalogMoveService($connection);
+        $entityManager = $this->createEntityManager($connection);
+        $service = new CatalogMoveService($entityManager);
 
         /** @var array{0:int,1:list<array{id:string,from:string,to:string}>} $result */
         $result = $service->move(new CatalogMoveRequest('electronics', 'fashion', 'main-tree', 'strict', true, 'en_US'));
@@ -67,7 +70,8 @@ final class CatalogMoveServiceTest extends TestCase
     public function testMoveRejectsCycles(): void
     {
         $connection = $this->createConnection();
-        $service = new CatalogMoveService($connection);
+        $entityManager = $this->createEntityManager($connection);
+        $service = new CatalogMoveService($entityManager);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot move a node under its own descendant.');
@@ -77,15 +81,20 @@ final class CatalogMoveServiceTest extends TestCase
 
     private function createConnection(): Connection
     {
-        $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
-        $connection->executeStatement('CREATE TABLE category (id TEXT PRIMARY KEY, slug TEXT NOT NULL, path TEXT NOT NULL, depth INTEGER NOT NULL)');
-        $connection->executeStatement("INSERT INTO category (id, slug, path, depth) VALUES
-            ('root', 'root', 'root', 0),
-            ('electronics', 'electronics', 'root.electronics', 1),
-            ('phones', 'phones', 'root.electronics.phones', 2),
-            ('fashion', 'fashion', 'root.fashion', 1)
+        $connection = CategoryDoctrineEntityManagerFactory::createConnection();
+        $connection->executeStatement('CREATE TABLE category (id TEXT PRIMARY KEY, name TEXT NOT NULL DEFAULT "", slug TEXT NOT NULL, parent_id TEXT DEFAULT NULL, path TEXT NOT NULL, depth INTEGER NOT NULL, locale TEXT DEFAULT NULL, tenant TEXT NOT NULL DEFAULT "default", workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL, icon_url TEXT DEFAULT NULL)');
+        $connection->executeStatement("INSERT INTO category (id, name, slug, parent_id, path, depth, locale, tenant, workflow_state, published, published_at, icon_url) VALUES
+            ('root', 'Root', 'root', NULL, 'root', 0, NULL, 'default', 'draft', 0, NULL, NULL),
+            ('electronics', 'Electronics', 'electronics', 'root', 'root.electronics', 1, NULL, 'default', 'draft', 0, NULL, NULL),
+            ('phones', 'Phones', 'phones', 'electronics', 'root.electronics.phones', 2, NULL, 'default', 'draft', 0, NULL, NULL),
+            ('fashion', 'Fashion', 'fashion', 'root', 'root.fashion', 1, NULL, 'default', 'draft', 0, NULL, NULL)
         ");
 
         return $connection;
+    }
+
+    private function createEntityManager(Connection $connection): EntityManagerInterface
+    {
+        return CategoryDoctrineEntityManagerFactory::createEntityManager($connection);
     }
 }

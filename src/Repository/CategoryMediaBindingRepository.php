@@ -1,65 +1,70 @@
 <?php
 
-// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
-use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
+use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\EventInterface\CategoryMediaBoundInterface;
-use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Provides repository services for category media binding repository.
- */
-final class CategoryMediaBindingRepository implements CategoryMediaBindingRepositoryInterface
+final class CatalogCategoryMediaBindingEntityRepository implements CatalogCategoryMediaBindingEntityRepositoryInterface
 {
-    /** @var array<string,CategoryMediaBindingInterface> */
+    /** @var array<string,CatalogCategoryMediaBindingEntityInterface> */
     private array $bindings = [];
 
     /** @var list<CategoryMediaBoundInterface> */
     private array $history = [];
 
-    /**
-     * Handles the save workflow.
-     */
-    public function save(CategoryMediaBindingInterface $binding): void
+    public function __construct(private readonly ?EntityManagerInterface $entityManager = null)
     {
+    }
+
+    public function save(CatalogCategoryMediaBindingEntityInterface $binding): void
+    {
+        if ($this->entityManager instanceof EntityManagerInterface && $binding instanceof CatalogCategoryMediaBindingEntity) {
+            $this->entityManager->persist($binding);
+            $this->entityManager->flush();
+
+            return;
+        }
+
         $this->bindings[$binding->bindingId()] = $binding;
     }
 
-    /**
-     * Finds the requested record in the underlying store.
-     */
-    public function find(string $bindingId): ?CategoryMediaBindingInterface
+    public function find(string $bindingId): ?CatalogCategoryMediaBindingEntityInterface
     {
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->find(CatalogCategoryMediaBindingEntity::class, trim($bindingId));
+        }
+
         return $this->bindings[$bindingId] ?? null;
     }
 
-    /**
-     * Handles the bindings for category workflow.
-     */
     public function bindingsForCategory(string $categoryId): array
     {
+        if ($this->entityManager instanceof EntityManagerInterface) {
+            return $this->entityManager->getRepository(CatalogCategoryMediaBindingEntity::class)->findBy(['categoryId' => trim($categoryId)]);
+        }
+
         return array_values(array_filter(
             $this->bindings,
-            static fn (CategoryMediaBindingInterface $binding): bool => $binding->categoryId() === $categoryId,
+            static fn (CatalogCategoryMediaBindingEntityInterface $binding): bool => $binding->categoryId() === $categoryId,
         ));
     }
 
-    /**
-     * Handles the append history workflow.
-     */
     public function appendHistory(CategoryMediaBoundInterface $event): void
     {
         $this->history[] = $event;
     }
 
-    /**
-     * Handles the history workflow.
-     */
     public function history(): array
     {
         return $this->history;
     }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryMediaBindingRepository', false)) {
+    class_alias(CatalogCategoryMediaBindingEntityRepository::class, __NAMESPACE__.'\\CategoryMediaBindingRepository');
 }

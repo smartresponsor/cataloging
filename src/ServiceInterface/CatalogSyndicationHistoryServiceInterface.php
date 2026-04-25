@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
+use App\Cataloging\EventInterface\CatalogSyndicationDestinationHistoryBuiltInterface;
 use App\Cataloging\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
 use App\Cataloging\ValueObject\CategorySyndicationHistoryRequest;
 
@@ -16,7 +16,7 @@ interface CatalogSyndicationHistoryServiceInterface
 {
     public function buildDestinationHistory(
         CategorySyndicationHistoryRequest $request,
-    ): CategorySyndicationDestinationHistoryBuiltInterface;
+    ): CatalogSyndicationDestinationHistoryBuiltInterface;
 
     public function consolidateRecoveryAudit(
         CategorySyndicationHistoryRequest $request,

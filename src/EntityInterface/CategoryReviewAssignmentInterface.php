@@ -8,7 +8,7 @@ namespace App\Cataloging\EntityInterface;
 /**
  * Defines the contract for category review assignment.
  */
-interface CategoryReviewAssignmentInterface
+interface CatalogCategoryReviewAssignmentEntityInterface
 {
     /**
      * Handles the request id workflow.
@@ -44,4 +44,7 @@ interface CategoryReviewAssignmentInterface
      * Handles the due at workflow.
      */
     public function dueAt(): ?\DateTimeImmutable;
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentInterface', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityInterface::class, __NAMESPACE__.'\\CategoryReviewAssignmentInterface');
 }

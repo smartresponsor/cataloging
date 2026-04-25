@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Message;
 
-use App\Cataloging\Entity\VirtualCategoryEntity;
+use App\Cataloging\Entity\CatalogVirtualCategoryEntity;
+use App\Cataloging\Entity\CatalogVirtualCategoryMemberEntity;
 use App\Cataloging\Rule\CategoryRule;
 use App\Cataloging\Rule\RuleEvaluator;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -23,7 +23,6 @@ final readonly class RecomputeVirtualCategoryHandler
      */
     public function __construct(
         private EntityManagerInterface $em,
-        private Connection $infraConnection,
         private RuleEvaluator $evaluator = new RuleEvaluator(),
     ) {
     }
@@ -35,47 +34,48 @@ final readonly class RecomputeVirtualCategoryHandler
      */
     public function __invoke(RecomputeVirtualCategoryMessage $msg): void
     {
-        $vc = $this->em->getRepository(VirtualCategoryEntity::class)->find($msg->virtualCategoryId);
+        $vc = $this->em->getRepository(CatalogVirtualCategoryEntity::class)->find($msg->virtualCategoryId);
         if (!$vc) {
             return;
         }
 
         $rule = new CategoryRule($vc->getRule());
-        $compiled = $this->evaluator->compile($rule);
 
-        $sql = 'SELECT id FROM record_index WHERE '.$compiled['sql'];
-        $stmt = $this->infraConnection->prepare($sql);
-        foreach ($compiled['params'] as $parameterKey => $parameterValue) {
-            $stmt->bindValue($parameterKey, $parameterValue);
-        }
-        $ids = $stmt->executeQuery()->fetchFirstColumn();
+        /** @var list<\App\Cataloging\Entity\CatalogRecordIndexEntity> $records */
+        $records = $this->em->createQueryBuilder()
+            ->select('record')
+            ->from(\App\Cataloging\Entity\CatalogRecordIndexEntity::class, 'record')
+            ->getQuery()
+            ->getResult();
 
-        $this->infraConnection->executeStatement(
-            'DELETE FROM virtual_category_member WHERE virtual_category_id = ?',
-            [$vc->getId()],
-        );
-        if ([] === $ids) {
-            return;
-        }
+        $ids = [];
+        foreach ($records as $record) {
+            $normalizedRecord = [
+                'brand' => $record->getBrand(),
+                'price' => $record->getPrice(),
+                'stock' => $record->getStock(),
+                'tag_set' => $record->getTagSet() ?? [],
+            ];
 
-        $values = [];
-        $params = [];
-        foreach ($ids as $recordId) {
-            if (!is_scalar($recordId) && null !== $recordId) {
-                continue;
+            if ($this->evaluator->matches($normalizedRecord, $rule)) {
+                $ids[] = $record->getId();
             }
-            $values[] = '(?, ?)';
-            $params[] = $vc->getId();
-            $params[] = (string) $recordId;
         }
 
-        if ([] === $values) {
-            return;
-        }
+        $this->em->wrapInTransaction(function (EntityManagerInterface $entityManager) use ($ids, $vc): void {
+            $entityManager->createQuery(
+                'DELETE FROM '.CatalogVirtualCategoryMemberEntity::class.' member WHERE member.virtualCategoryId = :virtualCategoryId'
+            )
+                ->setParameter('virtualCategoryId', $vc->getId())
+                ->execute();
 
-        $this->infraConnection->executeStatement(
-            'INSERT INTO virtual_category_member (virtual_category_id, record_id) VALUES '.implode(',', $values),
-            $params,
-        );
+            foreach ($ids as $recordId) {
+                if (!is_scalar($recordId) && null !== $recordId) {
+                    continue;
+                }
+
+                $entityManager->persist(new CatalogVirtualCategoryMemberEntity($vc->getId(), (string) $recordId));
+            }
+        });
     }
 }

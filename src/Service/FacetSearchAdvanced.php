@@ -5,23 +5,22 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
+use Doctrine\ORM\EntityManagerInterface;
+
 /**
  * Provides the facet search advanced application service.
  */
-final class FacetSearchAdvanced
+final readonly class FacetSearchAdvanced
 {
-    private \PDO $pdo;
-    private FacetFilter $filter;
-    private FacetRank $rank;
-
     /**
      * Initializes the facet search advanced service collaborators.
      */
-    public function __construct(\PDO $pdo, FacetFilter $filter, FacetRank $rank)
-    {
-        $this->pdo = $pdo;
-        $this->filter = $filter;
-        $this->rank = $rank;
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private FacetFilter $filter,
+        private FacetRank $rank,
+    ) {
     }
 
     /** @return list<array{id:mixed,slug:mixed,name:mixed,path:mixed,locale:mixed}> */
@@ -32,15 +31,34 @@ final class FacetSearchAdvanced
         int $limit = 20,
         int $offset = 0,
     ): array {
-        $sql = 'SELECT id, slug, name, path, locale FROM category_projection WHERE (slug LIKE :q OR name LIKE :q)';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':q', '%'.$term.'%');
-        $stmt->execute();
-        /** @var list<array{id:mixed,slug:mixed,name:mixed,path:mixed,locale:mixed}> $rows */
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder
+            ->select('projection')
+            ->from(CatalogCategoryProjectionEntity::class, 'projection')
+            ->where('projection.locale = :locale')
+            ->andWhere('(projection.slug LIKE :term OR projection.name LIKE :term)')
+            ->setParameter('locale', $locale)
+            ->setParameter('term', '%'.$term.'%');
+
+        if (null !== $pathPrefix && '' !== $pathPrefix) {
+            $builder
+                ->andWhere('projection.path LIKE :pathPrefix')
+                ->setParameter('pathPrefix', $pathPrefix.'%');
+        }
+
+        /** @var list<CatalogCategoryProjectionEntity> $entities */
+        $entities = $builder->getQuery()->getResult();
+        $rows = array_map(static fn (CatalogCategoryProjectionEntity $entity): array => [
+            'id' => $entity->getId(),
+            'slug' => $entity->getSlug(),
+            'name' => $entity->getName(),
+            'path' => $entity->getPath(),
+            'locale' => $entity->getLocale() ?? '',
+        ], $entities);
+
         $rows = array_values(array_filter(
             $rows,
-            fn (array $r): bool => $this->filter->scope($r, $pathPrefix, $locale),
+            fn (array $row): bool => $this->filter->scope($row, $pathPrefix, $locale),
         ));
         usort($rows, fn (array $a, array $b): int => $this->rank->score($term, $b) <=> $this->rank->score($term, $a));
 

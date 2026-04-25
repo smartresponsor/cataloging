@@ -12,11 +12,11 @@ K11 step12 adds destination-specific publish history and recovery/audit consolid
 
 ## Main backend contracts
 
-- `App\Cataloging\ValueObject\CategorySyndicationDestinationHistory`
+- `App\Cataloging\ValueObject\CatalogSyndicationDestinationHistory`
 - `App\Cataloging\ValueObject\CategorySyndicationRecoveryAuditSummary`
 - `App\Cataloging\Policy\CategorySyndicationHistoryPolicy`
 - `App\Cataloging\Service\CategorySyndicationHistoryService`
-- `App\Cataloging\Event\CategorySyndicationDestinationHistoryBuilt`
+- `App\Cataloging\Event\CatalogSyndicationDestinationHistoryBuilt`
 - `App\Cataloging\Event\CategorySyndicationRecoveryAuditConsolidated`
 
 ## Why this matters

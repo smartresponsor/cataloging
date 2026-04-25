@@ -5,54 +5,36 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository;
 
+use App\Cataloging\Entity\CatalogCategoryAttachmentEntity;
 use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Symfony\Component\Uid\Ulid;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Provides repository services for catalog attachment repository.
  */
 final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryInterface
 {
-    private bool $schemaEnsured = false;
-
-    /**
-     * Initializes the catalog attachment repository service collaborators.
-     */
-    public function __construct(private readonly Connection $connection)
+    public function __construct(private readonly ?EntityManagerInterface $entityManager = null)
     {
     }
 
-    /**
-     * Handles the list workflow.
-     *
-     * @throws Exception
-     */
     public function list(?string $categoryId = null): array
     {
-        $this->ensureSchema();
-
-        $sql = '
-            SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at '
-            .'FROM category_attachment';
-        $params = [];
-        if (null !== $categoryId && '' !== $categoryId) {
-            $sql .= ' WHERE category_id = :category_id';
-            $params['category_id'] = $categoryId;
+        if (null === $this->entityManager) {
+            return [];
         }
-        $sql .= ' ORDER BY created_at DESC, attachment_id DESC';
 
-        $rows = $this->connection->fetchAllAssociative($sql, $params);
+        $repository = $this->entityManager->getRepository(CatalogCategoryAttachmentEntity::class);
+        $entities = null !== $categoryId && '' !== $categoryId
+            ? $repository->findBy(['categoryId' => $categoryId], ['createdAt' => 'DESC', 'attachmentId' => 'DESC'])
+            : $repository->findBy([], ['createdAt' => 'DESC', 'attachmentId' => 'DESC']);
 
-        return array_values(array_filter(array_map(fn (array $row): ?array => $this->normalizeAttachmentRow($row), $rows)));
+        return array_values(array_map(
+            fn (CatalogCategoryAttachmentEntity $entity): array => $this->normalizeAttachmentEntity($entity),
+            array_values(array_filter($entities, fn ($entity): bool => $entity instanceof CatalogCategoryAttachmentEntity)),
+        ));
     }
 
-    /**
-     * Handles the add workflow.
-     *
-     * @throws Exception
-     */
     public function add(
         string $categoryId,
         string $type,
@@ -60,219 +42,69 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
         string $externalAttachmentId,
         ?string $referenceUri = null,
     ): array {
-        $this->ensureSchema();
-
-        $existing = $this->connection->fetchAssociative(
-            'SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at
-             FROM category_attachment
-             WHERE category_id = :category_id
-               AND type = :type
-               AND provider = :provider
-               AND external_attachment_id = :external_attachment_id
-             LIMIT 1',
-            [
-                'category_id' => $categoryId,
-                'type' => $type,
-                'provider' => $provider,
-                'external_attachment_id' => $externalAttachmentId,
-            ],
-        );
-        if (is_array($existing)) {
-            $normalized = $this->normalizeAttachmentRow($existing);
-            if (null !== $normalized) {
-                return $normalized;
-            }
+        if (null === $this->entityManager) {
+            throw new \RuntimeException('Doctrine entity manager is required for attachment storage.');
         }
 
-        $createdAtDateTime = new \DateTimeImmutable();
-
-        $item = [
-            'attachment_id' => (string) new Ulid(),
-            'category_id' => $categoryId,
+        $existing = $this->entityManager->getRepository(CatalogCategoryAttachmentEntity::class)->findOneBy([
+            'categoryId' => $categoryId,
             'type' => $type,
             'provider' => $provider,
-            'external_attachment_id' => $externalAttachmentId,
-            'path' => null !== $referenceUri ? $referenceUri : '',
-            'created_at' => $createdAtDateTime->format(DATE_ATOM),
-        ];
+            'externalAttachmentId' => $externalAttachmentId,
+        ]);
+        if ($existing instanceof CatalogCategoryAttachmentEntity) {
+            return $this->normalizeAttachmentEntity($existing);
+        }
 
-        $this->connection->insert('category_attachment', $item);
+        $entity = new CatalogCategoryAttachmentEntity($categoryId, $type, $provider, $externalAttachmentId, $referenceUri);
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
 
-        return [
-            'attachment_id' => $item['attachment_id'],
-            'category_id' => $item['category_id'],
-            'type' => $item['type'],
-            'provider' => $item['provider'],
-            'external_attachment_id' => $item['external_attachment_id'],
-            'reference_uri' => '' !== $item['path'] ? $item['path'] : null,
-            'path' => '' !== $item['path'] ? $item['path'] : null,
-            'created_at' => $item['created_at'],
-        ];
+        return $this->normalizeAttachmentEntity($entity);
     }
 
-    /**
-     * Handles the find one workflow.
-     *
-     * @throws Exception
-     */
     public function findOne(string $attachmentId): ?array
     {
-        $this->ensureSchema();
-
-        $row = $this->connection->fetchAssociative(
-            'SELECT attachment_id, category_id, type, provider, external_attachment_id, path, created_at
-             FROM category_attachment
-             WHERE attachment_id = :attachment_id
-             LIMIT 1',
-            ['attachment_id' => $attachmentId],
-        );
-
-        return is_array($row) ? $this->normalizeAttachmentRow($row) : null;
-    }
-
-    /**
-     * Deletes the requested target from the underlying store.
-     *
-     * @throws Exception
-     */
-    public function delete(string $attachmentId): bool
-    {
-        $this->ensureSchema();
-
-        return 0 < $this->connection->delete('category_attachment', [
-            'attachment_id' => $attachmentId,
-        ]);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function ensureSchema(): void
-    {
-        if ($this->schemaEnsured) {
-            return;
-        }
-
-        $schemaManager = $this->connection->createSchemaManager();
-        if (!$schemaManager->tablesExist(['category_attachment'])) {
-            $this->connection->executeStatement(sprintf(
-                'CREATE TABLE category_attachment (
-                    attachment_id VARCHAR(26) PRIMARY KEY,
-                    category_id VARCHAR(160) NOT NULL,
-                    type VARCHAR(64) NOT NULL,
-                    provider VARCHAR(64) NOT NULL,
-                    external_attachment_id VARCHAR(255) NOT NULL,
-                    path VARCHAR(2048) NOT NULL,
-                    created_at %s NOT NULL
-                )',
-                $this->createdAtColumnType(),
-            ));
-        }
-
-        /** @noinspection PhpDeprecationInspection */
-        $columns = $schemaManager->tablesExist(['category_attachment'])
-            ? array_change_key_case($schemaManager->listTableColumns('category_attachment'))
-            : [];
-
-        if (!isset($columns['provider'])) {
-            $this->connection->executeStatement(
-                "ALTER TABLE category_attachment ADD provider VARCHAR(64) NOT NULL DEFAULT 'attachment'",
-            );
-        }
-        if (!isset($columns['external_attachment_id'])) {
-            $this->connection->executeStatement(
-                "ALTER TABLE category_attachment ADD external_attachment_id VARCHAR(255) NOT NULL DEFAULT ''",
-            );
-            $this->connection->executeStatement(
-                "UPDATE category_attachment SET external_attachment_id = path WHERE external_attachment_id = ''",
-            );
-        }
-
-        /** @var array<string, true> $indexes */
-        $indexes = [];
-        if ($schemaManager->tablesExist(['category_attachment'])) {
-            foreach ($schemaManager->introspectTableIndexesByUnquotedName('category_attachment') as $indexName => $index) {
-                $indexes[strtolower((string) $indexName)] = true;
-            }
-        }
-
-        if (!isset($indexes['ux_category_attachment_external_binding'])) {
-            $this->connection->executeStatement(
-                'CREATE UNIQUE INDEX ux_category_attachment_external_binding
-                 ON category_attachment (category_id, type, provider, external_attachment_id)',
-            );
-        }
-        if (!isset($indexes['idx_category_attachment_category'])) {
-            $this->connection->executeStatement(
-                'CREATE INDEX idx_category_attachment_category
-                 ON category_attachment (category_id)',
-            );
-        }
-        if (!isset($indexes['idx_category_attachment_provider'])) {
-            $this->connection->executeStatement(
-                'CREATE INDEX idx_category_attachment_provider
-                 ON category_attachment (provider)',
-            );
-        }
-
-        $this->schemaEnsured = true;
-    }
-
-    /**
-     * @param array<string,mixed> $row
-     *
-     * @return array{
-     *     attachment_id:string,
-     *     category_id:string,
-     *     type:string,
-     *     provider:string,
-     *     external_attachment_id:string,
-     *     reference_uri:string|null,
-     *     path:string|null,
-     *     created_at:string,
-     * }|null
-     */
-    private function normalizeAttachmentRow(array $row): ?array
-    {
-        if (
-            !is_string($row['attachment_id'] ?? null)
-            || !is_string($row['category_id'] ?? null)
-            || !is_string($row['type'] ?? null)
-            || !is_string($row['provider'] ?? null)
-            || !is_string($row['external_attachment_id'] ?? null)
-            || !is_string($row['created_at'] ?? null)
-        ) {
+        if (null === $this->entityManager) {
             return null;
         }
 
-        $referenceUri = isset($row['path']) && is_string($row['path']) && '' !== trim($row['path'])
-            ? trim($row['path'])
-            : null;
+        $entity = $this->entityManager->find(CatalogCategoryAttachmentEntity::class, $attachmentId);
 
-        return [
-            'attachment_id' => $row['attachment_id'],
-            'category_id' => $row['category_id'],
-            'type' => $row['type'],
-            'provider' => $row['provider'],
-            'external_attachment_id' => $row['external_attachment_id'],
-            'reference_uri' => $referenceUri,
-            'path' => $referenceUri,
-            'created_at' => $row['created_at'],
-        ];
+        return $entity instanceof CatalogCategoryAttachmentEntity ? $this->normalizeAttachmentEntity($entity) : null;
+    }
+
+    public function delete(string $attachmentId): bool
+    {
+        if (null === $this->entityManager) {
+            return false;
+        }
+
+        $entity = $this->entityManager->find(CatalogCategoryAttachmentEntity::class, $attachmentId);
+        if (!$entity instanceof CatalogCategoryAttachmentEntity) {
+            return false;
+        }
+
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+
+        return true;
     }
 
     /**
-     * @throws Exception
+     * @return array{attachment_id:string,category_id:string,type:string,provider:string,external_attachment_id:string,reference_uri:string|null,path:string|null,created_at:string}
      */
-    private function createdAtColumnType(): string
+    private function normalizeAttachmentEntity(CatalogCategoryAttachmentEntity $entity): array
     {
-        $platformClass = $this->connection->getDatabasePlatform()::class;
-
-        return match (true) {
-            str_contains($platformClass, 'Postgre') => 'TIMESTAMPTZ',
-            str_contains($platformClass, 'MySQL') => 'DATETIME',
-            str_contains($platformClass, 'SQLite') => 'TEXT',
-            default => 'TIMESTAMP',
-        };
+        return [
+            'attachment_id' => $entity->getAttachmentId(),
+            'category_id' => $entity->getCategoryId(),
+            'type' => $entity->getType(),
+            'provider' => $entity->getProvider(),
+            'external_attachment_id' => $entity->getExternalAttachmentId(),
+            'reference_uri' => $entity->getReferenceUri(),
+            'path' => $entity->getReferenceUri(),
+            'created_at' => $entity->getCreatedAt()->format(DATE_ATOM),
+        ];
     }
 }

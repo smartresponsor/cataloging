@@ -32,7 +32,7 @@ final class CatalogPublicationQualityServiceTest extends TestCase
                         'contentReady' => true,
                         'localeReady' => true,
                         'mediaReady' => false,
-                        'aliasReady' => false,
+                        'slugHistoryReady' => false,
                     ],
                     [
                         'bannerReady' => false,
@@ -46,7 +46,7 @@ final class CatalogPublicationQualityServiceTest extends TestCase
         self::assertTrue($payload['publishableQuality']);
         self::assertSame('attention', $payload['riskLevel']);
         self::assertContains('mediaReady', $payload['softWarnings']);
-        self::assertContains('aliasReady', $payload['softWarnings']);
+        self::assertContains('slugHistoryReady', $payload['softWarnings']);
         self::assertContains('qualityScoreBelowTarget', $payload['softWarnings']);
         self::assertContains('bannerReady', $payload['advisoryWarnings']);
     }

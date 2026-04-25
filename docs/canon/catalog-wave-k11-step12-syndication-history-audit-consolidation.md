@@ -4,16 +4,16 @@ This wave adds destination-specific publish history and recovery/audit consolida
 
 ## Added files
 
-- `src/ValueObject/CategorySyndicationDestinationHistory.php`
-- `src/ValueObjectInterface/CategorySyndicationDestinationHistoryInterface.php`
+- `src/ValueObject/CatalogSyndicationDestinationHistory.php`
+- `src/ValueObjectInterface/CatalogSyndicationDestinationHistoryInterface.php`
 - `src/ValueObject/CategorySyndicationRecoveryAuditSummary.php`
 - `src/ValueObjectInterface/CategorySyndicationRecoveryAuditSummaryInterface.php`
 - `src/Policy/CategorySyndicationHistoryPolicy.php`
 - `src/PolicyInterface/CategorySyndicationHistoryPolicyInterface.php`
 - `src/Service/CategorySyndicationHistoryService.php`
 - `src/ServiceInterface/CategorySyndicationHistoryServiceInterface.php`
-- `src/Event/CategorySyndicationDestinationHistoryBuilt.php`
-- `src/EventInterface/CategorySyndicationDestinationHistoryBuiltInterface.php`
+- `src/Event/CatalogSyndicationDestinationHistoryBuilt.php`
+- `src/EventInterface/CatalogSyndicationDestinationHistoryBuiltInterface.php`
 - `src/Event/CategorySyndicationRecoveryAuditConsolidated.php`
 - `src/EventInterface/CategorySyndicationRecoveryAuditConsolidatedInterface.php`
 - `tests/Category/CategorySyndicationHistoryServiceTest.php`

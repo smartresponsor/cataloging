@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Event\CategoryMediaApplicabilityEvaluated;
 use App\Cataloging\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
-use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
@@ -21,7 +21,7 @@ final readonly class CatalogMediaApplicabilityService implements CatalogMediaApp
      * Initializes the catalog media applicability service service collaborators.
      */
     public function __construct(
-        private CategoryMediaBindingRepositoryInterface $repository,
+        private CatalogCategoryMediaBindingEntityRepositoryInterface $repository,
         private CategoryMediaApplicabilityPolicyInterface $policy,
     ) {
     }

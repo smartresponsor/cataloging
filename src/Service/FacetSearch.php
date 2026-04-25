@@ -5,54 +5,46 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
+use Doctrine\ORM\EntityManagerInterface;
+
 /**
  * Provides the facet search application service.
  */
-final class FacetSearch
+final readonly class FacetSearch
 {
-    private \PDO $pdo;
-
     /**
      * Initializes the facet search service collaborators.
      */
-    public function __construct(\PDO $pdo)
-    {
-        $this->pdo = $pdo;
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
     /** @return list<array{id:string,slug:string,name:string,path:string,locale:string}> */
     public function search(string $term, string $locale = 'en', int $limit = 20, int $offset = 0): array
     {
-        $sql = 'SELECT id, slug, name, path, locale FROM category_projection
-                WHERE locale = :locale AND (slug LIKE :q OR name LIKE :q)
-                ORDER BY name ASC LIMIT :lim OFFSET :off';
-        $stmt = $this->pdo->prepare($sql);
-        $like = '%'.$term.'%';
-        $stmt->bindValue(':locale', $locale);
-        $stmt->bindValue(':q', $like);
-        $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
-        $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
-        $stmt->execute();
-        /** @var list<array<string, mixed>> $rows */
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder
+            ->select('projection')
+            ->from(CatalogCategoryProjectionEntity::class, 'projection')
+            ->where('projection.locale = :locale')
+            ->andWhere('(projection.slug LIKE :term OR projection.name LIKE :term)')
+            ->setParameter('locale', $locale)
+            ->setParameter('term', '%'.$term.'%')
+            ->orderBy('projection.name', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
 
-        $result = [];
-        foreach ($rows as $row) {
-            $id = $row['id'] ?? null;
-            $slug = $row['slug'] ?? null;
-            $name = $row['name'] ?? null;
-            $path = $row['path'] ?? '';
-            $rowLocale = $row['locale'] ?? null;
+        /** @var list<CatalogCategoryProjectionEntity> $entities */
+        $entities = $builder->getQuery()->getResult();
 
-            $result[] = [
-                'id' => is_scalar($id) ? (string) $id : '',
-                'slug' => is_scalar($slug) ? (string) $slug : '',
-                'name' => is_scalar($name) ? (string) $name : '',
-                'path' => is_scalar($path) ? (string) $path : '',
-                'locale' => is_scalar($rowLocale) ? (string) $rowLocale : '',
-            ];
-        }
-
-        return $result;
+        return array_map(static fn (CatalogCategoryProjectionEntity $entity): array => [
+            'id' => $entity->getId(),
+            'slug' => $entity->getSlug(),
+            'name' => $entity->getName(),
+            'path' => $entity->getPath(),
+            'locale' => $entity->getLocale() ?? '',
+        ], $entities);
     }
 }
