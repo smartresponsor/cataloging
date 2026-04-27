@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Provides the slug service application service.
  */
-final readonly class CatalogCatalogSlugService
+final readonly class CatalogSlugService
 {
     /**
      * Initializes the slug service service collaborators.

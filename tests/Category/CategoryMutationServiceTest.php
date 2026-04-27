@@ -9,8 +9,8 @@ use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
 use App\Cataloging\Service\CacheInvalidationRecorder;
 use App\Cataloging\Service\CatalogCategoryMutationService;
+use App\Cataloging\Service\CatalogOutboxWriterService;
 use App\Cataloging\Service\CatalogPublicationGateService;
-use App\Cataloging\Service\OutboxWriter;
 use App\Cataloging\Tests\Support\CategoryDoctrineEntityManagerFactory;
 use App\Cataloging\ValueObject\CategoryMutationMoveRequest;
 use App\Cataloging\ValueObject\CategoryMutationPublishRequest;
@@ -223,7 +223,7 @@ final class CategoryMutationServiceTest extends TestCase
 
         return new CatalogCategoryMutationService(
             $entityManager,
-            new OutboxWriter($entityManager),
+            new CatalogOutboxWriterService($entityManager),
             new CacheInvalidationRecorder(),
             new CatalogPublicationGateService(new CategoryPublicationGatePolicy()),
             new CatalogCategoryWorkflowEntityPolicy(),

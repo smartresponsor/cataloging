@@ -17,7 +17,7 @@ final readonly class CatalogCollectionService
      */
     public function __construct(
         private CatalogCollectionProjectionRepositoryInterface $repository,
-        private CollectionBuilder $builder,
+        private CatalogCollectionBuilderService $builder,
     ) {
     }
 

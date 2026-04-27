@@ -17,7 +17,7 @@ function fileText(string $path): string
     return is_file($path) ? (string) file_get_contents($path) : '';
 }
 
-$workerSource = $root . '/src/Service/ProjectionWorker.php';
+$workerSource = $root . '/src/Service/CatalogProjectionWorkerService.php';
 $syncSource = $root . '/src/Projection/CategoryProjectionSync.php';
 $commandSource = $root . '/src/Command/CategoryProjectionRunCommand.php';
 $retrySource = $root . '/src/Outbox/CategoryOutboxRetry.php';
@@ -33,17 +33,17 @@ $items = [
     [
         'check' => 'outbox-worker-runtime-fields',
         'status' => fileContains($workerSource, 'available_at') && fileContains($workerSource, 'dead_lettered_at') && fileContains($workerSource, 'attempts') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/ProjectionWorker.php'],
+        'details' => ['file' => 'src/Service/CatalogProjectionWorkerService.php'],
     ],
     [
         'check' => 'outbox-worker-retry-backoff',
         'status' => fileContains($workerSource, 'nextRunAt') && fileContains($retrySource, 'nextDelaySeconds') ? 'pass' : 'warn',
-        'details' => ['workerFile' => 'src/Service/ProjectionWorker.php', 'retryFile' => 'src/Outbox/CategoryOutboxRetry.php'],
+        'details' => ['workerFile' => 'src/Service/CatalogProjectionWorkerService.php', 'retryFile' => 'src/Outbox/CategoryOutboxRetry.php'],
     ],
     [
         'check' => 'outbox-worker-dead-letter',
         'status' => fileContains($workerSource, 'dead_lettered_at') ? 'pass' : 'warn',
-        'details' => ['file' => 'src/Service/ProjectionWorker.php'],
+        'details' => ['file' => 'src/Service/CatalogProjectionWorkerService.php'],
     ],
     [
         'check' => 'projection-sync-real-upsert',

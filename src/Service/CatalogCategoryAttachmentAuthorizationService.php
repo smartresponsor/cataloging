@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * Provides the category attachment authorization service application service.
  */
-final readonly class CatalogCatalogCategoryAttachmentAuthorizationService
+final readonly class CatalogCategoryAttachmentAuthorizationService
 {
     /**
      * Initializes the category attachment authorization service service collaborators.
@@ -21,7 +21,7 @@ final readonly class CatalogCatalogCategoryAttachmentAuthorizationService
     public function __construct(
         private Security $security,
         private CatalogAttachmentRepositoryInterface $attachmentRepository,
-        private CategoryTenantAccessEvaluator $tenantAccessEvaluator,
+        private CatalogCategoryTenantAccessEvaluatorService $tenantAccessEvaluator,
     ) {
     }
 

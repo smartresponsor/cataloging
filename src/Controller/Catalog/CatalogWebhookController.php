@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Request\WebhookDispatchRequest;
-use App\Cataloging\Service\WebhookDispatcher;
+use App\Cataloging\Service\CatalogWebhookDispatcherService;
 use App\Cataloging\ValueObject\WebhookDispatchRequest as WebhookDispatchMessageRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ final readonly class CatalogWebhookController
     /**
      * Initializes the webhook controller service collaborators.
      */
-    public function __construct(private WebhookDispatcher $dispatcher)
+    public function __construct(private CatalogWebhookDispatcherService $dispatcher)
     {
     }
 

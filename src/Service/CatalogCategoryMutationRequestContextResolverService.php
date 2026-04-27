@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Resolves request context metadata for category mutation commands.
  */
-final readonly class CategoryMutationRequestContextResolver
+final readonly class CatalogCategoryMutationRequestContextResolverService
 {
     public function __construct(private Security $security)
     {

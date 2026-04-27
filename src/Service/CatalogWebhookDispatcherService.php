@@ -13,7 +13,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Provides the webhook dispatcher application service.
  */
-final readonly class WebhookDispatcher
+final readonly class CatalogWebhookDispatcherService
 {
     /**
      * Initializes the webhook dispatcher service collaborators.

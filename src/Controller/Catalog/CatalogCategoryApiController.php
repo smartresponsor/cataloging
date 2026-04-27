@@ -8,7 +8,7 @@ namespace App\Cataloging\Controller\Catalog;
 use App\Cataloging\Request\MoveCategoryRequest;
 use App\Cataloging\Request\PublishCategoryRequest;
 use App\Cataloging\Service\CatalogCategoryMutationAuthorizationService;
-use App\Cataloging\Service\CategoryMutationRequestContextResolver;
+use App\Cataloging\Service\CatalogCategoryMutationRequestContextResolverService;
 use App\Cataloging\Service\CategoryPayloadValueNormalizer;
 use App\Cataloging\ServiceInterface\CatalogCategoryMutationServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
@@ -36,7 +36,7 @@ final readonly class CatalogCategoryApiController
         private CatalogCategoryMutationAuthorizationService $categoryMutationAuthorizationService,
         private CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private CatalogCategoryReadScopeServiceInterface $categoryReadScopeService,
-        private CategoryMutationRequestContextResolver $requestContextResolver,
+        private CatalogCategoryMutationRequestContextResolverService $requestContextResolver,
     ) {
     }
 

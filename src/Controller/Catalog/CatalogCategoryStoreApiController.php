@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Service\ChannelFilter;
-use App\Cataloging\Service\ReadOptimizer;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,7 +22,7 @@ final readonly class CatalogCategoryStoreApiController
      */
     public function __construct(
         private ChannelFilter $filter,
-        private ReadOptimizer $optimizer,
+        private CatalogReadOptimizerService $optimizer,
     ) {
     }
 

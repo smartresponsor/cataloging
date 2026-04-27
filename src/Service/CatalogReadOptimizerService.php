@@ -11,7 +11,7 @@ use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 /**
  * Provides the read optimizer application service.
  */
-final class ReadOptimizer
+final class CatalogCatalogReadOptimizerServiceService
 {
     /** @var array<string,list<array<string,mixed>>> */
     private array $cache = [];

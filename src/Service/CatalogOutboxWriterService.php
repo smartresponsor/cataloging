@@ -8,7 +8,7 @@ use App\Cataloging\Entity\CatalogOutboxMessageEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
-final readonly class OutboxWriter
+final readonly class CatalogOutboxWriterService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

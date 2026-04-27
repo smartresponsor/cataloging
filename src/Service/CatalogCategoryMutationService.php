@@ -29,7 +29,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
      */
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly OutboxWriter $outboxWriter,
+        private readonly CatalogOutboxWriterService $outboxWriter,
         private readonly CacheInvalidationRecorder $cacheInvalidationRecorder,
         private readonly CatalogPublicationGateServiceInterface $publicationGateService,
         private readonly CatalogCategoryWorkflowEntityPolicyInterface $workflowPolicy,

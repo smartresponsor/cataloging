@@ -11,7 +11,7 @@ use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterf
 /**
  * Provides the attachment service application service.
  */
-final readonly class CatalogCatalogAttachmentService
+final readonly class CatalogAttachmentService
 {
     /**
      * Initializes the attachment service service collaborators.

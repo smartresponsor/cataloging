@@ -8,15 +8,15 @@ namespace App\Cataloging\Service;
 /**
  * Provides the warmup dispatcher application service.
  */
-final readonly class WarmupDispatcher
+final readonly class CatalogWarmupDispatcherService
 {
     /**
      * Initializes the warmup dispatcher service collaborators.
      */
     public function __construct(
         private WarmupPlan $plan,
-        private CloudflarePurger $cf,
-        private FastlyPurger $fastly,
+        private CatalogCloudflarePurgerService $cf,
+        private CatalogFastlyPurgerService $fastly,
     ) {
     }
 

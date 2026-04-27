@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the fastly purger application service.
  */
-final class FastlyPurger
+final class CatalogFastlyPurgerService
 {
     /** @param list<string> $keys @return string */
     public function headerForKeys(array $keys): string

@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the bulk operator application service.
  */
-final class BulkOperator
+final class CatalogBulkOperatorService
 {
     /**
      * @param list<int|string> $items

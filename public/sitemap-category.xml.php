@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  * Owner: Marketing America Corp
  */
-use App\Service\CanonicalResolver;
-use App\Service\SitemapGenerator;
+use App\Service\CatalogCanonicalResolverService;
+use App\Service\CatalogSitemapGeneratorService;
 
-$resolver = new CanonicalResolver();
-$generator = new SitemapGenerator($resolver);
+$resolver = new CatalogCanonicalResolverService();
+$generator = new CatalogSitemapGeneratorService($resolver);
 $categories = [['slug' => 'root'], ['slug' => 'electronics'], ['slug' => 'draft', 'noindex' => true]];
 header('Content-Type: application/xml');
 echo $generator->generate($categories, 'en');

@@ -5,17 +5,17 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Service\ImportPipeline;
+use App\Cataloging\Service\CatalogImportPipelineService;
 use PHPUnit\Framework\TestCase;
 
-final class ImportPipelineTest extends TestCase
+final class CatalogImportPipelineServiceTest extends TestCase
 {
     public function testProcessResultMarksFailureWhenSlugMissing(): void
     {
         $dir = sys_get_temp_dir().'/import-pipeline-test-'.bin2hex(random_bytes(4));
         mkdir($dir, 0777, true);
 
-        $pipeline = new ImportPipeline($dir);
+        $pipeline = new CatalogImportPipelineService($dir);
         $result = $pipeline->processResult(['locale' => 'en']);
 
         self::assertSame('failed', $result['status']);
@@ -29,7 +29,7 @@ final class ImportPipelineTest extends TestCase
     public function testProcessResultIncludesDlqFailureDetailsWhenPathMissing(): void
     {
         $dir = sys_get_temp_dir().'/import-pipeline-test-missing-'.bin2hex(random_bytes(4));
-        $pipeline = new ImportPipeline($dir);
+        $pipeline = new CatalogImportPipelineService($dir);
 
         $result = $pipeline->processResult(['locale' => 'en']);
 

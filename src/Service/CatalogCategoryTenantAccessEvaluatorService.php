@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * Centralizes tenant-bound authorization helpers shared by category authorization services.
  */
-final readonly class CategoryTenantAccessEvaluator
+final readonly class CatalogCategoryTenantAccessEvaluatorService
 {
     public function __construct(
         private ManagerRegistry $registry,

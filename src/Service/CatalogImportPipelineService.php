@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the import pipeline application service.
  */
-final readonly class ImportPipeline
+final readonly class CatalogImportPipelineService
 {
     /**
      * Initializes the import pipeline service collaborators.
@@ -43,13 +43,13 @@ final readonly class ImportPipeline
 
             return ['status' => 'ok', 'key' => $key, 'reason' => null];
         } catch (\InvalidArgumentException|\TypeError $exception) {
-            error_log('[ImportPipeline] '.$exception->getMessage());
+            error_log('[CatalogImportPipelineService] '.$exception->getMessage());
             $reason = $exception->getMessage();
 
             try {
                 $this->toDlq($item, $reason);
             } catch (\RuntimeException $dlqException) {
-                error_log('[ImportPipeline][DLQ] '.$dlqException->getMessage());
+                error_log('[CatalogImportPipelineService][DLQ] '.$dlqException->getMessage());
                 $reason .= ' | DLQ write failed: '.$dlqException->getMessage();
             } catch (\JsonException) {
             }

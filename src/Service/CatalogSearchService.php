@@ -14,7 +14,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * category_projection-backed read model.
  */
-final readonly class CatalogCatalogSearchService
+final readonly class CatalogSearchService
 {
     private const int DEFAULT_LIMIT = 20;
     private const int MAX_LIMIT = 100;

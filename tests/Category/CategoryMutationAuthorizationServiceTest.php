@@ -6,7 +6,7 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\Service\CatalogCategoryMutationAuthorizationService;
-use App\Cataloging\Service\CategoryTenantAccessEvaluator;
+use App\Cataloging\Service\CatalogCategoryTenantAccessEvaluatorService;
 use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use Doctrine\DBAL\Connection;
@@ -98,7 +98,7 @@ final class CatalogCategoryMutationAuthorizationServiceTest extends TestCase
 
         return new CatalogCategoryMutationAuthorizationService(
             $security,
-            new CategoryTenantAccessEvaluator($registry, $resolver, $tenantRolePolicy),
+            new CatalogCategoryTenantAccessEvaluatorService($registry, $resolver, $tenantRolePolicy),
         );
     }
 }

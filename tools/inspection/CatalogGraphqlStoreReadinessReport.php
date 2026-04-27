@@ -25,13 +25,13 @@ function containsAll(string $path, string ...$needles): bool
 }
 
 $storeController = $root . '/src/Controller/CategoryStoreApiController.php';
-$optimizer = $root . '/src/Service/ReadOptimizer.php';
+$optimizer = $root . '/src/Service/CatalogReadOptimizerService.php';
 $graphqlResolver = $root . '/src/Service/GraphqlResolver.php';
 $graphqlFacetResolver = $root . '/src/Service/GraphqlFacetResolver.php';
 $docs = $root . '/docs/category-graphql-store-readiness.md';
 $composer = $root . '/composer.json';
 $tests = [
-    $root . '/tests/Service/ReadOptimizerTest.php',
+    $root . '/tests/Service/CatalogReadOptimizerServiceTest.php',
     $root . '/tests/Service/GraphqlResolverTest.php',
 ];
 
@@ -44,12 +44,12 @@ $items = [
     [
         'check' => 'read-optimizer-uses-projection-read-service',
         'status' => containsAll($optimizer, 'CategoryProjectionReadServiceInterface', 'categoryProjectionReadService->tree') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/ReadOptimizer.php'],
+        'details' => ['file' => 'src/Service/CatalogReadOptimizerService.php'],
     ],
     [
         'check' => 'read-optimizer-no-file-metrics',
         'status' => !str_contains(fileText($optimizer), 'file_put_contents') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/ReadOptimizer.php'],
+        'details' => ['file' => 'src/Service/CatalogReadOptimizerService.php'],
     ],
     [
         'check' => 'graphql-category-read-uses-projection',
@@ -74,7 +74,7 @@ $items = [
     [
         'check' => 'store-read-no-root-electronics-demo-array',
         'status' => !str_contains(fileText($optimizer), "'Root'") && !str_contains(fileText($optimizer), "'Electronics'") ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/ReadOptimizer.php'],
+        'details' => ['file' => 'src/Service/CatalogReadOptimizerService.php'],
     ],
     [
         'check' => 'docs-present',
@@ -84,7 +84,7 @@ $items = [
     [
         'check' => 'tests-present',
         'status' => array_reduce($tests, static fn (bool $carry, string $file): bool => $carry && is_file($file), true) ? 'pass' : 'warn',
-        'details' => ['files' => ['tests/Service/ReadOptimizerTest.php', 'tests/Service/GraphqlResolverTest.php']],
+        'details' => ['files' => ['tests/Service/CatalogReadOptimizerServiceTest.php', 'tests/Service/GraphqlResolverTest.php']],
     ],
     [
         'check' => 'composer-report-wiring',

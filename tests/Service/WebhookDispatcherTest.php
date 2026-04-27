@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Service;
 
 use App\Cataloging\Observability\RequestCorrelationIdProvider;
-use App\Cataloging\Service\WebhookDispatcher;
+use App\Cataloging\Service\CatalogWebhookDispatcherService;
 use App\Cataloging\ValueObject\WebhookDispatchRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class WebhookDispatcherTest extends TestCase
+final class CatalogWebhookDispatcherServiceTest extends TestCase
 {
     public function testDispatchAddsSignatureCorrelationIdAndTimeout(): void
     {
@@ -30,7 +30,7 @@ final class WebhookDispatcherTest extends TestCase
         $request->attributes->set(RequestCorrelationIdProvider::ATTRIBUTE, 'corr-dispatcher');
         $stack->push($request);
 
-        $dispatcher = new WebhookDispatcher($client, 'secret', new RequestCorrelationIdProvider($stack));
+        $dispatcher = new CatalogWebhookDispatcherService($client, 'secret', new RequestCorrelationIdProvider($stack));
         $dispatcher->dispatch(new WebhookDispatchRequest('http://example/webhook', 'catalog.changed', ['id' => 'c-1']));
 
         self::assertSame('POST', $capturedOptions['method']);

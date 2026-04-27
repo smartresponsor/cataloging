@@ -10,7 +10,7 @@ use App\Cataloging\OutboxInterface\CategoryOutboxRetryInterface;
 use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-final readonly class ProjectionWorker
+final readonly class CatalogProjectionWorkerService
 {
     public function __construct(
         private ?EntityManagerInterface $entityManager,

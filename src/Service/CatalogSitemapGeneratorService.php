@@ -10,12 +10,12 @@ use App\Cataloging\ValueObject\CategoryCanonicalResolveRequest;
 /**
  * Provides the sitemap generator application service.
  */
-final readonly class SitemapGenerator
+final readonly class CatalogSitemapGeneratorService
 {
     /**
      * Initializes the sitemap generator service collaborators.
      */
-    public function __construct(private CanonicalResolver $canonicalResolver)
+    public function __construct(private CatalogCanonicalResolverService $canonicalResolver)
     {
     }
 

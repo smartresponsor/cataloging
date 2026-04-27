@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the synonym provider application service.
  */
-final class SynonymProvider
+final class CatalogSynonymProviderService
 {
     /** @var array<string,array<string,list<string>>> */
     private array $synonyms = [

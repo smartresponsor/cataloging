@@ -10,7 +10,7 @@ use App\Cataloging\ValueObject\CategoryCanonicalResolveRequest;
 /**
  * Provides the canonical resolver application service.
  */
-final class CanonicalResolver
+final class CatalogCanonicalResolverService
 {
     public function resolve(CategoryCanonicalResolveRequest $request): string
     {

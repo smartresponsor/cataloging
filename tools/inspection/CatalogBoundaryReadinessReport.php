@@ -95,7 +95,7 @@ $items = [
     ],
     [
         'check' => 'delivery-controllers-delegate-to-shared-services',
-        'status' => containsAll($storeController, 'ReadOptimizer')
+        'status' => containsAll($storeController, 'CatalogReadOptimizerService')
             && containsAll($storefrontController, 'CategoryProjectionReadServiceInterface', 'CategoryReadScopeServiceInterface')
             && containsAll($searchController, 'CategoryReadScopeServiceInterface', 'CatalogSearchService')
             && containsAll($adminController, 'CategoryProjectionReadServiceInterface')

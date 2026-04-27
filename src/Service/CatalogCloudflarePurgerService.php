@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the cloudflare purger application service.
  */
-final class CloudflarePurger
+final class CatalogCloudflarePurgerService
 {
     /**
      * @param list<string> $keys

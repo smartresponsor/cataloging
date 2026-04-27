@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Request\CategoryBulkRequest;
-use App\Cataloging\Service\BulkOperator;
+use App\Cataloging\Service\CatalogBulkOperatorService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,7 +19,7 @@ final readonly class CatalogCategoryBulkController
     /**
      * Initializes the category bulk controller service collaborators.
      */
-    public function __construct(private BulkOperator $bulk)
+    public function __construct(private CatalogBulkOperatorService $bulk)
     {
     }
 

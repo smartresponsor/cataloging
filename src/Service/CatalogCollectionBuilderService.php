@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the collection builder application service.
  */
-final readonly class CollectionBuilder
+final readonly class CatalogCollectionBuilderService
 {
     /**
      * Initializes the collection builder service collaborators.

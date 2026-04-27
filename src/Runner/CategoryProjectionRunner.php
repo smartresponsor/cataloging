@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Runner;
 
 use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
-use App\Cataloging\Service\ProjectionWorker;
+use App\Cataloging\Service\CatalogProjectionWorkerService;
 
 /**
  * Provides the category projection runner implementation.
@@ -16,7 +16,7 @@ final readonly class CategoryProjectionRunner implements CategoryProjectionRunne
     /**
      * Initializes the category projection runner service collaborators.
      */
-    public function __construct(private ProjectionWorker $worker)
+    public function __construct(private CatalogProjectionWorkerService $worker)
     {
     }
 

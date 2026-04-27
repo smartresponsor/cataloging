@@ -10,7 +10,7 @@ use App\Cataloging\ValueObject\CategoryHostContextRequest;
 /**
  * Provides the region resolver application service.
  */
-final class RegionResolver
+final class CatalogRegionResolverService
 {
     /**
      * Resolves the requested result for the provided input.

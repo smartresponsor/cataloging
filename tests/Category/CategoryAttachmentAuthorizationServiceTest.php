@@ -7,7 +7,7 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\Service\CatalogCategoryAttachmentAuthorizationService;
-use App\Cataloging\Service\CategoryTenantAccessEvaluator;
+use App\Cataloging\Service\CatalogCategoryTenantAccessEvaluatorService;
 use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use Doctrine\DBAL\Connection;
@@ -95,7 +95,7 @@ final class CatalogCategoryAttachmentAuthorizationServiceTest extends TestCase
         return new CatalogCategoryAttachmentAuthorizationService(
             $security,
             $repo,
-            new CategoryTenantAccessEvaluator($registry, $resolver, $tenantRolePolicy),
+            new CatalogCategoryTenantAccessEvaluatorService($registry, $resolver, $tenantRolePolicy),
         );
     }
 }

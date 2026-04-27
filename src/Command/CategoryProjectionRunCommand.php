@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Command;
 
 use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Cataloging\Service\CatalogProjectionWorkerService;
 use App\Cataloging\Service\CategoryPayloadValueNormalizer;
-use App\Cataloging\Service\ProjectionWorker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,7 +23,7 @@ final class CategoryProjectionRunCommand extends Command
      * Initializes the category projection run command service collaborators.
      */
     public function __construct(
-        private readonly ProjectionWorker $worker,
+        private readonly CatalogProjectionWorkerService $worker,
         private readonly ?CategoryProjectionRunnerInterface $runner = null,
     ) {
         parent::__construct();

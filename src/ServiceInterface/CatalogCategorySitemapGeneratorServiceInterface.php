@@ -8,7 +8,7 @@ namespace App\Cataloging\ServiceInterface;
 /**
  * Defines the contract for category sitemap generator.
  */
-interface CatalogCategorySitemapGeneratorServiceInterface
+interface CatalogCategoryCatalogSitemapGeneratorServiceServiceInterface
 {
     /**
      * Handles the generate index workflow.

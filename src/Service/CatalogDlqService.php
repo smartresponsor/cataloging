@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the dlq service application service.
  */
-final class CatalogCatalogDlqService
+final class CatalogDlqService
 {
     private string $file = 'report/category-dlq.json';
 

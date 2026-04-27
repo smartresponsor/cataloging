@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the progress tracker application service.
  */
-final class ProgressTracker
+final class CatalogCatalogProgressTrackerServiceService
 {
     private int $ok = 0;
     private int $fail = 0;

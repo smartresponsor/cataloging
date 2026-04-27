@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\ServiceInterface\CatalogCategorySitemapGeneratorServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryCatalogSitemapGeneratorServiceServiceInterface;
 
 /**
  * Provides the category sitemap generator application service.
  */
-final class CatalogCategorySitemapGeneratorService implements CatalogCategorySitemapGeneratorServiceInterface
+final class CatalogCategoryCatalogSitemapGeneratorServiceService implements CatalogCategoryCatalogSitemapGeneratorServiceServiceInterface
 {
     /**
      * Handles the generate index workflow.

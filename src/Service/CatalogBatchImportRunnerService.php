@@ -8,14 +8,14 @@ namespace App\Cataloging\Service;
 /**
  * Provides the batch import runner application service.
  */
-final class BatchImportRunner
+final class CatalogCatalogBatchImportRunnerServiceService
 {
-    private ProgressTracker $progress;
+    private CatalogProgressTrackerService $progress;
 
     /**
      * Initializes the batch import runner service collaborators.
      */
-    public function __construct(ProgressTracker $progress)
+    public function __construct(CatalogProgressTrackerService $progress)
     {
         $this->progress = $progress;
     }
@@ -47,7 +47,7 @@ final class BatchImportRunner
                 ++$successfulCount;
             } catch (\RuntimeException|\InvalidArgumentException|\TypeError $e) {
                 ++$failedCount;
-                error_log('[BatchImportRunner] '.$e->getMessage());
+                error_log('[CatalogBatchImportRunnerService] '.$e->getMessage());
             }
         }
         $this->progress->report($successfulCount, $failedCount);

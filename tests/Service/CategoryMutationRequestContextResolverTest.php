@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Service;
 
-use App\Cataloging\Service\CategoryMutationRequestContextResolver;
+use App\Cataloging\Service\CatalogCategoryMutationRequestContextResolverService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class CategoryMutationRequestContextResolverTest extends TestCase
+final class CatalogCategoryMutationRequestContextResolverServiceTest extends TestCase
 {
     public function testActorIdUsesAuthenticatedUserIdentifierWhenAvailable(): void
     {
@@ -20,7 +20,7 @@ final class CategoryMutationRequestContextResolverTest extends TestCase
         $security = $this->createMock(Security::class);
         $security->method('getUser')->willReturn($user);
 
-        $resolver = new CategoryMutationRequestContextResolver($security);
+        $resolver = new CatalogCategoryMutationRequestContextResolverService($security);
 
         self::assertSame('owner-1', $resolver->actorId(new Request()));
     }
@@ -30,7 +30,7 @@ final class CategoryMutationRequestContextResolverTest extends TestCase
         $security = $this->createMock(Security::class);
         $security->method('getUser')->willReturn(null);
 
-        $resolver = new CategoryMutationRequestContextResolver($security);
+        $resolver = new CatalogCategoryMutationRequestContextResolverService($security);
 
         self::assertSame('header-actor', $resolver->actorId(new Request(server: ['HTTP_X_ACTOR_ID' => 'header-actor'])));
         self::assertSame('category-api', $resolver->actorId(new Request()));
@@ -40,7 +40,7 @@ final class CategoryMutationRequestContextResolverTest extends TestCase
     {
         $security = $this->createMock(Security::class);
         $security->method('getUser')->willReturn(null);
-        $resolver = new CategoryMutationRequestContextResolver($security);
+        $resolver = new CatalogCategoryMutationRequestContextResolverService($security);
 
         $request = new Request(server: [
             'HTTP_X_IDEMPOTENCY_KEY' => 'idem-1',
