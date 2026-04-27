@@ -10,7 +10,7 @@ use App\Cataloging\ValueObject\CategoryStorefrontAdaptRequest;
 /**
  * Provides the storefront adapter application service.
  */
-final class StorefrontAdapter
+final class CatalogCatalogStorefrontAdapterServiceService
 {
     /**
      * @return list<array{id:mixed,name:string,slug:string,locale:string}>

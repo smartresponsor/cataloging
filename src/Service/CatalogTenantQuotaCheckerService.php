@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the tenant quota checker application service.
  */
-final readonly class TenantQuotaChecker
+final readonly class CatalogCatalogTenantQuotaCheckerServiceService
 {
     /** @param array{max_categories?: int, max_depth?: int, max_updates_per_day?: int} $limits */
     public function __construct(private array $limits = [
