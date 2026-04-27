@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryAccessAssignmentEntityInterface;
 use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntityRequest;
 use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntitySelection;
 

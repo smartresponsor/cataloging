@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
-use App\Cataloging\Repository\CatalogCategoryWorkflowEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryWorkflowRepository;
 use App\Cataloging\Service\CatalogWorkflowTransitionService;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
@@ -19,7 +19,7 @@ final class CatalogWorkflowTransitionServiceTest extends TestCase
 {
     public function testTransitionStoresCurrentStateAndAppendsAuditEvent(): void
     {
-        $repository = new CatalogCategoryWorkflowEntityRepository();
+        $repository = new CatalogCategoryWorkflowRepository();
         $service = new CatalogWorkflowTransitionService($repository, new CatalogCategoryWorkflowEntityPolicy());
 
         $event = $service->transition(new CatalogCategoryWorkflowEntityTransitionRequest(
@@ -46,7 +46,7 @@ final class CatalogWorkflowTransitionServiceTest extends TestCase
 
     public function testTransitionRejectsInvalidStateJump(): void
     {
-        $repository = new CatalogCategoryWorkflowEntityRepository();
+        $repository = new CatalogCategoryWorkflowRepository();
         $service = new CatalogWorkflowTransitionService($repository, new CatalogCategoryWorkflowEntityPolicy());
 
         $this->expectException(\DomainException::class);

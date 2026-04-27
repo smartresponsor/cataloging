@@ -24,11 +24,11 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
     public function testBuildGatedPublishPackageResolvesPublishabilityViaPolicy(): void
     {
         $fallbackAwareGateService = new class implements CatalogSyndicationFallbackAwarePackageGateServiceInterface {
-            public function buildGatedPublishPackage(CategorySyndicationPackageBuildRequest $request): \App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
+            public function buildGatedPublishPackage(CategorySyndicationPackageBuildRequest $request): \App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationFallbackAwarePackageGatedEventInterface
             {
                 $context = $request->context();
 
-                return new \App\Cataloging\Event\CategorySyndicationFallbackAwarePackageGated([
+                return new \App\Cataloging\Event\Catalog\CatalogCategorySyndicationFallbackAwarePackageGatedEvent([
                     'packageId' => $context->packageId(),
                     'destinationId' => $context->destinationId(),
                     'categoryId' => $context->categoryId(),
@@ -47,9 +47,9 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
         };
 
         $preferenceService = new class implements CatalogDestinationMediaPolicyPreferenceServiceInterface {
-            public function evaluate(CategoryDestinationMediaEvaluationRequest $request): \App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
+            public function evaluate(CategoryDestinationMediaEvaluationRequest $request): \App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaPolicyPreferenceEvaluatedEventInterface
             {
-                return new \App\Cataloging\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
+                return new \App\Cataloging\Event\Catalog\CatalogCategoryDestinationMediaPolicyPreferenceEvaluatedEvent([
                     'destinationId' => $request->destinationId(),
                     'categoryId' => $request->categoryId(),
                     'mediaPolicyMode' => 'allow_fallback',

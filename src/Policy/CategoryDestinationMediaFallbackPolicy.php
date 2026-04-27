@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\Cataloging\Service\CategoryMediaInputNormalizer;
 use App\Cataloging\ValueObject\CategoryDestinationMediaFallbackReport;

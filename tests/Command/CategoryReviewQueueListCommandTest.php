@@ -12,8 +12,8 @@ namespace App\Cataloging\Tests\Command;
 use App\Cataloging\Command\CategoryReviewQueueListCommand;
 use App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy;
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;
-use App\Cataloging\Repository\CatalogCategoryReviewAssignmentEntityRepository;
-use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryReviewAssignmentRepository;
 use App\Cataloging\Service\CatalogChangeRequestService;
 use App\Cataloging\Service\CatalogReviewAssignmentService;
 use App\Cataloging\Service\CatalogReviewQueueService;
@@ -26,8 +26,8 @@ final class CategoryReviewQueueListCommandTest extends TestCase
 {
     public function testExecutePrintsReviewerQueueAsNdjsonInPriorityOrder(): void
     {
-        $changeRequestRepository = new CategoryChangeRequestRepository();
-        $assignmentRepository = new CatalogCategoryReviewAssignmentEntityRepository();
+        $changeRequestRepository = new CatalogCategoryChangeRequestRepository();
+        $assignmentRepository = new CatalogCategoryReviewAssignmentRepository();
 
         $changeRequestService = new CatalogChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
         $assignmentService = new CatalogReviewAssignmentService(

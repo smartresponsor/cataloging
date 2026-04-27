@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Security;
 
-use App\Cataloging\Service\Security\CategoryRole;
 use App\Cataloging\Service\Security\ExternalIdentityContextMapper;
+use App\Cataloging\ValueObject\Security\CategoryRole;
 use PHPUnit\Framework\TestCase;
 
 final class ExternalIdentityContextMapperTest extends TestCase

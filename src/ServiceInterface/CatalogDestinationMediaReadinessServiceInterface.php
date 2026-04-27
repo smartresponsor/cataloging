@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaReadinessEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
 /**
@@ -18,5 +18,5 @@ interface CatalogDestinationMediaReadinessServiceInterface
      */
     public function evaluate(
         CategoryDestinationMediaEvaluationRequest $request,
-    ): CategoryDestinationMediaReadinessEvaluatedInterface;
+    ): CatalogCategoryDestinationMediaReadinessEvaluatedEventInterface;
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Security;
 
-use App\Cataloging\Security\JwtUser;
-use App\Cataloging\Security\JwtUserProvider;
+use App\Cataloging\User\JwtUser;
+use App\Cataloging\UserProvider\JwtUserProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 

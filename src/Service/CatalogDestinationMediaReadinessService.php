@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Event\CategoryDestinationMediaReadinessEvaluated;
 use App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDestinationRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
 use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;

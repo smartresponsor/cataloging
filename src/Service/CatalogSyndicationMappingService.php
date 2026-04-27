@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationPublishPackageBuilt;
-use App\Cataloging\EventInterface\CategorySyndicationPublishPackageBuiltInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationPublishPackageBuiltEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationPublishPackageBuiltEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationMappingPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationMappingServiceInterface;
 use App\Cataloging\ValueObject\CategorySyndicationMappingProfile;
@@ -28,7 +28,7 @@ final readonly class CatalogSyndicationMappingService implements CatalogSyndicat
 
     public function buildPublishPackage(
         CategorySyndicationPackageBuildRequest $request,
-    ): CategorySyndicationPublishPackageBuiltInterface {
+    ): CatalogCategorySyndicationPublishPackageBuiltEventInterface {
         $context = $request->context();
         $audit = $request->auditContext();
         $this->policy->assertLocaleMode($context->localeMode());
@@ -67,7 +67,7 @@ final readonly class CatalogSyndicationMappingService implements CatalogSyndicat
             [] === $missingRequiredFields,
         );
 
-        return new CategorySyndicationPublishPackageBuilt(
+        return new CatalogCategorySyndicationPublishPackageBuiltEvent(
             [
                 'packageId' => $package->packageId(),
                 'destinationId' => $package->destinationId(),

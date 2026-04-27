@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\PolicyInterface;
 
-use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\ValueObjectInterface\CategoryMediaCoverageReportInterface;
 
 /**

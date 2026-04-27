@@ -162,6 +162,57 @@ demo_and_discovery:
       - shared_ui_solution
   assumption_policy: forbidden
 
+catalog_layer3_contract:
+  enforce_literal_contract: true
+  entity:
+    root: src/Entity/Catalog
+    namespace: App\Entity\Catalog
+    subfolders_forbidden: true
+    only_entity_classes_allowed: true
+    class_name_regex: '^Catalog.*Entity$'
+  controller:
+    root: src/Controller/Catalog
+    namespace: App\Controller\Catalog
+    subfolders_forbidden: true
+    class_name_regex: '^Catalog.*Controller$'
+  controller_interface:
+    root: src/ControllerInterface/Catalog
+    namespace: App\ControllerInterface\Catalog
+    subfolders_forbidden: true
+    class_name_regex: '^Catalog.*ControllerInterface$'
+  event:
+    root: src/Event/Catalog
+    namespace: App\Event\Catalog
+    subfolders_forbidden: true
+    class_name_regex: '^Catalog.*Event$'
+  event_interface:
+    root: src/EventInterface/Catalog
+    namespace: App\EventInterface\Catalog
+    subfolders_forbidden: true
+    class_name_regex: '^Catalog.*EventInterface$'
+  repository:
+    root: src/Repository/Catalog
+    namespace: App\Repository\Catalog
+    subfolders_forbidden: true
+    class_name_regex: '^Catalog.*Repository$'
+  repository_interface:
+    root: src/RepositoryInterface/Catalog
+    namespace: App\RepositoryInterface\Catalog
+    subfolders_forbidden: true
+    class_name_regex: '^Catalog.*RepositoryInterface$'
+  forbidden_examples:
+    - src/Entity/CatalogCategoryEntity.php
+    - src/Entity/Role/SubjectId.php
+    - src/Entity/Catalog/Subtree/CatalogCategoryEntity.php
+    - src/Repository/Category/CatalogCategoryRepository.php
+    - src/Controller/Catalog/CategoryController.php
+    - src/Event/Catalog/Sub/CatalogCategoryPublishedEvent.php
+  required_action_on_violation:
+    - move_to_canonical_catalog_folder
+    - rename_class_to_match_layer_suffix
+    - update_imports_and_fqcn_references
+    - remove_compatibility_duplicates
+
 code_and_architecture:
   checks:
     - layer_isolation

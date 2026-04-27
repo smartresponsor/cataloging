@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\Service\CategoryAttachmentAuthorizationService;
 use App\Cataloging\Service\CategoryTenantAccessEvaluator;

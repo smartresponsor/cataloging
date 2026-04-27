@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;
-use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository;
 use App\Cataloging\Service\CatalogChangeRequestService;
 use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;
@@ -19,7 +19,7 @@ final class CatalogChangeRequestServiceTest extends TestCase
 {
     public function testSubmitPersistsProposedRequest(): void
     {
-        $service = new CatalogChangeRequestService(new CategoryChangeRequestRepository(), new CategoryChangeRequestPolicy());
+        $service = new CatalogChangeRequestService(new CatalogCategoryChangeRequestRepository(), new CategoryChangeRequestPolicy());
 
         $request = $service->submit(new CategoryChangeRequestSubmitRequest(
             'req-200',
@@ -36,7 +36,7 @@ final class CatalogChangeRequestServiceTest extends TestCase
 
     public function testReviewAcceptsExistingRequest(): void
     {
-        $repository = new CategoryChangeRequestRepository();
+        $repository = new CatalogCategoryChangeRequestRepository();
         $service = new CatalogChangeRequestService($repository, new CategoryChangeRequestPolicy());
         $service->submit(new CategoryChangeRequestSubmitRequest(
             'req-201',
@@ -61,7 +61,7 @@ final class CatalogChangeRequestServiceTest extends TestCase
 
     public function testReviewFailsWhenRequestIsMissing(): void
     {
-        $service = new CatalogChangeRequestService(new CategoryChangeRequestRepository(), new CategoryChangeRequestPolicy());
+        $service = new CatalogChangeRequestService(new CatalogCategoryChangeRequestRepository(), new CategoryChangeRequestPolicy());
 
         $this->expectException(\DomainException::class);
 

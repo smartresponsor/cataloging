@@ -9,7 +9,7 @@ use App\Cataloging\Entity\CatalogSyndicationDestinationEntity;
 use App\Cataloging\Event\CatalogSyndicationDestinationRegistered;
 use App\Cataloging\EventInterface\CatalogSyndicationDestinationRegisteredInterface;
 use App\Cataloging\PolicyInterface\CatalogSyndicationDestinationPolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDestinationRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationRegisterRequest;

@@ -11,7 +11,7 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\Policy\CategoryCompletenessPolicy;
 use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
 use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
 use App\Cataloging\Service\CatalogMediaCompletenessBridgeService;
 use App\Cataloging\Service\CatalogMediaCoverageService;
 use App\Cataloging\Service\CatalogMediaPublicationQualityBridgeService;
@@ -24,7 +24,7 @@ final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase
 {
     public function testEvaluatePromotesMissingRequiredMediaCoverageToHardBlocker(): void
     {
-        $repository = new CatalogCategoryMediaBindingEntityRepository();
+        $repository = new CatalogCategoryMediaBindingRepository();
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
         $completenessBridge = new CatalogMediaCompletenessBridgeService(new CategoryCompletenessPolicy(), $coverage);
         $qualityBridge = new CatalogMediaPublicationQualityBridgeService($completenessBridge, new CatalogPublicationQualityService(new CategoryPublicationQualityPolicy()));

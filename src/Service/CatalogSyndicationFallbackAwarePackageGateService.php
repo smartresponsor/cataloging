@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationFallbackAwarePackageGated;
-use App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationFallbackAwarePackageGatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationFallbackAwarePackageGatedEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationFallbackAwarePackageGatePolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
@@ -36,7 +36,7 @@ final readonly class CatalogSyndicationFallbackAwarePackageGateService implement
      */
     public function buildGatedPublishPackage(
         CategorySyndicationPackageBuildRequest $request,
-    ): CategorySyndicationFallbackAwarePackageGatedInterface {
+    ): CatalogCategorySyndicationFallbackAwarePackageGatedEventInterface {
         $context = $request->context();
         $audit = $request->auditContext();
         $packageBuilt = $this->mappingService->buildPublishPackage($request);
@@ -64,7 +64,7 @@ final readonly class CatalogSyndicationFallbackAwarePackageGateService implement
             CategoryPayloadValueNormalizer::stringList($fallbackMedia['fallbackMatchedBindingIds'] ?? null),
         );
 
-        return new CategorySyndicationFallbackAwarePackageGated(
+        return new CatalogCategorySyndicationFallbackAwarePackageGatedEvent(
             [
                 'packageId' => trim($context->packageId()),
                 'destinationId' => trim($context->destinationId()),

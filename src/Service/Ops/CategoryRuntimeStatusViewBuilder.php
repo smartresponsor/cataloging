@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Service\Ops;
 
 use App\Cataloging\Projection\CategoryRuntimeStatusView;
-use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryWorkflowEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryWorkflowRepositoryInterface;
 use App\Cataloging\Service\Governance\CategoryGovernanceViewBuilder;
 use App\Cataloging\Service\Traceability\CategoryActorTraceabilityViewBuilder;
 use App\Cataloging\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
@@ -23,8 +23,8 @@ final readonly class CategoryRuntimeStatusViewBuilder implements CategoryRuntime
     public function __construct(
         private CategoryGovernanceViewBuilder $governanceViewBuilder,
         private CategoryActorTraceabilityViewBuilder $traceabilityViewBuilder,
-        private CatalogCategoryWorkflowEntityRepositoryInterface $workflowRepository,
-        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $reviewAssignmentRepository,
+        private CatalogCategoryWorkflowRepositoryInterface $workflowRepository,
+        private CatalogCategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
     ) {
     }
 

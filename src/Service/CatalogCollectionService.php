@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCollectionProjectionRepositoryInterface;
 
 /**
  * Provides the catalog collection service application service.

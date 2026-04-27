@@ -10,7 +10,7 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
 use App\Cataloging\Service\CatalogMediaCoverageService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
@@ -24,7 +24,7 @@ final class CatalogMediaCoverageServiceTest extends TestCase
 {
     public function testEvaluateReturnsGovernedMediaChecks(): void
     {
-        $repository = new CatalogCategoryMediaBindingEntityRepository();
+        $repository = new CatalogCategoryMediaBindingRepository();
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
 

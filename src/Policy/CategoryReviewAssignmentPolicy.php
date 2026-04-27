@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
 use App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 
@@ -20,7 +20,7 @@ final class CatalogCategoryReviewAssignmentEntityPolicy implements CatalogCatego
      * Determines whether the current workflow can assign.
      */
     public function canAssign(
-        CategoryChangeRequestInterface $request,
+        CatalogCategoryChangeRequestEntityInterface $request,
         string $assignedReviewer,
         string $assignedBy,
         string $priority,
@@ -43,7 +43,7 @@ final class CatalogCategoryReviewAssignmentEntityPolicy implements CatalogCatego
      * Handles the assert can assign workflow.
      */
     public function assertCanAssign(
-        CategoryChangeRequestInterface $request,
+        CatalogCategoryChangeRequestEntityInterface $request,
         string $assignedReviewer,
         string $assignedBy,
         string $priority,

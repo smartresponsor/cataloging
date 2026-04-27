@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategorySyndicationDeliveryPolicy;
-use App\Cataloging\Repository\CatalogSyndicationDeliveryRecordRepository;
+use App\Cataloging\Repository\Catalog\CatalogSyndicationDeliveryRecordRepository;
 use App\Cataloging\Service\CatalogSyndicationDeliveryService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
 use App\Cataloging\ValueObject\CatalogSyndicationDeliveryRecordRequest;

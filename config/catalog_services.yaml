@@ -3,36 +3,36 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Cataloging\Controller\StatusController:
+    App\Cataloging\Controller\Catalog\CatalogStatusController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\LegacyCategoryListController:
+    App\Cataloging\Controller\Catalog\CatalogLegacyCategoryListController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\LegacyCollectionListController:
+    App\Cataloging\Controller\Catalog\CatalogLegacyCollectionListController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\CategoryAttachmentController:
+    App\Cataloging\Controller\Catalog\CatalogCategoryAttachmentController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\CategoryCollectionController:
+    App\Cataloging\Controller\Catalog\CatalogCategoryCollectionController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\CategoryReadController:
+    App\Cataloging\Controller\Catalog\CatalogCategoryReadController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\CategoryVirtualController:
+    App\Cataloging\Controller\Catalog\CatalogCategoryVirtualController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Repository\CatalogAttachmentRepository: ~
-    App\Cataloging\Repository\CatalogCollectionProjectionRepository: ~
-    App\Cataloging\Repository\CatalogRepository: ~
-    App\Cataloging\Repository\VirtualCategoryRepository: ~
+    App\Cataloging\Repository\Catalog\CatalogAttachmentRepository: ~
+    App\Cataloging\Repository\Catalog\CatalogCollectionProjectionRepository: ~
+    App\Cataloging\Repository\Catalog\CatalogRepository: ~
+    App\Cataloging\Repository\Catalog\CatalogVirtualCategoryRepository: ~
 
-    App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface: '@App\Cataloging\Repository\CatalogAttachmentRepository'
-    App\Cataloging\RepositoryInterface\CatalogCollectionProjectionRepositoryInterface:
-        '@App\Cataloging\Repository\CatalogCollectionProjectionRepository'
-    App\Cataloging\RepositoryInterface\VirtualCategoryRepositoryInterface: '@App\Cataloging\Repository\VirtualCategoryRepository'
+    App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface: '@App\Cataloging\Repository\Catalog\CatalogAttachmentRepository'
+    App\Cataloging\RepositoryInterface\Catalog\CatalogCollectionProjectionRepositoryInterface:
+        '@App\Cataloging\Repository\Catalog\CatalogCollectionProjectionRepository'
+    App\Cataloging\RepositoryInterface\Catalog\CatalogVirtualCategoryRepositoryInterface: '@App\Cataloging\Repository\Catalog\CatalogVirtualCategoryRepository'
 
     App\Cataloging\Service\AttachmentService: ~
     App\Cataloging\Service\CatalogCollectionService: ~

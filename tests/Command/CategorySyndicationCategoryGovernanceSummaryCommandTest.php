@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
-use App\Cataloging\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationCategoryGovernanceSummaryBuiltEvent;
 use App\Cataloging\Service\ArrayValueNormalizer;
 use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ final class CategorySyndicationCategoryGovernanceSummaryCommandTest extends Test
     public function testExecutePrintsCategoryGovernanceSummary(): void
     {
         $service = $this->createMock(CatalogSyndicationGovernanceSummaryServiceInterface::class);
-        $service->method('buildSummary')->willReturn(new CategorySyndicationCategoryGovernanceSummaryBuilt([
+        $service->method('buildSummary')->willReturn(new CatalogCategorySyndicationCategoryGovernanceSummaryBuiltEvent([
             'categoryId' => 'cat-1',
             'totalTrails' => 3,
             'destinationIds' => ['dest-1', 'dest-2'],

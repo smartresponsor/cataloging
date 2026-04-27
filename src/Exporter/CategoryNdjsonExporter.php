@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Exporter;
 
 use App\Cataloging\ExporterInterface\CategoryNdjsonExporterInterface;
-use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
 use App\Cataloging\ValueObject\CategoryTreeRequest;
 
 /**
@@ -18,7 +18,7 @@ final readonly class CategoryNdjsonExporter implements CategoryNdjsonExporterInt
     /**
      * Initializes the category ndjson exporter service collaborators.
      */
-    public function __construct(private CategoryRepositoryInterface $repository)
+    public function __construct(private CatalogCategoryRepositoryInterface $repository)
     {
     }
 

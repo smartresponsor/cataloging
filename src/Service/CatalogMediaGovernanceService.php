@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
 use App\Cataloging\Event\CategoryMediaBound;
 use App\Cataloging\PolicyInterface\CategoryMediaGovernancePolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaGovernanceServiceInterface;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 use App\Cataloging\ValueObject\CategoryMediaRole;
@@ -22,7 +22,7 @@ final readonly class CatalogMediaGovernanceService implements CatalogMediaGovern
      * Initializes the catalog media governance service service collaborators.
      */
     public function __construct(
-        private CatalogCategoryMediaBindingEntityRepositoryInterface $repository,
+        private CatalogCategoryMediaBindingRepositoryInterface $repository,
         private CategoryMediaGovernancePolicyInterface $policy,
     ) {
     }

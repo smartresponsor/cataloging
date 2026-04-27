@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryMediaCoverageEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaCoverageEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
 /**
@@ -13,5 +13,5 @@ use App\Cataloging\ValueObject\CategoryEvaluationRequest;
  */
 interface CatalogMediaCoverageServiceInterface
 {
-    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaCoverageEvaluatedInterface;
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryMediaCoverageEvaluatedEventInterface;
 }

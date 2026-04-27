@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogSyndicationDeliveryRecordEntityInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,7 +56,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
     {
         $format = $this->optionString($input, 'format', 'json');
         $payload = array_map(
-            fn (CatalogSyndicationDeliveryRecordInterface $record): array => $this->recordPayload($record),
+            fn (CatalogSyndicationDeliveryRecordEntityInterface $record): array => $this->recordPayload($record),
             $this->repository->failedRecords(),
         );
 
@@ -74,7 +74,7 @@ final class CategorySyndicationDeliveryFailedListCommand extends Command
     }
 
     /** @return array<string,int|string|null> */
-    private function recordPayload(CatalogSyndicationDeliveryRecordInterface $record): array
+    private function recordPayload(CatalogSyndicationDeliveryRecordEntityInterface $record): array
     {
         return [
             'deliveryId' => $record->deliveryId(),

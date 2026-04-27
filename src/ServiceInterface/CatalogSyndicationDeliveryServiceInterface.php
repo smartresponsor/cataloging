@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CatalogSyndicationDeliveryRecordedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDeliveryRecordedEventInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDeliveryRecordRequest;
 
 /**
@@ -18,5 +18,5 @@ interface CatalogSyndicationDeliveryServiceInterface
      */
     public function recordDelivery(
         CatalogSyndicationDeliveryRecordRequest $request,
-    ): CatalogSyndicationDeliveryRecordedInterface;
+    ): CatalogSyndicationDeliveryRecordedEventInterface;
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryPublicationQualityEvaluated;
-use App\Cataloging\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryPublicationQualityEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryPublicationQualityEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryPublicationQualityPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use App\Cataloging\ValueObject\CategoryPublicationQualityEvaluationRequest;
@@ -28,12 +28,12 @@ final readonly class CatalogPublicationQualityService implements CatalogPublicat
      */
     public function evaluate(
         CategoryPublicationQualityEvaluationRequest $request,
-    ): CategoryPublicationQualityEvaluatedInterface {
+    ): CatalogCategoryPublicationQualityEvaluatedEventInterface {
         $input = $request->input();
         $audit = $request->auditContext();
         $profile = $this->policy->buildProfile($input->score(), $input->publicationChecks(), $input->checks());
 
-        return new CategoryPublicationQualityEvaluated(
+        return new CatalogCategoryPublicationQualityEvaluatedEvent(
             trim($input->categoryId()),
             $profile->score(),
             $profile->isPublishableQuality(),

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryCompletenessEvaluated;
-use App\Cataloging\EventInterface\CategoryCompletenessEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryCompletenessEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryCompletenessEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryCompletenessPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogCompletenessServiceInterface;
 use App\Cataloging\ValueObject\CategoryCompletenessReport;
@@ -27,11 +27,11 @@ final readonly class CatalogCompletenessService implements CatalogCompletenessSe
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(CategoryEvaluationRequest $request): CategoryCompletenessEvaluatedInterface
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryCompletenessEvaluatedEventInterface
     {
         $report = CategoryCompletenessReport::fromChecks($this->policy->buildChecks($request->payload()));
 
-        return new CategoryCompletenessEvaluated(
+        return new CatalogCategoryCompletenessEvaluatedEvent(
             trim($request->categoryId()),
             $report->score(),
             $report->isComplete(),

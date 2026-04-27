@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
 use App\Cataloging\ServiceInterface\CategorySlugGeneratorInterface;
 use App\Cataloging\ValueObject\CategorySlugExistsRequest;
 use App\Cataloging\ValueObject\CategorySlugGenerationRequest;
@@ -18,7 +18,7 @@ final readonly class CategorySlugGenerator implements CategorySlugGeneratorInter
     /**
      * Initializes the category slug generator service collaborators.
      */
-    public function __construct(private CategoryRepositoryInterface $repo)
+    public function __construct(private CatalogCategoryRepositoryInterface $repo)
     {
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationFallbackAwarePackageGatedEventInterface;
 use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
@@ -19,5 +19,5 @@ interface CatalogSyndicationFallbackAwarePackageGateServiceInterface
      */
     public function buildGatedPublishPackage(
         CategorySyndicationPackageBuildRequest $request,
-    ): CategorySyndicationFallbackAwarePackageGatedInterface;
+    ): CatalogCategorySyndicationFallbackAwarePackageGatedEventInterface;
 }

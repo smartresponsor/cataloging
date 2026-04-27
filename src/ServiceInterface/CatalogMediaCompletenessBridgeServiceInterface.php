@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryCompletenessEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryCompletenessEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
 /**
@@ -13,5 +13,5 @@ use App\Cataloging\ValueObject\CategoryEvaluationRequest;
  */
 interface CatalogMediaCompletenessBridgeServiceInterface
 {
-    public function evaluate(CategoryEvaluationRequest $request): CategoryCompletenessEvaluatedInterface;
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryCompletenessEvaluatedEventInterface;
 }

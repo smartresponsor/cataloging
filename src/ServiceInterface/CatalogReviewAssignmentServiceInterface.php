@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryChangeRequestAssignedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryChangeRequestAssignedEventInterface;
 use App\Cataloging\ValueObject\CatalogCategoryReviewAssignmentEntityRequest;
 
 /**
@@ -16,5 +16,5 @@ interface CatalogReviewAssignmentServiceInterface
     /**
      * Handles the assign workflow.
      */
-    public function assign(CatalogCategoryReviewAssignmentEntityRequest $request): CategoryChangeRequestAssignedInterface;
+    public function assign(CatalogCategoryReviewAssignmentEntityRequest $request): CatalogCategoryChangeRequestAssignedEventInterface;
 }

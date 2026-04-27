@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 use App\Cataloging\Security\CategoryAuthorizationSubject;
 use App\Cataloging\Security\CategoryVoter;
 use Symfony\Bundle\SecurityBundle\Security;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryMediaBoundInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaBoundEventInterface;
 use App\Cataloging\ValueObject\CategoryMediaBindRequest;
 
 /**
@@ -13,5 +13,5 @@ use App\Cataloging\ValueObject\CategoryMediaBindRequest;
  */
 interface CatalogMediaGovernanceServiceInterface
 {
-    public function bind(CategoryMediaBindRequest $request): CategoryMediaBoundInterface;
+    public function bind(CategoryMediaBindRequest $request): CatalogCategoryMediaBoundEventInterface;
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategorySyndicationPackageGatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationPackageGatedEventInterface;
 use App\Cataloging\ValueObject\CategorySyndicationPackageBuildRequest;
 
 /**
@@ -18,5 +18,5 @@ interface CatalogSyndicationPackageGateServiceInterface
      */
     public function buildGatedPublishPackage(
         CategorySyndicationPackageBuildRequest $request,
-    ): CategorySyndicationPackageGatedInterface;
+    ): CatalogCategorySyndicationPackageGatedEventInterface;
 }

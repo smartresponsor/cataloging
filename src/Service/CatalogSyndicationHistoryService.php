@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CatalogSyndicationDestinationHistoryBuilt;
-use App\Cataloging\Event\CategorySyndicationRecoveryAuditConsolidated;
-use App\Cataloging\EventInterface\CatalogSyndicationDestinationHistoryBuiltInterface;
-use App\Cataloging\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationRecoveryAuditConsolidatedEvent;
+use App\Cataloging\Event\Catalog\CatalogSyndicationDestinationHistoryBuiltEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationRecoveryAuditConsolidatedEventInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDestinationHistoryBuiltEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
@@ -35,7 +35,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
      */
     public function buildDestinationHistory(
         CategorySyndicationHistoryRequest $request,
-    ): CatalogSyndicationDestinationHistoryBuiltInterface {
+    ): CatalogSyndicationDestinationHistoryBuiltEventInterface {
         $this->historyPolicy->assertDestinationId($request->destinationId());
         $filtered = $this->historyPolicy->recordsForDestination($request->destinationId(), $request->records());
 
@@ -86,7 +86,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
             $latestDeliveredAt,
         );
 
-        return new CatalogSyndicationDestinationHistoryBuilt([
+        return new CatalogSyndicationDestinationHistoryBuiltEvent([
             'destinationId' => $history->destinationId(),
             'packageIds' => $history->packageIds(),
             'categoryIds' => $history->categoryIds(),
@@ -108,7 +108,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
      */
     public function consolidateRecoveryAudit(
         CategorySyndicationHistoryRequest $request,
-    ): CategorySyndicationRecoveryAuditConsolidatedInterface {
+    ): CatalogCategorySyndicationRecoveryAuditConsolidatedEventInterface {
         $this->historyPolicy->assertDestinationId($request->destinationId());
         $filtered = $this->historyPolicy->recordsForDestination($request->destinationId(), $request->records());
 
@@ -154,7 +154,7 @@ final readonly class CatalogSyndicationHistoryService implements CatalogSyndicat
             array_keys($affectedCategoryIds),
         );
 
-        return new CategorySyndicationRecoveryAuditConsolidated([
+        return new CatalogCategorySyndicationRecoveryAuditConsolidatedEvent([
             'destinationId' => $summary->destinationId(),
             'totalFailed' => $summary->totalFailed(),
             'retryableFailed' => $summary->retryableFailed(),

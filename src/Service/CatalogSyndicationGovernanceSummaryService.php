@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
-use App\Cataloging\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationCategoryGovernanceSummaryBuiltEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationCategoryGovernanceSummaryBuiltEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use App\Cataloging\ValueObject\CategorySyndicationGovernanceSummaryRequest;
@@ -26,10 +26,10 @@ final readonly class CatalogSyndicationGovernanceSummaryService implements Catal
 
     public function buildSummary(
         CategorySyndicationGovernanceSummaryRequest $request,
-    ): CategorySyndicationCategoryGovernanceSummaryBuiltInterface {
+    ): CatalogCategorySyndicationCategoryGovernanceSummaryBuiltEventInterface {
         $summary = $this->policy->buildSummary($request->categoryId(), $request->trailPayloads());
 
-        return new CategorySyndicationCategoryGovernanceSummaryBuilt(
+        return new CatalogCategorySyndicationCategoryGovernanceSummaryBuiltEvent(
             [
                 'categoryId' => $summary->categoryId(),
                 'totalTrails' => $summary->totalTrails(),

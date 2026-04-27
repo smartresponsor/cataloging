@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationPackageGated;
-use App\Cataloging\EventInterface\CategorySyndicationPackageGatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationPackageGatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationPackageGatedEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationPackageGatePolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationMappingServiceInterface;
@@ -35,7 +35,7 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
      */
     public function buildGatedPublishPackage(
         CategorySyndicationPackageBuildRequest $request,
-    ): CategorySyndicationPackageGatedInterface {
+    ): CatalogCategorySyndicationPackageGatedEventInterface {
         $context = $request->context();
         $audit = $request->auditContext();
         $packagePayload = $this->mappingService->buildPublishPackage($request)->payload();
@@ -54,7 +54,7 @@ final readonly class CatalogSyndicationPackageGateService implements CatalogSynd
             $this->arrayValueNormalizer->stringList($mediaPayload['matchedBindingIds'] ?? null),
         );
 
-        return new CategorySyndicationPackageGated(
+        return new CatalogCategorySyndicationPackageGatedEvent(
             [
                 'packageId' => trim($context->packageId()),
                 'destinationId' => trim($context->destinationId()),

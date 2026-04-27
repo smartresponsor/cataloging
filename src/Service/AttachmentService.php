@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
-use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 
 /**
  * Provides the attachment service application service.

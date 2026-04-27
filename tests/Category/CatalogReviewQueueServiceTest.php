@@ -10,8 +10,8 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy;
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;
-use App\Cataloging\Repository\CatalogCategoryReviewAssignmentEntityRepository;
-use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryReviewAssignmentRepository;
 use App\Cataloging\Service\CatalogChangeRequestService;
 use App\Cataloging\Service\CatalogReviewAssignmentService;
 use App\Cataloging\Service\CatalogReviewQueueService;
@@ -25,8 +25,8 @@ final class CatalogReviewQueueServiceTest extends TestCase
 {
     public function testBuildsReadyQueueItemForAssignedReviewer(): void
     {
-        $changeRepository = new CategoryChangeRequestRepository();
-        $assignmentRepository = new CatalogCategoryReviewAssignmentEntityRepository();
+        $changeRepository = new CatalogCategoryChangeRequestRepository();
+        $assignmentRepository = new CatalogCategoryReviewAssignmentRepository();
         $requestService = new CatalogChangeRequestService($changeRepository, new CategoryChangeRequestPolicy());
         $assignmentService = new CatalogReviewAssignmentService(
             $changeRepository,
@@ -56,8 +56,8 @@ final class CatalogReviewQueueServiceTest extends TestCase
 
     public function testFlagsNotStartedRequestAsNotReady(): void
     {
-        $changeRepository = new CategoryChangeRequestRepository();
-        $assignmentRepository = new CatalogCategoryReviewAssignmentEntityRepository();
+        $changeRepository = new CatalogCategoryChangeRequestRepository();
+        $assignmentRepository = new CatalogCategoryReviewAssignmentRepository();
         $requestService = new CatalogChangeRequestService($changeRepository, new CategoryChangeRequestPolicy());
         $assignmentService = new CatalogReviewAssignmentService(
             $changeRepository,

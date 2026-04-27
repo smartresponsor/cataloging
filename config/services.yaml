@@ -19,13 +19,13 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Cataloging\Controller\StatusController:
+    App\Cataloging\Controller\Catalog\CatalogStatusController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\Admin\CategoryAdminController:
+    App\Cataloging\Controller\Catalog\CatalogCategoryAdminController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Controller\CategorySitemapController:
+    App\Cataloging\Controller\Catalog\CatalogCategorySitemapController:
         tags: [ 'controller.service_arguments' ]
 
     App\Cataloging\Security\JwtUserProvider:
@@ -40,7 +40,7 @@ services:
 
     App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Cataloging\Idempotency\CategoryIdempotencyStore'
 
-    App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface:
+    App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface:
         '@App\Cataloging\Repository\CategoryAccessAssignmentRepository'
 
 

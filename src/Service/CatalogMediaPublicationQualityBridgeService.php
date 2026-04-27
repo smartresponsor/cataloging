@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryPublicationQualityEvaluatedEventInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaPublicationQualityBridgeServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
@@ -30,7 +30,7 @@ final readonly class CatalogMediaPublicationQualityBridgeService implements Cata
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(CategoryEvaluationRequest $request): CategoryPublicationQualityEvaluatedInterface
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryPublicationQualityEvaluatedEventInterface
     {
         $completenessPayload = $this->completenessBridge->evaluate($request)->payload();
 

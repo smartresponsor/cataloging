@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity;
 
-use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogSyndicationDeliveryRecordEntityInterface;
 use App\Cataloging\ValueObjectInterface\CategorySyndicationDeliveryStatusInterface;
 
 /**
  * Represents the category syndication delivery record domain record.
  */
-final readonly class CatalogSyndicationDeliveryRecordEntity implements CatalogSyndicationDeliveryRecordInterface
+final readonly class CatalogSyndicationDeliveryRecordEntity implements CatalogSyndicationDeliveryRecordEntityInterface
 {
     /**
      * Initializes the category syndication delivery record service collaborators.

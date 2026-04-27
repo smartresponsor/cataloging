@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryCompletenessEvaluated;
-use App\Cataloging\EventInterface\CategoryCompletenessEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryCompletenessEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryCompletenessEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryCompletenessPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaCoverageServiceInterface;
@@ -30,7 +30,7 @@ final readonly class CatalogMediaCompletenessBridgeService implements CatalogMed
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(CategoryEvaluationRequest $request): CategoryCompletenessEvaluatedInterface
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryCompletenessEvaluatedEventInterface
     {
         $baseChecks = $this->completenessPolicy->buildChecks($request->payload());
         $mediaPayload = $this->mediaCoverageService->evaluate($request)->payload();
@@ -39,7 +39,7 @@ final readonly class CatalogMediaCompletenessBridgeService implements CatalogMed
 
         $report = CategoryCompletenessReport::fromChecks($mergedChecks);
 
-        return new CategoryCompletenessEvaluated(
+        return new CatalogCategoryCompletenessEvaluatedEvent(
             trim($request->categoryId()),
             $report->score(),
             $report->isComplete(),

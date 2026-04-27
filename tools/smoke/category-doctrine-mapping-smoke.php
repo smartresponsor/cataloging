@@ -5,8 +5,8 @@ $root = dirname(__DIR__, 2);
 $checks = [
     'doctrine-config' => $root . '/config/packages/catalog_doctrine.yaml',
     'schema-check' => $root . '/tools/migration/check-category-schema.php',
-    'entity-category' => $root . '/src/Entity/Category.php',
-    'entity-taxonomy' => $root . '/src/Entity/CatalogCategoryTaxonomyEntity.php',
+    'entity-category' => $root . '/src/Entity/Catalog/CatalogCategoryEntity.php',
+    'entity-taxonomy' => $root . '/src/Entity/Catalog/CatalogTaxonomyEntity.php',
 ];
 $missing = [];
 foreach ($checks as $label => $path) {

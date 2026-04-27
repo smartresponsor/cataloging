@@ -8,8 +8,8 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Event\CategoryDestinationMediaFallbackEvaluated;
 use App\Cataloging\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDestinationRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
 use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
@@ -23,7 +23,7 @@ final readonly class CatalogDestinationMediaFallbackService implements CatalogDe
      */
     public function __construct(
         private CatalogSyndicationDestinationRepositoryInterface $destinationRepository,
-        private CatalogCategoryMediaBindingEntityRepositoryInterface $bindingRepository,
+        private CatalogCategoryMediaBindingRepositoryInterface $bindingRepository,
         private CategoryDestinationMediaFallbackPolicyInterface $policy,
     ) {
     }

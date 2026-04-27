@@ -11,7 +11,7 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\Policy\CategoryCompletenessPolicy;
 use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
 use App\Cataloging\Service\CatalogMediaCompletenessBridgeService;
 use App\Cataloging\Service\CatalogMediaCoverageService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
@@ -26,7 +26,7 @@ final class CatalogMediaCompletenessBridgeServiceTest extends TestCase
 {
     public function testEvaluateUsesGovernedMediaBindingsForCompletenessChecks(): void
     {
-        $repository = new CatalogCategoryMediaBindingEntityRepository();
+        $repository = new CatalogCategoryMediaBindingRepository();
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $coverage = new CatalogMediaCoverageService($repository, new CategoryMediaCoveragePolicy());
         $service = new CatalogMediaCompletenessBridgeService(new CategoryCompletenessPolicy(), $coverage);

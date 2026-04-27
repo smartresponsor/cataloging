@@ -9,7 +9,7 @@ use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
 use App\Cataloging\Event\CatalogSyndicationDeliveryRecorded;
 use App\Cataloging\EventInterface\CatalogSyndicationDeliveryRecordedInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDeliveryRecordRequest;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;

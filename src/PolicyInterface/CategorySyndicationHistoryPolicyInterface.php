@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\PolicyInterface;
 
-use App\Cataloging\EntityInterface\CatalogSyndicationDeliveryRecordInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogSyndicationDeliveryRecordEntityInterface;
 
 /**
  * Defines the contract for category syndication history policy.
@@ -17,8 +17,8 @@ interface CategorySyndicationHistoryPolicyInterface
      */
     public function assertDestinationId(string $destinationId): void;
 
-    /** @param list<CatalogSyndicationDeliveryRecordInterface> $records
-     * @return list<CatalogSyndicationDeliveryRecordInterface>
+    /** @param list<CatalogSyndicationDeliveryRecordEntityInterface> $records
+     * @return list<CatalogSyndicationDeliveryRecordEntityInterface>
      */
     public function recordsForDestination(string $destinationId, array $records): array;
 }

@@ -23,7 +23,7 @@ final class CategoryMediaReadinessEvaluateCommandTest extends TestCase
         $service->expects(self::once())
             ->method('evaluate')
             ->with(self::callback(static fn (mixed $request): bool => $request instanceof CategoryDestinationMediaEvaluationRequest && 'cli-preview-destination' === $request->destinationId() && 'cat-1' === $request->categoryId() && 'ops' === $request->actorId() && 'check' === $request->reason()))
-            ->willReturn(new class implements \App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface {
+            ->willReturn(new class implements \App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaReadinessEvaluatedEventInterface {
                 /**
                  * @param array{publishable: bool, checks: array{destinationMediaPublishable: bool}} $payload
                  */

@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace App\Cataloging\Service\Traceability;
 
 use App\Cataloging\Projection\CategoryActorTraceabilityView;
-use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryWorkflowEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryWorkflowRepositoryInterface;
 use App\Cataloging\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface;
 
 /**
@@ -22,11 +22,11 @@ final readonly class CategoryActorTraceabilityViewBuilder implements CategoryAct
      * Initializes the category actor traceability view builder service collaborators.
      */
     public function __construct(
-        private CatalogCategoryAccessAssignmentEntityRepositoryInterface $accessAssignmentRepository,
-        private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $reviewAssignmentRepository,
-        private CatalogCategoryMediaBindingEntityRepositoryInterface $mediaBindingRepository,
-        private CatalogCategoryWorkflowEntityRepositoryInterface $workflowRepository,
+        private CatalogCategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository,
+        private CatalogCategoryChangeRequestRepositoryInterface $changeRequestRepository,
+        private CatalogCategoryReviewAssignmentRepositoryInterface $reviewAssignmentRepository,
+        private CatalogCategoryMediaBindingRepositoryInterface $mediaBindingRepository,
+        private CatalogCategoryWorkflowRepositoryInterface $workflowRepository,
     ) {
     }
 

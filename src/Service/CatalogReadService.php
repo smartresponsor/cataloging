@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Repository\CatalogRepository;
+use App\Cataloging\Repository\Catalog\CatalogRepository;
 use App\Cataloging\ServiceInterface\CatalogReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryCatalogReadNodeRequest;
 use App\Cataloging\ValueObject\CategoryCatalogReadPageRequest;

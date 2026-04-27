@@ -11,8 +11,6 @@ use App\Cataloging\ServiceInterface\GraphqlResolverInterface;
 use App\Cataloging\ValueObject\CategoryGraphqlMoveRequest;
 use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
 use App\Cataloging\ValueObject\CategoryGraphqlPublishRequest;
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -170,58 +168,6 @@ final readonly class GraphqlResolver implements GraphqlResolverInterface
         );
 
         return $rows;
-    }
-
-    /**
-     * @param list<string> $prefixes
-     *
-     * @return list<array<string,mixed>>
-     */
-    private function loadPathRowsFromConnection(array $prefixes): array
-    {
-        try {
-            $connection = $this->registry->getConnection('infra');
-        } catch (\Throwable) {
-            return [];
-        }
-
-        if (!$connection instanceof Connection) {
-            return [];
-        }
-
-        $rows = $connection->fetchAllAssociative(
-            'SELECT id, parent_id, slug, name, locale, workflow_state, published, path
-             FROM category_projection
-             WHERE path IN (?) ORDER BY path ASC',
-            [$prefixes],
-            [ArrayParameterType::STRING],
-        );
-
-        $normalized = [];
-        foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
-            $normalized[] = [
-                'id' => $row['id'] ?? '',
-                'parent_id' => $row['parent_id'] ?? null,
-                'slug' => $row['slug'] ?? '',
-                'name' => $row['name'] ?? '',
-                'locale' => $row['locale'] ?? 'en',
-                'workflow_state' => $row['workflow_state'] ?? 'draft',
-                'published' => $row['published'] ?? false,
-                'path' => $row['path'] ?? '',
-            ];
-        }
-
-        usort(
-            $normalized,
-            static fn (array $left, array $right): int => [strlen((string) ($left['path'] ?? '')), (string) ($left['path'] ?? '')]
-                <=> [strlen((string) ($right['path'] ?? '')), (string) ($right['path'] ?? '')],
-        );
-
-        return $normalized;
     }
 
     private function entityManager(): ?EntityManagerInterface

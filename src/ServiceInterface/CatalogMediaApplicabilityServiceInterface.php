@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaApplicabilityEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
 /**
@@ -13,5 +13,5 @@ use App\Cataloging\ValueObject\CategoryEvaluationRequest;
  */
 interface CatalogMediaApplicabilityServiceInterface
 {
-    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaApplicabilityEvaluatedInterface;
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryMediaApplicabilityEvaluatedEventInterface;
 }

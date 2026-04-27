@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity;
 
-use App\Cataloging\EntityInterface\CatalogSyndicationDestinationEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogSyndicationDestinationEntityInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationConfiguration;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationDefinition;
 

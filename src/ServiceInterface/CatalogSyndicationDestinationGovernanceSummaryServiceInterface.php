@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CatalogSyndicationDestinationGovernanceSummaryBuiltInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDestinationGovernanceSummaryBuiltEventInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationGovernanceSummaryRequest;
 
 /**
@@ -16,5 +16,5 @@ interface CatalogSyndicationDestinationGovernanceSummaryServiceInterface
 {
     public function buildSummary(
         CatalogSyndicationDestinationGovernanceSummaryRequest $request,
-    ): CatalogSyndicationDestinationGovernanceSummaryBuiltInterface;
+    ): CatalogSyndicationDestinationGovernanceSummaryBuiltEventInterface;
 }

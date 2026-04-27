@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Security;
 
-use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
 use App\Cataloging\Service\Security\CategoryRole;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -19,7 +19,7 @@ final class CategoryVoter extends Voter
      * Initializes the category voter service collaborators.
      */
     public function __construct(
-        private readonly ?CatalogCategoryAccessAssignmentEntityRepositoryInterface $accessAssignmentRepository = null,
+        private readonly ?CatalogCategoryAccessAssignmentRepositoryInterface $accessAssignmentRepository = null,
     ) {
     }
 

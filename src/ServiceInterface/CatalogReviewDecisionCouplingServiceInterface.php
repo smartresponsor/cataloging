@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryReviewDecisionCoupledInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryReviewDecisionCoupledEventInterface;
 use App\Cataloging\ValueObject\CategoryReviewDecisionCouplingRequest;
 
 /**
@@ -13,5 +13,5 @@ use App\Cataloging\ValueObject\CategoryReviewDecisionCouplingRequest;
  */
 interface CatalogReviewDecisionCouplingServiceInterface
 {
-    public function couple(CategoryReviewDecisionCouplingRequest $request): CategoryReviewDecisionCoupledInterface;
+    public function couple(CategoryReviewDecisionCouplingRequest $request): CatalogCategoryReviewDecisionCoupledEventInterface;
 }

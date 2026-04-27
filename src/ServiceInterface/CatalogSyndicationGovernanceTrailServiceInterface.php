@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationGovernanceTrailRecordedEventInterface;
 use App\Cataloging\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
 
 /**
@@ -15,5 +15,5 @@ interface CatalogSyndicationGovernanceTrailServiceInterface
 {
     public function recordTrail(
         CategorySyndicationGovernanceTrailRecordRequest $request,
-    ): CategorySyndicationGovernanceTrailRecordedInterface;
+    ): CatalogCategorySyndicationGovernanceTrailRecordedEventInterface;
 }

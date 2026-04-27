@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryPublicationGateEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryPublicationGateEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryPublicationGateAssertionRequest;
 use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
 
@@ -14,7 +14,7 @@ use App\Cataloging\ValueObject\CategoryPublicationGateEvaluationRequest;
  */
 interface CatalogPublicationGateServiceInterface
 {
-    public function evaluate(CategoryPublicationGateEvaluationRequest $request): CategoryPublicationGateEvaluatedInterface;
+    public function evaluate(CategoryPublicationGateEvaluationRequest $request): CatalogCategoryPublicationGateEvaluatedEventInterface;
 
     public function assertCanPublish(CategoryPublicationGateAssertionRequest $request): void;
 }

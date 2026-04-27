@@ -5,10 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service\Security;
 
+use App\Cataloging\ServiceInterface\Security\SecurityJwkCacheInterface;
+
 /**
  * Provides the jwk cache application service.
  */
-final readonly class JwkCache
+final readonly class JwkCache implements SecurityJwkCacheInterface
 {
     /**
      * Initializes the jwk cache service collaborators.

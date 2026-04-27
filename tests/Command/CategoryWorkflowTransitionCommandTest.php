@@ -11,7 +11,7 @@ namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategoryWorkflowTransitionCommand;
 use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
-use App\Cataloging\Repository\CatalogCategoryWorkflowEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryWorkflowRepository;
 use App\Cataloging\Service\CatalogWorkflowTransitionService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -20,7 +20,7 @@ final class CategoryWorkflowTransitionCommandTest extends TestCase
 {
     public function testExecutePrintsTransitionPayload(): void
     {
-        $repository = new CatalogCategoryWorkflowEntityRepository();
+        $repository = new CatalogCategoryWorkflowRepository();
         $service = new CatalogWorkflowTransitionService($repository, new CatalogCategoryWorkflowEntityPolicy());
         $command = new CategoryWorkflowTransitionCommand($service);
 

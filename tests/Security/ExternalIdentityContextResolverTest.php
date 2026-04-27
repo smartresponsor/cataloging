@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Security;
 
-use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\Service\Security\ExternalIdentityContextResolver;
 use App\Cataloging\ServiceInterface\OidcJwtValidatorInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
+use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

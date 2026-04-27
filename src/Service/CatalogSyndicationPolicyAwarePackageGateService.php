@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationPolicyAwarePackageGated;
-use App\Cataloging\EventInterface\CategorySyndicationPolicyAwarePackageGatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationPolicyAwarePackageGatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationPolicyAwarePackageGatedEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationPolicyAwarePackageGatePolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
@@ -32,7 +32,7 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
 
     public function buildGatedPublishPackage(
         CategorySyndicationPackageBuildRequest $request,
-    ): CategorySyndicationPolicyAwarePackageGatedInterface {
+    ): CatalogCategorySyndicationPolicyAwarePackageGatedEventInterface {
         $context = $request->context();
         $audit = $request->auditContext();
         $fallbackAware = $this->fallbackAwareGateService->buildGatedPublishPackage($request)->payload();
@@ -49,7 +49,7 @@ final readonly class CatalogSyndicationPolicyAwarePackageGateService implements 
             $fallbackAware,
         );
 
-        return new CategorySyndicationPolicyAwarePackageGated([
+        return new CatalogCategorySyndicationPolicyAwarePackageGatedEvent([
             'packageId' => trim($context->packageId()),
             'destinationId' => trim($context->destinationId()),
             'categoryId' => trim($context->categoryId()),

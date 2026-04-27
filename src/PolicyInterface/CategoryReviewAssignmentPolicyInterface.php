@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\PolicyInterface;
 
-use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
 
 /**
  * Defines the contract for category review assignment policy.
@@ -16,7 +16,7 @@ interface CatalogCategoryReviewAssignmentEntityPolicyInterface
      * Determines whether the current workflow can assign.
      */
     public function canAssign(
-        CategoryChangeRequestInterface $request,
+        CatalogCategoryChangeRequestEntityInterface $request,
         string $assignedReviewer,
         string $assignedBy,
         string $priority,
@@ -26,7 +26,7 @@ interface CatalogCategoryReviewAssignmentEntityPolicyInterface
      * Handles the assert can assign workflow.
      */
     public function assertCanAssign(
-        CategoryChangeRequestInterface $request,
+        CatalogCategoryChangeRequestEntityInterface $request,
         string $assignedReviewer,
         string $assignedBy,
         string $priority,

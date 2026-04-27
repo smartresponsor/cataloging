@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CatalogSyndicationDestinationRegisteredInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDestinationRegisteredEventInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationRegisterRequest;
 
 /**
@@ -15,5 +15,5 @@ interface CatalogSyndicationDestinationServiceInterface
 {
     public function register(
         CatalogSyndicationDestinationRegisterRequest $request,
-    ): CatalogSyndicationDestinationRegisteredInterface;
+    ): CatalogSyndicationDestinationRegisteredEventInterface;
 }

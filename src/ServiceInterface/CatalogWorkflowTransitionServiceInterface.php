@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CatalogCategoryWorkflowEntityTransitionedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryWorkflowEntityTransitionedEventInterface;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
 
 /**
@@ -16,5 +16,5 @@ interface CatalogWorkflowTransitionServiceInterface
     /**
      * Handles the transition workflow.
      */
-    public function transition(CatalogCategoryWorkflowEntityTransitionRequest $request): CatalogCategoryWorkflowEntityTransitionedInterface;
+    public function transition(CatalogCategoryWorkflowEntityTransitionRequest $request): CatalogCategoryWorkflowEntityTransitionedEventInterface;
 }

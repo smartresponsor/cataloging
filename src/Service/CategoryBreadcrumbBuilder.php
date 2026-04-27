@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
 use App\Cataloging\ServiceInterface\CategoryBreadcrumbBuilderInterface;
 
 /**
@@ -16,7 +16,7 @@ final readonly class CategoryBreadcrumbBuilder implements CategoryBreadcrumbBuil
     /**
      * Initializes the category breadcrumb builder service collaborators.
      */
-    public function __construct(private CategoryRepositoryInterface $repo)
+    public function __construct(private CatalogCategoryRepositoryInterface $repo)
     {
     }
 

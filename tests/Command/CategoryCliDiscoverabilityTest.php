@@ -18,7 +18,7 @@ use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
 use App\Cataloging\Command\CategorySyndicationPackagePreviewCommand;
 use App\Cataloging\Command\CategorySyndicationRetryScheduleCommand;
 use App\Cataloging\Command\CategoryWorkflowTransitionCommand;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\Service\ArrayValueNormalizer;
 use App\Cataloging\ServiceInterface\CatalogCompletenessServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;

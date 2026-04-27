@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Service\Governance;
 
 use App\Cataloging\Projection\CategoryGovernanceView;
-use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
 use App\Cataloging\Service\Security\CategoryRole;
 use App\Cataloging\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
 
@@ -18,7 +18,7 @@ final readonly class CategoryGovernanceViewBuilder implements CategoryGovernance
     /**
      * Initializes the category governance view builder service collaborators.
      */
-    public function __construct(private CatalogCategoryAccessAssignmentEntityRepositoryInterface $assignmentRepository)
+    public function __construct(private CatalogCategoryAccessAssignmentRepositoryInterface $assignmentRepository)
     {
     }
 

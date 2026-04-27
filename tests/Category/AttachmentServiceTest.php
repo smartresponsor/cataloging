@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
-use App\Cataloging\RepositoryInterface\CatalogAttachmentRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 use App\Cataloging\Service\AttachmentService;
 use PHPUnit\Framework\TestCase;
 

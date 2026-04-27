@@ -24,6 +24,8 @@ What is still transitional:
 - `docs/catalog-doc-entry.md`
 - `docs/catalog-current-status.md`
 - `docs/canon/catalog-structural-debt-register.md`
+- `AGENTS.md`
+- `docs/canon/catalog-layer3-naming-contract.md`
 
 ## API contracts
 

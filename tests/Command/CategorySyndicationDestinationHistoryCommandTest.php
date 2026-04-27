@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CatalogSyndicationDestinationHistoryCommand;
-use App\Cataloging\Event\CatalogSyndicationDestinationHistoryBuilt;
+use App\Cataloging\Event\Catalog\CatalogSyndicationDestinationHistoryBuiltEvent;
 use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -20,7 +20,7 @@ final class CategorySyndicationDestinationHistoryCommandTest extends TestCase
     public function testExecutePrintsHistorySummary(): void
     {
         $service = $this->createMock(CatalogSyndicationHistoryServiceInterface::class);
-        $service->method('buildDestinationHistory')->willReturn(new CatalogSyndicationDestinationHistoryBuilt([
+        $service->method('buildDestinationHistory')->willReturn(new CatalogSyndicationDestinationHistoryBuiltEvent([
             'destinationId' => 'dest-1', 'totalRecords' => 2, 'failedCount' => 1,
         ], new \DateTimeImmutable()));
 

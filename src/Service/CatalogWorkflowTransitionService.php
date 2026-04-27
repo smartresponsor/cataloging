@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Entity\CatalogCategoryWorkflowEntity;
 use App\Cataloging\Event\CatalogCategoryWorkflowEntityTransitioned;
 use App\Cataloging\PolicyInterface\CatalogCategoryWorkflowEntityPolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryWorkflowEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryWorkflowRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityTransitionRequest;
@@ -22,7 +22,7 @@ final readonly class CatalogWorkflowTransitionService implements CatalogWorkflow
      * Initializes the catalog workflow transition service service collaborators.
      */
     public function __construct(
-        private CatalogCategoryWorkflowEntityRepositoryInterface $repository,
+        private CatalogCategoryWorkflowRepositoryInterface $repository,
         private CatalogCategoryWorkflowEntityPolicyInterface $policy,
     ) {
     }

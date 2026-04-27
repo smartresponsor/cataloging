@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\Service\CategoryMutationAuthorizationService;
 use App\Cataloging\Service\CategoryTenantAccessEvaluator;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
+use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;

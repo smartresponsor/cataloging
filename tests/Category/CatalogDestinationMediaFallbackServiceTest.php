@@ -10,8 +10,8 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
-use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
+use App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
 use App\Cataloging\Service\CatalogSyndicationDestinationService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
@@ -25,7 +25,7 @@ final class CatalogDestinationMediaFallbackServiceTest extends TestCase
 {
     public function testEvaluateBuildsFallbackAwareDestinationMediaReport(): void
     {
-        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingRepository();
         $destinationRepository = new CatalogSyndicationDestinationRepository();
 
         $destinationService = new CatalogSyndicationDestinationService(new CatalogSyndicationDestinationPolicy(), $destinationRepository);

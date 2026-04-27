@@ -10,7 +10,7 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
 use App\Cataloging\Service\CatalogMediaApplicabilityService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
@@ -24,7 +24,7 @@ final class CatalogMediaApplicabilityServiceTest extends TestCase
 {
     public function testEvaluateReturnsChannelAndLocaleScopedCoverage(): void
     {
-        $repository = new CatalogCategoryMediaBindingEntityRepository();
+        $repository = new CatalogCategoryMediaBindingRepository();
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $applicability = new CatalogMediaApplicabilityService($repository, new CategoryMediaApplicabilityPolicy());
 
@@ -49,7 +49,7 @@ final class CatalogMediaApplicabilityServiceTest extends TestCase
 
     public function testEvaluateReportsMissingScopedRoleCoverage(): void
     {
-        $repository = new CatalogCategoryMediaBindingEntityRepository();
+        $repository = new CatalogCategoryMediaBindingRepository();
         $governance = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
         $applicability = new CatalogMediaApplicabilityService($repository, new CategoryMediaApplicabilityPolicy());
 

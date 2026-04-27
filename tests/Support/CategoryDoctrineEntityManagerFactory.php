@@ -29,7 +29,7 @@ final class CategoryDoctrineEntityManagerFactory
         }
 
         $config = ORMSetup::createAttributeMetadataConfiguration(
-            [dirname(__DIR__, 2).'/src/Entity'],
+            [dirname(__DIR__, 2).'/src/Entity/Catalog'],
             true,
         );
         $config->enableNativeLazyObjects(true);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaFallbackEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryDestinationMediaEvaluationRequest;
 
 /**
@@ -18,5 +18,5 @@ interface CatalogDestinationMediaFallbackServiceInterface
      */
     public function evaluate(
         CategoryDestinationMediaEvaluationRequest $request,
-    ): CategoryDestinationMediaFallbackEvaluatedInterface;
+    ): CatalogCategoryDestinationMediaFallbackEvaluatedEventInterface;
 }

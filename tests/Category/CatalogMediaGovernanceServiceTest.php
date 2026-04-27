@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
 use App\Cataloging\ValueObject\CatalogAuditContext;
 use App\Cataloging\ValueObject\CatalogCategoryMediaBindingEntityScope;
@@ -21,7 +21,7 @@ final class CatalogMediaGovernanceServiceTest extends TestCase
 {
     public function testBindReturnsMediaBindingEventWithNormalizedPayload(): void
     {
-        $repository = new CatalogCategoryMediaBindingEntityRepository();
+        $repository = new CatalogCategoryMediaBindingRepository();
         $service = new CatalogMediaGovernanceService($repository, new CategoryMediaGovernancePolicy());
 
         $payload = $this->normalizePayload($service->bind(

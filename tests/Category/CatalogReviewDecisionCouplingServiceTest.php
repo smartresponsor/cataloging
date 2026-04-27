@@ -11,8 +11,8 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
-use App\Cataloging\Repository\CatalogCategoryWorkflowEntityRepository;
-use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryWorkflowRepository;
 use App\Cataloging\Service\CatalogChangeRequestService;
 use App\Cataloging\Service\CatalogPublicationGateService;
 use App\Cataloging\Service\CatalogReviewDecisionCouplingService;
@@ -26,8 +26,8 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
 {
     public function testAcceptedReviewTransitionsWorkflowAndEvaluatesReadiness(): void
     {
-        $changeRequestRepository = new CategoryChangeRequestRepository();
-        $workflowRepository = new CatalogCategoryWorkflowEntityRepository();
+        $changeRequestRepository = new CatalogCategoryChangeRequestRepository();
+        $workflowRepository = new CatalogCategoryWorkflowRepository();
 
         $changeRequestService = new CatalogChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
         $workflowService = new CatalogWorkflowTransitionService($workflowRepository, new CatalogCategoryWorkflowEntityPolicy());
@@ -74,8 +74,8 @@ final class CatalogReviewDecisionCouplingServiceTest extends TestCase
 
     public function testRejectedReviewReturnsCategoryToDraftAndMarksNotPublishable(): void
     {
-        $changeRequestRepository = new CategoryChangeRequestRepository();
-        $workflowRepository = new CatalogCategoryWorkflowEntityRepository();
+        $changeRequestRepository = new CatalogCategoryChangeRequestRepository();
+        $workflowRepository = new CatalogCategoryWorkflowRepository();
 
         $changeRequestService = new CatalogChangeRequestService($changeRequestRepository, new CategoryChangeRequestPolicy());
         $workflowService = new CatalogWorkflowTransitionService($workflowRepository, new CatalogCategoryWorkflowEntityPolicy());

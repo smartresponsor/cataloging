@@ -11,7 +11,7 @@ namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
 use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
-use App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;

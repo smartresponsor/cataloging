@@ -14,8 +14,8 @@ use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
 use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
 use App\Cataloging\Policy\CategorySyndicationPackageGatePolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
-use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
+use App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
 use App\Cataloging\Service\CatalogMediaApplicabilityService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
@@ -37,7 +37,7 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
 {
     public function testBuildGatedPublishPackageCombinesMappingAndDestinationMediaReadiness(): void
     {
-        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingRepository();
         $destinationRepository = new CatalogSyndicationDestinationRepository();
 
         $governance = new CatalogMediaGovernanceService($bindingRepository, new CategoryMediaGovernancePolicy());

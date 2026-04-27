@@ -13,8 +13,8 @@ use App\Cataloging\Entity\CatalogSyndicationDestinationEntity;
 use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
-use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
+use App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
 use App\Cataloging\Service\CatalogDestinationMediaPolicyPreferenceService;
 use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
@@ -50,7 +50,7 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
             'operator-1',
         ));
 
-        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingRepository();
         $bindingRepository->save(new CatalogCategoryMediaBindingEntity(
             'binding-global-primary',
             'category-1901',

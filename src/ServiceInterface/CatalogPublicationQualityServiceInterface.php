@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryPublicationQualityEvaluatedEventInterface;
 use App\Cataloging\ValueObject\CategoryPublicationQualityEvaluationRequest;
 
 /**
@@ -18,5 +18,5 @@ interface CatalogPublicationQualityServiceInterface
      */
     public function evaluate(
         CategoryPublicationQualityEvaluationRequest $request,
-    ): CategoryPublicationQualityEvaluatedInterface;
+    ): CatalogCategoryPublicationQualityEvaluatedEventInterface;
 }

@@ -23,20 +23,20 @@ services:
       $jwkSet: '%catalog.oidc_jwk_set%'
       $audience: '%catalog.oidc_audience%'
       $issuer: '%catalog.oidc_issuer%'
-  App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface:
-    alias: App\Cataloging\Repository\CategoryChangeRequestRepository
+  App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface:
+    alias: App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository
 
-  App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface:
+  App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface:
     alias: App\Cataloging\Repository\CategoryReviewAssignmentRepository
-  App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface:
+  App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface:
     alias: App\Cataloging\Repository\CategoryAccessAssignmentRepository
-  App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface:
+  App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface:
     alias: App\Cataloging\Repository\CategoryMediaBindingRepository
-  App\Cataloging\RepositoryInterface\CatalogCategoryWorkflowEntityRepositoryInterface:
+  App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryWorkflowRepositoryInterface:
     alias: App\Cataloging\Repository\CategoryWorkflowRepository
-  App\Cataloging\RepositoryInterface\CatalogSyndicationDeliveryRecordRepositoryInterface:
+  App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface:
     alias: App\Cataloging\Repository\SyndicationDeliveryRecordRepository
-  App\Cataloging\RepositoryInterface\CatalogSyndicationDestinationRepositoryInterface:
+  App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface:
     alias: App\Cataloging\Repository\SyndicationDestinationRepository
 
   App\Cataloging\PolicyInterface\CatalogSyndicationDestinationPolicyInterface:

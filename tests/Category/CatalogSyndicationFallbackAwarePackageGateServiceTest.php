@@ -16,8 +16,8 @@ use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
 use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
 use App\Cataloging\Policy\CategorySyndicationFallbackAwarePackageGatePolicy;
 use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
-use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
+use App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
 use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
 use App\Cataloging\Service\CatalogMediaApplicabilityService;
@@ -54,7 +54,7 @@ final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCa
             'operator-1',
         ));
 
-        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingRepository();
         $bindingRepository->save(new CatalogCategoryMediaBindingEntity(
             'bind-1',
             'cat-1',

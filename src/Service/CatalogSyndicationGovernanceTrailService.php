@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategorySyndicationGovernanceTrailRecorded;
-use App\Cataloging\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationGovernanceTrailRecordedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationGovernanceTrailRecordedEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceTrailServiceInterface;
 use App\Cataloging\ValueObject\CategorySyndicationGovernanceTrailRecordRequest;
@@ -25,7 +25,7 @@ final readonly class CatalogSyndicationGovernanceTrailService implements Catalog
 
     public function recordTrail(
         CategorySyndicationGovernanceTrailRecordRequest $request,
-    ): CategorySyndicationGovernanceTrailRecordedInterface {
+    ): CatalogCategorySyndicationGovernanceTrailRecordedEventInterface {
         $payloadSet = $request->payloadSet();
         $audit = $request->auditContext();
 
@@ -36,7 +36,7 @@ final readonly class CatalogSyndicationGovernanceTrailService implements Catalog
             $payloadSet->recoveryPayload(),
         );
 
-        return new CategorySyndicationGovernanceTrailRecorded([
+        return new CatalogCategorySyndicationGovernanceTrailRecordedEvent([
             'destinationId' => $report->destinationId(),
             'categoryId' => $report->categoryId(),
             'mediaPolicyMode' => $report->mediaPolicyMode(),

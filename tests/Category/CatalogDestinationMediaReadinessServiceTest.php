@@ -12,8 +12,8 @@ use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
 use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
 use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
-use App\Cataloging\Repository\CatalogCategoryMediaBindingEntityRepository;
-use App\Cataloging\Repository\CatalogSyndicationDestinationRepository;
+use App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository;
+use App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository;
 use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
 use App\Cataloging\Service\CatalogMediaApplicabilityService;
 use App\Cataloging\Service\CatalogMediaGovernanceService;
@@ -32,7 +32,7 @@ final class CatalogDestinationMediaReadinessServiceTest extends TestCase
 {
     public function testEvaluateBuildsDestinationScopedMediaReadiness(): void
     {
-        $bindingRepository = new CatalogCategoryMediaBindingEntityRepository();
+        $bindingRepository = new CatalogCategoryMediaBindingRepository();
         $destinationRepository = new CatalogSyndicationDestinationRepository();
 
         $governance = new CatalogMediaGovernanceService($bindingRepository, new CategoryMediaGovernancePolicy());

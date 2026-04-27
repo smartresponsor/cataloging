@@ -7,4 +7,4 @@ security:
             provider: category_jwt
     providers:
         category_jwt:
-            id: App\Cataloging\Security\JwtUserProvider
+            id: App\Cataloging\UserProvider\JwtUserProvider

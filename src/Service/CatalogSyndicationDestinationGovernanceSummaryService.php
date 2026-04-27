@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CatalogSyndicationDestinationGovernanceSummaryBuilt;
-use App\Cataloging\EventInterface\CatalogSyndicationDestinationGovernanceSummaryBuiltInterface;
+use App\Cataloging\Event\Catalog\CatalogSyndicationDestinationGovernanceSummaryBuiltEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDestinationGovernanceSummaryBuiltEventInterface;
 use App\Cataloging\PolicyInterface\CatalogSyndicationDestinationGovernanceSummaryPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface;
 use App\Cataloging\ValueObject\CatalogSyndicationDestinationGovernanceSummaryRequest;
@@ -26,10 +26,10 @@ final readonly class CatalogSyndicationDestinationGovernanceSummaryService imple
 
     public function buildSummary(
         CatalogSyndicationDestinationGovernanceSummaryRequest $request,
-    ): CatalogSyndicationDestinationGovernanceSummaryBuiltInterface {
+    ): CatalogSyndicationDestinationGovernanceSummaryBuiltEventInterface {
         $summary = $this->policy->buildSummary($request->destinationId(), $request->trailPayloads());
 
-        return new CatalogSyndicationDestinationGovernanceSummaryBuilt(
+        return new CatalogSyndicationDestinationGovernanceSummaryBuiltEvent(
             [
                 'destinationId' => $summary->destinationId(),
                 'totalTrails' => $summary->totalTrails(),

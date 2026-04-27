@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
-use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryAccessAssignmentEntityRepositoryInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryAccessAssignmentEntityInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogAccessAssignmentServiceInterface;
 use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntityRequest;
 use App\Cataloging\ValueObject\CatalogCategoryAccessAssignmentEntitySelection;
@@ -21,7 +21,7 @@ final readonly class CatalogAccessAssignmentService implements CatalogAccessAssi
     /**
      * Initializes the catalog access assignment service service collaborators.
      */
-    public function __construct(private CatalogCategoryAccessAssignmentEntityRepositoryInterface $repository)
+    public function __construct(private CatalogCategoryAccessAssignmentRepositoryInterface $repository)
     {
     }
 

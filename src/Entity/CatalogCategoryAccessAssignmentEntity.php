@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity;
 
-use App\Cataloging\EntityInterface\CatalogCategoryAccessAssignmentEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryAccessAssignmentEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Random\RandomException;
 

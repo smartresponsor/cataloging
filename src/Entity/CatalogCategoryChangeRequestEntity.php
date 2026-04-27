@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity;
 
-use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use App\Cataloging\ValueObjectInterface\CategoryChangeRequestStateInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'category_change_request')]
 #[ORM\Index(name: 'idx_category_change_request_category_state', columns: ['category_id', 'state'])]
-final class CatalogCategoryChangeRequestEntity implements CategoryChangeRequestInterface
+final class CatalogCategoryChangeRequestEntity implements CatalogCategoryChangeRequestEntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'request_id', type: 'string', length: 64)]

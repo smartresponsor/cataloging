@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface\Security;
 
-use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

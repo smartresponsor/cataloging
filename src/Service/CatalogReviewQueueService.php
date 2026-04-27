@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\EntityInterface\CatalogCategoryReviewAssignmentEntityInterface;
-use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryReviewAssignmentEntityInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use App\Cataloging\ValueObject\CategoryReviewQueueItem;
@@ -23,8 +23,8 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
      * Initializes the catalog review queue service service collaborators.
      */
     public function __construct(
-        private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $assignmentRepository,
+        private CatalogCategoryChangeRequestRepositoryInterface $changeRequestRepository,
+        private CatalogCategoryReviewAssignmentRepositoryInterface $assignmentRepository,
     ) {
     }
 
@@ -38,7 +38,7 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
         foreach ($this->assignmentRepository->findByReviewer($request->reviewer()) as $assignment) {
             $changeRequest = $this->changeRequestRepository->findByRequestId($assignment->requestId());
 
-            if (!$changeRequest instanceof CategoryChangeRequestInterface) {
+            if (!$changeRequest instanceof CatalogCategoryChangeRequestEntityInterface) {
                 continue;
             }
 
@@ -54,7 +54,7 @@ final readonly class CatalogReviewQueueService implements CatalogReviewQueueServ
 
     private function buildQueueItem(
         CatalogCategoryReviewAssignmentEntityInterface $assignment,
-        CategoryChangeRequestInterface $changeRequest,
+        CatalogCategoryChangeRequestEntityInterface $changeRequest,
     ): CategoryReviewQueueItem {
         $warnings = [];
         $state = $changeRequest->state()->value();

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity;
 
-use App\Cataloging\EntityInterface\CatalogCategoryMediaBindingEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryMediaBindingEntityInterface;
 use App\Cataloging\ValueObject\CategoryMediaRole;
 use App\Cataloging\ValueObjectInterface\CategoryMediaRoleInterface;
 use Doctrine\ORM\Mapping as ORM;

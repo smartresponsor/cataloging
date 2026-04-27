@@ -10,7 +10,7 @@ use App\Cataloging\Event\CategoryCreated;
 use App\Cataloging\Event\CategoryMoved;
 use App\Cataloging\Event\CategoryUnlinked;
 use App\Cataloging\PolicyInterface\CategoryPolicyInterface;
-use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
 use App\Cataloging\ServiceInterface\CategoryServiceInterface as CategoryCategoryServiceInterface;
 use App\Cataloging\ServiceInterface\CategorySlugGeneratorInterface;
 use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
@@ -27,7 +27,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  */
 final class CategoryService implements CategoryCategoryServiceInterface
 {
-    private CategoryRepositoryInterface $repo;
+    private CatalogCategoryRepositoryInterface $repo;
     private CategoryPolicyInterface $policy;
     private CategorySlugGeneratorInterface $slugger;
     private EventDispatcherInterface $dispatcher;
@@ -36,7 +36,7 @@ final class CategoryService implements CategoryCategoryServiceInterface
      * Initializes the category service service collaborators.
      */
     public function __construct(
-        CategoryRepositoryInterface $repo,
+        CatalogCategoryRepositoryInterface $repo,
         CategoryPolicyInterface $policy,
         CategorySlugGeneratorInterface $slugger,
         EventDispatcherInterface $dispatcher,

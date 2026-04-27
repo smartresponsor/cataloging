@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\Event\CategoryChangeRequestReviewed;
 use App\Cataloging\PolicyInterface\CategoryChangeRequestPolicyInterface;
-use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
@@ -23,7 +23,7 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
      * Initializes the catalog change request service service collaborators.
      */
     public function __construct(
-        private CategoryChangeRequestRepositoryInterface $repository,
+        private CatalogCategoryChangeRequestRepositoryInterface $repository,
         private CategoryChangeRequestPolicyInterface $policy,
     ) {
     }

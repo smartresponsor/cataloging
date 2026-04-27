@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity;
 
-use App\Cataloging\EntityInterface\CatalogCategoryWorkflowEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryWorkflowEntityInterface;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
 use App\Cataloging\ValueObjectInterface\CatalogCategoryWorkflowEntityStateInterface;
 use Doctrine\ORM\Mapping as ORM;

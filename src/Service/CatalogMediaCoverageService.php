@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Event\CategoryMediaCoverageEvaluated;
 use App\Cataloging\EventInterface\CategoryMediaCoverageEvaluatedInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaCoveragePolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryMediaBindingEntityRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaCoverageServiceInterface;
 use App\Cataloging\ValueObject\CategoryEvaluationRequest;
 
@@ -21,7 +21,7 @@ final readonly class CatalogMediaCoverageService implements CatalogMediaCoverage
      * Initializes the catalog media coverage service service collaborators.
      */
     public function __construct(
-        private CatalogCategoryMediaBindingEntityRepositoryInterface $repository,
+        private CatalogCategoryMediaBindingRepositoryInterface $repository,
         private CategoryMediaCoveragePolicyInterface $policy,
     ) {
     }

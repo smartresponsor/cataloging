@@ -9,8 +9,8 @@ use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\Entity\CatalogCategoryReviewAssignmentEntity;
 use App\Cataloging\Event\CategoryChangeRequestAssigned;
 use App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface;
-use App\Cataloging\RepositoryInterface\CatalogCategoryReviewAssignmentEntityRepositoryInterface;
-use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
+use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogReviewAssignmentServiceInterface;
 use App\Cataloging\ValueObject\CatalogCategoryReviewAssignmentEntityRequest;
 
@@ -23,8 +23,8 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
      * Initializes the catalog review assignment service service collaborators.
      */
     public function __construct(
-        private CategoryChangeRequestRepositoryInterface $changeRequestRepository,
-        private CatalogCategoryReviewAssignmentEntityRepositoryInterface $assignmentRepository,
+        private CatalogCategoryChangeRequestRepositoryInterface $changeRequestRepository,
+        private CatalogCategoryReviewAssignmentRepositoryInterface $assignmentRepository,
         private CatalogCategoryReviewAssignmentEntityPolicyInterface $policy,
     ) {
     }
