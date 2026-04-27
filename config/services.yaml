@@ -33,10 +33,10 @@ services:
             $defaultRoles: [ 'ROLE_USER' ]
             $adminIdentifiers: '%env(csv:CATEGORY_API_ADMIN_IDENTIFIERS)%'
 
-    App\Cataloging\ServiceInterface\CategoryMutationServiceInterface: '@App\Cataloging\Service\CategoryMutationService'
+    App\Cataloging\ServiceInterface\CatalogCategoryMutationServiceInterface: '@App\Cataloging\Service\CatalogCategoryMutationService'
 
-    App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CategoryProjectionReadService'
-    App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface: '@App\Cataloging\Service\CategoryReadScopeService'
+    App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CatalogCategoryProjectionReadService'
+    App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface: '@App\Cataloging\Service\CatalogCategoryReadScopeService'
 
     App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Cataloging\Idempotency\CategoryIdempotencyStore'
 
@@ -54,7 +54,7 @@ services:
     App\Cataloging\Service\Security\ExternalIdentityContextMapper: ~
     App\Cataloging\Service\Security\ExternalIdentityContextResolver: ~
 
-    App\Cataloging\Service\OidcJwtVerifier:
+    App\Cataloging\Service\CatalogOidcJwtVerifierService:
         arguments:
             $jwkSet: '%catalog.oidc_jwk_set%'
             $audience: '%catalog.oidc_audience%'

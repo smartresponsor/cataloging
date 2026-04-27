@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 use Doctrine\DBAL\Exception;
@@ -24,8 +24,8 @@ final readonly class CatalogCategoryStorefrontController
      * Initializes the category storefront controller service collaborators.
      */
     public function __construct(
-        private CategoryProjectionReadServiceInterface $categoryProjectionReadService,
-        private CategoryReadScopeServiceInterface $categoryReadScopeService,
+        private CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private CatalogCategoryReadScopeServiceInterface $categoryReadScopeService,
     ) {
     }
 

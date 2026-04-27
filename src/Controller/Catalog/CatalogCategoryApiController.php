@@ -7,12 +7,12 @@ namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Request\MoveCategoryRequest;
 use App\Cataloging\Request\PublishCategoryRequest;
-use App\Cataloging\Service\CategoryMutationAuthorizationService;
+use App\Cataloging\Service\CatalogCategoryMutationAuthorizationService;
 use App\Cataloging\Service\CategoryMutationRequestContextResolver;
 use App\Cataloging\Service\CategoryPayloadValueNormalizer;
-use App\Cataloging\ServiceInterface\CategoryMutationServiceInterface;
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
-use App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryMutationServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface;
 use App\Cataloging\ValueObject\CategoryMutationMoveRequest;
 use App\Cataloging\ValueObject\CategoryMutationPublishRequest;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
@@ -32,10 +32,10 @@ final readonly class CatalogCategoryApiController
      * Initializes the category api controller service collaborators.
      */
     public function __construct(
-        private CategoryMutationServiceInterface $categoryMutationService,
-        private CategoryMutationAuthorizationService $categoryMutationAuthorizationService,
-        private CategoryProjectionReadServiceInterface $categoryProjectionReadService,
-        private CategoryReadScopeServiceInterface $categoryReadScopeService,
+        private CatalogCategoryMutationServiceInterface $categoryMutationService,
+        private CatalogCategoryMutationAuthorizationService $categoryMutationAuthorizationService,
+        private CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private CatalogCategoryReadScopeServiceInterface $categoryReadScopeService,
         private CategoryMutationRequestContextResolver $requestContextResolver,
     ) {
     }

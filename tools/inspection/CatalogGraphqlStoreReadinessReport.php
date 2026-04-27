@@ -63,7 +63,7 @@ $items = [
     ],
     [
         'check' => 'graphql-facet-read-uses-search-service',
-        'status' => containsAll($graphqlFacetResolver, 'SearchService', 'searchService->search') ? 'pass' : 'fail',
+        'status' => containsAll($graphqlFacetResolver, 'CatalogSearchService', 'searchService->search') ? 'pass' : 'fail',
         'details' => ['file' => 'src/Service/GraphqlFacetResolver.php'],
     ],
     [

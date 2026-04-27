@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\Service\SearchService;
-use App\Cataloging\ServiceInterface\CategoryReadScopeServiceInterface;
+use App\Cataloging\Service\CatalogSearchService;
+use App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use App\Cataloging\ValueObject\CategoryReadScopeRequest;
 use Doctrine\DBAL\Exception;
@@ -23,8 +23,8 @@ final readonly class CatalogCategorySearchController
      * Initializes the category search controller service collaborators.
      */
     public function __construct(
-        private SearchService $search,
-        private CategoryReadScopeServiceInterface $categoryReadScopeService,
+        private CatalogSearchService $search,
+        private CatalogCategoryReadScopeServiceInterface $categoryReadScopeService,
     ) {
     }
 

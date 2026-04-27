@@ -137,7 +137,7 @@ $providerSource = $root . '/src/Security/JwtUserProvider.php';
 $servicesSource = $root . '/config/services.yaml';
 $securityApiSource = $root . '/config/packages/catalog_category_security_api.yaml';
 $accessAssignmentRepository = $root . '/src/Repository/CatalogCategoryAccessAssignmentEntityRepository.php';
-$mutationAuthorizationService = $root . '/src/Service/CategoryMutationAuthorizationService.php';
+$mutationAuthorizationService = $root . '/src/Service/CatalogCategoryMutationAuthorizationService.php';
 $adminController = $root . '/src/Controller/Admin/CategoryAdminController.php';
 $adminApiController = $root . '/src/Controller/Api/CategoryAdminApiController.php';
 $categoryApiController = $root . '/src/Controller/CategoryApiController.php';
@@ -219,7 +219,7 @@ $items = [
         'check' => 'tenant-aware-mutation-policy',
         'status' => fileContains($mutationAuthorizationService, 'Cross-tenant category mutation is not allowed') ? 'pass' : 'warn',
         'details' => [
-            'service' => 'src/Service/CategoryMutationAuthorizationService.php',
+            'service' => 'src/Service/CatalogCategoryMutationAuthorizationService.php',
         ],
     ],
     [

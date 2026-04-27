@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +24,7 @@ final class CatalogCategoryMerchantController extends AbstractController
      * Initializes the category merchant controller service collaborators.
      */
     public function __construct(
-        private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService,
+        private readonly CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private readonly SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
     ) {
     }

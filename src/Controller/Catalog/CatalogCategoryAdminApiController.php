@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,7 @@ final readonly class CatalogCategoryAdminApiController
     /**
      * Initializes the category admin api controller service collaborators.
      */
-    public function __construct(private CategoryProjectionReadServiceInterface $categoryProjectionReadService)
+    public function __construct(private CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
 

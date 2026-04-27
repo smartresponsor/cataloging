@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Service;
 
 use App\Cataloging\Service\ReadOptimizer;
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +14,7 @@ final class ReadOptimizerTest extends TestCase
     public function testTreeIsProjectionBackedAndCached(): void
     {
         $calls = 0;
-        $readService = new class($calls) implements CategoryProjectionReadServiceInterface {
+        $readService = new class($calls) implements CatalogCategoryProjectionReadServiceInterface {
             public function __construct(private int &$calls)
             {
             }

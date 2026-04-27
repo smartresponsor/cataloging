@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +20,7 @@ final class CatalogCategoryListController extends AbstractController
     /**
      * Initializes the category list controller service collaborators.
      */
-    public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
+    public function __construct(private readonly CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
 

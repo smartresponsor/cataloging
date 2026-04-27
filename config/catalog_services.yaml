@@ -34,7 +34,7 @@ services:
         '@App\Cataloging\Repository\Catalog\CatalogCollectionProjectionRepository'
     App\Cataloging\RepositoryInterface\Catalog\CatalogVirtualCategoryRepositoryInterface: '@App\Cataloging\Repository\Catalog\CatalogVirtualCategoryRepository'
 
-    App\Cataloging\Service\AttachmentService: ~
+    App\Cataloging\Service\CatalogAttachmentService: ~
     App\Cataloging\Service\CatalogCollectionService: ~
     App\Cataloging\Service\CatalogLegacyCollectionFilterService: ~
     App\Cataloging\Service\CatalogMoveService: ~

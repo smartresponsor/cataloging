@@ -26,7 +26,7 @@ function hasAll(string $path, string ...$needles): bool
 
 $resolver = $root . '/src/Service/Security/ExternalIdentityContextResolver.php';
 $resolverInterface = $root . '/src/ServiceInterface/Security/SecurityExternalIdentityContextResolverInterface.php';
-$mutationAuthorization = $root . '/src/Service/CategoryMutationAuthorizationService.php';
+$mutationAuthorization = $root . '/src/Service/CatalogCategoryMutationAuthorizationService.php';
 $searchController = $root . '/src/Controller/CategorySearchController.php';
 $mapper = $root . '/src/Service/Security/ExternalIdentityContextMapper.php';
 $securityDoc = $root . '/docs/category-security-readiness.md';
@@ -52,7 +52,7 @@ $items = [
     [
         'check' => 'mutation-authorization-enforces-tenant-boundary',
         'status' => hasAll($mutationAuthorization, 'Cross-tenant category mutation is not allowed', 'categoryTenant(', 'externalTenantRoleAllows(') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/CategoryMutationAuthorizationService.php'],
+        'details' => ['file' => 'src/Service/CatalogCategoryMutationAuthorizationService.php'],
     ],
     [
         'check' => 'search-controller-enforces-tenant-scope',

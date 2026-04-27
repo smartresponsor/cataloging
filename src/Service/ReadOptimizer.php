@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 
 /**
@@ -21,7 +21,7 @@ final class ReadOptimizer
     /**
      * Initializes the read optimizer service collaborators.
      */
-    public function __construct(private readonly CategoryProjectionReadServiceInterface $categoryProjectionReadService)
+    public function __construct(private readonly CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService)
     {
     }
 

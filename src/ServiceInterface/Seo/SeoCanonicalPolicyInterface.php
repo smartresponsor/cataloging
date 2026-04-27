@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface\Seo;
 
-use App\Cataloging\ServiceInterface\CanonicalPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogCanonicalPolicyServiceInterface;
 
 /**
  * Defines the contract for seo canonical policy.
  */
-interface SeoCanonicalPolicyInterface extends CanonicalPolicyInterface
+interface SeoCanonicalPolicyInterface extends CatalogCanonicalPolicyServiceInterface
 {
 }

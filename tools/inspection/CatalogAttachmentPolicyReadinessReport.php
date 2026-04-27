@@ -25,23 +25,23 @@ function containsAll(string $path, string ...$needles): bool
 }
 
 $controller = $root . '/src/Controller/CategoryAttachmentController.php';
-$authorizationService = $root . '/src/Service/CategoryAttachmentAuthorizationService.php';
+$authorizationService = $root . '/src/Service/CatalogCategoryAttachmentAuthorizationService.php';
 $repository = $root . '/src/Repository/CatalogAttachmentRepository.php';
 $repositoryInterface = $root . '/src/RepositoryInterface/CatalogAttachmentRepositoryInterface.php';
 $securityConfig = $root . '/config/packages/catalog_category_security_api.yaml';
 $doc = $root . '/docs/category-attachment-policy-readiness.md';
 $composer = $root . '/composer.json';
-$tests = $root . '/tests/Category/CategoryAttachmentAuthorizationServiceTest.php';
+$tests = $root . '/tests/Category/CatalogCategoryAttachmentAuthorizationServiceTest.php';
 
 $items = [
     [
         'check' => 'attachment-authorization-service-present',
         'status' => is_file($authorizationService) ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/CategoryAttachmentAuthorizationService.php'],
+        'details' => ['file' => 'src/Service/CatalogCategoryAttachmentAuthorizationService.php'],
     ],
     [
         'check' => 'attachment-list-requires-authorization-service',
-        'status' => containsAll($controller, 'assertCanList(', 'CategoryAttachmentAuthorizationService') ? 'pass' : 'fail',
+        'status' => containsAll($controller, 'assertCanList(', 'CatalogCategoryAttachmentAuthorizationService') ? 'pass' : 'fail',
         'details' => ['file' => 'src/Controller/CategoryAttachmentController.php'],
     ],
     [
@@ -57,12 +57,12 @@ $items = [
     [
         'check' => 'attachment-policy-enforces-tenant-boundary',
         'status' => containsAll($authorizationService, 'Cross-tenant category attachment operation is not allowed', 'External tenant identity is required') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/CategoryAttachmentAuthorizationService.php'],
+        'details' => ['file' => 'src/Service/CatalogCategoryAttachmentAuthorizationService.php'],
     ],
     [
         'check' => 'attachment-policy-uses-category-voter-and-tenant-roles',
         'status' => containsAll($authorizationService, 'CategoryVoter::EDIT', 'CategoryVoter::VIEW', 'tenantRolePolicy->allow') ? 'pass' : 'warn',
-        'details' => ['file' => 'src/Service/CategoryAttachmentAuthorizationService.php'],
+        'details' => ['file' => 'src/Service/CatalogCategoryAttachmentAuthorizationService.php'],
     ],
     [
         'check' => 'attachment-repository-can-resolve-single-binding',
@@ -82,7 +82,7 @@ $items = [
     [
         'check' => 'attachment-policy-tests-present',
         'status' => is_file($tests) ? 'pass' : 'warn',
-        'details' => ['file' => 'tests/Category/CategoryAttachmentAuthorizationServiceTest.php'],
+        'details' => ['file' => 'tests/Category/CatalogCategoryAttachmentAuthorizationServiceTest.php'],
     ],
     [
         'check' => 'composer-report-wiring',

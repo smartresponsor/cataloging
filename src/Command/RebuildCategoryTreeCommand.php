@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Service\ProjectionRunner;
+use App\Cataloging\Service\CatalogProjectionRunnerService;
 use App\Cataloging\Service\TreeConsistencyChecker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -25,7 +25,7 @@ final class RebuildCategoryTreeCommand extends Command
      */
     public function __construct(
         private readonly TreeConsistencyChecker $checker,
-        private readonly ProjectionRunner $runner,
+        private readonly CatalogProjectionRunnerService $runner,
     ) {
         parent::__construct();
     }

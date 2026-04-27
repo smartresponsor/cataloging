@@ -24,7 +24,7 @@ function containsAll(string $path, string ...$needles): bool
     return true;
 }
 
-$searchService = $root . '/src/Service/SearchService.php';
+$searchService = $root . '/src/Service/CatalogSearchService.php';
 $searchController = $root . '/src/Controller/CategorySearchController.php';
 $apiCanonical = $root . '/api/catalog-openapi.yaml';
 $apiLegacy = $root . '/api/category-openapi.yaml';
@@ -37,17 +37,17 @@ $items = [
     [
         'check' => 'projection-backed-search-service',
         'status' => containsAll($searchService, 'category_projection', 'ManagerRegistry', 'fetchAllAssociative') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/SearchService.php'],
+        'details' => ['file' => 'src/Service/CatalogSearchService.php'],
     ],
     [
         'check' => 'no-in-memory-dataset',
         'status' => !str_contains(fileText($searchService), 'private array $data') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/SearchService.php'],
+        'details' => ['file' => 'src/Service/CatalogSearchService.php'],
     ],
     [
         'check' => 'no-file-based-search-side-effects',
         'status' => !str_contains(fileText($searchService), 'file_put_contents') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/SearchService.php'],
+        'details' => ['file' => 'src/Service/CatalogSearchService.php'],
     ],
     [
         'check' => 'controller-filter-support',

@@ -7,10 +7,10 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
-use App\Cataloging\Service\AttachmentService;
+use App\Cataloging\Service\CatalogAttachmentService;
 use PHPUnit\Framework\TestCase;
 
-final class AttachmentServiceTest extends TestCase
+final class CatalogAttachmentServiceTest extends TestCase
 {
     public function testListNormalizesBlankCategoryIdToNull(): void
     {
@@ -49,7 +49,7 @@ final class AttachmentServiceTest extends TestCase
             }
         };
 
-        $service = new AttachmentService($repository, new class implements AttachmentReferenceGatewayInterface {
+        $service = new CatalogAttachmentService($repository, new class implements AttachmentReferenceGatewayInterface {
             public function assertBindable(string $provider, string $externalAttachmentId, ?string $referenceUri = null): void
             {
             }
@@ -117,7 +117,7 @@ final class AttachmentServiceTest extends TestCase
             }
         };
 
-        $service = new AttachmentService($repository, $gateway);
+        $service = new CatalogAttachmentService($repository, $gateway);
         $item = $service->add(' cat-1 ', ' icon ', ' media ', ' ext-42 ', ' https://cdn.example.test/icon.png ');
 
         self::assertSame([
@@ -143,7 +143,7 @@ final class AttachmentServiceTest extends TestCase
     {
         $repository = $this->createMock(CatalogAttachmentRepositoryInterface::class);
         $gateway = $this->createMock(AttachmentReferenceGatewayInterface::class);
-        $service = new AttachmentService($repository, $gateway);
+        $service = new CatalogAttachmentService($repository, $gateway);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('category_id is required');
@@ -188,7 +188,7 @@ final class AttachmentServiceTest extends TestCase
             }
         };
 
-        $service = new AttachmentService($repository, new class implements AttachmentReferenceGatewayInterface {
+        $service = new CatalogAttachmentService($repository, new class implements AttachmentReferenceGatewayInterface {
             public function assertBindable(string $provider, string $externalAttachmentId, ?string $referenceUri = null): void
             {
             }
@@ -202,7 +202,7 @@ final class AttachmentServiceTest extends TestCase
     {
         $repository = $this->createMock(CatalogAttachmentRepositoryInterface::class);
         $gateway = $this->createMock(AttachmentReferenceGatewayInterface::class);
-        $service = new AttachmentService($repository, $gateway);
+        $service = new CatalogAttachmentService($repository, $gateway);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('attachment_id is required');

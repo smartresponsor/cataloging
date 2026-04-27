@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Service\CategoryMutationAuthorizationService;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\Service\CatalogCategoryMutationAuthorizationService;
 use App\Cataloging\Service\CategoryTenantAccessEvaluator;
+use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
-use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-final class CategoryMutationAuthorizationServiceTest extends TestCase
+final class CatalogCategoryMutationAuthorizationServiceTest extends TestCase
 {
     public function testAdminCanMoveAndPublish(): void
     {
@@ -63,7 +63,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
     }
 
     /** @param list<string> $roles */
-    private function service(Security $security, string $tenant, array $roles): CategoryMutationAuthorizationService
+    private function service(Security $security, string $tenant, array $roles): CatalogCategoryMutationAuthorizationService
     {
         $connection = $this->createMock(Connection::class);
         $connection->method('fetchOne')->willReturn('tenant-a');
@@ -88,7 +88,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
             }
         };
 
-        $tenantRolePolicy = new class implements TenantRolePolicyInterface {
+        $tenantRolePolicy = new class implements CatalogTenantRolePolicyServiceInterface {
             public function allow(array $ctx, string $action): bool
             {
                 return in_array($action, ['read', 'edit', 'publish'], true)
@@ -96,7 +96,7 @@ final class CategoryMutationAuthorizationServiceTest extends TestCase
             }
         };
 
-        return new CategoryMutationAuthorizationService(
+        return new CatalogCategoryMutationAuthorizationService(
             $security,
             new CategoryTenantAccessEvaluator($registry, $resolver, $tenantRolePolicy),
         );

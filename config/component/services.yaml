@@ -18,7 +18,7 @@ services:
       - '../../src/Entity/'
       - '../../src/Tests/'
 
-  App\Cataloging\Service\OidcJwtVerifier:
+  App\Cataloging\Service\CatalogOidcJwtVerifierService:
     arguments:
       $jwkSet: '%catalog.oidc_jwk_set%'
       $audience: '%catalog.oidc_audience%'

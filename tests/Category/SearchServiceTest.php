@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Service\SearchService;
+use App\Cataloging\Service\CatalogSearchService;
 use PHPUnit\Framework\TestCase;
 
-final class SearchServiceTest extends TestCase
+final class CatalogSearchServiceTest extends TestCase
 {
     public function testSourceUsesProjectionBackedSearchWithoutFileWrites(): void
     {
-        $source = file_get_contents(dirname(__DIR__, 2).'/src/Service/SearchService.php');
+        $source = file_get_contents(dirname(__DIR__, 2).'/src/Service/CatalogSearchService.php');
         self::assertIsString($source);
         self::assertStringContainsString('category_projection', $source);
         self::assertStringNotContainsString('private array $data', $source);
@@ -20,6 +20,6 @@ final class SearchServiceTest extends TestCase
 
     public function testClassExists(): void
     {
-        self::assertTrue(class_exists(SearchService::class));
+        self::assertTrue(class_exists(CatalogSearchService::class));
     }
 }

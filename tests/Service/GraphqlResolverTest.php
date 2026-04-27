@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Service;
 
-use App\Cataloging\Service\GraphqlResolver;
-use App\Cataloging\ServiceInterface\CategoryProjectionReadServiceInterface;
+use App\Cataloging\Service\CatalogGraphqlResolverService;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Connection;
@@ -17,7 +17,7 @@ final class GraphqlResolverTest extends TestCase
 {
     public function testCategoryUsesProjectionRow(): void
     {
-        $readService = new class implements CategoryProjectionReadServiceInterface {
+        $readService = new class implements CatalogCategoryProjectionReadServiceInterface {
             public function list(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
@@ -50,7 +50,7 @@ final class GraphqlResolverTest extends TestCase
             }
         };
 
-        $resolver = new GraphqlResolver($readService, $this->registryWithPaths([]));
+        $resolver = new CatalogGraphqlResolverService($readService, $this->registryWithPaths([]));
         $node = $resolver->category(new CategoryGraphqlNodeRequest('cat-1'));
 
         self::assertIsArray($node);
@@ -61,7 +61,7 @@ final class GraphqlResolverTest extends TestCase
 
     public function testCategoryPathUsesProjectionPrefixes(): void
     {
-        $readService = new class implements CategoryProjectionReadServiceInterface {
+        $readService = new class implements CatalogCategoryProjectionReadServiceInterface {
             public function list(?CategoryProjectionCriteria $criteria = null): array
             {
                 return [];
@@ -98,7 +98,7 @@ final class GraphqlResolverTest extends TestCase
             ['id' => 'cat-root', 'parent_id' => null, 'slug' => 'root', 'name' => 'Root', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root'],
             ['id' => 'cat-2', 'parent_id' => 'cat-root', 'slug' => 'electronics', 'name' => 'Electronics', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root.electronics'],
         ];
-        $resolver = new GraphqlResolver($readService, $this->registryWithPaths($rows));
+        $resolver = new CatalogGraphqlResolverService($readService, $this->registryWithPaths($rows));
         $path = $resolver->categoryPath(new CategoryGraphqlNodeRequest('cat-2'));
 
         self::assertCount(2, $path);

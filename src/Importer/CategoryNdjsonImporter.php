@@ -7,7 +7,7 @@ namespace App\Cataloging\Importer;
 
 use App\Cataloging\ImporterInterface\CategoryNdjsonImporterInterface;
 use App\Cataloging\Service\MetaPayloadNormalizer;
-use App\Cataloging\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\Cataloging\ServiceInterface\CatalogCategoryServiceInterface as CatalogCategoryService;
 use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
 

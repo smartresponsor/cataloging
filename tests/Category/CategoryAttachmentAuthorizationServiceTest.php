@@ -6,17 +6,17 @@ namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 use App\Cataloging\Security\ExternalIdentityContext;
-use App\Cataloging\Service\CategoryAttachmentAuthorizationService;
+use App\Cataloging\Service\CatalogCategoryAttachmentAuthorizationService;
 use App\Cataloging\Service\CategoryTenantAccessEvaluator;
+use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-final class CategoryAttachmentAuthorizationServiceTest extends TestCase
+final class CatalogCategoryAttachmentAuthorizationServiceTest extends TestCase
 {
     public function testAttachAllowedForMatchingTenantPublisherRole(): void
     {
@@ -45,7 +45,7 @@ final class CategoryAttachmentAuthorizationServiceTest extends TestCase
     }
 
     /** @param list<string> $roles */
-    private function service(string $tenant, array $roles): CategoryAttachmentAuthorizationService
+    private function service(string $tenant, array $roles): CatalogCategoryAttachmentAuthorizationService
     {
         $security = $this->createMock(Security::class);
         $security->method('isGranted')->willReturnCallback(static fn (string $attribute): bool => 'ROLE_ADMIN' === $attribute ? false : false);
@@ -85,14 +85,14 @@ final class CategoryAttachmentAuthorizationServiceTest extends TestCase
             }
         };
 
-        $tenantRolePolicy = new class implements TenantRolePolicyInterface {
+        $tenantRolePolicy = new class implements CatalogTenantRolePolicyServiceInterface {
             public function allow(array $ctx, string $action): bool
             {
                 return in_array($action, ['read', 'edit', 'publish'], true) && in_array($ctx['role'], ['publisher', 'editor', 'owner', 'reader'], true);
             }
         };
 
-        return new CategoryAttachmentAuthorizationService(
+        return new CatalogCategoryAttachmentAuthorizationService(
             $security,
             $repo,
             new CategoryTenantAccessEvaluator($registry, $resolver, $tenantRolePolicy),

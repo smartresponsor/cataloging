@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Request\CategoryAttachmentAddRequest;
-use App\Cataloging\Service\AttachmentService;
-use App\Cataloging\Service\CategoryAttachmentAuthorizationService;
+use App\Cataloging\Service\CatalogAttachmentService;
+use App\Cataloging\Service\CatalogCategoryAttachmentAuthorizationService;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,8 +23,8 @@ final readonly class CatalogCategoryAttachmentController
      * Initializes the category attachment controller service collaborators.
      */
     public function __construct(
-        private AttachmentService $attachmentService,
-        private CategoryAttachmentAuthorizationService $authorizationService,
+        private CatalogAttachmentService $attachmentService,
+        private CatalogCategoryAttachmentAuthorizationService $authorizationService,
     ) {
     }
 

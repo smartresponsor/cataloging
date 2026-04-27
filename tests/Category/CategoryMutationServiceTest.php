@@ -8,8 +8,8 @@ use App\Cataloging\Idempotency\CategoryIdempotencyStore;
 use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
 use App\Cataloging\Service\CacheInvalidationRecorder;
+use App\Cataloging\Service\CatalogCategoryMutationService;
 use App\Cataloging\Service\CatalogPublicationGateService;
-use App\Cataloging\Service\CategoryMutationService;
 use App\Cataloging\Service\OutboxWriter;
 use App\Cataloging\Tests\Support\CategoryDoctrineEntityManagerFactory;
 use App\Cataloging\ValueObject\CategoryMutationMoveRequest;
@@ -217,11 +217,11 @@ final class CategoryMutationServiceTest extends TestCase
         return CategoryDoctrineEntityManagerFactory::createConnection();
     }
 
-    private function createService(Connection $connection): CategoryMutationService
+    private function createService(Connection $connection): CatalogCategoryMutationService
     {
         $entityManager = $this->createEntityManager($connection);
 
-        return new CategoryMutationService(
+        return new CatalogCategoryMutationService(
             $entityManager,
             new OutboxWriter($entityManager),
             new CacheInvalidationRecorder(),

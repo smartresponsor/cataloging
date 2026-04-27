@@ -9,8 +9,8 @@ use App\Cataloging\ControllerInterface\Catalog\CatalogCategoryControllerInterfac
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
 use App\Cataloging\Service\CategoryPayloadValueNormalizer;
 use App\Cataloging\Service\MetaPayloadNormalizer;
-use App\Cataloging\ServiceInterface\CategoryBreadcrumbBuilderInterface;
-use App\Cataloging\ServiceInterface\CategoryServiceInterface as CatalogCategoryService;
+use App\Cataloging\ServiceInterface\CatalogCategoryBreadcrumbBuilderServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogCategoryServiceInterface as CatalogCategoryService;
 use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
 use App\Cataloging\ValueObject\CategoryServiceMoveRequest;
@@ -25,7 +25,7 @@ final class CatalogCategoryController implements CatalogCategoryControllerInterf
 {
     private CatalogCategoryService $service;
     private CatalogCategoryRepositoryInterface $repo;
-    private CategoryBreadcrumbBuilderInterface $breadcrumb;
+    private CatalogCategoryBreadcrumbBuilderServiceInterface $breadcrumb;
     private MetaPayloadNormalizer $metaPayloadNormalizer;
 
     /**
@@ -34,7 +34,7 @@ final class CatalogCategoryController implements CatalogCategoryControllerInterf
     public function __construct(
         CatalogCategoryService $service,
         CatalogCategoryRepositoryInterface $repo,
-        CategoryBreadcrumbBuilderInterface $breadcrumb,
+        CatalogCategoryBreadcrumbBuilderServiceInterface $breadcrumb,
         MetaPayloadNormalizer $metaPayloadNormalizer,
     ) {
         $this->service = $service;

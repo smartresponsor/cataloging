@@ -13,7 +13,7 @@ final class RollbackOperation
     /**
      * Handles the rollback workflow.
      */
-    public function rollback(Version $target): void
+    public function rollback(CatalogVersionService $target): void
     {
         // Application layer should restore state from the target version snapshot.
     }

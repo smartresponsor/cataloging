@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service\Security;
 
-use App\Cataloging\ServiceInterface\OidcJwtValidatorInterface;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\ServiceInterface\CatalogOidcJwtValidatorServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -23,7 +23,7 @@ final readonly class ExternalIdentityContextResolver implements SecurityExternal
      */
     public function __construct(
         private RequestStack $requestStack,
-        private OidcJwtValidatorInterface $validator,
+        private CatalogOidcJwtValidatorServiceInterface $validator,
         private SecurityExternalIdentityContextMapperInterface $mapper,
     ) {
     }

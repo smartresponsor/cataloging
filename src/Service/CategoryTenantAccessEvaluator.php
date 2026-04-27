@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Security\CategoryVoter;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
-use App\Cataloging\ServiceInterface\TenantRolePolicyInterface;
-use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
-use App\Cataloging\Voter\CategoryVoter;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -21,7 +22,7 @@ final readonly class CategoryTenantAccessEvaluator
     public function __construct(
         private ManagerRegistry $registry,
         private SecurityExternalIdentityContextResolverInterface $externalIdentityContextResolver,
-        private TenantRolePolicyInterface $tenantRolePolicy,
+        private CatalogTenantRolePolicyServiceInterface $tenantRolePolicy,
     ) {
     }
 
@@ -38,7 +39,24 @@ final readonly class CategoryTenantAccessEvaluator
             }
         }
 
-        return null;
+        try {
+            $connection = $this->registry->getConnection('data');
+        } catch (\Throwable) {
+            return null;
+        }
+
+        if (!$connection instanceof Connection) {
+            return null;
+        }
+
+        $tenant = $connection->fetchOne('SELECT tenant FROM category WHERE id = ?', [$normalizedId]);
+        if (!is_string($tenant)) {
+            return null;
+        }
+
+        $normalizedTenant = trim($tenant);
+
+        return '' !== $normalizedTenant ? $normalizedTenant : 'default';
     }
 
     public function resolveExternalIdentityContext(): ?ExternalIdentityContext

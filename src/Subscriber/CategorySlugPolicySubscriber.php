@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Subscriber;
 
 use App\Cataloging\Entity\CatalogCategoryEntity;
-use App\Cataloging\Service\SlugService;
+use App\Cataloging\Service\CatalogSlugService;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -20,7 +20,7 @@ final readonly class CategorySlugPolicySubscriber implements EventSubscriber
     /**
      * Initializes the category slug policy subscriber service collaborators.
      */
-    public function __construct(private SlugService $slugService)
+    public function __construct(private CatalogSlugService $slugService)
     {
     }
 

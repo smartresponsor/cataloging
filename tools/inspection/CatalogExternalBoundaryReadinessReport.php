@@ -25,7 +25,7 @@ function containsAll(string $path, string ...$needles): bool
 }
 
 $attachmentRequest = $root . '/src/Request/CategoryAttachmentAddRequest.php';
-$attachmentService = $root . '/src/Service/AttachmentService.php';
+$attachmentService = $root . '/src/Service/CatalogAttachmentService.php';
 $attachmentRepository = $root . '/src/Repository/CatalogAttachmentRepository.php';
 $attachmentGateway = $root . '/src/Attachment/NullAttachmentReferenceGateway.php';
 $attachmentGatewayInterface = $root . '/src/AttachmentInterface/AttachmentReferenceGatewayInterface.php';
@@ -46,7 +46,7 @@ $items = [
     [
         'check' => 'attachment-service-uses-reference-gateway',
         'status' => containsAll($attachmentService, 'AttachmentReferenceGatewayInterface', 'assertBindable', 'externalAttachmentId') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/AttachmentService.php'],
+        'details' => ['file' => 'src/Service/CatalogAttachmentService.php'],
     ],
     [
         'check' => 'attachment-repository-stores-provider-and-external-id',
@@ -56,7 +56,7 @@ $items = [
     [
         'check' => 'attachment-boundary-has-no-file-upload-operations',
         'status' => !str_contains(fileText($attachmentService), 'move_uploaded_file') && !str_contains(fileText($attachmentRepository), 'fopen(') ? 'pass' : 'fail',
-        'details' => ['files' => ['src/Service/AttachmentService.php', 'src/Repository/CatalogAttachmentRepository.php']],
+        'details' => ['files' => ['src/Service/CatalogAttachmentService.php', 'src/Repository/CatalogAttachmentRepository.php']],
     ],
     [
         'check' => 'attachment-gateway-interface-present',

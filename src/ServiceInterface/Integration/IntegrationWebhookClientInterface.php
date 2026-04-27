@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface\Integration;
 
-use App\Cataloging\ServiceInterface\WebhookClientInterface;
+use App\Cataloging\ServiceInterface\CatalogWebhookClientServiceInterface;
 
 /**
  * Defines the contract for integration webhook client.
  */
-interface IntegrationWebhookClientInterface extends WebhookClientInterface
+interface IntegrationWebhookClientInterface extends CatalogWebhookClientServiceInterface
 {
 }

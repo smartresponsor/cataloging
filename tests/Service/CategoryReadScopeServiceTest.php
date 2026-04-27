@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Service;
 
-use App\Cataloging\Service\CategoryReadScopeService;
+use App\Cataloging\Security\ExternalIdentityContext;
+use App\Cataloging\Service\CatalogCategoryReadScopeService;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use App\Cataloging\ValueObject\CategoryReadScopeRequest;
-use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ final class CategoryReadScopeServiceTest extends TestCase
 {
     public function testAnonymousReadDefaultsToPublished(): void
     {
-        $service = new CategoryReadScopeService(
+        $service = new CatalogCategoryReadScopeService(
             new class implements SecurityExternalIdentityContextResolverInterface {
                 public function resolveFromCurrentRequest(): ?ExternalIdentityContext
                 {
@@ -40,7 +40,7 @@ final class CategoryReadScopeServiceTest extends TestCase
 
     public function testCrossTenantReadIsRejectedForScopedActor(): void
     {
-        $service = new CategoryReadScopeService(
+        $service = new CatalogCategoryReadScopeService(
             new class implements SecurityExternalIdentityContextResolverInterface {
                 public function resolveFromCurrentRequest(): ?ExternalIdentityContext
                 {

@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface\Api;
 
-use App\Cataloging\ServiceInterface\GraphqlResolverInterface;
+use App\Cataloging\ServiceInterface\CatalogGraphqlResolverServiceInterface;
 
 /**
  * Defines the contract for api graphql resolver.
  */
-interface ApiGraphqlResolverInterface extends GraphqlResolverInterface
+interface ApiGraphqlResolverInterface extends CatalogGraphqlResolverServiceInterface
 {
 }

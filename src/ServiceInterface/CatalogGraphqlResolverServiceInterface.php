@@ -1,0 +1,27 @@
+<?php
+
+// Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+declare(strict_types=1);
+
+namespace App\Cataloging\ServiceInterface;
+
+use App\Cataloging\ValueObject\CategoryGraphqlMoveRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlNodeRequest;
+use App\Cataloging\ValueObject\CategoryGraphqlPublishRequest;
+
+/**
+ * Defines the contract for graphql resolver.
+ */
+interface CatalogGraphqlResolverServiceInterface
+{
+    /** @return array<string,mixed>|null */
+    public function category(CategoryGraphqlNodeRequest $request): ?array;
+
+    /** @return list<array<string,mixed>> */
+    public function categoryPath(CategoryGraphqlNodeRequest $request): array;
+
+    /** @return array<string,mixed>|null */
+    public function publishCategory(CategoryGraphqlPublishRequest $request): ?array;
+
+    public function moveCategory(CategoryGraphqlMoveRequest $request): bool;
+}
