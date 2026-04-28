@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\ServiceInterface\CategoryMoveInterface;
 use App\Cataloging\ValueObject\CatalogMoveRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -145,7 +145,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     {
         $rows = $this->entityManager->createQuery(
             'SELECT c.id AS id, c.path AS path, c.depth AS depth
-             FROM App\Cataloging\Entity\CatalogCategoryEntity c
+             FROM App\Cataloging\Entity\Catalog\CatalogCategoryEntity c
              WHERE c.path = :path OR c.path LIKE :prefix
              ORDER BY c.depth ASC, c.id ASC'
         )->setParameter('path', $path)

@@ -5,7 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\Service\ChannelFilter;
+use App\Cataloging\Service\CatalogChannelFilterService;
+use App\Cataloging\Service\CatalogReadOptimizerService;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +22,7 @@ final readonly class CatalogCategoryStoreApiController
      * Initializes the category store api controller service collaborators.
      */
     public function __construct(
-        private ChannelFilter $filter,
+        private CatalogChannelFilterService $filter,
         private CatalogReadOptimizerService $optimizer,
     ) {
     }

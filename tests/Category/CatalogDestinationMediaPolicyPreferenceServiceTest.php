@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
-use App\Cataloging\Entity\CatalogSyndicationDestinationEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryMediaBindingEntity;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDestinationEntity;
 use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;

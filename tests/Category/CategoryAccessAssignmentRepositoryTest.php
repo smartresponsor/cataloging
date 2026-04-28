@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryAccessAssignmentEntity;
 use App\Cataloging\Repository\Catalog\CatalogCategoryAccessAssignmentRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;

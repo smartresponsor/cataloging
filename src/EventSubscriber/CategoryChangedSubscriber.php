@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\EventSubscriber;
 
-use App\Cataloging\Service\CacheInvalidationRecorder;
+use App\Cataloging\Service\CatalogCacheInvalidationRecorderService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -16,7 +16,7 @@ final readonly class CategoryChangedSubscriber implements EventSubscriberInterfa
     /**
      * Initializes the category changed subscriber service collaborators.
      */
-    public function __construct(private CacheInvalidationRecorder $invalidator)
+    public function __construct(private CatalogCacheInvalidationRecorderService $invalidator)
     {
     }
 

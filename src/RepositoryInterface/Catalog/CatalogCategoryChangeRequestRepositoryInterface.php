@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\RepositoryInterface\Catalog;
 
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
-use App\Cataloging\EventInterface\CategoryChangeRequestReviewedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryChangeRequestReviewedEventInterface;
 
 /**
  * Defines the contract for category change request repository.
@@ -29,8 +29,8 @@ interface CatalogCategoryChangeRequestRepositoryInterface
     /**
      * Handles the append review history workflow.
      */
-    public function appendReviewHistory(CategoryChangeRequestReviewedInterface $event): void;
+    public function appendReviewHistory(CatalogCategoryChangeRequestReviewedEventInterface $event): void;
 
-    /** @return list<CategoryChangeRequestReviewedInterface> */
+    /** @return list<CatalogCategoryChangeRequestReviewedEventInterface> */
     public function reviewHistoryForRequestId(string $requestId): array;
 }

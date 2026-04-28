@@ -11,7 +11,7 @@ use Doctrine\DBAL\ParameterType;
  * Provides shared category projection query normalization and filter support.
  */
 /** @noinspection DuplicatedCode */
-final class CategoryProjectionQuerySupport
+final class CatalogCategoryProjectionQuerySupportService
 {
     /**
      * @param array<string,mixed> $criteria

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\Event\Catalog\CatalogCategoryChangeRequestReviewedEvent;
 use App\Cataloging\ValueObject\CategoryChangeRequestReviewRequest;
 use App\Cataloging\ValueObject\CategoryChangeRequestSubmitRequest;

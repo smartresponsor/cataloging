@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Subscriber;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\Service\CatalogSlugService;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PrePersistEventArgs;

@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the etag generator application service.
  */
-final class EtagGenerator
+final class CatalogEtagGeneratorService
 {
     /**
      * @param array<string|int,mixed> $data

@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the webhook notifier application service.
  */
-final readonly class WebhookNotifier
+final readonly class CatalogWebhookNotifierService
 {
     /**
      * Initializes the webhook notifier service collaborators.

@@ -5,9 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
-use App\Cataloging\Entity\CatalogCategoryReviewAssignmentEntity;
-use App\Cataloging\Event\CategoryChangeRequestAssigned;
+use App\Cataloging\Entity\Catalog\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryReviewAssignmentEntity;
+use App\Cataloging\Event\Catalog\CatalogCategoryChangeRequestAssignedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryChangeRequestAssignedEventInterface;
 use App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface;
@@ -32,7 +33,7 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
     /**
      * Handles the assign workflow.
      */
-    public function assign(CatalogCategoryReviewAssignmentEntityRequest $request): CategoryChangeRequestAssigned
+    public function assign(CatalogCategoryReviewAssignmentEntityRequest $request): CatalogCategoryChangeRequestAssignedEventInterface
     {
         $changeRequest = $this->changeRequestRepository->findByRequestId($request->requestId());
 
@@ -58,7 +59,7 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
 
         $this->assignmentRepository->save($assignment);
 
-        return new CategoryChangeRequestAssigned(
+        return new CatalogCategoryChangeRequestAssignedEvent(
             $assignment->requestId(),
             $assignment->categoryId(),
             $assignment->assignedReviewer(),

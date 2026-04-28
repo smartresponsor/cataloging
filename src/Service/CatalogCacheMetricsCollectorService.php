@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the cache metrics collector application service.
  */
-final class CacheMetricsCollector
+final class CatalogCacheMetricsCollectorService
 {
     /** @var array<string,int> */
     private array $hits = [];

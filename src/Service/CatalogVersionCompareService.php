@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the version compare application service.
  */
-final readonly class VersionCompare
+final readonly class CatalogVersionCompareService
 {
     /**
      * @param array<string,scalar|null> $fromValues

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
-use App\Cataloging\Security\CategoryAuthorizationSubject;
 use App\Cataloging\Security\CategoryVoter;
+use App\Cataloging\ValueObject\Security\CategoryAuthorizationSubject;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 

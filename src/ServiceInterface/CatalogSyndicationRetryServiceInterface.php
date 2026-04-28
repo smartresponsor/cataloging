@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Cataloging\ServiceInterface;
 
 use App\Cataloging\EntityInterface\Catalog\CatalogSyndicationDeliveryRecordEntityInterface;
-use App\Cataloging\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
-use App\Cataloging\EventInterface\CategorySyndicationRetryScheduledInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationRecoveryCandidatePreparedEventInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationRetryScheduledEventInterface;
 
 /**
  * Defines the contract for catalog syndication retry service.
@@ -21,7 +21,7 @@ interface CatalogSyndicationRetryServiceInterface
         CatalogSyndicationDeliveryRecordEntityInterface $record,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRecoveryCandidatePreparedInterface;
+    ): CatalogCategorySyndicationRecoveryCandidatePreparedEventInterface;
 
     /**
      * Schedules the retry workflow for later processing.
@@ -30,5 +30,5 @@ interface CatalogSyndicationRetryServiceInterface
         CatalogSyndicationDeliveryRecordEntityInterface $record,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRetryScheduledInterface;
+    ): CatalogCategorySyndicationRetryScheduledEventInterface;
 }

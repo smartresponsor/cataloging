@@ -5,8 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
-use App\Cataloging\Event\CategoryMediaBound;
+use App\Cataloging\Entity\Catalog\CatalogCategoryMediaBindingEntity;
+use App\Cataloging\Event\Catalog\CatalogCategoryMediaBoundEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaBoundEventInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaGovernancePolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaGovernanceServiceInterface;
@@ -30,7 +31,7 @@ final readonly class CatalogMediaGovernanceService implements CatalogMediaGovern
     /**
      * Handles the bind workflow.
      */
-    public function bind(CategoryMediaBindRequest $request): CategoryMediaBound
+    public function bind(CategoryMediaBindRequest $request): CatalogCategoryMediaBoundEventInterface
     {
         $scope = $request->scope();
         $state = $request->state();
@@ -63,7 +64,7 @@ final readonly class CatalogMediaGovernanceService implements CatalogMediaGovern
 
         $this->repository->save($binding);
 
-        $event = new CategoryMediaBound(
+        $event = new CatalogCategoryMediaBoundEvent(
             $scope->bindingId(),
             $scope->categoryId(),
             $scope->assetId(),

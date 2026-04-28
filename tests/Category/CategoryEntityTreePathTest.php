@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCategoryEntityTreePathTest extends TestCase

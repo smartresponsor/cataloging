@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryAccessAssignmentEntity;
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryAccessAssignmentEntityInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogAccessAssignmentServiceInterface;

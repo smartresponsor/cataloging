@@ -7,7 +7,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides a process-local filesystem lock for tree mutations.
  */
-final class TreeLock
+final class CatalogTreeLockService
 {
     private string $directory;
 

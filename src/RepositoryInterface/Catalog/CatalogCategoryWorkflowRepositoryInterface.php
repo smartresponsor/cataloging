@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\RepositoryInterface\Catalog;
 
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryWorkflowEntityInterface;
-use App\Cataloging\EventInterface\CatalogCategoryWorkflowEntityTransitionedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryWorkflowEntityTransitionedEventInterface;
 
 /**
  * Defines the contract for category workflow repository.
@@ -26,8 +26,8 @@ interface CatalogCategoryWorkflowRepositoryInterface
     /**
      * Handles the append history workflow.
      */
-    public function appendHistory(CatalogCategoryWorkflowEntityTransitionedInterface $event): void;
+    public function appendHistory(CatalogCategoryWorkflowEntityTransitionedEventInterface $event): void;
 
-    /** @return list<CatalogCategoryWorkflowEntityTransitionedInterface> */
+    /** @return list<CatalogCategoryWorkflowEntityTransitionedEventInterface> */
     public function historyForCategoryId(string $categoryId): array;
 }

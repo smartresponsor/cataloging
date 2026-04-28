@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Service\Security\CategoryRole;
 use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
+use App\Cataloging\ValueObject\Security\CategoryRole;
 
 /**
  * Provides the tenant role policy application service.

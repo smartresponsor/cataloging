@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the media linker application service.
  */
-final class MediaLinker
+final class CatalogMediaLinkerService
 {
     /**
      * @param array<string,mixed> $category

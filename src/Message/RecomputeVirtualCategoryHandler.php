@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Message;
 
-use App\Cataloging\Entity\CatalogVirtualCategoryEntity;
-use App\Cataloging\Entity\CatalogVirtualCategoryMemberEntity;
+use App\Cataloging\Entity\Catalog\CatalogVirtualCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogVirtualCategoryMemberEntity;
 use App\Cataloging\Rule\CategoryRule;
 use App\Cataloging\Rule\RuleEvaluator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,10 +41,10 @@ final readonly class RecomputeVirtualCategoryHandler
 
         $rule = new CategoryRule($vc->getRule());
 
-        /** @var list<\App\Cataloging\Entity\CatalogRecordIndexEntity> $records */
+        /** @var list<\App\Cataloging\Entity\Catalog\CatalogRecordIndexEntity> $records */
         $records = $this->em->createQueryBuilder()
             ->select('record')
-            ->from(\App\Cataloging\Entity\CatalogRecordIndexEntity::class, 'record')
+            ->from(\App\Cataloging\Entity\Catalog\CatalogRecordIndexEntity::class, 'record')
             ->getQuery()
             ->getResult();
 
@@ -70,11 +70,7 @@ final readonly class RecomputeVirtualCategoryHandler
                 ->execute();
 
             foreach ($ids as $recordId) {
-                if (!is_scalar($recordId) && null !== $recordId) {
-                    continue;
-                }
-
-                $entityManager->persist(new CatalogVirtualCategoryMemberEntity($vc->getId(), (string) $recordId));
+                $entityManager->persist(new CatalogVirtualCategoryMemberEntity($vc->getId(), $recordId));
             }
         });
     }

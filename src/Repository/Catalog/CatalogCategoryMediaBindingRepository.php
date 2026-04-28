@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogCategoryMediaBindingEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryMediaBindingEntity;
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryMediaBindingEntityInterface;
-use App\Cataloging\EventInterface\CategoryMediaBoundInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaBoundEventInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -15,7 +15,7 @@ final class CatalogCategoryMediaBindingRepository implements CatalogCategoryMedi
     /** @var array<string,CatalogCategoryMediaBindingEntityInterface> */
     private array $bindings = [];
 
-    /** @var list<CategoryMediaBoundInterface> */
+    /** @var list<CatalogCategoryMediaBoundEventInterface> */
     private array $history = [];
 
     public function __construct(private readonly ?EntityManagerInterface $entityManager = null)
@@ -55,7 +55,7 @@ final class CatalogCategoryMediaBindingRepository implements CatalogCategoryMedi
         ));
     }
 
-    public function appendHistory(CategoryMediaBoundInterface $event): void
+    public function appendHistory(CatalogCategoryMediaBoundEventInterface $event): void
     {
         $this->history[] = $event;
     }

@@ -12,4 +12,9 @@ interface CatalogCategoryChangeRequestReviewedEventInterface
 {
     /** @return array<string,mixed> */
     public function payload(): array;
+
+    /**
+     * Returns the reviewed request identifier.
+     */
+    public function requestId(): string;
 }

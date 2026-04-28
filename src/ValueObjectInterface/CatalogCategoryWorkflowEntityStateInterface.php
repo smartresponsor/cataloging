@@ -14,4 +14,6 @@ interface CatalogCategoryWorkflowEntityStateInterface
      * Returns the normalized workflow state string.
      */
     public function value(): string;
+
+    public function is(string $state): bool;
 }

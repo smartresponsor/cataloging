@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the tenant filter application service.
  */
-final class TenantFilter
+final class CatalogTenantFilterService
 {
     /**
      * @param list<array<string,mixed>> $items

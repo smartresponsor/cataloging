@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity\Catalog;
 
-use App\Cataloging\EntityInterface\CatalogCategoryReviewAssignmentEntityInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryReviewAssignmentEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]

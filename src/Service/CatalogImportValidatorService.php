@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the import validator application service.
  */
-final class CatalogCatalogImportValidatorServiceService
+final class CatalogImportValidatorService
 {
     /**
      * @param list<array<string,mixed>> $rows

@@ -6,10 +6,10 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\EntityInterface\Catalog\CatalogSyndicationDeliveryRecordEntityInterface;
-use App\Cataloging\Event\CategorySyndicationRecoveryCandidatePrepared;
-use App\Cataloging\Event\CategorySyndicationRetryScheduled;
-use App\Cataloging\EventInterface\CategorySyndicationRecoveryCandidatePreparedInterface;
-use App\Cataloging\EventInterface\CategorySyndicationRetryScheduledInterface;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationRecoveryCandidatePreparedEvent;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationRetryScheduledEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationRecoveryCandidatePreparedEventInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategorySyndicationRetryScheduledEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationRetryPolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use App\Cataloging\ValueObject\CategorySyndicationRecoveryCandidate;
@@ -37,7 +37,7 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
         CatalogSyndicationDeliveryRecordEntityInterface $record,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRecoveryCandidatePreparedInterface {
+    ): CatalogCategorySyndicationRecoveryCandidatePreparedEventInterface {
         $status = $record->status()->status();
         $this->policy->assertFailedStatus($status);
         $retryable = $this->policy->isRetryable($record->responseCode());
@@ -53,7 +53,7 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
             $retryable,
         );
 
-        return new CategorySyndicationRecoveryCandidatePrepared([
+        return new CatalogCategorySyndicationRecoveryCandidatePreparedEvent([
             'deliveryId' => $candidate->deliveryId(),
             'packageId' => $candidate->packageId(),
             'destinationId' => $candidate->destinationId(),
@@ -74,7 +74,7 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
      * @param string                                          $actorId
      * @param string                                          $reason
      *
-     * @return CategorySyndicationRetryScheduledInterface
+     * @return CatalogCategorySyndicationRetryScheduledEventInterface
      *
      * @throws \DateMalformedStringException
      */
@@ -82,7 +82,7 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
         CatalogSyndicationDeliveryRecordEntityInterface $record,
         string $actorId,
         string $reason,
-    ): CategorySyndicationRetryScheduledInterface {
+    ): CatalogCategorySyndicationRetryScheduledEventInterface {
         $status = $record->status()->status();
         $this->policy->assertFailedStatus($status);
 
@@ -106,7 +106,7 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
             true,
         );
 
-        return new CategorySyndicationRetryScheduled([
+        return new CatalogCategorySyndicationRetryScheduledEvent([
             'deliveryId' => $plan->deliveryId(),
             'packageId' => $plan->packageId(),
             'destinationId' => $plan->destinationId(),

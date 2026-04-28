@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
-use App\Cataloging\Event\CatalogSyndicationDeliveryRecorded;
-use App\Cataloging\EventInterface\CatalogSyndicationDeliveryRecordedInterface;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\Event\Catalog\CatalogSyndicationDeliveryRecordedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDeliveryRecordedEventInterface;
 use App\Cataloging\PolicyInterface\CategorySyndicationDeliveryPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDeliveryServiceInterface;
@@ -33,7 +33,7 @@ final readonly class CatalogSyndicationDeliveryService implements CatalogSyndica
      */
     public function recordDelivery(
         CatalogSyndicationDeliveryRecordRequest $request,
-    ): CatalogSyndicationDeliveryRecordedInterface {
+    ): CatalogSyndicationDeliveryRecordedEventInterface {
         $context = $request->context();
         $attempt = $request->attempt();
         $audit = $request->auditContext();
@@ -58,7 +58,7 @@ final readonly class CatalogSyndicationDeliveryService implements CatalogSyndica
 
         $this->repository->save($record);
 
-        return new CatalogSyndicationDeliveryRecorded(
+        return new CatalogSyndicationDeliveryRecordedEvent(
             [
                 'deliveryId' => $record->deliveryId(),
                 'packageId' => $record->packageId(),

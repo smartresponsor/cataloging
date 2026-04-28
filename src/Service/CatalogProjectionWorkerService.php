@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogOutboxMessageEntity;
+use App\Cataloging\Entity\Catalog\CatalogOutboxMessageEntity;
 use App\Cataloging\Observability\CatalogProjectionMetrics;
 use App\Cataloging\OutboxInterface\CategoryOutboxRetryInterface;
 use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
@@ -31,7 +31,7 @@ final readonly class CatalogProjectionWorkerService
         $processed = 0;
         $entities = $this->entityManager->getRepository(CatalogOutboxMessageEntity::class)->findBy([], ['createdAt' => 'ASC']);
         foreach ($entities as $entity) {
-            if (!$entity instanceof CatalogOutboxMessageEntity || !$entity->isReady($now)) {
+            if (!$entity->isReady($now)) {
                 continue;
             }
 
@@ -97,8 +97,18 @@ final readonly class CatalogProjectionWorkerService
         }
 
         $decoded = json_decode($payload, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
 
-        return is_array($decoded) ? $decoded : [];
+        $normalized = [];
+        foreach ($decoded as $key => $value) {
+            if (is_string($key)) {
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
     }
 
     private function stringValue(mixed $value): string

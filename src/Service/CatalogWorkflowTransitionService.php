@@ -5,8 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryWorkflowEntity;
-use App\Cataloging\Event\CatalogCategoryWorkflowEntityTransitioned;
+use App\Cataloging\Entity\Catalog\CatalogCategoryWorkflowEntity;
+use App\Cataloging\Event\Catalog\CatalogCategoryWorkflowEntityTransitionedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryWorkflowEntityTransitionedEventInterface;
 use App\Cataloging\PolicyInterface\CatalogCategoryWorkflowEntityPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryWorkflowRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
@@ -30,7 +31,7 @@ final readonly class CatalogWorkflowTransitionService implements CatalogWorkflow
     /**
      * Handles the transition workflow.
      */
-    public function transition(CatalogCategoryWorkflowEntityTransitionRequest $request): CatalogCategoryWorkflowEntityTransitioned
+    public function transition(CatalogCategoryWorkflowEntityTransitionRequest $request): CatalogCategoryWorkflowEntityTransitionedEventInterface
     {
         $current = $this->repository->findByCategoryId($request->categoryId());
         $currentWorkflow = $current instanceof CatalogCategoryWorkflowEntity
@@ -48,7 +49,7 @@ final readonly class CatalogWorkflowTransitionService implements CatalogWorkflow
         $updated = $currentWorkflow->transitionTo($toState, $request->actorId(), $request->reason());
         $this->repository->save($updated);
 
-        $event = new CatalogCategoryWorkflowEntityTransitioned(
+        $event = new CatalogCategoryWorkflowEntityTransitionedEvent(
             $request->categoryId(),
             $currentWorkflow->state()->value(),
             $toState->value(),

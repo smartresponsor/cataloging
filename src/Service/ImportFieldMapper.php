@@ -10,7 +10,7 @@ namespace App\Cataloging\Service;
  */
 final class ImportFieldMapper
 {
-    public function __construct(private readonly JsonArrayReader $jsonArrayReader = new JsonArrayReader())
+    public function __construct(private readonly CatalogJsonArrayReaderService $jsonArrayReader = new CatalogJsonArrayReaderService())
     {
     }
 

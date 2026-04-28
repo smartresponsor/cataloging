@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\DataFixtures;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

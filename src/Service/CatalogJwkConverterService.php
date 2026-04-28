@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the jwk converter application service.
  */
-final class JwkConverter
+final class CatalogJwkConverterService
 {
     /**
      * Handles the rsa to pem workflow.

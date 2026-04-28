@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
-use App\Cataloging\EventInterface\CategoryChangeRequestReviewedInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryChangeRequestReviewedEventInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -15,7 +15,7 @@ final class CatalogCategoryChangeRequestRepository implements CatalogCategoryCha
     /** @var array<string,CatalogCategoryChangeRequestEntityInterface> */
     private array $requests = [];
 
-    /** @var array<string,list<CategoryChangeRequestReviewedInterface>> */
+    /** @var array<string,list<CatalogCategoryChangeRequestReviewedEventInterface>> */
     private array $reviewHistory = [];
 
     public function __construct(private readonly ?EntityManagerInterface $entityManager = null)
@@ -55,7 +55,7 @@ final class CatalogCategoryChangeRequestRepository implements CatalogCategoryCha
         $this->requests[$request->requestId()] = $request;
     }
 
-    public function appendReviewHistory(CategoryChangeRequestReviewedInterface $event): void
+    public function appendReviewHistory(CatalogCategoryChangeRequestReviewedEventInterface $event): void
     {
         $requestId = trim($event->requestId());
         $this->reviewHistory[$requestId] ??= [];

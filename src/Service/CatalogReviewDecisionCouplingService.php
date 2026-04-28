@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryReviewDecisionCoupled;
-use App\Cataloging\EventInterface\CategoryReviewDecisionCoupledInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryReviewDecisionCoupledEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryReviewDecisionCoupledEventInterface;
 use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
@@ -35,7 +35,7 @@ final readonly class CatalogReviewDecisionCouplingService implements CatalogRevi
     /**
      * Handles the couple workflow.
      */
-    public function couple(CategoryReviewDecisionCouplingRequest $request): CategoryReviewDecisionCoupledInterface
+    public function couple(CategoryReviewDecisionCouplingRequest $request): CatalogCategoryReviewDecisionCoupledEventInterface
     {
         $normalizedTargetState = trim($request->targetState());
         if (!in_array($normalizedTargetState, ['accepted', 'rejected'], true)) {
@@ -69,7 +69,7 @@ final readonly class CatalogReviewDecisionCouplingService implements CatalogRevi
             ));
             $gatePayload = $gateEvent->payload();
 
-            return new CategoryReviewDecisionCoupled(
+            return new CatalogCategoryReviewDecisionCoupledEvent(
                 $request->requestId(),
                 $categoryId,
                 $normalizedTargetState,
@@ -91,7 +91,7 @@ final readonly class CatalogReviewDecisionCouplingService implements CatalogRevi
         ));
         $workflowPayload = $workflowEvent->payload();
 
-        return new CategoryReviewDecisionCoupled(
+        return new CatalogCategoryReviewDecisionCoupledEvent(
             $request->requestId(),
             $categoryId,
             $normalizedTargetState,

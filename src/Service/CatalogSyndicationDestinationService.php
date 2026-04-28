@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogSyndicationDestinationEntity;
-use App\Cataloging\Event\CatalogSyndicationDestinationRegistered;
-use App\Cataloging\EventInterface\CatalogSyndicationDestinationRegisteredInterface;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDestinationEntity;
+use App\Cataloging\Event\Catalog\CatalogSyndicationDestinationRegisteredEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogSyndicationDestinationRegisteredEventInterface;
 use App\Cataloging\PolicyInterface\CatalogSyndicationDestinationPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationDestinationServiceInterface;
@@ -30,7 +30,7 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
 
     public function register(
         CatalogSyndicationDestinationRegisterRequest $request,
-    ): CatalogSyndicationDestinationRegisteredInterface {
+    ): CatalogSyndicationDestinationRegisteredEventInterface {
         $definition = $request->definition();
         $configuration = $request->configuration();
         $audit = $request->auditContext();
@@ -50,7 +50,7 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
         );
         $this->repository->save($destination);
 
-        return new CatalogSyndicationDestinationRegistered(
+        return new CatalogSyndicationDestinationRegisteredEvent(
             [
                 'destinationId' => $destination->destinationId(),
                 'name' => $destination->name(),

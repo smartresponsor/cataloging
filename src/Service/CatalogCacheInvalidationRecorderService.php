@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the cache invalidation recorder application service.
  */
-final class CacheInvalidationRecorder
+final class CatalogCacheInvalidationRecorderService
 {
     /**
      * Handles the invalidate workflow.

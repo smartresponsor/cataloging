@@ -125,4 +125,9 @@ class CatalogOutboxMessageEntity
 
         return null === $this->availableAt || $this->availableAt <= $now;
     }
+
+    public function dispatchedAt(): ?\DateTimeImmutable
+    {
+        return $this->dispatchedAt;
+    }
 }

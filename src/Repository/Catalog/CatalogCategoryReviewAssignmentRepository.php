@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogCategoryReviewAssignmentEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryReviewAssignmentEntity;
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryReviewAssignmentEntityInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;

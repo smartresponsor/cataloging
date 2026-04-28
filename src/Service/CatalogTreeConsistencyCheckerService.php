@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the tree consistency checker application service.
  */
-final class TreeConsistencyChecker
+final class CatalogTreeConsistencyCheckerService
 {
     /**
      * @param list<array{id?:mixed,depth?:mixed,level?:mixed}> $nodes

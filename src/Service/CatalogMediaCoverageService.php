@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryMediaCoverageEvaluated;
-use App\Cataloging\EventInterface\CategoryMediaCoverageEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryMediaCoverageEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaCoverageEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaCoveragePolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaCoverageServiceInterface;
@@ -29,14 +29,14 @@ final readonly class CatalogMediaCoverageService implements CatalogMediaCoverage
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaCoverageEvaluatedInterface
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryMediaCoverageEvaluatedEventInterface
     {
         $report = $this->policy->buildReport(
             $request->payload(),
             $this->repository->bindingsForCategory($request->categoryId()),
         );
 
-        return new CategoryMediaCoverageEvaluated(
+        return new CatalogCategoryMediaCoverageEvaluatedEvent(
             trim($request->categoryId()),
             $report->requiredMissing(),
             $report->warnings(),

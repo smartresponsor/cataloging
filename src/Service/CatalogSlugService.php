@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,7 +25,7 @@ final readonly class CatalogSlugService
     /**
      * Handles the ensure unique workflow.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function ensureUnique(string $slug): string
     {

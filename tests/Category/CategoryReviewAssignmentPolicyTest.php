@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use PHPUnit\Framework\TestCase;

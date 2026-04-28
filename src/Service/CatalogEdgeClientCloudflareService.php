@@ -10,7 +10,7 @@ use App\Cataloging\ServiceInterface\EdgeClientInterface;
 /**
  * Provides the edge client cloudflare application service.
  */
-final class EdgeClientCloudflare implements EdgeClientInterface
+final class CatalogEdgeClientCloudflareService implements EdgeClientInterface
 {
     /**
      * Handles the purge workflow.

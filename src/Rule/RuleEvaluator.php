@@ -56,7 +56,7 @@ final class RuleEvaluator
             $tagRaw = $condition['tag'] ?? null;
             if (is_scalar($tagRaw)) {
                 $tagSet = $record['tag_set'] ?? null;
-                if (!is_array($tagSet) || !in_array((string) $tagRaw, array_map(static fn ($value): string => (string) $value, $tagSet), true)) {
+                if (!is_array($tagSet) || !in_array((string) $tagRaw, array_map(static fn ($value): string => self::stringFromMixed($value), $tagSet), true)) {
                     return false;
                 }
             }
@@ -156,5 +156,10 @@ final class RuleEvaluator
         }
 
         return ['sql' => [] !== $where ? '('.implode(' AND ', $where).')' : '1=1', 'params' => $params];
+    }
+
+    private static function stringFromMixed(mixed $value): string
+    {
+        return is_scalar($value) ? self::stringFromMixed($value) : '';
     }
 }

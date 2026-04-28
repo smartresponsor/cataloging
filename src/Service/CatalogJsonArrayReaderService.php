@@ -7,7 +7,7 @@ namespace App\Cataloging\Service;
 /**
  * Reads JSON files into normalized array payloads.
  */
-final readonly class JsonArrayReader
+final readonly class CatalogJsonArrayReaderService
 {
     /** @return array<int|string, mixed> */
     public function read(string $path): array

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryMediaApplicabilityEvaluated;
-use App\Cataloging\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryMediaApplicabilityEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaApplicabilityEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
@@ -29,7 +29,7 @@ final readonly class CatalogMediaApplicabilityService implements CatalogMediaApp
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(CategoryEvaluationRequest $request): CategoryMediaApplicabilityEvaluatedInterface
+    public function evaluate(CategoryEvaluationRequest $request): CatalogCategoryMediaApplicabilityEvaluatedEventInterface
     {
         $report = $this->policy->buildReport(
             $request->payload(),
@@ -37,7 +37,7 @@ final readonly class CatalogMediaApplicabilityService implements CatalogMediaApp
         );
         $payload = $request->payload();
 
-        return new CategoryMediaApplicabilityEvaluated(
+        return new CatalogCategoryMediaApplicabilityEvaluatedEvent(
             trim($request->categoryId()),
             trim($this->scalarString($payload['channel'] ?? '')),
             trim($this->scalarString($payload['locale'] ?? '')),

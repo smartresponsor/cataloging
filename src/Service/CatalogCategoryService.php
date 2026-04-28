@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CatalogCategoryLinkEntityed;
-use App\Cataloging\Event\CategoryCreated;
-use App\Cataloging\Event\CategoryMoved;
-use App\Cataloging\Event\CategoryUnlinked;
+use App\Cataloging\Event\Catalog\CatalogCategoryCreatedEvent;
+use App\Cataloging\Event\Catalog\CatalogCategoryLinkedEvent;
+use App\Cataloging\Event\Catalog\CatalogCategoryMovedEvent;
+use App\Cataloging\Event\Catalog\CatalogCategoryUnlinkedEvent;
 use App\Cataloging\PolicyInterface\CategoryPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryServiceInterface as CategoryCategoryServiceInterface;
@@ -67,7 +67,7 @@ final class CatalogCategoryService implements CategoryCategoryServiceInterface
             $slug,
             $request->meta(),
         ));
-        $this->dispatcher->dispatch(new CategoryCreated(['id' => $view['id']]));
+        $this->dispatcher->dispatch(new CatalogCategoryCreatedEvent(['id' => $view['id']]));
 
         return $view;
     }
@@ -78,7 +78,7 @@ final class CatalogCategoryService implements CategoryCategoryServiceInterface
     public function move(CategoryServiceMoveRequest $request): array
     {
         $view = $this->repo->move($request);
-        $this->dispatcher->dispatch(new CategoryMoved(
+        $this->dispatcher->dispatch(new CatalogCategoryMovedEvent(
             $this->stringValue($view, 'id', $request->categoryId()),
             $this->stringValue($view, 'oldParentId'),
             $request->newParentId() ?? '',
@@ -102,7 +102,7 @@ final class CatalogCategoryService implements CategoryCategoryServiceInterface
             $request->targetId(),
         );
         $this->dispatcher->dispatch(
-            new CatalogCategoryLinkEntityed([
+            new CatalogCategoryLinkedEvent([
                 'categoryId' => $request->categoryId(),
                 'targetDomain' => $request->targetDomain(),
                 'targetId' => $request->targetId(),
@@ -123,7 +123,7 @@ final class CatalogCategoryService implements CategoryCategoryServiceInterface
             $request->targetId(),
         );
         $this->dispatcher->dispatch(
-            new CategoryUnlinked([
+            new CatalogCategoryUnlinkedEvent([
                 'categoryId' => $request->categoryId(),
                 'targetDomain' => $request->targetDomain(),
                 'targetId' => $request->targetId(),

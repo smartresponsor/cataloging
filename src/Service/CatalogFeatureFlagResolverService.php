@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the feature flag resolver application service.
  */
-final readonly class CatalogCatalogFeatureFlagResolverServiceService
+final readonly class CatalogFeatureFlagResolverService
 {
     /** @param array<string,bool> $flags */
     public function __construct(private array $flags = [])

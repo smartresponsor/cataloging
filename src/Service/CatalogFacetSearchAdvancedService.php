@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Provides the facet search advanced application service.
  */
-final readonly class FacetSearchAdvanced
+final readonly class CatalogFacetSearchAdvancedService
 {
     /**
      * Initializes the facet search advanced service collaborators.

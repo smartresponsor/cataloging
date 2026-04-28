@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -25,7 +25,7 @@ final readonly class CatalogSearchService
      */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private CategoryProjectionQuerySupport $querySupport,
+        private CatalogCategoryProjectionQuerySupportService $querySupport,
     ) {
     }
 

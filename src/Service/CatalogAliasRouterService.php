@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the alias router application service.
  */
-final class AliasRouter
+final class CatalogAliasRouterService
 {
     /**
      * Resolves the requested result for the provided input.

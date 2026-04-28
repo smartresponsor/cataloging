@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the collection rule engine application service.
  */
-final class CollectionRuleEngine
+final class CatalogCollectionRuleEngineService
 {
     /**
      * @param array<string, list<scalar>|scalar|null> $category

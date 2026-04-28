@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryAuditEntity;
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryAuditEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\Exception\CategoryNotFoundException;
 use App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use App\Cataloging\PolicyInterface\CatalogCategoryWorkflowEntityPolicyInterface;
@@ -30,7 +30,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CatalogOutboxWriterService $outboxWriter,
-        private readonly CacheInvalidationRecorder $cacheInvalidationRecorder,
+        private readonly CatalogCacheInvalidationRecorderService $cacheInvalidationRecorder,
         private readonly CatalogPublicationGateServiceInterface $publicationGateService,
         private readonly CatalogCategoryWorkflowEntityPolicyInterface $workflowPolicy,
         private readonly CategoryIdempotencyStoreInterface $idempotencyStore,
@@ -511,7 +511,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     {
         $rows = $this->entityManager->createQuery(
             'SELECT c.id AS id, c.parentId AS parent_id, c.path AS path, c.depth AS depth
-             FROM App\Cataloging\Entity\CatalogCategoryEntity c
+             FROM App\Cataloging\Entity\Catalog\CatalogCategoryEntity c
              WHERE c.path = :path OR c.path LIKE :prefix
              ORDER BY c.depth ASC, c.id ASC'
         )->setParameter('path', $path)

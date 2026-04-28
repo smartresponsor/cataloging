@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryDestinationMediaFallbackEvaluated;
-use App\Cataloging\EventInterface\CategoryDestinationMediaFallbackEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryDestinationMediaFallbackEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaFallbackEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaFallbackPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
@@ -33,7 +33,7 @@ final readonly class CatalogDestinationMediaFallbackService implements CatalogDe
      */
     public function evaluate(
         CategoryDestinationMediaEvaluationRequest $request,
-    ): CategoryDestinationMediaFallbackEvaluatedInterface {
+    ): CatalogCategoryDestinationMediaFallbackEvaluatedEventInterface {
         $destinationId = $request->destinationId();
         $categoryId = $request->categoryId();
         $destination = $this->destinationRepository->find($destinationId);
@@ -49,7 +49,7 @@ final readonly class CatalogDestinationMediaFallbackService implements CatalogDe
             $this->bindingRepository->bindingsForCategory($categoryId),
         );
 
-        return new CategoryDestinationMediaFallbackEvaluated(
+        return new CatalogCategoryDestinationMediaFallbackEvaluatedEvent(
             $destinationId,
             $categoryId,
             trim($settings['channel'] ?? ''),

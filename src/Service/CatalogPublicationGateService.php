@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryPublicationGateEvaluated;
-use App\Cataloging\EventInterface\CategoryPublicationGateEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryPublicationGateEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryPublicationGateEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryPublicationGatePolicyInterface;
 use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
 use App\Cataloging\ValueObject\CatalogCategoryWorkflowEntityState;
@@ -29,12 +29,12 @@ final readonly class CatalogPublicationGateService implements CatalogPublication
     /**
      * Handles the evaluate workflow.
      */
-    public function evaluate(CategoryPublicationGateEvaluationRequest $request): CategoryPublicationGateEvaluatedInterface
+    public function evaluate(CategoryPublicationGateEvaluationRequest $request): CatalogCategoryPublicationGateEvaluatedEventInterface
     {
         $state = CatalogCategoryWorkflowEntityState::fromString($request->workflowState());
         $readiness = CategoryPublicationReadiness::fromChecks($request->checks());
 
-        return new CategoryPublicationGateEvaluated(
+        return new CatalogCategoryPublicationGateEvaluatedEvent(
             $request->categoryId(),
             $state->value(),
             $this->policy->canPublish($state, $readiness, $request->actorId(), $request->reason()),

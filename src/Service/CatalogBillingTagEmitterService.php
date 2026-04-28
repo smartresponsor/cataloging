@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the billing tag emitter application service.
  */
-final class BillingTagEmitter
+final class CatalogBillingTagEmitterService
 {
     /**
      * @param string              $tenant

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogRecordIndexEntity;
-use App\Cataloging\Entity\CatalogVirtualCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogRecordIndexEntity;
+use App\Cataloging\Entity\Catalog\CatalogVirtualCategoryEntity;
 use App\Cataloging\Message\RecomputeVirtualCategoryMessage;
 use App\Cataloging\Rule\CategoryRule;
 use App\Cataloging\Rule\RuleEvaluator;

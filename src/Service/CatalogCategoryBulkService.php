@@ -22,7 +22,7 @@ final readonly class CatalogCategoryBulkService implements CatalogCategoryBulkSe
      */
     public function __construct(
         private CategoryCategoryService $service,
-        private MetaPayloadNormalizer $metaPayloadNormalizer,
+        private CatalogMetaPayloadNormalizerService $metaPayloadNormalizer,
     ) {
     }
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
-use App\Cataloging\Event\CategoryChangeRequestReviewed;
+use App\Cataloging\Entity\Catalog\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Event\Catalog\CatalogCategoryChangeRequestReviewedEvent;
 use App\Cataloging\PolicyInterface\CategoryChangeRequestPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
@@ -56,7 +56,7 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
     /**
      * Handles the review workflow.
      */
-    public function review(CategoryChangeRequestReviewRequest $request): CategoryChangeRequestReviewed
+    public function review(CategoryChangeRequestReviewRequest $request): CatalogCategoryChangeRequestReviewedEvent
     {
         $entity = $this->repository->findByRequestId($request->requestId());
 
@@ -75,7 +75,7 @@ final readonly class CatalogChangeRequestService implements CatalogChangeRequest
         $updated = $entity->moveTo($toState, $request->reviewedBy(), $request->decisionReason());
         $this->repository->save($updated);
 
-        $event = new CategoryChangeRequestReviewed(
+        $event = new CatalogCategoryChangeRequestReviewedEvent(
             $updated->requestId(),
             $updated->categoryId(),
             $entity->state()->value(),

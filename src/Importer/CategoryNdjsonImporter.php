@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Importer;
 
 use App\Cataloging\ImporterInterface\CategoryNdjsonImporterInterface;
-use App\Cataloging\Service\MetaPayloadNormalizer;
+use App\Cataloging\Service\CatalogMetaPayloadNormalizerService;
 use App\Cataloging\ServiceInterface\CatalogCategoryServiceInterface as CatalogCategoryService;
 use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
 use App\Cataloging\ValueObject\CategoryCreateRequest;
@@ -21,7 +21,7 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
      */
     public function __construct(
         private CatalogCategoryService $service,
-        private MetaPayloadNormalizer $metaPayloadNormalizer,
+        private CatalogMetaPayloadNormalizerService $metaPayloadNormalizer,
     ) {
     }
 

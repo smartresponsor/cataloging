@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryDestinationMediaPolicyPreferenceEvaluated;
-use App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryDestinationMediaPolicyPreferenceEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaPolicyPreferenceEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaPolicyPreferencePolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaFallbackServiceInterface;
@@ -35,7 +35,7 @@ final readonly class CatalogDestinationMediaPolicyPreferenceService implements C
      */
     public function evaluate(
         CategoryDestinationMediaEvaluationRequest $request,
-    ): CategoryDestinationMediaPolicyPreferenceEvaluatedInterface {
+    ): CatalogCategoryDestinationMediaPolicyPreferenceEvaluatedEventInterface {
         $destinationId = $request->destinationId();
         $categoryId = $request->categoryId();
         $destination = $this->destinationRepository->find($destinationId);
@@ -50,7 +50,7 @@ final readonly class CatalogDestinationMediaPolicyPreferenceService implements C
         $fallbackPayload = $this->destinationMediaFallbackService->evaluate($request)->payload();
         $report = $this->policy->buildReport($mode, $strictPayload, $fallbackPayload);
 
-        return new CategoryDestinationMediaPolicyPreferenceEvaluated(
+        return new CatalogCategoryDestinationMediaPolicyPreferenceEvaluatedEvent(
             [
                 'destinationId' => $destinationId,
                 'categoryId' => $categoryId,

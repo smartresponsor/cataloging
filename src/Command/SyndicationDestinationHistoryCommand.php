@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDeliveryRecordEntity;
 use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use App\Cataloging\ValueObject\CategorySyndicationHistoryRequest;

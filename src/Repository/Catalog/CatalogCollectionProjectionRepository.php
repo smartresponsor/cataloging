@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogRecordIndexEntity;
+use App\Cataloging\Entity\Catalog\CatalogRecordIndexEntity;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCollectionProjectionRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 

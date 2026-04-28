@@ -23,7 +23,7 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
      */
     public function __construct(private readonly string $issuer, private readonly string $audience, array $jwkSet)
     {
-        $converter = new JwkConverter();
+        $converter = new CatalogJwkConverterService();
         $keys = $jwkSet['keys'] ?? [];
         if (is_array($keys)) {
             foreach ($keys as $jwk) {

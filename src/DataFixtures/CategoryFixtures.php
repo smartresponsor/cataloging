@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\DataFixtures;
 
-use App\Cataloging\Entity\CatalogCategoryBannerEntity;
-use App\Cataloging\Entity\CatalogCategoryEntity;
-use App\Cataloging\Entity\CatalogCategoryHtmlBlockEntity;
-use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryBannerEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryHtmlBlockEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategorySlugHistoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

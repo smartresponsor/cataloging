@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\RepositoryInterface\Catalog;
 
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryMediaBindingEntityInterface;
-use App\Cataloging\EventInterface\CategoryMediaBoundInterface;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryMediaBoundEventInterface;
 
 /**
  * Defines the contract for category media binding repository.
@@ -29,8 +29,8 @@ interface CatalogCategoryMediaBindingRepositoryInterface
     /**
      * Handles the append history workflow.
      */
-    public function appendHistory(CategoryMediaBoundInterface $event): void;
+    public function appendHistory(CatalogCategoryMediaBoundEventInterface $event): void;
 
-    /** @return list<CategoryMediaBoundInterface> */
+    /** @return list<CatalogCategoryMediaBoundEventInterface> */
     public function history(): array;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogVirtualCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogVirtualCategoryEntity;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogVirtualCategoryRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 

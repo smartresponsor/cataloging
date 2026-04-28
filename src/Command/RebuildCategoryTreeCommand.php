@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Command;
 
 use App\Cataloging\Service\CatalogProjectionRunnerService;
-use App\Cataloging\Service\TreeConsistencyChecker;
+use App\Cataloging\Service\CatalogTreeConsistencyCheckerService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +24,7 @@ final class RebuildCategoryTreeCommand extends Command
      * Initializes the rebuild category tree command service collaborators.
      */
     public function __construct(
-        private readonly TreeConsistencyChecker $checker,
+        private readonly CatalogTreeConsistencyCheckerService $checker,
         private readonly CatalogProjectionRunnerService $runner,
     ) {
         parent::__construct();

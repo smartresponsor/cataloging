@@ -13,7 +13,7 @@ final readonly class CatalogCollectionBuilderService
     /**
      * Initializes the collection builder service collaborators.
      */
-    public function __construct(private CollectionRuleEngine $engine)
+    public function __construct(private CatalogCollectionRuleEngineService $engine)
     {
     }
 

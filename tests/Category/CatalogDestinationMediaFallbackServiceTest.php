@@ -31,7 +31,7 @@ final class CatalogDestinationMediaFallbackServiceTest extends TestCase
         $destinationService = new CatalogSyndicationDestinationService(new CatalogSyndicationDestinationPolicy(), $destinationRepository);
         $service = new CatalogDestinationMediaFallbackService($destinationRepository, $bindingRepository, new CategoryDestinationMediaFallbackPolicy());
 
-        $bindingRepository->save(new \App\Cataloging\Entity\CatalogCategoryMediaBindingEntity(
+        $bindingRepository->save(new \App\Cataloging\Entity\Catalog\CatalogCategoryMediaBindingEntity(
             'bind-global-primary',
             'category-1802',
             'asset-primary',

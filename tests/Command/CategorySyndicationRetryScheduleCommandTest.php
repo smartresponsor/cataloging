@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategorySyndicationRetryScheduleCommand;
-use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
-use App\Cataloging\Event\CategorySyndicationRetryScheduled;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\Event\Catalog\CatalogCategorySyndicationRetryScheduledEvent;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
@@ -28,7 +28,7 @@ final class CategorySyndicationRetryScheduleCommandTest extends TestCase
         $repo->method('find')->with('d-1')->willReturn($record);
 
         $service = $this->createMock(CatalogSyndicationRetryServiceInterface::class);
-        $service->method('scheduleRetry')->willReturn(new CategorySyndicationRetryScheduled([
+        $service->method('scheduleRetry')->willReturn(new CatalogCategorySyndicationRetryScheduledEvent([
             'deliveryId' => 'd-1', 'nextAttempt' => 2, 'delaySeconds' => 300,
         ], new \DateTimeImmutable()));
 

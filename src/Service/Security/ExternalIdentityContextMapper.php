@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Service\Security;
 
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
+use App\Cataloging\ValueObject\Security\CategoryRole;
 use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 
 /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogCategoryAccessAssignmentEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryAccessAssignmentEntity;
 use App\Cataloging\EntityInterface\Catalog\CatalogCategoryAccessAssignmentEntityInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
 use Doctrine\DBAL\Connection;
@@ -69,7 +69,7 @@ final class CatalogCategoryAccessAssignmentRepository implements CatalogCategory
                 [trim($categoryId), 'active'],
             );
 
-            return array_values(array_map([$this, 'hydrateEntityFromRow'], $rows));
+            return array_map([$this, 'hydrateEntityFromRow'], $rows);
         }
 
         return array_values(array_filter($this->assignments, static fn (CatalogCategoryAccessAssignmentEntityInterface $assignment): bool => $assignment->categoryId() === $categoryId && 'active' === $assignment->status()));
@@ -87,7 +87,7 @@ final class CatalogCategoryAccessAssignmentRepository implements CatalogCategory
                 [trim($actorUserId), 'active'],
             );
 
-            return array_values(array_map([$this, 'hydrateEntityFromRow'], $rows));
+            return array_map([$this, 'hydrateEntityFromRow'], $rows);
         }
 
         return array_values(array_filter($this->assignments, static fn (CatalogCategoryAccessAssignmentEntityInterface $assignment): bool => $assignment->actorUserId() === $actorUserId && 'active' === $assignment->status()));
@@ -117,11 +117,11 @@ final class CatalogCategoryAccessAssignmentRepository implements CatalogCategory
     private function hydrateEntityFromRow(array $row): CatalogCategoryAccessAssignmentEntityInterface
     {
         return new CatalogCategoryAccessAssignmentEntity(
-            (string) ($row['assignment_id'] ?? ''),
-            (string) ($row['category_id'] ?? ''),
-            (string) ($row['actor_user_id'] ?? ''),
-            (string) ($row['role'] ?? ''),
-            (string) ($row['status'] ?? 'active'),
+            self::stringFromMixed($row['assignment_id'] ?? ''),
+            self::stringFromMixed($row['category_id'] ?? ''),
+            self::stringFromMixed($row['actor_user_id'] ?? ''),
+            self::stringFromMixed($row['role'] ?? ''),
+            self::stringFromMixed($row['status'] ?? 'active'),
             $this->boolFromRow($row['is_primary'] ?? false),
             $this->dateTimeFromRow($row['granted_at'] ?? null) ?? new \DateTimeImmutable('now'),
             $this->dateTimeFromRow($row['revoked_at'] ?? null),
@@ -146,5 +146,10 @@ final class CatalogCategoryAccessAssignmentRepository implements CatalogCategory
         }
 
         return new \DateTimeImmutable($value);
+    }
+
+    private static function stringFromMixed(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

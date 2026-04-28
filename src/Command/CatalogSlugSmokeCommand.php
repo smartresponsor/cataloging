@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
-use App\Cataloging\Entity\CatalogCategorySlugHistoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategorySlugHistoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogGraphqlResolverServiceInterface;
 use App\Cataloging\ValueObject\CategoryGraphqlMoveRequest;
@@ -145,6 +145,10 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
             ->getQuery()
             ->getResult();
 
+        if (!is_iterable($entities)) {
+            return [];
+        }
+
         $rows = [];
         foreach ($entities as $entity) {
             if (!$entity instanceof CatalogCategoryProjectionEntity) {
@@ -165,8 +169,8 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
 
         usort(
             $rows,
-            static fn (array $left, array $right): int => [strlen((string) ($left['path'] ?? '')), (string) ($left['path'] ?? '')]
-                <=> [strlen((string) ($right['path'] ?? '')), (string) ($right['path'] ?? '')],
+            static fn (array $left, array $right): int => [strlen(self::stringFromMixed($left['path'])), self::stringFromMixed($left['path'])]
+                <=> [strlen(self::stringFromMixed($right['path'])), self::stringFromMixed($right['path'])],
         );
 
         return $rows;
@@ -199,10 +203,6 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
 
         $normalized = [];
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
             $normalized[] = [
                 'id' => $row['id'] ?? '',
                 'parent_id' => $row['parent_id'] ?? null,
@@ -211,14 +211,14 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
                 'locale' => $row['locale'] ?? 'en',
                 'workflow_state' => $row['workflow_state'] ?? 'draft',
                 'published' => $row['published'] ?? false,
-                'path' => $row['path'] ?? '',
+                'path' => $row['path'],
             ];
         }
 
         usort(
             $normalized,
-            static fn (array $left, array $right): int => [strlen((string) ($left['path'] ?? '')), (string) ($left['path'] ?? '')]
-                <=> [strlen((string) ($right['path'] ?? '')), (string) ($right['path'] ?? '')],
+            static fn (array $left, array $right): int => [strlen(self::stringFromMixed($left['path'])), self::stringFromMixed($left['path'])]
+                <=> [strlen(self::stringFromMixed($right['path'])), self::stringFromMixed($right['path'])],
         );
 
         return $normalized;
@@ -300,5 +300,10 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
             is_string($value) => in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true),
             default => false,
         };
+    }
+
+    private static function stringFromMixed(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 }

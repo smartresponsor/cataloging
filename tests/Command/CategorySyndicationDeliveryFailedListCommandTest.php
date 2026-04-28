@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
-use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDeliveryRecordEntity;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;

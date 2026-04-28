@@ -40,7 +40,7 @@ services:
     App\Cataloging\Service\CatalogMoveService: ~
     App\Cataloging\Service\CatalogReadService: ~
     App\Cataloging\Service\CatalogVirtualCollectionService: ~
-    App\Cataloging\Service\CollectionRuleEngine: ~
+    App\Cataloging\Service\CatalogCollectionRuleEngineService: ~
     App\Cataloging\Service\CatalogCollectionBuilderService: ~
 
     App\Cataloging\ServiceInterface\CatalogMoveServiceInterface: '@App\Cataloging\Service\CatalogMoveService'

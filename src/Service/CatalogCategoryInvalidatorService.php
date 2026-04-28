@@ -10,7 +10,7 @@ use Psr\Cache\CacheItemPoolInterface;
 /**
  * Provides the category invalidator application service.
  */
-final readonly class CategoryInvalidator
+final readonly class CatalogCategoryInvalidatorService
 {
     /**
      * Initializes the category invalidator service collaborators.

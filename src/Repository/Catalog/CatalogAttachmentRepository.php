@@ -29,10 +29,12 @@ final class CatalogAttachmentRepository implements CatalogAttachmentRepositoryIn
             ? $repository->findBy(['categoryId' => $categoryId], ['createdAt' => 'DESC', 'attachmentId' => 'DESC'])
             : $repository->findBy([], ['createdAt' => 'DESC', 'attachmentId' => 'DESC']);
 
-        return array_values(array_map(
-            fn (CatalogCategoryAttachmentEntity $entity): array => $this->normalizeAttachmentEntity($entity),
-            array_values(array_filter($entities, fn ($entity): bool => $entity instanceof CatalogCategoryAttachmentEntity)),
-        ));
+        $attachments = [];
+        foreach ($entities as $entity) {
+            $attachments[] = $this->normalizeAttachmentEntity($entity);
+        }
+
+        return $attachments;
     }
 
     public function add(

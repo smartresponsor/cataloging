@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the tracing decorator application service.
  */
-final readonly class TracingDecorator
+final readonly class CatalogTracingDecoratorService
 {
     /**
      * Initializes the tracing decorator service collaborators.

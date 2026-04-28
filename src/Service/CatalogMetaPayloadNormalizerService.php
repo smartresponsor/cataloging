@@ -7,7 +7,7 @@ namespace App\Cataloging\Service;
 /**
  * Normalizes category metadata payload maps.
  */
-final readonly class MetaPayloadNormalizer
+final readonly class CatalogMetaPayloadNormalizerService
 {
     /**
      * @return array<string,array<string,bool|float|int|string|null>|bool|float|int|string|null>

@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryBannerEntity;
-use App\Cataloging\Entity\CatalogCategoryHtmlBlockEntity;
-use App\Cataloging\Entity\CatalogCategoryPinEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryBannerEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryHtmlBlockEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryPinEntity;
 use App\Cataloging\ServiceInterface\CatalogMerchServiceInterface;
 use App\Cataloging\ValueObject\CategoryMerchBannerPublishRequest;
 use App\Cataloging\ValueObject\CategoryMerchPinCreateRequest;

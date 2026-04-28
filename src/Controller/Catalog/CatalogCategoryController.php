@@ -7,8 +7,8 @@ namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\ControllerInterface\Catalog\CatalogCategoryControllerInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryRepositoryInterface;
+use App\Cataloging\Service\CatalogMetaPayloadNormalizerService;
 use App\Cataloging\Service\CategoryPayloadValueNormalizer;
-use App\Cataloging\Service\MetaPayloadNormalizer;
 use App\Cataloging\ServiceInterface\CatalogCategoryBreadcrumbBuilderServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryServiceInterface as CatalogCategoryService;
 use App\Cataloging\ValueObject\CatalogCategoryLinkEntityRequest;
@@ -26,7 +26,7 @@ final class CatalogCategoryController implements CatalogCategoryControllerInterf
     private CatalogCategoryService $service;
     private CatalogCategoryRepositoryInterface $repo;
     private CatalogCategoryBreadcrumbBuilderServiceInterface $breadcrumb;
-    private MetaPayloadNormalizer $metaPayloadNormalizer;
+    private CatalogMetaPayloadNormalizerService $metaPayloadNormalizer;
 
     /**
      * Initializes the category controller service collaborators.
@@ -35,7 +35,7 @@ final class CatalogCategoryController implements CatalogCategoryControllerInterf
         CatalogCategoryService $service,
         CatalogCategoryRepositoryInterface $repo,
         CatalogCategoryBreadcrumbBuilderServiceInterface $breadcrumb,
-        MetaPayloadNormalizer $metaPayloadNormalizer,
+        CatalogMetaPayloadNormalizerService $metaPayloadNormalizer,
     ) {
         $this->service = $service;
         $this->repo = $repo;

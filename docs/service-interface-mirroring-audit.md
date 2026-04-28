@@ -30,7 +30,7 @@ Interfaces must not live under `src/Service/...` and must be placed in a mirrore
 These are not folder-mirroring issues only, but naming/contract inconsistencies:
 
 - `src/Service/CatalogMoveService.php` implements `CategoryMoveInterface`.
-- `src/Service/EdgeClientFastly.php` and `src/Service/EdgeClientCloudflare.php` share `EdgeClientInterface`.
+- `src/Service/CatalogEdgeClientFastlyService.php` and `src/Service/CatalogEdgeClientCloudflareService.php` share `EdgeClientInterface`.
 
 If strict 1:1 mirroring is required, these should be normalized (rename contracts or split provider-specific interfaces).
 

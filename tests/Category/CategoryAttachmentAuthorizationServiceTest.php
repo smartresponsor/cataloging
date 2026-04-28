@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Category;
 
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
-use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\Service\CatalogCategoryAttachmentAuthorizationService;
 use App\Cataloging\Service\CatalogCategoryTenantAccessEvaluatorService;
 use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;

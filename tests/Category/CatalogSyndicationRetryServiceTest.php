@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Entity\CatalogSyndicationDeliveryRecordEntity;
+use App\Cataloging\Entity\Catalog\CatalogSyndicationDeliveryRecordEntity;
 use App\Cataloging\Policy\CategorySyndicationRetryPolicy;
 use App\Cataloging\Service\CatalogSyndicationRetryService;
 use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;

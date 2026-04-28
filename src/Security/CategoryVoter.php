@@ -6,7 +6,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Security;
 
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
-use App\Cataloging\Service\Security\CategoryRole;
+use App\Cataloging\ValueObject\Security\CategoryAuthorizationSubject;
+use App\Cataloging\ValueObject\Security\CategoryRole;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

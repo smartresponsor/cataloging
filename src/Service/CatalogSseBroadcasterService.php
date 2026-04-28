@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the sse broadcaster application service.
  */
-final class SseBroadcaster
+final class CatalogSseBroadcasterService
 {
     /**
      * @param string              $event

@@ -5,9 +5,9 @@ Base: current slice + G2 + voter compatibility fix.
 Applied in this wave:
 - Api GraphqlResolver collapsed into wrapper over canonical App\Cataloging\Service\GraphqlResolver
 - Integration QuotaGuard collapsed into wrapper over App\Cataloging\Service\QuotaGuard
-- Integration SseBroadcaster collapsed into wrapper over App\Cataloging\Service\SseBroadcaster
+- Integration CatalogSseBroadcasterService collapsed into wrapper over App\Cataloging\Service\CatalogSseBroadcasterService
 - Security TenantRolePolicy collapsed into wrapper over App\Cataloging\Service\TenantRolePolicy
-- Security JwkConverter collapsed into wrapper over App\Cataloging\Service\JwkConverter
+- Security CatalogJwkConverterService collapsed into wrapper over App\Cataloging\Service\CatalogJwkConverterService
 - Seo CanonicalPolicy collapsed into wrapper over App\Cataloging\Service\CanonicalPolicy
 - Seo RedirectRule collapsed into wrapper over App\Cataloging\Service\RedirectRule
 - Seo SlugVersionPolicy collapsed into wrapper over App\Cataloging\Service\SlugVersionPolicy

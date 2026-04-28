@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the circuit breaker application service.
  */
-final class CircuitBreaker
+final class CatalogCircuitBreakerService
 {
     private int $failCount = 0;
     private bool $open = false;

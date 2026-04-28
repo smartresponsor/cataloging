@@ -7,8 +7,8 @@ namespace App\Cataloging\Service\Governance;
 
 use App\Cataloging\Projection\CategoryGovernanceView;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
-use App\Cataloging\Service\Security\CategoryRole;
 use App\Cataloging\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface;
+use App\Cataloging\ValueObject\Security\CategoryRole;
 
 /**
  * Provides the category governance view builder application service.

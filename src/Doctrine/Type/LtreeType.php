@@ -22,7 +22,7 @@ final class LtreeType extends Type
             return null;
         }
 
-        return (string) $value;
+        return is_scalar($value) ? (string) $value : null;
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ?string
@@ -31,7 +31,7 @@ final class LtreeType extends Type
             return null;
         }
 
-        return (string) $value;
+        return is_scalar($value) ? (string) $value : null;
     }
 
     public function getName(): string

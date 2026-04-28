@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Projection;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
-use App\Cataloging\Entity\CatalogCategoryProjectionEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
 use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;

@@ -7,7 +7,7 @@ namespace App\Cataloging\Service;
 use App\Cataloging\Entity\CatalogRedirectRuleEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
-final readonly class RedirectWriter
+final readonly class CatalogRedirectWriterService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

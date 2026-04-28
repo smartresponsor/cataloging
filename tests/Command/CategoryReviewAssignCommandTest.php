@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\Command;
 
 use App\Cataloging\Command\CategoryReviewAssignCommand;
-use App\Cataloging\Entity\CatalogCategoryChangeRequestEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryChangeRequestEntity;
 use App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy;
 use App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository;
 use App\Cataloging\Repository\Catalog\CatalogCategoryReviewAssignmentRepository;

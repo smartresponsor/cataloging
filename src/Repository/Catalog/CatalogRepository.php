@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -54,7 +54,7 @@ final class CatalogRepository extends ServiceEntityRepository
     public function findAncestorRowsByPath(string $path): array
     {
         $entities = $this->createQueryBuilder('c')
-            ->where('c.path = :path OR :path LIKE CONCAT(c.path, , ' % ') OR c.path = :path')
+            ->where('c.path = :path OR :path LIKE CONCAT(c.path, , ) OR c.path = :path')
             ->setParameter('path', $path)
             ->orderBy('c.depth', 'ASC')
             ->getQuery()
@@ -109,13 +109,21 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param list<CatalogCategoryEntity> $entities
+     * @param iterable<mixed> $entities
      *
      * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
      */
-    private function rowsFromEntities(array $entities): array
+    private function rowsFromEntities(iterable $entities): array
     {
-        return array_map(fn (CatalogCategoryEntity $entity): array => $this->rowFromEntity($entity), $entities);
+        $rows = [];
+
+        foreach ($entities as $entity) {
+            if ($entity instanceof CatalogCategoryEntity) {
+                $rows[] = $this->rowFromEntity($entity);
+            }
+        }
+
+        return $rows;
     }
 
     /**

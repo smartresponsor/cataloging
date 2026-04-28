@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the channel filter application service.
  */
-final class ChannelFilter
+final class CatalogChannelFilterService
 {
     /**
      * @param list<array<string,mixed>> $categories

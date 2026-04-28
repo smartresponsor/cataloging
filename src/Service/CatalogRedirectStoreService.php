@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogSeoRedirectEntity;
+use App\Cataloging\Entity\Catalog\CatalogSeoRedirectEntity;
 use App\Cataloging\ServiceInterface\CatalogRedirectStoreServiceInterface;
 use App\Cataloging\ValueObject\RedirectPutRequest;
 use Doctrine\ORM\EntityManagerInterface;

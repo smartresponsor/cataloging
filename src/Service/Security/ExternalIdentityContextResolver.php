@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service\Security;
 
-use App\Cataloging\Security\ExternalIdentityContext;
 use App\Cataloging\ServiceInterface\CatalogOidcJwtValidatorServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextMapperInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
+use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

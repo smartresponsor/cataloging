@@ -17,7 +17,7 @@ class CatalogVirtualCategoryMemberEntity
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private ?int $id = null;
+    private null $id = null;
 
     #[ORM\Column(type: 'string', length: 26, name: 'virtual_category_id')]
     private string $virtualCategoryId;

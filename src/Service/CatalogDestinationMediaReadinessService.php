@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Event\CategoryDestinationMediaReadinessEvaluated;
-use App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface;
+use App\Cataloging\Event\Catalog\CatalogCategoryDestinationMediaReadinessEvaluatedEvent;
+use App\Cataloging\EventInterface\Catalog\CatalogCategoryDestinationMediaReadinessEvaluatedEventInterface;
 use App\Cataloging\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface;
 use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
@@ -36,7 +36,7 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
      */
     public function evaluate(
         CategoryDestinationMediaEvaluationRequest $request,
-    ): CategoryDestinationMediaReadinessEvaluatedInterface {
+    ): CatalogCategoryDestinationMediaReadinessEvaluatedEventInterface {
         $destinationId = $request->destinationId();
         $categoryId = $request->categoryId();
         $destination = $this->destinationRepository->find($destinationId);
@@ -69,7 +69,7 @@ final readonly class CatalogDestinationMediaReadinessService implements CatalogD
             ),
         );
 
-        return new CategoryDestinationMediaReadinessEvaluated(
+        return new CatalogCategoryDestinationMediaReadinessEvaluatedEvent(
             $destinationId,
             $categoryId,
             CategoryMediaInputNormalizer::stringValue($settings['channel'] ?? null),

@@ -7,7 +7,7 @@ namespace App\Cataloging\Tests\Category;
 use App\Cataloging\Idempotency\CategoryIdempotencyStore;
 use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
 use App\Cataloging\Policy\CategoryPublicationGatePolicy;
-use App\Cataloging\Service\CacheInvalidationRecorder;
+use App\Cataloging\Service\CatalogCacheInvalidationRecorderService;
 use App\Cataloging\Service\CatalogCategoryMutationService;
 use App\Cataloging\Service\CatalogOutboxWriterService;
 use App\Cataloging\Service\CatalogPublicationGateService;
@@ -224,7 +224,7 @@ final class CategoryMutationServiceTest extends TestCase
         return new CatalogCategoryMutationService(
             $entityManager,
             new CatalogOutboxWriterService($entityManager),
-            new CacheInvalidationRecorder(),
+            new CatalogCacheInvalidationRecorderService(),
             new CatalogPublicationGateService(new CategoryPublicationGatePolicy()),
             new CatalogCategoryWorkflowEntityPolicy(),
             new CategoryIdempotencyStore($entityManager),

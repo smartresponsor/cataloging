@@ -10,7 +10,7 @@ use App\Cataloging\ValueObject\CategoryHostContextRequest;
 /**
  * Provides the store scope resolver application service.
  */
-final class StoreScopeResolver
+final class CatalogStoreScopeResolverService
 {
     /**
      * Resolves the requested result for the provided input.

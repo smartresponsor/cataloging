@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the batch import runner application service.
  */
-final class CatalogCatalogBatchImportRunnerServiceService
+final class CatalogBatchImportRunnerService
 {
     private CatalogProgressTrackerService $progress;
 

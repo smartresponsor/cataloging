@@ -8,7 +8,7 @@ namespace App\Cataloging\Service;
 /**
  * Provides the facet index builder application service.
  */
-final class FacetIndexBuilder
+final class CatalogFacetIndexBuilderService
 {
     /**
      * @param array{id?:mixed,slug?:mixed,path?:mixed,locale?:mixed,name?:mixed} $category

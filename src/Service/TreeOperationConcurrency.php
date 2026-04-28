@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogCategoryEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -12,7 +12,7 @@ final class TreeOperationConcurrency
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TreeLock $treeLock,
+        private readonly CatalogTreeLockService $treeLock,
     ) {
     }
 

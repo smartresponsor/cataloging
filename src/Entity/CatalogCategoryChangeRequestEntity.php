@@ -46,6 +46,7 @@ final class CatalogCategoryChangeRequestEntity implements CatalogCategoryChangeR
     #[ORM\Column(name: 'reviewed_at', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $reviewedAt;
 
+    /** @param array<mixed, mixed> $changes */
     public function __construct(
         string $requestId,
         string $categoryId,
@@ -62,7 +63,7 @@ final class CatalogCategoryChangeRequestEntity implements CatalogCategoryChangeR
         $this->categoryId = $categoryId;
         $this->submittedBy = $submittedBy;
         $this->summary = $summary;
-        $this->changes = $changes;
+        $this->changes = self::normalizeStringKeyMap($changes);
         $this->stateValue = $state->value();
         $this->reviewedBy = $reviewedBy;
         $this->decisionReason = $decisionReason;
@@ -130,5 +131,23 @@ final class CatalogCategoryChangeRequestEntity implements CatalogCategoryChangeR
     public function reviewedAt(): ?\DateTimeImmutable
     {
         return $this->reviewedAt;
+    }
+
+    /**
+     * @param array<mixed, mixed> $values
+     *
+     * @return array<string, mixed>
+     */
+    private static function normalizeStringKeyMap(array $values): array
+    {
+        $normalized = [];
+
+        foreach ($values as $key => $value) {
+            if (is_string($key)) {
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
     }
 }

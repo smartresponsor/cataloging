@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity\Catalog;
 
-use App\Cataloging\EntityInterface\CategoryChangeRequestInterface;
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
 use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use App\Cataloging\ValueObjectInterface\CategoryChangeRequestStateInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'category_change_request')]
 #[ORM\Index(name: 'idx_category_change_request_category_state', columns: ['category_id', 'state'])]
-final class CatalogCategoryChangeRequestEntity implements CategoryChangeRequestInterface
+final class CatalogCategoryChangeRequestEntity implements CatalogCategoryChangeRequestEntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'request_id', type: 'string', length: 64)]
@@ -46,6 +46,7 @@ final class CatalogCategoryChangeRequestEntity implements CategoryChangeRequestI
     #[ORM\Column(name: 'reviewed_at', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $reviewedAt;
 
+    /** @param array<mixed, mixed> $changes */
     public function __construct(
         string $requestId,
         string $categoryId,
@@ -62,7 +63,7 @@ final class CatalogCategoryChangeRequestEntity implements CategoryChangeRequestI
         $this->categoryId = $categoryId;
         $this->submittedBy = $submittedBy;
         $this->summary = $summary;
-        $this->changes = $changes;
+        $this->changes = self::normalizeStringKeyMap($changes);
         $this->stateValue = $state->value();
         $this->reviewedBy = $reviewedBy;
         $this->decisionReason = $decisionReason;
@@ -130,5 +131,23 @@ final class CatalogCategoryChangeRequestEntity implements CategoryChangeRequestI
     public function reviewedAt(): ?\DateTimeImmutable
     {
         return $this->reviewedAt;
+    }
+
+    /**
+     * @param array<mixed, mixed> $values
+     *
+     * @return array<string, mixed>
+     */
+    private static function normalizeStringKeyMap(array $values): array
+    {
+        $normalized = [];
+
+        foreach ($values as $key => $value) {
+            if (is_string($key)) {
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
     }
 }

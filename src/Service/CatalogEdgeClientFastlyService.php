@@ -10,7 +10,7 @@ use App\Cataloging\ServiceInterface\EdgeClientInterface;
 /**
  * Provides the edge client fastly application service.
  */
-final class EdgeClientFastly implements EdgeClientInterface
+final class CatalogEdgeClientFastlyService implements EdgeClientInterface
 {
     /**
      * Handles the purge workflow.

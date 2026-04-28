@@ -52,17 +52,22 @@ final class CatalogCategoryMediaBindingEntity implements CatalogCategoryMediaBin
     private \DateTimeImmutable $boundAt;
 
     /** @param list<string> $channels @param list<string> $locales @param array<string,mixed> $metadata */
+    /**
+     * @param array<mixed, mixed> $channels
+     * @param array<mixed, mixed> $locales
+     * @param array<mixed, mixed> $metadata
+     */
     public function __construct(string $bindingId, string $categoryId, string $assetId, CategoryMediaRole $role, array $channels, array $locales, bool $requiredForPublish, bool $active, array $metadata, string $actorId, \DateTimeImmutable $boundAt)
     {
         $this->bindingId = $bindingId;
         $this->categoryId = $categoryId;
         $this->assetId = $assetId;
         $this->roleName = $role->value();
-        $this->channels = $channels;
-        $this->locales = $locales;
+        $this->channels = self::normalizeStringList($channels);
+        $this->locales = self::normalizeStringList($locales);
         $this->requiredForPublish = $requiredForPublish;
         $this->active = $active;
-        $this->metadata = $metadata;
+        $this->metadata = self::normalizeStringKeyMap($metadata);
         $this->actorId = $actorId;
         $this->boundAt = $boundAt;
     }
@@ -87,11 +92,13 @@ final class CatalogCategoryMediaBindingEntity implements CatalogCategoryMediaBin
         return CategoryMediaRole::fromString($this->roleName);
     }
 
+    /** @return list<string> */
     public function channels(): array
     {
         return $this->channels;
     }
 
+    /** @return list<string> */
     public function locales(): array
     {
         return $this->locales;
@@ -107,6 +114,7 @@ final class CatalogCategoryMediaBindingEntity implements CatalogCategoryMediaBin
         return $this->active;
     }
 
+    /** @return array<string, mixed> */
     public function metadata(): array
     {
         return $this->metadata;
@@ -120,5 +128,41 @@ final class CatalogCategoryMediaBindingEntity implements CatalogCategoryMediaBin
     public function boundAt(): \DateTimeImmutable
     {
         return $this->boundAt;
+    }
+
+    /**
+     * @param array<mixed, mixed> $values
+     *
+     * @return array<string, mixed>
+     */
+    private static function normalizeStringKeyMap(array $values): array
+    {
+        $normalized = [];
+
+        foreach ($values as $key => $value) {
+            if (is_string($key)) {
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param array<mixed, mixed> $values
+     *
+     * @return list<string>
+     */
+    private static function normalizeStringList(array $values): array
+    {
+        $normalized = [];
+
+        foreach ($values as $value) {
+            if (is_scalar($value)) {
+                $normalized[] = (string) $value;
+            }
+        }
+
+        return $normalized;
     }
 }

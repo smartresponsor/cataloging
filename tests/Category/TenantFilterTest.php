@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Category;
 
-use App\Cataloging\Service\TenantFilter;
+use App\Cataloging\Service\CatalogTenantFilterService;
 use PHPUnit\Framework\TestCase;
 
-final class TenantFilterTest extends TestCase
+final class CatalogTenantFilterServiceTest extends TestCase
 {
     public function testFilterByTenant(): void
     {
-        $f = new TenantFilter();
+        $f = new CatalogTenantFilterService();
         $items = [
             ['id' => 1, 'tenant' => 'default'],
             ['id' => 2, 'tenant' => 'merchant'],

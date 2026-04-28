@@ -18,7 +18,7 @@ final class AbVariantResolver
     /** @param array<string,bool> $flags */
     public function __construct(
         array $flags = [],
-        private readonly JsonArrayReader $jsonArrayReader = new JsonArrayReader(),
+        private readonly CatalogJsonArrayReaderService $jsonArrayReader = new CatalogJsonArrayReaderService(),
     ) {
         $this->flags = $flags;
     }

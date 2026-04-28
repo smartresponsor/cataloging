@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Service;
 
+use App\Cataloging\Service\CatalogReadOptimizerService;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use PHPUnit\Framework\TestCase;
