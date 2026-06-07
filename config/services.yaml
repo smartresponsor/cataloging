@@ -19,6 +19,7 @@ services:
             - '../src/Entity/'
             - '../src/Event/'
             - '../src/EventInterface/'
+            - '../src/Exception/'
             - '../src/Kernel.php'
             - '../src/ValueObject/'
             - '../src/ValueObjectInterface/'

@@ -16,6 +16,7 @@ services:
       - '../../src/Entity/'
       - '../../src/Event/'
       - '../../src/EventInterface/'
+      - '../../src/Exception/'
       - '../../src/Tests/'
       - '../../src/ValueObject/'
       - '../../src/ValueObjectInterface/'
