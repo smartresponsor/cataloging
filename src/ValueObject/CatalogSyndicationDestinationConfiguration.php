@@ -5,4 +5,31 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ValueObject;
 
-require_once __DIR__.'/SyndicationDestinationConfiguration.php';
+/**
+ * Carries activation and settings state for syndication destinations.
+ */
+final readonly class CatalogSyndicationDestinationConfiguration
+{
+    /**
+     * @param array<string,mixed> $settings
+     */
+    public function __construct(
+        private bool $enabled,
+        private array $settings,
+    ) {
+    }
+
+    public function enabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /** @return array<string,mixed> */
+    public function settings(): array
+    {
+        return $this->settings;
+    }
+}
+if (!class_exists(__NAMESPACE__.'\\SyndicationDestinationConfiguration', false)) {
+    class_alias(CatalogSyndicationDestinationConfiguration::class, __NAMESPACE__.'\\SyndicationDestinationConfiguration');
+}

@@ -5,4 +5,54 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Policy;
 
-require_once __DIR__.'/CategoryReviewAssignmentPolicy.php';
+use App\Cataloging\EntityInterface\Catalog\CatalogCategoryChangeRequestEntityInterface;
+use App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
+
+/**
+ * Provides the category review assignment policy implementation.
+ */
+final class CatalogCategoryReviewAssignmentEntityPolicy implements CatalogCategoryReviewAssignmentEntityPolicyInterface
+{
+    private const array ALLOWED_PRIORITIES = ['normal', 'high', 'urgent'];
+
+    /**
+     * Determines whether the current workflow can assign.
+     */
+    public function canAssign(
+        CatalogCategoryChangeRequestEntityInterface $request,
+        string $assignedReviewer,
+        string $assignedBy,
+        string $priority,
+    ): bool {
+        if ('' === trim($assignedReviewer) || '' === trim($assignedBy)) {
+            return false;
+        }
+
+        if (!in_array(trim($priority), self::ALLOWED_PRIORITIES, true)) {
+            return false;
+        }
+
+        return in_array($request->state()->value(), [
+            CategoryChangeRequestState::PROPOSED,
+            CategoryChangeRequestState::IN_REVIEW,
+        ], true);
+    }
+
+    /**
+     * Handles the assert can assign workflow.
+     */
+    public function assertCanAssign(
+        CatalogCategoryChangeRequestEntityInterface $request,
+        string $assignedReviewer,
+        string $assignedBy,
+        string $priority,
+    ): void {
+        if (!$this->canAssign($request, $assignedReviewer, $assignedBy, $priority)) {
+            throw new \DomainException(sprintf('Category review assignment is not allowed for request state: %s', $request->state()->value()));
+        }
+    }
+}
+if (!class_exists(__NAMESPACE__.'\\CategoryReviewAssignmentPolicy', false)) {
+    class_alias(CatalogCategoryReviewAssignmentEntityPolicy::class, __NAMESPACE__.'\\CategoryReviewAssignmentPolicy');
+}
