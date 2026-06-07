@@ -1,0 +1,21 @@
+config_tools:
+  - application_code: Cataloging
+    tool_code: cataloging.oidc
+    label: Cataloging OIDC
+    description: Safe OIDC trust settings stored in the Cataloging component env manifest.
+    form_class: App\Cataloging\Form\Config\CatalogingOidcConfigFormType
+    service_class: App\Cataloging\Service\Config\CatalogingOidcConfigService
+    required_permission: administration.config.update
+    editable_fields:
+      - audience
+      - issuer
+      - jwkSetJson
+    sensitive_fields: []
+    readable_files:
+      - config/component/runtime.yaml
+    writable_files:
+      - config/component/runtime.yaml
+    apply_strategy: component_yaml
+    metadata:
+      section: Configuration
+      kind: oidc

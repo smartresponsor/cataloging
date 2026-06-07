@@ -1,0 +1,4 @@
+parameters:
+  catalog.oidc_jwk_set: []
+  catalog.oidc_audience: 'catalog-dev'
+  catalog.oidc_issuer: 'catalog-dev'
