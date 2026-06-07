@@ -17,7 +17,11 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/Event/'
+            - '../src/EventInterface/'
             - '../src/Kernel.php'
+            - '../src/ValueObject/'
+            - '../src/ValueObjectInterface/'
 
     App\Cataloging\Controller\Catalog\CatalogStatusController:
         tags: [ 'controller.service_arguments' ]
@@ -36,12 +40,13 @@ services:
     App\Cataloging\ServiceInterface\CatalogCategoryMutationServiceInterface: '@App\Cataloging\Service\CatalogCategoryMutationService'
 
     App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CatalogCategoryProjectionReadService'
+    App\Cataloging\ServiceInterface\CatalogCategoryAdminServiceInterface: '@App\Cataloging\Service\CatalogCategoryAdminService'
     App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface: '@App\Cataloging\Service\CatalogCategoryReadScopeService'
 
     App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface: '@App\Cataloging\Idempotency\CategoryIdempotencyStore'
 
     App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface:
-        '@App\Cataloging\Repository\CategoryAccessAssignmentRepository'
+        '@App\Cataloging\Repository\Catalog\CatalogCategoryAccessAssignmentRepository'
 
 
     App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface: '@App\Cataloging\Attachment\NullAttachmentReferenceGateway'

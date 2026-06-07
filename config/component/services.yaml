@@ -1,7 +1,5 @@
-parameters:
-  catalog.oidc_jwk_set: []
-  catalog.oidc_audience: '%env(default:catalog-dev:CATALOG_OIDC_AUDIENCE)%'
-  catalog.oidc_issuer: '%env(default:catalog-dev:CATALOG_OIDC_ISSUER)%'
+imports:
+  - { resource: 'runtime.yaml' }
 
 services:
   _defaults:
@@ -16,32 +14,43 @@ services:
       - '../../src/Kernel.php'
       - '../../src/DependencyInjection/'
       - '../../src/Entity/'
+      - '../../src/Event/'
+      - '../../src/EventInterface/'
       - '../../src/Tests/'
+      - '../../src/ValueObject/'
+      - '../../src/ValueObjectInterface/'
 
   App\Cataloging\Service\CatalogOidcJwtVerifierService:
     arguments:
       $jwkSet: '%catalog.oidc_jwk_set%'
       $audience: '%catalog.oidc_audience%'
       $issuer: '%catalog.oidc_issuer%'
+  App\Cataloging\Service\Config\CatalogingOidcConfigService:
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+    tags: ['administering.config_tool']
   App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface:
     alias: App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository
 
   App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryReviewAssignmentRepositoryInterface:
-    alias: App\Cataloging\Repository\CategoryReviewAssignmentRepository
+    alias: App\Cataloging\Repository\Catalog\CatalogCategoryReviewAssignmentRepository
   App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface:
-    alias: App\Cataloging\Repository\CategoryAccessAssignmentRepository
+    alias: App\Cataloging\Repository\Catalog\CatalogCategoryAccessAssignmentRepository
   App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryMediaBindingRepositoryInterface:
-    alias: App\Cataloging\Repository\CategoryMediaBindingRepository
+    alias: App\Cataloging\Repository\Catalog\CatalogCategoryMediaBindingRepository
   App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryWorkflowRepositoryInterface:
-    alias: App\Cataloging\Repository\CategoryWorkflowRepository
+    alias: App\Cataloging\Repository\Catalog\CatalogCategoryWorkflowRepository
   App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface:
-    alias: App\Cataloging\Repository\SyndicationDeliveryRecordRepository
+    alias: App\Cataloging\Repository\Catalog\CatalogSyndicationDeliveryRecordRepository
+
+  App\Cataloging\Service\Catalog\CatalogCategoryMoveSurfaceBuilder:
+    public: true
   App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface:
-    alias: App\Cataloging\Repository\SyndicationDestinationRepository
+    alias: App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository
 
   App\Cataloging\PolicyInterface\CatalogSyndicationDestinationPolicyInterface:
-    alias: App\Cataloging\Policy\SyndicationDestinationPolicy
+    alias: App\Cataloging\Policy\CatalogSyndicationDestinationPolicy
   App\Cataloging\PolicyInterface\CatalogSyndicationDestinationGovernanceSummaryPolicyInterface:
-    alias: App\Cataloging\Policy\SyndicationDestinationGovernanceSummaryPolicy
+    alias: App\Cataloging\Policy\CatalogSyndicationDestinationGovernanceSummaryPolicy
   App\Cataloging\PolicyInterface\CatalogCategoryReviewAssignmentEntityPolicyInterface:
-    alias: App\Cataloging\Policy\CategoryReviewAssignmentPolicy
+    alias: App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy
