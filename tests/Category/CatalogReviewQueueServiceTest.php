@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Policy\CatalogCategoryReviewAssignmentEntityPolicy;
 use App\Cataloging\Policy\CategoryChangeRequestPolicy;

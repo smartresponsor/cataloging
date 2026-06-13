@@ -73,7 +73,7 @@ function buildJwt(OpenSSLAsymmetricKey $privateKey, array $header, array $payloa
 /**
  * @return array{status:string,message:string,payload?:array<string,mixed>}
  */
-function runScenario(string $name, callable $scenario): array
+function runScenario(string $nameEntity, callable $scenario): array
 {
     try {
         $result = $scenario();
@@ -86,7 +86,7 @@ function runScenario(string $name, callable $scenario): array
     } catch (Throwable $throwable) {
         return [
             'status' => 'fail',
-            'message' => sprintf('%s: %s', $name, $throwable->getMessage()),
+            'message' => sprintf('%s: %s', $nameEntity, $throwable->getMessage()),
         ];
     }
 }
@@ -94,21 +94,21 @@ function runScenario(string $name, callable $scenario): array
 /**
  * @return array{status:string,message:string}
  */
-function expectExceptionScenario(string $name, callable $scenario, string $expectedFragment): array
+function expectExceptionScenario(string $nameEntity, callable $scenario, string $expectedFragment): array
 {
     try {
         $scenario();
 
         return [
             'status' => 'fail',
-            'message' => sprintf('%s: expected exception containing "%s".', $name, $expectedFragment),
+            'message' => sprintf('%s: expected exception containing "%s".', $nameEntity, $expectedFragment),
         ];
     } catch (Throwable $throwable) {
         $message = $throwable->getMessage();
 
         return [
             'status' => str_contains($message, $expectedFragment) ? 'pass' : 'fail',
-            'message' => sprintf('%s: %s', $name, $message),
+            'message' => sprintf('%s: %s', $nameEntity, $message),
         ];
     }
 }

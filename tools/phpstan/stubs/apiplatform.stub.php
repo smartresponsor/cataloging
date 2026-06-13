@@ -21,14 +21,14 @@ namespace ApiPlatform\Metadata\GraphQl;
 
 class Query
 {
-    public function __construct(?string $name = null, ?string $resolver = null)
+    public function __construct(?string $nameEntity = null, ?string $resolver = null)
     {
     }
 }
 
 class QueryCollection
 {
-    public function __construct(?string $name = null, ?string $resolver = null)
+    public function __construct(?string $nameEntity = null, ?string $resolver = null)
     {
     }
 }

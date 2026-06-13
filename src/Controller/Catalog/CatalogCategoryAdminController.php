@@ -32,20 +32,20 @@ final class CatalogCategoryAdminController extends AbstractController
      * Handles the index workflow.
      */
     #[Route('/admin/category', name: 'admin_category_index')]
-    public function index(): Response
+    public function index(): array
     {
         try {
             $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
                 'limit' => 100,
                 'offset' => 0,
-                'order' => 'name',
+                'order' => 'nameEntity',
                 'direction' => 'asc',
             ]));
         } catch (\Throwable $exception) {
             throw $this->createNotFoundException('Unable to load category administration listing.', $exception);
         }
 
-        return $this->render('category/list.html.twig', [
+        return $this->viewPayload('admin-index', [
             'categories' => $categories,
         ]);
     }
@@ -54,19 +54,19 @@ final class CatalogCategoryAdminController extends AbstractController
      * Handles the new workflow.
      */
     #[Route('/admin/category/new', name: 'admin_category_new')]
-    public function new(Request $request): Response
+    public function new(Request $request): Response|array
     {
         $data = new CategoryAdminCategoryData();
         $form = $this->createForm(CategoryAdminCategoryType::class, $data);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', sprintf('Category "%s" captured for baseline save.', $data->name));
+            $this->addFlash('success', sprintf('CategoryEntity "%s" captured for baseline save.', $data->nameEntity));
 
             return $this->redirectToRoute('admin_category_index');
         }
 
-        return $this->render('category/form.html.twig', [
+        return $this->viewPayload('admin-new', [
             'form' => $form->createView(),
             'is_edit' => false,
         ]);
@@ -76,7 +76,7 @@ final class CatalogCategoryAdminController extends AbstractController
      * Handles the edit workflow.
      */
     #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
-    public function edit(int $id, Request $request): Response
+    public function edit(int $id, Request $request): Response|array
     {
         try {
             $category = $this->categoryProjectionReadService->findOne((string) $id);
@@ -84,7 +84,7 @@ final class CatalogCategoryAdminController extends AbstractController
             throw $this->createNotFoundException(sprintf('Unable to load category #%d.', $id), $exception);
         }
         if (null === $category) {
-            throw $this->createNotFoundException(sprintf('Category #%d was not found.', $id));
+            throw $this->createNotFoundException(sprintf('CategoryEntity #%d was not found.', $id));
         }
 
         $data = CategoryAdminCategoryData::fromArray($category);
@@ -92,12 +92,12 @@ final class CatalogCategoryAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', sprintf('Category #%d updated in baseline flow.', $id));
+            $this->addFlash('success', sprintf('CategoryEntity #%d updated in baseline flow.', $id));
 
             return $this->redirectToRoute('admin_category_index');
         }
 
-        return $this->render('category/form.html.twig', [
+        return $this->viewPayload('admin-edit', [
             'form' => $form->createView(),
             'is_edit' => true,
         ]);
@@ -107,7 +107,7 @@ final class CatalogCategoryAdminController extends AbstractController
      * Handles the tree workflow.
      */
     #[Route('/admin/category/tree', name: 'admin_category_tree')]
-    public function tree(): Response
+    public function tree(): array
     {
         try {
             $tree = $this->categoryProjectionReadService->tree();
@@ -115,8 +115,33 @@ final class CatalogCategoryAdminController extends AbstractController
             throw $this->createNotFoundException('Unable to load category tree.', $exception);
         }
 
-        return $this->render('category/tree.html.twig', [
+        return $this->viewPayload('admin-tree', [
             'tree' => $tree,
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function viewPayload(string $operation, array $data): array
+    {
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => $operation,
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => [
+                'body' => $data,
+            ],
+            'data' => $data,
+            'meta' => [
+                'source' => 'catalog_category_admin_controller',
+            ],
+        ];
     }
 }

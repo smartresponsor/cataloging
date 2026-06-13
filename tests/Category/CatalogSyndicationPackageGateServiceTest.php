@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Policy\CatalogSyndicationDestinationPolicy;
 use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
@@ -73,8 +73,8 @@ final class CatalogSyndicationPackageGateServiceTest extends TestCase
                     'v1',
                     'per_locale',
                 ),
-                ['name' => 'Summer Shoes', 'slug' => 'summer-shoes', 'seoTitle' => 'Summer Shoes'],
-                ['name' => 'title', 'slug' => 'handle', 'seoTitle' => 'seo_title'],
+                ['nameEntity' => 'Summer Shoes', 'slug' => 'summer-shoes', 'seoTitle' => 'Summer Shoes'],
+                ['nameEntity' => 'title', 'slug' => 'handle', 'seoTitle' => 'seo_title'],
                 ['title', 'handle', 'seo_title'],
                 new CatalogAuditContext('operator-7', 'build gated package'),
             ),

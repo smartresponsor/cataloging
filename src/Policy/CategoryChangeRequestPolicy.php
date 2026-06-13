@@ -57,7 +57,7 @@ final class CategoryChangeRequestPolicy implements CategoryChangeRequestPolicyIn
         array $changes,
     ): void {
         if (!$this->canSubmit($requestId, $categoryId, $submittedBy, $summary, $changes)) {
-            throw new \DomainException('Category change request submission is not allowed.');
+            throw new \DomainException('CategoryEntity change request submission is not allowed.');
         }
     }
 
@@ -89,7 +89,7 @@ final class CategoryChangeRequestPolicy implements CategoryChangeRequestPolicyIn
         string $decisionReason,
     ): void {
         if (!$this->canReview($from, $to, $reviewedBy, $decisionReason)) {
-            throw new \DomainException(sprintf('Category change request review transition is not allowed: %s -> %s', $from->value(), $to->value()));
+            throw new \DomainException(sprintf('CategoryEntity change request review transition is not allowed: %s -> %s', $from->value(), $to->value()));
         }
     }
 }

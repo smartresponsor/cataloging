@@ -41,8 +41,7 @@ final class ExportRedirectCommand extends Command
 
         $lines = [];
         foreach ($slugHistories as $slugHistory) {
-            /** @var CatalogCategoryEntity|null $cat */
-            $cat = $catRepo->find($slugHistory->categoryId());
+            $cat = $this->findCategoryEntity($catRepo, $slugHistory->categoryId());
             if (!$cat) {
                 continue;
             }
@@ -56,6 +55,29 @@ final class ExportRedirectCommand extends Command
         $output->writeln('Exported: '.$path);
 
         return Command::SUCCESS;
+    }
+
+    private function findCategoryEntity(object $repository, string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+
+            return $entity instanceof CatalogCategoryEntity ? $entity : null;
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 
     private function ensureDirectory(string $path): void

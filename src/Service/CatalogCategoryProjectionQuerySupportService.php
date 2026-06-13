@@ -150,7 +150,7 @@ final class CatalogCategoryProjectionQuerySupportService
         return [
             'id' => $id,
             'slug' => $this->optionalString($row['slug'] ?? null) ?? '',
-            'name' => $this->optionalString($row['name'] ?? null) ?? '',
+            'nameEntity' => $this->optionalString($row['nameEntity'] ?? null) ?? '',
             'parent_id' => $this->optionalString($row['parent_id'] ?? null),
             'path' => $this->optionalString($row['path'] ?? null) ?? '',
             'locale' => $this->optionalString($row['locale'] ?? null) ?? '',

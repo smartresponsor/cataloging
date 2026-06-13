@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Idempotency\CategoryIdempotencyStore;
 use App\Cataloging\Policy\CatalogCategoryWorkflowEntityPolicy;
@@ -21,6 +21,27 @@ use Symfony\Component\Yaml\Yaml;
 
 final class CategoryMutationServiceTest extends TestCase
 {
+    private const ROOT_ID = '1';
+    private const ELECTRONICS_ID = '2';
+    private const PHONES_ID = '3';
+    private const FASHION_ID = '4';
+    private const ROOT_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a301';
+    private const ELECTRONICS_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a302';
+    private const PHONES_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a303';
+    private const FASHION_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a304';
+    private const DEEP_ROOT_ID = '1';
+    private const DEEP_A_ID = '2';
+    private const DEEP_B_ID = '3';
+    private const DEEP_C_ID = '4';
+    private const DEEP_D_ID = '5';
+    private const DEEP_X_ID = '6';
+    private const DEEP_ROOT_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401';
+    private const DEEP_A_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a402';
+    private const DEEP_B_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a403';
+    private const DEEP_C_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a404';
+    private const DEEP_D_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a405';
+    private const DEEP_X_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a406';
+
     public function testMoveRebasesSubtreeUpdatesParentAndWritesAuditAndOutbox(): void
     {
         $connection = $this->createConnection();
@@ -28,24 +49,24 @@ final class CategoryMutationServiceTest extends TestCase
         $this->seedCategoryTree($connection);
 
         $service = $this->createService($connection);
-        $result = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict'));
+        $result = $service->move(new CategoryMutationMoveRequest(self::ELECTRONICS_ID, self::FASHION_ID, 'oleksandr', 'catalog', 'strict'));
 
-        self::assertSame('electronics', $result['id']);
-        self::assertSame('fashion', $result['newParentId']);
+        self::assertSame(self::ELECTRONICS_ID, $result['id']);
+        self::assertSame(self::FASHION_ID, $result['newParentId']);
         self::assertSame(2, $result['changedCount']);
         self::assertCount(2, $result['redirects']);
         self::assertFalse($result['duplicate']);
 
-        $category = $connection->fetchAssociative('SELECT parent_id, path, depth FROM category WHERE id = :id', ['id' => 'electronics']);
+        $category = $connection->fetchAssociative('SELECT parent_id, path, depth FROM category WHERE id = :id', ['id' => self::ELECTRONICS_ID]);
         self::assertIsArray($category);
-        self::assertSame('fashion', $category['parent_id']);
-        self::assertSame('root.fashion.electronics', $category['path']);
+        self::assertSame(4, (int) $category['parent_id']);
+        self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG, $category['path']);
         self::assertTrue(is_scalar($category['depth']));
         self::assertSame(2, (int) $category['depth']);
 
-        $phones = $connection->fetchAssociative('SELECT path, depth FROM category WHERE id = :id', ['id' => 'phones']);
+        $phones = $connection->fetchAssociative('SELECT path, depth FROM category WHERE id = :id', ['id' => self::PHONES_ID]);
         self::assertIsArray($phones);
-        self::assertSame('root.fashion.electronics.phones', $phones['path']);
+        self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG, $phones['path']);
         self::assertTrue(is_scalar($phones['depth']));
         self::assertSame(3, (int) $phones['depth']);
 
@@ -66,8 +87,8 @@ final class CategoryMutationServiceTest extends TestCase
 
         $service = $this->createService($connection);
         $service->move(new CategoryMutationMoveRequest(
-            'electronics',
-            'fashion',
+            self::ELECTRONICS_ID,
+            self::FASHION_ID,
             'oleksandr',
             'catalog',
             'strict',
@@ -81,8 +102,8 @@ final class CategoryMutationServiceTest extends TestCase
         $this->expectExceptionMessage('cannot be reused for a different request payload');
 
         $service->move(new CategoryMutationMoveRequest(
-            'electronics',
-            'root',
+            self::ELECTRONICS_ID,
+            self::ROOT_ID,
             'oleksandr',
             'catalog',
             'strict',
@@ -101,8 +122,8 @@ final class CategoryMutationServiceTest extends TestCase
 
         $service = $this->createService($connection);
         $result = $service->move(new CategoryMutationMoveRequest(
-            'a',
-            'x',
+            self::DEEP_A_ID,
+            self::DEEP_X_ID,
             'oleksandr',
             'catalog',
             'strict',
@@ -110,9 +131,9 @@ final class CategoryMutationServiceTest extends TestCase
 
         self::assertSame(4, $result['changedCount']);
 
-        $deepest = $connection->fetchAssociative('SELECT path, depth FROM category WHERE id = :id', ['id' => 'd']);
+        $deepest = $connection->fetchAssociative('SELECT path, depth FROM category WHERE id = :id', ['id' => self::DEEP_D_ID]);
         self::assertIsArray($deepest);
-        self::assertSame('root.x.a.b.c.d', $deepest['path']);
+        self::assertSame(self::DEEP_ROOT_SLUG.'.'.self::DEEP_X_SLUG.'.'.self::DEEP_A_SLUG.'.'.self::DEEP_B_SLUG.'.'.self::DEEP_C_SLUG.'.'.self::DEEP_D_SLUG, $deepest['path']);
         self::assertTrue(is_scalar($deepest['depth']));
         self::assertSame(5, (int) $deepest['depth']);
     }
@@ -124,8 +145,8 @@ final class CategoryMutationServiceTest extends TestCase
         $this->seedCategoryTree($connection);
 
         $service = $this->createService($connection);
-        $first = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
-        $second = $service->move(new CategoryMutationMoveRequest('electronics', 'fashion', 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
+        $first = $service->move(new CategoryMutationMoveRequest(self::ELECTRONICS_ID, self::FASHION_ID, 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
+        $second = $service->move(new CategoryMutationMoveRequest(self::ELECTRONICS_ID, self::FASHION_ID, 'oleksandr', 'catalog', 'strict', false, null, 'move-1', 'corr-1'));
 
         self::assertFalse($first['duplicate']);
         self::assertTrue($second['duplicate']);
@@ -145,10 +166,10 @@ final class CategoryMutationServiceTest extends TestCase
         $connection = $this->createConnection();
         $this->createSchema($connection);
         $this->seedCategoryTree($connection);
-        $connection->update('category', ['workflow_state' => 'approved'], ['id' => 'electronics']);
+        $connection->update('category', ['workflow_state' => 'approved'], ['id' => self::ELECTRONICS_ID]);
 
         $service = $this->createService($connection);
-        $result = $service->publish(new CategoryMutationPublishRequest('electronics', true, [
+        $result = $service->publish(new CategoryMutationPublishRequest(self::ELECTRONICS_ID, true, [
             'slugReady' => true,
             'seoReady' => true,
             'contentReady' => true,
@@ -164,7 +185,7 @@ final class CategoryMutationServiceTest extends TestCase
         self::assertNotNull($result['publishedAt']);
         self::assertFalse($result['duplicate']);
 
-        $row = $connection->fetchAssociative('SELECT workflow_state, published, published_at FROM category WHERE id = :id', ['id' => 'electronics']);
+        $row = $connection->fetchAssociative('SELECT workflow_state, published, published_at FROM category WHERE id = :id', ['id' => self::ELECTRONICS_ID]);
         self::assertIsArray($row);
         self::assertSame('published', $row['workflow_state']);
         self::assertTrue(is_scalar($row['published']));
@@ -185,7 +206,7 @@ final class CategoryMutationServiceTest extends TestCase
         $connection = $this->createConnection();
         $this->createSchema($connection);
         $this->seedCategoryTree($connection);
-        $connection->update('category', ['workflow_state' => 'approved'], ['id' => 'electronics']);
+        $connection->update('category', ['workflow_state' => 'approved'], ['id' => self::ELECTRONICS_ID]);
 
         $service = $this->createService($connection);
         $checks = [
@@ -195,8 +216,8 @@ final class CategoryMutationServiceTest extends TestCase
             'localeReady' => true,
         ];
 
-        $first = $service->publish(new CategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
-        $second = $service->publish(new CategoryMutationPublishRequest('electronics', true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
+        $first = $service->publish(new CategoryMutationPublishRequest(self::ELECTRONICS_ID, true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
+        $second = $service->publish(new CategoryMutationPublishRequest(self::ELECTRONICS_ID, true, $checks, 'oleksandr', 'manual publish', 'publish-1', 'corr-2'));
 
         self::assertFalse($first['duplicate']);
         self::assertTrue($second['duplicate']);
@@ -238,7 +259,7 @@ final class CategoryMutationServiceTest extends TestCase
 
     private function createSchema(Connection $connection): void
     {
-        $connection->executeStatement('CREATE TABLE category (id TEXT PRIMARY KEY, slug TEXT NOT NULL, name TEXT NOT NULL DEFAULT "", parent_id TEXT DEFAULT NULL, depth INTEGER NOT NULL DEFAULT 0, path TEXT DEFAULT NULL, locale TEXT DEFAULT NULL, tenant TEXT DEFAULT "default", icon_url TEXT DEFAULT NULL, workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL)');
+        $connection->executeStatement('CREATE TABLE category (id INTEGER PRIMARY KEY, slug TEXT NOT NULL, nameEntity TEXT NOT NULL DEFAULT "", parent_id INTEGER DEFAULT NULL, depth INTEGER NOT NULL DEFAULT 0, path TEXT DEFAULT NULL, locale TEXT DEFAULT NULL, tenant TEXT DEFAULT "default", icon_url TEXT DEFAULT NULL, workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL)');
         $connection->executeStatement('CREATE TABLE category_audit (id TEXT PRIMARY KEY, action TEXT NOT NULL, payload TEXT NOT NULL, created_at TEXT NOT NULL)');
         $connection->executeStatement('CREATE TABLE outbox (id TEXT PRIMARY KEY, type TEXT NOT NULL, payload TEXT NOT NULL, "key" TEXT NOT NULL UNIQUE, created_at TEXT NOT NULL, available_at TEXT DEFAULT NULL, attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT DEFAULT NULL, dispatched_at TEXT DEFAULT NULL, processed_at TEXT DEFAULT NULL, dead_lettered_at TEXT DEFAULT NULL)');
         $connection->executeStatement('CREATE TABLE category_idempotency (idempotency_key TEXT PRIMARY KEY, operation TEXT NOT NULL, request_hash TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL, correlation_id TEXT DEFAULT NULL)');
@@ -248,10 +269,10 @@ final class CategoryMutationServiceTest extends TestCase
     private function seedCategoryTree(Connection $connection): void
     {
         $rows = [
-            ['id' => 'root', 'slug' => 'root', 'name' => 'Root', 'parent_id' => null, 'depth' => 0, 'path' => 'root'],
-            ['id' => 'electronics', 'slug' => 'electronics', 'name' => 'Electronics', 'parent_id' => 'root', 'depth' => 1, 'path' => 'root.electronics'],
-            ['id' => 'phones', 'slug' => 'phones', 'name' => 'Phones', 'parent_id' => 'electronics', 'depth' => 2, 'path' => 'root.electronics.phones'],
-            ['id' => 'fashion', 'slug' => 'fashion', 'name' => 'Fashion', 'parent_id' => 'root', 'depth' => 1, 'path' => 'root.fashion'],
+            ['id' => 1, 'slug' => self::ROOT_SLUG, 'nameEntity' => 'Root', 'parent_id' => null, 'depth' => 0, 'path' => self::ROOT_SLUG],
+            ['id' => 2, 'slug' => self::ELECTRONICS_SLUG, 'nameEntity' => 'Electronics', 'parent_id' => 1, 'depth' => 1, 'path' => self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG],
+            ['id' => 3, 'slug' => self::PHONES_SLUG, 'nameEntity' => 'Phones', 'parent_id' => 2, 'depth' => 2, 'path' => self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG],
+            ['id' => 4, 'slug' => self::FASHION_SLUG, 'nameEntity' => 'Fashion', 'parent_id' => 1, 'depth' => 1, 'path' => self::ROOT_SLUG.'.'.self::FASHION_SLUG],
         ];
 
         foreach ($rows as $row) {
@@ -261,7 +282,7 @@ final class CategoryMutationServiceTest extends TestCase
 
     private function seedFromFixture(Connection $connection, string $fixtureFile): void
     {
-        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/Category/'.$fixtureFile);
+        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/CategoryEntity/'.$fixtureFile);
         if (!is_array($payload)) {
             return;
         }
@@ -276,7 +297,7 @@ final class CategoryMutationServiceTest extends TestCase
                 continue;
             }
 
-            /** @var array<string, mixed> $row */
+            /* @var array<string, mixed> $row */
             $connection->insert('category', $row);
         }
     }

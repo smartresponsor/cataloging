@@ -14,16 +14,16 @@ final class CategoryAdminCategoryData
      * Initializes the category admin category data service collaborators.
      */
     public function __construct(
-        public string $name = '',
+        public string $nameEntity = '',
         public string $slug = '',
     ) {
     }
 
-    /** @param array{name?:mixed,slug?:mixed} $payload */
+    /** @param array{nameEntity?:mixed,slug?:mixed} $payload */
     public static function fromArray(array $payload): self
     {
         return new self(
-            is_scalar($payload['name'] ?? null) ? trim((string) $payload['name']) : '',
+            is_scalar($payload['nameEntity'] ?? null) ? trim((string) $payload['nameEntity']) : '',
             is_scalar($payload['slug'] ?? null) ? trim((string) $payload['slug']) : '',
         );
     }

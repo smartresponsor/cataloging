@@ -39,9 +39,9 @@ final readonly class CategoryPublicationReadiness implements CategoryPublication
         }, $checks);
 
         $blockers = [];
-        foreach ($required as $name) {
-            if (($normalized[$name] ?? false) !== true) {
-                $blockers[] = $name;
+        foreach ($required as $nameEntity) {
+            if (($normalized[$nameEntity] ?? false) !== true) {
+                $blockers[] = $nameEntity;
             }
         }
 
@@ -67,17 +67,17 @@ final readonly class CategoryPublicationReadiness implements CategoryPublication
     /**
      * Determines whether the check value is available.
      */
-    public function hasCheck(string $name): bool
+    public function hasCheck(string $nameEntity): bool
     {
-        return array_key_exists($name, $this->checks);
+        return array_key_exists($nameEntity, $this->checks);
     }
 
     /**
      * Handles the check workflow.
      */
-    public function check(string $name): bool
+    public function check(string $nameEntity): bool
     {
-        return ($this->checks[$name] ?? false) === true;
+        return ($this->checks[$nameEntity] ?? false) === true;
     }
 
     /**

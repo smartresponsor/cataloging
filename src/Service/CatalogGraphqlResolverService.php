@@ -36,8 +36,6 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
     }
 
     /**
-     * @param CategoryGraphqlNodeRequest $request
-     *
      * @return array<string,mixed>|null
      */
     public function category(CategoryGraphqlNodeRequest $request): ?array
@@ -159,7 +157,7 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
                 'id' => $entity->getId(),
                 'parent_id' => $entity->getParentId(),
                 'slug' => $entity->getSlug(),
-                'name' => $entity->getName(),
+                'nameEntity' => $entity->getName(),
                 'locale' => $entity->getLocale(),
                 'workflow_state' => $entity->getWorkflowState(),
                 'published' => $entity->isPublished(),
@@ -194,7 +192,7 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
         }
 
         $rows = $connection->fetchAllAssociative(
-            'SELECT id, parent_id, slug, name, locale, workflow_state, published, path
+            'SELECT id, parent_id, slug, nameEntity, locale, workflow_state, published, path
              FROM category_projection
              WHERE path IN (?) ORDER BY path ASC',
             [$prefixes],
@@ -207,7 +205,7 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
                 'id' => $row['id'] ?? '',
                 'parent_id' => $row['parent_id'] ?? null,
                 'slug' => $row['slug'] ?? '',
-                'name' => $row['name'] ?? '',
+                'nameEntity' => $row['nameEntity'] ?? '',
                 'locale' => $row['locale'] ?? 'en',
                 'workflow_state' => $row['workflow_state'] ?? 'draft',
                 'published' => $row['published'] ?? false,
@@ -249,7 +247,7 @@ final readonly class CatalogGraphqlResolverService implements CatalogGraphqlReso
             'id' => $this->stringValue($row, 'id'),
             'parentId' => $this->parentIdValue($row),
             'slug' => $this->stringValue($row, 'slug'),
-            'name' => $this->stringValue($row, 'name'),
+            'nameEntity' => $this->stringValue($row, 'nameEntity'),
             'locale' => $this->stringValue($row, 'locale', 'en'),
             'status' => $published ? Status::PUBLISHED : $workflowState,
         ];

@@ -24,7 +24,7 @@ final class CatalogStorefrontAdapterService
             }
             $adaptedTree[] = [
                 'id' => $node['id'],
-                'name' => $this->stringValue($node, 'name'),
+                'nameEntity' => $this->stringValue($node, 'nameEntity'),
                 'slug' => $this->stringValue($node, 'slug'),
                 'locale' => $this->stringValue($node, 'locale', 'en'),
             ];

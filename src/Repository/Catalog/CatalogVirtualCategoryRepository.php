@@ -26,6 +26,6 @@ final readonly class CatalogVirtualCategoryRepository implements CatalogVirtualC
             return null;
         }
 
-        return ['id' => $entity->getId(), 'name' => $entity->getName(), 'rule' => $entity->getRule()];
+        return ['id' => $entity->getId(), 'nameEntity' => $entity->getName(), 'rule' => $entity->getRule()];
     }
 }

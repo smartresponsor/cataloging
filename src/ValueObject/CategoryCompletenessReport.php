@@ -41,16 +41,16 @@ final readonly class CategoryCompletenessReport implements CategoryCompletenessR
         ];
 
         $missingRequired = [];
-        foreach ($required as $name) {
-            if (($normalized[$name] ?? false) !== true) {
-                $missingRequired[] = $name;
+        foreach ($required as $nameEntity) {
+            if (($normalized[$nameEntity] ?? false) !== true) {
+                $missingRequired[] = $nameEntity;
             }
         }
 
         $warnings = [];
-        foreach (['mediaReady', 'slugHistoryReady', 'bannerReady', 'htmlBlockReady'] as $name) {
-            if (($normalized[$name] ?? false) !== true) {
-                $warnings[] = $name;
+        foreach (['mediaReady', 'slugHistoryReady', 'bannerReady', 'htmlBlockReady'] as $nameEntity) {
+            if (($normalized[$nameEntity] ?? false) !== true) {
+                $warnings[] = $nameEntity;
             }
         }
 

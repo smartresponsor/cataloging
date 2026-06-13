@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ValueObject;
 
-/** Immutable breadcrumb view for Category. */
+/** Immutable breadcrumb view for CategoryEntity. */
 final class CategoryBreadcrumb
 {
     /** @var list<array{id:string, name:string, slug:string}> */

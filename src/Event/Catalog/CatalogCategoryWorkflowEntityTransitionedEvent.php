@@ -26,7 +26,7 @@ final readonly class CatalogCategoryWorkflowEntityTransitionedEvent implements C
     }
 
     /**
-     * Handles the event name workflow.
+     * Handles the event nameEntity workflow.
      */
     public function eventName(): string
     {

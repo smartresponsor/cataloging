@@ -75,7 +75,7 @@ final class CatalogCategoryWorkflowEntityPolicy implements CatalogCategoryWorkfl
         string $reason,
     ): void {
         if (!$this->canTransition($from, $to, $actorId, $reason)) {
-            throw new \DomainException(sprintf('Category workflow transition is not allowed: %s -> %s', $from->value(), $to->value()));
+            throw new \DomainException(sprintf('CategoryEntity workflow transition is not allowed: %s -> %s', $from->value(), $to->value()));
         }
     }
 }

@@ -77,9 +77,9 @@ final class CategoryProjectionRunCommand extends Command
         }
     }
 
-    private function optionInt(InputInterface $input, string $name, int $default): int
+    private function optionInt(InputInterface $input, string $nameEntity, int $default): int
     {
-        $value = CategoryPayloadValueNormalizer::scalarString($input->getOption($name), (string) $default);
+        $value = CategoryPayloadValueNormalizer::scalarString($input->getOption($nameEntity), (string) $default);
 
         return is_numeric($value) ? (int) $value : $default;
     }

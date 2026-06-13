@@ -12,7 +12,7 @@ paths:
             responses:
                 '200':
                     description: Category list returned
-    /api/category/{id}/child:
+    /api/category/child/{id}:
         get:
             summary: List direct children for a category
             parameters:
@@ -25,7 +25,7 @@ paths:
                     description: Child category list returned
                 '404':
                     description: Category not found
-    /api/category/{id}/ancestor:
+    /api/category/ancestor/{id}:
         get:
             summary: List ancestors for a category
             parameters:
@@ -38,7 +38,7 @@ paths:
                     description: Ancestor category list returned
                 '404':
                     description: Category not found
-    /api/category/{id}/move:
+    /api/category/move/{id}:
         post:
             summary: Move a category under a new parent
             parameters:
@@ -76,7 +76,7 @@ paths:
                     description: Category or new parent not found
                 '409':
                     description: Move conflict or domain violation
-    /api/category/{id}/publish:
+    /api/category/publish/{id}:
         post:
             summary: Publish or unpublish a category
             parameters:

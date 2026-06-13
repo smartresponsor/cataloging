@@ -1,5 +1,6 @@
 # HTTP route for admin move (framework-agnostic placeholder)
 admin_category_move:
     path: /admin/category/tree/move
-    controller: App\Cataloging\Controller\Catalog\CatalogCategoryMoveController::move
+    controller: App\Cataloging\Service\Catalog\CatalogCategoryMoveSurfaceBuilder::move
     methods: [ POST ]
+    prefix: /ea

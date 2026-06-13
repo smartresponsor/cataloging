@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/linter/category_mirror_check.php <project-root>
- * Ensures <Layer> <-> <LayerInterface> mirrors exist for Category responsibility paths.
+ * Ensures <Layer> <-> <LayerInterface> mirrors exist for CategoryEntity responsibility paths.
  */
 $root = $argv[1] ?? getcwd();
 if (!is_string($root) || !is_dir($root)) {
@@ -16,7 +16,7 @@ $layers = ['Entity', 'Service', 'Repository', 'Policy', 'Event', 'ValueObject'];
 $fail = 0;
 
 foreach ($layers as $layer) {
-    $layerDir = $root . "/src/{$layer}/Category";
+    $layerDir = $root . "/src/{$layer}/CategoryEntity";
     if (!is_dir($layerDir)) {
         continue;
     }
@@ -27,11 +27,11 @@ foreach ($layers as $layer) {
             continue;
         }
 
-        $name = basename($file->getPathname(), '.php');
-        $iface = $root . "/src/{$layer}Interface/Category/{$name}Interface.php";
+        $nameEntity = basename($file->getPathname(), '.php');
+        $iface = $root . "/src/{$layer}Interface/CategoryEntity/{$nameEntity}Interface.php";
 
         if ($layer !== 'Event' && !file_exists($iface)) {
-            fwrite(STDERR, "Mirror missing for {$layer} {$name}: {$iface}\n");
+            fwrite(STDERR, "Mirror missing for {$layer} {$nameEntity}: {$iface}\n");
             $fail++;
         }
     }

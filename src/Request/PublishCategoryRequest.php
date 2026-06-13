@@ -42,11 +42,11 @@ final readonly class PublishCategoryRequest
 
         $checks = [];
         if (is_array($data['checks'] ?? null)) {
-            foreach ($data['checks'] as $name => $value) {
-                if (!is_string($name)) {
+            foreach ($data['checks'] as $nameEntity => $value) {
+                if (!is_string($nameEntity)) {
                     continue;
                 }
-                $checks[$name] = (bool) $value;
+                $checks[$nameEntity] = (bool) $value;
             }
         }
 

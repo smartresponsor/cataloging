@@ -23,7 +23,7 @@ paths:
                     description: Category returned
                 '404':
                     description: Category not found
-    /api/category/{id}/descendants:
+    /api/category/descendant/{id}:
         get:
             summary: Read a catalog category with descendant tree
             parameters:
@@ -36,7 +36,7 @@ paths:
                     description: Category tree returned
                 '404':
                     description: Category not found
-    /api/category/{id}/child:
+    /api/category/child/{id}:
         get:
             summary: List direct children for a category
             parameters:
@@ -49,7 +49,7 @@ paths:
                     description: Child category list returned
                 '404':
                     description: Category not found
-    /api/category/{id}/ancestor:
+    /api/category/ancestor/{id}:
         get:
             summary: List ancestors for a category
             parameters:
@@ -62,7 +62,7 @@ paths:
                     description: Ancestor category list returned
                 '404':
                     description: Category not found
-    /api/category/{id}/move:
+    /api/category/move/{id}:
         post:
             summary: Move a category under a new parent
             parameters:
@@ -100,7 +100,7 @@ paths:
                     description: Category or new parent not found
                 '409':
                     description: Move conflict or domain violation
-    /api/category/{id}/publish:
+    /api/category/publish/{id}:
         post:
             summary: Publish or unpublish a category
             parameters:
@@ -323,7 +323,7 @@ paths:
             responses:
                 '200':
                     description: Swagger UI page returned
-    /api/doc.json:
+    /api/doc/json:
         get:
             summary: OpenAPI JSON document
             responses:

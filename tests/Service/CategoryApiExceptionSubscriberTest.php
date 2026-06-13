@@ -97,7 +97,7 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
         $response = $event->getResponse();
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(500, $response->getStatusCode());
-        self::assertSame('{"error":"Category API runtime failure."}', $response->getContent());
+        self::assertSame('{"error":"CategoryEntity API runtime failure."}', $response->getContent());
     }
 
     public function testMapsUnexpectedThrowableTo500(): void
@@ -110,7 +110,7 @@ final class CategoryApiExceptionSubscriberTest extends TestCase
         $response = $event->getResponse();
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(500, $response->getStatusCode());
-        self::assertSame('{"error":"Category API unexpected failure."}', $response->getContent());
+        self::assertSame('{"error":"CategoryEntity API unexpected failure."}', $response->getContent());
     }
 
     private function event(string $route, \Throwable $throwable): ExceptionEvent

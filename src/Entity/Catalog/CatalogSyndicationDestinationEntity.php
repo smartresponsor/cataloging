@@ -33,7 +33,7 @@ final readonly class CatalogSyndicationDestinationEntity implements CatalogSyndi
         return new self(
             new CatalogSyndicationDestinationDefinition(
                 trim($definition->destinationId()),
-                trim($definition->name()),
+                trim($definition->nameEntity()),
                 trim($definition->destinationType()),
                 trim($definition->deliveryMode()),
             ),
@@ -92,9 +92,9 @@ final readonly class CatalogSyndicationDestinationEntity implements CatalogSyndi
         return $this->definition->destinationId();
     }
 
-    public function name(): string
+    public function nameEntity(): string
     {
-        return $this->definition->name();
+        return $this->definition->nameEntity();
     }
 
     public function destinationType(): string

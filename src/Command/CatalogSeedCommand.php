@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Executes the catalog seed command console workflow.
@@ -49,7 +50,8 @@ final class CatalogSeedCommand extends Command
         $totalCount = max(1, $this->argumentInt($input, 'count', 1));
         $branchingFactor = max(2, $this->argumentInt($input, 'branching', 5));
 
-        $root = new CatalogCategoryEntity('Root', 'root', 'root', 0);
+        $rootSlug = Uuid::v7()->toRfc4122();
+        $root = new CatalogCategoryEntity('Root', $rootSlug, $rootSlug, 0);
         $this->em->persist($root);
         $list = [$root];
         $created = 1;
@@ -58,7 +60,7 @@ final class CatalogSeedCommand extends Command
         while ($created < $totalCount) {
             $parent = $list[$parentIndex % count($list)];
             for ($childIndex = 0; $childIndex < $branchingFactor && $created < $totalCount; ++$childIndex) {
-                $slug = $parent->getSlug().'-'.dechex($created);
+                $slug = Uuid::v7()->toRfc4122();
                 $path = $parent->getPath().'.'.$slug;
                 $child = new CatalogCategoryEntity('Node '.$created, $slug, $path, $parent->getDepth() + 1);
                 $this->em->persist($child);

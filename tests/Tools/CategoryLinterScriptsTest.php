@@ -19,7 +19,7 @@ final class CategoryLinterScriptsTest extends TestCase
     public function testPrefixCheckDetectsCategoryPrefixViolation(): void
     {
         $projectRoot = $this->createProjectRoot();
-        $badFile = $projectRoot.'/src/Service/Category/InvalidName.php';
+        $badFile = $projectRoot.'/src/Service/CategoryEntity/InvalidName.php';
         mkdir(dirname($badFile), 0777, true);
         file_put_contents($badFile, "<?php\n");
 

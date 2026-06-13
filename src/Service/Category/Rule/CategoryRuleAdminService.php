@@ -33,10 +33,10 @@ final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterfac
      */
     public function save(array $input): string
     {
-        $name = $this->requireName($input);
+        $nameEntity = $this->requireName($input);
         $definition = $this->requireDefinition($input);
 
-        return $this->repo->save(['name' => $name, 'definition' => $definition]);
+        return $this->repo->save(['nameEntity' => $nameEntity, 'definition' => $definition]);
     }
 
     /**
@@ -69,12 +69,12 @@ final class CategoryRuleAdminService implements CategoryRuleAdminServiceInterfac
      */
     private function requireName(array $input): string
     {
-        $name = $input['name'] ?? null;
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('name is required');
+        $nameEntity = $input['nameEntity'] ?? null;
+        if (!is_string($nameEntity)) {
+            throw new \InvalidArgumentException('nameEntity is required');
         }
 
-        return $name;
+        return $nameEntity;
     }
 
     /**

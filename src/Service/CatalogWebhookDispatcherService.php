@@ -34,8 +34,8 @@ final readonly class CatalogWebhookDispatcherService
         $body = json_encode(['event' => $request->event, 'payload' => $request->payload], JSON_THROW_ON_ERROR);
         $signature = hash_hmac('sha256', $body, $this->secret);
         $headers = [
-            'X-Category-Event' => $request->event,
-            'X-Category-Signature' => $signature,
+            'X-CategoryEntity-Event' => $request->event,
+            'X-CategoryEntity-Signature' => $signature,
             'Content-Type' => 'application/json',
         ];
 

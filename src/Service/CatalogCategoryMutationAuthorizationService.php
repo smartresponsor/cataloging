@@ -28,7 +28,7 @@ final readonly class CatalogCategoryMutationAuthorizationService
      */
     public function assertCanMove(string $categoryId): void
     {
-        $this->assertGranted(CategoryVoter::EDIT, $categoryId, 'Category move is not allowed for the current actor.');
+        $this->assertGranted(CategoryVoter::EDIT, $categoryId, 'CategoryEntity move is not allowed for the current actor.');
     }
 
     /**
@@ -39,7 +39,7 @@ final readonly class CatalogCategoryMutationAuthorizationService
         $this->assertGranted(
             CategoryVoter::PUBLISH,
             $categoryId,
-            'Category publish is not allowed for the current actor.',
+            'CategoryEntity publish is not allowed for the current actor.',
         );
     }
 

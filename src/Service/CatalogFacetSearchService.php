@@ -29,10 +29,10 @@ final readonly class CatalogFacetSearchService
             ->select('projection')
             ->from(CatalogCategoryProjectionEntity::class, 'projection')
             ->where('projection.locale = :locale')
-            ->andWhere('(projection.slug LIKE :term OR projection.name LIKE :term)')
+            ->andWhere('(projection.slug LIKE :term OR projection.nameEntity LIKE :term)')
             ->setParameter('locale', $locale)
             ->setParameter('term', '%'.$term.'%')
-            ->orderBy('projection.name', 'ASC')
+            ->orderBy('projection.nameEntity', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
@@ -42,7 +42,7 @@ final readonly class CatalogFacetSearchService
         return array_map(static fn (CatalogCategoryProjectionEntity $entity): array => [
             'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
-            'name' => $entity->getName(),
+            'nameEntity' => $entity->getName(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',
         ], $entities);

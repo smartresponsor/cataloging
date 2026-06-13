@@ -67,7 +67,7 @@ $items = [
     ],
     [
         'check' => 'infra-projection-schema-canonical-fields',
-        'status' => str_contains($infraSchemaText, 'name varchar') && str_contains($infraSchemaText, 'path varchar') && str_contains($infraSchemaText, 'workflow_state') && str_contains($infraSchemaText, 'updated_at') ? 'pass' : 'warn',
+        'status' => str_contains($infraSchemaText, 'nameEntity varchar') && str_contains($infraSchemaText, 'path varchar') && str_contains($infraSchemaText, 'workflow_state') && str_contains($infraSchemaText, 'updated_at') ? 'pass' : 'warn',
         'details' => ['file' => 'config/sql/catalog_mysql_infra_category.sql'],
     ],
     [

@@ -40,8 +40,6 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     /**
      * Handles the move workflow.
      *
-     * @param CategoryMutationMoveRequest $request
-     *
      * @return array{
      *     id:string,
      *     oldParentId:string|null,
@@ -156,7 +154,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
 
                 $entity = $this->findCategoryEntity($rowId);
                 if (!$entity instanceof CatalogCategoryEntity) {
-                    throw new \RuntimeException(sprintf('Category node "%s" was not found for ORM update.', $rowId));
+                    throw new \RuntimeException(sprintf('CategoryEntity node "%s" was not found for ORM update.', $rowId));
                 }
 
                 $entity->setPath($rebasedPath);
@@ -249,8 +247,6 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     /**
      * Handles the publish workflow.
      *
-     * @param CategoryMutationPublishRequest $request
-     *
      * @return array{
      *     id:string,
      *     published:bool,
@@ -322,7 +318,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
                 ));
                 $payload = $gate->payload();
                 if (($payload['publishable'] ?? false) !== true) {
-                    throw new \DomainException('Category publication gate failed: '.implode(',', $this->stringList(is_array($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
+                    throw new \DomainException('CategoryEntity publication gate failed: '.implode(',', $this->stringList(is_array($payload['blockers'] ?? null) ? $payload['blockers'] : [])));
                 }
                 $targetState = CatalogCategoryWorkflowEntityState::PUBLISHED;
                 $publishedAtDateTime = new \DateTimeImmutable('now');
@@ -345,7 +341,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
 
             $entity = $this->findCategoryEntity($normalizedCategoryId);
             if (!$entity instanceof CatalogCategoryEntity) {
-                throw new CategoryNotFoundException(sprintf('Category "%s" was not found.', $normalizedCategoryId));
+                throw new CategoryNotFoundException(sprintf('CategoryEntity "%s" was not found.', $normalizedCategoryId));
             }
 
             $entity->setWorkflowState($targetState);
@@ -413,11 +409,6 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     }
 
     /**
-     * @param string $categoryId
-     * @param string $newParentId
-     * @param string $treeId
-     * @param string $policy
-     *
      * @return array{
      *     id:string,
      *     oldParentId: ?string,
@@ -452,9 +443,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     }
 
     /**
-     * @param string             $categoryId
      * @param array<string,bool> $checks
-     * @param string             $reason
      *
      * @return array{
      *     id:string,
@@ -501,7 +490,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
             return $this->mapCategoryEntity($entity);
         }
 
-        throw new CategoryNotFoundException(sprintf('Category "%s" was not found.', $categoryId));
+        throw new CategoryNotFoundException(sprintf('CategoryEntity "%s" was not found.', $categoryId));
     }
 
     /**
@@ -549,7 +538,26 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
 
     private function findCategoryEntity(string $categoryId): ?CatalogCategoryEntity
     {
-        $entity = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($categoryId);
+        $normalizedCategoryId = trim($categoryId);
+        if ('' === $normalizedCategoryId) {
+            return null;
+        }
+
+        $repository = $this->entityManager->getRepository(CatalogCategoryEntity::class);
+
+        if (ctype_digit($normalizedCategoryId)) {
+            $entity = $repository->find((int) $normalizedCategoryId);
+            if ($entity instanceof CatalogCategoryEntity) {
+                return $entity;
+            }
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedCategoryId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedCategoryId);
 
         return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
@@ -605,8 +613,6 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     /**
      * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
      *
-     * @param array $values
-     *
      * @phpstan-param array<mixed> $values
      *
      * @return list<string>
@@ -630,8 +636,6 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
 
     /**
      * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
-     *
-     * @param array $values
      *
      * @phpstan-param array<mixed> $values
      *
@@ -672,7 +676,7 @@ final class CatalogCategoryMutationService implements CatalogCategoryMutationSer
     {
         $normalized = $this->requiredString($value, 'path');
         if ('' === $normalized) {
-            throw new \RuntimeException('Category path cannot be empty.');
+            throw new \RuntimeException('CategoryEntity path cannot be empty.');
         }
 
         return $normalized;

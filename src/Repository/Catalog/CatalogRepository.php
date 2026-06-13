@@ -22,7 +22,7 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array{id:string,name:string,slug:string,path:string,depth:int}|null
+     * @return array{id:int,name:string,slug:string,path:string,depth:int}|null
      */
     public function findNodeRowById(string $id): ?array
     {
@@ -32,7 +32,7 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     * @return list<array{id:int,name:string,slug:string,path:string,depth:int}>
      */
     public function findChildrenRowsByPath(string $path): array
     {
@@ -49,7 +49,7 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     * @return list<array{id:int,name:string,slug:string,path:string,depth:int}>
      */
     public function findAncestorRowsByPath(string $path): array
     {
@@ -71,7 +71,7 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     * @return list<array{id:int,name:string,slug:string,path:string,depth:int}>
      */
     public function findDescendantRowsByPath(string $path): array
     {
@@ -89,7 +89,7 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return list<array{id:string,name:string,slug:string,path:string,depth:int}>
+     * @return list<array{id:int,name:string,slug:string,path:string,depth:int}>
      */
     public function findPageRows(int $limit, string $after): array
     {
@@ -127,13 +127,13 @@ final class CatalogRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array{id:string,name:string,slug:string,path:string,depth:int}
+     * @return array{id:int,name:string,slug:string,path:string,depth:int}
      */
     private function rowFromEntity(CatalogCategoryEntity $entity): array
     {
         return [
             'id' => $entity->getId(),
-            'name' => $entity->getName(),
+            'nameEntity' => $entity->getName(),
             'slug' => $entity->getSlug(),
             'path' => $entity->getPath(),
             'depth' => $entity->getDepth(),

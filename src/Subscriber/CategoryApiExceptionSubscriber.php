@@ -65,11 +65,11 @@ final class CategoryApiExceptionSubscriber implements EventSubscriberInterface
         }
 
         if ($exception instanceof Exception) {
-            $event->setResponse(new JsonResponse(['error' => 'Category API runtime failure.'], 500));
+            $event->setResponse(new JsonResponse(['error' => 'CategoryEntity API runtime failure.'], 500));
 
             return;
         }
 
-        $event->setResponse(new JsonResponse(['error' => 'Category API unexpected failure.'], 500));
+        $event->setResponse(new JsonResponse(['error' => 'CategoryEntity API unexpected failure.'], 500));
     }
 }

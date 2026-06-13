@@ -33,7 +33,7 @@ final class CategoryRuntimeStatusCommand extends Command
     protected function configure(): void
     {
         parent::configure();
-        $this->addArgument('categoryId', InputArgument::REQUIRED, 'Category id');
+        $this->addArgument('categoryId', InputArgument::REQUIRED, 'CategoryEntity id');
     }
 
     /**

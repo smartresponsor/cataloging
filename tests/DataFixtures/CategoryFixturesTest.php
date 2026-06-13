@@ -29,7 +29,7 @@ final class CategoryFixturesTest extends TestCase
             ->willReturnCallback(static function () use (&$persisted): void {
                 ++$persisted;
             });
-        $manager->expects(self::once())->method('flush');
+        $manager->expects(self::exactly(25))->method('flush');
 
         (new CategoryFixtures())->load($manager);
 

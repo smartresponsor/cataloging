@@ -160,17 +160,17 @@ $items = [
     ],
     [
         'check' => 'nelmio-doc-route-config',
-        'status' => str_contains($nelmioRoutesContent, '/api/doc') && str_contains($nelmioRoutesContent, '/api/doc.json') ? 'pass' : 'fail',
+        'status' => str_contains($nelmioRoutesContent, '/api/doc') && str_contains($nelmioRoutesContent, '/api/doc/json') ? 'pass' : 'fail',
         'details' => [
             'file' => 'config/routes/nelmio_api_doc.yaml',
         ],
     ],
     [
         'check' => 'nelmio-doc-route-runtime',
-        'status' => isset($routerPathSet['/api/doc'], $routerPathSet['/api/doc.json']) ? 'pass' : 'fail',
+        'status' => isset($routerPathSet['/api/doc'], $routerPathSet['/api/doc/json']) ? 'pass' : 'fail',
         'details' => [
             'hasDocUi' => isset($routerPathSet['/api/doc']),
-            'hasDocJson' => isset($routerPathSet['/api/doc.json']),
+            'hasDocJson' => isset($routerPathSet['/api/doc/json']),
         ],
     ],
     [

@@ -43,7 +43,7 @@ final class CatalogWebhookDispatcherServiceTest extends TestCase
             is_array($normalizedHeaders['x-correlation-id'] ?? null) ? $normalizedHeaders['x-correlation-id'] : null,
         );
         self::assertSame(
-            ['X-Category-Event: catalog.changed'],
+            ['X-CategoryEntity-Event: catalog.changed'],
             is_array($normalizedHeaders['x-category-event'] ?? null) ? $normalizedHeaders['x-category-event'] : null,
         );
         self::assertArrayHasKey('x-category-signature', $normalizedHeaders);

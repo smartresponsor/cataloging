@@ -58,7 +58,7 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
             return $this->normalizeCategoryRow([
                 'id' => $entity->getId(),
                 'slug' => $entity->getSlug(),
-                'name' => $entity->getName(),
+                'nameEntity' => $entity->getName(),
                 'locale' => $entity->getLocale() ?? 'en',
                 'published' => $entity->isPublished(),
                 'workflow_state' => $entity->getWorkflowState(),
@@ -73,13 +73,13 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         $normalized = [
             'id' => $this->stringValue($payload['id'] ?? $id, ''),
             'slug' => $this->stringValue($payload['slug'] ?? null, ''),
-            'name' => $this->stringValue($payload['name'] ?? null, ''),
+            'nameEntity' => $this->stringValue($payload['nameEntity'] ?? null, ''),
             'locale' => $this->stringValue($payload['locale'] ?? 'en', 'en'),
             'status' => $this->stringValue($payload['status'] ?? 'active', 'active'),
         ];
 
-        if ('' === $normalized['slug'] || '' === $normalized['name']) {
-            throw new \InvalidArgumentException('Category slug and name are required.');
+        if ('' === $normalized['slug'] || '' === $normalized['nameEntity']) {
+            throw new \InvalidArgumentException('CategoryEntity slug and nameEntity are required.');
         }
 
         $repository = $this->entityManager->getRepository(CatalogCategoryEntity::class);
@@ -93,7 +93,7 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
 
         if (!$entity instanceof CatalogCategoryEntity) {
             $entity = new CatalogCategoryEntity(
-                $normalized['name'],
+                $normalized['nameEntity'],
                 $normalized['slug'],
                 $normalized['slug'],
                 0,
@@ -102,7 +102,7 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
             );
             $this->entityManager->persist($entity);
         } else {
-            $entity->setName($normalized['name']);
+            $entity->setName($normalized['nameEntity']);
             $entity->setSlug($normalized['slug']);
             $entity->setLocale($normalized['locale']);
         }
@@ -115,7 +115,7 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         return $this->normalizeCategoryRow([
             'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
-            'name' => $entity->getName(),
+            'nameEntity' => $entity->getName(),
             'locale' => $entity->getLocale() ?? 'en',
             'published' => $entity->isPublished(),
             'workflow_state' => $entity->getWorkflowState(),
@@ -135,7 +135,7 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         return [
             'id' => $this->intValue($row['id'] ?? null),
             'slug' => $this->stringValue($row['slug'] ?? null, ''),
-            'name' => $this->stringValue($row['name'] ?? null, ''),
+            'nameEntity' => $this->stringValue($row['nameEntity'] ?? null, ''),
             'locale' => $this->stringValue($row['locale'] ?? null, 'en'),
             'status' => $published ? 'active' : ('published' === $workflowState ? 'active' : 'draft'),
         ];
@@ -144,7 +144,7 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
     private function matchesQuery(array $row, string $query): bool
     {
         $needle = mb_strtolower($query);
-        foreach (['id', 'slug', 'name', 'locale'] as $field) {
+        foreach (['id', 'slug', 'nameEntity', 'locale'] as $field) {
             $value = $this->stringValue($row[$field] ?? null, '');
             if ('' !== $value && str_contains(mb_strtolower($value), $needle)) {
                 return true;

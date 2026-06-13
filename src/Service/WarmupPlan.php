@@ -14,7 +14,7 @@ final class WarmupPlan
     public function planForPublish(string $categoryId): array
     {
         return [
-            '/api/category/'.$categoryId,
+            '/api/catalog/category/'.$categoryId,
             '/graphql',
             '/sitemap.xml',
         ];

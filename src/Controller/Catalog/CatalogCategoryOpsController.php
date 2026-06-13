@@ -7,7 +7,6 @@ namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Service\CategoryPayloadValueNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -19,13 +18,26 @@ final class CatalogCategoryOpsController extends AbstractController
      * Executes the invokable workflow for this service.
      */
     #[Route('/admin/category/ops', name: 'admin_category_ops')]
-    public function __invoke(): Response
+    public function __invoke(): array
     {
-        return $this->render('category/admin/ops.html.twig', [
+        $data = [
             'slo' => $this->readJsonFile('report/category-slo-ci.json'),
             'dlq' => $this->readJsonFile('report/category-dlq.json'),
             'canary' => $this->readJsonFile('report/category-canary-window.json'),
-        ]);
+        ];
+
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => 'admin-ops',
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => ['body' => $data],
+            'data' => $data,
+            'meta' => ['source' => 'catalog_category_ops_controller'],
+        ];
     }
 
     /** @return array<string,mixed> */

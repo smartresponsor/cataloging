@@ -31,7 +31,7 @@ final readonly class CatalogCategoryTenantAccessEvaluatorService
         $normalizedId = trim($categoryId);
         $entityManager = $this->categoryEntityManager();
         if ($entityManager instanceof EntityManagerInterface) {
-            $entity = $entityManager->find(CatalogCategoryEntity::class, $normalizedId);
+            $entity = $this->findCategoryEntity($entityManager, $normalizedId);
             if ($entity instanceof CatalogCategoryEntity) {
                 $tenant = trim($entity->getTenant());
 
@@ -49,7 +49,7 @@ final readonly class CatalogCategoryTenantAccessEvaluatorService
             return null;
         }
 
-        $tenant = $connection->fetchOne('SELECT tenant FROM category WHERE id = ?', [$normalizedId]);
+        $tenant = $connection->fetchOne('SELECT tenant FROM category WHERE id = ? OR slug = ?', [$normalizedId, $normalizedId]);
         if (!is_string($tenant)) {
             return null;
         }
@@ -99,6 +99,31 @@ final readonly class CatalogCategoryTenantAccessEvaluatorService
         $manager = $this->registry->getManagerForClass(CatalogCategoryEntity::class);
 
         return $manager instanceof EntityManagerInterface ? $manager : null;
+    }
+
+    private function findCategoryEntity(EntityManagerInterface $entityManager, string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        $repository = $entityManager->getRepository(CatalogCategoryEntity::class);
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+            if ($entity instanceof CatalogCategoryEntity) {
+                return $entity;
+            }
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 
     private function actionForAttribute(string $attribute): ?string

@@ -6,10 +6,10 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
-use App\Cataloging\Service\Category\Rule\CategoryRuleAdminService;
-use App\Cataloging\Service\Category\Rule\CategoryRuleEngine;
+use App\Cataloging\Service\CategoryEntity\Rule\CategoryRuleAdminService;
+use App\Cataloging\Service\CategoryEntity\Rule\CategoryRuleEngine;
 use App\Cataloging\ServiceInterface\Rule\RuleRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 

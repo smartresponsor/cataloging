@@ -17,7 +17,7 @@ final class CatalogStatusController extends AbstractController
     /**
      * Executes the invokable workflow for this service.
      */
-    #[Route('/status', name: 'catalog_status_handler', methods: ['GET'])]
+    #[Route('/api/catalog/status', name: 'catalog_status_handler', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         return $this->json([

@@ -62,6 +62,6 @@ final class CategoryPublicationGatePolicy implements CategoryPublicationGatePoli
             $details[] = 'reason missing';
         }
 
-        throw new \DomainException('Category publication gate failed: '.implode('; ', $details));
+        throw new \DomainException('CategoryEntity publication gate failed: '.implode('; ', $details));
     }
 }

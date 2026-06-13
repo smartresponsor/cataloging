@@ -11,14 +11,14 @@ namespace App\Cataloging\ValueObject;
 final readonly class CategoryRepositoryCreateRequest
 {
     /**
-     * @param array<string, scalar|null> $name
+     * @param array<string, scalar|null> $nameEntity
      * @param array<string, string>      $slug
      * @param array<string, mixed>       $meta
      */
     public function __construct(
         private string $taxonomyId,
         private ?string $parentId,
-        private array $name,
+        private array $nameEntity,
         private array $slug,
         private array $meta = [],
     ) {
@@ -35,9 +35,9 @@ final readonly class CategoryRepositoryCreateRequest
     }
 
     /** @return array<string, scalar|null> */
-    public function name(): array
+    public function nameEntity(): array
     {
-        return $this->name;
+        return $this->nameEntity;
     }
 
     /** @return array<string, string> */

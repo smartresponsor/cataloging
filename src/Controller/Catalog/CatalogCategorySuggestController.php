@@ -27,21 +27,21 @@ final class CatalogCategorySuggestController extends AbstractController
     /**
      * Handles the suggest workflow.
      */
-    #[Route('/api/category/suggest', name: 'api_category_suggest', methods: ['POST'])]
+    #[Route('/api/catalog/category/suggest', name: 'api_category_suggest', methods: ['POST'])]
     public function suggest(Request $request): JsonResponse
     {
         try {
-            $name = $this->requestString($request, 'name');
+            $nameEntity = $this->requestString($request, 'nameEntity');
             $description = $this->requestString($request, 'desc');
             $tags = $this->requestTags($request);
-            $suggestion = $this->catalogSuggestService->suggest($name, $description, $tags);
+            $suggestion = $this->catalogSuggestService->suggest($nameEntity, $description, $tags);
 
             $logDir = getcwd().'/var/log';
             $this->ensureDirectory($logDir);
             $writer = new RotatingFileWriter($logDir.'/category_suggest.log');
             $writer->write(
                 json_encode(
-                    ['name' => $name, 'desc' => $description, 'tags' => $tags, 'res' => $suggestion],
+                    ['nameEntity' => $nameEntity, 'desc' => $description, 'tags' => $tags, 'res' => $suggestion],
                     JSON_THROW_ON_ERROR,
                 )."\n",
             );

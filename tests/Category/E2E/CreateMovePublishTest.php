@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category\E2E;
+namespace App\Cataloging\Tests\CategoryEntity\E2E;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Panther\PantherTestCaseTrait;
@@ -70,11 +70,11 @@ final class CreateMovePublishTest extends TestCase
         return null;
     }
 
-    private function hasExecutable(string $name): bool
+    private function hasExecutable(string $nameEntity): bool
     {
         $command = '\\' === DIRECTORY_SEPARATOR
-            ? sprintf('where %s 2>NUL', escapeshellarg($name))
-            : sprintf('command -v %s 2>/dev/null', escapeshellarg($name));
+            ? sprintf('where %s 2>NUL', escapeshellarg($nameEntity))
+            : sprintf('command -v %s 2>/dev/null', escapeshellarg($nameEntity));
         $result = shell_exec($command);
 
         return is_string($result) && '' !== trim($result);

@@ -37,7 +37,15 @@ final class MetricsSubscriber implements EventSubscriberInterface
      */
     public function onRequest(RequestEvent $requestEvent): void
     {
-        unset($requestEvent);
+        if (!$requestEvent->isMainRequest()) {
+            return;
+        }
+
+        $request = $requestEvent->getRequest();
+        if (!str_starts_with($request->getPathInfo(), '/api/catalog/category/')) {
+            return;
+        }
+
         $this->start = microtime(true);
     }
 
@@ -46,12 +54,17 @@ final class MetricsSubscriber implements EventSubscriberInterface
      */
     public function onTerminate(TerminateEvent $e): void
     {
+        $request = $e->getRequest();
+        if (!str_starts_with($request->getPathInfo(), '/api/catalog/category/')) {
+            return;
+        }
+
         $elapsed = (microtime(true) - $this->start) * 1000.0;
         $status = $e->getResponse()->getStatusCode();
         $timestamp = new \DateTimeImmutable();
         $rec = [
             'ts' => $timestamp->format(DATE_ATOM),
-            'path' => $e->getRequest()->getPathInfo(),
+            'path' => $request->getPathInfo(),
             'ms' => round($elapsed, 2),
             'status' => $status,
             'correlation_id' => $this->requestCorrelationIdProvider->current(),

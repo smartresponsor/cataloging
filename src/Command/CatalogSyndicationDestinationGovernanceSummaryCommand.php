@@ -94,8 +94,6 @@ final class CatalogSyndicationDestinationGovernanceSummaryCommand extends Comman
     }
 
     /**
-     * @param string $json
-     *
      * @return list<array<string,mixed>>
      *
      * @throws \JsonException

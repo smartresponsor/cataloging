@@ -14,31 +14,31 @@ use Symfony\Component\Console\Input\InputInterface;
 /** @noinspection DuplicatedCode */
 trait CategoryCliInputTrait
 {
-    private function argumentString(InputInterface $input, string $name, string $default = ''): string
+    private function argumentString(InputInterface $input, string $nameEntity, string $default = ''): string
     {
-        $value = $input->getArgument($name);
+        $value = $input->getArgument($nameEntity);
 
         return CategoryPayloadValueNormalizer::scalarString($value, $default);
     }
 
-    private function optionString(InputInterface $input, string $name, string $default = ''): string
+    private function optionString(InputInterface $input, string $nameEntity, string $default = ''): string
     {
-        $value = $input->getOption($name);
+        $value = $input->getOption($nameEntity);
 
         return CategoryPayloadValueNormalizer::scalarString($value, $default);
     }
 
-    private function argumentInt(InputInterface $input, string $name, int $default = 0): int
+    private function argumentInt(InputInterface $input, string $nameEntity, int $default = 0): int
     {
-        $value = $input->getArgument($name);
+        $value = $input->getArgument($nameEntity);
 
         return is_numeric($value) ? (int) $value : $default;
     }
 
     /** @return array<string,mixed> */
-    private function jsonOptionMap(InputInterface $input, string $name): array
+    private function jsonOptionMap(InputInterface $input, string $nameEntity): array
     {
-        $raw = $this->optionString($input, $name, '{}');
+        $raw = $this->optionString($input, $nameEntity, '{}');
         if ('' === trim($raw)) {
             return [];
         }

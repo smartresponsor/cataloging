@@ -10,7 +10,6 @@ use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextReso
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -33,7 +32,7 @@ final class CatalogCategoryMerchantController extends AbstractController
      * Handles the index workflow.
      */
     #[Route('/merchant/category', name: 'merchant_category_index')]
-    public function index(Request $request): Response
+    public function index(Request $request): array
     {
         try {
             $context = $this->externalIdentityContextResolver->resolveFromRequest($request);
@@ -42,15 +41,24 @@ final class CatalogCategoryMerchantController extends AbstractController
                 'tenant' => $tenant,
                 'limit' => 100,
                 'offset' => 0,
-                'order' => 'name',
+                'order' => 'nameEntity',
                 'direction' => 'asc',
             ]));
         } catch (\Throwable $exception) {
             throw $this->createNotFoundException('Unable to load merchant categories.', $exception);
         }
 
-        return $this->render('category/merchant/list.html.twig', [
-            'categories' => $categories,
-        ]);
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => 'merchant-index',
+                'intent' => 'merchant',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => ['body' => ['categories' => $categories]],
+            'data' => ['categories' => $categories],
+            'meta' => ['source' => 'catalog_category_merchant_controller'],
+        ];
     }
 }

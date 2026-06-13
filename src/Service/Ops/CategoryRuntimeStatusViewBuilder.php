@@ -35,7 +35,7 @@ final readonly class CategoryRuntimeStatusViewBuilder implements CategoryRuntime
     {
         $categoryId = trim($categoryId);
         if ('' === $categoryId) {
-            throw new \InvalidArgumentException('Category id must not be empty.');
+            throw new \InvalidArgumentException('CategoryEntity id must not be empty.');
         }
 
         $governance = $this->governanceViewBuilder->build($categoryId)->toArray();

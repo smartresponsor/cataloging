@@ -40,14 +40,14 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
         }
 
         $entityManager = $this->entityManager();
-        $category = $entityManager->getRepository(CatalogCategoryEntity::class)->find($categoryId);
+        $category = $this->findCategoryEntity($entityManager, $categoryId);
         if (!$category instanceof CatalogCategoryEntity) {
             throw new \RuntimeException(sprintf('Projection source category "%s" was not found.', $categoryId));
         }
 
-        $projection = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->find($categoryId);
+        $projection = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->find((string) $category->getId());
         if (!$projection instanceof CatalogCategoryProjectionEntity) {
-            $projection = new CatalogCategoryProjectionEntity($category->getId());
+            $projection = new CatalogCategoryProjectionEntity((string) $category->getId());
             $entityManager->persist($projection);
         }
 
@@ -82,5 +82,30 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
         }
 
         return trim((string) $value);
+    }
+
+    private function findCategoryEntity(EntityManagerInterface $entityManager, string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        $repository = $entityManager->getRepository(CatalogCategoryEntity::class);
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+            if ($entity instanceof CatalogCategoryEntity) {
+                return $entity;
+            }
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 }

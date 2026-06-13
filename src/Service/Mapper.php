@@ -13,7 +13,7 @@ final class Mapper
     /**
      * @param array<string,mixed> $input
      *
-     * @return array{'id':string,'parentId':?string,'slug':string,'name':string,'locale':string}
+     * @return array{'id':string,'parentId':?string,'slug':string,'nameEntity':string,'locale':string}
      */
     public function map(array $input): array
     {
@@ -21,7 +21,7 @@ final class Mapper
             'id' => $this->stringValue($input, 'id'),
             'parentId' => $this->parentIdValue($input),
             'slug' => $this->stringValue($input, 'slug', $this->stringValue($input, 'handle')),
-            'name' => $this->stringValue($input, 'name', $this->stringValue($input, 'title')),
+            'nameEntity' => $this->stringValue($input, 'nameEntity', $this->stringValue($input, 'title')),
             'locale' => $this->stringValue($input, 'locale', 'en'),
         ];
     }

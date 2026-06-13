@@ -29,7 +29,7 @@ final readonly class CatalogCategoryCollectionController
     /**
      * Executes the invokable workflow for this service.
      */
-    #[Route('/api/category/collection', name: 'api_category_collection', methods: ['POST'])]
+    #[Route('/api/catalog/category/collection', name: 'api_category_collection', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());

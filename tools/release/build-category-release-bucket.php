@@ -9,6 +9,6 @@ $base = '/mnt/data';
 $out = [];
 foreach ($packs as $p) {
     $exists = file_exists($base.'/'.$p);
-    $out[] = ['name' => $p, 'exists' => $exists];
+    $out[] = ['nameEntity' => $p, 'exists' => $exists];
 }
 file_put_contents(__DIR__.'/../../report/category-rc1-release-bucket.json', json_encode($out, JSON_PRETTY_PRINT));

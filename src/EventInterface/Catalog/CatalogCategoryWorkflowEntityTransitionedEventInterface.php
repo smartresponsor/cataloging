@@ -11,7 +11,7 @@ namespace App\Cataloging\EventInterface\Catalog;
 interface CatalogCategoryWorkflowEntityTransitionedEventInterface
 {
     /**
-     * Handles the event name workflow.
+     * Handles the event nameEntity workflow.
      */
     public function eventName(): string;
 

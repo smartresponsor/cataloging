@@ -10,20 +10,20 @@ namespace App\Cataloging\Service;
  */
 final class FacetRank
 {
-    /** @param array{name?:mixed,slug?:mixed,path?:mixed} $row */
+    /** @param array{nameEntity?:mixed,slug?:mixed,path?:mixed} $row */
     public function score(string $term, array $row): float
     {
-        $name = strtolower($this->stringValue($row, 'name'));
+        $nameEntity = strtolower($this->stringValue($row, 'nameEntity'));
         $slug = strtolower($this->stringValue($row, 'slug'));
         $needle = strtolower($term);
         $score = 0.0;
-        if ($name === $needle || $slug === $needle) {
+        if ($nameEntity === $needle || $slug === $needle) {
             $score += 10.0;
         }
-        if (str_starts_with($name, $needle) || str_starts_with($slug, $needle)) {
+        if (str_starts_with($nameEntity, $needle) || str_starts_with($slug, $needle)) {
             $score += 3.0;
         }
-        if (str_contains($name, $needle) || str_contains($slug, $needle)) {
+        if (str_contains($nameEntity, $needle) || str_contains($slug, $needle)) {
             $score += 1.0;
         }
         $depth = substr_count($this->stringValue($row, 'path'), '/');

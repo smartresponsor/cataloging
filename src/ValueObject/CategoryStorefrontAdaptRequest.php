@@ -11,14 +11,14 @@ namespace App\Cataloging\ValueObject;
 final readonly class CategoryStorefrontAdaptRequest
 {
     /**
-     * @param list<array{id:mixed,name?:mixed,slug?:mixed,locale?:mixed,published?:mixed}> $tree
+     * @param list<array{id:mixed,nameEntity?:mixed,slug?:mixed,locale?:mixed,published?:mixed}> $tree
      */
     public function __construct(private array $tree)
     {
     }
 
     /**
-     * @return list<array{id:mixed,name?:mixed,slug?:mixed,locale?:mixed,published?:mixed}>
+     * @return list<array{id:mixed,nameEntity?:mixed,slug?:mixed,locale?:mixed,published?:mixed}>
      */
     public function tree(): array
     {

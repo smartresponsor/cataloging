@@ -129,7 +129,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
         $tester = new CommandTester($command);
         $tester->execute([
             'categoryId' => 'cat-1',
-            '--mapping' => '{"fieldMap":{"name":"title"},"requiredFields":["title"],"payload":{"title":"Catalog"}}',
+            '--mapping' => '{"fieldMap":{"nameEntity":"title"},"requiredFields":["title"],"payload":{"title":"Catalog"}}',
             '--destination' => '{"destinationId":"dest-1","channel":"web","locale":"en_US"}',
         ]);
 

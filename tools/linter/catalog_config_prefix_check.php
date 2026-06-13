@@ -50,14 +50,14 @@ foreach ($rii as $file) {
         continue;
     }
 
-    $name = basename($path);
+    $nameEntity = basename($path);
     $relativePath = ltrim(substr($path, strlen(str_replace('\\', '/', $configRoot))), '/');
 
-    if (str_starts_with($relativePath, 'component/') && in_array($name, $allowedNames, true)) {
+    if (str_starts_with($relativePath, 'component/') && in_array($nameEntity, $allowedNames, true)) {
         continue;
     }
 
-    if (str_starts_with($name, 'catalog_') || in_array($name, $allowedNames, true)) {
+    if (str_starts_with($nameEntity, 'catalog_') || in_array($nameEntity, $allowedNames, true)) {
         continue;
     }
 

@@ -19,17 +19,17 @@ class CatalogVirtualCategoryEntity
     private string $id;
 
     #[ORM\Column(type: 'string', length: 160)]
-    private string $name;
+    private string $nameEntity;
 
     /** @var array<string,mixed> */
     #[ORM\Column(type: 'json')]
     private array $rule;
 
     /** @param array<string,mixed> $rule */
-    public function __construct(string $id, string $name, array $rule)
+    public function __construct(string $id, string $nameEntity, array $rule)
     {
         $this->id = $id;
-        $this->name = $name;
+        $this->nameEntity = $nameEntity;
         $this->rule = $rule;
     }
 
@@ -42,11 +42,11 @@ class CatalogVirtualCategoryEntity
     }
 
     /**
-     * Returns the name value.
+     * Returns the nameEntity value.
      */
     public function getName(): string
     {
-        return $this->name;
+        return $this->nameEntity;
     }
 
     /** @return array<string,mixed> */

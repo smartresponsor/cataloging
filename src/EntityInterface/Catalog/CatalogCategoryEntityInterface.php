@@ -26,7 +26,7 @@ interface CatalogCategoryEntityInterface
     public function parentId(): ?string;
 
     /** @return array<string,string> */
-    public function name(): array;
+    public function nameEntity(): array;
 
     /** @return array<string,string> */
     public function slug(): array;

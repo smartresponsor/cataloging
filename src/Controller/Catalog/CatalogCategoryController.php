@@ -81,7 +81,7 @@ final class CatalogCategoryController implements CatalogCategoryControllerInterf
             $this->requiredString($auth, 'actorId'),
             $this->requiredString($body, 'taxonomyId'),
             $this->nullableStringFromMap($body, 'parentId'),
-            $this->stringMap($body, 'name'),
+            $this->stringMap($body, 'nameEntity'),
             $this->stringMap($body, 'slug'),
             $this->metaPayload($body),
         ));
@@ -215,8 +215,6 @@ final class CatalogCategoryController implements CatalogCategoryControllerInterf
     }
 
     /**
-     * @param mixed $value
-     *
      * @return list<array<string, mixed>>
      */
     private function listOfMaps(mixed $value): array

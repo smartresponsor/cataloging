@@ -11,7 +11,7 @@ namespace App\Cataloging\Service;
 final class CatalogFacetIndexBuilderService
 {
     /**
-     * @param array{id?:mixed,slug?:mixed,path?:mixed,locale?:mixed,name?:mixed} $category
+     * @param array{id?:mixed,slug?:mixed,path?:mixed,locale?:mixed,nameEntity?:mixed} $category
      *
      * @return array{id:string,slug:string,path:string,locale:string,name:string}
      */
@@ -22,7 +22,7 @@ final class CatalogFacetIndexBuilderService
             'slug' => $this->stringValue($category, 'slug'),
             'path' => $this->stringValue($category, 'path'),
             'locale' => $this->stringValue($category, 'locale', 'en'),
-            'name' => $this->stringValue($category, 'name'),
+            'nameEntity' => $this->stringValue($category, 'nameEntity'),
         ];
     }
 

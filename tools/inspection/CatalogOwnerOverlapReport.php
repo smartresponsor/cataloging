@@ -14,16 +14,16 @@ foreach ($iterator as $file) {
         continue;
     }
     $relative = str_replace($root . DIRECTORY_SEPARATOR, '', $file->getPathname());
-    $name = $file->getBasename('.php');
+    $nameEntity = $file->getBasename('.php');
     $signals = [];
-    if (str_contains($name, 'Catalog') && str_contains($relative, '/Category/')) {
-        $signals[] = 'catalog-name-inside-category-scope';
+    if (str_contains($nameEntity, 'Catalog') && str_contains($relative, '/CategoryEntity/')) {
+        $signals[] = 'catalog-nameEntity-inside-category-scope';
     }
-    if (str_contains($name, 'Category') && str_contains($relative, '/Catalog')) {
-        $signals[] = 'category-name-inside-catalog-scope';
+    if (str_contains($nameEntity, 'CategoryEntity') && str_contains($relative, '/Catalog')) {
+        $signals[] = 'category-nameEntity-inside-catalog-scope';
     }
     if ($signals !== []) {
-        $overlaps[] = ['file' => $relative, 'class' => $name, 'signals' => $signals];
+        $overlaps[] = ['file' => $relative, 'class' => $nameEntity, 'signals' => $signals];
     }
 }
 

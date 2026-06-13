@@ -25,10 +25,10 @@ final class TreeOperationConcurrency
         $this->treeLock->acquire('category_tree');
         try {
             $this->entityManager->beginTransaction();
-            $nodePath = $this->pathFromEntity($this->entityManager->find(CatalogCategoryEntity::class, $nodeId, LockMode::PESSIMISTIC_WRITE));
+            $nodePath = $this->pathFromEntity($this->findLockedCategoryEntity($nodeId));
 
             if (null !== $newParentId) {
-                $parentPath = $this->pathFromEntity($this->entityManager->find(CatalogCategoryEntity::class, $newParentId, LockMode::PESSIMISTIC_WRITE));
+                $parentPath = $this->pathFromEntity($this->findLockedCategoryEntity($newParentId));
                 if ('' !== $parentPath && '' !== $nodePath && str_starts_with($parentPath, $nodePath)) {
                     throw new \InvalidArgumentException('Cycle detected');
                 }
@@ -51,5 +51,31 @@ final class TreeOperationConcurrency
     private function pathFromEntity(?CatalogCategoryEntity $entity): string
     {
         return $entity instanceof CatalogCategoryEntity ? $entity->getPath() : '';
+    }
+
+    private function findLockedCategoryEntity(string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        $repository = $this->entityManager->getRepository(CatalogCategoryEntity::class);
+        if (is_numeric($normalizedId)) {
+            $entity = $this->entityManager->find(CatalogCategoryEntity::class, (int) $normalizedId, LockMode::PESSIMISTIC_WRITE);
+
+            return $entity instanceof CatalogCategoryEntity ? $entity : null;
+        }
+
+        $candidate = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($candidate instanceof CatalogCategoryEntity) {
+            $entity = $this->entityManager->find(CatalogCategoryEntity::class, $candidate->getId(), LockMode::PESSIMISTIC_WRITE);
+
+            return $entity instanceof CatalogCategoryEntity ? $entity : null;
+        }
+
+        $entity = $this->entityManager->find(CatalogCategoryEntity::class, $normalizedId, LockMode::PESSIMISTIC_WRITE);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 }

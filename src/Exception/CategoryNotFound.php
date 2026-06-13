@@ -15,6 +15,6 @@ final class CategoryNotFound extends \RuntimeException
      */
     public function __construct(string $detail = '')
     {
-        parent::__construct('Category not found'.('' !== $detail ? ': '.$detail : ''));
+        parent::__construct('CategoryEntity not found'.('' !== $detail ? ': '.$detail : ''));
     }
 }

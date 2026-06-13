@@ -12,7 +12,7 @@ if (!is_file($in)) {
 $rows = array_map('str_getcsv', file($in));
 $out = [];
 foreach ($rows as $r) {
-    $out[] = ['id' => $r[0] ?? null, 'slug' => $r[1] ?? null, 'name' => $r[2] ?? null];
+    $out[] = ['id' => $r[0] ?? null, 'slug' => $r[1] ?? null, 'nameEntity' => $r[2] ?? null];
 }
 file_put_contents('report/category-import-from-csv.json', json_encode($out, JSON_PRETTY_PRINT));
 echo "imported " . count($out) . " categories\n";

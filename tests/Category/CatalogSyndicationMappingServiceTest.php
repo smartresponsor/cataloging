@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
 use App\Cataloging\Service\CatalogSyndicationMappingService;
@@ -31,12 +31,12 @@ final class CatalogSyndicationMappingServiceTest extends TestCase
                     'per_locale',
                 ),
                 [
-                    'name' => 'Summer Shoes',
+                    'nameEntity' => 'Summer Shoes',
                     'slug' => 'summer-shoes',
                     'seoTitle' => '',
                 ],
                 [
-                    'name' => 'title',
+                    'nameEntity' => 'title',
                     'slug' => 'handle',
                     'seoTitle' => 'seo_title',
                 ],

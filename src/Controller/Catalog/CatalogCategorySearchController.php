@@ -31,7 +31,7 @@ final readonly class CatalogCategorySearchController
     /**
      * Executes the invokable workflow for this service.
      */
-    #[Route('/api/category/search', name: 'api_category_search', methods: ['GET'])]
+    #[Route('/api/catalog/category/search', name: 'api_category_search', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {
         try {

@@ -53,7 +53,7 @@ final readonly class CatalogSyndicationDestinationService implements CatalogSynd
         return new CatalogSyndicationDestinationRegisteredEvent(
             [
                 'destinationId' => $destination->destinationId(),
-                'name' => $destination->name(),
+                'nameEntity' => $destination->nameEntity(),
                 'destinationType' => $destination->destinationType(),
                 'deliveryMode' => $destination->deliveryMode(),
                 'enabled' => $destination->enabled(),

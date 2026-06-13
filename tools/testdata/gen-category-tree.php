@@ -8,10 +8,10 @@ $out = [];
 $id = 1;
 for ($i=0; $i<50; $i++) {
   $parent = $id;
-  $out[] = ['id' => (string)$id, 'name' => 'root-'.$i, 'slug' => 'root-'.$i, 'parent' => '', 'locale' => 'en', 'published' => true];
+  $out[] = ['id' => (string)$id, 'nameEntity' => 'root-'.$i, 'slug' => 'root-'.$i, 'parent' => '', 'locale' => 'en', 'published' => true];
   $id++;
   for ($j=0; $j<20; $j++) {
-    $out[] = ['id' => (string)$id, 'name' => 'c-'.$i.'-'.$j, 'slug' => 'c-'.$i.'-'.$j, 'parent' => (string)$parent, 'locale' => 'en', 'published' => true];
+    $out[] = ['id' => (string)$id, 'nameEntity' => 'c-'.$i.'-'.$j, 'slug' => 'c-'.$i.'-'.$j, 'parent' => (string)$parent, 'locale' => 'en', 'published' => true];
     $id++;
   }
 }

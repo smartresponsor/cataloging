@@ -185,18 +185,18 @@ $items = [
     ],
     [
         'check' => 'publish-route-protected',
-        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/{id}/publish', $rules) ? 'pass' : 'fail',
+        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/publish/{id}', $rules) ? 'pass' : 'fail',
         'details' => [
-            'route' => '/api/category/{id}/publish',
-            'presentInRouter' => isset($routeSet['/api/category/{id}/publish']),
+            'route' => '/api/category/publish/{id}',
+            'presentInRouter' => isset($routeSet['/api/category/publish/{id}']),
         ],
     ],
     [
         'check' => 'move-route-protected',
-        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/{id}/move', $rules) ? 'pass' : 'fail',
+        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/move/{id}', $rules) ? 'pass' : 'fail',
         'details' => [
-            'route' => '/api/category/{id}/move',
-            'presentInRouter' => isset($routeSet['/api/category/{id}/move']),
+            'route' => '/api/category/move/{id}',
+            'presentInRouter' => isset($routeSet['/api/category/move/{id}']),
         ],
     ],
     [

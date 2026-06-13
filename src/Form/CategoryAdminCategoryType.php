@@ -22,7 +22,7 @@ final class CategoryAdminCategoryType extends AbstractType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('name', TextType::class, [
+            ->add('nameEntity', TextType::class, [
                 'label' => 'Name',
                 'attr' => ['class' => 'form-control', 'maxlength' => 160],
             ])

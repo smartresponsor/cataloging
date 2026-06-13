@@ -17,7 +17,7 @@ final class ImportFieldMapper
     /** @var array<string,string> */
     private array $map = [
         'external_id' => 'id',
-        'title' => 'name',
+        'title' => 'nameEntity',
         'lang' => 'locale',
     ];
 

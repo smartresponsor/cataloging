@@ -43,7 +43,7 @@ final readonly class CatalogCategoryApiController
     /**
      * Handles the tree workflow.
      */
-    #[Route('/api/category/tree', name: 'api_category_tree', methods: ['GET'])]
+    #[Route('/api/catalog/category/tree', name: 'api_category_tree', methods: ['GET'])]
     public function tree(Request $request): JsonResponse
     {
         try {
@@ -68,7 +68,7 @@ final readonly class CatalogCategoryApiController
     /**
      * Handles the move workflow.
      */
-    #[Route('/api/category/{id}/move', name: 'api_category_move', methods: ['POST'])]
+    #[Route('/api/catalog/category/move/{id}', name: 'api_category_move', methods: ['POST'])]
     public function move(string $id, Request $request): JsonResponse
     {
         $dto = MoveCategoryRequest::fromArray($this->decodeMap($request));
@@ -96,7 +96,7 @@ final readonly class CatalogCategoryApiController
     /**
      * Handles the publish workflow.
      */
-    #[Route('/api/category/{id}/publish', name: 'api_category_publish', methods: ['POST'])]
+    #[Route('/api/catalog/category/publish/{id}', name: 'api_category_publish', methods: ['POST'])]
     public function publish(string $id, Request $request): JsonResponse
     {
         $dto = PublishCategoryRequest::fromArray($this->decodeMap($request));

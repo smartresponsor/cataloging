@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity\Catalog;
 
-/** Universal link of Category to any target domain entity. */
+/** Universal link of CategoryEntity to any target domain entity. */
 final class CatalogCategoryLinkEntity
 {
     /** @var string ULID */

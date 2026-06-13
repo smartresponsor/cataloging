@@ -18,12 +18,12 @@ interface CategoryPublicationReadinessInterface
     /**
      * Determines whether the check value is available.
      */
-    public function hasCheck(string $name): bool;
+    public function hasCheck(string $nameEntity): bool;
 
     /**
      * Handles the check workflow.
      */
-    public function check(string $name): bool;
+    public function check(string $nameEntity): bool;
 
     /** @return list<string> */
     public function blockers(): array;

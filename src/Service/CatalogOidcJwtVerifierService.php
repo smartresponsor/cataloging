@@ -15,6 +15,7 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
 {
     /** @var array<string,string> */
     private array $pemByKid = [];
+    private bool $hasRsaKeys = false;
 
     /**
      * @param array<string,mixed> $jwkSet
@@ -38,14 +39,10 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
                 }
             }
         }
-        if ([] === $this->pemByKid) {
-            throw new \InvalidArgumentException('No RSA keys found in JWKS');
-        }
+        $this->hasRsaKeys = [] !== $this->pemByKid;
     }
 
     /**
-     * @param string $jwt
-     *
      * @return array<string,mixed>
      *
      * @throws \JsonException
@@ -54,6 +51,10 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
      */
     public function verify(string $jwt): array
     {
+        if (!$this->hasRsaKeys) {
+            throw new \InvalidArgumentException('No RSA keys configured in JWKS');
+        }
+
         $parts = explode('.', $jwt);
         if (3 !== count($parts)) {
             throw new \InvalidArgumentException('Malformed JWT');
@@ -125,8 +126,6 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
     }
 
     /**
-     * @param string $json
-     *
      * @return array<string,mixed>
      *
      * @throws \JsonException
@@ -138,7 +137,7 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
             throw new \InvalidArgumentException('Invalid JSON object');
         }
 
-        /** @var array<string, mixed> $decoded */
+        /* @var array<string, mixed> $decoded */
         return $decoded;
     }
 

@@ -69,9 +69,9 @@ function collectInstalledVersions(string $root, array $packages): array
     $installed = require $installedFile;
     $versions = [];
 
-    foreach (($installed['versions'] ?? []) as $name => $meta) {
-        if (in_array($name, $packages, true)) {
-            $versions[$name] = (string) ($meta['pretty_version'] ?? $meta['version'] ?? 'unknown');
+    foreach (($installed['versions'] ?? []) as $nameEntity => $meta) {
+        if (in_array($nameEntity, $packages, true)) {
+            $versions[$nameEntity] = (string) ($meta['pretty_version'] ?? $meta['version'] ?? 'unknown');
         }
     }
 
@@ -113,14 +113,14 @@ function collectLockedPackages(string $root): array
     $packages = [];
 
     foreach ($decoded['packages'] ?? [] as $package) {
-        $packages[(string) $package['name']] = [
+        $packages[(string) $package['nameEntity']] = [
             'version' => (string) ($package['version'] ?? 'unknown'),
             'dev' => false,
         ];
     }
 
     foreach ($decoded['packages-dev'] ?? [] as $package) {
-        $packages[(string) $package['name']] = [
+        $packages[(string) $package['nameEntity']] = [
             'version' => (string) ($package['version'] ?? 'unknown'),
             'dev' => true,
         ];
@@ -138,15 +138,15 @@ function collectLockedPackageDirectories(string $root, array $lockedPackages): a
 {
     $rows = [];
 
-    foreach ($lockedPackages as $name => $meta) {
-        if (!str_contains($name, '/')) {
+    foreach ($lockedPackages as $nameEntity => $meta) {
+        if (!str_contains($nameEntity, '/')) {
             continue;
         }
 
-        [$vendor, $package] = explode('/', $name, 2);
+        [$vendor, $package] = explode('/', $nameEntity, 2);
         $path = 'vendor/' . $vendor . '/' . $package;
-        $rows[$name] = [
-            'name' => $name,
+        $rows[$nameEntity] = [
+            'nameEntity' => $nameEntity,
             'path' => $path,
             'exists' => is_dir($root . '/' . $path),
             'version' => $meta['version'],
@@ -298,3 +298,4 @@ printf(
     count($missingLockedPackages),
     str_replace($root . DIRECTORY_SEPARATOR, '', $out),
 );
+

@@ -26,10 +26,8 @@ final readonly class CatalogMovePreviewService implements CatalogMovePreviewServ
      */
     public function preview(string $sourceId, string $targetParentId): ?array
     {
-        /** @var CatalogCategoryEntity|null $source */
-        $source = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($sourceId);
-        /** @var CatalogCategoryEntity|null $target */
-        $target = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($targetParentId);
+        $source = $this->findCategoryEntity($sourceId);
+        $target = $this->findCategoryEntity($targetParentId);
         if (null === $source || null === $target) {
             return null;
         }
@@ -46,5 +44,30 @@ final readonly class CatalogMovePreviewService implements CatalogMovePreviewServ
             'newDepth' => $newDepth,
             'conflict' => null !== $duplicate,
         ];
+    }
+
+    private function findCategoryEntity(string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        $repository = $this->entityManager->getRepository(CatalogCategoryEntity::class);
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+            if ($entity instanceof CatalogCategoryEntity) {
+                return $entity;
+            }
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 }

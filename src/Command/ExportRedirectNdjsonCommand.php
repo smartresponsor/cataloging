@@ -49,7 +49,7 @@ final class ExportRedirectNdjsonCommand extends Command
         }
 
         foreach ($slugHistories as $slugHistory) {
-            $category = $catRepo->find($slugHistory->categoryId());
+            $category = $this->findCategoryEntity($catRepo, $slugHistory->categoryId());
             if (!$category instanceof CatalogCategoryEntity) {
                 continue;
             }
@@ -70,6 +70,29 @@ final class ExportRedirectNdjsonCommand extends Command
         $output->writeln('Exported NDJSON: '.$path);
 
         return Command::SUCCESS;
+    }
+
+    private function findCategoryEntity(object $repository, string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+
+            return $entity instanceof CatalogCategoryEntity ? $entity : null;
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 
     private function ensureDirectory(string $path): void

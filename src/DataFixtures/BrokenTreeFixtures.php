@@ -8,6 +8,7 @@ namespace App\Cataloging\DataFixtures;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Provides the broken tree fixtures implementation.
@@ -19,14 +20,15 @@ final class BrokenTreeFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $root = new CatalogCategoryEntity('Catalog Broken Root', 'catalog-broken-root', 'catalog_broken_root', 0);
+        $rootSlug = Uuid::v7()->toRfc4122();
+        $root = new CatalogCategoryEntity('Catalog Broken Root', $rootSlug, $rootSlug, 0);
         $manager->persist($root);
 
-        $slugA = 'broken';
-        $slugB = 'node';
+        $slugA = Uuid::v7()->toRfc4122();
+        $slugB = Uuid::v7()->toRfc4122();
         $brokenPath = sprintf('%s.%s.%s', $root->getPath(), $slugA, $slugB);
 
-        $broken = new CatalogCategoryEntity('Broken Child Node', 'broken-child-node', $brokenPath, 1);
+        $broken = new CatalogCategoryEntity('Broken Child Node', Uuid::v7()->toRfc4122(), $brokenPath, 1);
         $manager->persist($broken);
 
         $manager->flush();

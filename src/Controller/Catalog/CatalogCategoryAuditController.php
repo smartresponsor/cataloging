@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace App\Cataloging\Controller\Catalog;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -20,7 +19,7 @@ final class CatalogCategoryAuditController extends AbstractController
      * @throws \JsonException
      */
     #[Route('/admin/category/audit', name: 'admin_category_audit')]
-    public function __invoke(): Response
+    public function __invoke(): array
     {
         $file = 'report/category-telemetry.ndjson';
         $rows = [];
@@ -37,8 +36,17 @@ final class CatalogCategoryAuditController extends AbstractController
             }
         }
 
-        return $this->render('category/admin/audit.html.twig', [
-            'rows' => $rows,
-        ]);
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => 'admin-audit',
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => ['body' => ['rows' => $rows]],
+            'data' => ['rows' => $rows],
+            'meta' => ['source' => 'catalog_category_audit_controller'],
+        ];
     }
 }

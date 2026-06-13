@@ -29,14 +29,10 @@ final readonly class CatalogWebhookController
     /**
      * Executes the invokable workflow for this service.
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \JsonException
      * @throws TransportExceptionInterface
      */
-    #[Route('/api/category/webhook/test', name: 'api_category_webhook_test', methods: ['POST'])]
+    #[Route('/api/catalog/category/webhook/test', name: 'api_category_webhook_test', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function __invoke(Request $request): JsonResponse
     {

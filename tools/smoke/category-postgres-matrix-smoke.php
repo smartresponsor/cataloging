@@ -7,7 +7,7 @@ $php = escapeshellarg(PHP_BINARY);
 $runner = escapeshellarg($root.'/tools/php/php84.php');
 $phpunit = escapeshellarg($root.'/vendor/bin/phpunit');
 $config = escapeshellarg($root.'/phpunit.xml.dist');
-$suitePath = escapeshellarg($root.'/tests/Category/Api');
+$suitePath = escapeshellarg($root.'/tests/CategoryEntity/Api');
 
 /**
  * Run API test surface against local/docker Postgres DSNs when provided:

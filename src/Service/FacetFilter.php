@@ -10,7 +10,7 @@ namespace App\Cataloging\Service;
  */
 final class FacetFilter
 {
-    /** @param array{id?:mixed,slug?:mixed,name?:mixed,path?:mixed,locale?:mixed} $row */
+    /** @param array{id?:mixed,slug?:mixed,nameEntity?:mixed,path?:mixed,locale?:mixed} $row */
     public function scope(array $row, ?string $pathPrefix, string $locale): bool
     {
         if (($row['locale'] ?? null) !== $locale) {

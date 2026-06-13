@@ -204,7 +204,7 @@ final readonly class CatalogCategoryBulkService implements CatalogCategoryBulkSe
             $actorId,
             $this->requiredString($payload, 'taxonomyId'),
             $this->optionalString($payload, 'parentId'),
-            $this->requiredStringMap($payload, 'name'),
+            $this->requiredStringMap($payload, 'nameEntity'),
             $this->requiredStringMap($payload, 'slug'),
             $this->metaPayload($payload),
         );

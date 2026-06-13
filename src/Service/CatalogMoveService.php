@@ -58,7 +58,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
         try {
             $node = $this->fetchNode($normalizedNodeId);
             if (null === $node) {
-                throw new \RuntimeException(sprintf('Category node "%s" was not found.', $normalizedNodeId));
+                throw new \RuntimeException(sprintf('CategoryEntity node "%s" was not found.', $normalizedNodeId));
             }
             $newParent = $this->fetchNode($normalizedNewParentId);
             if (null === $newParent) {
@@ -127,7 +127,7 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     /** @return array<string, mixed>|null */
     private function fetchNode(string $id): ?array
     {
-        $entity = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($id);
+        $entity = $this->findCategoryEntity($id);
         if (!$entity instanceof CatalogCategoryEntity) {
             return null;
         }
@@ -182,9 +182,9 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
 
     private function updateRow(string $id, string $path, int $depth): void
     {
-        $entity = $this->entityManager->getRepository(CatalogCategoryEntity::class)->find($id);
+        $entity = $this->findCategoryEntity($id);
         if (!$entity instanceof CatalogCategoryEntity) {
-            throw new \RuntimeException(sprintf('Category node "%s" was not found for ORM update.', $id));
+            throw new \RuntimeException(sprintf('CategoryEntity node "%s" was not found for ORM update.', $id));
         }
 
         $entity->setPath($path);
@@ -233,12 +233,12 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     private function pathValue(mixed $path): string
     {
         if (!is_scalar($path)) {
-            throw new \RuntimeException('Category path must be a scalar value.');
+            throw new \RuntimeException('CategoryEntity path must be a scalar value.');
         }
 
         $normalized = trim((string) $path);
         if ('' === $normalized) {
-            throw new \RuntimeException('Category path cannot be empty.');
+            throw new \RuntimeException('CategoryEntity path cannot be empty.');
         }
 
         return $normalized;
@@ -247,14 +247,39 @@ final readonly class CatalogMoveService implements CategoryMoveInterface
     private function idValue(mixed $id): string
     {
         if (!is_scalar($id)) {
-            throw new \RuntimeException('Category id must be a scalar value.');
+            throw new \RuntimeException('CategoryEntity id must be a scalar value.');
         }
 
         $normalized = trim((string) $id);
         if ('' === $normalized) {
-            throw new \RuntimeException('Category id cannot be empty.');
+            throw new \RuntimeException('CategoryEntity id cannot be empty.');
         }
 
         return $normalized;
+    }
+
+    private function findCategoryEntity(string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        $repository = $this->entityManager->getRepository(CatalogCategoryEntity::class);
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+            if ($entity instanceof CatalogCategoryEntity) {
+                return $entity;
+            }
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 }

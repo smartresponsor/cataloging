@@ -20,18 +20,16 @@ final class CatalogWebhookAdminService implements CatalogWebhookAdminServiceInte
     private static int $deliverySequence = 1;
 
     /**
-     * @param string $name
-     *
      * @return array{kid:string,secret:non-empty-string}
      *
      * @throws RandomException
      */
-    public function registerKey(string $name): array
+    public function registerKey(string $nameEntity): array
     {
         $token = bin2hex(random_bytes(16));
-        self::$keys[$name] = ['kid' => $name, 'secret' => $token];
+        self::$keys[$nameEntity] = ['kid' => $nameEntity, 'secret' => $token];
 
-        return self::$keys[$name];
+        return self::$keys[$nameEntity];
     }
 
     /** @param array<string,mixed> $payload */

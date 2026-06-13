@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Entity\Catalog\CatalogCategoryAccessAssignmentEntity;
 use App\Cataloging\Repository\Catalog\CatalogCategoryAccessAssignmentRepository;

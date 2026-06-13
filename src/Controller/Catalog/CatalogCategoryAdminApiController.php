@@ -28,7 +28,7 @@ final readonly class CatalogCategoryAdminApiController
     /**
      * Handles the list workflow.
      */
-    #[Route('/api/admin/category/list', name: 'api_admin_category_list', methods: ['GET'])]
+    #[Route('/api/catalog/category/admin/list', name: 'api_admin_category_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         try {
@@ -52,7 +52,7 @@ final readonly class CatalogCategoryAdminApiController
     /**
      * Handles the bulk workflow.
      */
-    #[Route('/api/admin/category/bulk', name: 'api_admin_category_bulk', methods: ['POST'])]
+    #[Route('/api/catalog/category/bulk', name: 'api_admin_category_bulk', methods: ['POST'])]
     public function bulk(Request $request): JsonResponse
     {
         try {

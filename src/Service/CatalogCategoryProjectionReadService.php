@@ -65,7 +65,19 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
         }
 
         $entityManager = $this->entityManager();
-        $entity = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->find($normalizedId);
+        $repository = $entityManager->getRepository(CatalogCategoryProjectionEntity::class);
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+
+            return $entity instanceof CatalogCategoryProjectionEntity ? $this->mapEntityToRow($entity) : null;
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryProjectionEntity) {
+            return $this->mapEntityToRow($entity);
+        }
+
+        $entity = $repository->find($normalizedId);
 
         return $entity instanceof CatalogCategoryProjectionEntity ? $this->mapEntityToRow($entity) : null;
     }
@@ -99,11 +111,11 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
         $nodes = [];
         foreach ($rows as $row) {
             $id = $row['id'] ?? null;
-            if (!is_string($id) || '' === $id) {
+            if (!is_scalar($id) || '' === (string) $id) {
                 continue;
             }
 
-            $nodes[$id] = [...$row, 'children' => []];
+            $nodes[(string) $id] = [...$row, 'children' => []];
         }
 
         /** @var array<string,string> $parentIndex */
@@ -111,16 +123,16 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
         $roots = [];
         foreach ($rows as $row) {
             $id = $row['id'] ?? null;
-            if (!is_string($id) || '' === $id) {
+            if (!is_scalar($id) || '' === (string) $id) {
                 continue;
             }
             $parentId = $row['parent_id'] ?? null;
-            if (is_string($parentId) && '' !== $parentId && isset($nodes[$parentId])) {
-                $parentIndex[$id] = $parentId;
+            if (is_scalar($parentId) && '' !== (string) $parentId && isset($nodes[(string) $parentId])) {
+                $parentIndex[(string) $id] = (string) $parentId;
                 continue;
             }
 
-            $roots[] = $id;
+            $roots[] = (string) $id;
         }
 
         return $this->materializeTree($roots, $nodes, $parentIndex);
@@ -181,10 +193,10 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
     private function mapEntityToRow(CatalogCategoryProjectionEntity $entity): array
     {
         return [
-            'id' => $entity->getId(),
+            'id' => (int) $entity->getId(),
             'slug' => $entity->getSlug(),
-            'name' => $entity->getName(),
-            'parent_id' => $entity->getParentId(),
+            'nameEntity' => $entity->getName(),
+            'parent_id' => null === $entity->getParentId() ? null : (int) $entity->getParentId(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',
             'tenant' => $entity->getTenant(),

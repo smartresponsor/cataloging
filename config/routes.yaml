@@ -3,3 +3,4 @@ controllers:
         path: ../src/Controller/
         namespace: App\Cataloging\Controller
     type: attribute
+    prefix: /ea

@@ -28,9 +28,9 @@ final class CatalogSuggestService
      *
      * @return list<array{category:string,score:int,explain:list<string>}>
      */
-    public function suggest(string $name, string $desc = '', array $tags = [], int $k = 5): array
+    public function suggest(string $nameEntity, string $desc = '', array $tags = [], int $k = 5): array
     {
-        $tokens = $this->tokenize($name.' '.$desc.' '.implode(' ', $tags));
+        $tokens = $this->tokenize($nameEntity.' '.$desc.' '.implode(' ', $tags));
         /** @var array<string,array{score:int,explain:list<string>}> $scores */
         $scores = [];
 

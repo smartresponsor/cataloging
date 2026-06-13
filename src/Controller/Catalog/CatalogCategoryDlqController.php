@@ -7,7 +7,6 @@ namespace App\Cataloging\Controller\Catalog;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -21,7 +20,7 @@ final class CatalogCategoryDlqController extends AbstractController
      * @throws \JsonException
      */
     #[Route('/admin/category/dlq', name: 'admin_category_dlq', methods: ['GET', 'POST'])]
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): array
     {
         $file = 'report/category-dlq.json';
         $dlq = $this->readDlq($file);
@@ -48,9 +47,18 @@ final class CatalogCategoryDlqController extends AbstractController
             );
         }
 
-        return $this->render('category/admin/dlq.html.twig', [
-            'dlq' => $dlq,
-        ]);
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => 'admin-dlq',
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => ['body' => ['dlq' => $dlq]],
+            'data' => ['dlq' => $dlq],
+            'meta' => ['source' => 'catalog_category_dlq_controller'],
+        ];
     }
 
     /** @return list<array{id:string,last_action?:string,ts?:string}> */

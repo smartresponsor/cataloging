@@ -13,22 +13,22 @@ final class CategoryAdminCategoryDataTest extends TestCase
     public function testFromArrayNormalizesScalarValues(): void
     {
         $dto = CategoryAdminCategoryData::fromArray([
-            'name' => '  Summer Collection  ',
+            'nameEntity' => '  Summer Collection  ',
             'slug' => '  summer-collection  ',
         ]);
 
-        self::assertSame('Summer Collection', $dto->name);
+        self::assertSame('Summer Collection', $dto->nameEntity);
         self::assertSame('summer-collection', $dto->slug);
     }
 
     public function testFromArrayFallsBackToEmptyStringsForInvalidValues(): void
     {
         $dto = CategoryAdminCategoryData::fromArray([
-            'name' => ['not', 'scalar'],
+            'nameEntity' => ['not', 'scalar'],
             'slug' => null,
         ]);
 
-        self::assertSame('', $dto->name);
+        self::assertSame('', $dto->nameEntity);
         self::assertSame('', $dto->slug);
     }
 }

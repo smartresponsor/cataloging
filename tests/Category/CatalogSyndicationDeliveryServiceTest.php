@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Policy\CategorySyndicationDeliveryPolicy;
 use App\Cataloging\Repository\Catalog\CatalogSyndicationDeliveryRecordRepository;

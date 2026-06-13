@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\AttachmentInterface\AttachmentReferenceGatewayInterface;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;

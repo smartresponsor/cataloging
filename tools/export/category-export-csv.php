@@ -5,14 +5,14 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
 $rows = [
-  ['id' => 1, 'name' => 'Root', 'slug' => 'root', 'parent' => '', 'locale' => 'en', 'channel' => 'default'],
-  ['id' => 2, 'name' => 'Electronics', 'slug' => 'electronics', 'parent' => '1', 'locale' => 'en', 'channel' => 'default'],
+  ['id' => 1, 'nameEntity' => 'Root', 'slug' => 'root', 'parent' => '', 'locale' => 'en', 'channel' => 'default'],
+  ['id' => 2, 'nameEntity' => 'Electronics', 'slug' => 'electronics', 'parent' => '1', 'locale' => 'en', 'channel' => 'default'],
 ];
 $fname = 'report/category-export-'.date('YmdHis').'.csv';
 $f = fopen($fname, 'w');
-fputcsv($f, ['id','name','slug','parent','locale','channel']);
+fputcsv($f, ['id','nameEntity','slug','parent','locale','channel']);
 foreach ($rows as $r) {
-  fputcsv($f, [$r['id'],$r['name'],$r['slug'],$r['parent'],$r['locale'],$r['channel']]);
+  fputcsv($f, [$r['id'],$r['nameEntity'],$r['slug'],$r['parent'],$r['locale'],$r['channel']]);
 }
 fclose($f);
 $indexFile = 'report/category-export-index.json';

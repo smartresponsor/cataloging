@@ -41,7 +41,7 @@ final class CatalogSlugSmokeCommand extends Command
         $foundCount = 0;
         $missingCount = 0;
         foreach ($slugHistories as $slugHistory) {
-            $category = $categoryRepository->find($slugHistory->categoryId());
+            $category = $this->findCategoryEntity($categoryRepository, $slugHistory->categoryId());
             if ($category) {
                 ++$foundCount;
             } else {
@@ -51,5 +51,28 @@ final class CatalogSlugSmokeCommand extends Command
         $output->writeln('Slug history ok: '.$foundCount.'; missing target: '.$missingCount);
 
         return 0 === $missingCount ? Command::SUCCESS : Command::FAILURE;
+    }
+
+    private function findCategoryEntity(object $repository, string $id): ?CatalogCategoryEntity
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        if (is_numeric($normalizedId)) {
+            $entity = $repository->find((int) $normalizedId);
+
+            return $entity instanceof CatalogCategoryEntity ? $entity : null;
+        }
+
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryEntity) {
+            return $entity;
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryEntity ? $entity : null;
     }
 }

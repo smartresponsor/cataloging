@@ -12,7 +12,7 @@ final readonly class CatalogSyndicationDestinationDefinition
 {
     public function __construct(
         private string $destinationId,
-        private string $name,
+        private string $nameEntity,
         private string $destinationType,
         private string $deliveryMode,
     ) {
@@ -23,9 +23,9 @@ final readonly class CatalogSyndicationDestinationDefinition
         return $this->destinationId;
     }
 
-    public function name(): string
+    public function nameEntity(): string
     {
-        return $this->name;
+        return $this->nameEntity;
     }
 
     public function destinationType(): string

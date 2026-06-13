@@ -21,7 +21,7 @@ interface CatalogTaxonomyEntityInterface
     public function code(): string;
 
     /** @return array<string,string> */
-    public function name(): array;
+    public function nameEntity(): array;
 
     /** @return array<string,mixed> */
     public function rule(): array;

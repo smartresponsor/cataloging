@@ -9,8 +9,8 @@ declare(strict_types=1);
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 
 /**
- * CLI: php tools/Category/rescue/tools_linter_category_prefix_check.php <project-root>
- * Ensures classes under Category responsibility paths start with 'Category'.
+ * CLI: php tools/CategoryEntity/rescue/tools_linter_category_prefix_check.php <project-root>
+ * Ensures classes under CategoryEntity responsibility paths start with 'CategoryEntity'.
  */
 
 $root = $argv[1] ?? getcwd();
@@ -23,12 +23,12 @@ foreach ($rii as $file) {
     }
 
     $path = str_replace('\\', '/', $file->getPathname());
-    if (!preg_match('~(?:^|/)src/.*/Category/[^/]+\.php$~', $path)) {
+    if (!preg_match('~(?:^|/)src/.*/CategoryEntity/[^/]+\.php$~', $path)) {
         continue;
     }
 
-    $name = basename($path, '.php');
-    if (!preg_match('/^Category([A-Z].*)?$|^Category$/', $name)) {
+    $nameEntity = basename($path, '.php');
+    if (!preg_match('/^CategoryEntity([A-Z].*)?$|^CategoryEntity$/', $nameEntity)) {
         fwrite(STDERR, "Prefix violation: {$file->getPathname()}\n");
         ++$fail;
     }

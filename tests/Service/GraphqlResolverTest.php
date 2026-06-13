@@ -38,7 +38,7 @@ final class GraphqlResolverTest extends TestCase
                     'id' => $id,
                     'parent_id' => null,
                     'slug' => 'root',
-                    'name' => 'Root',
+                    'nameEntity' => 'Root',
                     'locale' => 'en',
                     'tenant' => 'default',
                     'workflow_state' => 'published',
@@ -82,7 +82,7 @@ final class GraphqlResolverTest extends TestCase
                     'id' => $id,
                     'parent_id' => 'cat-root',
                     'slug' => 'electronics',
-                    'name' => 'Electronics',
+                    'nameEntity' => 'Electronics',
                     'locale' => 'en',
                     'tenant' => 'default',
                     'workflow_state' => 'published',
@@ -95,8 +95,8 @@ final class GraphqlResolverTest extends TestCase
         };
 
         $rows = [
-            ['id' => 'cat-root', 'parent_id' => null, 'slug' => 'root', 'name' => 'Root', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root'],
-            ['id' => 'cat-2', 'parent_id' => 'cat-root', 'slug' => 'electronics', 'name' => 'Electronics', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root.electronics'],
+            ['id' => 'cat-root', 'parent_id' => null, 'slug' => 'root', 'nameEntity' => 'Root', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root'],
+            ['id' => 'cat-2', 'parent_id' => 'cat-root', 'slug' => 'electronics', 'nameEntity' => 'Electronics', 'locale' => 'en', 'workflow_state' => 'published', 'published' => true, 'path' => 'root.electronics'],
         ];
         $resolver = new CatalogGraphqlResolverService($readService, $this->registryWithPaths($rows));
         $path = $resolver->categoryPath(new CategoryGraphqlNodeRequest('cat-2'));

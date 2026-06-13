@@ -7,7 +7,6 @@ namespace App\Cataloging\Controller\Catalog;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -19,15 +18,24 @@ final class CatalogCategoryBatchEditController extends AbstractController
      * Executes the invokable workflow for this service.
      */
     #[Route('/admin/category/batch-edit', name: 'admin_category_batch_edit', methods: ['GET', 'POST'])]
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): array
     {
         $rows = [];
         if ($request->isMethod('POST')) {
             $rows = $request->request->all('rows');
         }
 
-        return $this->render('category/admin/batch_edit.html.twig', [
-            'rows' => $rows,
-        ]);
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => 'admin-batch-edit',
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => ['body' => ['rows' => $rows]],
+            'data' => ['rows' => $rows],
+            'meta' => ['source' => 'catalog_category_batch_edit_controller'],
+        ];
     }
 }

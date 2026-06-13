@@ -31,7 +31,7 @@ $repositoryInterface = $root . '/src/RepositoryInterface/CatalogAttachmentReposi
 $securityConfig = $root . '/config/packages/catalog_category_security_api.yaml';
 $doc = $root . '/docs/category-attachment-policy-readiness.md';
 $composer = $root . '/composer.json';
-$tests = $root . '/tests/Category/CatalogCategoryAttachmentAuthorizationServiceTest.php';
+$tests = $root . '/tests/CategoryEntity/CatalogCategoryAttachmentAuthorizationServiceTest.php';
 
 $items = [
     [
@@ -46,12 +46,12 @@ $items = [
     ],
     [
         'check' => 'attachment-add-requires-policy-check',
-        'status' => containsAll($controller, 'assertCanAttach(') && containsAll($authorizationService, 'Category attachment binding is not allowed') ? 'pass' : 'fail',
+        'status' => containsAll($controller, 'assertCanAttach(') && containsAll($authorizationService, 'CategoryEntity attachment binding is not allowed') ? 'pass' : 'fail',
         'details' => ['file' => 'src/Controller/CategoryAttachmentController.php'],
     ],
     [
         'check' => 'attachment-delete-requires-policy-check',
-        'status' => containsAll($controller, 'assertCanDetach(') && containsAll($authorizationService, 'Category attachment deletion is not allowed') ? 'pass' : 'fail',
+        'status' => containsAll($controller, 'assertCanDetach(') && containsAll($authorizationService, 'CategoryEntity attachment deletion is not allowed') ? 'pass' : 'fail',
         'details' => ['file' => 'src/Controller/CategoryAttachmentController.php'],
     ],
     [
@@ -82,7 +82,7 @@ $items = [
     [
         'check' => 'attachment-policy-tests-present',
         'status' => is_file($tests) ? 'pass' : 'warn',
-        'details' => ['file' => 'tests/Category/CatalogCategoryAttachmentAuthorizationServiceTest.php'],
+        'details' => ['file' => 'tests/CategoryEntity/CatalogCategoryAttachmentAuthorizationServiceTest.php'],
     ],
     [
         'check' => 'composer-report-wiring',

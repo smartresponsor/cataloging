@@ -5,34 +5,34 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Entity\Catalog;
 
-/** Category taxonomy entity (code: product, project, vendor, report, etc.). */
+/** CategoryEntity taxonomy entity (code: product, project, vendor, report, etc.). */
 final class CatalogTaxonomyEntity
 {
     /** @var string ULID */
     private string $id;
     private string $code;
     /** @var array<string,string> */
-    private array $name;
+    private array $nameEntity;
     /** @var array<string,mixed> */
     private array $rule;
     private \DateTimeImmutable $createdAt;
     private \DateTimeImmutable $updatedAt;
 
     /**
-     * @param array<string,string> $name
+     * @param array<string,string> $nameEntity
      * @param array<string,mixed>  $rule
      */
     public function __construct(
         string $id,
         string $code,
-        array $name,
+        array $nameEntity,
         array $rule,
         \DateTimeImmutable $createdAt,
         \DateTimeImmutable $updatedAt,
     ) {
         $this->id = $id;
         $this->code = $code;
-        $this->name = $name;
+        $this->nameEntity = $nameEntity;
         $this->rule = $rule;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
@@ -55,9 +55,9 @@ final class CatalogTaxonomyEntity
     }
 
     /** @return array<string,string> */
-    public function name(): array
+    public function nameEntity(): array
     {
-        return $this->name;
+        return $this->nameEntity;
     }
 
     /** @return array<string,mixed> */

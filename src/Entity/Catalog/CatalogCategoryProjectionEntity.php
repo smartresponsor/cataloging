@@ -25,7 +25,7 @@ class CatalogCategoryProjectionEntity
     private string $slug;
 
     #[ORM\Column(type: 'string', length: 160)]
-    private string $name;
+    private string $nameEntity;
 
     #[ORM\Column(type: 'string', length: 26, nullable: true, options: ['fixed' => true])]
     private ?string $parentId = null;
@@ -74,12 +74,12 @@ class CatalogCategoryProjectionEntity
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->nameEntity;
     }
 
-    public function setName(string $name): void
+    public function setName(string $nameEntity): void
     {
-        $this->name = $name;
+        $this->nameEntity = $nameEntity;
     }
 
     public function getParentId(): ?string

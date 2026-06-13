@@ -46,7 +46,7 @@ final class CatalogCategoryRepository implements CatalogCategoryRepositoryInterf
             'id' => '',
             'taxonomyId' => $request->taxonomyId(),
             'parentId' => $request->parentId(),
-            'name' => $request->name(),
+            'nameEntity' => $request->nameEntity(),
             'slug' => $request->slug(),
             'meta' => $request->meta(),
             'path' => '',

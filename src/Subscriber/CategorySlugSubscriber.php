@@ -52,7 +52,7 @@ final readonly class CategorySlugSubscriber implements EventSubscriber
             if ($repo->findOneBy(['slug' => $old])) {
                 return;
             }
-            $slugHistory = new CatalogCategorySlugHistoryEntity($old, $entity->getId());
+            $slugHistory = new CatalogCategorySlugHistoryEntity($old, (string) $entity->getId());
             $this->em->persist($slugHistory);
         }
     }

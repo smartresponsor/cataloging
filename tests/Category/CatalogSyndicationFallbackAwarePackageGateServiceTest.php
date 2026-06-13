@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Owner: Marketing America Corp
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Entity\Catalog\CatalogCategoryMediaBindingEntity;
 use App\Cataloging\Entity\Catalog\CatalogSyndicationDestinationEntity;
@@ -86,7 +86,7 @@ final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCa
         $event = $service->buildGatedPublishPackage(
             new CategorySyndicationPackageBuildRequest(
                 new CategorySyndicationPackageContext('pkg-1', 'dest-1', 'cat-1', 'v1', 'per_locale'),
-                ['title' => 'Category One'],
+                ['title' => 'CategoryEntity One'],
                 ['title' => 'title'],
                 ['title'],
                 new CatalogAuditContext('actor-1', 'test'),

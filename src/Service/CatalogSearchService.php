@@ -37,7 +37,7 @@ final readonly class CatalogSearchService
         $criteriaMap = $criteria?->toArray() ?? [];
         $limit = $this->boundedInt($criteriaMap['limit'] ?? null, self::DEFAULT_LIMIT, 1, self::MAX_LIMIT);
         $offset = $this->boundedInt($criteriaMap['offset'] ?? null, 0, 0, self::MAX_OFFSET);
-        $order = $this->allowedString($criteriaMap['order'] ?? null, ['path', 'name', 'slug', 'updated_at'], 'path');
+        $order = $this->allowedString($criteriaMap['order'] ?? null, ['path', 'nameEntity', 'slug', 'updated_at'], 'path');
         $direction = strtoupper($this->allowedString($criteriaMap['direction'] ?? null, ['asc', 'desc'], 'asc'));
 
         return $this->searchOrmOnly($criteriaMap, $limit, $offset, $order, $direction);
@@ -58,7 +58,7 @@ final readonly class CatalogSearchService
         $this->applyOrmProjectionFilters($queryBuilder, $criteriaMap);
 
         $orderField = match ($order) {
-            'name' => 'projection.name',
+            'nameEntity' => 'projection.nameEntity',
             'slug' => 'projection.slug',
             'updated_at' => 'projection.updatedAt',
             default => 'projection.path',
@@ -132,7 +132,7 @@ final readonly class CatalogSearchService
         $q = $this->querySupport->optionalString($criteriaMap['q'] ?? null) ?? '';
         if ('' !== $q) {
             $queryBuilder
-                ->andWhere('(projection.slug LIKE :searchTerm OR projection.name LIKE :searchTerm OR projection.path LIKE :searchTerm)')
+                ->andWhere('(projection.slug LIKE :searchTerm OR projection.nameEntity LIKE :searchTerm OR projection.path LIKE :searchTerm)')
                 ->setParameter('searchTerm', '%'.$q.'%');
         }
     }
@@ -202,7 +202,7 @@ final readonly class CatalogSearchService
         return [
             'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
-            'name' => $entity->getName(),
+            'nameEntity' => $entity->getName(),
             'parent_id' => $entity->getParentId(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',

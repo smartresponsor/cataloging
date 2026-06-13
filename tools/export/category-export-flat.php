@@ -5,8 +5,8 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>
  */
 $data = [
-  ['id' => '1', 'name' => 'Root', 'slug' => 'root', 'parent' => '', 'locale' => 'en'],
-  ['id' => '2', 'name' => 'Electronics', 'slug' => 'electronics', 'parent' => '1', 'locale' => 'en'],
+  ['id' => '1', 'nameEntity' => 'Root', 'slug' => 'root', 'parent' => '', 'locale' => 'en'],
+  ['id' => '2', 'nameEntity' => 'Electronics', 'slug' => 'electronics', 'parent' => '1', 'locale' => 'en'],
 ];
 file_put_contents('report/category-export-flat.json', json_encode($data, JSON_PRETTY_PRINT));
 echo "exported ".count($data)." categories\n";

@@ -23,8 +23,8 @@ final class CatalogImportValidatorService
             if ('' === $this->stringValue($row, 'id')) {
                 $rowErrors[] = 'missing id';
             }
-            if ('' === $this->stringValue($row, 'name')) {
-                $rowErrors[] = 'missing name';
+            if ('' === $this->stringValue($row, 'nameEntity')) {
+                $rowErrors[] = 'missing nameEntity';
             }
             if ([] !== $rowErrors) {
                 $errors[] = ['row' => $index, 'errors' => $rowErrors];

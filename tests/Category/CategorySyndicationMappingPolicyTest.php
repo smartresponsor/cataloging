@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
 use PHPUnit\Framework\TestCase;
@@ -19,14 +19,14 @@ final class CategorySyndicationMappingPolicyTest extends TestCase
 
         self::assertSame(
             [
-                'name' => 'title',
+                'nameEntity' => 'title',
                 'seoTitle' => 'seo_title',
                 'slug' => 'handle',
             ],
             $policy->normalizeFieldMap([
                 ' seoTitle ' => ' seo_title ',
                 ' slug ' => ' handle ',
-                ' name ' => ' title ',
+                ' nameEntity ' => ' title ',
             ]),
         );
 

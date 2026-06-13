@@ -31,7 +31,7 @@ final readonly class CatalogCategoryAttachmentController
     /**
      * Handles the list workflow.
      */
-    #[Route('/api/category/attachments', name: 'api_category_attachment_list', methods: ['GET'])]
+    #[Route('/api/catalog/category/attachment', name: 'api_category_attachment_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $categoryId = $request->query->get('category_id');
@@ -55,7 +55,7 @@ final readonly class CatalogCategoryAttachmentController
     /**
      * Handles the attach workflow.
      */
-    #[Route('/api/category/attachments', name: 'api_category_attachment_attach', methods: ['POST'])]
+    #[Route('/api/catalog/category/attachment', name: 'api_category_attachment_attach', methods: ['POST'])]
     public function attach(Request $request): JsonResponse
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());
@@ -99,7 +99,7 @@ final readonly class CatalogCategoryAttachmentController
     /**
      * Handles the detach workflow.
      */
-    #[Route('/api/category/attachments/{attachmentId}', name: 'api_category_attachment_detach', methods: ['DELETE'])]
+    #[Route('/api/catalog/category/attachment/{attachmentId}', name: 'api_category_attachment_detach', methods: ['DELETE'])]
     public function detach(string $attachmentId): JsonResponse
     {
         try {

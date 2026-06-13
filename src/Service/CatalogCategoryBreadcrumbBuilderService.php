@@ -30,7 +30,7 @@ final readonly class CatalogCategoryBreadcrumbBuilderService implements CatalogC
     {
         $chain = $this->normalizeChain($this->repo->breadcrumb($categoryId, $locale));
         $fullSlug = implode('/', array_map(static fn (array $node): string => $node['slug'], $chain));
-        $title = implode(' / ', array_map(static fn (array $node): string => $node['name'], $chain));
+        $title = implode(' / ', array_map(static fn (array $node): string => $node['nameEntity'], $chain));
 
         return ['breadcrumb' => $chain, 'seo' => ['fullSlug' => $fullSlug, 'title' => $title]];
     }
@@ -49,12 +49,12 @@ final readonly class CatalogCategoryBreadcrumbBuilderService implements CatalogC
                 continue;
             }
             $id = $node['id'] ?? null;
-            $name = $node['name'] ?? null;
+            $nameEntity = $node['nameEntity'] ?? null;
             $slug = $node['slug'] ?? null;
-            if (!is_scalar($id) || !is_scalar($name) || !is_scalar($slug)) {
+            if (!is_scalar($id) || !is_scalar($nameEntity) || !is_scalar($slug)) {
                 continue;
             }
-            $chain[] = ['id' => (string) $id, 'name' => (string) $name, 'slug' => (string) $slug];
+            $chain[] = ['id' => (string) $id, 'nameEntity' => (string) $nameEntity, 'slug' => (string) $slug];
         }
 
         return $chain;

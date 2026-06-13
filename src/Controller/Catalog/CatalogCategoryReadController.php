@@ -28,7 +28,7 @@ final class CatalogCategoryReadController extends AbstractController
     /**
      * Handles the list workflow.
      */
-    #[Route('/api/category/list', name: 'api_category_list', methods: ['GET'])]
+    #[Route('/api/catalog/category/list', name: 'api_category_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $result = $this->categoryReadService->list(new CategoryCatalogReadPageRequest(
@@ -48,7 +48,7 @@ final class CatalogCategoryReadController extends AbstractController
      * Handles the by id workflow.
      */
     #[Route(
-        '/api/category/{id}',
+        '/api/catalog/category/{id}',
         name: 'api_category_by_id',
         requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'],
         methods: ['GET'],
@@ -67,7 +67,7 @@ final class CatalogCategoryReadController extends AbstractController
      * Handles the descendants tree workflow.
      */
     #[Route(
-        '/api/category/{id}/descendants',
+        '/api/catalog/category/descendant/{id}',
         name: 'api_category_descendants_tree',
         requirements: ['id' => '[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}'],
         methods: ['GET'],
@@ -85,7 +85,7 @@ final class CatalogCategoryReadController extends AbstractController
     /**
      * Handles the child list workflow.
      */
-    #[Route('/api/category/{id}/child', name: 'api_category_child_list', methods: ['GET'])]
+    #[Route('/api/catalog/category/child/{id}', name: 'api_category_child_list', methods: ['GET'])]
     public function childList(string $id): JsonResponse
     {
         $children = $this->categoryReadService->childList(new CategoryCatalogReadNodeRequest($id));
@@ -103,7 +103,7 @@ final class CatalogCategoryReadController extends AbstractController
     /**
      * Handles the ancestor list workflow.
      */
-    #[Route('/api/category/{id}/ancestor', name: 'api_category_ancestor_list', methods: ['GET'])]
+    #[Route('/api/catalog/category/ancestor/{id}', name: 'api_category_ancestor_list', methods: ['GET'])]
     public function ancestorList(string $id): JsonResponse
     {
         $ancestors = $this->categoryReadService->ancestorList(new CategoryCatalogReadNodeRequest($id));

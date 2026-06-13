@@ -16,9 +16,9 @@ interface CatalogSyndicationDestinationEntityInterface
     public function destinationId(): string;
 
     /**
-     * Handles the name workflow.
+     * Handles the nameEntity workflow.
      */
-    public function name(): string;
+    public function nameEntity(): string;
 
     /**
      * Handles the destination type workflow.

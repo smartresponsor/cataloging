@@ -90,16 +90,13 @@ final class CategoryPublicationQualityEvaluateCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param string         $name
-     *
      * @return array<string,bool>
      *
      * @throws \JsonException
      */
-    private function decodeJsonMapOption(InputInterface $input, string $name): array
+    private function decodeJsonMapOption(InputInterface $input, string $nameEntity): array
     {
-        $decoded = json_decode($this->optionString($input, $name, '{}'), true, 512, JSON_THROW_ON_ERROR);
+        $decoded = json_decode($this->optionString($input, $nameEntity, '{}'), true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($decoded)) {
             return [];
         }

@@ -86,8 +86,6 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
     }
 
     /**
-     * @param string $line
-     *
      * @return array<string,mixed>
      *
      * @throws \JsonException
@@ -193,7 +191,7 @@ final readonly class CategoryNdjsonImporter implements CategoryNdjsonImporterInt
             $this->optionalStringValue($data, 'actorId') ?? 'system',
             $this->requiredStringValue($data, 'taxonomyId'),
             $this->optionalStringValue($data, 'parentId'),
-            $this->stringMapValue($data, 'name'),
+            $this->stringMapValue($data, 'nameEntity'),
             $this->stringMapValue($data, 'slug'),
             $this->metaMapValue($data),
         );

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * CLI: php tools/linter/category_prefix_check.php <project-root>
- * Ensures classes under Category responsibility paths start with 'Category'.
+ * Ensures classes under CategoryEntity responsibility paths start with 'CategoryEntity'.
  */
 $root = $argv[1] ?? getcwd();
 if (!is_string($root) || !is_dir($root)) {
@@ -21,12 +21,12 @@ foreach ($rii as $file) {
     }
 
     $path = str_replace('\\', '/', $file->getPathname());
-    if (preg_match('~(?:^|/)src/.*/Category/[^/]+\.php$~', $path) !== 1) {
+    if (preg_match('~(?:^|/)src/.*/CategoryEntity/[^/]+\.php$~', $path) !== 1) {
         continue;
     }
 
-    $name = basename($path, '.php');
-    if (preg_match('/^Category([A-Z].*)?$/', $name) !== 1) {
+    $nameEntity = basename($path, '.php');
+    if (preg_match('/^CategoryEntity([A-Z].*)?$/', $nameEntity) !== 1) {
         fwrite(STDERR, "Prefix violation: {$path}\n");
         $fail++;
     }

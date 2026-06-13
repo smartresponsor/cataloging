@@ -43,7 +43,7 @@ final readonly class CatalogCategoryAttachmentAuthorizationService
         $this->assertGranted(
             CategoryVoter::VIEW,
             $normalizedCategoryId,
-            'Category attachment listing is not allowed for the current actor.',
+            'CategoryEntity attachment listing is not allowed for the current actor.',
         );
     }
 
@@ -55,7 +55,7 @@ final readonly class CatalogCategoryAttachmentAuthorizationService
         $this->assertGranted(
             CategoryVoter::EDIT,
             $categoryId,
-            'Category attachment binding is not allowed for the current actor.',
+            'CategoryEntity attachment binding is not allowed for the current actor.',
         );
     }
 
@@ -66,13 +66,13 @@ final readonly class CatalogCategoryAttachmentAuthorizationService
     {
         $attachment = $this->attachmentRepository->findOne(trim($attachmentId));
         if (null === $attachment) {
-            throw new AccessDeniedHttpException('Category attachment deletion target could not be resolved.');
+            throw new AccessDeniedHttpException('CategoryEntity attachment deletion target could not be resolved.');
         }
 
         $this->assertGranted(
             CategoryVoter::EDIT,
             $attachment['category_id'],
-            'Category attachment deletion is not allowed for the current actor.',
+            'CategoryEntity attachment deletion is not allowed for the current actor.',
         );
     }
 

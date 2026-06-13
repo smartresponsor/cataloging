@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace App\Cataloging\Entity\Catalog;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Ulid;
 
 /**
  * Represents the durable category write-model entity.
@@ -19,13 +18,14 @@ use Symfony\Component\Uid\Ulid;
 class CatalogCategoryEntity
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'string', length: 26, options: ['fixed' => true])]
-    private string $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private int $id = 0;
 
     #[ORM\Column(type: 'string', length: 160)]
-    private string $name;
+    private string $nameEntity;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
     private string $slug;
 
     #[ORM\Column(type: 'string', length: 26, nullable: true, options: ['fixed' => true], name: 'parent_id')]
@@ -60,7 +60,7 @@ class CatalogCategoryEntity
      * Initializes the durable category write-model.
      */
     public function __construct(
-        string $name,
+        string $nameEntity,
         string $slug,
         string $path,
         int $depth,
@@ -68,8 +68,7 @@ class CatalogCategoryEntity
         ?string $locale = null,
         string $tenant = 'default',
     ) {
-        $this->id = (string) new Ulid();
-        $this->name = $name;
+        $this->nameEntity = $nameEntity;
         $this->slug = $slug;
         $this->path = $path;
         $this->depth = $depth;
@@ -81,25 +80,25 @@ class CatalogCategoryEntity
     /**
      * Returns the id value.
      */
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Returns the name value.
+     * Returns the nameEntity value.
      */
     public function getName(): string
     {
-        return $this->name;
+        return $this->nameEntity;
     }
 
     /**
-     * Updates the name value.
+     * Updates the nameEntity value.
      */
-    public function setName(string $name): void
+    public function setName(string $nameEntity): void
     {
-        $this->name = $name;
+        $this->nameEntity = $nameEntity;
     }
 
     /**

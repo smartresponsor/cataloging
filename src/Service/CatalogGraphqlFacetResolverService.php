@@ -38,7 +38,7 @@ final readonly class CatalogGraphqlFacetResolverService implements CatalogGraphq
             'published' => true,
             'limit' => $request->limit(),
             'offset' => $request->offset(),
-            'order' => 'name',
+            'order' => 'nameEntity',
             'direction' => 'asc',
         ]));
 
@@ -63,7 +63,7 @@ final readonly class CatalogGraphqlFacetResolverService implements CatalogGraphq
             $items[] = [
                 'id' => $this->stringValue($row, 'id'),
                 'slug' => $this->stringValue($row, 'slug'),
-                'name' => $this->stringValue($row, 'name'),
+                'nameEntity' => $this->stringValue($row, 'nameEntity'),
                 'path' => $path,
                 'locale' => $this->stringValue($row, 'locale', 'en'),
                 'score' => null,

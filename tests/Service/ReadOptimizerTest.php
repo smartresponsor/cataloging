@@ -31,7 +31,7 @@ final class CatalogReadOptimizerServiceTest extends TestCase
                 return [[
                     'id' => 'cat-1',
                     'slug' => 'root',
-                    'name' => 'Root',
+                    'nameEntity' => 'Root',
                     'parent_id' => null,
                     'path' => 'root',
                     'locale' => 'en',

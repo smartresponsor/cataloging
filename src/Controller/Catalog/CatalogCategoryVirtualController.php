@@ -26,7 +26,7 @@ final readonly class CatalogCategoryVirtualController
     /**
      * Handles the preview workflow.
      */
-    #[Route('/api/category/virtual/preview', name: 'api_category_virtual_preview', methods: ['POST'])]
+    #[Route('/api/catalog/category/virtual/preview', name: 'api_category_virtual_preview', methods: ['POST'])]
     public function preview(Request $request): JsonResponse
     {
         $input = CategoryCollectionRequest::fromJson((string) $request->getContent());
@@ -47,7 +47,7 @@ final readonly class CatalogCategoryVirtualController
     /**
      * Handles the apply workflow.
      */
-    #[Route('/api/category/virtual/apply/{id}', name: 'api_category_virtual_apply', methods: ['POST'])]
+    #[Route('/api/catalog/category/virtual/apply/{id}', name: 'api_category_virtual_apply', methods: ['POST'])]
     public function apply(string $id): JsonResponse
     {
         $result = $this->service->apply($id);

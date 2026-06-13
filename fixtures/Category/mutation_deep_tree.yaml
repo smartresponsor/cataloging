@@ -1,7 +1,7 @@
 rows:
-  - { id: 'root', slug: 'root', name: 'Root', parent_id: null, depth: 0, path: 'root' }
-  - { id: 'a', slug: 'a', name: 'A', parent_id: 'root', depth: 1, path: 'root.a' }
-  - { id: 'b', slug: 'b', name: 'B', parent_id: 'a', depth: 2, path: 'root.a.b' }
-  - { id: 'c', slug: 'c', name: 'C', parent_id: 'b', depth: 3, path: 'root.a.b.c' }
-  - { id: 'd', slug: 'd', name: 'D', parent_id: 'c', depth: 4, path: 'root.a.b.c.d' }
-  - { id: 'x', slug: 'x', name: 'X', parent_id: 'root', depth: 1, path: 'root.x' }
+  - { id: 1, slug: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401', name: 'Root', parent_id: null, depth: 0, path: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401' }
+  - { id: 2, slug: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a402', name: 'A', parent_id: 1, depth: 1, path: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a402' }
+  - { id: 3, slug: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a403', name: 'B', parent_id: 2, depth: 2, path: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a402.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a403' }
+  - { id: 4, slug: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a404', name: 'C', parent_id: 3, depth: 3, path: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a402.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a403.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a404' }
+  - { id: 5, slug: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a405', name: 'D', parent_id: 4, depth: 4, path: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a402.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a403.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a404.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a405' }
+  - { id: 6, slug: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a406', name: 'X', parent_id: 1, depth: 1, path: '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401.018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a406' }

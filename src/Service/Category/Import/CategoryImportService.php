@@ -40,7 +40,7 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
             while (($row = fgetcsv($handle)) !== false) {
                 $payload = [
                     'id' => $this->cell($row, $idx, 'id'),
-                    'name' => $this->cell($row, $idx, 'name'),
+                    'nameEntity' => $this->cell($row, $idx, 'nameEntity'),
                     'slug' => $this->cell($row, $idx, 'slug'),
                     'parentId' => $this->cell($row, $idx, 'parent_id'),
                     'path' => $this->cell($row, $idx, 'path'),
@@ -93,7 +93,7 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
     /** @param array<string,mixed> $row */
     private function validateCategory(array $row): void
     {
-        foreach (['id', 'name', 'slug'] as $fieldName) {
+        foreach (['id', 'nameEntity', 'slug'] as $fieldName) {
             if (!isset($row[$fieldName]) || !is_string($row[$fieldName]) || '' === $row[$fieldName]) {
                 throw new \InvalidArgumentException('category field '.$fieldName.' required');
             }
@@ -103,7 +103,7 @@ final readonly class CategoryImportService implements CategoryImportServiceInter
     /** @param array<string,mixed> $row */
     private function validateRule(array $row): void
     {
-        foreach (['id', 'name', 'definition'] as $fieldName) {
+        foreach (['id', 'nameEntity', 'definition'] as $fieldName) {
             if (!array_key_exists($fieldName, $row)) {
                 throw new \InvalidArgumentException('rule field '.$fieldName.' required');
             }

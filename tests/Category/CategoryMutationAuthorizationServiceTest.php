@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Cataloging\Tests\Category;
+namespace App\Cataloging\Tests\CategoryEntity;
 
 use App\Cataloging\Service\CatalogCategoryMutationAuthorizationService;
 use App\Cataloging\Service\CatalogCategoryTenantAccessEvaluatorService;

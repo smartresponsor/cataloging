@@ -8,8 +8,8 @@ declare(strict_types=1);
  */
 
 /**
- * CLI: php tools/Category/rescue/tools_linter_category_mirror_check.php <project-root>
- * Ensures <Layer> <-> <LayerInterface> mirrors exist for Category-related classes.
+ * CLI: php tools/CategoryEntity/rescue/tools_linter_category_mirror_check.php <project-root>
+ * Ensures <Layer> <-> <LayerInterface> mirrors exist for CategoryEntity-related classes.
  */
 
 $root = $argv[1] ?? getcwd();
@@ -28,10 +28,10 @@ foreach ($layers as $layer) {
             continue;
         }
 
-        $name = basename($file->getPathname(), '.php');
-        $iface = $root . "/src/{$layer}Interface/{$name}Interface.php";
+        $nameEntity = basename($file->getPathname(), '.php');
+        $iface = $root . "/src/{$layer}Interface/{$nameEntity}Interface.php";
         if (!file_exists($iface) && $layer !== 'Event') {
-            fwrite(STDERR, "Mirror missing for {$layer} {$name}: {$iface}\n");
+            fwrite(STDERR, "Mirror missing for {$layer} {$nameEntity}: {$iface}\n");
             ++$fail;
         }
     }

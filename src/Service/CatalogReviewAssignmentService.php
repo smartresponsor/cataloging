@@ -38,7 +38,7 @@ final readonly class CatalogReviewAssignmentService implements CatalogReviewAssi
         $changeRequest = $this->changeRequestRepository->findByRequestId($request->requestId());
 
         if (!$changeRequest instanceof CatalogCategoryChangeRequestEntity) {
-            throw new \DomainException(sprintf('Category change request not found: %s', $request->requestId()));
+            throw new \DomainException(sprintf('CategoryEntity change request not found: %s', $request->requestId()));
         }
 
         $this->policy->assertCanAssign(

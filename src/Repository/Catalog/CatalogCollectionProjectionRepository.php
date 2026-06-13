@@ -8,6 +8,7 @@ namespace App\Cataloging\Repository\Catalog;
 use App\Cataloging\Entity\Catalog\CatalogRecordIndexEntity;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCollectionProjectionRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides repository services for catalog collection projection repository.
@@ -18,6 +19,7 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
      * Initializes the catalog collection projection repository service collaborators.
      */
     public function __construct(
+        #[Autowire(service: 'doctrine.orm.postgres_entity_manager')]
         private EntityManagerInterface $entityManager,
     ) {
     }

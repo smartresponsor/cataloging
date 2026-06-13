@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category\Regression;
+namespace App\Cataloging\Tests\CategoryEntity\Regression;
 
 use PHPUnit\Framework\TestCase;
 

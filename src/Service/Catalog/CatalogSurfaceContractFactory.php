@@ -91,12 +91,12 @@ final class CatalogSurfaceContractFactory
         $cards = [];
 
         foreach ($categories as $category) {
-            $name = (string) ($category['name'] ?? $category['slug'] ?? 'Category');
-            $slug = (string) ($category['slug'] ?? strtolower(str_replace(' ', '-', $name)));
+            $nameEntity = (string) ($category['nameEntity'] ?? $category['slug'] ?? 'CategoryEntity');
+            $slug = (string) ($category['slug'] ?? strtolower(str_replace(' ', '-', $nameEntity)));
             $cards[] = [
                 'id' => (string) ($category['id'] ?? $slug),
-                'title' => $name,
-                'eyebrow' => (string) ($category['workflow_state'] ?? 'Category'),
+                'title' => $nameEntity,
+                'eyebrow' => (string) ($category['workflow_state'] ?? 'CategoryEntity'),
                 'summary' => sprintf(
                     '%s · %s',
                     (string) ($category['locale'] ?? 'global'),
@@ -154,7 +154,7 @@ final class CatalogSurfaceContractFactory
     {
         return [
             ['title' => 'Browse catalog', 'url' => '/catalog/'],
-            ['title' => 'Category list', 'url' => '/catalog/category/'],
+            ['title' => 'CategoryEntity list', 'url' => '/catalog/category/'],
         ];
     }
 

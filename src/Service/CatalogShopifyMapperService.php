@@ -13,7 +13,7 @@ final class CatalogShopifyMapperService
     /**
      * @param array<string,mixed> $shopify
      *
-     * @return array{'id':string,'parentId':?string,'slug':string,'name':string,'locale':string,'seoTitle':?string,'redirect':mixed}
+     * @return array{'id':string,'parentId':?string,'slug':string,'nameEntity':string,'locale':string,'seoTitle':?string,'redirect':mixed}
      */
     public function map(array $shopify): array
     {
@@ -25,7 +25,7 @@ final class CatalogShopifyMapperService
             'id' => $this->stringValue($shopify, 'id'),
             'parentId' => $this->parentIdValue($shopify),
             'slug' => $this->stringValue($shopify, 'handle'),
-            'name' => $this->stringValue($shopify, 'title'),
+            'nameEntity' => $this->stringValue($shopify, 'title'),
             'locale' => 'en',
             'seoTitle' => $seoTitle,
             'redirect' => $redirect,

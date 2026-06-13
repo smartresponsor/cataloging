@@ -49,7 +49,7 @@ final class CatalogCategoryReviewAssignmentEntityPolicy implements CatalogCatego
         string $priority,
     ): void {
         if (!$this->canAssign($request, $assignedReviewer, $assignedBy, $priority)) {
-            throw new \DomainException(sprintf('Category review assignment is not allowed for request state: %s', $request->state()->value()));
+            throw new \DomainException(sprintf('CategoryEntity review assignment is not allowed for request state: %s', $request->state()->value()));
         }
     }
 }

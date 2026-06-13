@@ -22,7 +22,7 @@ use App\Cataloging\ValueObject\CategorySlugGenerationRequest;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Category service — implements create/move/attach/detach using contracts.
+ * CategoryEntity service — implements create/move/attach/detach using contracts.
  * Storage specifics are delegated to the repository.
  */
 final class CatalogCategoryService implements CategoryCategoryServiceInterface
@@ -63,7 +63,7 @@ final class CatalogCategoryService implements CategoryCategoryServiceInterface
         $view = $this->repo->create(new CategoryRepositoryCreateRequest(
             $request->taxonomyId(),
             $request->parentId(),
-            $request->name(),
+            $request->nameEntity(),
             $slug,
             $request->meta(),
         ));

@@ -11,7 +11,7 @@ namespace App\Cataloging\Service;
 final class SeoPerLocale
 {
     /**
-     * @param array{'id'?:mixed,'locale'?:mixed,'name'?:mixed,'slug'?:mixed} $category
+     * @param array{'id'?:mixed,'locale'?:mixed,'nameEntity'?:mixed,'slug'?:mixed} $category
      *
      * @return array{'id':?string,'locale':string,'title':string,'description':string,'canonical':string}
      *
@@ -20,9 +20,9 @@ final class SeoPerLocale
     public function build(array $category): array
     {
         $locale = $this->stringValue($category, 'locale', 'en');
-        $name = $this->stringValue($category, 'name');
+        $nameEntity = $this->stringValue($category, 'nameEntity');
         $slug = $this->stringValue($category, 'slug');
-        $title = 'uk' === $locale ? 'Категорія: '.$name : 'Category: '.$name;
+        $title = 'uk' === $locale ? 'Категорія: '.$nameEntity : 'CategoryEntity: '.$nameEntity;
         $canonical = 'https://example.com/category/'.$slug.'?lang='.$locale;
         $id = $this->stringValue($category, 'id');
         $data = [

@@ -57,9 +57,9 @@ final class CategoryMediaCoveragePolicy implements CategoryMediaCoveragePolicyIn
         }
 
         $warnings = [];
-        foreach (['mediaReady', 'bannerReady', 'heroReady'] as $name) {
-            if (true !== $checks[$name]) {
-                $warnings[] = $name;
+        foreach (['mediaReady', 'bannerReady', 'heroReady'] as $nameEntity) {
+            if (true !== $checks[$nameEntity]) {
+                $warnings[] = $nameEntity;
             }
         }
 

@@ -9,7 +9,6 @@ use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterfac
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -28,7 +27,7 @@ final class CatalogCategoryListController extends AbstractController
      * Executes the invokable workflow for this service.
      */
     #[Route('/admin/category/list', name: 'admin_category_list', methods: ['GET'])]
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): array
     {
         $page = max(1, (int) $request->query->get('page', 1));
         $published = $request->query->getBoolean('published');
@@ -38,17 +37,24 @@ final class CatalogCategoryListController extends AbstractController
                 'published' => $published ? true : null,
                 'limit' => 100,
                 'offset' => 0,
-                'order' => 'name',
+                'order' => 'nameEntity',
                 'direction' => 'asc',
             ]));
         } catch (\Throwable $exception) {
             throw $this->createNotFoundException('Unable to load category admin list.', $exception);
         }
 
-        return $this->render('category/admin/list.html.twig', [
-            'items' => $items,
-            'page' => $page,
-            'published' => $published,
-        ]);
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => 'admin-list',
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => ['body' => ['items' => $items, 'page' => $page, 'published' => $published]],
+            'data' => ['items' => $items, 'page' => $page, 'published' => $published],
+            'meta' => ['source' => 'catalog_category_list_controller'],
+        ];
     }
 }

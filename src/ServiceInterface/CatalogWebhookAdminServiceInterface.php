@@ -11,7 +11,7 @@ namespace App\Cataloging\ServiceInterface;
 interface CatalogWebhookAdminServiceInterface
 {
     /** @return array{kid:string,secret:string} */
-    public function registerKey(string $name): array;
+    public function registerKey(string $nameEntity): array;
 
     /** @param array<string,mixed> $payload */
     public function scheduleDelivery(string $target, array $payload): int;

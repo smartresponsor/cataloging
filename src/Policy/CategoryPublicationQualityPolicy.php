@@ -23,19 +23,19 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
         array $checks,
     ): CategoryPublicationQualityProfileInterface {
         $normalizedPublicationChecks = [];
-        foreach ($publicationChecks as $name => $value) {
-            $normalizedPublicationChecks[(string) $name] = (bool) $value;
+        foreach ($publicationChecks as $nameEntity => $value) {
+            $normalizedPublicationChecks[(string) $nameEntity] = (bool) $value;
         }
 
         $normalizedChecks = [];
-        foreach ($checks as $name => $value) {
-            $normalizedChecks[(string) $name] = (bool) $value;
+        foreach ($checks as $nameEntity => $value) {
+            $normalizedChecks[(string) $nameEntity] = (bool) $value;
         }
 
         $hardBlockers = [];
-        foreach (['slugReady', 'seoReady', 'contentReady', 'localeReady', 'requiredMediaCoverageReady'] as $name) {
-            if (($normalizedPublicationChecks[$name] ?? true) !== true) {
-                $hardBlockers[] = $name;
+        foreach (['slugReady', 'seoReady', 'contentReady', 'localeReady', 'requiredMediaCoverageReady'] as $nameEntity) {
+            if (($normalizedPublicationChecks[$nameEntity] ?? true) !== true) {
+                $hardBlockers[] = $nameEntity;
             }
         }
 
@@ -44,9 +44,9 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
         }
 
         $softWarnings = [];
-        foreach (['mediaReady', 'slugHistoryReady'] as $name) {
-            if (($normalizedPublicationChecks[$name] ?? true) !== true) {
-                $softWarnings[] = $name;
+        foreach (['mediaReady', 'slugHistoryReady'] as $nameEntity) {
+            if (($normalizedPublicationChecks[$nameEntity] ?? true) !== true) {
+                $softWarnings[] = $nameEntity;
             }
         }
 
@@ -55,9 +55,9 @@ final class CategoryPublicationQualityPolicy implements CategoryPublicationQuali
         }
 
         $advisoryWarnings = [];
-        foreach (['bannerReady', 'htmlBlockReady', 'heroReady'] as $name) {
-            if (($normalizedChecks[$name] ?? true) !== true) {
-                $advisoryWarnings[] = $name;
+        foreach (['bannerReady', 'htmlBlockReady', 'heroReady'] as $nameEntity) {
+            if (($normalizedChecks[$nameEntity] ?? true) !== true) {
+                $advisoryWarnings[] = $nameEntity;
             }
         }
 

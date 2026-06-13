@@ -1,7 +1,7 @@
 security:
     firewalls:
         category_api:
-            pattern: ^/api/category
+            pattern: ^/api/catalog/category
             lazy: true
             stateless: true
             provider: category_jwt

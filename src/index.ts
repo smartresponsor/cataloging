@@ -14,7 +14,7 @@ export async function dryRunMove(payload: {
     warnings: string[];
     redirects: { from: string; to: string; locale?: string }[]
 }> {
-    const r = await fetch('/admin/category/tree/move', {
+    const r = await fetch('/ea/admin/category/tree/move', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({...payload, dryRun: true})
@@ -34,7 +34,7 @@ export async function commitMove(payload: {
     warnings: string[];
     redirects: { from: string; to: string; locale?: string }[]
 }> {
-    const r = await fetch('/admin/category/tree/move', {
+    const r = await fetch('/ea/admin/category/tree/move', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({...payload, dryRun: false})

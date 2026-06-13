@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category\GraphQL;
+namespace App\Cataloging\Tests\CategoryEntity\GraphQL;
 
 use PHPUnit\Framework\TestCase;
 

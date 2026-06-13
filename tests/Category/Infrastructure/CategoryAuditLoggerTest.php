@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Author: Oleksandr Tishchenko <dev@highhopesamerica.com>.
  */
 
-namespace App\Cataloging\Tests\Category\Infrastructure;
+namespace App\Cataloging\Tests\CategoryEntity\Infrastructure;
 
 use App\Cataloging\Infrastructure\CategoryAuditLogger;
 use PHPUnit\Framework\TestCase;

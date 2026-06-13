@@ -21,33 +21,33 @@ final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePoli
         $audit = $request->auditContext();
 
         if ('' === trim($scope->bindingId())) {
-            throw new \InvalidArgumentException('Category media bindingId must be provided.');
+            throw new \InvalidArgumentException('CategoryEntity media bindingId must be provided.');
         }
         if ('' === trim($scope->categoryId())) {
-            throw new \InvalidArgumentException('Category media categoryId must be provided.');
+            throw new \InvalidArgumentException('CategoryEntity media categoryId must be provided.');
         }
         if ('' === trim($scope->assetId())) {
-            throw new \InvalidArgumentException('Category media assetId must be provided.');
+            throw new \InvalidArgumentException('CategoryEntity media assetId must be provided.');
         }
         CategoryMediaRole::fromString($scope->role());
         if ([] === $scope->channels()) {
-            throw new \InvalidArgumentException('Category media channels must contain at least one channel.');
+            throw new \InvalidArgumentException('CategoryEntity media channels must contain at least one channel.');
         }
         foreach ($scope->channels() as $channel) {
             if ('' === trim($channel)) {
-                throw new \InvalidArgumentException('Category media channels must not contain empty values.');
+                throw new \InvalidArgumentException('CategoryEntity media channels must not contain empty values.');
             }
         }
         foreach ($scope->locales() as $locale) {
             if ('' === trim($locale)) {
-                throw new \InvalidArgumentException('Category media locales must not contain empty values.');
+                throw new \InvalidArgumentException('CategoryEntity media locales must not contain empty values.');
             }
         }
         if ('' === trim($audit->actorId())) {
-            throw new \InvalidArgumentException('Category media actorId must be provided.');
+            throw new \InvalidArgumentException('CategoryEntity media actorId must be provided.');
         }
         if ('' === trim($audit->reason())) {
-            throw new \InvalidArgumentException('Category media reason must be provided.');
+            throw new \InvalidArgumentException('CategoryEntity media reason must be provided.');
         }
     }
 }
