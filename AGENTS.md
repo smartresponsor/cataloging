@@ -1,170 +1,389 @@
-# AGENTS — Catalog structural canon contract
+#AGENT.md
 
-This file is a machine-facing contract. Treat it as literal repository law for all future edits.
+# SmartResponsor Platform Rules
 
-## Priority
+Этот файл находится в корне репозитория и является постоянным контекстом для Codex CLI.
+Перед работой прочитай также `README.md`, `composer.json`, `MANIFEST.json` и локальную `.gating/`, если она есть.
 
-If any prompt, historical document, or older repository pattern conflicts with this file, this file wins.
+## 1. Источник текущего кода
 
-## Symfony root
+- Работай с текущим деревом репозитория.
+- Архив, переданный как «текущий срез», полностью заменяет предыдущие срезы.
+- Предыдущий архив допустим только при полном совпадении SHA-256.
+- Сначала составь краткий inventory текущего состояния, затем меняй код.
+- Для удаления используй точный список подтверждённо устаревших файлов.
 
-- Use the default Symfony `App\\` namespace.
-- Do not introduce custom application roots.
-- Do not introduce `/src/Domain/`.
-- Do not introduce ports-and-adapters style trees.
+## 2. Runtime
 
-## Layer 3 structure contract
+- PHP `8.4+`.
+- Symfony `8.x+`.
+- Код использует возможности текущих PHP ^8.4 и Symfony ^8.*.
+- Обратная совместимость с PHP ниже 8.4 и Symfony 7 не является целью.
+- Основной namespace приложений и компонентов: `App\`.
+- Каждый PHP-файл использует `declare(strict_types=1);`.
+- Комментарии, docblock и технические тексты в коде пишутся на английском.
 
-The following layers have a single canonical inner folder and no other inner tree is allowed for that layer.
+## 3. Symfony-oriented структура
 
-### Entity
+Используй typed layers, которые читаются по имени класса и папке:
 
-Allowed canonical tree:
-- `src/Entity/Catalog/`
+```text
+*Entity       → src/Entity/
+*EntityInterface       → src/EntityInterface/
+*Repository   → src/Repository/
+*RepositoryInterface   → src/RepositoryInterface/
+*Controller   → src/Controller/
+*ControllerInterface   → src/ControllerInterface/
+*Type         → src/Form/
+*TypeInterface         → src/TypeInterface/
+*Voter        → src/Voter/
+*VoterInterface        → src/VoterInterface/
+*Subscriber   → src/EventSubscriber/ или src/Subscriber/
+*SubscriberInterface   → src/EventSubscriberInterface/ или src/SubscriberInterface/
+*Listener     → src/Listener/
+*ListenerInterface     → src/ListenerInterface/
+*Command      → src/Command/
+*CommandInterface      → src/CommandInterface/
+```
 
-Rules:
-- `src/Entity/` may contain only the `Catalog/` folder.
-- No other files are allowed directly under `src/Entity/`.
-- No other folders are allowed under `src/Entity/`.
-- `src/Entity/Catalog/` may contain only entity classes.
-- No subfolders are allowed under `src/Entity/Catalog/`.
-- Every entity class name must start with `Catalog`.
-- Every entity class name must end with `Entity`.
-- Canonical namespace: `App\\Entity\\Catalog`.
+- Классы и методы получают предметные имена в единственном числе.
+- Интерфейс описывает реальный публичный контракт.
+- Описательные docblock сохраняют назначение, инварианты и эксплуатационный контекст.
 
-Literal examples:
-- allowed: `src/Entity/Catalog/CatalogCategoryEntity.php`
-- allowed: `src/Entity/Catalog/CatalogOutboxMessageEntity.php`
-- forbidden: `src/Entity/CatalogCategoryEntity.php`
-- forbidden: `src/Entity/Role/SubjectId.php`
-- forbidden: `src/Entity/Catalog/Subtree/CatalogCategoryEntity.php`
-- forbidden: `src/Entity/Category/CatalogCategoryEntity.php`
-- forbidden: `src/Entity/Catalog/CategoryEntity.php`
-- forbidden: `src/Entity/Catalog/CatalogCategory.php`
+Отдельные деревья `src/Domain`, `Port`, `Adapter`, `Adaptor`, `Resource`, `Surface` в платформе не используются.
 
-### Controller
+## 4. Роль репозитория
 
-Allowed canonical tree:
-- `src/Controller/Catalog/`
+Сначала определи роль репозитория по `composer.json`, `MANIFEST.json`, bundle-классу и текущему коду.
 
-Rules:
-- `src/Controller/` may contain only the `Catalog/` folder.
-- No other files are allowed directly under `src/Controller/`.
-- No subfolders are allowed under `src/Controller/Catalog/`.
-- Every controller class name must start with `Catalog`.
-- Every controller class name must end with `Controller`.
-- Canonical namespace: `App\\Controller\\Catalog`.
+### Обычное приложение или компонент
 
-Literal examples:
-- allowed: `src/Controller/Catalog/CatalogCategoryController.php`
-- forbidden: `src/Controller/Category/CatalogCategoryController.php`
-- forbidden: `src/Controller/Catalog/CategoryController.php`
-- forbidden: `src/Controller/Catalog/Admin/CatalogCategoryController.php`
+- Хранит собственную бизнес-ответственность.
+- Подключает общие возможности через Composer dependencies.
+- Использует публичные контракты соседних компонентов.
 
-### ControllerInterface
+### Cruding
 
-Allowed canonical tree:
-- `src/ControllerInterface/Catalog/`
+- Владеет общей CRUD-механикой.
+- Владеет generic CRUD routes и CRUD controllers.
+- Владеет разбором URI и выбором CRUD operation.
+- Владеет канонической CRUD route grammar.
 
-Rules:
-- `src/ControllerInterface/` may contain only the `Catalog/` folder.
-- No subfolders are allowed under `src/ControllerInterface/Catalog/`.
-- Every controller interface name must start with `Catalog`.
-- Every controller interface name must end with `ControllerInterface`.
-- Canonical namespace: `App\\ControllerInterface\\Catalog`.
+### Objecting
 
-### Event
+- Владеет повторно используемыми системными полями.
+- Владеет их Doctrine mapping, traits, interfaces и публичным API.
+- Consumer Entity подключает Objecting pack вместо локальной копии системного поля.
 
-Allowed canonical tree:
-- `src/Event/Catalog/`
+### Gating
 
-Rules:
-- `src/Event/` may contain only the `Catalog/` folder.
-- No subfolders are allowed under `src/Event/Catalog/`.
-- Every event class name must start with `Catalog`.
-- Every event class name must end with `Event`.
-- Canonical namespace: `App\\Event\\Catalog`.
+- Владеет исполняемыми правилами канонизации.
+- `AGENTS.md` объясняет канон Codex; Gating проверяет его машинно.
+- При расхождении правила синхронизируются в обоих местах, но AGENTS.md только расшмпением.
 
-### EventInterface
+### Documentating
 
-Allowed canonical tree:
-- `src/EventInterface/Catalog/`
+- Владеет полной общей документацией платформы.
+- Каждый компонент хранит только документацию своей ответственности.
 
-Rules:
-- `src/EventInterface/` may contain only the `Catalog/` folder.
-- No subfolders are allowed under `src/EventInterface/Catalog/`.
-- Every event interface name must start with `Catalog`.
-- Every event interface name must end with `EventInterface`.
-- Canonical namespace: `App\\EventInterface\\Catalog`.
+## 5. Zero CRUD controllers и zero CRUD routes YAML
 
-### Repository
+Целевое состояние обычного приложения:
 
-Allowed canonical tree:
-- `src/Repository/Catalog/`
+```text
+zero CRUD controllers
+zero CRUD routes YAML
+```
 
-Rules:
-- `src/Repository/` may contain only the `Catalog/` folder.
-- No subfolders are allowed under `src/Repository/Catalog/`.
-- Every repository class name must start with `Catalog`.
-- Every repository class name must end with `Repository`.
-- Canonical namespace: `App\\Repository\\Catalog`.
+Generic операции принадлежат Cruding:
 
-### RepositoryInterface
+```text
+index
+show
+new
+edit
+delete
+archive
+restore
+import
+export
+```
 
-Allowed canonical tree:
-- `src/RepositoryInterface/Catalog/`
+Обычное приложение предоставляет Cruding необходимые:
 
-Rules:
-- `src/RepositoryInterface/` may contain only the `Catalog/` folder.
-- No subfolders are allowed under `src/RepositoryInterface/Catalog/`.
-- Every repository interface name must start with `Catalog`.
-- Every repository interface name must end with `RepositoryInterface`.
-- Canonical namespace: `App\\RepositoryInterface\\Catalog`.
+```text
+Entity
+Repository
+Form Type
+Service
+```
 
-## Naming convention contract
+Бизнес-маршруты остаются в приложении, которому принадлежит бизнес-действие. Например:
 
-Literal naming contract:
-- entity: `Catalog...Entity`
-- controller: `Catalog...Controller`
-- controller interface: `Catalog...ControllerInterface`
-- event: `Catalog...Event`
-- event interface: `Catalog...EventInterface`
-- repository: `Catalog...Repository`
-- repository interface: `Catalog...RepositoryInterface`
+```text
+approve
+calculate
+confirm
+pay
+publish
+send
+synchronize
+```
 
-Forbidden naming shapes:
-- `Category...Entity`
-- `...CatalogEntity`
-- `Catalog...`
-- `...Entityed`
-- names without the required suffix for the layer
-- names with nested inner layer folders that try to encode the name in the tree instead of the class
+Business route и business controller/service используются для реального бизнес-действия, а не для повторения generic CRUD.
 
-## Non-entity classes
+Route grammar:
 
-The following are forbidden inside `src/Entity/Catalog/`:
-- value objects
-- requests
-- responses
-- DTOs
-- helpers
-- traits
-- service classes
-- interfaces
-- enums
+- первый сегмент показывает владельца или бизнес-сущность;
+- каждое понятие занимает отдельный `/segment`;
+- tokens используются в единственном числе;
+- `id` или `slug` находятся только в конце URI;
+- CRUD operation token находится перед `id` или `slug`;
+- generic CRUD grammar реализуется в Cruding.
 
-Move them to their proper layer.
+## 6. Подключаемые приложения
 
-## Editing rule for machines
+Каждый репозиторий имеет собственные:
 
-When editing this repository:
-1. preserve the canonical layer folder exactly;
-2. do not create sibling folders next to `Catalog` inside the listed layers;
-3. do not create subfolders under the listed `Catalog` folders;
-4. rename the class if the suffix or prefix is wrong;
-5. update imports, FQCN strings, service wiring, tests, and mapping references in the same wave;
-6. do not leave compatibility duplicates behind.
+```text
+composer.json
+composer.lock
+установленные dependencies
+```
 
-## Violation handling
+Общие приложения подключаются явно, в частности:
 
-If the current repository state conflicts with this contract, fix the repository state. Do not preserve the violation for backward compatibility unless the owner explicitly orders that exception.
+```text
+Cruding
+Interfacing
+Viewing
+Objecting
+```
+
+Cruding, Interfacing и Viewing могут работать:
+
+- внутри host application;
+- как отдельно установленный component/application;
+- на own site с собственным runtime.
+
+Связь между соседними репозиториями выражается Composer dependency и публичным контрактом, а не наличием соседней папки.
+
+## 7. Entity и поток данных
+
+Doctrine Entity используется внутри операции, которая читает или изменяет её состояние.
+
+Канонический поток:
+
+1. HTTP, CLI, Messenger или webhook принимает scalar values и input DTO.
+2. Application operation получает идентификатор и входные данные.
+3. Repository загружает Entity рядом с этой операцией.
+4. Бизнес-изменение выполняется внутри короткой операции и, когда нужно, Doctrine transaction.
+5. Наружу возвращается result DTO, view model, scalar result или идентификатор.
+
+Для внешних и асинхронных границ используй:
+
+```text
+id
+slug
+input DTO
+message DTO
+result DTO
+```
+
+Doctrine Entity остаётся внутри Doctrine/application boundary и не используется как универсальный transport payload для Messenger, session, webhook или внешнего API.
+
+## 8. Транзакции и version
+
+- Doctrine transaction охватывает одну короткую прикладную операцию.
+- Внешний HTTP-вызов выполняется вне долгой database transaction.
+- Mutable root Entity с риском lost update использует каноническое Objecting version field и Doctrine optimistic locking.
+- `version` является технической версией состояния строки.
+- Doctrine управляет увеличением версии.
+- Expected version передаётся от чтения формы к сохранению и проверяется при update.
+- Business revision или номер документа моделируется отдельным бизнес-полем.
+
+## 9. User Vendor identity и системные поля
+
+- `VendorEntity` является основной business root User Entity.
+- `VendorEntity.id` является PostgreSQL primary key и сквозным идентификатором платформы.
+- `VendorSecurityEntity` является OneToOne security extension.
+- `VendorSecurityEntity` использует тот же shared primary key.
+- Login, password hash и security metadata находятся в `VendorSecurityEntity`.
+- Multitenancy платформы реализуется существующей Vendor identity.
+
+Objecting предоставляет канонические lifecycle fields и методы для:
+
+```text
+created / createdBy
+modified / modifiedBy
+deleted / deletedBy
+version
+```
+
+- Consumer Entity подключает актуальный Objecting pack.
+- Реальная business relation к Vendor называется `vendor` или `vendor_id`.
+- Отдельная Tenant identity не создаётся поверх Vendor identity.
+- Поле `tenant_id` заменяется только после определения его реальной семантики.
+
+## 10. Entity First database development
+
+Текущий режим разработки — Entity First.
+
+- Entity, Doctrine mapping, relations, constraints и indexes являются источником текущей схемы.
+- Локальная development database перестраивается под текущую Entity-модель.
+- Doctrine migrations сейчас не являются частью рабочего процесса, если задача прямо не требует иного.
+- Текущая модель сразу заменяет старую модель.
+- После переноса всех callers устаревшие aliases, wrappers и параллельные реализации удаляются.
+- Doctrine mapping и фактическая локальная схема проверяются после изменения.
+
+## 11. Локальная разработка и production
+
+Канонический путь изменения:
+
+```text
+local repository
+→ implementation
+→ lint/static analysis/tests/Gating
+→ Git
+→ deployment
+→ production
+```
+
+Production получает проверенный build или package. Разработка и исправление исходного кода выполняются локально.
+
+## 12. UI и стили
+
+Основные UI providers:
+
+```text
+AntDesign and ProComponent
+PrimeReact
+```
+
+- Используй provider, уже выбранный текущим интерфейсом.
+- Общие цвета, размеры, spacing и состояния задаются theme tokens, component styles или отдельными style-файлами.
+- Inline CSS является редким локально обоснованным исключением.
+- Новые интерфейсы собираются из существующих компонентов provider.
+
+## 13. Документация
+
+### Markdown (`.md`)
+
+Используется для обычной репозиторной документации:
+
+```text
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+короткие инструкции
+локальные заметки
+```
+
+### AsciiDoc (`.adoc`)
+
+Используется для структурированной документации:
+
+```text
+архитектура
+спецификации
+длинные руководства
+операционные инструкции
+публикуемая документация
+```
+
+AsciiDoc обрабатывается.
+
+Маленький репозиторий документирует только собственную ответственность. Полная объединённая документация находится в Documentating.
+
+## 14. Gating и качество
+
+Gating является исполняемым каноном платформы.
+
+Перед завершением задачи запусти доступные проверки текущего репозитория:
+
+```text
+Gating
+composer validate
+composer scripts
+PHP syntax check
+PHPStan
+tests
+Symfony container/YAML lint
+Doctrine mapping/schema validation
+```
+
+Используй реальные scripts из `composer.json` и локальных tools.
+
+- Gating работает report-first.
+- Исправления выполняются точечно по найденным фактам.
+- Секреты и private keys хранятся вне репозитория.
+- Generated folders `vendor`, `node_modules`, `var`, cache и logs не входят в анализ исходного кода.
+- Описательные docblock сохраняются.
+- Таблицы Doctrine используют database prefix компонента, если он задан профилем.
+
+## 15. Готовность изменения
+
+Изменение готово, когда:
+
+- код выражает одну текущую модель;
+- namespace и typed layers корректны;
+- generic CRUD не продублирован вне Cruding;
+- Entity остаётся внутри operation boundary;
+- зависимости объявлены явно;
+- Objecting system fields не продублированы локально;
+- старые tokens и aliases удалены после обновления callers;
+- Gating, PHPStan и tests проходят либо точные внешние блокеры перечислены;
+- добавленные, изменённые и удалённые файлы перечислены отдельно;
+- каждое удаление подтверждено текущим деревом.
+
+## 16. Порядок работы Codex
+
+1. Прочитай текущие инструкции и код.
+2. Составь краткий inventory.
+3. Определи целевую каноническую модель.
+4. Обнови implementation, callers, configuration и tests.
+5. Удали подтверждённые obsolete files.
+6. Запусти доступные проверки.
+7. Дай итоговый отчёт с командами и результатами.
+
+Изменение считается полным, когда старое имя или модель удалены не только из Entity, но также из runtime, Doctrine, YAML, serializer, Form, DTO, template, fixture, test и локальной документации.
+
+
+## 17. Порядок работы MCP server + memory-MCP
+
+Каждый компонент должен иметь граф через MCP server + memory-MCP;
+Графы нужно обновлять;
+При создании или рбновлении графов учитывается \www\.cbmignore а также локальный .gitignore;
+В паняти должен быть однин общий граф для всего \www\, в твкде отдельные графы приложений;
+
+## Workspace Rules
+
+- Treat `D:\PhpstormProjects\www` as an umbrella workspace with multiple independent projects.
+- Before changing code, inspect the nearest `composer.json`, `package.json`, or existing project docs for the target subproject.
+- Avoid touching `vendor/`, generated artifacts, and unrelated project trees unless the task explicitly requires it.
+- Prefer project-local scripts and configs over ad hoc one-off commands.
+- Keep secrets out of git-tracked files. Use Windows user env vars for runtime secrets.
+
+## Cloudflare AI Gateway
+
+- Use `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and `CF_GATEWAY_ID` or `CF_AIG_GATEWAY_ID`.
+- Use `cf-ai-verify` to verify auth and `cf-ai-test` for a smoke request.
+- Prefer `curl.exe` from PowerShell when validating Cloudflare endpoints.
+- Use `codex-cf-review -Scope Changed` as the default daily review path.
+- Keep the policy layer in `.gating/` when you need scope, prompt, schema, or exit-code changes.
+
+## Codex Usage
+
+- Keep global Codex defaults in `C:\Users\Admin\.codex`.
+- Keep workspace-specific guidance in `D:\PhpstormProjects\www\.codex`.
+- If a subproject has its own `AGENTS.md`, it overrides these workspace norms for that subtree.
+
+## Composer
+
+prod composer.prod.json
+dev composer.json
+
+## App Runtime
+
+prod \www\App\config\kernel\runtime_scope.prod.lock
+dev \www\App\config\kernel\runtime_scope.prod.lock
