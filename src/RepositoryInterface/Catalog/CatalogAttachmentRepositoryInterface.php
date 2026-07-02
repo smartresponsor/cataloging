@@ -11,8 +11,6 @@ namespace App\Cataloging\RepositoryInterface\Catalog;
 interface CatalogAttachmentRepositoryInterface
 {
     /**
-     * @param string|null $categoryId
-     *
      * @return list<array{
      *     attachment_id:string,
      *     category_id:string,
@@ -47,8 +45,6 @@ interface CatalogAttachmentRepositoryInterface
     ): array;
 
     /**
-     * @param string $attachmentId
-     *
      * @return array{
      *     attachment_id:string,
      *     category_id:string,
