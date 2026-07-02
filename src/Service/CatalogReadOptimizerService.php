@@ -26,8 +26,6 @@ final class CatalogReadOptimizerService
     }
 
     /**
-     * @param CategoryProjectionCriteria|null $criteria
-     *
      * @return list<array<string,mixed>>
      *
      * @throws \JsonException
