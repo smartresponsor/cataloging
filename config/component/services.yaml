@@ -20,16 +20,37 @@ services:
       - '../../src/Tests/'
       - '../../src/ValueObject/'
       - '../../src/ValueObjectInterface/'
+      - '../../src/Service/CatalogVersionService.php'
 
   App\Cataloging\Service\CatalogOidcJwtVerifierService:
     arguments:
       $jwkSet: '%catalog.oidc_jwk_set%'
       $audience: '%catalog.oidc_audience%'
       $issuer: '%catalog.oidc_issuer%'
+  App\Cataloging\Service\CatalogImportPipelineService:
+    arguments:
+      $dlqPath: '%kernel.project_dir%/var/cataloging/import-dlq'
+  App\Cataloging\Service\CatalogWebhookClientService:
+    arguments:
+      $secret: '%catalog.webhook_secret%'
+      $maxRetry: '%catalog.webhook_max_retry%'
+  App\Cataloging\Service\CatalogWebhookNotifierService:
+    arguments:
+      $endpoint: '%catalog.webhook_endpoint%'
   App\Cataloging\Service\Config\CatalogingOidcConfigService:
     arguments:
       $projectDir: '%kernel.project_dir%'
     tags: ['administering.config_tool']
+  App\Cataloging\ServiceInterface\Acl\AclRepositoryInterface:
+    alias: App\Cataloging\Repository\Acl\CatalogInMemoryAclRepository
+  App\Cataloging\ServiceInterface\CategoryReadRepositoryInterface:
+    alias: App\Cataloging\Repository\Category\CatalogEmptyCategoryReadRepository
+  App\Cataloging\ServiceInterface\Import\ImportRepositoryInterface:
+    alias: App\Cataloging\Repository\Import\CatalogInMemoryImportRepository
+  App\Cataloging\ServiceInterface\Quota\CacheStoreInterface:
+    alias: App\Cataloging\Repository\Quota\CatalogInMemoryCacheStore
+  App\Cataloging\ServiceInterface\Rule\RuleRepositoryInterface:
+    alias: App\Cataloging\Repository\Rule\CatalogInMemoryRuleRepository
   App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryChangeRequestRepositoryInterface:
     alias: App\Cataloging\Repository\Catalog\CatalogCategoryChangeRequestRepository
 
