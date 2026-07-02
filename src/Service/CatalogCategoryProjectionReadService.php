@@ -66,12 +66,6 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
 
         $entityManager = $this->entityManager();
         $repository = $entityManager->getRepository(CatalogCategoryProjectionEntity::class);
-        if (is_numeric($normalizedId)) {
-            $entity = $repository->find((int) $normalizedId);
-
-            return $entity instanceof CatalogCategoryProjectionEntity ? $this->mapEntityToRow($entity) : null;
-        }
-
         $entity = $repository->findOneBy(['slug' => $normalizedId]);
         if ($entity instanceof CatalogCategoryProjectionEntity) {
             return $this->mapEntityToRow($entity);
@@ -193,10 +187,10 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
     private function mapEntityToRow(CatalogCategoryProjectionEntity $entity): array
     {
         return [
-            'id' => (int) $entity->getId(),
+            'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
             'nameEntity' => $entity->getName(),
-            'parent_id' => null === $entity->getParentId() ? null : (int) $entity->getParentId(),
+            'parent_id' => $entity->getParentId(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',
             'tenant' => $entity->getTenant(),
