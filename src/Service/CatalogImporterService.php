@@ -61,7 +61,7 @@ final class CatalogImporterService
             if (!is_array($item)) {
                 continue;
             }
-            /** @var array<string, scalar|null> $item */
+            /* @var array<string, scalar|null> $item */
             $this->upsert($item);
             ++$count;
         }

@@ -24,7 +24,7 @@ doctrine:
                     App:
                         is_bundle: false
                         type: attribute
-                        dir: '%kernel.project_dir%/src/Entity/Catalog/Catalog'
+                        dir: '%kernel.project_dir%/src/Entity/Catalog'
                         prefix: 'App\Cataloging\Entity\Catalog'
                         alias: App
             infra:
