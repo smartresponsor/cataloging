@@ -26,6 +26,7 @@ $fail = 0;
 $allowedNames = [
     'api_platform.yaml',
     'component.yaml',
+    'config_tools.yaml',
     'doctrine.yaml',
     'env.yaml',
     'framework.yaml',
@@ -33,6 +34,7 @@ $allowedNames = [
     'monolog.yaml',
     'nelmio_api_doc.yaml',
     'routes.yaml',
+    'runtime.yaml',
     'security.yaml',
     'services.yaml',
     'smoke.yaml',
