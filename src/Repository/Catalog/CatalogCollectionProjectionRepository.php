@@ -19,7 +19,7 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
      * Initializes the catalog collection projection repository service collaborators.
      */
     public function __construct(
-        #[Autowire(service: 'doctrine.orm.postgres_entity_manager')]
+        #[Autowire(service: 'doctrine.orm.data_entity_manager')]
         private EntityManagerInterface $entityManager,
     ) {
     }

@@ -1,4 +1,10 @@
-component_controllers:
-  resource: '../../src/Controller/'
-  type: attribute
-  prefix: /ea
+# Cataloging component route export.
+#
+# Hosts import this file when they need Cataloging-owned HTTP routes.
+# Generic CRUD route discovery stays outside Cataloging and belongs to Cruding.
+
+cataloging_category_move:
+  resource: ../routes/catalog_category_move.yaml
+
+cataloging_api_doc:
+  resource: ../routes/nelmio_api_doc.yaml
