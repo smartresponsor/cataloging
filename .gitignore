@@ -4,6 +4,7 @@
 composer.lock
 
 # Logs and caches
+/.console-mcp/
 /var/logs/
 /var/cache/
 /var/sessions/
