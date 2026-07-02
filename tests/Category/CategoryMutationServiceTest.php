@@ -282,7 +282,7 @@ final class CategoryMutationServiceTest extends TestCase
 
     private function seedFromFixture(Connection $connection, string $fixtureFile): void
     {
-        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/CategoryEntity/'.$fixtureFile);
+        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/Category/'.$fixtureFile);
         if (!is_array($payload)) {
             return;
         }
@@ -298,6 +298,11 @@ final class CategoryMutationServiceTest extends TestCase
             }
 
             /* @var array<string, mixed> $row */
+            if (array_key_exists('name', $row) && !array_key_exists('nameEntity', $row)) {
+                $row['nameEntity'] = $row['name'];
+                unset($row['name']);
+            }
+
             $connection->insert('category', $row);
         }
     }
