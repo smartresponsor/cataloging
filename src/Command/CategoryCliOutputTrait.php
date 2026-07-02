@@ -14,10 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 trait CategoryCliOutputTrait
 {
     /**
-     * @param OutputInterface                               $output
      * @param array<string,mixed>|list<array<string,mixed>> $payload
-     *
-     * @return int
      *
      * @throws \JsonException
      */
@@ -34,11 +31,7 @@ trait CategoryCliOutputTrait
     }
 
     /**
-     * @param OutputInterface           $output
      * @param list<array<string,mixed>> $rows
-     * @param string                    $format
-     *
-     * @return int
      *
      * @throws \JsonException
      */
@@ -67,9 +60,6 @@ trait CategoryCliOutputTrait
 
     /**
      * @param array<string,mixed>|list<array<string,mixed>> $payload
-     * @param int                                           $flags
-     *
-     * @return string
      *
      * @throws \JsonException
      */
