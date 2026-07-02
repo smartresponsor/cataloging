@@ -41,8 +41,6 @@ services:
     arguments:
       $projectDir: '%kernel.project_dir%'
     tags: ['administering.config_tool']
-  App\Cataloging\ServiceInterface\Acl\AclRepositoryInterface:
-    alias: App\Cataloging\Repository\Acl\CatalogInMemoryAclRepository
   App\Cataloging\ServiceInterface\CategoryReadRepositoryInterface:
     alias: App\Cataloging\Repository\Category\CatalogEmptyCategoryReadRepository
   App\Cataloging\ServiceInterface\Import\ImportRepositoryInterface:
