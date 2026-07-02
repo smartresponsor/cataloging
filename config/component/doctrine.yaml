@@ -6,6 +6,6 @@ doctrine:
       Cataloging:
         type: attribute
         is_bundle: false
-        dir: '%kernel.project_dir%/vendor/cataloging/catalog/src/Entity/Catalog/Catalog'
+        dir: '%kernel.project_dir%/vendor/cataloging/catalog/src/Entity/Catalog'
         prefix: 'App\Cataloging\Entity\Catalog'
         alias: Cataloging
