@@ -23,8 +23,6 @@ final readonly class CatalogAttachmentService
     }
 
     /**
-     * @param string|null $categoryId
-     *
      * @return list<array<string,mixed>>
      */
     public function list(?string $categoryId = null): array
