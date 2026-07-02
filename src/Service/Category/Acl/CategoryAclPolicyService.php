@@ -5,24 +5,13 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service\Category\Acl;
 
-use App\Cataloging\ServiceInterface\Acl\AclRepositoryInterface;
 use App\Cataloging\ServiceInterface\Category\CategoryAclPolicyServiceInterface;
 
 /**
- * Provides the category acl policy service application service.
+ * Provides a Cataloging-side category access policy seam without owning ACL persistence.
  */
 final class CategoryAclPolicyService implements CategoryAclPolicyServiceInterface
 {
-    private AclRepositoryInterface $repo;
-
-    /**
-     * Initializes the category acl policy service service collaborators.
-     */
-    public function __construct(AclRepositoryInterface $repo)
-    {
-        $this->repo = $repo;
-    }
-
     /**
      * @param array{
      *     categoryId:string,
@@ -35,6 +24,8 @@ final class CategoryAclPolicyService implements CategoryAclPolicyServiceInterfac
      */
     public function allow(array $subject): bool
     {
-        return $this->repo->decide($subject);
+        unset($subject);
+
+        return false;
     }
 }
