@@ -13,8 +13,6 @@ final class CatalogEtagGeneratorService
     /**
      * @param array<string|int,mixed> $data
      *
-     * @return string
-     *
      * @throws \JsonException
      */
     public function forArray(array $data): string
