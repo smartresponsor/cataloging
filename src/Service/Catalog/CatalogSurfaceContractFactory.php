@@ -25,7 +25,7 @@ final class CatalogSurfaceContractFactory
         return new CatalogSurfaceContract(
             CatalogSurfaceContract::WORD,
             CatalogSurfaceContract::VIEW_BASE,
-            '@Interfacing/catalog/index.html.twig',
+            'catalog/index.html.twig',
             $this->slotMap(),
             $catalogToken,
             [
@@ -34,7 +34,7 @@ final class CatalogSurfaceContractFactory
                     'action' => '/catalog/',
                     'method' => 'GET',
                     'queryName' => 'q',
-                    'placeholder' => 'Search categories, products, collections...',
+                    'inputHint' => 'Search categories, products, collections...',
                     'query' => $query,
                 ],
                 'left.panel' => [

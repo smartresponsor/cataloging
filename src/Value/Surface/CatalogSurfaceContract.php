@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Value\Surface;
 
-use App\Interfacing\Contract\Surface\InterfaceSurfaceRenderableInterface;
+use App\Interfacing\Contract\Template\InterfaceTemplateRenderableInterface;
 
-final readonly class CatalogSurfaceContract implements InterfaceSurfaceRenderableInterface
+final readonly class CatalogSurfaceContract implements InterfaceTemplateRenderableInterface
 {
     public const WORD = 'catalog';
-    public const VIEW_BASE = 'index';
+    public const VIEW_BASE = 'base';
 
     /**
      * @param array<string, string> $slotMap
