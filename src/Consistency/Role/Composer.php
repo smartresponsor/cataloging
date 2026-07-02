@@ -8,7 +8,7 @@ namespace App\Cataloging\Consistency\Role;
 use App\Cataloging\Consistency\RoleInterface\PdpV2Interface;
 
 if (!interface_exists('PolicyInterface\Role\PdpV2Interface', false)) {
-    /**
+    /*
      * Defines the contract for pdp v2.
      */
     eval('namespace PolicyInterface\Role; interface PdpV2Interface {}');
@@ -24,8 +24,6 @@ if (!interface_exists('PolicyInterface\Role\PdpV2Interface', false)) {
 final class Composer
 {
     /**
-     * @var array
-     *
      * @phpstan-var list<mixed>
      */
     private array $participants;
