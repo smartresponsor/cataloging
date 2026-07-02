@@ -74,9 +74,6 @@ final class CatalogCategoryWorkflowEntityState implements CatalogCategoryWorkflo
         return $this->value === $other->value();
     }
 
-    /**
-     * @param string|CatalogCategoryWorkflowEntityStateInterface $expected
-     */
     public function is(string|CatalogCategoryWorkflowEntityStateInterface $expected): bool
     {
         $expectedValue = $expected instanceof CatalogCategoryWorkflowEntityStateInterface
