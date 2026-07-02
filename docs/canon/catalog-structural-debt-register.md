@@ -7,7 +7,7 @@ This register tracks RC-facing structural debt only inside Cataloging responsibi
 - Wildcard controller route import is not a Cataloging RC route-export pattern.
 - Generic CRUD controller discovery is not owned by Cataloging.
 - Deleted storefront controller references are not retained as route-contract truth.
-- Placeholder terminology is being normalized to concrete synthetic-seam descriptions where runtime behavior is deterministic.
+- Synthetic-seam terminology is being normalized to concrete descriptions where runtime behavior is deterministic.
 
 ## Still monitored
 
