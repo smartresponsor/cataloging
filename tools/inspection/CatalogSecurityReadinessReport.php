@@ -122,7 +122,7 @@ function policyAuthorizedMutationRoute(string $controllerSource, string $service
     return fileContains($controllerSource, $serviceNeedle) || fileContains($controllerSource, $voterNeedle);
 }
 
-$generatedArtifacts = ['config/reference.php'];
+$generatedArtifacts = [];
 $router = routerPaths($root);
 restoreGeneratedArtifacts($root, $generatedArtifacts);
 $routeSet = array_fill_keys($router['paths'], true);
