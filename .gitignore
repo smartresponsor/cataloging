@@ -14,6 +14,9 @@ composer.lock
 /allure-report/
 /var/
 
+# Symfony generated app-only reference artifact
+/config/reference.php
+
 # PHPUnit
 .phpunit.result.cache
 /.phpunit.cache/
