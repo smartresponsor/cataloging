@@ -108,7 +108,7 @@ function routerPaths(string $root): array
     return ['exitCode' => 0, 'paths' => $paths];
 }
 
-$generatedArtifacts = ['config/reference.php'];
+$generatedArtifacts = [];
 $canonical = openApiSummary($root . '/api/catalog-openapi.yaml');
 $legacy = openApiSummary($root . '/api/category-openapi.yaml');
 $router = routerPaths($root);

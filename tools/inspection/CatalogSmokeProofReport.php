@@ -53,7 +53,7 @@ function restoreGeneratedArtifacts(string $root, array $paths): void
 $php = escapeshellarg(PHP_BINARY);
 $runner = escapeshellarg($root . '/tools/php/php84.php');
 
-$generatedArtifacts = ['config/reference.php'];
+$generatedArtifacts = [];
 
 putenv('APP_ENV=prod');
 putenv('APP_DEBUG=0');

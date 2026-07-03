@@ -107,7 +107,7 @@ $readSurfaceReadiness = readJsonOrEmpty($reportDir . '/catalog-read-surface-read
 $graphqlStoreReadiness = readJsonOrEmpty($reportDir . '/catalog-graphql-store-readiness-report.json');
 $boundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-boundary-readiness-report.json');
 
-$generatedArtifacts = ['config/reference.php'];
+$generatedArtifacts = [];
 
 $gitStatus = commandResult('git -C ' . escapeshellarg($root) . ' status --porcelain');
 putenv('APP_ENV=prod');
