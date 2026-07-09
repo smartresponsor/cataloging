@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
-use App\Cataloging\Security\CategoryVoter;
 use App\Cataloging\ServiceInterface\CatalogTenantRolePolicyServiceInterface;
 use App\Cataloging\ServiceInterface\Security\SecurityExternalIdentityContextResolverInterface;
 use App\Cataloging\ValueObject\Security\ExternalIdentityContext;
+use App\Cataloging\Voter\CategoryVoter;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Idempotency;
 
-use App\Cataloging\Entity\CatalogCategoryIdempotencyEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryIdempotencyEntity;
 use App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface;
 use Doctrine\ORM\EntityManagerInterface;
 

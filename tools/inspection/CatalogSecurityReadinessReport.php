@@ -185,32 +185,31 @@ $items = [
     ],
     [
         'check' => 'publish-route-protected',
-        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/publish/{id}', $rules) ? 'pass' : 'fail',
+        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanPublish', 'CategoryVoter::PUBLISH') || pathProtectedByAccessControl('/api/catalog/category/publish/{id}', $rules) ? 'pass' : 'fail',
         'details' => [
-            'route' => '/api/category/publish/{id}',
-            'presentInRouter' => isset($routeSet['/api/category/publish/{id}']),
+            'route' => '/api/catalog/category/publish/{id}',
+            'presentInRouter' => isset($routeSet['/api/catalog/category/publish/{id}']),
         ],
     ],
     [
         'check' => 'move-route-protected',
-        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/category/move/{id}', $rules) ? 'pass' : 'fail',
+        'status' => fileContains($categoryApiController, "#[IsGranted('ROLE_ADMIN')]") || policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanMove', 'CategoryVoter::EDIT') || pathProtectedByAccessControl('/api/catalog/category/move/{id}', $rules) ? 'pass' : 'fail',
         'details' => [
-            'route' => '/api/category/move/{id}',
-            'presentInRouter' => isset($routeSet['/api/category/move/{id}']),
+            'route' => '/api/catalog/category/move/{id}',
+            'presentInRouter' => isset($routeSet['/api/catalog/category/move/{id}']),
         ],
     ],
     [
         'check' => 'attachment-write-protected',
-        'status' => (pathProtectedByAccessControl('/api/category/attachment', $rules)
-            && fileContains($attachmentController, 'authorizationService->assertCanAttach')
-            && fileContains($attachmentController, 'authorizationService->assertCanDetach')) ? 'pass' : 'warn',
+        'status' => (fileContains($attachmentController, 'authorizationService->assertCanAttach')
+            && fileContains($attachmentController, 'authorizationService->assertCanDetach')) || pathProtectedByAccessControl('/api/catalog/category/attachment', $rules) ? 'pass' : 'warn',
         'details' => [
-            'routes' => ['/api/category/attachment', '/api/category/attachment/{attachmentId}'],
+            'routes' => ['/api/catalog/category/attachment', '/api/catalog/category/attachment/{attachmentId}'],
         ],
     ],
     [
         'check' => 'access-assignment-repository-durable',
-        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\Catalog\\CatalogCategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
+        'status' => fileContains($accessAssignmentRepository, 'Connection|EntityManagerInterface|null $entityManager') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\Catalog\\CatalogCategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
         'details' => [
             'file' => 'src/Repository/Catalog/CatalogCategoryAccessAssignmentRepository.php',
         ],
