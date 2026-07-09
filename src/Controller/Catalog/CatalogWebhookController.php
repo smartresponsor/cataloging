@@ -7,7 +7,7 @@ namespace App\Cataloging\Controller\Catalog;
 
 use App\Cataloging\Request\WebhookDispatchRequest;
 use App\Cataloging\Service\CatalogWebhookDispatcherService;
-use App\Cataloging\ValueObject\WebhookDispatchRequest as WebhookDispatchMessageRequest;
+use App\Cataloging\ValueObject\WebhookDispatchMessageRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

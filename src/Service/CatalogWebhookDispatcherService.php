@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\Observability\RequestCorrelationIdProvider;
-use App\Cataloging\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\ValueObject\WebhookDispatchMessageRequest;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -29,7 +29,7 @@ final readonly class CatalogWebhookDispatcherService
      * @throws TransportExceptionInterface
      * @throws \JsonException
      */
-    public function dispatch(WebhookDispatchRequest $request): void
+    public function dispatch(WebhookDispatchMessageRequest $request): void
     {
         $body = json_encode(['event' => $request->event, 'payload' => $request->payload], JSON_THROW_ON_ERROR);
         $signature = hash_hmac('sha256', $body, $this->secret);
