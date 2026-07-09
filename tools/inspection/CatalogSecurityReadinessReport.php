@@ -133,26 +133,26 @@ $rules = accessControlRules([
     $root . '/config/packages/catalog_security.yaml',
 ]);
 
-$providerSource = $root . '/src/Security/JwtUserProvider.php';
+$providerSource = $root . '/src/UserProvider/JwtUserProvider.php';
 $servicesSource = $root . '/config/services.yaml';
 $securityApiSource = $root . '/config/packages/catalog_category_security_api.yaml';
-$accessAssignmentRepository = $root . '/src/Repository/CatalogCategoryAccessAssignmentEntityRepository.php';
+$accessAssignmentRepository = $root . '/src/Repository/Catalog/CatalogCategoryAccessAssignmentRepository.php';
 $mutationAuthorizationService = $root . '/src/Service/CatalogCategoryMutationAuthorizationService.php';
-$adminController = $root . '/src/Controller/Admin/CategoryAdminController.php';
-$adminApiController = $root . '/src/Controller/Api/CategoryAdminApiController.php';
-$categoryApiController = $root . '/src/Controller/CategoryApiController.php';
-$attachmentController = $root . '/src/Controller/CategoryAttachmentController.php';
-$webhookController = $root . '/src/Controller/WebhookController.php';
+$adminController = $root . '/src/Controller/Catalog/CatalogCategoryAdminController.php';
+$adminApiController = $root . '/src/Controller/Catalog/CatalogCategoryAdminApiController.php';
+$categoryApiController = $root . '/src/Controller/Catalog/CatalogCategoryApiController.php';
+$attachmentController = $root . '/src/Controller/Catalog/CatalogCategoryAttachmentController.php';
+$webhookController = $root . '/src/Controller/Catalog/CatalogWebhookController.php';
 $jwksDoc = $root . '/docs/security/jwks.md';
-$oidcVerifier = $root . '/src/Service/OidcJwtVerifier.php';
-$oidcValidator = $root . '/src/Service/OidcJwtValidator.php';
+$oidcVerifier = $root . '/src/Service/CatalogOidcJwtVerifierService.php';
+$oidcValidator = $root . '/src/Service/CatalogOidcJwtValidatorService.php';
 
 $items = [
     [
         'check' => 'jwt-provider-least-privilege-default',
-        'status' => fileContains($providerSource, 'private readonly array $defaultRoles = [\'ROLE_USER\']') && !fileContains($providerSource, 'private readonly array $defaultRoles = [\'ROLE_ADMIN\']') ? 'pass' : 'fail',
+        'status' => fileContains($providerSource, '$defaultRoles = [\'ROLE_USER\']') && fileContains($providerSource, '$adminIdentifiers') && !fileContains($providerSource, '$defaultRoles = [\'ROLE_ADMIN\']') ? 'pass' : 'fail',
         'details' => [
-            'file' => 'src/Security/JwtUserProvider.php',
+            'file' => 'src/UserProvider/JwtUserProvider.php',
         ],
     ],
     [
@@ -178,9 +178,9 @@ $items = [
     ],
     [
         'check' => 'admin-api-route-protected',
-        'status' => fileContains($adminApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/admin/category/list', $rules) ? 'pass' : 'fail',
+        'status' => fileContains($adminApiController, "#[IsGranted('ROLE_ADMIN')]") || pathProtectedByAccessControl('/api/catalog/category/admin/list', $rules) ? 'pass' : 'fail',
         'details' => [
-            'routePrefix' => '/api/admin/category',
+            'routePrefix' => '/api/catalog/category/admin',
         ],
     ],
     [
@@ -210,9 +210,9 @@ $items = [
     ],
     [
         'check' => 'access-assignment-repository-durable',
-        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\CatalogCategoryAccessAssignmentEntityRepositoryInterface") ? 'pass' : 'warn',
+        'status' => fileContains($accessAssignmentRepository, 'private readonly ?Connection $connection') && fileContains($servicesSource, "App\Cataloging\\RepositoryInterface\\Catalog\\CatalogCategoryAccessAssignmentRepositoryInterface") ? 'pass' : 'warn',
         'details' => [
-            'file' => 'src/Repository/CatalogCategoryAccessAssignmentEntityRepository.php',
+            'file' => 'src/Repository/Catalog/CatalogCategoryAccessAssignmentRepository.php',
         ],
     ],
     [
@@ -227,7 +227,7 @@ $items = [
         'status' => policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanMove', 'CategoryVoter::EDIT')
             && policyAuthorizedMutationRoute($categoryApiController, 'categoryMutationAuthorizationService->assertCanPublish', 'CategoryVoter::PUBLISH') ? 'pass' : 'warn',
         'details' => [
-            'controller' => 'src/Controller/CategoryApiController.php',
+            'controller' => 'src/Controller/Catalog/CatalogCategoryApiController.php',
         ],
     ],
 
