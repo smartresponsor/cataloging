@@ -160,6 +160,7 @@
     "test:integration": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
     "test:playwright": "npm run test:playwright",
     "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
+    "test:object-identity": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist tests/Unit/Catalog/CatalogObjectIdentityContractTest.php",
     "test:coverage:gate": [
       "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml",
       "@php tools/php/php84.php tools/qa/check_coverage_threshold.php build/logs/clover.xml 70"
