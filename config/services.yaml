@@ -33,6 +33,15 @@ services:
     App\Cataloging\Controller\Catalog\CatalogCategorySitemapController:
         tags: [ 'controller.service_arguments' ]
 
+    App\Cataloging\Controller\Catalog\CatalogCategoryMerchantController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Cataloging\Controller\Catalog\CatalogLegacyCategoryListController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Cataloging\Controller\Catalog\CatalogLegacyCollectionListController:
+        tags: [ 'controller.service_arguments' ]
+
     App\Cataloging\UserProvider\JwtUserProvider:
         arguments:
             $defaultRoles: [ 'ROLE_USER' ]
