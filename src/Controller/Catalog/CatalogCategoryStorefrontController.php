@@ -14,6 +14,7 @@ use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -70,6 +71,37 @@ final readonly class CatalogCategoryStorefrontController
             ],
             $query,
         );
+    }
+
+    #[Route('/catalog/category/{slug}', name: 'cataloging_catalog_category_show', methods: ['GET'])]
+    public function category(Request $request, string $slug): mixed
+    {
+        try {
+            $criteria = $this->categoryReadScopeService->applyTenantScope(new CategoryReadScopeRequest(
+                $request,
+                CategoryProjectionCriteria::fromArray([
+                    'tenant' => $request->query->get('tenant'),
+                    'locale' => $request->query->get('locale'),
+                    'published' => true,
+                    'limit' => 500,
+                    'offset' => 0,
+                    'order' => 'nameEntity',
+                    'direction' => 'asc',
+                ]),
+            ));
+            $tree = $this->categoryProjectionReadService->tree($criteria);
+        } catch (AccessDeniedHttpException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 403);
+        } catch (Exception $exception) {
+            throw new NotFoundHttpException('Unable to load the catalog category.', $exception);
+        }
+
+        $surface = $this->surfaceContractFactory->createDetail('catalog', $tree, $slug);
+        if (null === $surface) {
+            throw new NotFoundHttpException('Catalog category was not found.');
+        }
+
+        return $surface;
     }
 
     #[Route('/api/catalog/category/storefront', name: 'api_category_storefront', methods: ['GET'])]
