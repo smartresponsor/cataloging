@@ -203,6 +203,7 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
             'workflow_state' => $entity->getWorkflowState(),
             'published' => $entity->isPublished(),
             'published_at' => $entity->getPublishedAt()?->format('Y-m-d H:i:s'),
+            'icon_url' => $entity->getIconUrl(),
             'updated_at' => $entity->getUpdatedAt()->format('Y-m-d H:i:s'),
         ];
     }
