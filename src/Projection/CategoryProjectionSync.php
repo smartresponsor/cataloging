@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace App\Cataloging\Projection;
 
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
-use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
 use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
+use App\Cataloging\Service\CatalogCategoryProjectionSynchronizerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,8 +19,10 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
     /**
      * Initializes the category projection sync service collaborators.
      */
-    public function __construct(private ManagerRegistry $registry)
-    {
+    public function __construct(
+        private ManagerRegistry $registry,
+        private CatalogCategoryProjectionSynchronizerService $synchronizer,
+    ) {
     }
 
     /**
@@ -45,25 +47,7 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
             throw new \RuntimeException(sprintf('Projection source category "%s" was not found.', $categoryId));
         }
 
-        $projection = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->find((string) $category->getId());
-        if (!$projection instanceof CatalogCategoryProjectionEntity) {
-            $projection = new CatalogCategoryProjectionEntity((string) $category->getId());
-            $entityManager->persist($projection);
-        }
-
-        $projection->setSlug($category->getSlug());
-        $projection->setName($category->getName());
-        $projection->setParentId($category->getParentId());
-        $projection->setPath($category->getPath());
-        $projection->setLocale($category->getLocale());
-        $projection->setTenant($category->getTenant());
-        $projection->setWorkflowState($category->getWorkflowState());
-        $projection->setPublished($category->isPublished());
-        $projection->setPublishedAt($category->getPublishedAt());
-        $projection->setIconUrl($category->getIconUrl());
-        $projection->setUpdatedAt(new \DateTimeImmutable('now'));
-
-        $entityManager->flush();
+        $this->synchronizer->synchronize($category);
     }
 
     private function entityManager(): EntityManagerInterface
