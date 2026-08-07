@@ -21,9 +21,6 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final readonly class CatalogCategoryStorefrontController
 {
-    /**
-     * Initializes the category storefront controller service collaborators.
-     */
     public function __construct(
         private CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private CatalogCategoryReadScopeServiceInterface $categoryReadScopeService,
@@ -36,16 +33,17 @@ final readonly class CatalogCategoryStorefrontController
     public function show(Request $request): mixed
     {
         $categories = [];
+        $query = trim((string) $request->query->get('q', ''));
 
         try {
             $criteria = $this->categoryReadScopeService->applyTenantScope(new CategoryReadScopeRequest(
                 $request,
                 CategoryProjectionCriteria::fromArray([
-                    'q' => $request->query->get('q'),
+                    'q' => '' === $query ? null : $query,
                     'tenant' => $request->query->get('tenant'),
                     'locale' => $request->query->get('locale'),
                     'workflow_state' => $request->query->get('workflow_state'),
-                    'published' => $request->query->has('published') ? $request->query->getBoolean('published') : null,
+                    'published' => $request->query->has('published') ? $request->query->getBoolean('published') : true,
                     'limit' => $request->query->get('limit') ?? 200,
                     'offset' => $request->query->get('offset') ?? 0,
                     'order' => $request->query->get('order') ?? 'nameEntity',
@@ -53,7 +51,9 @@ final readonly class CatalogCategoryStorefrontController
                 ]),
             ));
 
-            $categories = $this->categoryProjectionReadService->list($criteria);
+            $categories = '' === $query
+                ? $this->categoryProjectionReadService->tree($criteria)
+                : $this->categoryProjectionReadService->list($criteria);
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (Exception) {
@@ -68,13 +68,10 @@ final readonly class CatalogCategoryStorefrontController
                 'locale' => $request->query->get('locale'),
                 'workflow_state' => $request->query->get('workflow_state'),
             ],
-            (string) $request->query->get('q', ''),
+            $query,
         );
     }
 
-    /**
-     * Executes the invokable workflow for this service.
-     */
     #[Route('/api/catalog/category/storefront', name: 'api_category_storefront', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse
     {
@@ -93,7 +90,7 @@ final readonly class CatalogCategoryStorefrontController
                 ]),
             ));
 
-            return new JsonResponse($this->categoryProjectionReadService->list($criteria));
+            return new JsonResponse($this->categoryProjectionReadService->tree($criteria));
         } catch (AccessDeniedHttpException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (Exception) {
