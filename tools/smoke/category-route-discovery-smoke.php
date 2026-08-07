@@ -19,6 +19,11 @@ try {
     /** @var RouteCollection $collection */
     $collection = $router->getRouteCollection();
     $requiredRoutes = [
+        'cataloging_catalog_index_explicit',
+        'cataloging_catalog_index',
+        'cataloging_catalog_index_no_slash',
+        'cataloging_catalog_category_show',
+        'api_category_storefront',
         'api_category_attachment_list',
         'api_category_attachment_add',
         'api_category_collection',
@@ -46,9 +51,39 @@ try {
         exit(1);
     }
 
+    $expectedPaths = [
+        'cataloging_catalog_index_explicit' => '/catalog/index',
+        'cataloging_catalog_index' => '/catalog/',
+        'cataloging_catalog_index_no_slash' => '/catalog',
+        'cataloging_catalog_category_show' => '/catalog/category/{slug}',
+        'api_category_storefront' => '/api/catalog/category/storefront',
+    ];
+
+    $invalidPaths = [];
+    foreach ($expectedPaths as $routeName => $expectedPath) {
+        $route = $collection->get($routeName);
+        if (null === $route || $route->getPath() !== $expectedPath) {
+            $invalidPaths[] = sprintf(
+                '%s=%s expected=%s',
+                $routeName,
+                null === $route ? 'missing' : $route->getPath(),
+                $expectedPath,
+            );
+        }
+    }
+
+    if ([] !== $invalidPaths) {
+        fwrite(STDERR, sprintf(
+            "[category-route-discovery-smoke] Invalid storefront route paths: %s\n",
+            implode('; ', $invalidPaths),
+        ));
+        exit(1);
+    }
+
     echo sprintf(
-        "[category-route-discovery-smoke] Verified %d required routes.\n",
-        count($requiredRoutes)
+        "[category-route-discovery-smoke] Verified %d required routes and %d public storefront paths.\n",
+        count($requiredRoutes),
+        count($expectedPaths),
     );
     exit(0);
 } finally {
