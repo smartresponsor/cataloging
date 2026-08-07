@@ -9,6 +9,7 @@ use App\Cataloging\Entity\Catalog\CatalogCategoryBannerEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryHtmlBlockEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategorySlugHistoryEntity;
+use App\Cataloging\Service\CatalogCategoryProjectionSynchronizerService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
@@ -79,6 +80,10 @@ final class CategoryFixtures extends Fixture
         ],
     ];
 
+    public function __construct(private readonly CatalogCategoryProjectionSynchronizerService $projectionSynchronizer)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         $root = $this->createCategory($manager, 'Marketplace', self::MARKETPLACE_IMAGE, null);
@@ -136,11 +141,17 @@ final class CategoryFixtures extends Fixture
         $slug = Uuid::v7()->toRfc4122();
         $path = null === $parent ? $slug : $parent->getPath().'.'.$slug;
         $depth = null === $parent ? 0 : $parent->getDepth() + 1;
+        $parentId = null === $parent ? null : (string) $parent->getId();
 
-        $category = new CatalogCategoryEntity($name, $slug, $path, $depth);
+        $category = new CatalogCategoryEntity($name, $slug, $path, $depth, $parentId);
         $category->setIconUrl($image);
+        $category->setWorkflowState('published');
+        $category->setPublished(true);
+        $category->setPublishedAt(new \DateTimeImmutable('now'));
         $manager->persist($category);
         $manager->flush();
+
+        $this->projectionSynchronizer->synchronize($category);
 
         return $category;
     }
