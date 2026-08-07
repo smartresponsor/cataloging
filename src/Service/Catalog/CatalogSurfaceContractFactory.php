@@ -15,8 +15,9 @@ final class CatalogSurfaceContractFactory
     public function create(string $catalogToken, array $categories, array $filters = [], string $query = ''): CatalogSurfaceContract
     {
         $query = trim($query);
-        $catalogCards = $this->createCatalogCards($categories);
-        $resultCards = '' === $query ? [] : $this->createCards($categories);
+        $flattened = $this->flatten($categories);
+        $catalogCards = $this->createCatalogCards($flattened);
+        $resultCards = '' === $query ? [] : $this->createCards($flattened);
         $sections = [
             [
                 'id' => 'catalogs',
@@ -51,7 +52,7 @@ final class CatalogSurfaceContractFactory
                     'query' => $query,
                 ],
                 'left.panel' => [
-                    'filters' => $this->createFilters($catalogCards, $filters),
+                    'filters' => $this->createFilters($catalogCards),
                 ],
                 'main.body' => [
                     'title' => 'Marketplace',
@@ -59,11 +60,30 @@ final class CatalogSurfaceContractFactory
                     'sections' => $sections,
                 ],
                 'right.panel' => [
-                    'stats' => $this->createStats($categories, $catalogCards),
+                    'stats' => $this->createStats($flattened, $catalogCards),
                     'actions' => $this->createHeroActions(),
                 ],
             ],
         );
+    }
+
+    /**
+     * @param list<array<string, mixed>> $nodes
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function flatten(array $nodes): array
+    {
+        $result = [];
+        foreach ($nodes as $node) {
+            $result[] = $node;
+            $children = $node['children'] ?? null;
+            if (is_array($children)) {
+                $result = [...$result, ...$this->flatten(array_values(array_filter($children, 'is_array')))];
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -143,18 +163,16 @@ final class CatalogSurfaceContractFactory
 
     /**
      * @param list<array<string, mixed>> $catalogCards
-     * @param array<string, mixed>       $filters
      *
      * @return list<array{id: string, title: string, url: string}>
      */
-    private function createFilters(array $catalogCards, array $filters): array
+    private function createFilters(array $catalogCards): array
     {
         $items = [['id' => 'all', 'title' => 'All catalogs', 'url' => '/catalog/']];
         foreach ($catalogCards as $card) {
-            $title = (string) ($card['title'] ?? 'Catalog');
             $items[] = [
                 'id' => (string) ($card['kind'] ?? 'catalog'),
-                'title' => $title,
+                'title' => (string) ($card['title'] ?? 'Catalog'),
                 'url' => (string) ($card['href'] ?? '/catalog/'),
             ];
         }
@@ -237,9 +255,7 @@ final class CatalogSurfaceContractFactory
 
     private function catalogKind(string $name): ?string
     {
-        $normalized = strtolower(trim($name));
-
-        return match ($normalized) {
+        return match (strtolower(trim($name))) {
             'task catalog' => 'task',
             'order catalog' => 'order',
             'product catalog' => 'product',
