@@ -60,6 +60,7 @@ final readonly class CategoryProjectionSync implements CategoryProjectionSyncInt
         $projection->setWorkflowState($category->getWorkflowState());
         $projection->setPublished($category->isPublished());
         $projection->setPublishedAt($category->getPublishedAt());
+        $projection->setIconUrl($category->getIconUrl());
         $projection->setUpdatedAt(new \DateTimeImmutable('now'));
 
         $entityManager->flush();
