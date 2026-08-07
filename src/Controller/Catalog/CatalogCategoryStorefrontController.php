@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\Service\Catalog\CatalogSurfaceContractFactory;
+use App\Cataloging\Service\Catalog\CatalogContractFactory;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
@@ -25,7 +25,7 @@ final readonly class CatalogCategoryStorefrontController
     public function __construct(
         private CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService,
         private CatalogCategoryReadScopeServiceInterface $categoryReadScopeService,
-        private CatalogSurfaceContractFactory $surfaceContractFactory,
+        private CatalogContractFactory $contractFactory,
     ) {
     }
 
@@ -61,7 +61,7 @@ final readonly class CatalogCategoryStorefrontController
             $categories = [];
         }
 
-        return $this->surfaceContractFactory->create(
+        return $this->contractFactory->create(
             'catalog',
             $categories,
             [
@@ -96,12 +96,12 @@ final readonly class CatalogCategoryStorefrontController
             throw new NotFoundHttpException('Unable to load the catalog category.', $exception);
         }
 
-        $surface = $this->surfaceContractFactory->createDetail('catalog', $tree, $slug);
-        if (null === $surface) {
+        $contract = $this->contractFactory->createDetail('catalog', $tree, $slug);
+        if (null === $contract) {
             throw new NotFoundHttpException('Catalog category was not found.');
         }
 
-        return $surface;
+        return $contract;
     }
 
     #[Route('/api/catalog/category/storefront', name: 'api_category_storefront', methods: ['GET'])]
