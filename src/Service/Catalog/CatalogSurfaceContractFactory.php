@@ -68,6 +68,87 @@ final class CatalogSurfaceContractFactory
     }
 
     /**
+     * @param list<array<string, mixed>> $tree
+     */
+    public function createDetail(string $catalogToken, array $tree, string $slug): ?CatalogSurfaceContract
+    {
+        $path = $this->findNodePath($tree, trim($slug));
+        if ([] === $path) {
+            return null;
+        }
+
+        $category = $path[array_key_last($path)];
+        $catalogKind = $this->pathCatalogKind($path);
+        $title = trim((string) ($category['nameEntity'] ?? $category['slug'] ?? 'Catalog section'));
+        $imageUrl = trim((string) ($category['imageUrl'] ?? $category['iconUrl'] ?? $category['icon_url'] ?? ''));
+        $children = array_values(array_filter($category['children'] ?? [], 'is_array'));
+        $childCards = [];
+        foreach ($children as $child) {
+            $childCards[] = $this->card(
+                $child,
+                $this->detailDescription($catalogKind, $child),
+                $this->catalogEyebrow($catalogKind ?? 'category'),
+                $catalogKind,
+            );
+        }
+
+        $sections = [];
+        if ([] !== $childCards) {
+            $sections[] = [
+                'id' => 'categories',
+                'title' => 'Choose a category',
+                'summary' => sprintf('%d %s available in %s.', count($childCards), 1 === count($childCards) ? 'category' : 'categories', $title),
+                'cards' => $childCards,
+            ];
+        } else {
+            $sections[] = [
+                'id' => 'leaf',
+                'title' => 'Explore this category',
+                'summary' => 'Listings and marketplace offers for this category can be discovered from the catalog search.',
+                'cards' => [],
+            ];
+        }
+
+        return new CatalogSurfaceContract(
+            CatalogSurfaceContract::WORD,
+            CatalogSurfaceContract::VIEW_BASE,
+            '@Interfacing/catalog/index.html.twig',
+            $this->detailSlotMap(),
+            $catalogToken,
+            [
+                'query' => '',
+                'top.search' => [
+                    'action' => '/catalog/',
+                    'method' => 'GET',
+                    'queryName' => 'q',
+                    'placeholder' => sprintf('Search in %s...', $title),
+                    'query' => '',
+                ],
+                'left.panel' => [
+                    'filters' => $this->breadcrumbFilters($path),
+                ],
+                'main.body' => [
+                    'title' => $title,
+                    'description' => $this->detailDescription($catalogKind, $category),
+                    'eyebrow' => $this->catalogEyebrow($catalogKind ?? 'category'),
+                    'imageUrl' => '' === $imageUrl ? null : $imageUrl,
+                    'image' => '' === $imageUrl ? null : $imageUrl,
+                    'breadcrumbs' => $this->breadcrumbs($path),
+                    'sections' => $sections,
+                ],
+                'right.panel' => [
+                    'stats' => [
+                        ['label' => 'Categories', 'value' => (string) count($children)],
+                        ['label' => 'Type', 'value' => ucfirst($catalogKind ?? 'category')],
+                        ['label' => 'Status', 'value' => !empty($category['published']) ? 'Available' : 'Unavailable'],
+                    ],
+                    'actions' => $this->detailActions($catalogKind, $title),
+                ],
+            ],
+        );
+    }
+
+    /**
      * @param list<array<string, mixed>> $nodes
      *
      * @return list<array<string, mixed>>
@@ -87,6 +168,43 @@ final class CatalogSurfaceContractFactory
     }
 
     /**
+     * @param list<array<string, mixed>> $nodes
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function findNodePath(array $nodes, string $slug): array
+    {
+        foreach ($nodes as $node) {
+            if (trim((string) ($node['slug'] ?? '')) === $slug) {
+                return [$node];
+            }
+
+            $children = array_values(array_filter($node['children'] ?? [], 'is_array'));
+            $childPath = $this->findNodePath($children, $slug);
+            if ([] !== $childPath) {
+                return [$node, ...$childPath];
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @param list<array<string, mixed>> $path
+     */
+    private function pathCatalogKind(array $path): ?string
+    {
+        foreach ($path as $node) {
+            $kind = $this->catalogKind((string) ($node['nameEntity'] ?? ''));
+            if (null !== $kind) {
+                return $kind;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param list<array<string, mixed>> $categories
      *
      * @return list<array<string, mixed>>
@@ -101,7 +219,7 @@ final class CatalogSurfaceContractFactory
                 continue;
             }
 
-            $cards[] = $this->card($category, $this->catalogDescription($kind), $this->catalogEyebrow($kind));
+            $cards[] = $this->card($category, $this->catalogDescription($kind), $this->catalogEyebrow($kind), $kind);
         }
 
         usort($cards, fn (array $left, array $right): int => $this->catalogOrder((string) ($left['kind'] ?? '')) <=> $this->catalogOrder((string) ($right['kind'] ?? '')));
@@ -123,10 +241,12 @@ final class CatalogSurfaceContractFactory
                 continue;
             }
 
+            $kind = $this->catalogKind($name) ?? 'category';
             $cards[] = $this->card(
                 $category,
                 $this->genericDescription($category),
-                $this->catalogEyebrow($this->catalogKind($name) ?? 'category'),
+                $this->catalogEyebrow($kind),
+                'category' === $kind ? null : $kind,
             );
         }
 
@@ -135,16 +255,14 @@ final class CatalogSurfaceContractFactory
 
     /**
      * @param array<string, mixed> $category
-     *
-     * @return array<string, mixed>
      */
-    private function card(array $category, string $summary, string $eyebrow): array
+    private function card(array $category, string $summary, string $eyebrow, ?string $inheritedKind = null): array
     {
         $name = trim((string) ($category['nameEntity'] ?? $category['slug'] ?? 'Catalog section'));
         $slug = trim((string) ($category['slug'] ?? ''));
         $id = (string) ($category['id'] ?? $slug);
         $imageUrl = trim((string) ($category['imageUrl'] ?? $category['iconUrl'] ?? $category['icon_url'] ?? ''));
-        $kind = $this->catalogKind($name) ?? 'category';
+        $kind = $inheritedKind ?? $this->catalogKind($name) ?? 'category';
 
         return [
             'id' => $id,
@@ -175,6 +293,52 @@ final class CatalogSurfaceContractFactory
                 'title' => (string) ($card['title'] ?? 'Catalog'),
                 'url' => (string) ($card['href'] ?? '/catalog/'),
             ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param list<array<string, mixed>> $path
+     *
+     * @return list<array{id: string, title: string, url: string}>
+     */
+    private function breadcrumbFilters(array $path): array
+    {
+        $filters = [['id' => 'marketplace', 'title' => 'Marketplace', 'url' => '/catalog/']];
+        foreach ($path as $node) {
+            $name = trim((string) ($node['nameEntity'] ?? ''));
+            $slug = trim((string) ($node['slug'] ?? ''));
+            if ('Marketplace' === $name || '' === $name || '' === $slug) {
+                continue;
+            }
+
+            $filters[] = [
+                'id' => $slug,
+                'title' => $name,
+                'url' => '/catalog/category/'.rawurlencode($slug),
+            ];
+        }
+
+        return $filters;
+    }
+
+    /**
+     * @param list<array<string, mixed>> $path
+     *
+     * @return list<array{title: string, url: string}>
+     */
+    private function breadcrumbs(array $path): array
+    {
+        $items = [['title' => 'Marketplace', 'url' => '/catalog/']];
+        foreach ($path as $node) {
+            $name = trim((string) ($node['nameEntity'] ?? ''));
+            $slug = trim((string) ($node['slug'] ?? ''));
+            if ('Marketplace' === $name || '' === $name || '' === $slug) {
+                continue;
+            }
+
+            $items[] = ['title' => $name, 'url' => '/catalog/category/'.rawurlencode($slug)];
         }
 
         return $items;
@@ -214,6 +378,32 @@ final class CatalogSurfaceContractFactory
     }
 
     /**
+     * @return list<array{title: string, url: string}>
+     */
+    private function detailActions(?string $kind, string $title): array
+    {
+        $query = match ($kind) {
+            'task' => 'task',
+            'order' => 'order',
+            'product' => 'product',
+            'service' => 'service',
+            default => $title,
+        };
+        $primary = match ($kind) {
+            'task' => 'Browse task requests',
+            'order' => 'Browse orders',
+            'product' => 'Browse products',
+            'service' => 'Find services',
+            default => 'Search marketplace',
+        };
+
+        return [
+            ['title' => $primary, 'url' => '/catalog/?'.http_build_query(['q' => $query])],
+            ['title' => 'Back to marketplace', 'url' => '/catalog/'],
+        ];
+    }
+
+    /**
      * @param array<string, mixed> $category
      */
     private function genericDescription(array $category): string
@@ -224,6 +414,25 @@ final class CatalogSurfaceContractFactory
         return 0 < $depth
             ? 'Browse this marketplace category and continue to related listings.'
             : 'Explore this marketplace catalog.';
+    }
+
+    /**
+     * @param array<string, mixed> $category
+     */
+    private function detailDescription(?string $kind, array $category): string
+    {
+        $name = trim((string) ($category['nameEntity'] ?? 'this category'));
+        if (null !== $kind && null !== $this->catalogKind($name)) {
+            return $this->catalogDescription($kind);
+        }
+
+        return match ($kind) {
+            'task' => sprintf('Browse customer-requested work in %s and related job categories.', $name),
+            'order' => sprintf('Explore ready-to-request work packages and projects in %s.', $name),
+            'product' => sprintf('Shop marketplace products, parts, tools, and materials in %s.', $name),
+            'service' => sprintf('Discover provider-authored professional services in %s.', $name),
+            default => sprintf('Explore %s in the marketplace.', $name),
+        };
     }
 
     /**
@@ -307,6 +516,19 @@ final class CatalogSurfaceContractFactory
             'left.panel' => 'Catalogs',
             'main.body' => 'Marketplace',
             'right.panel' => 'Overview',
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function detailSlotMap(): array
+    {
+        return [
+            'top.search' => 'Search',
+            'left.panel' => 'Browse',
+            'main.body' => 'Category',
+            'right.panel' => 'Actions',
         ];
     }
 }
