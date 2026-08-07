@@ -48,6 +48,9 @@ class CatalogCategoryProjectionEntity
     #[ORM\Column(type: 'datetime_immutable', nullable: true, name: 'published_at')]
     private ?\DateTimeImmutable $publishedAt = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true, name: 'icon_url')]
+    private ?string $iconUrl = null;
+
     #[ORM\Column(type: 'datetime_immutable', name: 'updated_at')]
     private \DateTimeImmutable $updatedAt;
 
@@ -151,6 +154,16 @@ class CatalogCategoryProjectionEntity
     public function setPublishedAt(?\DateTimeImmutable $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
+    }
+
+    public function getIconUrl(): ?string
+    {
+        return $this->iconUrl;
+    }
+
+    public function setIconUrl(?string $iconUrl): void
+    {
+        $this->iconUrl = $iconUrl;
     }
 
     public function getUpdatedAt(): \DateTimeImmutable
