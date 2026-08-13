@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Tests\DataFixtures;
 
 use App\Cataloging\DataFixtures\CategoryFixtures;
+use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -24,15 +25,19 @@ final class CategoryFixturesTest extends TestCase
 
         $persisted = 0;
         $manager = $this->createMock(ObjectManager::class);
-        $manager->expects(self::exactly(45))
+        $manager->expects(self::exactly(46))
             ->method('persist')
-            ->willReturnCallback(static function () use (&$persisted): void {
+            ->willReturnCallback(static function (object $entity) use (&$persisted): void {
                 ++$persisted;
+                if ($entity instanceof CatalogCategoryEntity && 0 === $entity->getId()) {
+                    $property = new \ReflectionProperty(CatalogCategoryEntity::class, 'id');
+                    $property->setValue($entity, $persisted);
+                }
             });
-        $manager->expects(self::exactly(25))->method('flush');
+        $manager->expects(self::exactly(26))->method('flush');
 
         (new CategoryFixtures())->load($manager);
 
-        self::assertSame(45, $persisted);
+        self::assertSame(46, $persisted);
     }
 }
