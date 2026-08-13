@@ -31,17 +31,15 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
     {
         $criteriaMap = $this->criteriaMap($criteria);
 
-        $entityManager = $this->entityManager();
-        $entities = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->findBy([], ['path' => 'ASC', 'slug' => 'ASC']);
-        $rows = [];
-        foreach ($entities as $entity) {
-            $row = $this->mapEntityToRow($entity);
-            if ($this->matchesCriteria($row, $criteriaMap)) {
-                $rows[] = $row;
-            }
-        }
+        $rawRows = $this->entityManager()->getConnection()->fetchAllAssociative(
+            'SELECT id, slug, name_entity AS "nameEntity", parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at FROM category_projection ORDER BY path ASC, slug ASC'
+        );
+        $rows = $this->querySupport->normalizeProjectionRows($rawRows);
 
-        return $rows;
+        return array_values(array_filter(
+            $rows,
+            fn (array $row): bool => $this->matchesCriteria($row, $criteriaMap),
+        ));
     }
 
     /**

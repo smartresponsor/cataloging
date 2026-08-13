@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Entity\Catalog;
 
 use App\Cataloging\Repository\Catalog\CatalogCategoryProductBindingRepository;
+use App\Objecting\EntityInterface\ObjectRelationEntityInterface;
 use App\Objecting\EntityTrait\Embeddable\ObjectAuditEmbeddableTrait;
 use App\Objecting\EntityTrait\Embeddable\ObjectIdentityEmbeddableTrait;
 use App\Objecting\EntityTrait\Embeddable\ObjectStateEmbeddableTrait;
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CatalogCategoryProductBindingRepository::class)]
 #[ORM\Table(name: 'category_product_binding')]
 #[ORM\UniqueConstraint(name: 'uniq_category_product_binding', columns: ['category_id', 'product_id'])]
-final class CatalogCategoryProductBindingEntity
+final class CatalogCategoryProductBindingEntity implements ObjectRelationEntityInterface
 {
     use ObjectIdentityEmbeddableTrait;
     use ObjectAuditEmbeddableTrait;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
+use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -50,9 +51,13 @@ final class CatalogSeedCommand extends Command
         $totalCount = max(1, $this->argumentInt($input, 'count', 1));
         $branchingFactor = max(2, $this->argumentInt($input, 'branching', 5));
 
+        $catalog = new CatalogCatalogEntity('seed', 'Seed Catalog', 'load-testing');
+        $this->em->persist($catalog);
+
         $rootSlug = Uuid::v7()->toRfc4122();
-        $root = new CatalogCategoryEntity('Root', $rootSlug, $rootSlug, 0);
+        $root = new CatalogCategoryEntity($catalog, 'Root', $rootSlug, $rootSlug, 0);
         $this->em->persist($root);
+        $this->em->flush();
         $list = [$root];
         $created = 1;
 
@@ -62,7 +67,7 @@ final class CatalogSeedCommand extends Command
             for ($childIndex = 0; $childIndex < $branchingFactor && $created < $totalCount; ++$childIndex) {
                 $slug = Uuid::v7()->toRfc4122();
                 $path = $parent->getPath().'.'.$slug;
-                $child = new CatalogCategoryEntity('Node '.$created, $slug, $path, $parent->getDepth() + 1);
+                $child = new CatalogCategoryEntity($catalog, 'Node '.$created, $slug, $path, $parent->getDepth() + 1, $parent->getId());
                 $this->em->persist($child);
                 $list[] = $child;
                 ++$created;

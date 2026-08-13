@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\DataFixtures;
 
+use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryBannerEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryHtmlBlockEntity;
@@ -57,10 +58,14 @@ final class CategoryFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
+        $catalog = new CatalogCatalogEntity('products', 'Products', 'product-commerce');
+        $manager->persist($catalog);
+
         $rootSlug = Uuid::v7()->toRfc4122();
-        $root = new CatalogCategoryEntity('Marketplace', $rootSlug, $rootSlug, 0);
+        $root = new CatalogCategoryEntity($catalog, 'Marketplace', $rootSlug, $rootSlug, 0);
         $root->setIconUrl(self::ICONS[0]);
         $manager->persist($root);
+        $manager->flush();
 
         $branches = [$root];
         for ($index = 1; $index <= 24; ++$index) {
@@ -70,7 +75,7 @@ final class CategoryFixtures extends Fixture
             $path = $parent->getPath().'.'.$slug;
             $depth = $parent->getDepth() + 1;
 
-            $category = new CatalogCategoryEntity($nameEntity, $slug, $path, $depth);
+            $category = new CatalogCategoryEntity($catalog, $nameEntity, $slug, $path, $depth, $parent->getId());
             $category->setIconUrl(self::ICONS[$index % count(self::ICONS)]);
             $manager->persist($category);
             $manager->flush();
