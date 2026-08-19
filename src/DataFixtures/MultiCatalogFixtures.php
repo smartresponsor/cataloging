@@ -86,67 +86,92 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             throw new \RuntimeException('Doctrine entity manager is required to load catalog fixtures.');
         }
 
-        $connection = $manager->getConnection();
-        $codes = array_keys(self::TREES);
-        $placeholders = implode(', ', array_fill(0, count($codes), '?'));
-
-        $connection->executeStatement(
-            sprintf('DELETE FROM category_projection WHERE id IN (SELECT category.id::text FROM category JOIN catalog ON catalog.id = category.catalog_id WHERE catalog.object_code IN (%s))', $placeholders),
-            $codes,
-        );
-        $connection->executeStatement(
-            sprintf('DELETE FROM category WHERE catalog_id IN (SELECT id FROM catalog WHERE object_code IN (%s))', $placeholders),
-            $codes,
-        );
-        $connection->executeStatement(
-            sprintf('DELETE FROM catalog WHERE object_code IN (%s)', $placeholders),
-            $codes,
-        );
-
         foreach (self::TREES as $code => [$name, $purpose, $branches]) {
-            $catalog = new CatalogCatalogEntity($code, $name, $purpose);
-            $manager->persist($catalog);
-            $manager->flush();
+            $catalog = $this->adoptCatalog($manager, $code, $name, $purpose);
+            $seenCategoryIds = [];
 
-            $root = $this->category($catalog, $name, $code, $code, 0, null, true);
-            $manager->persist($root);
-            $manager->flush();
+            $root = $this->adoptCategory($manager, $catalog, $name, $code, $code, 0, null, true);
+            $seenCategoryIds[$root->getId()] = true;
             $this->projection($manager, $root);
 
             foreach ($branches as $branchName => $leaves) {
                 $published = 'services' !== $code || in_array($branchName, self::PUBLISHED_SERVICE_BRANCHES, true);
                 $branchSlug = $this->slug($branchName);
-                $branch = $this->category($catalog, $branchName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
-                $manager->persist($branch);
-                $manager->flush();
+                $branch = $this->adoptCategory($manager, $catalog, $branchName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
+                $seenCategoryIds[$branch->getId()] = true;
                 $this->projection($manager, $branch);
 
                 foreach ($leaves as $leafName) {
                     $leafSlug = $this->slug($leafName);
-                    $leaf = $this->category($catalog, $leafName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId(), $published);
-                    $manager->persist($leaf);
-                    $manager->flush();
+                    $leaf = $this->adoptCategory($manager, $catalog, $leafName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId(), $published);
+                    $seenCategoryIds[$leaf->getId()] = true;
                     $this->projection($manager, $leaf);
                 }
+            }
+
+            if ('services' === $code) {
+                $this->unpublishUnknownServiceCategories($manager, $catalog, $seenCategoryIds);
             }
         }
 
         $manager->flush();
     }
 
-    private function category(CatalogCatalogEntity $catalog, string $name, string $slug, string $path, int $depth, ?string $parentId = null, bool $published = true): CatalogCategoryEntity
+    private function adoptCatalog(EntityManagerInterface $manager, string $code, string $name, string $purpose): CatalogCatalogEntity
     {
-        $category = new CatalogCategoryEntity($catalog, $name, $slug, $path, $depth, $parentId, 'en', 'default');
+        $id = $manager->getConnection()->fetchOne(
+            'SELECT id FROM catalog WHERE object_code = :code AND tenant = :tenant ORDER BY id LIMIT 1',
+            ['code' => $code, 'tenant' => 'default'],
+        );
+        $catalog = false === $id ? null : $manager->find(CatalogCatalogEntity::class, (int) $id);
+        if (!$catalog instanceof CatalogCatalogEntity) {
+            $catalog = new CatalogCatalogEntity($code, $name, $purpose);
+            $manager->persist($catalog);
+            $manager->flush();
+        } else {
+            $catalog->setName($name);
+            $catalog->setPurpose($purpose);
+        }
+
+        return $catalog;
+    }
+
+    private function adoptCategory(EntityManagerInterface $manager, CatalogCatalogEntity $catalog, string $name, string $slug, string $path, int $depth, ?string $parentId = null, bool $published = true): CatalogCategoryEntity
+    {
+        $category = $manager->getRepository(CatalogCategoryEntity::class)->findOneBy([
+            'catalog' => $catalog,
+            'parentId' => null === $parentId ? null : (int) $parentId,
+            'slug' => $slug,
+        ]);
+        if (!$category instanceof CatalogCategoryEntity) {
+            $category = new CatalogCategoryEntity($catalog, $name, $slug, $path, $depth, $parentId, 'en', 'default');
+            $manager->persist($category);
+            $manager->flush();
+        } else {
+            $category->setName($name);
+            $category->setSlug($slug);
+            $category->setParentId($parentId);
+            $category->setPath($path);
+            $category->setDepth($depth);
+            $category->setLocale('en');
+            $category->setTenant('default');
+        }
+
         $category->setWorkflowState($published ? 'published' : 'draft');
         $category->setPublished($published);
-        $category->setPublishedAt($published ? new \DateTimeImmutable() : null);
+        if ($published && null === $category->getPublishedAt()) {
+            $category->setPublishedAt(new \DateTimeImmutable());
+        }
 
         return $category;
     }
 
-    private function projection(ObjectManager $manager, CatalogCategoryEntity $category): void
+    private function projection(EntityManagerInterface $manager, CatalogCategoryEntity $category): void
     {
-        $projection = new CatalogCategoryProjectionEntity((string) $category->getId());
+        $projection = $manager->getRepository(CatalogCategoryProjectionEntity::class)->find((string) $category->getId());
+        if (!$projection instanceof CatalogCategoryProjectionEntity) {
+            $projection = new CatalogCategoryProjectionEntity((string) $category->getId());
+        }
         $projection->setSlug($category->getSlug());
         $projection->setName($category->getName());
         $projection->setParentId($category->getParentId());
@@ -158,6 +183,23 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         $projection->setPublishedAt($category->getPublishedAt());
         $projection->setUpdatedAt(new \DateTimeImmutable());
         $manager->persist($projection);
+    }
+
+    /** @param array<int, true> $seenCategoryIds */
+    private function unpublishUnknownServiceCategories(EntityManagerInterface $manager, CatalogCatalogEntity $catalog, array $seenCategoryIds): void
+    {
+        $categories = $manager->getRepository(CatalogCategoryEntity::class)->findBy(['catalog' => $catalog]);
+        foreach ($categories as $category) {
+            if (!$category instanceof CatalogCategoryEntity || isset($seenCategoryIds[$category->getId()])) {
+                continue;
+            }
+
+            $category->setWorkflowState('draft');
+            $category->setPublished(false);
+            $category->setPublishedAt(null);
+            $manager->persist($category);
+            $this->projection($manager, $category);
+        }
     }
 
     private function slug(string $value): string
