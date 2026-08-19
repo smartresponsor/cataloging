@@ -14,6 +14,21 @@ use Doctrine\Persistence\ObjectManager;
 
 final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterface
 {
+    private const PUBLISHED_SERVICE_BRANCHES = [
+        'Appliance Installation',
+        'Ceiling Fan Installation',
+        'Furniture Assembly',
+        'Home Cleaning',
+        'Home Organization',
+        'Lighting Installation',
+        'Mirror Hanging',
+        'Picture Hanging',
+        'Security Device Installation',
+        'Shelf Mounting',
+        'TV Mounting',
+        'Window Treatment Installation',
+    ];
+
     private const TREES = [
         'services' => ['Services', 'service-discovery', [
             'Home Cleaning' => ['Standard Home Cleaning', 'Apartment Cleaning', 'Deep Cleaning', 'Move-In Cleaning', 'Move-Out Cleaning', 'Office Cleaning', 'Carpet Cleaning', 'Interior Window Cleaning'],
@@ -26,7 +41,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             'Lighting Installation' => ['Light Fixture Installation', 'Chandelier Installation', 'Pendant Light Installation', 'Light Fixture Replacement'],
             'Ceiling Fan Installation' => ['New Ceiling Fan Installation', 'Ceiling Fan Replacement', 'Ceiling Fan Troubleshooting'],
             'Smart Home Installation' => ['Smart Thermostat Installation', 'Smart Home Setup', 'Smart Lighting Setup', 'Wi-Fi Device Setup'],
-            'Security Device Installation' => ['Security Camera Installation', 'Video Doorbell Installation', 'Smart Lock Installation', 'Home Security System Setup'],
+            'Security Device Installation' => ['Security Camera Installation', 'Video Doorbell Installation', 'Door Lock Replacement', 'Smart Lock Installation', 'Home Security System Setup'],
             'Home Theater Setup' => ['TV Setup', 'Soundbar Installation', 'Speaker Installation', 'Streaming Device Setup', 'Gaming Console Setup', 'Cable Management'],
             'Computer Support' => ['Computer Setup', 'Computer Repair', 'Printer Setup', 'Data Transfer', 'Technical Support'],
             'Wi-Fi Setup' => ['Router Installation', 'Wi-Fi Setup', 'Network Troubleshooting', 'Mesh Wi-Fi Installation'],
@@ -93,21 +108,22 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             $manager->persist($catalog);
             $manager->flush();
 
-            $root = $this->category($catalog, $name, $code, $code, 0);
+            $root = $this->category($catalog, $name, $code, $code, 0, null, true);
             $manager->persist($root);
             $manager->flush();
             $this->projection($manager, $root);
 
             foreach ($branches as $branchName => $leaves) {
+                $published = 'services' !== $code || in_array($branchName, self::PUBLISHED_SERVICE_BRANCHES, true);
                 $branchSlug = $this->slug($branchName);
-                $branch = $this->category($catalog, $branchName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId());
+                $branch = $this->category($catalog, $branchName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
                 $manager->persist($branch);
                 $manager->flush();
                 $this->projection($manager, $branch);
 
                 foreach ($leaves as $leafName) {
                     $leafSlug = $this->slug($leafName);
-                    $leaf = $this->category($catalog, $leafName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId());
+                    $leaf = $this->category($catalog, $leafName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId(), $published);
                     $manager->persist($leaf);
                     $manager->flush();
                     $this->projection($manager, $leaf);
@@ -118,12 +134,12 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         $manager->flush();
     }
 
-    private function category(CatalogCatalogEntity $catalog, string $name, string $slug, string $path, int $depth, ?string $parentId = null): CatalogCategoryEntity
+    private function category(CatalogCatalogEntity $catalog, string $name, string $slug, string $path, int $depth, ?string $parentId = null, bool $published = true): CatalogCategoryEntity
     {
         $category = new CatalogCategoryEntity($catalog, $name, $slug, $path, $depth, $parentId, 'en', 'default');
-        $category->setWorkflowState('published');
-        $category->setPublished(true);
-        $category->setPublishedAt(new \DateTimeImmutable());
+        $category->setWorkflowState($published ? 'published' : 'draft');
+        $category->setPublished($published);
+        $category->setPublishedAt($published ? new \DateTimeImmutable() : null);
 
         return $category;
     }
@@ -137,8 +153,8 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         $projection->setPath($category->getPath());
         $projection->setLocale($category->getLocale());
         $projection->setTenant($category->getTenant());
-        $projection->setWorkflowState('published');
-        $projection->setPublished(true);
+        $projection->setWorkflowState($category->getWorkflowState());
+        $projection->setPublished($category->isPublished());
         $projection->setPublishedAt($category->getPublishedAt());
         $projection->setUpdatedAt(new \DateTimeImmutable());
         $manager->persist($projection);
