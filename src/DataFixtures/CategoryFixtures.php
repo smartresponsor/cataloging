@@ -12,7 +12,6 @@ use App\Cataloging\Entity\Catalog\CatalogCategoryHtmlBlockEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategorySlugHistoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * Provides the category fixtures implementation.
@@ -61,26 +60,21 @@ final class CategoryFixtures extends Fixture
         $catalog = new CatalogCatalogEntity('products', 'Products', 'product-commerce');
         $manager->persist($catalog);
 
-        $rootSlug = Uuid::v7()->toRfc4122();
+        $rootSlug = 'marketplace';
         $root = new CatalogCategoryEntity($catalog, 'Marketplace', $rootSlug, $rootSlug, 0);
         $root->setIconUrl(self::ICONS[0]);
         $manager->persist($root);
         $manager->flush();
 
-        $branches = [$root];
         for ($index = 1; $index <= 24; ++$index) {
-            $parent = $branches[array_rand($branches)];
-            $slug = Uuid::v7()->toRfc4122();
             $nameEntity = self::CATEGORY_NAMES[$index - 1] ?? sprintf('Catalog section %d', $index);
-            $path = $parent->getPath().'.'.$slug;
-            $depth = $parent->getDepth() + 1;
+            $slug = $this->slug($nameEntity);
+            $path = $root->getPath().'.'.$slug;
 
-            $category = new CatalogCategoryEntity($catalog, $nameEntity, $slug, $path, $depth, $parent->getId());
+            $category = new CatalogCategoryEntity($catalog, $nameEntity, $slug, $path, 1, $root->getId());
             $category->setIconUrl(self::ICONS[$index % count(self::ICONS)]);
             $manager->persist($category);
             $manager->flush();
-            $branches[] = $category;
-
             if (0 === $index % 3) {
                 $manager->persist(new CatalogCategoryBannerEntity(
                     (string) $category->getId(),
@@ -106,5 +100,10 @@ final class CategoryFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    private function slug(string $value): string
+    {
+        return substr(strtolower(trim((string) preg_replace('/[^a-z0-9]+/i', '-', $value), '-')), 0, 36);
     }
 }
