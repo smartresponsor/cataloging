@@ -27,7 +27,6 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         'Shelf Mounting',
         'TV Mounting',
         'Window Treatment Installation',
-        'Dispute',
     ];
 
     private const SERVICE_BRANCH_DISPLAY_NAMES = [
@@ -59,28 +58,6 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
     ];
 
     private const CATEGORY_METADATA = [
-        'products.return' => [
-            'schema' => 'catalog-category-types@1',
-            'types' => [
-                ['code' => 'damaged', 'label' => 'Damaged'],
-                ['code' => 'wrong_item', 'label' => 'Wrong Item'],
-                ['code' => 'not_as_described', 'label' => 'Not as Described'],
-                ['code' => 'missing_parts', 'label' => 'Missing Parts'],
-                ['code' => 'defective', 'label' => 'Defective'],
-                ['code' => 'other', 'label' => 'Other'],
-            ],
-        ],
-        'services.dispute' => [
-            'schema' => 'catalog-category-types@1',
-            'types' => [
-                ['code' => 'quality', 'label' => 'Quality'],
-                ['code' => 'no_show', 'label' => 'No-show'],
-                ['code' => 'billing', 'label' => 'Billing'],
-                ['code' => 'property_damage', 'label' => 'Property Damage'],
-                ['code' => 'incomplete_work', 'label' => 'Incomplete Work'],
-                ['code' => 'other', 'label' => 'Other'],
-            ],
-        ],
         'leads.dispute' => [
             'schema' => 'catalog-category-types@1',
             'types' => [
@@ -96,7 +73,6 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
 
     private const TREES = [
         'services' => ['Services', 'service-discovery', [
-            'Dispute' => [],
             'Home Cleaning' => ['Standard Home Cleaning', 'Apartment Cleaning', 'Deep Cleaning', 'Move-In Cleaning', 'Move-Out Cleaning', 'Office Cleaning', 'Carpet Cleaning', 'Interior Window Cleaning'],
             'Furniture Assembly' => ['Standard Furniture Assembly', 'IKEA Furniture Assembly', 'Fitness Equipment Assembly', 'Office Furniture Assembly', 'Shelving Assembly', 'Bed Assembly', 'Furniture Disassembly'],
             'TV Mounting' => ['Standard TV Mounting', 'Over-Fireplace TV Mounting', 'Large TV Mounting', 'Corner TV Mounting', 'Soundbar Mounting', 'Cable Concealment'],
@@ -122,7 +98,6 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             'Dispute' => [],
         ]],
         'products' => ['Products', 'product-commerce', [
-            'Return' => [],
             'Electronics' => ['TVs and Displays', 'Computers', 'Tablets', 'Mobile Phones', 'Audio', 'Cameras', 'Gaming', 'Networking', 'Electronic Accessories'],
             'Home and Kitchen' => ['Furniture', 'Home Decor', 'Kitchen', 'Bedding', 'Bathroom', 'Storage and Organization', 'Cleaning Supplies', 'Household Supplies'],
             'Appliances' => ['Major Appliances', 'Small Appliances', 'Kitchen Appliances', 'Laundry Appliances', 'Heating and Cooling', 'Appliance Parts'],
@@ -187,6 +162,9 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
 
             if ('services' === $code || 'leads' === $code) {
                 $this->unpublishUnknownCategories($manager, $catalog, $seenCategoryIds);
+            }
+            if ('products' === $code) {
+                $this->unpublishCategoryPath($manager, $catalog, 'products.return');
             }
         }
 
@@ -259,6 +237,23 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         $projection->setPublishedAt($category->getPublishedAt());
         $projection->setUpdatedAt(new \DateTimeImmutable());
         $manager->persist($projection);
+    }
+
+    private function unpublishCategoryPath(EntityManagerInterface $manager, CatalogCatalogEntity $catalog, string $path): void
+    {
+        $category = $manager->getRepository(CatalogCategoryEntity::class)->findOneBy([
+            'catalog' => $catalog,
+            'path' => $path,
+        ]);
+        if (!$category instanceof CatalogCategoryEntity) {
+            return;
+        }
+
+        $category->setWorkflowState('draft');
+        $category->setPublished(false);
+        $category->setPublishedAt(null);
+        $manager->persist($category);
+        $this->projection($manager, $category);
     }
 
     /** @param array<int, true> $seenCategoryIds */
