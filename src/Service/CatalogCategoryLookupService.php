@@ -15,12 +15,12 @@ final readonly class CatalogCategoryLookupService implements CatalogCategoryLook
     {
     }
 
-    public function publishedByCatalogAndSlug(string $catalogCode, string $slug, string $tenant = 'default'): ?CatalogCategoryEntity
+    public function publishedByCatalogAndPath(string $catalogCode, string $path, string $tenant = 'default'): ?CatalogCategoryEntity
     {
         $catalogCode = trim($catalogCode);
-        $slug = trim($slug);
+        $path = trim($path);
         $tenant = '' === trim($tenant) ? 'default' : trim($tenant);
-        if ('' === $catalogCode || '' === $slug) {
+        if ('' === $catalogCode || '' === $path) {
             return null;
         }
 
@@ -35,8 +35,9 @@ final readonly class CatalogCategoryLookupService implements CatalogCategoryLook
 
         $category = $this->entityManager->getRepository(CatalogCategoryEntity::class)->findOneBy([
             'catalog' => $catalog,
-            'slug' => $slug,
+            'path' => $path,
             'tenant' => $tenant,
+            'workflowState' => 'published',
             'published' => true,
         ]);
 
