@@ -57,6 +57,20 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         'standard-tv-mounting' => 'TV Mounting',
     ];
 
+    private const CATEGORY_METADATA = [
+        'leads.dispute' => [
+            'schema' => 'catalog-category-types@1',
+            'types' => [
+                ['code' => 'invalid', 'label' => 'Invalid'],
+                ['code' => 'duplicate', 'label' => 'Duplicate'],
+                ['code' => 'wrong_category', 'label' => 'Wrong Category'],
+                ['code' => 'outside_service_area', 'label' => 'Outside Service Area'],
+                ['code' => 'fraud_or_spam', 'label' => 'Fraud or Spam'],
+                ['code' => 'billing_dispute', 'label' => 'Billing Dispute'],
+            ],
+        ],
+    ];
+
     private const TREES = [
         'services' => ['Services', 'service-discovery', [
             'Dispute' => [],
@@ -82,7 +96,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             'Minor Home Repairs' => ['General Handyman', 'Door Adjustment', 'Minor Wall Repair', 'Cabinet Hardware Installation', 'Grab Bar Installation', 'Childproofing'],
         ]],
         'leads' => ['Leads', 'lead-discovery', [
-            'Dispute' => ['Invalid', 'Duplicate', 'Wrong Category', 'Outside Service Area', 'Fraud or Spam', 'Billing Dispute'],
+            'Dispute' => [],
         ]],
         'products' => ['Products', 'product-commerce', [
             'Return' => [],
@@ -132,6 +146,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
                 $branchSlug = $this->slug($branchName);
                 $branchDisplayName = 'services' === $code ? (self::SERVICE_BRANCH_DISPLAY_NAMES[$branchSlug] ?? $branchName) : $branchName;
                 $branch = $this->adoptCategory($manager, $catalog, $branchDisplayName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
+                $branch->setMetadata(self::CATEGORY_METADATA[$branch->getPath()] ?? []);
                 $seenCategoryIds[$branch->getId()] = true;
                 $this->projection($manager, $branch);
 
@@ -145,8 +160,8 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
                 }
             }
 
-            if ('services' === $code) {
-                $this->unpublishUnknownServiceCategories($manager, $catalog, $seenCategoryIds);
+            if ('services' === $code || 'leads' === $code) {
+                $this->unpublishUnknownCategories($manager, $catalog, $seenCategoryIds);
             }
         }
 
@@ -222,7 +237,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
     }
 
     /** @param array<int, true> $seenCategoryIds */
-    private function unpublishUnknownServiceCategories(EntityManagerInterface $manager, CatalogCatalogEntity $catalog, array $seenCategoryIds): void
+    private function unpublishUnknownCategories(EntityManagerInterface $manager, CatalogCatalogEntity $catalog, array $seenCategoryIds): void
     {
         $categories = $manager->getRepository(CatalogCategoryEntity::class)->findBy(['catalog' => $catalog]);
         foreach ($categories as $category) {
