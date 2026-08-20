@@ -27,6 +27,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         'Shelf Mounting',
         'TV Mounting',
         'Window Treatment Installation',
+        'Dispute',
     ];
 
     private const SERVICE_BRANCH_DISPLAY_NAMES = [
@@ -58,6 +59,28 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
     ];
 
     private const CATEGORY_METADATA = [
+        'products.return' => [
+            'schema' => 'catalog-category-types@1',
+            'types' => [
+                ['code' => 'damaged', 'label' => 'Damaged'],
+                ['code' => 'wrong_item', 'label' => 'Wrong Item'],
+                ['code' => 'not_as_described', 'label' => 'Not as Described'],
+                ['code' => 'missing_parts', 'label' => 'Missing Parts'],
+                ['code' => 'defective', 'label' => 'Defective'],
+                ['code' => 'other', 'label' => 'Other'],
+            ],
+        ],
+        'services.dispute' => [
+            'schema' => 'catalog-category-types@1',
+            'types' => [
+                ['code' => 'quality', 'label' => 'Quality'],
+                ['code' => 'no_show', 'label' => 'No-show'],
+                ['code' => 'billing', 'label' => 'Billing'],
+                ['code' => 'property_damage', 'label' => 'Property Damage'],
+                ['code' => 'incomplete_work', 'label' => 'Incomplete Work'],
+                ['code' => 'other', 'label' => 'Other'],
+            ],
+        ],
         'leads.dispute' => [
             'schema' => 'catalog-category-types@1',
             'types' => [
