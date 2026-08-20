@@ -29,12 +29,13 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         'Window Treatment Installation',
     ];
 
+    private const SERVICE_BRANCH_DISPLAY_NAMES = [
+        'home-cleaning' => 'House Cleaning',
+    ];
+
     /** @var array<string, true> */
     private const PUBLISHED_SERVICE_LEAF_SLUGS = [
-        'standard-home-cleaning' => true,
         'deep-cleaning' => true,
-        'standard-furniture-assembly' => true,
-        'standard-tv-mounting' => true,
         'gallery-wall-installation' => true,
         'heavy-mirror-hanging' => true,
         'floating-shelf-installation' => true,
@@ -129,7 +130,8 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             foreach ($branches as $branchName => $leaves) {
                 $published = 'services' !== $code || in_array($branchName, self::PUBLISHED_SERVICE_BRANCHES, true);
                 $branchSlug = $this->slug($branchName);
-                $branch = $this->adoptCategory($manager, $catalog, $branchName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
+                $branchDisplayName = 'services' === $code ? (self::SERVICE_BRANCH_DISPLAY_NAMES[$branchSlug] ?? $branchName) : $branchName;
+                $branch = $this->adoptCategory($manager, $catalog, $branchDisplayName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
                 $seenCategoryIds[$branch->getId()] = true;
                 $this->projection($manager, $branch);
 
