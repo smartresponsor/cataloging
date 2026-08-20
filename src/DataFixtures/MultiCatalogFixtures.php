@@ -15,6 +15,7 @@ use Doctrine\Persistence\ObjectManager;
 final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterface
 {
     private const PUBLISHED_SERVICE_BRANCHES = [
+        'Dispute',
         'Appliance Installation',
         'Ceiling Fan Installation',
         'Furniture Assembly',
