@@ -51,6 +51,7 @@ services:
 
     App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CatalogCategoryProjectionReadService'
     App\Cataloging\ServiceInterface\CatalogCatalogTreeReadServiceInterface: '@App\Cataloging\Service\CatalogCatalogTreeReadService'
+    App\Cataloging\ServiceInterface\CatalogCategoryLookupServiceInterface: '@App\Cataloging\Service\CatalogCategoryLookupService'
     App\Cataloging\ServiceInterface\CatalogCategoryAdminServiceInterface: '@App\Cataloging\Service\CatalogCategoryAdminService'
     App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface: '@App\Cataloging\Service\CatalogCategoryReadScopeService'
 
