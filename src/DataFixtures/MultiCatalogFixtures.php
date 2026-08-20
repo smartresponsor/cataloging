@@ -15,7 +15,6 @@ use Doctrine\Persistence\ObjectManager;
 final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterface
 {
     private const PUBLISHED_SERVICE_BRANCHES = [
-        'Dispute',
         'Appliance Installation',
         'Ceiling Fan Installation',
         'Furniture Assembly',
@@ -28,6 +27,33 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         'Shelf Mounting',
         'TV Mounting',
         'Window Treatment Installation',
+    ];
+
+    /** @var array<string, true> */
+    private const PUBLISHED_SERVICE_LEAF_SLUGS = [
+        'standard-home-cleaning' => true,
+        'deep-cleaning' => true,
+        'standard-furniture-assembly' => true,
+        'standard-tv-mounting' => true,
+        'gallery-wall-installation' => true,
+        'heavy-mirror-hanging' => true,
+        'floating-shelf-installation' => true,
+        'curtain-rod-installation' => true,
+        'chandelier-installation' => true,
+        'ceiling-fan-replacement' => true,
+        'security-camera-installation' => true,
+        'video-doorbell-installation' => true,
+        'door-lock-replacement' => true,
+        'smart-lock-installation' => true,
+        'dishwasher-installation' => true,
+        'closet-organization' => true,
+        'kitchen-organization' => true,
+    ];
+
+    private const SERVICE_LEAF_DISPLAY_NAMES = [
+        'standard-home-cleaning' => 'House Cleaning',
+        'standard-furniture-assembly' => 'Furniture Assembly',
+        'standard-tv-mounting' => 'TV Mounting',
     ];
 
     private const TREES = [
@@ -109,7 +135,9 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
 
                 foreach ($leaves as $leafName) {
                     $leafSlug = $this->slug($leafName);
-                    $leaf = $this->adoptCategory($manager, $catalog, $leafName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId(), $published);
+                    $leafPublished = 'services' !== $code || ($published && isset(self::PUBLISHED_SERVICE_LEAF_SLUGS[$leafSlug]));
+                    $displayName = 'services' === $code ? (self::SERVICE_LEAF_DISPLAY_NAMES[$leafSlug] ?? $leafName) : $leafName;
+                    $leaf = $this->adoptCategory($manager, $catalog, $displayName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId(), $leafPublished);
                     $seenCategoryIds[$leaf->getId()] = true;
                     $this->projection($manager, $leaf);
                 }
