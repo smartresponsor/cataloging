@@ -54,6 +54,9 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             'Home Organization' => ['Closet Organization', 'Garage Organization', 'Kitchen Organization', 'General Home Organization'],
             'Minor Home Repairs' => ['General Handyman', 'Door Adjustment', 'Minor Wall Repair', 'Cabinet Hardware Installation', 'Grab Bar Installation', 'Childproofing'],
         ]],
+        'leads' => ['Leads', 'lead-discovery', [
+            'Dispute' => [],
+        ]],
         'products' => ['Products', 'product-commerce', [
             'Return' => [],
             'Electronics' => ['TVs and Displays', 'Computers', 'Tablets', 'Mobile Phones', 'Audio', 'Cameras', 'Gaming', 'Networking', 'Electronic Accessories'],
