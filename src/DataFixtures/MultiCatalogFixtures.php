@@ -53,6 +53,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             'Minor Home Repairs' => ['General Handyman', 'Door Adjustment', 'Minor Wall Repair', 'Cabinet Hardware Installation', 'Grab Bar Installation', 'Childproofing'],
         ]],
         'products' => ['Products', 'product-commerce', [
+            'Return' => [],
             'Electronics' => ['TVs and Displays', 'Computers', 'Tablets', 'Mobile Phones', 'Audio', 'Cameras', 'Gaming', 'Networking', 'Electronic Accessories'],
             'Home and Kitchen' => ['Furniture', 'Home Decor', 'Kitchen', 'Bedding', 'Bathroom', 'Storage and Organization', 'Cleaning Supplies', 'Household Supplies'],
             'Appliances' => ['Major Appliances', 'Small Appliances', 'Kitchen Appliances', 'Laundry Appliances', 'Heating and Cooling', 'Appliance Parts'],
