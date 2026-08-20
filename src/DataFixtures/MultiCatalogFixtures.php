@@ -31,6 +31,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
 
     private const TREES = [
         'services' => ['Services', 'service-discovery', [
+            'Dispute' => [],
             'Home Cleaning' => ['Standard Home Cleaning', 'Apartment Cleaning', 'Deep Cleaning', 'Move-In Cleaning', 'Move-Out Cleaning', 'Office Cleaning', 'Carpet Cleaning', 'Interior Window Cleaning'],
             'Furniture Assembly' => ['Standard Furniture Assembly', 'IKEA Furniture Assembly', 'Fitness Equipment Assembly', 'Office Furniture Assembly', 'Shelving Assembly', 'Bed Assembly', 'Furniture Disassembly'],
             'TV Mounting' => ['Standard TV Mounting', 'Over-Fireplace TV Mounting', 'Large TV Mounting', 'Corner TV Mounting', 'Soundbar Mounting', 'Cable Concealment'],
