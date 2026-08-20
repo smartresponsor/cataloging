@@ -71,6 +71,10 @@ class CatalogCategoryEntity implements ObjectEntityInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true, name: 'icon_url')]
     private ?string $iconUrl = null;
 
+    /** @var array<string, mixed> */
+    #[ORM\Column(type: 'json')]
+    private array $metadata = [];
+
     /**
      * Initializes the durable category write-model.
      */
@@ -289,6 +293,19 @@ class CatalogCategoryEntity implements ObjectEntityInterface
     public function getIconUrl(): ?string
     {
         return $this->iconUrl;
+    }
+
+    /** @return array<string, mixed> */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /** @param array<string, mixed> $metadata */
+    public function setMetadata(array $metadata): void
+    {
+        $this->metadata = $metadata;
+        $this->touchModified();
     }
 
     /**
