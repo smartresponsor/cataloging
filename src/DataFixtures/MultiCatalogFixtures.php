@@ -169,7 +169,9 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
                 $branchSlug = $this->slug($branchName);
                 $branchDisplayName = 'services' === $code ? (self::SERVICE_BRANCH_DISPLAY_NAMES[$branchSlug] ?? $branchName) : $branchName;
                 $branch = $this->adoptCategory($manager, $catalog, $branchDisplayName, $branchSlug, $code.'.'.$this->path($branchSlug), 1, (string) $root->getId(), $published);
-                $branch->setMetadata(self::CATEGORY_METADATA[$branch->getPath()] ?? []);
+                if (isset(self::CATEGORY_METADATA[$branch->getPath()])) {
+                    $branch->setMetadata($this->mergeCategoryMetadata($branch->getMetadata(), self::CATEGORY_METADATA[$branch->getPath()]));
+                }
                 $seenCategoryIds[$branch->getId()] = true;
                 $this->projection($manager, $branch);
 
@@ -274,6 +276,46 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             $manager->persist($category);
             $this->projection($manager, $category);
         }
+    }
+
+    /**
+     * @param array<string, mixed> $existing
+     * @param array<string, mixed> $fixture
+     *
+     * @return array<string, mixed>
+     */
+    private function mergeCategoryMetadata(array $existing, array $fixture): array
+    {
+        $merged = array_replace($existing, $fixture);
+        $existingTypes = is_array($existing['types'] ?? null) ? $existing['types'] : [];
+        $fixtureTypes = is_array($fixture['types'] ?? null) ? $fixture['types'] : [];
+        if ([] === $fixtureTypes) {
+            return $merged;
+        }
+
+        $typesByCode = [];
+        $typeOrder = [];
+        foreach ([$existingTypes, $fixtureTypes] as $types) {
+            foreach ($types as $type) {
+                if (!is_array($type)) {
+                    continue;
+                }
+                $code = strtolower(trim((string) ($type['code'] ?? '')));
+                if ('' === $code) {
+                    continue;
+                }
+                if (!isset($typesByCode[$code])) {
+                    $typeOrder[] = $code;
+                    $typesByCode[$code] = $type;
+                    continue;
+                }
+                $typesByCode[$code] = array_replace($typesByCode[$code], $type);
+            }
+        }
+
+        $merged['types'] = array_map(static fn (string $code): array => $typesByCode[$code], $typeOrder);
+
+        return $merged;
     }
 
     private function slug(string $value): string
