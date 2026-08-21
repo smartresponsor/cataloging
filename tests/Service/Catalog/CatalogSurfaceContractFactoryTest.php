@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Service\Catalog;
 
-use App\Cataloging\Service\Catalog\CatalogSurfaceContractFactory;
+use App\Cataloging\Service\Catalog\CatalogContractFactory;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSurfaceContractFactoryTest extends TestCase
 {
     public function testIndexExposesFourBusinessCatalogsFromMarketplaceTree(): void
     {
-        $factory = new CatalogSurfaceContractFactory();
+        $factory = new CatalogContractFactory();
         $surface = $factory->create('catalog', $this->tree());
 
         $sections = $surface->slots['main.body']['sections'] ?? [];
@@ -29,7 +29,7 @@ final class CatalogSurfaceContractFactoryTest extends TestCase
 
     public function testDetailInheritsCatalogKindAndBuildsChildCards(): void
     {
-        $factory = new CatalogSurfaceContractFactory();
+        $factory = new CatalogContractFactory();
         $surface = $factory->createDetail('catalog', $this->tree(), 'appliance-installation');
 
         self::assertNotNull($surface);
@@ -50,7 +50,7 @@ final class CatalogSurfaceContractFactoryTest extends TestCase
 
     public function testCatalogDetailShowsImmediateChildrenWithInheritedKind(): void
     {
-        $factory = new CatalogSurfaceContractFactory();
+        $factory = new CatalogContractFactory();
         $surface = $factory->createDetail('catalog', $this->tree(), 'task-catalog');
 
         self::assertNotNull($surface);
@@ -65,7 +65,7 @@ final class CatalogSurfaceContractFactoryTest extends TestCase
 
     public function testUnknownSlugReturnsNullDetailSurface(): void
     {
-        $factory = new CatalogSurfaceContractFactory();
+        $factory = new CatalogContractFactory();
 
         self::assertNull($factory->createDetail('catalog', $this->tree(), 'missing-category'));
     }

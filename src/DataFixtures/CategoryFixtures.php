@@ -5,12 +5,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\DataFixtures;
 
+use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryBannerEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryHtmlBlockEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategorySlugHistoryEntity;
 use App\Cataloging\Service\CatalogCategoryProjectionSynchronizerService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
 
@@ -86,11 +88,13 @@ final class CategoryFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $root = $this->createCategory($manager, 'Marketplace', self::MARKETPLACE_IMAGE, null);
+        $catalog = $this->catalog($manager);
+        $root = $this->createCategory($manager, $catalog, 'Marketplace', self::MARKETPLACE_IMAGE, null);
 
         foreach (self::CATALOGS as $catalogIndex => $catalogDefinition) {
-            $catalog = $this->createCategory(
+            $catalogCategory = $this->createCategory(
                 $manager,
+                $catalog,
                 $catalogDefinition['name'],
                 $catalogDefinition['image'],
                 $root,
@@ -98,7 +102,7 @@ final class CategoryFixtures extends Fixture
 
             $this->addPresentationContent(
                 $manager,
-                $catalog,
+                $catalogCategory,
                 $catalogDefinition['name'],
                 $catalogDefinition['description'],
                 true,
@@ -107,9 +111,10 @@ final class CategoryFixtures extends Fixture
             foreach ($catalogDefinition['children'] as $childIndex => $childDefinition) {
                 $category = $this->createCategory(
                     $manager,
+                    $catalog,
                     $childDefinition['name'],
                     $childDefinition['image'],
-                    $catalog,
+                    $catalogCategory,
                 );
 
                 $this->addPresentationContent(
@@ -132,8 +137,30 @@ final class CategoryFixtures extends Fixture
         $manager->flush();
     }
 
+    private function catalog(ObjectManager $manager): CatalogCatalogEntity
+    {
+        if ($manager instanceof EntityManagerInterface) {
+            $id = $manager->getConnection()->fetchOne(
+                "SELECT id FROM catalog WHERE object_code = 'marketplace' AND tenant = 'default' LIMIT 1",
+            );
+            if (false !== $id) {
+                $existing = $manager->find(CatalogCatalogEntity::class, (int) $id);
+                if ($existing instanceof CatalogCatalogEntity) {
+                    return $existing;
+                }
+            }
+        }
+
+        $catalog = new CatalogCatalogEntity('marketplace', 'Marketplace', 'marketplace-catalog');
+        $manager->persist($catalog);
+        $manager->flush();
+
+        return $catalog;
+    }
+
     private function createCategory(
         ObjectManager $manager,
+        CatalogCatalogEntity $catalog,
         string $name,
         string $image,
         ?CatalogCategoryEntity $parent,
@@ -143,7 +170,7 @@ final class CategoryFixtures extends Fixture
         $depth = null === $parent ? 0 : $parent->getDepth() + 1;
         $parentId = null === $parent ? null : (string) $parent->getId();
 
-        $category = new CatalogCategoryEntity($name, $slug, $path, $depth, $parentId);
+        $category = new CatalogCategoryEntity($catalog, $name, $slug, $path, $depth, $parentId);
         $category->setIconUrl($image);
         $category->setWorkflowState('published');
         $category->setPublished(true);

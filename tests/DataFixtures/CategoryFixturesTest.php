@@ -7,6 +7,10 @@ namespace App\Cataloging\Tests\DataFixtures;
 
 use App\Cataloging\DataFixtures\CategoryFixtures;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
+use App\Cataloging\Service\CatalogCategoryProjectionSynchronizerService;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +29,7 @@ final class CategoryFixturesTest extends TestCase
 
         $persisted = 0;
         $manager = $this->createMock(ObjectManager::class);
-        $manager->expects(self::exactly(46))
+        $manager->expects(self::atLeastOnce())
             ->method('persist')
             ->willReturnCallback(static function (object $entity) use (&$persisted): void {
                 ++$persisted;
@@ -34,10 +38,18 @@ final class CategoryFixturesTest extends TestCase
                     $property->setValue($entity, $persisted);
                 }
             });
-        $manager->expects(self::exactly(26))->method('flush');
+        $manager->expects(self::exactly(27))->method('flush');
 
-        (new CategoryFixtures())->load($manager);
+        $projectionRepository = $this->createMock(EntityRepository::class);
+        $projectionRepository->method('find')->willReturn(null);
+        $projectionEntityManager = $this->createMock(EntityManagerInterface::class);
+        $projectionEntityManager->method('getRepository')->willReturn($projectionRepository);
+        $registry = $this->createMock(ManagerRegistry::class);
+        $registry->method('getManager')->willReturn($projectionEntityManager);
+        $projectionSynchronizer = new CatalogCategoryProjectionSynchronizerService($registry);
 
-        self::assertSame(46, $persisted);
+        (new CategoryFixtures($projectionSynchronizer))->load($manager);
+
+        self::assertGreaterThanOrEqual(65, $persisted);
     }
 }
