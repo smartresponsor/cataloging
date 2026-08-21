@@ -35,6 +35,18 @@ services:
     tags:
       - { name: 'doctrine.fixture.orm', group: 'cataloging' }
 
+  App\Cataloging\DataFixtures\RetailingCatalogFixtures:
+    tags:
+      - { name: 'doctrine.fixture.orm', group: 'cataloging' }
+
+  App\Cataloging\DataFixtures\ShippingProviderCatalogFixtures:
+    tags:
+      - { name: 'doctrine.fixture.orm', group: 'cataloging' }
+
+  App\Cataloging\DataFixtures\PaymentProviderCatalogFixtures:
+    tags:
+      - { name: 'doctrine.fixture.orm', group: 'cataloging' }
+
   App\Cataloging\Service\CatalogOidcJwtVerifierService:
     arguments:
       $jwkSet: '%catalog.oidc_jwk_set%'
