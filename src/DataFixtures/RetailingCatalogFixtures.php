@@ -131,6 +131,12 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
     private function mergeMetadata(array $existing, array $fixture): array
     {
         $merged = array_replace($existing, $fixture);
+        $existingTypes = is_array($existing['types'] ?? null) ? $existing['types'] : [];
+        $fixtureTypes = is_array($fixture['types'] ?? null) ? $fixture['types'] : [];
+        if ([] !== $existingTypes || [] !== $fixtureTypes) {
+            $merged['types'] = $this->mergeTypesByCode($existingTypes, $fixtureTypes);
+        }
+
         $existingSupport = is_array($existing['support'] ?? null) ? $existing['support'] : [];
         $fixtureSupport = is_array($fixture['support'] ?? null) ? $fixture['support'] : [];
         $support = $existingSupport;
@@ -143,32 +149,53 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
             $combined = array_replace($current, $definition);
             $existingTypes = is_array($current['types'] ?? null) ? $current['types'] : [];
             $fixtureTypes = is_array($definition['types'] ?? null) ? $definition['types'] : [];
-            $typesByCode = [];
-            $order = [];
-            foreach ([$existingTypes, $fixtureTypes] as $types) {
-                foreach ($types as $type) {
-                    if (!is_array($type)) {
-                        continue;
-                    }
-                    $code = strtolower(trim((string) ($type['code'] ?? '')));
-                    if ('' === $code) {
-                        continue;
-                    }
-                    if (!isset($typesByCode[$code])) {
-                        $order[] = $code;
-                        $typesByCode[$code] = $type;
-                        continue;
-                    }
-                    $typesByCode[$code] = array_replace($typesByCode[$code], $type);
-                }
-            }
-            $combined['types'] = array_map(static fn (string $code): array => $typesByCode[$code], $order);
+            $combined['types'] = $this->mergeTypesByCode($existingTypes, $fixtureTypes);
             $support[$kind] = $combined;
         }
 
         $merged['support'] = $support;
 
         return $merged;
+    }
+
+    /**
+     * @param array<int, mixed> $existingTypes
+     * @param array<int, mixed> $fixtureTypes
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function mergeTypesByCode(array $existingTypes, array $fixtureTypes): array
+    {
+        $typesByCode = [];
+        $order = [];
+
+        foreach ([$existingTypes, $fixtureTypes] as $types) {
+            foreach ($types as $type) {
+                if (!is_array($type)) {
+                    continue;
+                }
+                $code = strtolower(trim((string) ($type['code'] ?? '')));
+                if ('' === $code) {
+                    continue;
+                }
+                if (!isset($typesByCode[$code])) {
+                    $order[] = $code;
+                    $typesByCode[$code] = $type;
+                    continue;
+                }
+
+                $current = $typesByCode[$code];
+                $merged = array_replace($current, $type);
+                $existingChildren = is_array($current['types'] ?? null) ? $current['types'] : [];
+                $fixtureChildren = is_array($type['types'] ?? null) ? $type['types'] : [];
+                if ([] !== $existingChildren || [] !== $fixtureChildren) {
+                    $merged['types'] = $this->mergeTypesByCode($existingChildren, $fixtureChildren);
+                }
+                $typesByCode[$code] = $merged;
+            }
+        }
+
+        return array_map(static fn (string $code): array => $typesByCode[$code], $order);
     }
 
     /** @return list<array<string, mixed>> */
