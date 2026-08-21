@@ -7,19 +7,56 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Normalize GitHub App private key
+        id: app-key
+        shell: pwsh
+        env:
+          PEM: ${{ secrets.AUTOMATER_APP_PRIVATE_KEY }}
+          B64: ${{ secrets.AUTOMATER_APP_PRIVATE_KEY_B64 }}
+        run: |
+          $key = $env:PEM
+          if ([string]::IsNullOrWhiteSpace($key) -and -not [string]::IsNullOrWhiteSpace($env:B64)) {
+            $key = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($env:B64))
+          }
+          if ([string]::IsNullOrWhiteSpace($key)) {
+            throw "AUTOMATER_APP_PRIVATE_KEY is empty (and AUTOMATER_APP_PRIVATE_KEY_B64 is empty)."
+          }
+          if ($key.StartsWith('"') -and $key.EndsWith('"')) { $key = $key.Trim('"') }
+          $key = $key -replace "`r",""
+          $key = $key -replace "\\n","`n"
+          if ($key -notmatch "BEGIN (RSA )?PRIVATE KEY") {
+            throw "Private key does not look like PEM."
+          }
+          "private-key<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $key | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Create scoped GitHub App token
+        id: app
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.AUTOMATER_APP_ID }}
+          private-key: ${{ steps.app-key.outputs.private-key }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            cataloging
+            objecting
+            interfacing
       - name: Checkout Cataloging
         uses: actions/checkout@v4
         with:
+          token: ${{ steps.app.outputs.token }}
           path: Cataloging
       - name: Checkout Objecting
         uses: actions/checkout@v4
         with:
           repository: smartresponsor/objecting
+          token: ${{ steps.app.outputs.token }}
           path: Objecting
       - name: Checkout Interfacing
         uses: actions/checkout@v4
         with:
           repository: smartresponsor/interfacing
+          token: ${{ steps.app.outputs.token }}
           path: Interfacing
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
