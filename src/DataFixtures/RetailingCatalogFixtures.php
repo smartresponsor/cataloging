@@ -199,6 +199,7 @@ SQL,
                 'type' => [
                     'code' => (string) $row['slug'],
                     'label' => (string) $row['name_entity'],
+                    'sourceCategoryId' => $id,
                 ],
             ];
         }
