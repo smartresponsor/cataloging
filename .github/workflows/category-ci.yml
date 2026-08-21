@@ -7,6 +7,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Automater credentials
+        id: creds
+        shell: bash
+        env:
+          APP_ID: ${{ vars.AUTOMATER_APP_ID }}
+          PEM: ${{ secrets.AUTOMATER_APP_PRIVATE_KEY }}
+          B64: ${{ secrets.AUTOMATER_APP_PRIVATE_KEY_B64 }}
+        run: |
+          if [ -z "$APP_ID" ] || { [ -z "$PEM" ] && [ -z "$B64" ]; }; then
+            echo "Cataloging CI requires AUTOMATER_APP_ID and an Automater private key for sibling repository checkout." >&2
+            exit 1
+          fi
       - name: Normalize GitHub App private key
         id: app-key
         shell: pwsh
@@ -32,7 +44,7 @@ jobs:
           "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Create scoped GitHub App token
         id: app
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.AUTOMATER_APP_ID }}
           private-key: ${{ steps.app-key.outputs.private-key }}
