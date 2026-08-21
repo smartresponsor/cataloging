@@ -7,15 +7,34 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Cataloging
+        uses: actions/checkout@v4
+        with:
+          path: Cataloging
+      - name: Checkout Objecting
+        uses: actions/checkout@v4
+        with:
+          repository: smartresponsor/objecting
+          path: Objecting
+      - name: Checkout Interfacing
+        uses: actions/checkout@v4
+        with:
+          repository: smartresponsor/interfacing
+          path: Interfacing
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
+          tools: composer:v2
+      - name: Install dependencies
+        working-directory: Cataloging
+        run: composer install --no-interaction --prefer-dist --no-progress
       - name: Run tests
-        run: tools/ci/run-tests.sh
+        working-directory: Cataloging
+        run: sh tools/ci/run-tests.sh
       - name: Run cs
-        run: tools/ci/run-cs.sh
+        working-directory: Cataloging
+        run: sh tools/ci/run-cs.sh
   release:
     if: startsWith(github.ref, 'refs/tags/category-')
     runs-on: ubuntu-latest
