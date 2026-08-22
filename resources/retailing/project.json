@@ -1,0 +1,191 @@
+{
+    "schema": "retailing-category@1",
+    "types": [
+        {
+            "code": "social",
+            "label": "Social",
+            "types": [
+                {
+                    "code": "education",
+                    "label": "Education"
+                },
+                {
+                    "code": "employment-and-skills",
+                    "label": "Employment and Skills"
+                },
+                {
+                    "code": "community-development",
+                    "label": "Community Development"
+                },
+                {
+                    "code": "immigration-and-integration",
+                    "label": "Immigration and Integration"
+                },
+                {
+                    "code": "accessibility-and-inclusion",
+                    "label": "Accessibility and Inclusion"
+                },
+                {
+                    "code": "youth-programs",
+                    "label": "Youth Programs"
+                },
+                {
+                    "code": "senior-engagement",
+                    "label": "Senior Engagement"
+                },
+                {
+                    "code": "cultural-programs",
+                    "label": "Cultural Programs"
+                },
+                {
+                    "code": "civic-participation",
+                    "label": "Civic Participation"
+                },
+                {
+                    "code": "environmental-initiatives",
+                    "label": "Environmental Initiatives"
+                },
+                {
+                    "code": "public-awareness",
+                    "label": "Public Awareness"
+                },
+                {
+                    "code": "technology-access",
+                    "label": "Technology Access"
+                }
+            ]
+        },
+        {
+            "code": "charity",
+            "label": "Charity",
+            "types": [
+                {
+                    "code": "emergency-medical-care",
+                    "label": "Emergency Medical Care"
+                },
+                {
+                    "code": "treatment-assistance",
+                    "label": "Treatment Assistance"
+                },
+                {
+                    "code": "medication-assistance",
+                    "label": "Medication Assistance"
+                },
+                {
+                    "code": "rehabilitation-assistance",
+                    "label": "Rehabilitation Assistance"
+                },
+                {
+                    "code": "medical-equipment-assistance",
+                    "label": "Medical Equipment Assistance"
+                },
+                {
+                    "code": "critical-illness-support",
+                    "label": "Critical Illness Support"
+                },
+                {
+                    "code": "accident-recovery",
+                    "label": "Accident Recovery"
+                },
+                {
+                    "code": "maternal-and-child-health",
+                    "label": "Maternal and Child Health"
+                },
+                {
+                    "code": "emergency-food-assistance",
+                    "label": "Emergency Food Assistance"
+                },
+                {
+                    "code": "emergency-shelter",
+                    "label": "Emergency Shelter"
+                },
+                {
+                    "code": "disaster-relief",
+                    "label": "Disaster Relief"
+                },
+                {
+                    "code": "lifesaving-humanitarian-aid",
+                    "label": "Lifesaving Humanitarian Aid"
+                }
+            ]
+        },
+        {
+            "code": "business",
+            "label": "Business",
+            "types": [
+                {
+                    "code": "new-business",
+                    "label": "New Business"
+                },
+                {
+                    "code": "product-development",
+                    "label": "Product Development"
+                },
+                {
+                    "code": "product-launch",
+                    "label": "Product Launch"
+                },
+                {
+                    "code": "service-development",
+                    "label": "Service Development"
+                },
+                {
+                    "code": "service-launch",
+                    "label": "Service Launch"
+                },
+                {
+                    "code": "marketing-campaign",
+                    "label": "Marketing Campaign"
+                },
+                {
+                    "code": "sales-campaign",
+                    "label": "Sales Campaign"
+                },
+                {
+                    "code": "software-development",
+                    "label": "Software Development"
+                },
+                {
+                    "code": "website-development",
+                    "label": "Website Development"
+                },
+                {
+                    "code": "mobile-app-development",
+                    "label": "Mobile App Development"
+                },
+                {
+                    "code": "hardware-development",
+                    "label": "Hardware Development"
+                },
+                {
+                    "code": "research-and-development",
+                    "label": "Research and Development"
+                },
+                {
+                    "code": "business-automation",
+                    "label": "Business Automation"
+                },
+                {
+                    "code": "internal-operations",
+                    "label": "Internal Operations"
+                },
+                {
+                    "code": "client-delivery",
+                    "label": "Client Delivery"
+                },
+                {
+                    "code": "commercial-installation",
+                    "label": "Commercial Installation"
+                },
+                {
+                    "code": "expansion",
+                    "label": "Expansion"
+                },
+                {
+                    "code": "partnership",
+                    "label": "Partnership"
+                }
+            ]
+        }
+    ]
+}

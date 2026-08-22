@@ -8,11 +8,10 @@ use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 
-final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
+final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInterface
 {
     private const CATEGORIES = [
         'product' => 'Product',
@@ -20,13 +19,6 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
         'project' => 'Project',
         'task' => 'Task',
         'order' => 'Order',
-    ];
-
-    private const SOURCE_CATALOGS = [
-        'product' => 'products',
-        'service' => 'services',
-        'project' => 'projects',
-        'task' => 'services',
     ];
 
     private const METADATA = [
@@ -72,11 +64,6 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
         return ['cataloging'];
     }
 
-    public function getDependencies(): array
-    {
-        return [MultiCatalogFixtures::class];
-    }
-
     public function load(ObjectManager $manager): void
     {
         if (!$manager instanceof EntityManagerInterface) {
@@ -105,12 +92,7 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
             $category->setSlug($code);
             $category->setPath($code);
             $category->setDepth(0);
-            $fixtureMetadata = self::METADATA[$code];
-            $sourceCatalog = self::SOURCE_CATALOGS[$code] ?? null;
-            if (is_string($sourceCatalog)) {
-                $fixtureMetadata['types'] = $this->typesFromCatalog($manager, $sourceCatalog);
-                $fixtureMetadata['sourceCatalog'] = $sourceCatalog;
-            }
+            $fixtureMetadata = array_replace(self::METADATA[$code], $this->taxonomyMetadata($code));
             $category->setMetadata($this->mergeMetadata($category->getMetadata(), $fixtureMetadata));
             $category->setWorkflowState('published');
             $category->setPublished(true);
@@ -198,57 +180,21 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
         return array_map(static fn (string $code): array => $typesByCode[$code], $order);
     }
 
-    /** @return list<array<string, mixed>> */
-    private function typesFromCatalog(EntityManagerInterface $manager, string $catalogCode): array
+    /** @return array<string, mixed> */
+    private function taxonomyMetadata(string $code): array
     {
-        $rows = $manager->getConnection()->fetchAllAssociative(
-            <<<'SQL'
-SELECT category.id, category.parent_id, category.slug, category.name_entity, category.depth, category.path
-FROM category
-JOIN catalog ON catalog.id = category.catalog_id
-WHERE catalog.object_code = :catalogCode
-  AND catalog.tenant = :tenant
-  AND category.published = TRUE
-  AND category.workflow_state = 'published'
-ORDER BY category.depth ASC, category.path ASC
-SQL,
-            ['catalogCode' => $catalogCode, 'tenant' => 'default'],
-        );
-
-        $nodes = [];
-        foreach ($rows as $row) {
-            if ((int) $row['depth'] <= 0) {
-                continue;
-            }
-            $id = (string) $row['id'];
-            $nodes[$id] = [
-                'parentId' => null === $row['parent_id'] ? null : (string) $row['parent_id'],
-                'type' => [
-                    'code' => (string) $row['slug'],
-                    'label' => (string) $row['name_entity'],
-                    'sourceCategoryId' => $id,
-                ],
-            ];
+        $path = dirname(__DIR__, 2).'/resources/retailing/'.$code.'.json';
+        $json = file_get_contents($path);
+        if (false === $json) {
+            throw new \RuntimeException(sprintf('Retailing taxonomy resource is missing: %s.', $path));
         }
 
-        foreach ($nodes as $id => $node) {
-            $parentId = $node['parentId'];
-            if (null === $parentId || !isset($nodes[$parentId])) {
-                continue;
-            }
-            $nodes[$parentId]['type']['types'] ??= [];
-            $nodes[$parentId]['type']['types'][] = &$nodes[$id]['type'];
+        $metadata = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($metadata) || 'retailing-category@1' !== ($metadata['schema'] ?? null) || !is_array($metadata['types'] ?? null)) {
+            throw new \RuntimeException(sprintf('Retailing taxonomy resource is invalid: %s.', $path));
         }
 
-        $types = [];
-        foreach ($nodes as $node) {
-            $parentId = $node['parentId'];
-            if (null === $parentId || !isset($nodes[$parentId])) {
-                $types[] = $node['type'];
-            }
-        }
-
-        return $types;
+        return $metadata;
     }
 
     private function catalog(EntityManagerInterface $manager): CatalogCatalogEntity

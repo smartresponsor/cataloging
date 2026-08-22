@@ -32,10 +32,9 @@ final class RetailingCatalogFixturesTest extends TestCase
                 [
                     'code' => 'security-device-installation',
                     'label' => 'Security Device Installation',
-                    'sourceCategoryId' => '861',
                     'types' => [
-                        ['code' => 'smart-lock-installation', 'label' => 'Smart Lock Installation', 'sourceCategoryId' => '864'],
-                        ['code' => 'video-doorbell-installation', 'label' => 'Video Doorbell Installation', 'sourceCategoryId' => '863'],
+                        ['code' => 'smart-lock-installation', 'label' => 'Smart Lock Installation'],
+                        ['code' => 'video-doorbell-installation', 'label' => 'Video Doorbell Installation'],
                     ],
                 ],
             ],
@@ -51,15 +50,28 @@ final class RetailingCatalogFixturesTest extends TestCase
 
         $security = $merged['types'][0];
         self::assertSame('Security Device Installation', $security['label']);
-        self::assertSame('861', $security['sourceCategoryId']);
         self::assertTrue($security['custom']);
         self::assertCount(3, $security['types']);
         self::assertSame('custom-sensor-installation', $security['types'][0]['code']);
         self::assertSame('smart-lock-installation', $security['types'][1]['code']);
         self::assertSame('Smart Lock Installation', $security['types'][1]['label']);
-        self::assertSame('864', $security['types'][1]['sourceCategoryId']);
         self::assertTrue($security['types'][1]['custom']);
         self::assertSame('video-doorbell-installation', $security['types'][2]['code']);
+    }
+
+    public function testCanonicalTaxonomyResourcesAreStandaloneAndBridgeFree(): void
+    {
+        $method = new \ReflectionMethod(RetailingCatalogFixtures::class, 'taxonomyMetadata');
+        $fixture = new RetailingCatalogFixtures();
+
+        foreach (['product', 'service', 'project', 'task', 'order'] as $code) {
+            /** @var array<string, mixed> $metadata */
+            $metadata = $method->invoke($fixture, $code);
+            self::assertSame('retailing-category@1', $metadata['schema']);
+            self::assertIsArray($metadata['types']);
+            self::assertArrayNotHasKey('sourceCatalog', $metadata);
+            self::assertStringNotContainsString('sourceCategoryId', json_encode($metadata, JSON_THROW_ON_ERROR));
+        }
     }
 
     public function testMergeMetadataPreservesExistingSupportVocabularyTypes(): void
