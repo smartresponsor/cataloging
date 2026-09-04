@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Dto;
 
-use App\Cataloging\Dto\CategoryAdminCategoryData;
+use App\Cataloging\Dto\CategoryAdminCategoryDTO;
 use PHPUnit\Framework\TestCase;
 
-final class CategoryAdminCategoryDataTest extends TestCase
+final class CategoryAdminCategoryDTOTest extends TestCase
 {
     public function testFromArrayNormalizesScalarValues(): void
     {
-        $dto = CategoryAdminCategoryData::fromArray([
+        $dto = CategoryAdminCategoryDTO::fromArray([
             'nameEntity' => '  Summer Collection  ',
             'slug' => '  summer-collection  ',
         ]);
@@ -23,7 +23,7 @@ final class CategoryAdminCategoryDataTest extends TestCase
 
     public function testFromArrayFallsBackToEmptyStringsForInvalidValues(): void
     {
-        $dto = CategoryAdminCategoryData::fromArray([
+        $dto = CategoryAdminCategoryDTO::fromArray([
             'nameEntity' => ['not', 'scalar'],
             'slug' => null,
         ]);

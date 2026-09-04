@@ -6,13 +6,10 @@ declare(strict_types=1);
 namespace App\Cataloging\Dto;
 
 /**
- * Provides the category admin category data implementation.
+ * Carries normalized category administration form data.
  */
-final class CategoryAdminCategoryData
+final class CategoryAdminCategoryDTO
 {
-    /**
-     * Initializes the category admin category data service collaborators.
-     */
     public function __construct(
         public string $nameEntity = '',
         public string $slug = '',
