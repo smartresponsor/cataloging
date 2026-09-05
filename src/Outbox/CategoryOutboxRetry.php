@@ -16,8 +16,7 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
     private array $scheduled = [];
 
     /**
-     * @param array<string, mixed> $event   * @throws \DateMalformedStringException
-     * @param int                  $attempt
+     * @param array<string, mixed> $event
      *
      * @throws \DateMalformedStringException
      */

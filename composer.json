@@ -13,7 +13,7 @@
         "php": "^8.4",
         "ext-json": "*",
         "ext-pdo": "*",
-        "interfacing/interface": "*@dev",
+        "interfacing/interface": "dev-master",
         "api-platform/doctrine-orm": "^4.3",
     "api-platform/graphql": "^4.3",
     "api-platform/symfony": "^4.3",
@@ -38,7 +38,7 @@
     "symfony/yaml": "^8.1",
     "ext-openssl": "*",
     "symfony/serializer": "^8.1",
-    "objecting/object": "*@dev"
+    "objecting/object": "dev-master"
   },
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^4.3",
@@ -50,7 +50,41 @@
   "autoload": {
     "psr-4": {
       "App\\Cataloging\\": "src/"
-    }
+    },
+    "files": [
+      "src/EventInterface/CategoryWorkflowTransitionedInterface.php",
+      "src/EventInterface/SyndicationDeliveryRecordedInterface.php",
+      "src/EventInterface/SyndicationDestinationGovernanceSummaryBuiltInterface.php",
+      "src/EventInterface/SyndicationDestinationHistoryBuiltInterface.php",
+      "src/EventInterface/SyndicationDestinationRegisteredInterface.php",
+      "src/Event/CategoryWorkflowTransitioned.php",
+      "src/Event/SyndicationDeliveryRecorded.php",
+      "src/Event/SyndicationDestinationGovernanceSummaryBuilt.php",
+      "src/Event/SyndicationDestinationHistoryBuilt.php",
+      "src/Event/SyndicationDestinationRegistered.php",
+      "src/Exception/CategoryLinkConflict.php",
+      "src/Exception/TaxonomyConflict.php",
+      "src/ValueObject/CategoryAccessAssignmentRequest.php",
+      "src/ValueObject/CategoryAccessAssignmentSelection.php",
+      "src/ValueObject/CategoryLinkRequest.php"
+    ],
+    "exclude-from-classmap": [
+      "src/Event/CategoryWorkflowTransitioned.php",
+      "src/Event/SyndicationDeliveryRecorded.php",
+      "src/Event/SyndicationDestinationGovernanceSummaryBuilt.php",
+      "src/Event/SyndicationDestinationHistoryBuilt.php",
+      "src/Event/SyndicationDestinationRegistered.php",
+      "src/EventInterface/CategoryWorkflowTransitionedInterface.php",
+      "src/EventInterface/SyndicationDeliveryRecordedInterface.php",
+      "src/EventInterface/SyndicationDestinationGovernanceSummaryBuiltInterface.php",
+      "src/EventInterface/SyndicationDestinationHistoryBuiltInterface.php",
+      "src/EventInterface/SyndicationDestinationRegisteredInterface.php",
+      "src/Exception/CategoryLinkConflict.php",
+      "src/Exception/TaxonomyConflict.php",
+      "src/ValueObject/CategoryAccessAssignmentRequest.php",
+      "src/ValueObject/CategoryAccessAssignmentSelection.php",
+      "src/ValueObject/CategoryLinkRequest.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -126,6 +160,7 @@
     "test:integration": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite integration",
     "test:playwright": "npm run test:playwright",
     "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
+    "test:object-identity": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist tests/Unit/Catalog/CatalogObjectIdentityContractTest.php",
     "test:coverage:gate": [
       "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml",
       "@php tools/php/php84.php tools/qa/check_coverage_threshold.php build/logs/clover.xml 70"
@@ -143,6 +178,13 @@
     {
       "type": "path",
       "url": "../Objecting",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../Interfacing",
       "options": {
         "symlink": true
       }

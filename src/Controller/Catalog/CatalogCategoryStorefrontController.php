@@ -32,6 +32,7 @@ final readonly class CatalogCategoryStorefrontController
     #[Route('/catalog/index', name: 'cataloging_catalog_index_explicit', methods: ['GET'])]
     #[Route('/catalog/', name: 'cataloging_catalog_index', methods: ['GET'])]
     #[Route('/catalog', name: 'cataloging_catalog_index_no_slash', methods: ['GET'])]
+    #[Route('/catalog/index', name: 'cataloging_catalog_index_legacy', methods: ['GET'])]
     public function show(Request $request): mixed
     {
         $categories = [];

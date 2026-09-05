@@ -53,8 +53,10 @@ function restoreGeneratedArtifacts(string $root, array $paths): void
 $php = escapeshellarg(PHP_BINARY);
 $runner = escapeshellarg($root . '/tools/php/php84.php');
 
-$generatedArtifacts = ['config/reference.php'];
+$generatedArtifacts = [];
 
+putenv('APP_ENV=prod');
+putenv('APP_DEBUG=0');
 $checks = [
     'container-boot-smoke' => sprintf('%s %s %s', $php, $runner, escapeshellarg($root . '/tools/smoke/category-container-boot-smoke.php')),
     'runtime-smoke' => sprintf('%s %s %s', $php, $runner, escapeshellarg($root . '/tools/smoke/category-runtime-smoke.php')),
@@ -62,7 +64,7 @@ $checks = [
     'doctrine-mapping-smoke' => sprintf('%s %s %s', $php, $runner, escapeshellarg($root . '/tools/smoke/category-doctrine-mapping-smoke.php')),
     'fixture-sanity-smoke' => sprintf('%s %s %s', $php, $runner, escapeshellarg($root . '/tools/smoke/category-fixture-sanity.php')),
     'fixture-load-smoke' => sprintf('%s %s %s', $php, $runner, escapeshellarg($root . '/tools/smoke/category-fixture-load-smoke.php')),
-    'prod-console-about' => 'cd ' . escapeshellarg($root) . ' && APP_ENV=prod APP_DEBUG=0 php bin/console about --no-ansi',
+    'prod-console-about' => 'cd ' . escapeshellarg($root) . ' && ' . PHP_BINARY . ' -d variables_order=EGPCS bin/console about --no-ansi',
 ];
 
 $items = [];

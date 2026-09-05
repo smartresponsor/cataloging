@@ -33,7 +33,16 @@ services:
     App\Cataloging\Controller\Catalog\CatalogCategorySitemapController:
         tags: [ 'controller.service_arguments' ]
 
-    App\Cataloging\Security\JwtUserProvider:
+    App\Cataloging\Controller\Catalog\CatalogCategoryMerchantController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Cataloging\Controller\Catalog\CatalogLegacyCategoryListController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Cataloging\Controller\Catalog\CatalogLegacyCollectionListController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Cataloging\UserProvider\JwtUserProvider:
         arguments:
             $defaultRoles: [ 'ROLE_USER' ]
             $adminIdentifiers: '%env(csv:CATEGORY_API_ADMIN_IDENTIFIERS)%'
@@ -41,6 +50,10 @@ services:
     App\Cataloging\ServiceInterface\CatalogCategoryMutationServiceInterface: '@App\Cataloging\Service\CatalogCategoryMutationService'
 
     App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CatalogCategoryProjectionReadService'
+    App\Cataloging\ServiceInterface\CatalogCatalogTreeReadServiceInterface: '@App\Cataloging\Service\CatalogCatalogTreeReadService'
+    App\Cataloging\ServiceInterface\CatalogCategoryLookupServiceInterface: '@App\Cataloging\Service\CatalogCategoryLookupService'
+    App\Cataloging\ServiceInterface\CatalogCategoryTypeVocabularyServiceInterface: '@App\Cataloging\Service\CatalogCategoryTypeVocabularyService'
+    App\Cataloging\ServiceInterface\CatalogCategoryVocabularyServiceInterface: '@App\Cataloging\Service\CatalogCategoryVocabularyService'
     App\Cataloging\ServiceInterface\CatalogCategoryAdminServiceInterface: '@App\Cataloging\Service\CatalogCategoryAdminService'
     App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface: '@App\Cataloging\Service\CatalogCategoryReadScopeService'
 

@@ -107,10 +107,12 @@ $readSurfaceReadiness = readJsonOrEmpty($reportDir . '/catalog-read-surface-read
 $graphqlStoreReadiness = readJsonOrEmpty($reportDir . '/catalog-graphql-store-readiness-report.json');
 $boundaryReadiness = readJsonOrEmpty($reportDir . '/catalog-boundary-readiness-report.json');
 
-$generatedArtifacts = ['config/reference.php'];
+$generatedArtifacts = [];
 
 $gitStatus = commandResult('git -C ' . escapeshellarg($root) . ' status --porcelain');
-$consoleAbout = commandResult('cd ' . escapeshellarg($root) . ' && APP_ENV=prod APP_DEBUG=0 php bin/console about --no-ansi');
+putenv('APP_ENV=prod');
+putenv('APP_DEBUG=0');
+$consoleAbout = commandResult('cd ' . escapeshellarg($root) . ' && ' . PHP_BINARY . ' -d variables_order=EGPCS bin/console about --no-ansi');
 restoreGeneratedArtifacts($root, $generatedArtifacts);
 
 $requiredPhpUnitExtensions = ['dom', 'json', 'libxml', 'mbstring', 'tokenizer', 'xml', 'xmlwriter'];

@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service\Config;
 
-use App\Administering\Service\Config\ConfigApplyService;
-use App\Administering\Service\Config\ConfigFileWriterService;
-use App\Administering\ServiceInterface\Config\AdministrationConfigToolServiceInterface;
-use App\Administering\Value\Config\AdministrationConfigToolDescriptor;
+use App\Administering\Service\Config\AdministrationConfigApplyService;
+use App\Administering\Service\Config\AdministrationConfigFileWriterService;
+use App\Administering\ServiceInterface\Config\ConfigToolServiceInterface;
+use App\Administering\Value\Config\ConfigToolDescriptor;
 use App\Cataloging\Form\Config\CatalogingOidcConfigFormType;
 use App\Cataloging\Value\Form\Config\CatalogingOidcConfigData;
 use Symfony\Component\Yaml\Yaml;
 
-final readonly class CatalogingOidcConfigService implements AdministrationConfigToolServiceInterface
+final readonly class CatalogingOidcConfigService implements ConfigToolServiceInterface
 {
     public function __construct(
         private string $projectDir,
-        private ConfigApplyService $applyService,
-        private ConfigFileWriterService $fileWriter,
+        private AdministrationConfigApplyService $applyService,
+        private AdministrationConfigFileWriterService $fileWriter,
     ) {
     }
 
-    public function descriptor(): AdministrationConfigToolDescriptor
+    public function descriptor(): ConfigToolDescriptor
     {
-        return new AdministrationConfigToolDescriptor(
+        return new ConfigToolDescriptor(
             applicationCode: 'Cataloging',
             toolCode: 'cataloging.oidc',
             label: 'Cataloging OIDC',

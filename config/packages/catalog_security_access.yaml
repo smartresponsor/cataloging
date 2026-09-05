@@ -1,4 +1,4 @@
-﻿security:
+security:
     access_decision_manager:
         strategy: unanimous
     role_hierarchy:

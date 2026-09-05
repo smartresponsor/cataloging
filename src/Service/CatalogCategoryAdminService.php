@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\ServiceInterface\CatalogCategoryAdminServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
@@ -92,7 +93,9 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         }
 
         if (!$entity instanceof CatalogCategoryEntity) {
+            $catalog = $this->defaultCatalog();
             $entity = new CatalogCategoryEntity(
+                $catalog,
                 $normalized['nameEntity'],
                 $normalized['slug'],
                 $normalized['slug'],
@@ -206,6 +209,17 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         $entity = $repository->find($normalizedId);
 
         return $entity instanceof CatalogCategoryEntity ? $entity : null;
+    }
+
+    private function defaultCatalog(): CatalogCatalogEntity
+    {
+        $repository = $this->entityManager->getRepository(CatalogCatalogEntity::class);
+        $catalog = $repository->findOneBy([], ['id' => 'ASC']);
+        if (!$catalog instanceof CatalogCatalogEntity) {
+            throw new \RuntimeException('A catalog must exist before a category can be created.');
+        }
+
+        return $catalog;
     }
 
     private function intValue(mixed $value, int $default = 0): int

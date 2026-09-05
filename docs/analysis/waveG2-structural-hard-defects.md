@@ -13,4 +13,4 @@ Applied against the latest current slice as the only base.
 
 ## Notes
 - This wave is structural and does not claim full runtime validation.
-- Remaining competing-code and placeholder zones are intentionally deferred to later waves.
+- Remaining competing-code and synthetic seam zones are intentionally deferred to later waves.

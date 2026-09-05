@@ -1,0 +1,445 @@
+{
+    "schema": "retailing-category@1",
+    "types": [
+        {
+            "code": "electronics",
+            "label": "Electronics",
+            "types": [
+                {
+                    "code": "tvs-and-displays",
+                    "label": "TVs and Displays"
+                },
+                {
+                    "code": "computers",
+                    "label": "Computers"
+                },
+                {
+                    "code": "tablets",
+                    "label": "Tablets"
+                },
+                {
+                    "code": "mobile-phones",
+                    "label": "Mobile Phones"
+                },
+                {
+                    "code": "audio",
+                    "label": "Audio"
+                },
+                {
+                    "code": "cameras",
+                    "label": "Cameras"
+                },
+                {
+                    "code": "gaming",
+                    "label": "Gaming"
+                },
+                {
+                    "code": "networking",
+                    "label": "Networking"
+                },
+                {
+                    "code": "electronic-accessories",
+                    "label": "Electronic Accessories"
+                }
+            ]
+        },
+        {
+            "code": "home-and-kitchen",
+            "label": "Home and Kitchen",
+            "types": [
+                {
+                    "code": "furniture",
+                    "label": "Furniture"
+                },
+                {
+                    "code": "home-decor",
+                    "label": "Home Decor"
+                },
+                {
+                    "code": "kitchen",
+                    "label": "Kitchen"
+                },
+                {
+                    "code": "bedding",
+                    "label": "Bedding"
+                },
+                {
+                    "code": "bathroom",
+                    "label": "Bathroom"
+                },
+                {
+                    "code": "storage-and-organization",
+                    "label": "Storage and Organization"
+                },
+                {
+                    "code": "cleaning-supplies",
+                    "label": "Cleaning Supplies"
+                },
+                {
+                    "code": "household-supplies",
+                    "label": "Household Supplies"
+                }
+            ]
+        },
+        {
+            "code": "appliances",
+            "label": "Appliances",
+            "types": [
+                {
+                    "code": "major-appliances",
+                    "label": "Major Appliances"
+                },
+                {
+                    "code": "small-appliances",
+                    "label": "Small Appliances"
+                },
+                {
+                    "code": "kitchen-appliances",
+                    "label": "Kitchen Appliances"
+                },
+                {
+                    "code": "laundry-appliances",
+                    "label": "Laundry Appliances"
+                },
+                {
+                    "code": "heating-and-cooling",
+                    "label": "Heating and Cooling"
+                },
+                {
+                    "code": "appliance-parts",
+                    "label": "Appliance Parts"
+                }
+            ]
+        },
+        {
+            "code": "tools-and-hardware",
+            "label": "Tools and Hardware",
+            "types": [
+                {
+                    "code": "hand-tools",
+                    "label": "Hand Tools"
+                },
+                {
+                    "code": "power-tools",
+                    "label": "Power Tools"
+                },
+                {
+                    "code": "tool-accessories",
+                    "label": "Tool Accessories"
+                },
+                {
+                    "code": "fasteners",
+                    "label": "Fasteners"
+                },
+                {
+                    "code": "mounting-hardware",
+                    "label": "Mounting Hardware"
+                },
+                {
+                    "code": "electrical-supplies",
+                    "label": "Electrical Supplies"
+                },
+                {
+                    "code": "plumbing-supplies",
+                    "label": "Plumbing Supplies"
+                },
+                {
+                    "code": "safety-equipment",
+                    "label": "Safety Equipment"
+                }
+            ]
+        },
+        {
+            "code": "smart-home-and-security",
+            "label": "Smart Home and Security",
+            "types": [
+                {
+                    "code": "security-cameras",
+                    "label": "Security Cameras"
+                },
+                {
+                    "code": "video-doorbells",
+                    "label": "Video Doorbells"
+                },
+                {
+                    "code": "smart-locks",
+                    "label": "Smart Locks"
+                },
+                {
+                    "code": "smart-lighting",
+                    "label": "Smart Lighting"
+                },
+                {
+                    "code": "smart-thermostats",
+                    "label": "Smart Thermostats"
+                },
+                {
+                    "code": "sensors",
+                    "label": "Sensors"
+                },
+                {
+                    "code": "home-automation",
+                    "label": "Home Automation"
+                }
+            ]
+        },
+        {
+            "code": "lighting",
+            "label": "Lighting",
+            "types": [
+                {
+                    "code": "ceiling-lights",
+                    "label": "Ceiling Lights"
+                },
+                {
+                    "code": "chandeliers",
+                    "label": "Chandeliers"
+                },
+                {
+                    "code": "ceiling-fans",
+                    "label": "Ceiling Fans"
+                },
+                {
+                    "code": "wall-lights",
+                    "label": "Wall Lights"
+                },
+                {
+                    "code": "lamps",
+                    "label": "Lamps"
+                },
+                {
+                    "code": "light-bulbs",
+                    "label": "Light Bulbs"
+                },
+                {
+                    "code": "lighting-accessories",
+                    "label": "Lighting Accessories"
+                }
+            ]
+        },
+        {
+            "code": "office",
+            "label": "Office",
+            "types": [
+                {
+                    "code": "office-furniture",
+                    "label": "Office Furniture"
+                },
+                {
+                    "code": "office-electronics",
+                    "label": "Office Electronics"
+                },
+                {
+                    "code": "printers-and-scanners",
+                    "label": "Printers and Scanners"
+                },
+                {
+                    "code": "office-supplies",
+                    "label": "Office Supplies"
+                },
+                {
+                    "code": "shipping-supplies",
+                    "label": "Shipping Supplies"
+                },
+                {
+                    "code": "presentation-equipment",
+                    "label": "Presentation Equipment"
+                }
+            ]
+        },
+        {
+            "code": "clothing-and-accessories",
+            "label": "Clothing and Accessories",
+            "types": [
+                {
+                    "code": "men",
+                    "label": "Men"
+                },
+                {
+                    "code": "women",
+                    "label": "Women"
+                },
+                {
+                    "code": "children",
+                    "label": "Children"
+                },
+                {
+                    "code": "shoes",
+                    "label": "Shoes"
+                },
+                {
+                    "code": "bags",
+                    "label": "Bags"
+                },
+                {
+                    "code": "jewelry",
+                    "label": "Jewelry"
+                },
+                {
+                    "code": "fashion-accessories",
+                    "label": "Fashion Accessories"
+                }
+            ]
+        },
+        {
+            "code": "health-and-personal-care",
+            "label": "Health and Personal Care",
+            "types": [
+                {
+                    "code": "personal-care",
+                    "label": "Personal Care"
+                },
+                {
+                    "code": "mobility-and-accessibility",
+                    "label": "Mobility and Accessibility"
+                },
+                {
+                    "code": "medical-supplies",
+                    "label": "Medical Supplies"
+                },
+                {
+                    "code": "fitness",
+                    "label": "Fitness"
+                },
+                {
+                    "code": "wellness",
+                    "label": "Wellness"
+                }
+            ]
+        },
+        {
+            "code": "sports-and-outdoors",
+            "label": "Sports and Outdoors",
+            "types": [
+                {
+                    "code": "exercise-and-fitness",
+                    "label": "Exercise and Fitness"
+                },
+                {
+                    "code": "team-sports",
+                    "label": "Team Sports"
+                },
+                {
+                    "code": "outdoor-recreation",
+                    "label": "Outdoor Recreation"
+                },
+                {
+                    "code": "cycling",
+                    "label": "Cycling"
+                },
+                {
+                    "code": "sports-accessories",
+                    "label": "Sports Accessories"
+                }
+            ]
+        },
+        {
+            "code": "automotive",
+            "label": "Automotive",
+            "types": [
+                {
+                    "code": "automotive-parts",
+                    "label": "Automotive Parts"
+                },
+                {
+                    "code": "automotive-accessories",
+                    "label": "Automotive Accessories"
+                },
+                {
+                    "code": "automotive-tools-and-equipment",
+                    "label": "Automotive Tools and Equipment"
+                },
+                {
+                    "code": "car-electronics",
+                    "label": "Car Electronics"
+                }
+            ]
+        },
+        {
+            "code": "baby-and-kids",
+            "label": "Baby and Kids",
+            "types": [
+                {
+                    "code": "baby-products",
+                    "label": "Baby Products"
+                },
+                {
+                    "code": "toys",
+                    "label": "Toys"
+                },
+                {
+                    "code": "kids-furniture",
+                    "label": "Kids Furniture"
+                },
+                {
+                    "code": "school-supplies",
+                    "label": "School Supplies"
+                },
+                {
+                    "code": "child-safety",
+                    "label": "Child Safety"
+                }
+            ]
+        },
+        {
+            "code": "pet-supplies",
+            "label": "Pet Supplies",
+            "types": [
+                {
+                    "code": "dog-supplies",
+                    "label": "Dog Supplies"
+                },
+                {
+                    "code": "cat-supplies",
+                    "label": "Cat Supplies"
+                },
+                {
+                    "code": "pet-furniture",
+                    "label": "Pet Furniture"
+                },
+                {
+                    "code": "pet-care",
+                    "label": "Pet Care"
+                },
+                {
+                    "code": "other-pet-supplies",
+                    "label": "Other Pet Supplies"
+                }
+            ]
+        },
+        {
+            "code": "business-and-industrial",
+            "label": "Business and Industrial",
+            "types": [
+                {
+                    "code": "commercial-equipment",
+                    "label": "Commercial Equipment"
+                },
+                {
+                    "code": "hospitality-equipment",
+                    "label": "Hospitality Equipment"
+                },
+                {
+                    "code": "retail-equipment",
+                    "label": "Retail Equipment"
+                },
+                {
+                    "code": "warehouse-supplies",
+                    "label": "Warehouse Supplies"
+                },
+                {
+                    "code": "packaging",
+                    "label": "Packaging"
+                },
+                {
+                    "code": "signage",
+                    "label": "Signage"
+                },
+                {
+                    "code": "professional-supplies",
+                    "label": "Professional Supplies"
+                }
+            ]
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-# HTTP route for admin move (framework-agnostic placeholder)
+# HTTP route for admin move (framework-agnostic route descriptor)
 admin_category_move:
     path: /admin/category/tree/move
     controller: App\Cataloging\Service\Catalog\CatalogCategoryMoveSurfaceBuilder::move

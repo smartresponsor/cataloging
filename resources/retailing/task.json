@@ -1,0 +1,129 @@
+{
+    "schema": "retailing-category@1",
+    "types": [
+        {
+            "code": "home-cleaning",
+            "label": "House Cleaning",
+            "types": [
+                {
+                    "code": "deep-cleaning",
+                    "label": "Deep Cleaning"
+                }
+            ]
+        },
+        {
+            "code": "furniture-assembly",
+            "label": "Furniture Assembly"
+        },
+        {
+            "code": "tv-mounting",
+            "label": "TV Mounting"
+        },
+        {
+            "code": "picture-hanging",
+            "label": "Picture Hanging",
+            "types": [
+                {
+                    "code": "gallery-wall-installation",
+                    "label": "Gallery Wall Installation"
+                }
+            ]
+        },
+        {
+            "code": "mirror-hanging",
+            "label": "Mirror Hanging",
+            "types": [
+                {
+                    "code": "heavy-mirror-hanging",
+                    "label": "Heavy Mirror Hanging"
+                }
+            ]
+        },
+        {
+            "code": "shelf-mounting",
+            "label": "Shelf Mounting",
+            "types": [
+                {
+                    "code": "floating-shelf-installation",
+                    "label": "Floating Shelf Installation"
+                }
+            ]
+        },
+        {
+            "code": "window-treatment-installation",
+            "label": "Window Treatment Installation",
+            "types": [
+                {
+                    "code": "curtain-rod-installation",
+                    "label": "Curtain Rod Installation"
+                }
+            ]
+        },
+        {
+            "code": "lighting-installation",
+            "label": "Lighting Installation",
+            "types": [
+                {
+                    "code": "chandelier-installation",
+                    "label": "Chandelier Installation"
+                }
+            ]
+        },
+        {
+            "code": "ceiling-fan-installation",
+            "label": "Ceiling Fan Installation",
+            "types": [
+                {
+                    "code": "ceiling-fan-replacement",
+                    "label": "Ceiling Fan Replacement"
+                }
+            ]
+        },
+        {
+            "code": "security-device-installation",
+            "label": "Security Device Installation",
+            "types": [
+                {
+                    "code": "security-camera-installation",
+                    "label": "Security Camera Installation"
+                },
+                {
+                    "code": "video-doorbell-installation",
+                    "label": "Video Doorbell Installation"
+                },
+                {
+                    "code": "door-lock-replacement",
+                    "label": "Door Lock Replacement"
+                },
+                {
+                    "code": "smart-lock-installation",
+                    "label": "Smart Lock Installation"
+                }
+            ]
+        },
+        {
+            "code": "appliance-installation",
+            "label": "Appliance Installation",
+            "types": [
+                {
+                    "code": "dishwasher-installation",
+                    "label": "Dishwasher Installation"
+                }
+            ]
+        },
+        {
+            "code": "home-organization",
+            "label": "Home Organization",
+            "types": [
+                {
+                    "code": "closet-organization",
+                    "label": "Closet Organization"
+                },
+                {
+                    "code": "kitchen-organization",
+                    "label": "Kitchen Organization"
+                }
+            ]
+        }
+    ]
+}

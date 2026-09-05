@@ -19,7 +19,7 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
      * Initializes the catalog collection projection repository service collaborators.
      */
     public function __construct(
-        #[Autowire(service: 'doctrine.orm.postgres_entity_manager')]
+        #[Autowire(service: 'doctrine.orm.data_entity_manager')]
         private EntityManagerInterface $entityManager,
     ) {
     }
@@ -41,6 +41,19 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
             fn (CatalogRecordIndexEntity $entity): ?array => $this->normalizeRecordIndexEntity($entity),
             $entities,
         )));
+    }
+
+    /** @return array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}|null */
+    public function find(string $id): ?array
+    {
+        $id = trim($id);
+        if ('' === $id) {
+            return null;
+        }
+
+        $entity = $this->entityManager->find(CatalogRecordIndexEntity::class, $id);
+
+        return $entity instanceof CatalogRecordIndexEntity ? $this->normalizeRecordIndexEntity($entity) : null;
     }
 
     /**

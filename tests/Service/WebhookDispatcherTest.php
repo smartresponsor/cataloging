@@ -6,14 +6,14 @@ namespace App\Cataloging\Tests\Service;
 
 use App\Cataloging\Observability\RequestCorrelationIdProvider;
 use App\Cataloging\Service\CatalogWebhookDispatcherService;
-use App\Cataloging\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\ValueObject\WebhookDispatchMessageRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class CatalogWebhookDispatcherServiceTest extends TestCase
+final class WebhookDispatcherTest extends TestCase
 {
     public function testDispatchAddsSignatureCorrelationIdAndTimeout(): void
     {
@@ -31,7 +31,7 @@ final class CatalogWebhookDispatcherServiceTest extends TestCase
         $stack->push($request);
 
         $dispatcher = new CatalogWebhookDispatcherService($client, 'secret', new RequestCorrelationIdProvider($stack));
-        $dispatcher->dispatch(new WebhookDispatchRequest('http://example/webhook', 'catalog.changed', ['id' => 'c-1']));
+        $dispatcher->dispatch(new WebhookDispatchMessageRequest('http://example/webhook', 'catalog.changed', ['id' => 'c-1']));
 
         self::assertSame('POST', $capturedOptions['method']);
         self::assertSame('http://example/webhook', $capturedOptions['url']);
@@ -44,8 +44,8 @@ final class CatalogWebhookDispatcherServiceTest extends TestCase
         );
         self::assertSame(
             ['X-CategoryEntity-Event: catalog.changed'],
-            is_array($normalizedHeaders['x-category-event'] ?? null) ? $normalizedHeaders['x-category-event'] : null,
+            is_array($normalizedHeaders['x-categoryentity-event'] ?? null) ? $normalizedHeaders['x-categoryentity-event'] : null,
         );
-        self::assertArrayHasKey('x-category-signature', $normalizedHeaders);
+        self::assertArrayHasKey('x-categoryentity-signature', $normalizedHeaders);
     }
 }

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\ServiceInterface\CatalogWebhookClientServiceInterface;
-use App\Cataloging\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\ValueObject\WebhookDispatchMessageRequest;
 
 /**
  * Provides the webhook client application service.
@@ -30,7 +30,7 @@ final readonly class CatalogWebhookClientService implements CatalogWebhookClient
      *
      * @throws \JsonException
      */
-    public function send(WebhookDispatchRequest $request): bool
+    public function send(WebhookDispatchMessageRequest $request): bool
     {
         if ('' === trim($request->endpoint)) {
             return false;

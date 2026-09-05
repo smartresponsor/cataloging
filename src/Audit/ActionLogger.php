@@ -11,8 +11,6 @@ namespace App\Cataloging\Audit;
 final class ActionLogger
 {
     /**
-     * @param string              $actor
-     * @param string              $action
      * @param array<string,mixed> $target
      * @param array<string,mixed> $ctx
      *

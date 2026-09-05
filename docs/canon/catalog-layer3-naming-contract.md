@@ -1,23 +1,27 @@
-# Catalog layer 3 structure and naming contract
+# Cataloging layer 3 naming contract
 
-This document is literal and normative.
+This document is literal and normative for the current Cataloging RC line.
 
-## Canonical inner trees
+## Canonical namespace and layer roots
 
-Only the following inner trees are allowed.
+Production code uses `App\\Cataloging\\`. Test code uses `App\\Cataloging\\Tests\\`.
 
-- `src/Entity/Catalog/`
-- `src/Controller/Catalog/`
-- `src/ControllerInterface/Catalog/`
-- `src/Event/Catalog/`
-- `src/EventInterface/Catalog/`
-- `src/Repository/Catalog/`
-- `src/RepositoryInterface/Catalog/`
+Canonical layer roots follow AGENTS.md and stay Symfony-oriented:
 
-For each listed layer:
-- the parent layer folder may contain only the `Catalog/` folder;
-- the `Catalog/` folder may not contain subfolders;
-- the `Catalog/` folder may contain only classes of that exact layer.
+- `src/Entity/`
+- `src/EntityInterface/`
+- `src/Controller/`
+- `src/ControllerInterface/`
+- `src/Event/`
+- `src/EventInterface/`
+- `src/Repository/`
+- `src/RepositoryInterface/`
+- `src/Service/`
+- `src/ServiceInterface/`
+- `src/ValueObject/`
+- `src/Exception/`
+
+No new `src/Domain`, Port, Adapter, or Adaptor tree is part of this repository canon.
 
 ## Literal class-name contract
 
@@ -31,31 +35,29 @@ For each listed layer:
 
 ## Literal namespace contract
 
-- `App\\Entity\\Catalog`
-- `App\\Controller\\Catalog`
-- `App\\ControllerInterface\\Catalog`
-- `App\\Event\\Catalog`
-- `App\\EventInterface\\Catalog`
-- `App\\Repository\\Catalog`
-- `App\\RepositoryInterface\\Catalog`
+- `App\\Cataloging\\Entity`
+- `App\\Cataloging\\Controller`
+- `App\\Cataloging\\ControllerInterface`
+- `App\\Cataloging\\Event`
+- `App\\Cataloging\\EventInterface`
+- `App\\Cataloging\\Repository`
+- `App\\Cataloging\\RepositoryInterface`
 
 ## Forbidden examples
 
-- `src/Entity/CatalogCategoryEntity.php`
-- `src/Entity/Role/SubjectId.php`
-- `src/Entity/Catalog/Subtree/CatalogCategoryEntity.php`
-- `src/Repository/Category/CatalogCategoryRepository.php`
-- `src/Event/Catalog/Sub/CatalogCategoryPublishedEvent.php`
-- `src/Controller/Catalog/CategoryController.php`
-- `src/RepositoryInterface/Catalog/CategoryRepositoryInterface.php`
+- `src/Domain/CatalogCategory.php`
+- `src/Port/CatalogCategoryPort.php`
+- `src/Adapter/CatalogCategoryAdapter.php`
+- wildcard controller scans for generic CRUD routes
+- generic CRUD controllers owned by Cataloging
 
 ## Allowed examples
 
-- `src/Entity/Catalog/CatalogCategoryEntity.php`
-- `src/Repository/Catalog/CatalogCategoryRepository.php`
-- `src/RepositoryInterface/Catalog/CatalogCategoryRepositoryInterface.php`
-- `src/Controller/Catalog/CatalogCategoryController.php`
-- `src/Event/Catalog/CatalogCategoryPublishedEvent.php`
+- `src/Entity/CatalogCategoryEntity.php`
+- `src/Repository/CatalogCategoryRepository.php`
+- `src/RepositoryInterface/CatalogCategoryRepositoryInterface.php`
+- `src/Controller/CatalogCategoryController.php`
+- `src/Event/CatalogCategoryPublishedEvent.php`
 
 ## Machine rule
 

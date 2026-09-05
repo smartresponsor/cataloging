@@ -2,3 +2,8 @@ parameters:
   catalog.oidc_jwk_set: []
   catalog.oidc_audience: 'catalog-dev'
   catalog.oidc_issuer: 'catalog-dev'
+  catalog.webhook_secret_default: 'catalog-dev-webhook-secret'
+  catalog.webhook_secret: '%env(default:catalog.webhook_secret_default:CATALOG_WEBHOOK_SECRET)%'
+  catalog.webhook_max_retry: 3
+  catalog.webhook_endpoint_default: ''
+  catalog.webhook_endpoint: '%env(default:catalog.webhook_endpoint_default:CATALOG_WEBHOOK_ENDPOINT)%'
