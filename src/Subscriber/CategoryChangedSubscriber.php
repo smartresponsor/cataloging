@@ -3,19 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\EventSubscriber;
+namespace App\Cataloging\Subscriber;
 
 use App\Cataloging\Service\CatalogCacheInvalidationRecorderService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Provides the category changed subscriber implementation.
+ * Subscribes to category changes and invalidates catalog cache entries.
  */
 final readonly class CategoryChangedSubscriber implements EventSubscriberInterface
 {
-    /**
-     * Initializes the category changed subscriber service collaborators.
-     */
     public function __construct(private CatalogCacheInvalidationRecorderService $invalidator)
     {
     }
@@ -29,9 +26,6 @@ final readonly class CategoryChangedSubscriber implements EventSubscriberInterfa
         ];
     }
 
-    /**
-     * Handles the on changed workflow.
-     */
     public function onChanged(object $event): void
     {
         $id = $event->id ?? null;

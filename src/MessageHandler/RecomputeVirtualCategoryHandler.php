@@ -3,35 +3,29 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\Message;
+namespace App\Cataloging\MessageHandler;
 
 use App\Cataloging\Entity\Catalog\CatalogVirtualCategoryEntity;
 use App\Cataloging\Entity\Catalog\CatalogVirtualCategoryMemberEntity;
+use App\Cataloging\Message\RecomputeVirtualCategoryMessage;
 use App\Cataloging\Rule\CategoryRule;
 use App\Cataloging\Rule\RuleEvaluator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
- * Provides the recompute virtual category handler implementation.
+ * Handles virtual category recomputation messages.
  */
 #[AsMessageHandler]
 final readonly class RecomputeVirtualCategoryHandler
 {
-    /**
-     * Initializes the recompute virtual category handler service collaborators.
-     */
     public function __construct(
         private EntityManagerInterface $em,
         private RuleEvaluator $evaluator = new RuleEvaluator(),
     ) {
     }
 
-    /**
-     * Executes the invokable workflow for this service.
-     *
-     * @throws \Throwable
-     */
+    /** @throws \Throwable */
     public function __invoke(RecomputeVirtualCategoryMessage $msg): void
     {
         $vc = $this->em->getRepository(CatalogVirtualCategoryEntity::class)->find($msg->virtualCategoryId);

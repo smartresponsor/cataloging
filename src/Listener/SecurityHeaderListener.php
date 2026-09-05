@@ -3,18 +3,15 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\EventSubscriber;
+namespace App\Cataloging\Listener;
 
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
- * Provides the security header listener implementation.
+ * Applies catalog security headers to HTTP responses.
  */
 final class SecurityHeaderListener
 {
-    /**
-     * Handles the on kernel response workflow.
-     */
     public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();

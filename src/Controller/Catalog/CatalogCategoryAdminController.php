@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\Dto\CategoryAdminCategoryData;
+use App\Cataloging\Dto\CategoryAdminCategoryDTO;
 use App\Cataloging\Form\CategoryAdminCategoryType;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
@@ -56,7 +56,7 @@ final class CatalogCategoryAdminController extends AbstractController
     #[Route('/admin/category/new', name: 'admin_category_new')]
     public function new(Request $request): Response|array
     {
-        $data = new CategoryAdminCategoryData();
+        $data = new CategoryAdminCategoryDTO();
         $form = $this->createForm(CategoryAdminCategoryType::class, $data);
         $form->handleRequest($request);
 
@@ -87,7 +87,7 @@ final class CatalogCategoryAdminController extends AbstractController
             throw $this->createNotFoundException(sprintf('CategoryEntity #%d was not found.', $id));
         }
 
-        $data = CategoryAdminCategoryData::fromArray($category);
+        $data = CategoryAdminCategoryDTO::fromArray($category);
         $form = $this->createForm(CategoryAdminCategoryType::class, $data);
         $form->handleRequest($request);
 

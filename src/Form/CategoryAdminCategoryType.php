@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Form;
 
-use App\Cataloging\Dto\CategoryAdminCategoryData;
+use App\Cataloging\Dto\CategoryAdminCategoryDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,7 +40,7 @@ final class CategoryAdminCategoryType extends AbstractType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => CategoryAdminCategoryData::class,
+            'data_class' => CategoryAdminCategoryDTO::class,
             'csrf_protection' => true,
         ]);
     }
