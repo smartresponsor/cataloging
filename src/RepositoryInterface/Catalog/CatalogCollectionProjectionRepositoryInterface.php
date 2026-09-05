@@ -14,4 +14,7 @@ interface CatalogCollectionProjectionRepositoryInterface
      * @return list<array<string, list<bool|float|int|string>|bool|float|int|string|null>>
      */
     public function list(): array;
+
+    /** @return array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}|null */
+    public function find(string $id): ?array;
 }

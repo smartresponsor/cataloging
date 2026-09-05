@@ -35,6 +35,17 @@ final class CatalogCollectionServiceTest extends TestCase
                     ],
                 ];
             }
+
+            public function find(string $id): ?array
+            {
+                foreach ($this->list() as $row) {
+                    if (($row['id'] ?? null) === $id) {
+                        return $row;
+                    }
+                }
+
+                return null;
+            }
         };
 
         $service = new CatalogCollectionService($repository, new CatalogCollectionBuilderService(new CatalogCollectionRuleEngineService()));

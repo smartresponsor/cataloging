@@ -43,6 +43,19 @@ final readonly class CatalogCollectionProjectionRepository implements CatalogCol
         )));
     }
 
+    /** @return array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}|null */
+    public function find(string $id): ?array
+    {
+        $id = trim($id);
+        if ('' === $id) {
+            return null;
+        }
+
+        $entity = $this->entityManager->find(CatalogRecordIndexEntity::class, $id);
+
+        return $entity instanceof CatalogRecordIndexEntity ? $this->normalizeRecordIndexEntity($entity) : null;
+    }
+
     /**
      * @return array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}|null
      */
