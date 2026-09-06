@@ -19,11 +19,6 @@ final class CatalogCategoryTranslationEntity
     use ObjectAuditEmbeddableTrait;
     use ObjectLocaleEmbeddableTrait;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
-
     public function __construct(
         #[ORM\Column(name: 'category_id', length: 26)]
         private string $categoryId,
@@ -47,7 +42,7 @@ final class CatalogCategoryTranslationEntity
 
     public function id(): ?int
     {
-        return $this->id;
+        return $this->getId();
     }
 
     public function categoryId(): string

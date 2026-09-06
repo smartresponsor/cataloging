@@ -28,11 +28,6 @@ final class CatalogCatalogEntity implements ObjectEntityInterface, ObjectCodedIn
     use ObjectCodeEmbeddableTrait;
     use ObjectStateEmbeddableTrait;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id = 0;
-
     #[ORM\Column(type: 'string', length: 160)]
     private string $name;
 
@@ -60,11 +55,6 @@ final class CatalogCatalogEntity implements ObjectEntityInterface, ObjectCodedIn
         $this->name = $normalizedName;
         $this->purpose = $normalizedPurpose;
         $this->tenant = $normalizedTenant;
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     public function getCode(): string

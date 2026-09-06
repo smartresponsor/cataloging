@@ -28,11 +28,6 @@ class CatalogCategoryEntity implements ObjectEntityInterface
     use ObjectTitleEmbeddableTrait;
     use ObjectAuditEmbeddableTrait;
     use ObjectStateEmbeddableTrait;
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id = 0;
-
     #[ORM\Column(type: 'string', length: 160)]
     private string $nameEntity;
 
@@ -106,14 +101,6 @@ class CatalogCategoryEntity implements ObjectEntityInterface
     public function getCatalog(): CatalogCatalogEntity
     {
         return $this->catalog;
-    }
-
-    /**
-     * Returns the id value.
-     */
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     /**
