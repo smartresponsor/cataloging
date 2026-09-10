@@ -1,5 +1,5 @@
 imports:
-  - { resource: 'runtime.yaml' }
+  - { resource: 'catalog_runtime.yaml' }
 
 services:
   _defaults:

@@ -33,8 +33,8 @@ final readonly class CatalogingOidcConfigService implements AdministrationConfig
             requiredPermission: 'administration.config.update',
             editableFields: ['audience', 'issuer', 'jwkSetJson'],
             sensitiveFields: [],
-            readableFiles: ['config/component/runtime.yaml'],
-            writableFiles: ['config/component/runtime.yaml'],
+            readableFiles: ['config/component/catalog_runtime.yaml'],
+            writableFiles: ['config/component/catalog_runtime.yaml'],
             metadata: [
                 'section' => 'Configuration',
                 'kind' => 'oidc',
@@ -75,7 +75,7 @@ final readonly class CatalogingOidcConfigService implements AdministrationConfig
         $patch = $this->envPatch($payload);
         $write = $this->fileWriter->write(
             $this->projectDir.'/../Cataloging',
-            'config/component/runtime.yaml',
+            'config/component/catalog_runtime.yaml',
             $patch,
             $this->descriptor()->writableFiles,
         );
@@ -113,7 +113,7 @@ final readonly class CatalogingOidcConfigService implements AdministrationConfig
     /** @return array<string, mixed> */
     private function envManifest(): array
     {
-        $path = $this->projectDir.'/../Cataloging/config/component/runtime.yaml';
+        $path = $this->projectDir.'/../Cataloging/config/component/catalog_runtime.yaml';
         $parsed = is_file($path) ? Yaml::parseFile($path) : [];
 
         return is_array($parsed) ? $parsed : [];

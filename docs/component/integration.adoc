@@ -12,8 +12,8 @@ The host application should only enable the bundle and import route configuratio
 
 * Bundle class: `App\Cataloging\CatalogingBundle`
 * Extension class: `App\Cataloging\DependencyInjection\CatalogingExtension`
-* Service export: `config/component/services.yaml`
-* Route export: `config/component/routes.yaml`
+* Service export: `config/component/catalog_services.yaml`
+* Route export: `config/component/catalog_routes.yaml`
 
 == Host application responsibilities
 
@@ -29,7 +29,7 @@ If the component exports HTTP routes, the host imports the route file using the 
 ----
 # config/routes/cataloging.yaml
 cataloging_component:
-  resource: '@CatalogingBundle/config/component/routes.yaml'
+  resource: '@CatalogingBundle/config/component/catalog_routes.yaml'
 ----
 
 == Boundary rule

@@ -24,13 +24,13 @@ final class CatalogingExtension extends Extension
         unset($configs);
 
         $configDirectory = __DIR__.'/../../config/component';
-        $servicesFile = $configDirectory.'/services.yaml';
+        $servicesFile = $configDirectory.'/catalog_services.yaml';
 
         if (!is_file($servicesFile)) {
             return;
         }
 
         $loader = new YamlFileLoader($container, new FileLocator($configDirectory));
-        $loader->load('services.yaml');
+        $loader->load('catalog_services.yaml');
     }
 }

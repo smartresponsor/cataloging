@@ -70,10 +70,20 @@ final class CategoryLinterScriptsTest extends TestCase
         self::assertSame(1, $this->runScript('tools/linter/catalog_config_prefix_check.php', $projectRoot));
     }
 
-    public function testConfigPrefixCheckAllowsSymfonyBundleFacingComponentYamlFiles(): void
+    public function testConfigPrefixCheckRejectsUnprefixedComponentYamlFiles(): void
     {
         $projectRoot = $this->createProjectRoot();
-        $okFile = $projectRoot.'/config/component/security.yaml';
+        $badFile = $projectRoot.'/config/component/security.yaml';
+        mkdir(dirname($badFile), 0777, true);
+        file_put_contents($badFile, "security: {}\n");
+
+        self::assertSame(1, $this->runScript('tools/linter/catalog_config_prefix_check.php', $projectRoot));
+    }
+
+    public function testConfigPrefixCheckAllowsCatalogPrefixedComponentYamlFiles(): void
+    {
+        $projectRoot = $this->createProjectRoot();
+        $okFile = $projectRoot.'/config/component/catalog_security.yaml';
         mkdir(dirname($okFile), 0777, true);
         file_put_contents($okFile, "security: {}\n");
 

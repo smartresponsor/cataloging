@@ -12,9 +12,9 @@ config_tools:
       - jwkSetJson
     sensitive_fields: []
     readable_files:
-      - config/component/runtime.yaml
+      - config/component/catalog_runtime.yaml
     writable_files:
-      - config/component/runtime.yaml
+      - config/component/catalog_runtime.yaml
     apply_strategy: component_yaml
     metadata:
       section: Configuration
