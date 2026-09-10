@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\Dto\CategoryAdminCategoryDTO;
+use App\Cataloging\DTO\CategoryAdminCategoryDTO;
 use App\Cataloging\Form\CategoryAdminCategoryType;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
