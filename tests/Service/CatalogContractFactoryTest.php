@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\Service;
 
-use App\Cataloging\Service\Catalog\CatalogContractFactory;
+use App\Cataloging\Service\CatalogContractFactory;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogContractFactoryTest extends TestCase

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Controller\Catalog;
 
-use App\Cataloging\Service\Catalog\CatalogContractFactory;
+use App\Cataloging\Service\CatalogContractFactory;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryReadScopeServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;

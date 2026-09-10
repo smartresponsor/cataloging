@@ -44,7 +44,7 @@ services:
   App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDeliveryRecordRepositoryInterface:
     alias: App\Cataloging\Repository\Catalog\CatalogSyndicationDeliveryRecordRepository
 
-  App\Cataloging\Service\Catalog\CatalogCategoryMoveSurfaceBuilder:
+  App\Cataloging\Service\CatalogCategoryMoveSurfaceBuilder:
     public: true
   App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface:
     alias: App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Cataloging\Service\Catalog;
+namespace App\Cataloging\Service;
 
 use App\Cataloging\Value\Surface\CatalogContract;
 
