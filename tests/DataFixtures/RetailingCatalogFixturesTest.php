@@ -45,18 +45,24 @@ final class RetailingCatalogFixturesTest extends TestCase
         $merged = $method->invoke(new RetailingCatalogFixtures(), $existing, $fixture);
 
         self::assertSame('retailing-category@1', $merged['schema']);
-        self::assertCount(2, $merged['types']);
-        self::assertSame('custom-service', $merged['types'][1]['code']);
+        self::assertIsArray($merged['types']);
+        /** @var list<array<string, mixed>> $types */
+        $types = array_values($merged['types']);
+        self::assertCount(2, $types);
+        self::assertSame('custom-service', $types[1]['code']);
 
-        $security = $merged['types'][0];
+        $security = $types[0];
         self::assertSame('Security Device Installation', $security['label']);
         self::assertTrue($security['custom']);
-        self::assertCount(3, $security['types']);
-        self::assertSame('custom-sensor-installation', $security['types'][0]['code']);
-        self::assertSame('smart-lock-installation', $security['types'][1]['code']);
-        self::assertSame('Smart Lock Installation', $security['types'][1]['label']);
-        self::assertTrue($security['types'][1]['custom']);
-        self::assertSame('video-doorbell-installation', $security['types'][2]['code']);
+        self::assertIsArray($security['types']);
+        /** @var list<array<string, mixed>> $securityTypes */
+        $securityTypes = array_values($security['types']);
+        self::assertCount(3, $securityTypes);
+        self::assertSame('custom-sensor-installation', $securityTypes[0]['code']);
+        self::assertSame('smart-lock-installation', $securityTypes[1]['code']);
+        self::assertSame('Smart Lock Installation', $securityTypes[1]['label']);
+        self::assertTrue($securityTypes[1]['custom']);
+        self::assertSame('video-doorbell-installation', $securityTypes[2]['code']);
     }
 
     public function testCanonicalTaxonomyResourcesAreStandaloneAndBridgeFree(): void
@@ -84,6 +90,13 @@ final class RetailingCatalogFixturesTest extends TestCase
             'support' => ['dispute' => ['types' => [['code' => 'quality', 'label' => 'Quality']]]],
         ]);
 
-        self::assertSame(['custom', 'quality'], array_column($merged['support']['dispute']['types'], 'code'));
+        self::assertIsArray($merged['support']);
+        $support = $merged['support'];
+        self::assertIsArray($support['dispute'] ?? null);
+        $dispute = $support['dispute'];
+        self::assertIsArray($dispute['types'] ?? null);
+        /** @var list<array<string, mixed>> $types */
+        $types = array_values($dispute['types']);
+        self::assertSame(['custom', 'quality'], array_column($types, 'code'));
     }
 }

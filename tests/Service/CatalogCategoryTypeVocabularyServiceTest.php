@@ -57,6 +57,7 @@ final class CatalogCategoryTypeVocabularyServiceTest extends TestCase
             ->publishedTypes('shipping', 'providers'));
     }
 
+    /** @param array<string, mixed> $metadata */
     private function category(array $metadata): CatalogCategoryEntity
     {
         $catalog = new CatalogCatalogEntity('shipping', 'Shipping', 'shipping-classification');
@@ -69,7 +70,7 @@ final class CatalogCategoryTypeVocabularyServiceTest extends TestCase
     private function lookup(CatalogCategoryEntity $category): CatalogCategoryLookupServiceInterface
     {
         return new class($category) implements CatalogCategoryLookupServiceInterface {
-            public function __construct(private readonly CatalogCategoryEntity $category)
+            public function __construct(private readonly ?CatalogCategoryEntity $category)
             {
             }
 

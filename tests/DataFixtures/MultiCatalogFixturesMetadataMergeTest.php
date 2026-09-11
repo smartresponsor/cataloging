@@ -14,6 +14,7 @@ final class MultiCatalogFixturesMetadataMergeTest extends TestCase
         $fixture = new MultiCatalogFixtures();
         $method = new \ReflectionMethod($fixture, 'mergeCategoryMetadata');
 
+        /** @var array<string, mixed> $merged */
         $merged = $method->invoke($fixture, [
             'schema' => 'catalog-category-types@1',
             'source' => 'runtime',

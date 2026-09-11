@@ -75,8 +75,8 @@ final class CatalogObjectIdentityContractTest extends TestCase
 
         self::assertArrayHasKey('objectIdentity', $metadata->embeddedClasses);
         self::assertSame(ObjectIdentityEmbeddable::class, $metadata->embeddedClasses['objectIdentity']['class']);
-        self::assertSame('object_uuid', $objectUuid['columnName']);
-        self::assertSame('object_slug', $objectSlug['columnName']);
+        self::assertSame('uuid', $objectUuid['columnName']);
+        self::assertSame('slug', $objectSlug['columnName']);
         self::assertSame('binary', $objectUuid['type']);
         self::assertSame(16, $objectUuid['length']);
         self::assertFalse($objectUuid['nullable'] ?? false);
@@ -88,7 +88,7 @@ final class CatalogObjectIdentityContractTest extends TestCase
         $createSql = \implode("\n", $schemaTool->getCreateSchemaSql([$metadata]));
 
         self::assertNotSame('', $createSql);
-        self::assertStringContainsString('object_uuid', $createSql);
-        self::assertStringContainsString('object_slug', $createSql);
+        self::assertStringContainsString('uuid', $createSql);
+        self::assertStringContainsString('slug', $createSql);
     }
 }
