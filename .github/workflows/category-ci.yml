@@ -53,6 +53,9 @@ jobs:
             cataloging
             objecting
             interfacing
+            cruding
+            viewing
+            administering
       - name: Checkout Cataloging
         uses: actions/checkout@v4
         with:
@@ -70,6 +73,24 @@ jobs:
           repository: smartresponsor/interfacing
           token: ${{ steps.app.outputs.token }}
           path: Interfacing
+      - name: Checkout Cruding
+        uses: actions/checkout@v4
+        with:
+          repository: smartresponsor/cruding
+          token: ${{ steps.app.outputs.token }}
+          path: Cruding
+      - name: Checkout Viewing
+        uses: actions/checkout@v4
+        with:
+          repository: smartresponsor/viewing
+          token: ${{ steps.app.outputs.token }}
+          path: Viewing
+      - name: Checkout Administering
+        uses: actions/checkout@v4
+        with:
+          repository: smartresponsor/administering
+          token: ${{ steps.app.outputs.token }}
+          path: Administering
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
