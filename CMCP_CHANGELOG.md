@@ -92,4 +92,17 @@ Growth stream (post-RC): richer discovery/search semantics, merchandising UX, fe
 
 ## Iteration 5 — final acceptance and handoff
 
-Pending remote integration and post-merge clean-state verification.
+- Task-owned work was committed in signed commits and pushed to `origin/feature/catalog-runtime-vocabulary-rebased-20260820`.
+- Pre-existing `.gating/` remains physically present but is excluded locally through `.git/info/exclude`; it was not deleted, staged, committed, or pushed.
+- Existing PR `#92` (`feature/catalog-runtime-vocabulary-rebased-20260820` -> `master`) was updated successfully. Current integration head during final inspection: `ea0542d2b43ae0279e49e3f654d4dc673be688e7`.
+- PR mergeability is `MERGEABLE`; no content conflict exists against the current remote `master`.
+- Cataloging CI workflow was aligned with the runtime dependency contour by adding Cruding, Viewing and Administering to GitHub App token scope and sibling checkouts.
+- GitHub Actions `Category CI / test` still fails externally before any workflow step executes: repeated runs complete in approximately two seconds with an empty `steps` list, while the workflow's first declared step requires repository-level `AUTOMATER_APP_ID` plus an Automater private key. This is not a reproduced product/test failure; all authoritative local runtime/static/style/readiness gates are green.
+- Official Console MCP safe merge was attempted after explicit authorization and was blocked by repository merge policy solely as `checks:failed:1`. No direct/protected-branch push or unsafe bypass was attempted.
+
+### Final handoff state
+
+- Product/code RC verification: green.
+- Feature branch: pushed and current on remote.
+- PR #92: open and mergeable, no code conflicts.
+- Remaining terminal blocker: external GitHub Actions/required-check policy. Merge requires the required check to be restored/overridden by repository administration, after which the existing safe merge can complete without further product changes.
