@@ -61,8 +61,15 @@ final class CatalogImporterService
             if (!is_array($item)) {
                 continue;
             }
-            /* @var array<string, scalar|null> $item */
-            $this->upsert($item);
+            /** @var array<string, scalar|null> $normalizedItem */
+            $normalizedItem = [];
+            foreach ($item as $key => $value) {
+                if (!is_string($key) || (!is_scalar($value) && null !== $value)) {
+                    continue;
+                }
+                $normalizedItem[$key] = $value;
+            }
+            $this->upsert($normalizedItem);
             ++$count;
         }
 

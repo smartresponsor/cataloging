@@ -19,6 +19,4 @@ interface CatalogSyndicationDestinationGovernanceSummaryBuiltInterface
      */
     public function occurredAt(): \DateTimeImmutable;
 }
-if (!class_exists(__NAMESPACE__.'\\SyndicationDestinationGovernanceSummaryBuiltInterface', false)) {
-    class_alias(CatalogSyndicationDestinationGovernanceSummaryBuiltInterface::class, __NAMESPACE__.'\\SyndicationDestinationGovernanceSummaryBuiltInterface');
-}
+class_alias(CatalogSyndicationDestinationGovernanceSummaryBuiltInterface::class, __NAMESPACE__.'\\SyndicationDestinationGovernanceSummaryBuiltInterface');

@@ -16,6 +16,8 @@ final class CatalogCategoryBatchEditController extends AbstractController
 {
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/admin/category/batch-edit', name: 'admin_category_batch_edit', methods: ['GET', 'POST'])]
     public function __invoke(Request $request): array

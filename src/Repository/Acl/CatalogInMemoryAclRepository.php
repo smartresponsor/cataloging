@@ -42,7 +42,8 @@ final class CatalogInMemoryAclRepository implements AclRepositoryInterface
                 continue;
             }
 
-            $effect = strtolower((string) ($rule['effect'] ?? $rule['decision'] ?? 'deny'));
+            $effectValue = $rule['effect'] ?? $rule['decision'] ?? 'deny';
+            $effect = strtolower(is_scalar($effectValue) ? (string) $effectValue : 'deny');
 
             return in_array($effect, ['allow', 'allowed', 'grant', 'granted'], true);
         }
@@ -65,7 +66,8 @@ final class CatalogInMemoryAclRepository implements AclRepositoryInterface
                 return false;
             }
 
-            if ((string) $rule[$key] !== (string) $value) {
+            $ruleValue = $rule[$key];
+            if (!is_scalar($ruleValue) || !is_scalar($value) || (string) $ruleValue !== (string) $value) {
                 return false;
             }
         }

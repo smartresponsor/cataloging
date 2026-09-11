@@ -20,6 +20,4 @@ interface CatalogSyndicationDestinationRegisteredEventInterface
      */
     public function occurredAt(): \DateTimeImmutable;
 }
-if (!class_exists(__NAMESPACE__.'\\SyndicationDestinationRegisteredInterface', false)) {
-    class_alias(CatalogSyndicationDestinationRegisteredEventInterface::class, __NAMESPACE__.'\\SyndicationDestinationRegisteredInterface');
-}
+class_alias(CatalogSyndicationDestinationRegisteredEventInterface::class, __NAMESPACE__.'\\SyndicationDestinationRegisteredInterface');

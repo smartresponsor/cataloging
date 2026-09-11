@@ -137,8 +137,14 @@ final class CatalogOidcJwtVerifierService implements CatalogOidcJwtVerifierServi
             throw new \InvalidArgumentException('Invalid JSON object');
         }
 
-        /* @var array<string, mixed> $decoded */
-        return $decoded;
+        $object = [];
+        foreach ($decoded as $key => $value) {
+            if (is_string($key)) {
+                $object[$key] = $value;
+            }
+        }
+
+        return $object;
     }
 
     /**

@@ -25,6 +25,8 @@ final class CatalogCategoryListController extends AbstractController
 
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/admin/category/list', name: 'admin_category_list', methods: ['GET'])]
     public function __invoke(Request $request): array

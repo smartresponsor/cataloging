@@ -15,6 +15,8 @@ final class CatalogCategoryPermsController extends AbstractController
 {
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/admin/category/perms', name: 'admin_category_perms')]
     public function __invoke(): array

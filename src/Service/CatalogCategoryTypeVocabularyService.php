@@ -33,8 +33,13 @@ final readonly class CatalogCategoryTypeVocabularyService implements CatalogCate
             if (!is_array($type)) {
                 continue;
             }
-            $code = strtolower(trim((string) ($type['code'] ?? '')));
-            $label = trim((string) ($type['label'] ?? ''));
+            $rawCode = $type['code'] ?? null;
+            $rawLabel = $type['label'] ?? null;
+            if (!is_scalar($rawCode) || !is_scalar($rawLabel)) {
+                continue;
+            }
+            $code = strtolower(trim((string) $rawCode));
+            $label = trim((string) $rawLabel);
             if ('' === $code || '' === $label || isset($seen[$code])) {
                 continue;
             }

@@ -27,7 +27,9 @@ final readonly class CatalogCategoryVocabularyService implements CatalogCategory
             'SELECT id FROM catalog WHERE object_code = :code AND tenant = :tenant ORDER BY id LIMIT 1',
             ['code' => $catalogCode, 'tenant' => $tenant],
         );
-        $catalog = false === $catalogId ? null : $this->entityManager->find(CatalogCatalogEntity::class, (int) $catalogId);
+        $catalog = is_int($catalogId) || (is_string($catalogId) && ctype_digit($catalogId))
+            ? $this->entityManager->find(CatalogCatalogEntity::class, (int) $catalogId)
+            : null;
         if (!$catalog instanceof CatalogCatalogEntity) {
             return [];
         }
@@ -40,9 +42,9 @@ final readonly class CatalogCategoryVocabularyService implements CatalogCategory
             'published' => true,
         ], ['nameEntity' => 'ASC']);
 
-        return array_values(array_map(
+        return array_map(
             static fn (CatalogCategoryEntity $category): array => ['code' => $category->getSlug(), 'label' => $category->getName()],
             $categories,
-        ));
+        );
     }
 }

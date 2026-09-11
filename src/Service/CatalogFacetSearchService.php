@@ -42,7 +42,7 @@ final readonly class CatalogFacetSearchService
         return array_map(static fn (CatalogCategoryProjectionEntity $entity): array => [
             'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
-            'nameEntity' => $entity->getName(),
+            'name' => $entity->getName(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',
         ], $entities);

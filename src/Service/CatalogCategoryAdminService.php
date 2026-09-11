@@ -24,10 +24,6 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         $query = trim($query);
         $filtered = [];
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
             if ('' !== $query && !$this->matchesQuery($row, $query)) {
                 continue;
             }
@@ -138,12 +134,13 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         return [
             'id' => $this->intValue($row['id'] ?? null),
             'slug' => $this->stringValue($row['slug'] ?? null, ''),
-            'nameEntity' => $this->stringValue($row['nameEntity'] ?? null, ''),
+            'name' => $this->stringValue($row['name'] ?? $row['nameEntity'] ?? null, ''),
             'locale' => $this->stringValue($row['locale'] ?? null, 'en'),
             'status' => $published ? 'active' : ('published' === $workflowState ? 'active' : 'draft'),
         ];
     }
 
+    /** @param array<string, mixed> $row */
     private function matchesQuery(array $row, string $query): bool
     {
         $needle = mb_strtolower($query);

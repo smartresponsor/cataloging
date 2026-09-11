@@ -49,8 +49,8 @@ final readonly class CatalogingOidcConfigService implements ConfigToolServiceInt
         $data = new CatalogingOidcConfigData();
         $manifest = $this->envManifest();
 
-        $data->audience = (string) ($manifest['catalog.oidc_audience'] ?? $data->audience);
-        $data->issuer = (string) ($manifest['catalog.oidc_issuer'] ?? $data->issuer);
+        $data->audience = $this->scalarString($manifest['catalog.oidc_audience'] ?? null, $data->audience);
+        $data->issuer = $this->scalarString($manifest['catalog.oidc_issuer'] ?? null, $data->issuer);
         $data->jwkSetJson = json_encode($manifest['catalog.oidc_jwk_set'] ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) ?: '[]';
 
         return $data;
@@ -66,7 +66,7 @@ final readonly class CatalogingOidcConfigService implements ConfigToolServiceInt
             'catalog.oidc_jwk_set' => $payload->jwkSetJson,
         ];
 
-        return $this->applyService->save($this->descriptor(), (string) ($context['actor'] ?? 'system'), $values, $masked, []);
+        return $this->applyService->save($this->descriptor(), $this->scalarString($context['actor'] ?? null, 'system'), $values, $masked, []);
     }
 
     public function apply(object $data, array $context = []): array
@@ -85,7 +85,7 @@ final readonly class CatalogingOidcConfigService implements ConfigToolServiceInt
 
         return $this->applyService->apply(
             $this->descriptor(),
-            (string) ($context['actor'] ?? 'system'),
+            $this->scalarString($context['actor'] ?? null, 'system'),
             $values,
             $patch,
             [],
@@ -115,8 +115,18 @@ final readonly class CatalogingOidcConfigService implements ConfigToolServiceInt
     {
         $path = $this->projectDir.'/../Cataloging/config/component/runtime.yaml';
         $parsed = is_file($path) ? Yaml::parseFile($path) : [];
+        if (!is_array($parsed)) {
+            return [];
+        }
 
-        return is_array($parsed) ? $parsed : [];
+        $manifest = [];
+        foreach ($parsed as $key => $value) {
+            if (is_string($key)) {
+                $manifest[$key] = $value;
+            }
+        }
+
+        return $manifest;
     }
 
     /**
@@ -153,5 +163,16 @@ final readonly class CatalogingOidcConfigService implements ConfigToolServiceInt
             'catalog.oidc_issuer' => ['fieldType' => 'string', 'secret' => false, 'current' => $data->issuer, 'pending' => $data->issuer, 'masked' => null, 'status' => $status],
             'catalog.oidc_jwk_set' => ['fieldType' => 'textarea', 'secret' => false, 'current' => $data->jwkSetJson, 'pending' => $data->jwkSetJson, 'masked' => null, 'status' => $status],
         ];
+    }
+
+    private function scalarString(mixed $value, string $default = ''): string
+    {
+        if (!is_scalar($value)) {
+            return $default;
+        }
+
+        $normalized = trim((string) $value);
+
+        return '' === $normalized ? $default : $normalized;
     }
 }

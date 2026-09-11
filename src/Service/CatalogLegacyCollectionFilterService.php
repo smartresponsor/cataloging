@@ -56,13 +56,17 @@ final class CatalogLegacyCollectionFilterService
                 $priceValue = $product['price'] ?? 0;
                 $price = is_numeric($priceValue) ? (float) $priceValue : 0.0;
 
-                return match ($operator) {
-                    '>' => $price > $expected,
-                    '>=' => $price >= $expected,
-                    '<' => $price < $expected,
-                    '<=' => $price <= $expected,
-                    default => false,
-                };
+                if ('>' === $operator) {
+                    return $price > $expected;
+                }
+                if ('>=' === $operator) {
+                    return $price >= $expected;
+                }
+                if ('<' === $operator) {
+                    return $price < $expected;
+                }
+
+                return $price <= $expected;
             };
         }
 

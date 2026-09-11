@@ -30,6 +30,8 @@ final class CatalogCategoryAdminController extends AbstractController
 
     /**
      * Handles the index workflow.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/admin/category', name: 'admin_category_index')]
     public function index(): array
@@ -52,6 +54,8 @@ final class CatalogCategoryAdminController extends AbstractController
 
     /**
      * Handles the new workflow.
+     *
+     * @return Response|array<string, mixed>
      */
     #[Route('/admin/category/new', name: 'admin_category_new')]
     public function new(Request $request): Response|array
@@ -74,6 +78,8 @@ final class CatalogCategoryAdminController extends AbstractController
 
     /**
      * Handles the edit workflow.
+     *
+     * @return Response|array<string, mixed>
      */
     #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
     public function edit(int $id, Request $request): Response|array
@@ -105,6 +111,8 @@ final class CatalogCategoryAdminController extends AbstractController
 
     /**
      * Handles the tree workflow.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/admin/category/tree', name: 'admin_category_tree')]
     public function tree(): array

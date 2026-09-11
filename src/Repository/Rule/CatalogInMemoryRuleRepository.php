@@ -68,7 +68,8 @@ final class CatalogInMemoryRuleRepository implements RuleRepositoryInterface
                 continue;
             }
 
-            if ((string) ($rule[$key] ?? '') !== (string) $value) {
+            $ruleValue = $rule[$key] ?? '';
+            if (!is_scalar($ruleValue) || !is_scalar($value) || (string) $ruleValue !== (string) $value) {
                 return false;
             }
         }

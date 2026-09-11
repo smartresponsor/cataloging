@@ -43,15 +43,18 @@ final readonly class CatalogCatalogTreeReadService implements CatalogCatalogTree
 
         $nodes = [];
         foreach ($rows as $row) {
-            $id = (string) $row['id'];
+            $id = self::stringValue($row['id'] ?? null);
+            if ('' === $id) {
+                continue;
+            }
             $nodes[$id] = [
                 'nodeId' => $id,
-                'parentNodeId' => null === $row['parent_id'] ? null : (string) $row['parent_id'],
-                'title' => (string) $row['name_entity'],
-                'slug' => (string) $row['slug'],
-                'depth' => (int) $row['depth'],
-                'path' => (string) $row['path'],
-                'iconUrl' => $row['icon_url'],
+                'parentNodeId' => self::nullableStringValue($row['parent_id'] ?? null),
+                'title' => self::stringValue($row['name_entity'] ?? null),
+                'slug' => self::stringValue($row['slug'] ?? null),
+                'depth' => self::intValue($row['depth'] ?? null),
+                'path' => self::stringValue($row['path'] ?? null),
+                'iconUrl' => self::nullableStringValue($row['icon_url'] ?? null),
                 'childCount' => 0,
                 'children' => [],
             ];
@@ -79,12 +82,27 @@ final readonly class CatalogCatalogTreeReadService implements CatalogCatalogTree
 
         return [
             'catalog' => [
-                'code' => (string) $catalog['object_code'],
-                'name' => (string) $catalog['name'],
-                'purpose' => (string) $catalog['purpose'],
+                'code' => self::stringValue($catalog['object_code'] ?? null),
+                'name' => self::stringValue($catalog['name'] ?? null),
+                'purpose' => self::stringValue($catalog['purpose'] ?? null),
             ],
             'root' => $root,
             'nodes' => is_array($root) ? $root['children'] : [],
         ];
+    }
+
+    private static function stringValue(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string) $value : $default;
+    }
+
+    private static function nullableStringValue(mixed $value): ?string
+    {
+        return null === $value ? null : (is_scalar($value) ? (string) $value : null);
+    }
+
+    private static function intValue(mixed $value): int
+    {
+        return is_int($value) ? $value : (is_scalar($value) && is_numeric((string) $value) ? (int) $value : 0);
     }
 }
