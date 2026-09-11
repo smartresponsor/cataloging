@@ -62,6 +62,4 @@ interface CatalogSyndicationDestinationGovernanceSummaryInterface
     /** @return array<string,bool> */
     public function checks(): array;
 }
-if (!class_exists(__NAMESPACE__.'\\SyndicationDestinationGovernanceSummaryInterface', false)) {
-    class_alias(CatalogSyndicationDestinationGovernanceSummaryInterface::class, __NAMESPACE__.'\\SyndicationDestinationGovernanceSummaryInterface');
-}
+class_alias(CatalogSyndicationDestinationGovernanceSummaryInterface::class, __NAMESPACE__.'\\SyndicationDestinationGovernanceSummaryInterface');

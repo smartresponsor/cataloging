@@ -10,7 +10,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class CatalogCategoryMutationRequestContextResolverServiceTest extends TestCase
+final class CategoryMutationRequestContextResolverTest extends TestCase
 {
     public function testActorIdUsesAuthenticatedUserIdentifierWhenAvailable(): void
     {

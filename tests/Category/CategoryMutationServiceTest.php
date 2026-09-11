@@ -29,10 +29,7 @@ final class CategoryMutationServiceTest extends TestCase
     private const ELECTRONICS_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a302';
     private const PHONES_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a303';
     private const FASHION_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a304';
-    private const DEEP_ROOT_ID = '1';
     private const DEEP_A_ID = '2';
-    private const DEEP_B_ID = '3';
-    private const DEEP_C_ID = '4';
     private const DEEP_D_ID = '5';
     private const DEEP_X_ID = '6';
     private const DEEP_ROOT_SLUG = '018f4f0e-5d8c-7a3c-a0d4-1bf3d8c6a401';
@@ -59,6 +56,7 @@ final class CategoryMutationServiceTest extends TestCase
 
         $category = $connection->fetchAssociative('SELECT parent_id, path, depth FROM category WHERE id = :id', ['id' => self::ELECTRONICS_ID]);
         self::assertIsArray($category);
+        self::assertTrue(is_scalar($category['parent_id'] ?? null));
         self::assertSame(4, (int) $category['parent_id']);
         self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG, $category['path']);
         self::assertTrue(is_scalar($category['depth']));
@@ -259,7 +257,9 @@ final class CategoryMutationServiceTest extends TestCase
 
     private function createSchema(Connection $connection): void
     {
-        $connection->executeStatement('CREATE TABLE category (id INTEGER PRIMARY KEY, slug TEXT NOT NULL, nameEntity TEXT NOT NULL DEFAULT "", parent_id INTEGER DEFAULT NULL, depth INTEGER NOT NULL DEFAULT 0, path TEXT DEFAULT NULL, locale TEXT DEFAULT NULL, tenant TEXT DEFAULT "default", icon_url TEXT DEFAULT NULL, workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL)');
+        $connection->executeStatement('CREATE TABLE catalog (id INTEGER PRIMARY KEY, code TEXT, uuid BLOB DEFAULT NULL, slug TEXT DEFAULT NULL, first_title TEXT DEFAULT NULL, middle_title TEXT DEFAULT NULL, last_title TEXT DEFAULT NULL, active INTEGER NOT NULL DEFAULT 1, enabled INTEGER NOT NULL DEFAULT 1, status TEXT DEFAULT NULL, created_at TEXT NOT NULL, modified_at TEXT DEFAULT NULL, created_by TEXT DEFAULT NULL, modified_by TEXT DEFAULT NULL, name TEXT NOT NULL, purpose TEXT NOT NULL, tenant TEXT NOT NULL DEFAULT "default")');
+        $connection->executeStatement("INSERT INTO catalog (id, code, created_at, name, purpose, tenant) VALUES (1, 'test', '2026-07-28 00:00:00', 'Test', 'testing', 'default')");
+        $connection->executeStatement('CREATE TABLE category (id INTEGER PRIMARY KEY, catalog_id INTEGER NOT NULL DEFAULT 1, uuid BLOB DEFAULT NULL, slug TEXT DEFAULT NULL, first_title TEXT DEFAULT NULL, middle_title TEXT DEFAULT NULL, last_title TEXT DEFAULT NULL, created_at TEXT NOT NULL DEFAULT "2026-07-28 00:00:00", modified_at TEXT DEFAULT NULL, created_by TEXT DEFAULT NULL, modified_by TEXT DEFAULT NULL, active INTEGER NOT NULL DEFAULT 1, enabled INTEGER NOT NULL DEFAULT 1, status TEXT DEFAULT NULL, category_slug TEXT NOT NULL, nameEntity TEXT NOT NULL DEFAULT "", parent_id INTEGER DEFAULT NULL, depth INTEGER NOT NULL DEFAULT 0, path TEXT DEFAULT NULL, locale TEXT DEFAULT NULL, tenant TEXT DEFAULT "default", icon_url TEXT DEFAULT NULL, workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL, metadata TEXT NOT NULL DEFAULT "{}")');
         $connection->executeStatement('CREATE TABLE category_audit (id TEXT PRIMARY KEY, action TEXT NOT NULL, payload TEXT NOT NULL, created_at TEXT NOT NULL)');
         $connection->executeStatement('CREATE TABLE outbox (id TEXT PRIMARY KEY, type TEXT NOT NULL, payload TEXT NOT NULL, "key" TEXT NOT NULL UNIQUE, created_at TEXT NOT NULL, available_at TEXT DEFAULT NULL, attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT DEFAULT NULL, dispatched_at TEXT DEFAULT NULL, processed_at TEXT DEFAULT NULL, dead_lettered_at TEXT DEFAULT NULL)');
         $connection->executeStatement('CREATE TABLE category_idempotency (idempotency_key TEXT PRIMARY KEY, operation TEXT NOT NULL, request_hash TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL, correlation_id TEXT DEFAULT NULL)');
@@ -269,10 +269,10 @@ final class CategoryMutationServiceTest extends TestCase
     private function seedCategoryTree(Connection $connection): void
     {
         $rows = [
-            ['id' => 1, 'slug' => self::ROOT_SLUG, 'nameEntity' => 'Root', 'parent_id' => null, 'depth' => 0, 'path' => self::ROOT_SLUG],
-            ['id' => 2, 'slug' => self::ELECTRONICS_SLUG, 'nameEntity' => 'Electronics', 'parent_id' => 1, 'depth' => 1, 'path' => self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG],
-            ['id' => 3, 'slug' => self::PHONES_SLUG, 'nameEntity' => 'Phones', 'parent_id' => 2, 'depth' => 2, 'path' => self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG],
-            ['id' => 4, 'slug' => self::FASHION_SLUG, 'nameEntity' => 'Fashion', 'parent_id' => 1, 'depth' => 1, 'path' => self::ROOT_SLUG.'.'.self::FASHION_SLUG],
+            ['id' => 1, 'category_slug' => self::ROOT_SLUG, 'nameEntity' => 'Root', 'parent_id' => null, 'depth' => 0, 'path' => self::ROOT_SLUG],
+            ['id' => 2, 'category_slug' => self::ELECTRONICS_SLUG, 'nameEntity' => 'Electronics', 'parent_id' => 1, 'depth' => 1, 'path' => self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG],
+            ['id' => 3, 'category_slug' => self::PHONES_SLUG, 'nameEntity' => 'Phones', 'parent_id' => 2, 'depth' => 2, 'path' => self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG],
+            ['id' => 4, 'category_slug' => self::FASHION_SLUG, 'nameEntity' => 'Fashion', 'parent_id' => 1, 'depth' => 1, 'path' => self::ROOT_SLUG.'.'.self::FASHION_SLUG],
         ];
 
         foreach ($rows as $row) {
@@ -282,7 +282,7 @@ final class CategoryMutationServiceTest extends TestCase
 
     private function seedFromFixture(Connection $connection, string $fixtureFile): void
     {
-        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/CategoryEntity/'.$fixtureFile);
+        $payload = Yaml::parseFile(__DIR__.'/../../fixtures/Category/'.$fixtureFile);
         if (!is_array($payload)) {
             return;
         }
@@ -297,7 +297,16 @@ final class CategoryMutationServiceTest extends TestCase
                 continue;
             }
 
-            /* @var array<string, mixed> $row */
+            /** @var array<string, mixed> $row */
+            if (array_key_exists('name', $row) && !array_key_exists('nameEntity', $row)) {
+                $row['nameEntity'] = $row['name'];
+                unset($row['name']);
+            }
+            if (array_key_exists('slug', $row) && !array_key_exists('category_slug', $row)) {
+                $row['category_slug'] = $row['slug'];
+                unset($row['slug']);
+            }
+
             $connection->insert('category', $row);
         }
     }

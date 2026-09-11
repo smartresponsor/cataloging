@@ -16,6 +16,7 @@ final class CatalogCollectionServiceTest extends TestCase
     public function testBuildReadsProjectionRowsInsteadOfHardcodedPayloads(): void
     {
         $repository = new class implements CatalogCollectionProjectionRepositoryInterface {
+            /** @return list<array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}> */
             public function list(): array
             {
                 return [
@@ -34,6 +35,18 @@ final class CatalogCollectionServiceTest extends TestCase
                         'tag_set' => ['summer'],
                     ],
                 ];
+            }
+
+            /** @return array{id:string,brand:?string,price:?float,stock:?int,tag_set?:list<bool|float|int|string>}|null */
+            public function find(string $id): ?array
+            {
+                foreach ($this->list() as $row) {
+                    if ($row['id'] === $id) {
+                        return $row;
+                    }
+                }
+
+                return null;
             }
         };
 

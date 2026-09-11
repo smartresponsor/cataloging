@@ -19,8 +19,6 @@ final readonly class CatalogImportPipelineService
 
     /**
      * @param array<string, mixed> $item
-     *
-     * @return bool
      */
     public function process(array $item): bool
     {
@@ -60,7 +58,6 @@ final readonly class CatalogImportPipelineService
 
     /**
      * @param array<string, mixed> $item
-     * @param string               $reason
      *
      * @throws \RuntimeException
      * @throws \JsonException

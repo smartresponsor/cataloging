@@ -30,16 +30,16 @@ $deliveryDoc = $root . '/docs/category-delivery-surface-boundary.md';
 $proofDoc = $root . '/docs/category-operational-proof-boundary.md';
 $antoraBoundaryPage = $root . '/docs/modules/ROOT/pages/boundaries.adoc';
 $antoraNav = $root . '/docs/modules/ROOT/nav.adoc';
-$graphqlResolver = $root . '/src/Service/GraphqlResolver.php';
-$graphqlFacetResolver = $root . '/src/Service/GraphqlFacetResolver.php';
-$storeController = $root . '/src/Controller/CategoryStoreApiController.php';
-$storefrontController = $root . '/src/Controller/CategoryStorefrontController.php';
-$searchController = $root . '/src/Controller/CategorySearchController.php';
-$adminController = $root . '/src/Controller/Admin/CategoryAdminController.php';
-$adminApiController = $root . '/src/Controller/Api/CategoryAdminApiController.php';
-$merchantController = $root . '/src/Controller/Merchant/CategoryMerchantController.php';
-$readScopeService = $root . '/src/Service/CategoryReadScopeService.php';
-$projectionReadService = $root . '/src/Service/CategoryProjectionReadService.php';
+$graphqlResolver = $root . '/src/Service/CatalogGraphqlResolverService.php';
+$graphqlFacetResolver = $root . '/src/Service/CatalogGraphqlFacetResolverService.php';
+$storeController = $root . '/src/Controller/Catalog/CatalogCategoryStoreApiController.php';
+$storefrontController = $root . '/src/Controller/Catalog/CatalogCategoryApiController.php';
+$searchController = $root . '/src/Controller/Catalog/CatalogCategorySearchController.php';
+$adminController = $root . '/src/Controller/Catalog/CatalogCategoryAdminController.php';
+$adminApiController = $root . '/src/Controller/Catalog/CatalogCategoryAdminApiController.php';
+$merchantController = $root . '/src/Controller/Catalog/CatalogCategoryMerchantController.php';
+$readScopeService = $root . '/src/Service/CatalogCategoryReadScopeService.php';
+$projectionReadService = $root . '/src/Service/CatalogCategoryProjectionReadService.php';
 $rcDoc = $root . '/docs/category-rc-readiness.md';
 $composer = $root . '/composer.json';
 
@@ -90,8 +90,8 @@ $items = [
     ],
     [
         'check' => 'graphql-resolvers-declared-as-secondary-adapters',
-        'status' => containsAll($graphqlResolver, 'Secondary GraphQL read adapter', 'compatibility/convenience read surface') && containsAll($graphqlFacetResolver, 'Secondary GraphQL facet adapter', 'compatibility/read surface') ? 'pass' : 'fail',
-        'details' => ['files' => ['src/Service/GraphqlResolver.php', 'src/Service/GraphqlFacetResolver.php']],
+        'status' => containsAll($graphqlResolver, 'Secondary GraphQL read adapter', 'compatibility/convenience read surface') && containsAll($graphqlFacetResolver, 'Secondary GraphQL facet adapter', 'canonical search/read services') ? 'pass' : 'fail',
+        'details' => ['files' => ['src/Service/CatalogGraphqlResolverService.php', 'src/Service/CatalogGraphqlFacetResolverService.php']],
     ],
     [
         'check' => 'delivery-controllers-delegate-to-shared-services',
@@ -102,18 +102,18 @@ $items = [
             && containsAll($adminApiController, 'CategoryProjectionReadServiceInterface')
             && containsAll($merchantController, 'CategoryProjectionReadServiceInterface', 'SecurityExternalIdentityContextResolverInterface') ? 'pass' : 'fail',
         'details' => ['controllers' => [
-            'src/Controller/CategoryStoreApiController.php',
-            'src/Controller/CategoryStorefrontController.php',
-            'src/Controller/CategorySearchController.php',
-            'src/Controller/Admin/CategoryAdminController.php',
-            'src/Controller/Api/CategoryAdminApiController.php',
-            'src/Controller/Merchant/CategoryMerchantController.php',
+            'src/Controller/Catalog/CatalogCategoryStoreApiController.php',
+            'src/Controller/Catalog/CatalogCategoryApiController.php',
+            'src/Controller/Catalog/CatalogCategorySearchController.php',
+            'src/Controller/Catalog/CatalogCategoryAdminController.php',
+            'src/Controller/Catalog/CatalogCategoryAdminApiController.php',
+            'src/Controller/Catalog/CatalogCategoryMerchantController.php',
         ]],
     ],
     [
         'check' => 'shared-read-services-centralize-delivery-seams',
         'status' => containsAll($readScopeService, 'applyTenantScope') && containsAll($projectionReadService, 'list(', 'tree(', 'findOne(') ? 'pass' : 'fail',
-        'details' => ['files' => ['src/Service/CategoryReadScopeService.php', 'src/Service/CategoryProjectionReadService.php']],
+        'details' => ['files' => ['src/Service/CatalogCategoryReadScopeService.php', 'src/Service/CatalogCategoryProjectionReadService.php']],
     ],
     [
         'check' => 'runtime-src-does-not-depend-on-inspection-artifacts',

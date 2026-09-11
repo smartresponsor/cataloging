@@ -18,6 +18,4 @@ interface CatalogSyndicationDestinationHistoryBuiltInterface
      */
     public function occurredAt(): \DateTimeImmutable;
 }
-if (!class_exists(__NAMESPACE__.'\\SyndicationDestinationHistoryBuiltInterface', false)) {
-    class_alias(CatalogSyndicationDestinationHistoryBuiltInterface::class, __NAMESPACE__.'\\SyndicationDestinationHistoryBuiltInterface');
-}
+class_alias(CatalogSyndicationDestinationHistoryBuiltInterface::class, __NAMESPACE__.'\\SyndicationDestinationHistoryBuiltInterface');

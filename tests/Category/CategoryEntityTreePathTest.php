@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Tests\CategoryEntity;
 
+use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +41,9 @@ final class CatalogCategoryEntityTreePathTest extends TestCase
     {
         $reflection = new \ReflectionClass(CatalogCategoryEntity::class);
         $entity = $reflection->newInstanceWithoutConstructor();
+
+        $catalogProperty = $reflection->getProperty('catalog');
+        $catalogProperty->setValue($entity, new CatalogCatalogEntity('test', 'Test', 'testing'));
 
         $pathProperty = $reflection->getProperty('path');
         $pathProperty->setValue($entity, $path);

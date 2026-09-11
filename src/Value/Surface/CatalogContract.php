@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Value\Surface;
 
-use App\Interfacing\Contract\Surface\InterfaceSurfaceRenderableInterface;
+use App\Interfacing\Contract\InterfaceSurfaceRenderableInterface;
 
 final readonly class CatalogContract implements InterfaceSurfaceRenderableInterface
 {

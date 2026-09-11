@@ -30,6 +30,8 @@ final class CatalogCategoryMerchantController extends AbstractController
 
     /**
      * Handles the index workflow.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/merchant/category', name: 'merchant_category_index')]
     public function index(Request $request): array

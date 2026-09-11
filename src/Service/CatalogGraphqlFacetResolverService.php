@@ -63,7 +63,7 @@ final readonly class CatalogGraphqlFacetResolverService implements CatalogGraphq
             $items[] = [
                 'id' => $this->stringValue($row, 'id'),
                 'slug' => $this->stringValue($row, 'slug'),
-                'nameEntity' => $this->stringValue($row, 'nameEntity'),
+                'name' => $this->stringValue($row, 'name', $this->stringValue($row, 'nameEntity')),
                 'path' => $path,
                 'locale' => $this->stringValue($row, 'locale', 'en'),
                 'score' => null,

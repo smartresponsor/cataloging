@@ -25,18 +25,18 @@ function containsAll(string $path, string ...$needles): bool
 }
 
 $searchService = $root . '/src/Service/CatalogSearchService.php';
-$searchController = $root . '/src/Controller/CategorySearchController.php';
+$searchController = $root . '/src/Controller/Catalog/CatalogCategorySearchController.php';
 $apiCanonical = $root . '/api/catalog-openapi.yaml';
 $apiLegacy = $root . '/api/category-openapi.yaml';
 $sqlSchema = $root . '/config/sql/catalog_mysql_infra_category.sql';
-$migration = $root . '/migrations/Version20251102081000_category_projection_search_runtime_hardening.php';
+$migration = $root . '/src/Entity/Catalog/CatalogCategoryProjectionEntity.php';
 $docs = $root . '/docs/category-search-readiness.md';
 $composer = $root . '/composer.json';
 
 $items = [
     [
         'check' => 'projection-backed-search-service',
-        'status' => containsAll($searchService, 'category_projection', 'ManagerRegistry', 'fetchAllAssociative') ? 'pass' : 'fail',
+        'status' => containsAll($searchService, 'category_projection', 'CatalogCategoryProjectionEntity', 'createQueryBuilder') ? 'pass' : 'fail',
         'details' => ['file' => 'src/Service/CatalogSearchService.php'],
     ],
     [
@@ -72,7 +72,7 @@ $items = [
     [
         'check' => 'projection-search-indexes-migration',
         'status' => containsAll($migration, 'idx_category_projection_name', 'idx_category_projection_tenant_locale', 'idx_category_projection_workflow_state', 'idx_category_projection_updated_at') ? 'pass' : 'fail',
-        'details' => ['file' => 'migrations/Version20251102081000_category_projection_search_runtime_hardening.php'],
+        'details' => ['file' => 'src/Entity/Catalog/CatalogCategoryProjectionEntity.php'],
     ],
     [
         'check' => 'search-readiness-doc',

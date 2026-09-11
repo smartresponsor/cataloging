@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Repository\Catalog;
 
-use App\Cataloging\Entity\CatalogCategoryAttachmentEntity;
+use App\Cataloging\Entity\Catalog\CatalogCategoryAttachmentEntity;
 use App\Cataloging\RepositoryInterface\Catalog\CatalogAttachmentRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 

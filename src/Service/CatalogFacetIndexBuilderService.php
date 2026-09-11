@@ -22,7 +22,7 @@ final class CatalogFacetIndexBuilderService
             'slug' => $this->stringValue($category, 'slug'),
             'path' => $this->stringValue($category, 'path'),
             'locale' => $this->stringValue($category, 'locale', 'en'),
-            'nameEntity' => $this->stringValue($category, 'nameEntity'),
+            'name' => $this->stringValue($category, 'name', $this->stringValue($category, 'nameEntity')),
         ];
     }
 

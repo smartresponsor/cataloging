@@ -55,7 +55,7 @@ final readonly class CatalogCategoryAttachmentController
     /**
      * Handles the attach workflow.
      */
-    #[Route('/api/catalog/category/attachment', name: 'api_category_attachment_attach', methods: ['POST'])]
+    #[Route('/api/catalog/category/attachment', name: 'api_category_attachment_add', methods: ['POST'])]
     public function attach(Request $request): JsonResponse
     {
         $input = CategoryAttachmentAddRequest::fromJson((string) $request->getContent());

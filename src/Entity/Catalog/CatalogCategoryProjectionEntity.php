@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'category_projection')]
 #[ORM\Index(name: 'idx_category_projection_path', columns: ['path'])]
+#[ORM\Index(name: 'idx_category_projection_name', columns: ['name_entity'])]
 #[ORM\Index(name: 'idx_category_projection_tenant_locale', columns: ['tenant', 'locale'])]
 #[ORM\Index(name: 'idx_category_projection_workflow_state', columns: ['workflow_state'])]
 #[ORM\Index(name: 'idx_category_projection_updated_at', columns: ['updated_at'])]

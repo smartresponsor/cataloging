@@ -113,14 +113,14 @@ function collectLockedPackages(string $root): array
     $packages = [];
 
     foreach ($decoded['packages'] ?? [] as $package) {
-        $packages[(string) $package['nameEntity']] = [
+        $packages[(string) $package['name']] = [
             'version' => (string) ($package['version'] ?? 'unknown'),
             'dev' => false,
         ];
     }
 
     foreach ($decoded['packages-dev'] ?? [] as $package) {
-        $packages[(string) $package['nameEntity']] = [
+        $packages[(string) $package['name']] = [
             'version' => (string) ($package['version'] ?? 'unknown'),
             'dev' => true,
         ];

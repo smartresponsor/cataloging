@@ -202,7 +202,7 @@ final readonly class CatalogSearchService
         return [
             'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
-            'nameEntity' => $entity->getName(),
+            'name' => $entity->getName(),
             'parent_id' => $entity->getParentId(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',

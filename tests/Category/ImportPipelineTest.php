@@ -8,7 +8,7 @@ namespace App\Cataloging\Tests\CategoryEntity;
 use App\Cataloging\Service\CatalogImportPipelineService;
 use PHPUnit\Framework\TestCase;
 
-final class CatalogImportPipelineServiceTest extends TestCase
+final class ImportPipelineTest extends TestCase
 {
     public function testProcessResultMarksFailureWhenSlugMissing(): void
     {

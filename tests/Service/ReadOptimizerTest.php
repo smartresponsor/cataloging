@@ -9,7 +9,7 @@ use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterfac
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use PHPUnit\Framework\TestCase;
 
-final class CatalogReadOptimizerServiceTest extends TestCase
+final class ReadOptimizerTest extends TestCase
 {
     public function testTreeIsProjectionBackedAndCached(): void
     {

@@ -5,7 +5,7 @@ component:
   package: cataloging/catalog
   status: rc
   namespace: App
-  responsibility: "catalog, category, and product-discovery surfaces"
+  responsibility: "catalog and category discovery surfaces"
   export_contract:
     services: config/component/services.yaml
     routes: config/component/routes.yaml

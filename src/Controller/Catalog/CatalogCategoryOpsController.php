@@ -16,6 +16,8 @@ final class CatalogCategoryOpsController extends AbstractController
 {
     /**
      * Executes the invokable workflow for this service.
+     *
+     * @return array<string, mixed>
      */
     #[Route('/admin/category/ops', name: 'admin_category_ops')]
     public function __invoke(): array

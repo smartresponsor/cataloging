@@ -20,6 +20,4 @@ interface CatalogSyndicationDeliveryRecordedInterface
      */
     public function occurredAt(): \DateTimeImmutable;
 }
-if (!class_exists(__NAMESPACE__.'\\SyndicationDeliveryRecordedInterface', false)) {
-    class_alias(CatalogSyndicationDeliveryRecordedInterface::class, __NAMESPACE__.'\\SyndicationDeliveryRecordedInterface');
-}
+class_alias(CatalogSyndicationDeliveryRecordedInterface::class, __NAMESPACE__.'\\SyndicationDeliveryRecordedInterface');

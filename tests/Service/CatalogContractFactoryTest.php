@@ -49,7 +49,15 @@ final class CatalogContractFactoryTest extends TestCase
             ],
         ]];
 
-        $cards = $factory->create('catalog', $tree)->slots['main.body']['sections'][0]['cards'];
+        $contract = $factory->create('catalog', $tree);
+        $mainBody = $contract->slots['main.body'] ?? null;
+        self::assertIsArray($mainBody);
+        $sections = $mainBody['sections'] ?? null;
+        self::assertIsArray($sections);
+        $firstSection = $sections[0] ?? null;
+        self::assertIsArray($firstSection);
+        $cards = $firstSection['cards'] ?? null;
+        self::assertIsArray($cards);
 
         self::assertSame(['Task Catalog', 'Order Catalog', 'Product Catalog', 'Service Catalog'], array_column($cards, 'title'));
         self::assertSame(['task.jpg', 'order.jpg', 'product.jpg', 'service.jpg'], array_column($cards, 'imageUrl'));
@@ -88,12 +96,34 @@ final class CatalogContractFactoryTest extends TestCase
         $contract = $factory->createDetail('catalog', $tree, 'appliance-installation');
 
         self::assertNotNull($contract);
-        self::assertSame('Appliance Installation', $contract->slots['main.body']['title']);
-        self::assertSame('appliance.jpg', $contract->slots['main.body']['imageUrl']);
-        self::assertSame('Task', $contract->slots['right.panel']['stats'][1]['value']);
-        self::assertSame(['Marketplace', 'Task Catalog', 'Appliance Installation'], array_column($contract->slots['main.body']['breadcrumbs'], 'title'));
-        self::assertSame('task', $contract->slots['main.body']['sections'][0]['cards'][0]['kind']);
-        self::assertSame('Browse task requests', $contract->slots['right.panel']['actions'][0]['title']);
+        $mainBody = $contract->slots['main.body'] ?? null;
+        $rightPanel = $contract->slots['right.panel'] ?? null;
+        self::assertIsArray($mainBody);
+        self::assertIsArray($rightPanel);
+        self::assertSame('Appliance Installation', $mainBody['title']);
+        self::assertSame('appliance.jpg', $mainBody['imageUrl']);
+
+        $stats = $rightPanel['stats'] ?? null;
+        self::assertIsArray($stats);
+        self::assertIsArray($stats[1] ?? null);
+        self::assertSame('Task', $stats[1]['value']);
+
+        $breadcrumbs = $mainBody['breadcrumbs'] ?? null;
+        self::assertIsArray($breadcrumbs);
+        self::assertSame(['Marketplace', 'Task Catalog', 'Appliance Installation'], array_column($breadcrumbs, 'title'));
+
+        $sections = $mainBody['sections'] ?? null;
+        self::assertIsArray($sections);
+        self::assertIsArray($sections[0] ?? null);
+        $cards = $sections[0]['cards'] ?? null;
+        self::assertIsArray($cards);
+        self::assertIsArray($cards[0] ?? null);
+        self::assertSame('task', $cards[0]['kind']);
+
+        $actions = $rightPanel['actions'] ?? null;
+        self::assertIsArray($actions);
+        self::assertIsArray($actions[0] ?? null);
+        self::assertSame('Browse task requests', $actions[0]['title']);
     }
 
     public function testCreateDetailReturnsNullForUnknownSlug(): void

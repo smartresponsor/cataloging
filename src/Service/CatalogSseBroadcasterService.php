@@ -11,10 +11,7 @@ namespace App\Cataloging\Service;
 final class CatalogSseBroadcasterService
 {
     /**
-     * @param string              $event
      * @param array<string,mixed> $data
-     *
-     * @return string
      *
      * @throws \JsonException
      */

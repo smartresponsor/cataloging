@@ -31,17 +31,15 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
     {
         $criteriaMap = $this->criteriaMap($criteria);
 
-        $entityManager = $this->entityManager();
-        $entities = $entityManager->getRepository(CatalogCategoryProjectionEntity::class)->findBy([], ['path' => 'ASC', 'slug' => 'ASC']);
-        $rows = [];
-        foreach ($entities as $entity) {
-            $row = $this->mapEntityToRow($entity);
-            if ($this->matchesCriteria($row, $criteriaMap)) {
-                $rows[] = $row;
-            }
-        }
+        $rawRows = $this->entityManager()->getConnection()->fetchAllAssociative(
+            'SELECT id, slug, name_entity AS "nameEntity", parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at FROM category_projection ORDER BY path ASC, slug ASC'
+        );
+        $rows = $this->querySupport->normalizeProjectionRows($rawRows);
 
-        return $rows;
+        return array_values(array_filter(
+            $rows,
+            fn (array $row): bool => $this->matchesCriteria($row, $criteriaMap),
+        ));
     }
 
     /**
@@ -66,12 +64,6 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
 
         $entityManager = $this->entityManager();
         $repository = $entityManager->getRepository(CatalogCategoryProjectionEntity::class);
-        if (is_numeric($normalizedId)) {
-            $entity = $repository->find((int) $normalizedId);
-
-            return $entity instanceof CatalogCategoryProjectionEntity ? $this->mapEntityToRow($entity) : null;
-        }
-
         $entity = $repository->findOneBy(['slug' => $normalizedId]);
         if ($entity instanceof CatalogCategoryProjectionEntity) {
             return $this->mapEntityToRow($entity);
@@ -193,10 +185,10 @@ final readonly class CatalogCategoryProjectionReadService implements CatalogCate
     private function mapEntityToRow(CatalogCategoryProjectionEntity $entity): array
     {
         return [
-            'id' => (int) $entity->getId(),
+            'id' => $entity->getId(),
             'slug' => $entity->getSlug(),
             'nameEntity' => $entity->getName(),
-            'parent_id' => null === $entity->getParentId() ? null : (int) $entity->getParentId(),
+            'parent_id' => $entity->getParentId(),
             'path' => $entity->getPath(),
             'locale' => $entity->getLocale() ?? '',
             'tenant' => $entity->getTenant(),

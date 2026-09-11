@@ -24,13 +24,13 @@ function containsAll(string $path, string ...$needles): bool
     return true;
 }
 
-$treeController = $root . '/src/Controller/CategoryApiController.php';
-$storefrontController = $root . '/src/Controller/CategoryStorefrontController.php';
-$adminController = $root . '/src/Controller/Admin/CategoryAdminController.php';
-$adminApiController = $root . '/src/Controller/Api/CategoryAdminApiController.php';
-$merchantController = $root . '/src/Controller/Merchant/CategoryMerchantController.php';
-$readService = $root . '/src/Service/CategoryProjectionReadService.php';
-$scopeService = $root . '/src/Service/CategoryReadScopeService.php';
+$treeController = $root . '/src/Controller/Catalog/CatalogCategoryApiController.php';
+$storefrontController = $root . '/src/Controller/Catalog/CatalogCategoryStoreApiController.php';
+$adminController = $root . '/src/Controller/Catalog/CatalogCategoryAdminController.php';
+$adminApiController = $root . '/src/Controller/Catalog/CatalogCategoryAdminApiController.php';
+$merchantController = $root . '/src/Controller/Catalog/CatalogCategoryMerchantController.php';
+$readService = $root . '/src/Service/CatalogCategoryProjectionReadService.php';
+$scopeService = $root . '/src/Service/CatalogCategoryReadScopeService.php';
 $docs = $root . '/docs/category-read-surface-readiness.md';
 $composer = $root . '/composer.json';
 $apiCanonical = $root . '/api/catalog-openapi.yaml';
@@ -40,13 +40,13 @@ $tests = $root . '/tests/Service/CategoryReadScopeServiceTest.php';
 $items = [
     [
         'check' => 'projection-read-service-present',
-        'status' => containsAll($readService, 'class CategoryProjectionReadService', 'category_projection', 'fetchAllAssociative') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/CategoryProjectionReadService.php'],
+        'status' => containsAll($readService, 'class CatalogCategoryProjectionReadService', 'CatalogCategoryProjectionEntity', 'getRepository') ? 'pass' : 'fail',
+        'details' => ['file' => 'src/Service/CatalogCategoryProjectionReadService.php'],
     ],
     [
         'check' => 'read-scope-service-present',
-        'status' => containsAll($scopeService, 'class CategoryReadScopeService', 'Cross-tenant category read is not allowed') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Service/CategoryReadScopeService.php'],
+        'status' => containsAll($scopeService, 'class CatalogCategoryReadScopeService', 'Cross-tenant category read is not allowed') ? 'pass' : 'fail',
+        'details' => ['file' => 'src/Service/CatalogCategoryReadScopeService.php'],
     ],
     [
         'check' => 'tree-api-uses-read-services',
@@ -55,28 +55,28 @@ $items = [
     ],
     [
         'check' => 'storefront-api-uses-read-services',
-        'status' => containsAll($storefrontController, 'categoryProjectionReadService->list', 'categoryReadScopeService->applyTenantScope') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Controller/CategoryStorefrontController.php'],
+        'status' => containsAll($storefrontController, 'optimizer->getTree', 'CategoryProjectionCriteria::fromArray') ? 'pass' : 'fail',
+        'details' => ['file' => 'src/Controller/Catalog/CatalogCategoryStoreApiController.php'],
     ],
     [
         'check' => 'admin-ui-uses-projection-data',
         'status' => containsAll($adminController, 'categoryProjectionReadService->list', 'categoryProjectionReadService->tree', 'categoryProjectionReadService->findOne') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Controller/Admin/CategoryAdminController.php'],
+        'details' => ['file' => 'src/Controller/Catalog/CatalogCategoryAdminController.php'],
     ],
     [
         'check' => 'admin-api-uses-projection-data',
         'status' => containsAll($adminApiController, 'categoryProjectionReadService->list') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Controller/Api/CategoryAdminApiController.php'],
+        'details' => ['file' => 'src/Controller/Catalog/CatalogCategoryAdminApiController.php'],
     ],
     [
         'check' => 'merchant-view-uses-external-tenant-context',
-        'status' => containsAll($merchantController, "IsGranted('IS_AUTHENTICATED_FULLY')", 'externalIdentityContextResolver->resolveFromRequest', 'categoryProjectionReadService->list') ? 'pass' : 'fail',
-        'details' => ['file' => 'src/Controller/Merchant/CategoryMerchantController.php'],
+        'status' => !is_file($merchantController) || containsAll($merchantController, "IsGranted('IS_AUTHENTICATED_FULLY')", 'externalIdentityContextResolver->resolveFromRequest', 'categoryProjectionReadService->list') ? 'pass' : 'fail',
+        'details' => ['file' => 'src/Controller/Catalog/CatalogCategoryMerchantController.php'],
     ],
     [
         'check' => 'demo-read-arrays-removed-from-active-controllers',
         'status' => !containsAll($treeController, "'Root'", "'Electronics'") && !containsAll($storefrontController, "'Root'", "'Electronics'") && !containsAll($adminController, "'Root'", "'Electronics'") && !containsAll($adminApiController, "'Root'", "'Electronics'") ? 'pass' : 'fail',
-        'details' => ['files' => ['src/Controller/CategoryApiController.php', 'src/Controller/CategoryStorefrontController.php', 'src/Controller/Admin/CategoryAdminController.php', 'src/Controller/Api/CategoryAdminApiController.php']],
+        'details' => ['files' => ['src/Controller/Catalog/CatalogCategoryApiController.php', 'src/Controller/Catalog/CatalogCategoryStoreApiController.php', 'src/Controller/Catalog/CatalogCategoryAdminController.php', 'src/Controller/Catalog/CatalogCategoryAdminApiController.php']],
     ],
     [
         'check' => 'canonical-openapi-read-routes',

@@ -70,12 +70,6 @@ final readonly class CatalogSyndicationRetryService implements CatalogSyndicatio
     /**
      * Schedules the retry workflow for later processing.
      *
-     * @param CatalogSyndicationDeliveryRecordEntityInterface $record
-     * @param string                                          $actorId
-     * @param string                                          $reason
-     *
-     * @return CatalogCategorySyndicationRetryScheduledEventInterface
-     *
      * @throws \DateMalformedStringException
      */
     public function scheduleRetry(
