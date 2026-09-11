@@ -20,6 +20,11 @@ final class CatalogCategoryFeaturedEntity
     use ObjectAuditEmbeddableTrait;
     use ObjectStateEmbeddableTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
+
     public function __construct(
         #[ORM\Column(name: 'category_id', length: 26)]
         private string $categoryId,
@@ -27,8 +32,7 @@ final class CatalogCategoryFeaturedEntity
         private string $surface,
         #[ORM\Column(name: 'sort_order', type: 'integer')]
         private int $sortOrder = 0,
-        #[ORM\Column(type: 'boolean')]
-        private bool $active = true,
+        bool $active = true,
         #[ORM\Column(name: 'starts_at', type: 'datetime_immutable', nullable: true)]
         private ?\DateTimeImmutable $startsAt = null,
         #[ORM\Column(name: 'ends_at', type: 'datetime_immutable', nullable: true)]
@@ -36,12 +40,12 @@ final class CatalogCategoryFeaturedEntity
     ) {
         $this->initializeObjectIdentity(objectSlug: $categoryId.'-'.$surface);
         $this->initializeObjectAudit();
-        $this->initializeObjectState(objectStatus: $active ? 'active' : 'inactive');
+        $this->initializeObjectState(objectActive: $active, objectEnabled: $active, objectStatus: $active ? 'active' : 'inactive');
     }
 
     public function id(): ?int
     {
-        return $this->getId();
+        return $this->id;
     }
 
     public function categoryId(): string
@@ -61,7 +65,7 @@ final class CatalogCategoryFeaturedEntity
 
     public function active(): bool
     {
-        return $this->active;
+        return $this->isObjectActive();
     }
 
     public function startsAt(): ?\DateTimeImmutable

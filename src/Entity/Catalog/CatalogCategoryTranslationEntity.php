@@ -19,14 +19,18 @@ final class CatalogCategoryTranslationEntity
     use ObjectAuditEmbeddableTrait;
     use ObjectLocaleEmbeddableTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
+
     public function __construct(
         #[ORM\Column(name: 'category_id', length: 26)]
         private string $categoryId,
-        #[ORM\Column(length: 12)]
-        private string $locale,
+        string $locale,
         #[ORM\Column(length: 180)]
         private string $nameEntity,
-        #[ORM\Column(length: 180)]
+        #[ORM\Column(name: 'translation_slug', length: 180)]
         private string $slug,
         #[ORM\Column(type: 'text', nullable: true)]
         private ?string $description = null,
@@ -42,7 +46,7 @@ final class CatalogCategoryTranslationEntity
 
     public function id(): ?int
     {
-        return $this->getId();
+        return $this->id;
     }
 
     public function categoryId(): string
@@ -52,7 +56,7 @@ final class CatalogCategoryTranslationEntity
 
     public function locale(): string
     {
-        return $this->locale;
+        return $this->getObjectLocale();
     }
 
     public function nameEntity(): string

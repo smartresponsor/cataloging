@@ -77,7 +77,9 @@ final class ShippingProviderCatalogFixtures extends Fixture implements FixtureGr
             'SELECT id FROM catalog WHERE object_code = :code AND tenant = :tenant ORDER BY id LIMIT 1',
             ['code' => 'shipping', 'tenant' => 'default'],
         );
-        $catalog = false === $id ? null : $manager->find(CatalogCatalogEntity::class, (int) $id);
+        $catalog = is_int($id) || (is_string($id) && ctype_digit($id))
+            ? $manager->find(CatalogCatalogEntity::class, (int) $id)
+            : null;
         if (!$catalog instanceof CatalogCatalogEntity) {
             $catalog = new CatalogCatalogEntity('shipping', 'Shipping', 'shipping-classification');
             $manager->persist($catalog);

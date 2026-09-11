@@ -143,7 +143,7 @@ final class CategoryFixtures extends Fixture
             $id = $manager->getConnection()->fetchOne(
                 "SELECT id FROM catalog WHERE object_code = 'marketplace' AND tenant = 'default' LIMIT 1",
             );
-            if (false !== $id) {
+            if (is_int($id) || (is_string($id) && ctype_digit($id))) {
                 $existing = $manager->find(CatalogCatalogEntity::class, (int) $id);
                 if ($existing instanceof CatalogCatalogEntity) {
                     return $existing;

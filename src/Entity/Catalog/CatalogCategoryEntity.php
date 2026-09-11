@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'category')]
-#[ORM\UniqueConstraint(name: 'uniq_category_catalog_parent_slug', columns: ['catalog_id', 'parent_id', 'slug'])]
+#[ORM\UniqueConstraint(name: 'uniq_category_catalog_parent_slug', columns: ['catalog_id', 'parent_id', 'category_slug'])]
 #[ORM\Index(name: 'idx_category_path', columns: ['path'])]
 #[ORM\Index(name: 'idx_category_catalog_path', columns: ['catalog_id', 'path'])]
 #[ORM\Index(name: 'idx_category_tenant_workflow', columns: ['tenant', 'workflow_state'])]
@@ -28,10 +28,16 @@ class CatalogCategoryEntity implements ObjectEntityInterface
     use ObjectTitleEmbeddableTrait;
     use ObjectAuditEmbeddableTrait;
     use ObjectStateEmbeddableTrait;
+
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
+
     #[ORM\Column(type: 'string', length: 160)]
     private string $nameEntity;
 
-    #[ORM\Column(type: 'string', length: 36)]
+    #[ORM\Column(name: 'category_slug', type: 'string', length: 36)]
     private string $slug;
 
     #[ORM\ManyToOne(targetEntity: CatalogCatalogEntity::class)]
@@ -96,6 +102,11 @@ class CatalogCategoryEntity implements ObjectEntityInterface
         $this->initializeObjectTitle($nameEntity);
         $this->initializeObjectAudit();
         $this->initializeObjectState(objectStatus: $this->workflowState);
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getCatalog(): CatalogCatalogEntity

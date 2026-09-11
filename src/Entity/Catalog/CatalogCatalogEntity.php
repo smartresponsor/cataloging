@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'catalog')]
-#[ORM\UniqueConstraint(name: 'uniq_catalog_tenant_code', columns: ['tenant', 'object_code'])]
+#[ORM\UniqueConstraint(name: 'uniq_catalog_tenant_code', columns: ['tenant', 'code'])]
 final class CatalogCatalogEntity implements ObjectEntityInterface, ObjectCodedInterface
 {
     use ObjectIdentityEmbeddableTrait;
@@ -27,6 +27,11 @@ final class CatalogCatalogEntity implements ObjectEntityInterface, ObjectCodedIn
     use ObjectAuditEmbeddableTrait;
     use ObjectCodeEmbeddableTrait;
     use ObjectStateEmbeddableTrait;
+
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 160)]
     private string $name;
@@ -55,6 +60,11 @@ final class CatalogCatalogEntity implements ObjectEntityInterface, ObjectCodedIn
         $this->name = $normalizedName;
         $this->purpose = $normalizedPurpose;
         $this->tenant = $normalizedTenant;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getCode(): string

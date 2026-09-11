@@ -67,7 +67,9 @@ final class PaymentProviderCatalogFixtures extends Fixture implements FixtureGro
             'SELECT id FROM catalog WHERE object_code = :code AND tenant = :tenant ORDER BY id LIMIT 1',
             ['code' => 'payment', 'tenant' => 'default'],
         );
-        $catalog = false === $id ? null : $manager->find(CatalogCatalogEntity::class, (int) $id);
+        $catalog = is_int($id) || (is_string($id) && ctype_digit($id))
+            ? $manager->find(CatalogCatalogEntity::class, (int) $id)
+            : null;
         if (!$catalog instanceof CatalogCatalogEntity) {
             $catalog = new CatalogCatalogEntity('payment', 'Payment', 'payment-classification');
             $manager->persist($catalog);

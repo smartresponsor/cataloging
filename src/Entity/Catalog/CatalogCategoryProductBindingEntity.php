@@ -20,6 +20,11 @@ final class CatalogCategoryProductBindingEntity implements ObjectRelationEntityI
     use ObjectAuditEmbeddableTrait;
     use ObjectStateEmbeddableTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
+
     public function __construct(
         #[ORM\Column(name: 'category_id', length: 26)]
         private string $categoryId,
@@ -37,7 +42,7 @@ final class CatalogCategoryProductBindingEntity implements ObjectRelationEntityI
 
     public function id(): ?int
     {
-        return $this->getId();
+        return $this->id;
     }
 
     public function categoryId(): string

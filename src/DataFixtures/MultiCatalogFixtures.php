@@ -136,7 +136,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             $seenCategoryIds = [];
 
             $root = $this->adoptCategory($manager, $catalog, $name, $code, $code, 0, null, true);
-            $seenCategoryIds[$root->getId()] = true;
+            $seenCategoryIds[$this->requireCategoryId($root)] = true;
             $this->projection($manager, $root);
 
             foreach ($branches as $branchName => $leaves) {
@@ -147,7 +147,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
                 if (isset(self::CATEGORY_METADATA[$branch->getPath()])) {
                     $branch->setMetadata($this->mergeCategoryMetadata($branch->getMetadata(), self::CATEGORY_METADATA[$branch->getPath()]));
                 }
-                $seenCategoryIds[$branch->getId()] = true;
+                $seenCategoryIds[$this->requireCategoryId($branch)] = true;
                 $this->projection($manager, $branch);
 
                 foreach ($leaves as $leafName) {
@@ -155,7 +155,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
                     $leafPublished = 'services' !== $code || ($published && isset(self::PUBLISHED_SERVICE_LEAF_SLUGS[$leafSlug]));
                     $displayName = 'services' === $code ? (self::SERVICE_LEAF_DISPLAY_NAMES[$leafSlug] ?? $leafName) : $leafName;
                     $leaf = $this->adoptCategory($manager, $catalog, $displayName, $leafSlug, $branch->getPath().'.'.$this->path($leafSlug), 2, (string) $branch->getId(), $leafPublished);
-                    $seenCategoryIds[$leaf->getId()] = true;
+                    $seenCategoryIds[$this->requireCategoryId($leaf)] = true;
                     $this->projection($manager, $leaf);
                 }
             }
@@ -177,7 +177,9 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
             'SELECT id FROM catalog WHERE object_code = :code AND tenant = :tenant ORDER BY id LIMIT 1',
             ['code' => $code, 'tenant' => 'default'],
         );
-        $catalog = false === $id ? null : $manager->find(CatalogCatalogEntity::class, (int) $id);
+        $catalog = is_int($id) || (is_string($id) && ctype_digit($id))
+            ? $manager->find(CatalogCatalogEntity::class, (int) $id)
+            : null;
         if (!$catalog instanceof CatalogCatalogEntity) {
             $catalog = new CatalogCatalogEntity($code, $name, $purpose);
             $manager->persist($catalog);
@@ -261,7 +263,7 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
     {
         $categories = $manager->getRepository(CatalogCategoryEntity::class)->findBy(['catalog' => $catalog]);
         foreach ($categories as $category) {
-            if (!$category instanceof CatalogCategoryEntity || isset($seenCategoryIds[$category->getId()])) {
+            if (isset($seenCategoryIds[$this->requireCategoryId($category)])) {
                 continue;
             }
 
@@ -295,7 +297,11 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
                 if (!is_array($type)) {
                     continue;
                 }
-                $code = strtolower(trim((string) ($type['code'] ?? '')));
+                $rawCode = $type['code'] ?? null;
+                if (!is_scalar($rawCode)) {
+                    continue;
+                }
+                $code = strtolower(trim((string) $rawCode));
                 if ('' === $code) {
                     continue;
                 }
@@ -311,6 +317,16 @@ final class MultiCatalogFixtures extends Fixture implements FixtureGroupInterfac
         $merged['types'] = array_map(static fn (string $code): array => $typesByCode[$code], $typeOrder);
 
         return $merged;
+    }
+
+    private function requireCategoryId(CatalogCategoryEntity $category): int
+    {
+        $id = $category->getId();
+        if (null === $id) {
+            throw new \LogicException('Persisted catalog category must have an identifier.');
+        }
+
+        return $id;
     }
 
     private function slug(string $value): string

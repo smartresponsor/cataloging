@@ -19,11 +19,15 @@ final class CatalogCategoryAttachmentTranslationEntity
     use ObjectAuditEmbeddableTrait;
     use ObjectLocaleEmbeddableTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
+
     public function __construct(
         #[ORM\Column(name: 'attachment_id', length: 26)]
         private string $attachmentId,
-        #[ORM\Column(length: 12)]
-        private string $locale,
+        string $locale,
         #[ORM\Column(length: 180, nullable: true)]
         private ?string $title = null,
         #[ORM\Column(type: 'text', nullable: true)]
@@ -36,7 +40,7 @@ final class CatalogCategoryAttachmentTranslationEntity
 
     public function id(): ?int
     {
-        return $this->getId();
+        return $this->id;
     }
 
     public function attachmentId(): string
@@ -46,7 +50,7 @@ final class CatalogCategoryAttachmentTranslationEntity
 
     public function locale(): string
     {
-        return $this->locale;
+        return $this->getObjectLocale();
     }
 
     public function title(): ?string

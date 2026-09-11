@@ -37,17 +37,14 @@ final class CategoryProjectionRebuildCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $batchSize = max(1, (int) $input->getOption('batch-size'));
+            $batchSizeOption = $input->getOption('batch-size');
+            $batchSize = max(1, is_scalar($batchSizeOption) ? (int) $batchSizeOption : 100);
             $entityManager = $this->entityManager();
             $categories = $entityManager->getRepository(CatalogCategoryEntity::class)->findBy([], ['id' => 'ASC']);
             $processed = 0;
             $withIcon = 0;
 
             foreach ($categories as $category) {
-                if (!$category instanceof CatalogCategoryEntity) {
-                    continue;
-                }
-
                 $this->synchronizer->synchronize($category, false);
                 ++$processed;
                 if (null !== $category->getIconUrl() && '' !== trim($category->getIconUrl())) {

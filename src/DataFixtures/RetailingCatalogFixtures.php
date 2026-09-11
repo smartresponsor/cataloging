@@ -141,14 +141,16 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
     }
 
     /**
-     * @param array<int, mixed> $existingTypes
-     * @param array<int, mixed> $fixtureTypes
+     * @param array<array-key, mixed> $existingTypes
+     * @param array<array-key, mixed> $fixtureTypes
      *
-     * @return list<array<string, mixed>>
+     * @return list<array<array-key, mixed>>
      */
     private function mergeTypesByCode(array $existingTypes, array $fixtureTypes): array
     {
+        /** @var array<string, array<array-key, mixed>> $typesByCode */
         $typesByCode = [];
+        /** @var list<string> $order */
         $order = [];
 
         foreach ([$existingTypes, $fixtureTypes] as $types) {
@@ -156,7 +158,11 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
                 if (!is_array($type)) {
                     continue;
                 }
-                $code = strtolower(trim((string) ($type['code'] ?? '')));
+                $rawCode = $type['code'] ?? null;
+                if (!is_scalar($rawCode)) {
+                    continue;
+                }
+                $code = strtolower(trim((string) $rawCode));
                 if ('' === $code) {
                     continue;
                 }
@@ -194,7 +200,14 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
             throw new \RuntimeException(sprintf('Retailing taxonomy resource is invalid: %s.', $path));
         }
 
-        return $metadata;
+        $normalized = [];
+        foreach ($metadata as $key => $value) {
+            if (is_string($key)) {
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
     }
 
     private function catalog(EntityManagerInterface $manager): CatalogCatalogEntity
@@ -203,7 +216,9 @@ final class RetailingCatalogFixtures extends Fixture implements FixtureGroupInte
             'SELECT id FROM catalog WHERE object_code = :code AND tenant = :tenant ORDER BY id LIMIT 1',
             ['code' => 'retailing', 'tenant' => 'default'],
         );
-        $catalog = false === $id ? null : $manager->find(CatalogCatalogEntity::class, (int) $id);
+        $catalog = is_int($id) || (is_string($id) && ctype_digit($id))
+            ? $manager->find(CatalogCatalogEntity::class, (int) $id)
+            : null;
         if (!$catalog instanceof CatalogCatalogEntity) {
             $catalog = new CatalogCatalogEntity('retailing', 'Retailing', 'retailing-classification');
             $manager->persist($catalog);
