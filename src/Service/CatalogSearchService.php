@@ -26,6 +26,7 @@ final readonly class CatalogSearchService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CatalogCategoryProjectionQuerySupportService $querySupport,
+        private CatalogFacetIndexBuilderService $facetIndexBuilder,
     ) {
     }
 
@@ -82,6 +83,13 @@ final readonly class CatalogSearchService
         $totalValue = $countBuilder->getQuery()->getSingleScalarResult();
         $total = is_numeric($totalValue) ? (int) $totalValue : count($items);
 
+        $facets = [
+            'locale' => $this->facetCountsOrm('locale', $criteriaMap),
+            'tenant' => $this->facetCountsOrm('tenant', $criteriaMap),
+            'workflow_state' => $this->facetCountsOrm('workflow_state', $criteriaMap),
+            'published' => $this->facetCountsOrm('published', $criteriaMap),
+        ];
+
         return [
             'items' => $items,
             'total' => $total,
@@ -89,12 +97,12 @@ final readonly class CatalogSearchService
             'offset' => $offset,
             'order' => strtolower($order),
             'direction' => strtolower($direction),
-            'facets' => [
-                'locale' => $this->facetCountsOrm('locale', $criteriaMap),
-                'tenant' => $this->facetCountsOrm('tenant', $criteriaMap),
-                'workflow_state' => $this->facetCountsOrm('workflow_state', $criteriaMap),
-                'published' => $this->facetCountsOrm('published', $criteriaMap),
-            ],
+            'facets' => $facets,
+            'facet_contracts' => array_map(
+                fn (string $identifier, array $buckets): array => $this->facetIndexBuilder->buildCountContract($identifier, $buckets),
+                array_keys($facets),
+                array_values($facets),
+            ),
         ];
     }
 

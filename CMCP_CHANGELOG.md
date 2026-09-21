@@ -187,3 +187,12 @@ Task: `engine-20260921193930-cataloging-a734f5`
 - Full `composer quality`: PHP-CS-Fixer clean; PHPStan clean; PHPUnit 207 tests / 791 assertions / 1 intentional skip; Gating green.
 - `composer validate --strict --check-lock`: pass.
 - Additional standalone `lint` execution was attempted through Console MCP but the execution surface timed out; no lint failure was reported or inferred.
+
+## 2026-09-21 — Faceting storefront acceptance
+
+- Extended the existing `CatalogFacetIndexBuilderService` rather than introducing duplicate facet ownership.
+- The builder now emits a stable counted-facet contract with Faceting-compatible facet/value identifier normalization, non-negative count validation and deterministic count-descending/value-ascending bucket ordering.
+- `CatalogSearchService` preserves its legacy `facets` map and additionally exposes `facet_contracts` for Searching/Retailing storefront consumers, so existing callers are not broken.
+- Focused acceptance tests cover canonical identifier normalization, deterministic ordering and invalid-count rejection.
+- Verification is GREEN: PHPUnit 209 tests / 794 assertions / 1 intentional skip; PHPStan 887 files / 0 errors; PHP-CS-Fixer 0/889 fixable files; aggregate `composer quality` GREEN; Gating 8 rules / 0 failed / 0 warning.
+- `PRODUCT_CAPABILITY_AUDIT.adoc` records facet/storefront projection as PARITY and separates completed Faceting/Indexing/Searching acceptance from unrelated Pricing/Stocking/Retailing integration work.

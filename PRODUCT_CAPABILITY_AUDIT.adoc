@@ -1,0 +1,42 @@
+= Product Capability Audit: Cataloging
+:revdate: 2026-09-21
+
+== Boundary verdict
+
+Cataloging is the system of record for catalog structure and product/catalog classification. The current repository is still transitional: legacy Category vocabulary and compatibility contracts remain. Syndication is present, but outbound commerce-channel behavior must not absorb Retailing ownership.
+
+== Market baseline
+
+Compared against current Medusa v2, Vendure, and Sylius product/catalog capabilities: products and variants, options/attributes, categories/taxonomy, collections/grouping, assets, translations, channel visibility, import/export and extensibility.
+
+== Capability matrix
+
+[cols="3,1,4",options="header"]
+|===
+|Capability |Status |Audit
+|Catalog/product identity |PARTIAL |Strong structural work exists, but repository vocabulary is still converging from Category to Catalog.
+|Variants/options/attributes |PARTIAL |Must be proven as first-class catalog contracts, not inferred from legacy category surfaces.
+|Taxonomy/category tree |PARITY |This is one of the repository's strongest existing business areas.
+|Collections/curated grouping |PARTIAL |Keep distinct from taxonomy and from merchandising/presentation.
+|Assets/media references |PARTIAL |Attachment/readiness work exists; media ownership must remain reference-oriented if another component owns asset storage.
+|Localization/translations |PARTIAL |Required for parity across modern commerce catalogs.
+|Channel/store visibility |PARTIAL |Catalog may expose eligibility metadata; selling/listing policy belongs to Retailing.
+|Facet/storefront projection |PARITY |Catalog search now exposes backward-compatible legacy facet maps plus stable counted facet contracts with Faceting-compatible identifiers and deterministic bucket ordering for Searching/Retailing consumers.
+|Import/export/syndication |PARITY |Repository contains explicit syndication lifecycle and delivery evidence.
+|Catalog history/audit |PARTIAL |Operational evidence exists; business-visible version/history semantics should be stabilized.
+|Extensible custom attributes |PARTIAL |Needed for parity with competitor custom-field/attribute models.
+|===
+
+== Boundary risks
+
+* Finish Category -> Catalog vocabulary convergence.
+* Do not let syndication become seller/channel commercial policy; Retailing owns the retail/listing projection.
+* Pricing, stock, promotions and tax remain references, never embedded engines.
+
+== Milestone direction
+
+M1: canonical Product/Catalog/Variant/Option/Attribute vocabulary and compatibility retirement.
+M2: collections, localization, channel visibility contracts, custom attributes.
+M3: asset/reference and import/export/syndication stabilization.
+M4: Faceting/Indexing/Searching facet projection acceptance is COMPLETE at the Cataloging storefront read boundary; Pricing, Stocking and broader Retailing integration remain separately owned acceptance work.
+
