@@ -106,3 +106,69 @@ Growth stream (post-RC): richer discovery/search semantics, merchandising UX, fe
 - Feature branch: pushed and current on remote.
 - PR #92: open and mergeable, no code conflicts.
 - Remaining terminal blocker: external GitHub Actions/required-check policy. Merge requires the required check to be restored/overridden by repository administration, after which the existing safe merge can complete without further product changes.
+
+## Iteration 6 — 2026-09-20 Cataloging RC reconnaissance and gate-ownership closure
+
+- Re-resolved the active workspace as `D:\\PhpstormProjects\\www\\cataloging` and preserved the inherited dirty/staged tree without reverting or rewriting unrelated work.
+- Re-read Cataloging `AGENTS.md`, `README.md`, `composer.json`, canonical status/debt/naming documents, the canonical OpenAPI contract, PHPUnit/package configuration, Symfony bundle integration documentation, and the current staged/unstaged Git diff.
+- Re-read the mandatory dependency contour for Objecting, Cruding, Viewing, and Interfacing, and verified the declared Cataloging runtime dependencies/path repositories for `objecting/object`, `cruding/crud`, `viewing/view`, and `interfacing/interface`.
+- Re-read Canonization textual rules Canon000, Canon002, Canon007, Canon008, Canon018, Canon019, Canon020, Canon021, Canon025, Canon026, Canon038, and Canon040, plus their Gating executable mirrors where needed.
+
+### Current target-to-canon mapping
+
+- Canon000 + Canon018: `cataloging/catalog` maps to namespace `App\\Cataloging\\` and component-owned PHP subject prefix `Catalog*`.
+- Canon002: typed interface roots mirror their implementation roots; local duplicate mirror enforcement is transitional tooling debt, not a reason to invent another architecture tree.
+- Canon007: compatibility aliases and Category-to-Catalog migrations may only be removed after all callers/config/tests/docs are synchronized.
+- Canon008: Objecting, Cruding, Viewing, and Interfacing are real runtime package dependencies rather than sibling-folder assumptions.
+- Canon019 + Canon020: no `src/Domain`, `src/Application`, `src/Infrastructure`, Port/Adapter/Adaptor roots; stable Symfony/application roles remain visible in role-first roots.
+- Canon021: generic application CRUD remains owned by Cruding; Cataloging keeps only catalog/category business operations.
+- Canon025 + Canon026: Cataloging remains a dual-mode Symfony component on PHP 8.4+ / Symfony 8.1+.
+- Canon038: component-owned YAML uses the `catalog_` subject prefix; conventional Symfony/vendor bootstrap filenames are exempt only for their real framework role.
+- Canon040: executable coverage is lines >=80%, methods >=80%, branches >=70% from persistent PHPUnit/php-code-coverage text evidence; local test-count or Clover-only approximation is non-canonical.
+
+### RC-critical workstream
+
+- The inherited staged change removes Cataloging-local config-prefix and coverage-threshold implementations that duplicate Canon038/Canon040 enforcement and rewires coverage production to the canonical PHPUnit text summary with branch coverage.
+- Active source/script search found no live references to the removed coverage checker or `test:coverage:gate`. References to the removed config-prefix checker remain only in historical pipeline reports and are intentionally preserved as historical evidence.
+- This journal previously claimed the removed `lint:config-prefix` script still passed; the current entry supersedes that stale statement and records Gating/Canon038 as the canonical owner.
+- The generic RC diagnostic warning for `CatalogContractFactory.php` was inspected and classified as a false positive: the matched token is the legitimate UI contract key `placeholder`, not a TODO/FIXME/stub.
+
+### Growth workstream
+
+- Post-RC opportunities remain richer governance/workflow, channel/locale-scoped discovery, completeness/data-quality signals, and taxonomy interoperability. None is required to close the current gate-ownership cleanup.
+
+### Verification/blocker state
+
+- Console MCP successfully completed repository reads and the RC diagnostic, which reported no hard RC blockers.
+- Subsequent Composer/script execution began returning an internal tool failure. This is an execution-surface blocker, not a Cataloging gate result; no green result is inferred from it.
+- Required next acceptance evidence is a successful project-local pipeline plus final Git/branch/PR inspection once the Console execution surface is available.
+
+## Iteration 7 — Canon040 evidence and final RC closure
+
+- Fixed the Cataloging Objecting metadata contract test to assert the current Objecting entity-native Doctrine fields `uuid` and `slug` rather than removed embeddable field names `objectUuid` and `objectSlug`.
+- Removed duplicate-stale Cataloging Canon000/Canon002/Canon019 checks from the active local pipeline and their PHPUnit assertions. Canonization's owner-guard consolidation explicitly classifies Cataloging prefix/mirror/canonical-root scripts as central-policy duplicates.
+- Console MCP prohibits physical deletion through the patch surface. The three duplicate guard files were therefore removed from Git tracking with the approved index-only operation; their local working-tree copies remain as untracked files and are not part of the repository change.
+- Restored `declare(strict_types=1);` in the generated `config/reference.php` while preserving its inherited generated changes.
+- Repaired Canon040 coverage evidence production for PHPUnit 11.5.55: use `--path-coverage`, pass `xdebug.mode=coverage` into the PHP 8.4 wrapper target process, and persist the report at `var/coverage-summary.txt`.
+
+### Verified gates
+
+- Composer validation: pass.
+- PHP syntax lint over tracked PHP: pass.
+- PHP-CS-Fixer dry run: 0/886 files require changes.
+- PHPStan: 884 files, 0 errors.
+- PHPUnit: 205 tests, 789 assertions, 1 intentional skip, 0 failures/errors.
+- Catalog boundary readiness: 11 pass, 0 warn, 0 fail.
+- Git diff whitespace check: pass.
+- Canon040 coverage evidence now executes under PHP 8.4.13 with Xdebug 3.5.1 and records: lines 44.58% (4920/11037), methods 34.72% (744/2143), branches 65.89% (3154/4787).
+
+### Canon040 disposition
+
+- Canon040 itself defines below-threshold coverage as a warning/remediation condition rather than a hard repository execution failure.
+- Cataloging is currently HIGH_TEST_DEBT because line and method coverage are below the high-debt thresholds. This is a factual post-RC remediation stream; it must not be hidden by test-count proxies or fake coverage.
+- RC correctness/static/runtime gates remain green. Coverage growth is tracked separately and should prioritize uncovered repositories, entities, request parsing, policies and integration paths by risk rather than mechanically testing accessors.
+
+### Remaining integration tail
+
+- Stage the coherent current change-set, create a signed commit, push the current feature branch, inspect PR #92 against the exact pushed head, and attempt the safe merge only if GitHub policy evidence is green.
+- The three physically retained untracked duplicate-guard files are a local capability artifact caused by Console MCP deletion policy; they are intentionally excluded from Git and must not be mistaken for repository-owned source after the deletion commit.

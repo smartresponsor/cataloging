@@ -142,11 +142,7 @@ $steps.Add((New-Step 'composer-md' 'composer md' 'smell'))
 $steps.Add((New-Step 'composer-md-tests' 'composer md:tests' 'smell'))
 $steps.Add((New-Step 'composer-test' 'composer test' 'test'))
 $steps.Add((New-Step 'phpunit-tools' 'php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist tests/Tools' 'test'))
-$steps.Add((New-Step 'prefix-check' 'php tools/php/php84.php tools/linter/category_prefix_check.php' 'canon'))
-$steps.Add((New-Step 'canonical-roots-check' 'php tools/php/php84.php tools/linter/category_canonical_roots_check.php' 'canon'))
-$steps.Add((New-Step 'mirror-check' 'php tools/php/php84.php tools/linter/category_mirror_check.php' 'canon'))
 $steps.Add((New-Step 'app-namespace-check' 'php tools/php/php84.php tools/linter/app_namespace_check.php' 'canon'))
-$steps.Add((New-Step 'config-prefix-check' 'php tools/php/php84.php tools/linter/catalog_config_prefix_check.php' 'canon'))
 
 if ($IncludeSmokes) {
     $steps.Add((New-Step 'smoke-runtime' 'composer smoke:runtime' 'smoke'))

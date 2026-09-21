@@ -101,7 +101,6 @@
     "cs:fix": "@php tools/php/php84.php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
     "lint": "@php tools/php/php84.php tools/qa/CatalogPhpLint.php",
     "lint:app-namespace": "@php tools/php/php84.php tools/linter/app_namespace_check.php",
-    "lint:config-prefix": "@php tools/php/php84.php tools/linter/catalog_config_prefix_check.php",
     "md": "@php tools/php/php84.php vendor/bin/phpmd src text phpmd.xml.dist",
     "md:tests": "@php tools/php/php84.php vendor/bin/phpmd tests text phpmd.xml.dist",
     "pipeline:local": "powershell -ExecutionPolicy Bypass -File tools/ci/run-category-local-pipeline.ps1",
@@ -123,7 +122,6 @@
     "qa:style": [
       "@lint",
       "@lint:app-namespace",
-      "@lint:config-prefix",
       "@cs:check"
     ],
     "qa:test": [
@@ -167,10 +165,7 @@
     "test:playwright": "npm run test:playwright",
     "test:unit": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit",
     "test:object-identity": "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist tests/Unit/Catalog/CatalogObjectIdentityContractTest.php",
-    "test:coverage:gate": [
-      "@php tools/php/php84.php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml",
-      "@php tools/php/php84.php tools/qa/check_coverage_threshold.php build/logs/clover.xml 70"
-    ]
+    "test:coverage": "@php tools/php/php84.php -d xdebug.mode=coverage vendor/bin/phpunit -c phpunit.xml.dist --path-coverage --coverage-text=var/coverage-summary.txt"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,
