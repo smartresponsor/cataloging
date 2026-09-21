@@ -185,69 +185,34 @@
   },
   "repositories": [
     {
-      "type": "path",
-      "url": "../Objecting",
-      "options": {
-        "symlink": true
-      }
+      "type": "vcs",
+      "url": "git@github.com:smartresponsor/objecting.git",
+      "no-api": true
     },
     {
-      "type": "path",
-      "url": "../Interfacing",
-      "options": {
-        "symlink": true
-      }
+      "type": "vcs",
+      "url": "git@github.com:smartresponsor/interfacing.git",
+      "no-api": true
     },
     {
-      "type": "path",
-      "url": "../Cruding",
-      "options": {
-        "symlink": true
-      }
+      "type": "vcs",
+      "url": "git@github.com:smartresponsor/cruding.git",
+      "no-api": true
     },
     {
-      "type": "path",
-      "url": "../Viewing",
-      "options": {
-        "symlink": true
-      }
+      "type": "vcs",
+      "url": "git@github.com:smartresponsor/viewing.git",
+      "no-api": true
     },
     {
-      "type": "path",
-      "url": "../Administering",
-      "options": {
-        "symlink": true
-      }
+      "type": "vcs",
+      "url": "git@github.com:smartresponsor/administering.git",
+      "no-api": true
     },
     {
-      "type": "path",
-      "url": "../Gating",
-      "options": {
-        "symlink": true,
-        "versions": {
-          "gating/gate": "dev-master"
-        }
-      }
-    },
-    {
-      "type": "path",
-      "url": "../Collectioning",
-      "options": {
-        "symlink": true,
-        "versions": {
-          "collectioning/collection": "dev-master"
-        }
-      }
-    },
-    {
-      "type": "path",
-      "url": "../Tabling",
-      "options": {
-        "symlink": true,
-        "versions": {
-          "tabling/table": "dev-master"
-        }
-      }
+      "type": "vcs",
+      "url": "https://github.com/smartresponsor/gating.git",
+      "no-api": true
     }
   ]
 }

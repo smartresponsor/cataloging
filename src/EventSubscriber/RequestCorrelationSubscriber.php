@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Cataloging\Observability;
+namespace App\Cataloging\EventSubscriber;
 
+use App\Cataloging\Observability\RequestCorrelationIdProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
