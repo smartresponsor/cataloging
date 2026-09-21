@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\Security;
+namespace App\Cataloging\Voter\Legacy;
 
 use App\Cataloging\RepositoryInterface\Catalog\CatalogCategoryAccessAssignmentRepositoryInterface;
 use App\Cataloging\ValueObject\Security\CategoryAuthorizationSubject;

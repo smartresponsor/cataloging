@@ -226,7 +226,7 @@ function DownloadAssets(
   $dlKey = if ([string]::IsNullOrWhiteSpace($Tag)) { ("branch-" + $useBranch) } else { $Tag.Replace("/","_") }
 
   $dlDir = Join-Path $WorkDir ("dl-" + $Owner + "-" + $Repo + "-" + $dlKey)
-  if (Test-Path -LiteralPath $dlDir) { Remove-Item -Recurse -Force -LiteralPath $dlDir }
+  if (Test-Path -LiteralPath $dlDir) { Remove-Item -Recurse -LiteralPath $dlDir }
   New-Item -ItemType Directory -Path $dlDir | Out-Null
   # Preferred path: download release assets
   if (-not [string]::IsNullOrWhiteSpace($Tag)) {
@@ -276,7 +276,7 @@ function VerifySha([string]$ShaPath, [string]$ZipPath) {
 }
 
 function ExtractZip([string]$ZipPath, [string]$ToDir) {
-  if (Test-Path -LiteralPath $ToDir) { Remove-Item -Recurse -Force -LiteralPath $ToDir }
+  if (Test-Path -LiteralPath $ToDir) { Remove-Item -Recurse -LiteralPath $ToDir }
   New-Item -ItemType Directory -Path $ToDir | Out-Null
   Add-Type -AssemblyName System.IO.Compression.FileSystem
   [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $ToDir)

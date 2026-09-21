@@ -1,0 +1,26 @@
+component:
+  name: Cataloging
+  nameEntity: cataloging
+  namespace: App\Cataloging
+  business_prefix: Catalog
+  database_prefix: catalog_
+  typed_layers_required: true
+  service_interface_mirror: true
+  route_owner_root: catalog
+  route_owner_roots:
+    - catalog
+    - category
+  mutation_mode: forbidden
+  secret_scan: enabled
+  docblock_preservation: enabled
+  enabled_rules:
+    - profile.contract_validity
+    - structure.forbidden_architecture
+    - namespace.profile_match
+    - layer.typed_class_location
+    - composer.platform_constraint
+    - mutation.safety_firewall
+    - security.secret_leak
+    - inventory.component_surface
+  release:
+    evidence_required: false
