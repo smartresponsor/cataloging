@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
-use App\Cataloging\Entity\CatalogRedirectRuleEntity;
+use App\Cataloging\Entity\Catalog\CatalogRedirectRuleEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class CatalogRedirectWriterService

@@ -26,4 +26,23 @@ final class CategoryPostgresMatrixSmokeScriptTest extends TestCase
         self::assertSame(0, $exitCode);
         self::assertStringContainsString('No DSNs provided. Nothing executed.', $text);
     }
+
+    public function testSmokeScriptGracefullySkipsWhenConfiguredDsnEndpointIsUnavailable(): void
+    {
+        $script = dirname(__DIR__, 2).'/tools/smoke/category-postgres-matrix-smoke.php';
+        $dsn = 'pgsql:///cataloging';
+        $command = escapeshellarg(PHP_BINARY)
+            .' -r '
+            .escapeshellarg(
+                'putenv(\'CATEGORY_TEST_LOCAL_DATABASE_URL='.$dsn.'\');'
+                .'putenv(\'CATEGORY_TEST_DOCKER_DATABASE_URL\');'
+                .'require '.var_export($script, true).';'
+            );
+
+        exec($command, $output, $exitCode);
+        $text = implode("\n", $output);
+
+        self::assertSame(0, $exitCode);
+        self::assertStringContainsString('database endpoint is not reachable within the smoke timeout', $text);
+    }
 }

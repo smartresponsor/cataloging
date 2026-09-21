@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace App\Cataloging\ServiceInterface;
 
-use App\Cataloging\ValueObject\WebhookDispatchRequest;
+use App\Cataloging\ValueObject\WebhookDispatchMessageRequest;
 
 /**
  * Defines the contract for webhook client.
  */
 interface CatalogWebhookClientServiceInterface
 {
-    public function send(WebhookDispatchRequest $request): bool;
+    public function send(WebhookDispatchMessageRequest $request): bool;
 }

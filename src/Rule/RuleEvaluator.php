@@ -106,8 +106,6 @@ final class RuleEvaluator
     }
 
     /**
-     * @param CategoryRule $rule
-     *
      * @return array{sql:string,params:array<string,mixed>}
      *
      * @throws \JsonException

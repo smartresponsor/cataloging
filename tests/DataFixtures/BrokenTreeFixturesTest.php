@@ -24,7 +24,7 @@ final class BrokenTreeFixturesTest extends TestCase
 
         $persisted = 0;
         $manager = $this->createMock(ObjectManager::class);
-        $manager->expects(self::exactly(2))
+        $manager->expects(self::exactly(3))
             ->method('persist')
             ->willReturnCallback(static function () use (&$persisted): void {
                 ++$persisted;
@@ -33,6 +33,6 @@ final class BrokenTreeFixturesTest extends TestCase
 
         (new BrokenTreeFixtures())->load($manager);
 
-        self::assertSame(2, $persisted);
+        self::assertSame(3, $persisted);
     }
 }

@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 final class CatalogMoveServiceTest extends TestCase
 {
-    private const ROOT_ID = '1';
     private const ELECTRONICS_ID = '2';
     private const PHONES_ID = '3';
     private const FASHION_ID = '4';
@@ -41,6 +40,7 @@ final class CatalogMoveServiceTest extends TestCase
         self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG, $redirects[1]['to']);
 
         $rows = $connection->fetchAllAssociative('SELECT id, path, depth FROM category ORDER BY id ASC');
+        /** @var array<int, array{id:string,path:string,depth:string}> $indexed */
         $indexed = [];
         foreach ($rows as $row) {
             $fromId = $row['id'] ?? null;
@@ -52,10 +52,10 @@ final class CatalogMoveServiceTest extends TestCase
             $indexed[(string) $fromId] = ['id' => (string) $fromId, 'path' => (string) $fromPath, 'depth' => (string) $fromDepth];
         }
 
-        self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG, $indexed[self::ELECTRONICS_ID]['path']);
-        self::assertSame(2, (int) $indexed[self::ELECTRONICS_ID]['depth']);
-        self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG, $indexed[self::PHONES_ID]['path']);
-        self::assertSame(3, (int) $indexed[self::PHONES_ID]['depth']);
+        self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG, $indexed[(int) self::ELECTRONICS_ID]['path']);
+        self::assertSame(2, (int) $indexed[(int) self::ELECTRONICS_ID]['depth']);
+        self::assertSame(self::ROOT_SLUG.'.'.self::FASHION_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG, $indexed[(int) self::PHONES_ID]['path']);
+        self::assertSame(3, (int) $indexed[(int) self::PHONES_ID]['depth']);
     }
 
     public function testMoveDryRunRollsBackChanges(): void
@@ -91,8 +91,10 @@ final class CatalogMoveServiceTest extends TestCase
     private function createConnection(): Connection
     {
         $connection = CategoryDoctrineEntityManagerFactory::createConnection();
-        $connection->executeStatement('CREATE TABLE category (id INTEGER PRIMARY KEY, nameEntity TEXT NOT NULL DEFAULT "", slug TEXT NOT NULL, parent_id INTEGER DEFAULT NULL, path TEXT NOT NULL, depth INTEGER NOT NULL, locale TEXT DEFAULT NULL, tenant TEXT NOT NULL DEFAULT "default", workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL, icon_url TEXT DEFAULT NULL)');
-        $connection->executeStatement("INSERT INTO category (id, nameEntity, slug, parent_id, path, depth, locale, tenant, workflow_state, published, published_at, icon_url) VALUES
+        $connection->executeStatement('CREATE TABLE catalog (id INTEGER PRIMARY KEY, uuid BLOB DEFAULT NULL, slug TEXT DEFAULT NULL, first_title TEXT DEFAULT NULL, middle_title TEXT DEFAULT NULL, last_title TEXT DEFAULT NULL, code TEXT, active INTEGER NOT NULL DEFAULT 1, enabled INTEGER NOT NULL DEFAULT 1, status TEXT DEFAULT NULL, created_at TEXT NOT NULL, modified_at TEXT DEFAULT NULL, created_by TEXT DEFAULT NULL, modified_by TEXT DEFAULT NULL, name TEXT NOT NULL, purpose TEXT NOT NULL, tenant TEXT NOT NULL DEFAULT "default")');
+        $connection->executeStatement("INSERT INTO catalog (id, code, created_at, name, purpose, tenant) VALUES (1, 'test', '2026-07-28 00:00:00', 'Test', 'testing', 'default')");
+        $connection->executeStatement('CREATE TABLE category (id INTEGER PRIMARY KEY, catalog_id INTEGER NOT NULL DEFAULT 1, uuid BLOB DEFAULT NULL, slug TEXT DEFAULT NULL, first_title TEXT DEFAULT NULL, middle_title TEXT DEFAULT NULL, last_title TEXT DEFAULT NULL, created_at TEXT NOT NULL DEFAULT "2026-07-28 00:00:00", modified_at TEXT DEFAULT NULL, created_by TEXT DEFAULT NULL, modified_by TEXT DEFAULT NULL, active INTEGER NOT NULL DEFAULT 1, enabled INTEGER NOT NULL DEFAULT 1, status TEXT DEFAULT NULL, nameEntity TEXT NOT NULL DEFAULT "", category_slug TEXT NOT NULL, parent_id INTEGER DEFAULT NULL, path TEXT NOT NULL, depth INTEGER NOT NULL, locale TEXT DEFAULT NULL, tenant TEXT NOT NULL DEFAULT "default", workflow_state TEXT NOT NULL DEFAULT "draft", published INTEGER NOT NULL DEFAULT 0, published_at TEXT DEFAULT NULL, icon_url TEXT DEFAULT NULL, metadata TEXT NOT NULL DEFAULT "{}")');
+        $connection->executeStatement("INSERT INTO category (id, nameEntity, category_slug, parent_id, path, depth, locale, tenant, workflow_state, published, published_at, icon_url) VALUES
             (1, 'Root', '".self::ROOT_SLUG."', NULL, '".self::ROOT_SLUG."', 0, NULL, 'default', 'draft', 0, NULL, NULL),
             (2, 'Electronics', '".self::ELECTRONICS_SLUG."', 1, '".self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG."', 1, NULL, 'default', 'draft', 0, NULL, NULL),
             (3, 'Phones', '".self::PHONES_SLUG."', 2, '".self::ROOT_SLUG.'.'.self::ELECTRONICS_SLUG.'.'.self::PHONES_SLUG."', 2, NULL, 'default', 'draft', 0, NULL, NULL),

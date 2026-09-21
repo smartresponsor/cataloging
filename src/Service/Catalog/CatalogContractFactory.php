@@ -78,9 +78,9 @@ final class CatalogContractFactory
 
         $category = $path[array_key_last($path)];
         $catalogKind = $this->pathCatalogKind($path);
-        $title = trim((string) ($category['nameEntity'] ?? $category['slug'] ?? 'Catalog section'));
-        $imageUrl = trim((string) ($category['imageUrl'] ?? $category['iconUrl'] ?? $category['icon_url'] ?? ''));
-        $children = array_values(array_filter($category['children'] ?? [], 'is_array'));
+        $title = $this->stringValue($category['name'] ?? $category['nameEntity'] ?? $category['slug'] ?? null, 'Catalog section');
+        $imageUrl = $this->stringValue($category['imageUrl'] ?? $category['iconUrl'] ?? $category['icon_url'] ?? null);
+        $children = $this->nodeList($category['children'] ?? null);
         $childCards = [];
 
         foreach ($children as $child) {
@@ -142,6 +142,7 @@ final class CatalogContractFactory
 
     /**
      * @param list<array<string, mixed>> $nodes
+     *
      * @return list<array<string, mixed>>
      */
     private function flatten(array $nodes): array
@@ -149,9 +150,9 @@ final class CatalogContractFactory
         $result = [];
         foreach ($nodes as $node) {
             $result[] = $node;
-            $children = $node['children'] ?? null;
-            if (is_array($children)) {
-                $result = [...$result, ...$this->flatten(array_values(array_filter($children, 'is_array')))];
+            $children = $this->nodeList($node['children'] ?? null);
+            if ([] !== $children) {
+                $result = [...$result, ...$this->flatten($children)];
             }
         }
 
@@ -160,16 +161,17 @@ final class CatalogContractFactory
 
     /**
      * @param list<array<string, mixed>> $nodes
+     *
      * @return list<array<string, mixed>>
      */
     private function findNodePath(array $nodes, string $slug): array
     {
         foreach ($nodes as $node) {
-            if (trim((string) ($node['slug'] ?? '')) === $slug) {
+            if ($this->stringValue($node['slug'] ?? null) === $slug) {
                 return [$node];
             }
 
-            $children = array_values(array_filter($node['children'] ?? [], 'is_array'));
+            $children = $this->nodeList($node['children'] ?? null);
             $childPath = $this->findNodePath($children, $slug);
             if ([] !== $childPath) {
                 return [$node, ...$childPath];
@@ -185,7 +187,7 @@ final class CatalogContractFactory
     private function pathCatalogKind(array $path): ?string
     {
         foreach ($path as $node) {
-            $kind = $this->catalogKind((string) ($node['nameEntity'] ?? ''));
+            $kind = $this->catalogKind($this->stringValue($node['name'] ?? $node['nameEntity'] ?? null));
             if (null !== $kind) {
                 return $kind;
             }
@@ -196,13 +198,14 @@ final class CatalogContractFactory
 
     /**
      * @param list<array<string, mixed>> $categories
+     *
      * @return list<array<string, mixed>>
      */
     private function createCatalogCards(array $categories): array
     {
         $cards = [];
         foreach ($categories as $category) {
-            $name = trim((string) ($category['nameEntity'] ?? ''));
+            $name = $this->stringValue($category['name'] ?? $category['nameEntity'] ?? null);
             $kind = $this->catalogKind($name);
             if (null === $kind) {
                 continue;
@@ -211,20 +214,21 @@ final class CatalogContractFactory
             $cards[] = $this->card($category, $this->catalogDescription($kind), $this->catalogEyebrow($kind), $kind);
         }
 
-        usort($cards, fn (array $left, array $right): int => $this->catalogOrder((string) ($left['kind'] ?? '')) <=> $this->catalogOrder((string) ($right['kind'] ?? '')));
+        usort($cards, fn (array $left, array $right): int => $this->catalogOrder($this->stringValue($left['kind'] ?? null)) <=> $this->catalogOrder($this->stringValue($right['kind'] ?? null)));
 
         return $cards;
     }
 
     /**
      * @param list<array<string, mixed>> $categories
+     *
      * @return list<array<string, mixed>>
      */
     private function createCards(array $categories): array
     {
         $cards = [];
         foreach ($categories as $category) {
-            $name = trim((string) ($category['nameEntity'] ?? $category['slug'] ?? 'Catalog section'));
+            $name = $this->stringValue($category['name'] ?? $category['nameEntity'] ?? $category['slug'] ?? null, 'Catalog section');
             if ('Marketplace' === $name) {
                 continue;
             }
@@ -243,14 +247,15 @@ final class CatalogContractFactory
 
     /**
      * @param array<string, mixed> $category
+     *
      * @return array<string, mixed>
      */
     private function card(array $category, string $summary, string $eyebrow, ?string $inheritedKind = null): array
     {
-        $name = trim((string) ($category['nameEntity'] ?? $category['slug'] ?? 'Catalog section'));
-        $slug = trim((string) ($category['slug'] ?? ''));
-        $id = (string) ($category['id'] ?? $slug);
-        $imageUrl = trim((string) ($category['imageUrl'] ?? $category['iconUrl'] ?? $category['icon_url'] ?? ''));
+        $name = $this->stringValue($category['name'] ?? $category['nameEntity'] ?? $category['slug'] ?? null, 'Catalog section');
+        $slug = $this->stringValue($category['slug'] ?? null);
+        $id = $this->stringValue($category['id'] ?? null, $slug);
+        $imageUrl = $this->stringValue($category['imageUrl'] ?? $category['iconUrl'] ?? $category['icon_url'] ?? null);
         $kind = $inheritedKind ?? $this->catalogKind($name) ?? 'category';
 
         return [
@@ -270,6 +275,7 @@ final class CatalogContractFactory
 
     /**
      * @param list<array<string, mixed>> $catalogCards
+     *
      * @return list<array{id: string, title: string, url: string}>
      */
     private function createFilters(array $catalogCards): array
@@ -277,9 +283,9 @@ final class CatalogContractFactory
         $items = [['id' => 'all', 'title' => 'All catalogs', 'url' => '/catalog/']];
         foreach ($catalogCards as $card) {
             $items[] = [
-                'id' => (string) ($card['kind'] ?? 'catalog'),
-                'title' => (string) ($card['title'] ?? 'Catalog'),
-                'url' => (string) ($card['href'] ?? '/catalog/'),
+                'id' => $this->stringValue($card['kind'] ?? null, 'catalog'),
+                'title' => $this->stringValue($card['title'] ?? null, 'Catalog'),
+                'url' => $this->stringValue($card['href'] ?? null, '/catalog/'),
             ];
         }
 
@@ -288,14 +294,15 @@ final class CatalogContractFactory
 
     /**
      * @param list<array<string, mixed>> $path
+     *
      * @return list<array{id: string, title: string, url: string}>
      */
     private function breadcrumbFilters(array $path): array
     {
         $filters = [['id' => 'marketplace', 'title' => 'Marketplace', 'url' => '/catalog/']];
         foreach ($path as $node) {
-            $name = trim((string) ($node['nameEntity'] ?? ''));
-            $slug = trim((string) ($node['slug'] ?? ''));
+            $name = $this->stringValue($node['name'] ?? $node['nameEntity'] ?? null);
+            $slug = $this->stringValue($node['slug'] ?? null);
             if ('Marketplace' === $name || '' === $name || '' === $slug) {
                 continue;
             }
@@ -312,14 +319,15 @@ final class CatalogContractFactory
 
     /**
      * @param list<array<string, mixed>> $path
+     *
      * @return list<array{title: string, url: string}>
      */
     private function breadcrumbs(array $path): array
     {
         $items = [['title' => 'Marketplace', 'url' => '/catalog/']];
         foreach ($path as $node) {
-            $name = trim((string) ($node['nameEntity'] ?? ''));
-            $slug = trim((string) ($node['slug'] ?? ''));
+            $name = $this->stringValue($node['name'] ?? $node['nameEntity'] ?? null);
+            $slug = $this->stringValue($node['slug'] ?? null);
             if ('Marketplace' === $name || '' === $name || '' === $slug) {
                 continue;
             }
@@ -333,6 +341,7 @@ final class CatalogContractFactory
     /**
      * @param list<array<string, mixed>> $categories
      * @param list<array<string, mixed>> $catalogCards
+     *
      * @return array<int, array{label: string, value: string}>
      */
     private function createStats(array $categories, array $catalogCards): array
@@ -391,7 +400,7 @@ final class CatalogContractFactory
     /** @param array<string, mixed> $category */
     private function genericDescription(array $category): string
     {
-        $path = trim((string) ($category['path'] ?? ''));
+        $path = $this->stringValue($category['path'] ?? null);
         $depth = '' === $path ? 0 : substr_count($path, '.');
 
         return 0 < $depth
@@ -402,7 +411,7 @@ final class CatalogContractFactory
     /** @param array<string, mixed> $category */
     private function detailDescription(?string $kind, array $category): string
     {
-        $name = trim((string) ($category['nameEntity'] ?? 'this category'));
+        $name = $this->stringValue($category['name'] ?? $category['nameEntity'] ?? null, 'this category');
         if (null !== $kind && null !== $this->catalogKind($name)) {
             return $this->catalogDescription($kind);
         }
@@ -505,5 +514,41 @@ final class CatalogContractFactory
             'main.body' => 'Category',
             'right.panel' => 'Actions',
         ];
+    }
+
+    private function stringValue(mixed $value, string $default = ''): string
+    {
+        if (!is_scalar($value)) {
+            return $default;
+        }
+
+        $normalized = trim((string) $value);
+
+        return '' === $normalized ? $default : $normalized;
+    }
+
+    /** @return list<array<string, mixed>> */
+    private function nodeList(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $nodes = [];
+        foreach ($value as $node) {
+            if (!is_array($node)) {
+                continue;
+            }
+
+            $normalized = [];
+            foreach ($node as $key => $item) {
+                if (is_string($key)) {
+                    $normalized[$key] = $item;
+                }
+            }
+            $nodes[] = $normalized;
+        }
+
+        return $nodes;
     }
 }

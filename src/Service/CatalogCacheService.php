@@ -21,8 +21,6 @@ final readonly class CatalogCacheService
     }
 
     /**
-     * @param string $locale
-     *
      * @return array<string,mixed>
      *
      * @throws InvalidArgumentException

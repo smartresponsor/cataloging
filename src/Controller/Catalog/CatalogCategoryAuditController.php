@@ -16,6 +16,8 @@ final class CatalogCategoryAuditController extends AbstractController
     /**
      * Executes the invokable workflow for this service.
      *
+     * @return array<string, mixed>
+     *
      * @throws \JsonException
      */
     #[Route('/admin/category/audit', name: 'admin_category_audit')]

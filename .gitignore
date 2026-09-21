@@ -4,6 +4,7 @@
 composer.lock
 
 # Logs and caches
+/.console-mcp/
 /var/logs/
 /var/cache/
 /var/sessions/
@@ -12,6 +13,9 @@ composer.lock
 /allure-results/
 /allure-report/
 /var/
+
+# Symfony generated app-only reference artifact
+/config/reference.php
 
 # PHPUnit
 .phpunit.result.cache
@@ -37,6 +41,11 @@ Thumbs.db
 **/node_modules/
 /test-results/
 /playwright-report/
+
+# Retired local canon guards
+/tools/linter/category_canonical_roots_check.php
+/tools/linter/category_mirror_check.php
+/tools/linter/category_prefix_check.php
 
 # AI
 /Domain/Ai/agent-trigger/worker/.dev.vars

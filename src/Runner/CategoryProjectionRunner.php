@@ -23,9 +23,6 @@ final readonly class CategoryProjectionRunner implements CategoryProjectionRunne
     /**
      * Handles the run workflow.
      *
-     * @param int $maxSec
-     * @param int $maxBatch
-     *
      * @throws \Throwable
      */
     public function run(int $maxSec, int $maxBatch): void

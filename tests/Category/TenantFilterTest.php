@@ -11,7 +11,7 @@ namespace App\Cataloging\Tests\CategoryEntity;
 use App\Cataloging\Service\CatalogTenantFilterService;
 use PHPUnit\Framework\TestCase;
 
-final class CatalogTenantFilterServiceTest extends TestCase
+final class TenantFilterTest extends TestCase
 {
     public function testFilterByTenant(): void
     {

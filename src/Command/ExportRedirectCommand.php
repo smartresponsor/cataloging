@@ -8,6 +8,7 @@ namespace App\Cataloging\Command;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategorySlugHistoryEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +58,8 @@ final class ExportRedirectCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function findCategoryEntity(object $repository, string $id): ?CatalogCategoryEntity
+    /** @param EntityRepository<CatalogCategoryEntity> $repository */
+    private function findCategoryEntity(EntityRepository $repository, string $id): ?CatalogCategoryEntity
     {
         $normalizedId = trim($id);
         if ('' === $normalizedId) {

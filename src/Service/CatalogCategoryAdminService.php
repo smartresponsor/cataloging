@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Service;
 
+use App\Cataloging\Entity\Catalog\CatalogCatalogEntity;
 use App\Cataloging\Entity\Catalog\CatalogCategoryEntity;
 use App\Cataloging\ServiceInterface\CatalogCategoryAdminServiceInterface;
 use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
@@ -23,10 +24,6 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         $query = trim($query);
         $filtered = [];
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-
             if ('' !== $query && !$this->matchesQuery($row, $query)) {
                 continue;
             }
@@ -92,7 +89,9 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         }
 
         if (!$entity instanceof CatalogCategoryEntity) {
+            $catalog = $this->defaultCatalog();
             $entity = new CatalogCategoryEntity(
+                $catalog,
                 $normalized['nameEntity'],
                 $normalized['slug'],
                 $normalized['slug'],
@@ -135,12 +134,13 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         return [
             'id' => $this->intValue($row['id'] ?? null),
             'slug' => $this->stringValue($row['slug'] ?? null, ''),
-            'nameEntity' => $this->stringValue($row['nameEntity'] ?? null, ''),
+            'name' => $this->stringValue($row['name'] ?? $row['nameEntity'] ?? null, ''),
             'locale' => $this->stringValue($row['locale'] ?? null, 'en'),
             'status' => $published ? 'active' : ('published' === $workflowState ? 'active' : 'draft'),
         ];
     }
 
+    /** @param array<string, mixed> $row */
     private function matchesQuery(array $row, string $query): bool
     {
         $needle = mb_strtolower($query);
@@ -206,6 +206,17 @@ final readonly class CatalogCategoryAdminService implements CatalogCategoryAdmin
         $entity = $repository->find($normalizedId);
 
         return $entity instanceof CatalogCategoryEntity ? $entity : null;
+    }
+
+    private function defaultCatalog(): CatalogCatalogEntity
+    {
+        $repository = $this->entityManager->getRepository(CatalogCatalogEntity::class);
+        $catalog = $repository->findOneBy([], ['id' => 'ASC']);
+        if (!$catalog instanceof CatalogCatalogEntity) {
+            throw new \RuntimeException('A catalog must exist before a category can be created.');
+        }
+
+        return $catalog;
     }
 
     private function intValue(mixed $value, int $default = 0): int

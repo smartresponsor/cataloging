@@ -11,8 +11,6 @@ namespace App\Cataloging\Service;
 final class CatalogBillingTagEmitterService
 {
     /**
-     * @param string              $tenant
-     * @param string              $operation
      * @param array<string,mixed> $payload
      *
      * @throws \JsonException

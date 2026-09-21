@@ -33,7 +33,12 @@ function runCommand(string $command, array $extraEnv = []): int
         2 => STDERR,
     ];
 
-    $environment = array_merge($_ENV, array_map(static fn (mixed $value): string => (string) $value, $_SERVER), $extraEnv);
+    $serverEnvironment = array_filter(
+        $_SERVER,
+        static fn (mixed $value): bool => is_scalar($value),
+    );
+    $serverEnvironment = array_map(static fn (mixed $value): string => (string) $value, $serverEnvironment);
+    $environment = array_merge($_ENV, $serverEnvironment, $extraEnv);
     $process = proc_open($command, $descriptors, $pipes, null, $environment);
 
     if (!is_resource($process)) {
@@ -45,9 +50,52 @@ function runCommand(string $command, array $extraEnv = []): int
     return proc_close($process);
 }
 
+/**
+ * Returns true when the DSN host and port are reachable quickly enough for a DB-backed smoke run.
+ */
+function databaseEndpointReachable(string $dsn, float $timeoutSeconds = 1.0): bool
+{
+    $parts = parse_url($dsn);
+    if (!is_array($parts)) {
+        return false;
+    }
+
+    $host = $parts['host'] ?? null;
+    if (!is_string($host) || trim($host) === '') {
+        return false;
+    }
+
+    $scheme = is_string($parts['scheme'] ?? null) ? strtolower($parts['scheme']) : '';
+    $defaultPort = match ($scheme) {
+        'postgres', 'postgresql', 'pgsql' => 5432,
+        default => null,
+    };
+
+    $port = $parts['port'] ?? $defaultPort;
+    if (!is_int($port) || $port < 1) {
+        return false;
+    }
+
+    $errno = 0;
+    $errstr = '';
+    $socket = @fsockopen($host, $port, $errno, $errstr, $timeoutSeconds);
+    if (!is_resource($socket)) {
+        return false;
+    }
+
+    fclose($socket);
+
+    return true;
+}
+
 foreach ($targets as $target => $dsn) {
     if (!is_string($dsn) || trim($dsn) === '') {
         fwrite(STDOUT, sprintf("[category-postgres-matrix-smoke] SKIP %s: DSN env var is not set.\n", $target));
+        continue;
+    }
+
+    if (!databaseEndpointReachable($dsn)) {
+        fwrite(STDOUT, sprintf("[category-postgres-matrix-smoke] SKIP %s: database endpoint is not reachable within the smoke timeout.\n", $target));
         continue;
     }
 

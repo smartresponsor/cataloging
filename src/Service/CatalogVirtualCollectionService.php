@@ -52,7 +52,7 @@ final readonly class CatalogVirtualCollectionService
 
         return [
             'id' => $virtualCategory['id'],
-            'nameEntity' => $virtualCategory['nameEntity'],
+            'name' => $virtualCategory['name'],
             'rule' => $virtualCategory['rule'],
             'data' => $data,
             'total' => count($data),
