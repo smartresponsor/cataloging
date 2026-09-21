@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Cataloging\Service;
 
 use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
+use App\Cataloging\ServiceInterface\CatalogSearchServiceInterface;
 use App\Cataloging\ValueObject\CategoryProjectionCriteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -14,7 +15,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * category_projection-backed read model.
  */
-final readonly class CatalogSearchService
+final readonly class CatalogSearchService implements CatalogSearchServiceInterface
 {
     private const int DEFAULT_LIMIT = 20;
     private const int MAX_LIMIT = 100;

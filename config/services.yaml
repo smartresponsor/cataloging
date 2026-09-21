@@ -51,6 +51,7 @@ services:
     App\Cataloging\ServiceInterface\CatalogPriceableReferenceServiceInterface: '@App\Cataloging\Service\CatalogPriceableReferenceService'
 
     App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface: '@App\Cataloging\Service\CatalogCategoryProjectionReadService'
+    App\Cataloging\ServiceInterface\CatalogSearchServiceInterface: '@App\Cataloging\Service\CatalogSearchService'
     App\Cataloging\ServiceInterface\CatalogCatalogTreeReadServiceInterface: '@App\Cataloging\Service\CatalogCatalogTreeReadService'
     App\Cataloging\ServiceInterface\CatalogCategoryLookupServiceInterface: '@App\Cataloging\Service\CatalogCategoryLookupService'
     App\Cataloging\ServiceInterface\CatalogCategoryTypeVocabularyServiceInterface: '@App\Cataloging\Service\CatalogCategoryTypeVocabularyService'
