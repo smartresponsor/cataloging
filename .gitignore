@@ -42,6 +42,11 @@ Thumbs.db
 /test-results/
 /playwright-report/
 
+# Retired local canon guards
+/tools/linter/category_canonical_roots_check.php
+/tools/linter/category_mirror_check.php
+/tools/linter/category_prefix_check.php
+
 # AI
 /Domain/Ai/agent-trigger/worker/.dev.vars
 /Domain/Ai/agent-trigger/worker/.dev.vars.*
