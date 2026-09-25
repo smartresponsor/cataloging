@@ -6,13 +6,13 @@ namespace App\Cataloging\Service\Config;
 
 use App\Administering\Service\Config\AdministrationConfigApplyService;
 use App\Administering\Service\Config\AdministrationConfigFileWriterService;
-use App\Administering\ServiceInterface\Config\ConfigToolServiceInterface;
-use App\Administering\Value\Config\ConfigToolDescriptor;
+use App\Administering\ServiceInterface\Config\AdministrationConfigToolServiceInterface;
+use App\Administering\Value\Config\AdministrationConfigToolDescriptor;
 use App\Cataloging\Form\Config\CatalogingOidcConfigFormType;
 use App\Cataloging\Value\Form\Config\CatalogingOidcConfigData;
 use Symfony\Component\Yaml\Yaml;
 
-final readonly class CatalogingOidcConfigService implements ConfigToolServiceInterface
+final readonly class CatalogingOidcConfigService implements AdministrationConfigToolServiceInterface
 {
     public function __construct(
         private string $projectDir,
@@ -21,9 +21,9 @@ final readonly class CatalogingOidcConfigService implements ConfigToolServiceInt
     ) {
     }
 
-    public function descriptor(): ConfigToolDescriptor
+    public function descriptor(): AdministrationConfigToolDescriptor
     {
-        return new ConfigToolDescriptor(
+        return new AdministrationConfigToolDescriptor(
             applicationCode: 'Cataloging',
             toolCode: 'cataloging.oidc',
             label: 'Cataloging OIDC',

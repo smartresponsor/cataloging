@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'outbox')]
 #[ORM\Index(name: 'idx_outbox_projection_ready', columns: ['processed_at', 'dead_lettered_at', 'available_at', 'created_at'])]
+#[ORM\UniqueConstraint(name: 'uniq_outbox_key', columns: ['key'])]
 class CatalogOutboxMessageEntity
 {
     #[ORM\Id]
@@ -21,7 +22,7 @@ class CatalogOutboxMessageEntity
     #[ORM\Column(type: 'text')]
     private string $payload;
 
-    #[ORM\Column(name: 'key', type: 'string', length: 190, unique: true)]
+    #[ORM\Column(name: 'key', type: 'string', length: 190)]
     private string $messageKey;
 
     #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]

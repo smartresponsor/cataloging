@@ -21,6 +21,6 @@ $paths = @(
 foreach ($rel in $paths) {
     $full = Join-Path $PSScriptRoot ('..\' + $rel.Replace('/', '\'))
     if (Test-Path $full) {
-        Remove-Item $full -Recurse -Force
+        Remove-Item $full -Recurse
     }
 }

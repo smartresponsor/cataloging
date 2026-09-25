@@ -172,3 +172,27 @@ Growth stream (post-RC): richer discovery/search semantics, merchandising UX, fe
 
 - Stage the coherent current change-set, create a signed commit, push the current feature branch, inspect PR #92 against the exact pushed head, and attempt the safe merge only if GitHub policy evidence is green.
 - The three physically retained untracked duplicate-guard files are a local capability artifact caused by Console MCP deletion policy; they are intentionally excluded from Git and must not be mistaken for repository-owned source after the deletion commit.
+
+## 2026-09-21 — Gating consumer integration and typed-layer closure
+
+Task: `engine-20260921193930-cataloging-a734f5`
+
+- Rechecked the active Cataloging branch and preserved the pre-existing untracked `PRODUCT_CAPABILITY_AUDIT.adoc` outside this change.
+- Materialized `gating/gate` through Composer and refreshed only that package metadata so the consumer autoload resolves the current `App\\Gating\\` namespace.
+- Added Cataloging-owned Gating profile and severity configuration under `config/gating/`; `.gating/` remains an artifact/output surface.
+- Wired dev/prod Composer gate commands to the explicit Cataloging profile and severity configuration.
+- Closed all Gating typed-layer findings by moving controllers, subscribers, listener, middleware, events, and the preserved legacy voter into their canonical Symfony-oriented roots.
+- Reduced recursive PowerShell cleanup destructiveness by removing `-Force` from the exact bounded recursive cleanup operations reported by the mutation firewall.
+- Gating result: 8 rules, 0 failed, 0 warning, 0 suppressed, 0 skipped.
+- Full `composer quality`: PHP-CS-Fixer clean; PHPStan clean; PHPUnit 207 tests / 791 assertions / 1 intentional skip; Gating green.
+- `composer validate --strict --check-lock`: pass.
+- Additional standalone `lint` execution was attempted through Console MCP but the execution surface timed out; no lint failure was reported or inferred.
+
+## 2026-09-21 — Faceting storefront acceptance
+
+- Extended the existing `CatalogFacetIndexBuilderService` rather than introducing duplicate facet ownership.
+- The builder now emits a stable counted-facet contract with Faceting-compatible facet/value identifier normalization, non-negative count validation and deterministic count-descending/value-ascending bucket ordering.
+- `CatalogSearchService` preserves its legacy `facets` map and additionally exposes `facet_contracts` for Searching/Retailing storefront consumers, so existing callers are not broken.
+- Focused acceptance tests cover canonical identifier normalization, deterministic ordering and invalid-count rejection.
+- Verification is GREEN: PHPUnit 209 tests / 794 assertions / 1 intentional skip; PHPStan 887 files / 0 errors; PHP-CS-Fixer 0/889 fixable files; aggregate `composer quality` GREEN; Gating 8 rules / 0 failed / 0 warning.
+- `PRODUCT_CAPABILITY_AUDIT.adoc` records facet/storefront projection as PARITY and separates completed Faceting/Indexing/Searching acceptance from unrelated Pricing/Stocking/Retailing integration work.

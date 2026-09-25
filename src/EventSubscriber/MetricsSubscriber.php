@@ -3,8 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\Observability;
+namespace App\Cataloging\EventSubscriber;
 
+use App\Cataloging\Observability\RequestCorrelationIdProvider;
 use App\Cataloging\Util\RotatingFileWriter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

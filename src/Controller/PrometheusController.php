@@ -3,8 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Cataloging\Observability;
+namespace App\Cataloging\Controller;
 
+use App\Cataloging\Observability\CatalogProjectionMetrics;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
