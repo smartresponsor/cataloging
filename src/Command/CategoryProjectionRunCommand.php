@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Cataloging\Command;
+
+use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Cataloging\Service\CatalogProjectionWorkerService;
+use App\Cataloging\Service\CategoryPayloadValueNormalizer;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * Executes the category projection run command console workflow.
+ */
+#[AsCommand(name: 'app:category:projection:run')]
+final class CategoryProjectionRunCommand extends Command
+{
+    /**
+     * Initializes the category projection run command service collaborators.
+     */
+    public function __construct(
+        private readonly CatalogProjectionWorkerService $worker,
+        private readonly ?CategoryProjectionRunnerInterface $runner = null,
+    ) {
+        parent::__construct();
+    }
+
+    /**
+     * Configures the command definition and available options.
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+        $this
+            ->addOption('once', null, InputOption::VALUE_NONE, 'Process a single projection batch.')
+            ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Maximum messages for a single batch.', '50')
+            ->addOption('max-sec', null, InputOption::VALUE_REQUIRED, 'Maximum seconds for loop mode.', '5')
+            ->addOption('max-batch', null, InputOption::VALUE_REQUIRED, 'Maximum messages for loop mode.', '100');
+    }
+
+    /**
+     * Runs the command workflow and returns the process status.
+     */
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        try {
+            $limit = max(1, $this->optionInt($input, 'limit', 50));
+            if ($input->getOption('once')) {
+                $processed = $this->worker->runOnce($limit);
+                $output->writeln(sprintf('<info>projection batch processed=%d</info>', $processed));
+
+                return self::SUCCESS;
+            }
+
+            $maxSec = max(1, $this->optionInt($input, 'max-sec', 5));
+            $maxBatch = max(1, $this->optionInt($input, 'max-batch', 100));
+            if (null === $this->runner) {
+                $processed = $this->worker->runOnce(min($limit, $maxBatch));
+                $output->writeln(sprintf('<comment>runner not wired, fallback processed=%d</comment>', $processed));
+
+                return self::SUCCESS;
+            }
+
+            $this->runner->run($maxSec, $maxBatch);
+            $output->writeln(sprintf('<info>projection runner completed maxSec=%d maxBatch=%d</info>', $maxSec, $maxBatch));
+
+            return self::SUCCESS;
+        } catch (\Throwable $exception) {
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
+
+            return self::FAILURE;
+        }
+    }
+
+    private function optionInt(InputInterface $input, string $nameEntity, int $default): int
+    {
+        $value = CategoryPayloadValueNormalizer::scalarString($input->getOption($nameEntity), (string) $default);
+
+        return is_numeric($value) ? (int) $value : $default;
+    }
+}

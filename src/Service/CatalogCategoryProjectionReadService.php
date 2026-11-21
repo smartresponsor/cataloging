@@ -1,0 +1,202 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Cataloging\Service;
+
+use App\Cataloging\Entity\Catalog\CatalogCategoryProjectionEntity;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
+/**
+ * Provides the category projection read service application service.
+ */
+final readonly class CatalogCategoryProjectionReadService implements CatalogCategoryProjectionReadServiceInterface
+{
+    /**
+     * Initializes the category projection read service collaborators.
+     */
+    public function __construct(
+        private ManagerRegistry $registry,
+        private CatalogCategoryProjectionQuerySupportService $querySupport,
+    ) {
+    }
+
+    /**
+     * @return list<array<string,mixed>>
+     */
+    public function list(?CategoryProjectionCriteria $criteria = null): array
+    {
+        $criteriaMap = $this->criteriaMap($criteria);
+
+        $rawRows = $this->entityManager()->getConnection()->fetchAllAssociative(
+            'SELECT id, slug, name_entity AS "nameEntity", parent_id, path, locale, tenant, workflow_state, published, published_at, updated_at FROM category_projection ORDER BY path ASC, slug ASC'
+        );
+        $rows = $this->querySupport->normalizeProjectionRows($rawRows);
+
+        return array_values(array_filter(
+            $rows,
+            fn (array $row): bool => $this->matchesCriteria($row, $criteriaMap),
+        ));
+    }
+
+    /**
+     * @return list<array<string,mixed>>
+     */
+    public function tree(?CategoryProjectionCriteria $criteria = null): array
+    {
+        $rows = $this->list($criteria);
+
+        return $this->buildTree($rows);
+    }
+
+    /**
+     * @return array<string,mixed>|null
+     */
+    public function findOne(string $id): ?array
+    {
+        $normalizedId = trim($id);
+        if ('' === $normalizedId) {
+            return null;
+        }
+
+        $entityManager = $this->entityManager();
+        $repository = $entityManager->getRepository(CatalogCategoryProjectionEntity::class);
+        $entity = $repository->findOneBy(['slug' => $normalizedId]);
+        if ($entity instanceof CatalogCategoryProjectionEntity) {
+            return $this->mapEntityToRow($entity);
+        }
+
+        $entity = $repository->find($normalizedId);
+
+        return $entity instanceof CatalogCategoryProjectionEntity ? $this->mapEntityToRow($entity) : null;
+    }
+
+    /**
+     * @return array{tenant: ?string, locale: ?string, workflow_state: ?string, published: ?bool}
+     */
+    private function criteriaMap(?CategoryProjectionCriteria $criteria): array
+    {
+        return $this->querySupport->normalizeProjectionCriteriaMap($criteria?->toArray() ?? []);
+    }
+
+    private function entityManager(): EntityManagerInterface
+    {
+        $manager = $this->registry->getManager();
+        if (!$manager instanceof EntityManagerInterface) {
+            throw new \RuntimeException('Doctrine entity manager is not available for category projection reads.');
+        }
+
+        return $manager;
+    }
+
+    /**
+     * @param list<array<string,mixed>> $rows
+     *
+     * @return list<array<string,mixed>>
+     */
+    private function buildTree(array $rows): array
+    {
+        /** @var array<string,array<string,mixed>> $nodes */
+        $nodes = [];
+        foreach ($rows as $row) {
+            $id = $row['id'] ?? null;
+            if (!is_scalar($id) || '' === (string) $id) {
+                continue;
+            }
+
+            $nodes[(string) $id] = [...$row, 'children' => []];
+        }
+
+        /** @var array<string,string> $parentIndex */
+        $parentIndex = [];
+        $roots = [];
+        foreach ($rows as $row) {
+            $id = $row['id'] ?? null;
+            if (!is_scalar($id) || '' === (string) $id) {
+                continue;
+            }
+            $parentId = $row['parent_id'] ?? null;
+            if (is_scalar($parentId) && '' !== (string) $parentId && isset($nodes[(string) $parentId])) {
+                $parentIndex[(string) $id] = (string) $parentId;
+                continue;
+            }
+
+            $roots[] = (string) $id;
+        }
+
+        return $this->materializeTree($roots, $nodes, $parentIndex);
+    }
+
+    /**
+     * @param list<string>                      $ids
+     * @param array<string,array<string,mixed>> $nodes
+     * @param array<string,string>              $parentIndex
+     *
+     * @return list<array<string,mixed>>
+     */
+    private function materializeTree(array $ids, array $nodes, array $parentIndex): array
+    {
+        $result = [];
+        foreach ($ids as $id) {
+            if (!isset($nodes[$id])) {
+                continue;
+            }
+
+            $children = [];
+            foreach ($parentIndex as $childId => $parentId) {
+                if ($parentId === $id) {
+                    $children[] = $childId;
+                }
+            }
+
+            $node = $nodes[$id];
+            $node['children'] = $this->materializeTree($children, $nodes, $parentIndex);
+            $result[] = $node;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array{tenant: ?string, locale: ?string, workflow_state: ?string, published: ?bool} $criteriaMap
+     * @param array<string,mixed>                                                                $row
+     */
+    private function matchesCriteria(array $row, array $criteriaMap): bool
+    {
+        foreach ($criteriaMap as $field => $value) {
+            if (null === $value) {
+                continue;
+            }
+
+            if (($row[$field] ?? null) !== $value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private function mapEntityToRow(CatalogCategoryProjectionEntity $entity): array
+    {
+        return [
+            'id' => $entity->getId(),
+            'slug' => $entity->getSlug(),
+            'nameEntity' => $entity->getName(),
+            'parent_id' => $entity->getParentId(),
+            'path' => $entity->getPath(),
+            'locale' => $entity->getLocale() ?? '',
+            'tenant' => $entity->getTenant(),
+            'workflow_state' => $entity->getWorkflowState(),
+            'published' => $entity->isPublished(),
+            'published_at' => $entity->getPublishedAt()?->format('Y-m-d H:i:s'),
+            'icon_url' => $entity->getIconUrl(),
+            'updated_at' => $entity->getUpdatedAt()->format('Y-m-d H:i:s'),
+        ];
+    }
+}
