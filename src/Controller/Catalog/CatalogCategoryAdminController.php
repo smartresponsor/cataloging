@@ -1,0 +1,155 @@
+<?php
+
+# Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
+declare(strict_types=1);
+
+namespace App\Cataloging\Controller\Catalog;
+
+use App\Cataloging\Dto\CategoryAdminCategoryDTO;
+use App\Cataloging\Form\CategoryAdminCategoryType;
+use App\Cataloging\ServiceInterface\CatalogCategoryProjectionReadServiceInterface;
+use App\Cataloging\ValueObject\CategoryProjectionCriteria;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[IsGranted('ROLE_ADMIN')]
+/**
+ * Admin UI delivery adapter over shared projection-backed catalog services.
+ */
+final class CatalogCategoryAdminController extends AbstractController
+{
+    /**
+     * Initializes the category admin controller service collaborators.
+     */
+    public function __construct(private readonly CatalogCategoryProjectionReadServiceInterface $categoryProjectionReadService)
+    {
+    }
+
+    /**
+     * Handles the index workflow.
+     *
+     * @return array<string, mixed>
+     */
+    #[Route('/admin/category', name: 'admin_category_index')]
+    public function index(): array
+    {
+        try {
+            $categories = $this->categoryProjectionReadService->list(CategoryProjectionCriteria::fromArray([
+                'limit' => 100,
+                'offset' => 0,
+                'order' => 'nameEntity',
+                'direction' => 'asc',
+            ]));
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException('Unable to load category administration listing.', $exception);
+        }
+
+        return $this->viewPayload('admin-index', [
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * Handles the new workflow.
+     *
+     * @return Response|array<string, mixed>
+     */
+    #[Route('/admin/category/new', name: 'admin_category_new')]
+    public function new(Request $request): Response|array
+    {
+        $data = new CategoryAdminCategoryDTO();
+        $form = $this->createForm(CategoryAdminCategoryType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', sprintf('CategoryEntity "%s" captured for baseline save.', $data->nameEntity));
+
+            return $this->redirectToRoute('admin_category_index');
+        }
+
+        return $this->viewPayload('admin-new', [
+            'form' => $form->createView(),
+            'is_edit' => false,
+        ]);
+    }
+
+    /**
+     * Handles the edit workflow.
+     *
+     * @return Response|array<string, mixed>
+     */
+    #[Route('/admin/category/{id}/edit', name: 'admin_category_edit')]
+    public function edit(int $id, Request $request): Response|array
+    {
+        try {
+            $category = $this->categoryProjectionReadService->findOne((string) $id);
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException(sprintf('Unable to load category #%d.', $id), $exception);
+        }
+        if (null === $category) {
+            throw $this->createNotFoundException(sprintf('CategoryEntity #%d was not found.', $id));
+        }
+
+        $data = CategoryAdminCategoryDTO::fromArray($category);
+        $form = $this->createForm(CategoryAdminCategoryType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', sprintf('CategoryEntity #%d updated in baseline flow.', $id));
+
+            return $this->redirectToRoute('admin_category_index');
+        }
+
+        return $this->viewPayload('admin-edit', [
+            'form' => $form->createView(),
+            'is_edit' => true,
+        ]);
+    }
+
+    /**
+     * Handles the tree workflow.
+     *
+     * @return array<string, mixed>
+     */
+    #[Route('/admin/category/tree', name: 'admin_category_tree')]
+    public function tree(): array
+    {
+        try {
+            $tree = $this->categoryProjectionReadService->tree();
+        } catch (\Throwable $exception) {
+            throw $this->createNotFoundException('Unable to load category tree.', $exception);
+        }
+
+        return $this->viewPayload('admin-tree', [
+            'tree' => $tree,
+        ]);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function viewPayload(string $operation, array $data): array
+    {
+        return [
+            '_view' => [
+                'surface' => 'category',
+                'operation' => $operation,
+                'intent' => 'admin',
+                'component' => 'Cataloging',
+                'format' => 'auto',
+            ],
+            'locations' => [
+                'body' => $data,
+            ],
+            'data' => $data,
+            'meta' => [
+                'source' => 'catalog_category_admin_controller',
+            ],
+        ];
+    }
+}
