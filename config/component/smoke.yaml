@@ -1,0 +1,6 @@
+smoke:
+  component: cataloging
+  console: []
+  http: []
+  evidence:
+    path: var/evidence/cataloging/
