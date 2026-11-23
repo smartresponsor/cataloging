@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
-use App\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
-use App\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\Cataloging\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
+use App\Cataloging\EventInterface\CategorySyndicationCategoryGovernanceSummaryBuiltInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 
 final class CatalogSyndicationGovernanceSummaryService implements CatalogSyndicationGovernanceSummaryServiceInterface
 {

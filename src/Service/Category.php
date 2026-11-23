@@ -3,16 +3,16 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryCreated;
-use App\Event\CategoryLinked;
-use App\Event\CategoryMoved;
-use App\Event\CategoryUnlinked;
-use App\PolicyInterface\CategoryPolicyInterface;
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CategoryInterface as CategoryCategoryServiceInterface;
-use App\ServiceInterface\CategorySlugGeneratorInterface;
+use App\Cataloging\Event\CategoryCreated;
+use App\Cataloging\Event\CategoryLinked;
+use App\Cataloging\Event\CategoryMoved;
+use App\Cataloging\Event\CategoryUnlinked;
+use App\Cataloging\PolicyInterface\CategoryPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\ServiceInterface\CategoryInterface as CategoryCategoryServiceInterface;
+use App\Cataloging\ServiceInterface\CategorySlugGeneratorInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**

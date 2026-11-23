@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service\Category\Quota;
+namespace App\Cataloging\Service\Category\Quota;
 
-use App\ServiceInterface\Category\CategoryTokenBucketInterface;
-use App\ServiceInterface\Quota\CacheStoreInterface;
+use App\Cataloging\ServiceInterface\Category\CategoryTokenBucketInterface;
+use App\Cataloging\ServiceInterface\Quota\CacheStoreInterface;
 
 final class CategoryTokenBucket implements CategoryTokenBucketInterface
 {

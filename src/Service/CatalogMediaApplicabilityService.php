@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryMediaApplicabilityEvaluated;
-use App\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
-use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
-use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-use App\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
+use App\Cataloging\Event\CategoryMediaApplicabilityEvaluated;
+use App\Cataloging\EventInterface\CategoryMediaApplicabilityEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogMediaApplicabilityServiceInterface;
 
 final class CatalogMediaApplicabilityService implements CatalogMediaApplicabilityServiceInterface
 {

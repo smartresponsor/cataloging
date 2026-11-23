@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryEntity;
-use App\Repository\CatalogRepository;
-use App\ServiceInterface\CatalogReadServiceInterface;
+use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Repository\CatalogRepository;
+use App\Cataloging\ServiceInterface\CatalogReadServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 

@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationGovernanceTrailRecorded;
-use App\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
-use App\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationGovernanceTrailServiceInterface;
+use App\Cataloging\Event\CategorySyndicationGovernanceTrailRecorded;
+use App\Cataloging\EventInterface\CategorySyndicationGovernanceTrailRecordedInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceTrailServiceInterface;
 
 final class CatalogSyndicationGovernanceTrailService implements CatalogSyndicationGovernanceTrailServiceInterface
 {

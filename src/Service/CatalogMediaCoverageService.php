@@ -3,13 +3,13 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryMediaCoverageEvaluated;
-use App\EventInterface\CategoryMediaCoverageEvaluatedInterface;
-use App\PolicyInterface\CategoryMediaCoveragePolicyInterface;
-use App\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
-use App\ServiceInterface\CatalogMediaCoverageServiceInterface;
+use App\Cataloging\Event\CategoryMediaCoverageEvaluated;
+use App\Cataloging\EventInterface\CategoryMediaCoverageEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryMediaCoveragePolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogMediaCoverageServiceInterface;
 
 final class CatalogMediaCoverageService implements CatalogMediaCoverageServiceInterface
 {

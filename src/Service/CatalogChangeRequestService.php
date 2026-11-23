@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryChangeRequest;
-use App\Event\CategoryChangeRequestReviewed;
-use App\PolicyInterface\CategoryChangeRequestPolicyInterface;
-use App\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
-use App\ServiceInterface\CatalogChangeRequestServiceInterface;
-use App\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\Entity\CategoryChangeRequest;
+use App\Cataloging\Event\CategoryChangeRequestReviewed;
+use App\Cataloging\PolicyInterface\CategoryChangeRequestPolicyInterface;
+use App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
 
 final class CatalogChangeRequestService implements CatalogChangeRequestServiceInterface
 {

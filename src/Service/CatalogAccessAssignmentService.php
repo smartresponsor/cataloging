@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryAccessAssignment;
-use App\EntityInterface\CategoryAccessAssignmentInterface;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
-use App\ServiceInterface\CatalogAccessAssignmentServiceInterface;
+use App\Cataloging\Entity\CategoryAccessAssignment;
+use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogAccessAssignmentServiceInterface;
 
 final class CatalogAccessAssignmentService implements CatalogAccessAssignmentServiceInterface
 {

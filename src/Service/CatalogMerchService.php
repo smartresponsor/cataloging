@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Entity\CategoryBanner;
-use App\Entity\CategoryHtmlBlock;
-use App\Entity\CategoryPin;
-use App\ServiceInterface\CatalogMerchServiceInterface;
+use App\Cataloging\Entity\CategoryBanner;
+use App\Cataloging\Entity\CategoryHtmlBlock;
+use App\Cataloging\Entity\CategoryPin;
+use App\Cataloging\ServiceInterface\CatalogMerchServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class CatalogMerchService implements CatalogMerchServiceInterface

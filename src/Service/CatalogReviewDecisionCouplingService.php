@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryReviewDecisionCoupled;
-use App\EventInterface\CategoryReviewDecisionCoupledInterface;
-use App\ServiceInterface\CatalogChangeRequestServiceInterface;
-use App\ServiceInterface\CatalogPublicationGateServiceInterface;
-use App\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
-use App\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
+use App\Cataloging\Event\CategoryReviewDecisionCoupled;
+use App\Cataloging\EventInterface\CategoryReviewDecisionCoupledInterface;
+use App\Cataloging\ServiceInterface\CatalogChangeRequestServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewDecisionCouplingServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface;
 
 final class CatalogReviewDecisionCouplingService implements CatalogReviewDecisionCouplingServiceInterface
 {

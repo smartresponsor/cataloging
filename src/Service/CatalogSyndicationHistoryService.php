@@ -3,17 +3,17 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategorySyndicationDestinationHistoryBuilt;
-use App\Event\CategorySyndicationRecoveryAuditConsolidated;
-use App\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
-use App\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
-use App\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
-use App\PolicyInterface\CategorySyndicationRetryPolicyInterface;
-use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
-use App\ValueObject\CategorySyndicationDestinationHistory;
-use App\ValueObject\CategorySyndicationRecoveryAuditSummary;
+use App\Cataloging\Event\CategorySyndicationDestinationHistoryBuilt;
+use App\Cataloging\Event\CategorySyndicationRecoveryAuditConsolidated;
+use App\Cataloging\EventInterface\CategorySyndicationDestinationHistoryBuiltInterface;
+use App\Cataloging\EventInterface\CategorySyndicationRecoveryAuditConsolidatedInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationHistoryPolicyInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationRetryPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDestinationHistory;
+use App\Cataloging\ValueObject\CategorySyndicationRecoveryAuditSummary;
 
 final class CatalogSyndicationHistoryService implements CatalogSyndicationHistoryServiceInterface
 {

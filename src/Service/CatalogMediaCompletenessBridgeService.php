@@ -3,14 +3,14 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryCompletenessEvaluated;
-use App\EventInterface\CategoryCompletenessEvaluatedInterface;
-use App\PolicyInterface\CategoryCompletenessPolicyInterface;
-use App\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
-use App\ServiceInterface\CatalogMediaCoverageServiceInterface;
-use App\ValueObject\CategoryCompletenessReport;
+use App\Cataloging\Event\CategoryCompletenessEvaluated;
+use App\Cataloging\EventInterface\CategoryCompletenessEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryCompletenessPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogMediaCompletenessBridgeServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogMediaCoverageServiceInterface;
+use App\Cataloging\ValueObject\CategoryCompletenessReport;
 
 final class CatalogMediaCompletenessBridgeService implements CatalogMediaCompletenessBridgeServiceInterface
 {

@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\Event\CategoryPublicationQualityEvaluated;
-use App\EventInterface\CategoryPublicationQualityEvaluatedInterface;
-use App\PolicyInterface\CategoryPublicationQualityPolicyInterface;
-use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\Cataloging\Event\CategoryPublicationQualityEvaluated;
+use App\Cataloging\EventInterface\CategoryPublicationQualityEvaluatedInterface;
+use App\Cataloging\PolicyInterface\CategoryPublicationQualityPolicyInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
 
 final class CatalogPublicationQualityService implements CatalogPublicationQualityServiceInterface
 {
