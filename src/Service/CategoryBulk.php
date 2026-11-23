@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Cataloging\Service;
 
-use App\ServiceInterface\CategoryBulkInterface;
-use App\ServiceInterface\CategoryInterface as CategoryCategoryService;
+use App\Cataloging\ServiceInterface\CategoryBulkInterface;
+use App\Cataloging\ServiceInterface\CategoryInterface as CategoryCategoryService;
 
 final class CategoryBulk implements CategoryBulkInterface
 {
