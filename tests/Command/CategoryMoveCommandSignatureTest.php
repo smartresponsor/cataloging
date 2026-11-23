@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategoryMoveCommand;
-use App\ServiceInterface\CategoryMoveInterface;
+use App\Cataloging\Command\CategoryMoveCommand;
+use App\Cataloging\ServiceInterface\CategoryMoveInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryMoveCommandSignatureTest extends TestCase

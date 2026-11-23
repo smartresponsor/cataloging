@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategoryReviewAssignCommand;
-use App\Entity\CategoryChangeRequest;
-use App\Policy\CategoryReviewAssignmentPolicy;
-use App\Repository\CategoryChangeRequestRepository;
-use App\Repository\CategoryReviewAssignmentRepository;
-use App\Service\CatalogReviewAssignmentService;
+use App\Cataloging\Command\CategoryReviewAssignCommand;
+use App\Cataloging\Entity\CategoryChangeRequest;
+use App\Cataloging\Policy\CategoryReviewAssignmentPolicy;
+use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Repository\CategoryReviewAssignmentRepository;
+use App\Cataloging\Service\CatalogReviewAssignmentService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

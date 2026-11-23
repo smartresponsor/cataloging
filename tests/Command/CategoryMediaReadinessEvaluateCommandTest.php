@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategoryMediaReadinessEvaluateCommand;
-use App\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
+use App\Cataloging\Command\CategoryMediaReadinessEvaluateCommand;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +19,7 @@ final class CategoryMediaReadinessEvaluateCommandTest extends TestCase
     public function testExecutePrintsJsonPayload(): void
     {
         $service = $this->createMock(CatalogDestinationMediaReadinessServiceInterface::class);
-        $service->method('evaluate')->willReturn(new class implements \App\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface {
+        $service->method('evaluate')->willReturn(new class implements \App\Cataloging\EventInterface\CategoryDestinationMediaReadinessEvaluatedInterface {
             /**
              * @param array{publishable: bool, checks: array{destinationMediaPublishable: bool}} $payload
              */

@@ -19,7 +19,7 @@ final class CategorySyndicationPackagePreviewCommandTest extends TestCase
     public function testExecutePrintsPreviewPackage(): void
     {
         $service = $this->createMock(CatalogSyndicationPackageGateServiceInterface::class);
-        $service->method('buildGatedPublishPackage')->willReturn(new class implements \App\EventInterface\CategorySyndicationPackageGatedInterface {
+        $service->method('buildGatedPublishPackage')->willReturn(new class implements \App\Cataloging\EventInterface\CategorySyndicationPackageGatedInterface {
             /** @param array<string, mixed> $payload */
             public function __construct(private readonly array $payload = ['publishable' => true, 'packageId' => 'pkg-1'])
             {

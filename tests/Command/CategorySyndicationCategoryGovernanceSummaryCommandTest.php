@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
-use App\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
-use App\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
+use App\Cataloging\Command\CategorySyndicationCategoryGovernanceSummaryCommand;
+use App\Cataloging\Event\CategorySyndicationCategoryGovernanceSummaryBuilt;
+use App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

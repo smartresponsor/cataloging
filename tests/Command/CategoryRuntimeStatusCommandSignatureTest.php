@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategoryRuntimeStatusCommand;
-use App\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
+use App\Cataloging\Command\CategoryRuntimeStatusCommand;
+use App\Cataloging\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryRuntimeStatusCommandSignatureTest extends TestCase

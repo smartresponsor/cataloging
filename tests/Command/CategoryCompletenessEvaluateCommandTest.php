@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategoryCompletenessEvaluateCommand;
-use App\Policy\CategoryCompletenessPolicy;
-use App\Service\CatalogCompletenessService;
+use App\Cataloging\Command\CategoryCompletenessEvaluateCommand;
+use App\Cataloging\Policy\CategoryCompletenessPolicy;
+use App\Cataloging\Service\CatalogCompletenessService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

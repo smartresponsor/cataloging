@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategoryReviewQueueListCommand;
-use App\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\Cataloging\Command\CategoryReviewQueueListCommand;
+use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
