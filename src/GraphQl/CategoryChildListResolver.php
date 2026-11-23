@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\GraphQl;
+namespace App\Cataloging\GraphQl;
 
 use ApiPlatform\GraphQl\Resolver\QueryCollectionResolverInterface;
-use App\Entity\CategoryEntity;
-use App\Repository\CatalogRepository;
+use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Repository\CatalogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class CategoryChildListResolver implements QueryCollectionResolverInterface

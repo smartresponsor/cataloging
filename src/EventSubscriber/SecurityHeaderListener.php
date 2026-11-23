@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\EventSubscriber;
+namespace App\Cataloging\EventSubscriber;
 
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 

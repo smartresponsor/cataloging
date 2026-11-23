@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\OutboxInterface;
+namespace App\Cataloging\OutboxInterface;
 
 interface CategoryOutboxRetryInterface
 {
@@ -13,4 +13,6 @@ interface CategoryOutboxRetryInterface
      * @param array<string, mixed> $event
      */
     public function schedule(array $event, int $attempt): void;
+
+    public function nextRunAt(\DateTimeImmutable $now, int $attempt): \DateTimeImmutable;
 }

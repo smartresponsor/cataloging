@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Observability;
+namespace App\Cataloging\Observability;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -38,7 +38,7 @@ final class MetricsSubscriber implements EventSubscriberInterface
         ];
         $metricsDir = sys_get_temp_dir().'/sr_metrics';
         $this->ensureDirectory($metricsDir);
-        $writer = new \App\Util\RotatingFileWriter($metricsDir.'/category_http.jsonl');
+        $writer = new \App\Cataloging\Util\RotatingFileWriter($metricsDir.'/category_http.jsonl');
         $writer->write(json_encode($rec)."\n");
     }
 

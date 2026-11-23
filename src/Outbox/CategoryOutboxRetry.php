@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Outbox;
+namespace App\Cataloging\Outbox;
 
-use App\OutboxInterface\CategoryOutboxRetryInterface;
+use App\Cataloging\OutboxInterface\CategoryOutboxRetryInterface;
 
 final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
 {
@@ -23,6 +23,13 @@ final class CategoryOutboxRetry implements CategoryOutboxRetryInterface
             'attempt' => $normalizedAttempt,
             'runAt' => time() + $delaySeconds,
         ];
+    }
+
+    public function nextRunAt(\DateTimeImmutable $now, int $attempt): \DateTimeImmutable
+    {
+        $delaySeconds = min(300, 2 ** min(max(1, $attempt), 8));
+
+        return $now->modify(sprintf('+%d seconds', $delaySeconds));
     }
 
     /** @return list<array{event:array<string, mixed>,attempt:int,runAt:int}> */

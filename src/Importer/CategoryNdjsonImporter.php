@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Importer;
+namespace App\Cataloging\Importer;
 
-use App\ImporterInterface\CategoryNdjsonImporterInterface;
-use App\ServiceInterface\CategoryInterface as CatalogCategoryService;
+use App\Cataloging\ImporterInterface\CategoryNdjsonImporterInterface;
+use App\Cataloging\ServiceInterface\CategoryInterface as CatalogCategoryService;
 
 final class CategoryNdjsonImporter implements CategoryNdjsonImporterInterface
 {

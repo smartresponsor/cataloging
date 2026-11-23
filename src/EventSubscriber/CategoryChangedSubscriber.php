@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\EventSubscriber;
+namespace App\Cataloging\EventSubscriber;
 
-use App\Service\CacheInvalidator;
+use App\Cataloging\Service\CacheInvalidator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CategoryChangedSubscriber implements EventSubscriberInterface
