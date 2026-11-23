@@ -27,7 +27,7 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
              */
             public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): \App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
             {
-                return new \App\Event\CategorySyndicationFallbackAwarePackageGated([
+                return new \App\Cataloging\Event\CategorySyndicationFallbackAwarePackageGated([
                     'packageId' => $packageId,
                     'destinationId' => $destinationId,
                     'categoryId' => $categoryId,
@@ -48,7 +48,7 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
         $preferenceService = new class implements CatalogDestinationMediaPolicyPreferenceServiceInterface {
             public function evaluate(string $destinationId, string $categoryId, string $actorId, string $reason): \App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
             {
-                return new \App\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
+                return new \App\Cataloging\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
                     'destinationId' => $destinationId,
                     'categoryId' => $categoryId,
                     'mediaPolicyMode' => 'allow_fallback',

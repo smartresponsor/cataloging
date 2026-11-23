@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Dto;
 
-use App\Dto\CategoryAdminCategoryData;
+use App\Cataloging\Dto\CategoryAdminCategoryData;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryAdminCategoryDataTest extends TestCase

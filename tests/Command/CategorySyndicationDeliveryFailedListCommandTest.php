@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategorySyndicationDeliveryFailedListCommand;
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\Command\CategorySyndicationDeliveryFailedListCommand;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

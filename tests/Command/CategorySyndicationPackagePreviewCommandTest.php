@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Command\CategorySyndicationPackagePreviewCommand;
-use App\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
+use App\Cataloging\Command\CategorySyndicationPackagePreviewCommand;
+use App\Cataloging\ServiceInterface\CatalogSyndicationPackageGateServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 

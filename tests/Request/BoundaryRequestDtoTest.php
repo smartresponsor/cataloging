@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Request;
 
-use App\Request\CategoryAttachmentAddRequest;
-use App\Request\CategoryBulkRequest;
-use App\Request\CategoryCollectionRequest;
-use App\Request\CategoryRulePreviewRequest;
-use App\Request\WebhookDispatchRequest;
+use App\Cataloging\Request\CategoryAttachmentAddRequest;
+use App\Cataloging\Request\CategoryBulkRequest;
+use App\Cataloging\Request\CategoryCollectionRequest;
+use App\Cataloging\Request\CategoryRulePreviewRequest;
+use App\Cataloging\Request\WebhookDispatchRequest;
 use PHPUnit\Framework\TestCase;
 
 final class BoundaryRequestDtoTest extends TestCase

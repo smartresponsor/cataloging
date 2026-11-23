@@ -59,7 +59,7 @@ final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase
 
         $service = new CatalogDestinationMediaPolicyPreferenceService(
             $destinationRepository,
-            new CatalogDestinationMediaReadinessService($destinationRepository, new CatalogMediaApplicabilityService($bindingRepository, new \App\Policy\CategoryMediaApplicabilityPolicy()), new CategoryDestinationMediaReadinessPolicy()),
+            new CatalogDestinationMediaReadinessService($destinationRepository, new CatalogMediaApplicabilityService($bindingRepository, new \App\Cataloging\Policy\CategoryMediaApplicabilityPolicy()), new CategoryDestinationMediaReadinessPolicy()),
             new CatalogDestinationMediaFallbackService($destinationRepository, $bindingRepository, new CategoryDestinationMediaFallbackPolicy()),
             new CategoryDestinationMediaPolicyPreferencePolicy(),
         );
