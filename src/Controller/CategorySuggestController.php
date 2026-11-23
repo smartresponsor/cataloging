@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Ai\CatalogSuggestService;
+use App\Cataloging\Ai\CatalogSuggestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ final class CategorySuggestController extends AbstractController
         // simple audit log
         $logDir = getcwd().'/var/log';
         $this->ensureDirectory($logDir);
-        $writer = new \App\Util\RotatingFileWriter($logDir.'/category_suggest.log');
+        $writer = new \App\Cataloging\Util\RotatingFileWriter($logDir.'/category_suggest.log');
         $writer->write(json_encode(['name' => $name, 'desc' => $desc, 'tags' => $tags, 'res' => $res], JSON_THROW_ON_ERROR)."\n");
 
         return $this->json(['ok' => true, 'item' => $res]);

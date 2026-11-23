@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Service\Category\CategoryApproxTotalService;
-use App\Service\Category\CategoryCollectionService;
-use App\ServiceInterface\Category\CategoryCollectionServiceInterface;
+use App\Cataloging\Service\Category\CategoryApproxTotalService;
+use App\Cataloging\Service\Category\CategoryCollectionService;
+use App\Cataloging\ServiceInterface\Category\CategoryCollectionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
