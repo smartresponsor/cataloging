@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
-use App\ValueObject\CategorySyndicationGovernanceTrailReport;
-use App\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
+use App\Cataloging\PolicyInterface\CategorySyndicationGovernanceTrailPolicyInterface;
+use App\Cataloging\ValueObject\CategorySyndicationGovernanceTrailReport;
+use App\Cataloging\ValueObjectInterface\CategorySyndicationGovernanceTrailReportInterface;
 
 final class CategorySyndicationGovernanceTrailPolicy implements CategorySyndicationGovernanceTrailPolicyInterface
 {

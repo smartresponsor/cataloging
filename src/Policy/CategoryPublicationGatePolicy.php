@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryPublicationGatePolicyInterface;
-use App\ValueObject\CategoryWorkflowState;
-use App\ValueObjectInterface\CategoryPublicationReadinessInterface;
-use App\ValueObjectInterface\CategoryWorkflowStateInterface;
+use App\Cataloging\PolicyInterface\CategoryPublicationGatePolicyInterface;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
+use App\Cataloging\ValueObjectInterface\CategoryPublicationReadinessInterface;
+use App\Cataloging\ValueObjectInterface\CategoryWorkflowStateInterface;
 
 final class CategoryPublicationGatePolicy implements CategoryPublicationGatePolicyInterface
 {

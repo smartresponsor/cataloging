@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryMediaGovernancePolicyInterface;
-use App\ValueObject\CategoryMediaRole;
+use App\Cataloging\PolicyInterface\CategoryMediaGovernancePolicyInterface;
+use App\Cataloging\ValueObject\CategoryMediaRole;
 
 final class CategoryMediaGovernancePolicy implements CategoryMediaGovernancePolicyInterface
 {

@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\EntityInterface\CategoryMediaBindingInterface;
-use App\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
-use App\ValueObject\CategoryMediaApplicabilityReport;
-use App\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
+use App\Cataloging\EntityInterface\CategoryMediaBindingInterface;
+use App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface;
+use App\Cataloging\ValueObject\CategoryMediaApplicabilityReport;
+use App\Cataloging\ValueObjectInterface\CategoryMediaApplicabilityReportInterface;
 
 final class CategoryMediaApplicabilityPolicy implements CategoryMediaApplicabilityPolicyInterface
 {

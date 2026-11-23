@@ -3,11 +3,11 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Policy;
+namespace App\Cataloging\Policy;
 
-use App\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
-use App\ValueObject\CategoryDestinationMediaReadinessReport;
-use App\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
+use App\Cataloging\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface;
+use App\Cataloging\ValueObject\CategoryDestinationMediaReadinessReport;
+use App\Cataloging\ValueObjectInterface\CategoryDestinationMediaReadinessReportInterface;
 
 final class CategoryDestinationMediaReadinessPolicy implements CategoryDestinationMediaReadinessPolicyInterface
 {
