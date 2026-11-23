@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
 
 /**
  * SQL-backed repository. Actual SQL and connections are injected in infrastructure layer.

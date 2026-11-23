@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Cataloging\Repository;
 
-use App\EntityInterface\CategoryAccessAssignmentInterface;
-use App\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
+use App\Cataloging\EntityInterface\CategoryAccessAssignmentInterface;
+use App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface;
 
 final class CategoryAccessAssignmentRepository implements CategoryAccessAssignmentRepositoryInterface
 {

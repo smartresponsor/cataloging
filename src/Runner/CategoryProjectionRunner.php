@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Runner;
+namespace App\Cataloging\Runner;
 
-use App\ProjectionInterface\CategoryProjectionSyncInterface;
-use App\RunnerInterface\CategoryProjectionRunnerInterface;
+use App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface;
+use App\Cataloging\RunnerInterface\CategoryProjectionRunnerInterface;
 
 final class CategoryProjectionRunner implements CategoryProjectionRunnerInterface
 {
