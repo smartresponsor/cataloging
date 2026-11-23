@@ -3,8 +3,8 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface\Security;
+namespace App\Cataloging\ServiceInterface\Security;
 
-interface TenantRolePolicyInterface extends \App\ServiceInterface\TenantRolePolicyInterface
+interface TenantRolePolicyInterface extends \App\Cataloging\ServiceInterface\TenantRolePolicyInterface
 {
 }

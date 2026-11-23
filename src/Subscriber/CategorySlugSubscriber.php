@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Subscriber;
+namespace App\Cataloging\Subscriber;
 
-use App\Entity\CategoryAliasEntity;
-use App\Entity\CategoryEntity;
+use App\Cataloging\Entity\CategoryAliasEntity;
+use App\Cataloging\Entity\CategoryEntity;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;

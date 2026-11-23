@@ -3,7 +3,7 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
 /** Generates and normalizes locale-dependent slugs; applies conflict auto-suffix when needed. */
 interface CategorySlugGeneratorInterface

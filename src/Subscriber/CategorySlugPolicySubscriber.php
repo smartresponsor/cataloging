@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Subscriber;
+namespace App\Cataloging\Subscriber;
 
-use App\Entity\CategoryEntity;
-use App\Service\SlugService;
+use App\Cataloging\Entity\CategoryEntity;
+use App\Cataloging\Service\SlugService;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
