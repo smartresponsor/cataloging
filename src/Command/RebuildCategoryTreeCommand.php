@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Service\ProjectionRunner;
-use App\Service\TreeConsistencyChecker;
+use App\Cataloging\Service\ProjectionRunner;
+use App\Cataloging\Service\TreeConsistencyChecker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

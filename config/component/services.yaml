@@ -13,6 +13,408 @@ services:
     exclude:
       - '../../src/Kernel.php'
       - '../../src/DependencyInjection/'
+      - '../../src/Controller/Admin/'
+      - '../../src/Controller/Api/'
+      - '../../src/Controller/Merchant/'
+      - '../../src/Controller/AdminCategoryController.php'
+      - '../../src/Controller/CategoryApiController.php'
+      - '../../src/Controller/CategoryAttachmentController.php'
+      - '../../src/Controller/CategoryCollectionController.php'
+      - '../../src/Controller/CategoryController.php'
+      - '../../src/Controller/CategoryListHandler.php'
+      - '../../src/Controller/CategoryMerchController.php'
+      - '../../src/Controller/CategoryReadController.php'
+      - '../../src/Controller/CategoryRuleController.php'
+      - '../../src/Controller/CategorySearchController.php'
+      - '../../src/Controller/CategorySitemapController.php'
+      - '../../src/Controller/CategoryStoreApiController.php'
+      - '../../src/Controller/CategoryStorefrontController.php'
+      - '../../src/Controller/CollectionListHandler.php'
+      - '../../src/Controller/StatusHandler.php'
+      - '../../src/Controller/WebhookController.php'
+      - '../../src/ControllerInterface/CategoryControllerInterface.php'
+      - '../../src/DataFixtures/BrokenTreeFixtures.php'
+      - '../../src/DataFixtures/CategoryFixtures.php'
+      - '../../src/Dto/CategoryAdminCategoryData.php'
+      - '../../src/Service/JwkConverter.php'
+      - '../../src/Runner/CategoryProjectionRunner.php'
+      - '../../src/Request/CategoryAttachmentAddRequest.php'
+      - '../../src/Request/CategoryBulkRequest.php'
+      - '../../src/Request/CategoryCollectionRequest.php'
+      - '../../src/Request/CategoryRulePreviewRequest.php'
+      - '../../src/Request/MoveCategoryRequest.php'
+      - '../../src/Request/PublishCategoryRequest.php'
+      - '../../src/Request/WebhookDispatchRequest.php'
+      - '../../src/Observability/CatalogProjectionMetrics.php'
+      - '../../src/Observability/MetricsController.php'
+      - '../../src/Observability/MetricsSubscriber.php'
+      - '../../src/Observability/OtelCategoryProcessor.php'
+      - '../../src/Observability/PrometheusController.php'
+      - '../../src/Logging/RedactingProcessor.php'
+      - '../../src/InfrastructureInterface/OutboxDispatcherInterface.php'
+      - '../../src/InfrastructureInterface/WebhookSenderInterface.php'
+      - '../../src/Outbox/CategoryOutboxRetry.php'
+      - '../../src/OutboxInterface/CategoryOutboxRetryInterface.php'
+      - '../../src/ProjectionInterface/CategoryProjectionSyncInterface.php'
+      - '../../src/Importer/CategoryNdjsonImporter.php'
+      - '../../src/ImporterInterface/CategoryNdjsonImporterInterface.php'
+      - '../../src/IdempotencyInterface/CategoryIdempotencyStoreInterface.php'
+      - '../../src/Idempotency/CategoryIdempotencyStore.php'
+      - '../../src/Rule/CategoryRule.php'
+      - '../../src/Rule/CategoryRulePolicy.php'
+      - '../../src/Rule/RuleEvaluator.php'
+      - '../../src/GraphQl/CatalogStateProvider.php'
+      - '../../src/GraphQl/CategoryAncestorListResolver.php'
+      - '../../src/GraphQl/CategoryChildListResolver.php'
+      - '../../src/GraphQl/CategoryQuery.php'
+      - '../../src/GraphQl/CategoryResolver.php'
+      - '../../src/GraphQl/CategoryType.php'
+      - '../../src/Infrastructure/CacheInvalidator.php'
+      - '../../src/Infrastructure/CategoryAuditLogger.php'
+      - '../../src/Infrastructure/HttpWebhookSender.php'
+      - '../../src/Infrastructure/MessengerOutboxDispatcher.php'
+      - '../../src/Infrastructure/OrderWebhookPublisher.php'
+      - '../../src/Infrastructure/OutboxMessage.php'
+      - '../../src/Infrastructure/ProductWebhookPublisher.php'
+      - '../../src/Infrastructure/ProjectionSync.php'
+      - '../../src/Projection/CategoryActorTraceabilityView.php'
+      - '../../src/Projection/CategoryGovernanceView.php'
+      - '../../src/Projection/CategoryProjectionSync.php'
+      - '../../src/Projection/CategoryRuntimeStatusView.php'
+      - '../../src/Form/CategoryAdminCategoryType.php'
+      - '../../src/Message/RecomputeVirtualCategoryHandler.php'
+      - '../../src/Message/RecomputeVirtualCategoryMessage.php'
+      - '../../src/Security/CatalogVoter.php'
+      - '../../src/Security/CategoryVoter.php'
+      - '../../src/Security/ConsentChecker.php'
+      - '../../src/Security/JwtUserProvider.php'
+      - '../../src/Security/PolicyEvaluator.php'
+      - '../../src/Security/RateLimitResolver.php'
+      - '../../src/Security/RoleResolver.php'
+      - '../../src/Subscriber/CategorySlugPolicySubscriber.php'
+      - '../../src/Subscriber/CategorySlugSubscriber.php'
+      - '../../src/Util/RotatingFileWriter.php'
+      - '../../src/ExporterInterface/CategoryNdjsonExporterInterface.php'
+      - '../../src/Exporter/CategoryNdjsonExporter.php'
+      - '../../src/Policy/CategoryCanonicalPolicy.php'
+      - '../../src/Policy/CategoryChangeRequestPolicy.php'
+      - '../../src/Policy/CategoryCompletenessPolicy.php'
+      - '../../src/Policy/CategoryDestinationMediaFallbackPolicy.php'
+      - '../../src/Policy/CategoryDestinationMediaPolicyPreferencePolicy.php'
+      - '../../src/Policy/CategoryDestinationMediaReadinessPolicy.php'
+      - '../../src/Policy/CategoryMediaApplicabilityPolicy.php'
+      - '../../src/Policy/CategoryMediaCoveragePolicy.php'
+      - '../../src/Policy/CategoryMediaGovernancePolicy.php'
+      - '../../src/Policy/CategoryPolicy.php'
+      - '../../src/Policy/CategoryPublicationGatePolicy.php'
+      - '../../src/Policy/CategoryPublicationQualityPolicy.php'
+      - '../../src/Policy/CategoryReviewAssignmentPolicy.php'
+      - '../../src/Policy/CategorySyndicationCategoryGovernanceSummaryPolicy.php'
+      - '../../src/Policy/CategorySyndicationDeliveryPolicy.php'
+      - '../../src/Policy/CategorySyndicationDestinationGovernanceSummaryPolicy.php'
+      - '../../src/Policy/CategorySyndicationDestinationPolicy.php'
+      - '../../src/Policy/CategorySyndicationFallbackAwarePackageGatePolicy.php'
+      - '../../src/Policy/CategorySyndicationGovernanceTrailPolicy.php'
+      - '../../src/Policy/CategorySyndicationHistoryPolicy.php'
+      - '../../src/Policy/CategorySyndicationMappingPolicy.php'
+      - '../../src/Policy/CategorySyndicationPackageGatePolicy.php'
+      - '../../src/Policy/CategorySyndicationPolicyAwarePackageGatePolicy.php'
+      - '../../src/Policy/CategorySyndicationRetryPolicy.php'
+      - '../../src/Policy/CategoryWorkflowPolicy.php'
+      - '../../src/PolicyInterface/CategoryCanonicalPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryChangeRequestPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryCompletenessPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryDestinationMediaFallbackPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryDestinationMediaPolicyPreferencePolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryDestinationMediaReadinessPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryMediaApplicabilityPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryMediaCoveragePolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryMediaGovernancePolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryPublicationGatePolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryPublicationQualityPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryReviewAssignmentPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationCategoryGovernanceSummaryPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationDeliveryPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationDestinationGovernanceSummaryPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationDestinationPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationFallbackAwarePackageGatePolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationGovernanceTrailPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationHistoryPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationMappingPolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationPackageGatePolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationPolicyAwarePackageGatePolicyInterface.php'
+      - '../../src/PolicyInterface/CategorySyndicationRetryPolicyInterface.php'
+      - '../../src/PolicyInterface/CategoryWorkflowPolicyInterface.php'
+      - '../../src/Repository/CatalogRepository.php'
+      - '../../src/Repository/CategoryAccessAssignmentRepository.php'
+      - '../../src/Repository/CategoryChangeRequestRepository.php'
+      - '../../src/Repository/CategoryMediaBindingRepository.php'
+      - '../../src/Repository/CategoryRepository.php'
+      - '../../src/Repository/CategoryReviewAssignmentRepository.php'
+      - '../../src/Repository/CategorySyndicationDeliveryRecordRepository.php'
+      - '../../src/Repository/CategorySyndicationDestinationRepository.php'
+      - '../../src/Repository/CategoryWorkflowRepository.php'
+      - '../../src/RepositoryInterface/CategoryAccessAssignmentRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategoryChangeRequestRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategoryMediaBindingRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategoryRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategoryReviewAssignmentRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategorySyndicationDeliveryRecordRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategorySyndicationDestinationRepositoryInterface.php'
+      - '../../src/RepositoryInterface/CategoryWorkflowRepositoryInterface.php'
+      - '../../src/Service/AliasRouter.php'
+      - '../../src/Service/AtomicMove.php'
+      - '../../src/Service/AttachmentService.php'
+      - '../../src/Service/BatchImportRunner.php'
+      - '../../src/Service/BillingTagEmitter.php'
+      - '../../src/Service/BulkOperator.php'
+      - '../../src/Service/CacheInvalidator.php'
+      - '../../src/Service/CacheMetricsCollector.php'
+      - '../../src/Service/CanonicalPolicy.php'
+      - '../../src/Service/CanonicalPolicyLocale.php'
+      - '../../src/Service/CanonicalResolver.php'
+      - '../../src/Service/CatalogAccessAssignmentService.php'
+      - '../../src/Service/CatalogCacheService.php'
+      - '../../src/Service/CatalogChangeRequestService.php'
+      - '../../src/Service/CatalogCompletenessService.php'
+      - '../../src/Service/CatalogDestinationMediaFallbackService.php'
+      - '../../src/Service/CatalogDestinationMediaPolicyPreferenceService.php'
+      - '../../src/Service/CatalogDestinationMediaReadinessService.php'
+      - '../../src/Service/CatalogMediaApplicabilityService.php'
+      - '../../src/Service/CatalogMediaCompletenessBridgeService.php'
+      - '../../src/Service/CatalogMediaCoverageService.php'
+      - '../../src/Service/CatalogMediaGovernanceService.php'
+      - '../../src/Service/CatalogMediaPublicationQualityBridgeService.php'
+      - '../../src/Service/CatalogMerchService.php'
+      - '../../src/Service/CatalogMovePreviewService.php'
+      - '../../src/Service/CatalogMoveService.php'
+      - '../../src/Service/CatalogPublicationGateService.php'
+      - '../../src/Service/CatalogPublicationQualityService.php'
+      - '../../src/Service/CatalogReadService.php'
+      - '../../src/Service/CatalogReviewAssignmentService.php'
+      - '../../src/Service/CatalogReviewDecisionCouplingService.php'
+      - '../../src/Service/CatalogReviewQueueService.php'
+      - '../../src/Service/CatalogRuleService.php'
+      - '../../src/Service/CatalogSyndicationDeliveryService.php'
+      - '../../src/Service/CatalogSyndicationDestinationGovernanceSummaryService.php'
+      - '../../src/Service/CatalogSyndicationDestinationService.php'
+      - '../../src/Service/CatalogSyndicationFallbackAwarePackageGateService.php'
+      - '../../src/Service/CatalogSyndicationGovernanceSummaryService.php'
+      - '../../src/Service/CatalogSyndicationGovernanceTrailService.php'
+      - '../../src/Service/CatalogSyndicationHistoryService.php'
+      - '../../src/Service/CatalogSyndicationMappingService.php'
+      - '../../src/Service/CatalogSyndicationPackageGateService.php'
+      - '../../src/Service/CatalogSyndicationPolicyAwarePackageGateService.php'
+      - '../../src/Service/CatalogSyndicationRetryService.php'
+      - '../../src/Service/CatalogWorkflowTransitionService.php'
+      - '../../src/Service/Category.php'
+      - '../../src/Service/Category/Acl/CategoryAclPolicyService.php'
+      - '../../src/Service/Category/CategoryApproxTotalService.php'
+      - '../../src/Service/Category/CategoryCategoryService.php'
+      - '../../src/Service/Category/CategoryCollectionImportService.php'
+      - '../../src/Service/Category/CategoryCollectionService.php'
+      - '../../src/Service/Category/Graphql/CategoryGraphqlGuard.php'
+      - '../../src/Service/Category/Graphql/CategoryLoader.php'
+      - '../../src/Service/Category/Import/CategoryImportService.php'
+      - '../../src/Service/Category/Quota/CategoryQuotaService.php'
+      - '../../src/Service/Category/Quota/CategoryTokenBucket.php'
+      - '../../src/Service/Category/Rule/CategoryRuleAdminService.php'
+      - '../../src/Service/Category/Rule/CategoryRuleEngine.php'
+      - '../../src/Service/Category/Suggest/CategoryRuleSuggestService.php'
+      - '../../src/Service/CategoryBreadcrumbBuilder.php'
+      - '../../src/Service/CategoryBulk.php'
+      - '../../src/Service/CategoryCacheHeader.php'
+      - '../../src/Service/CategoryHttpCache.php'
+      - '../../src/Service/CategoryInvalidator.php'
+      - '../../src/Service/CategoryRuleEngine.php'
+      - '../../src/Service/CategorySerializer.php'
+      - '../../src/Service/CategorySitemapGenerator.php'
+      - '../../src/Service/CategorySlugGenerator.php'
+      - '../../src/Service/ChannelFilter.php'
+      - '../../src/Service/CircuitBreaker.php'
+      - '../../src/Service/CloudflarePurger.php'
+      - '../../src/Service/CollectionBuilder.php'
+      - '../../src/Service/CollectionRuleService.php'
+      - '../../src/Service/DataResidencyGuard.php'
+      - '../../src/Service/DlqService.php'
+      - '../../src/Service/DraftPolicy.php'
+      - '../../src/Service/EdgeClientCloudflare.php'
+      - '../../src/Service/EdgeClientFastly.php'
+      - '../../src/Service/EtagGenerator.php'
+      - '../../src/Service/EtagMiddleware.php'
+      - '../../src/Service/FacetFilter.php'
+      - '../../src/Service/FacetIndexBuilder.php'
+      - '../../src/Service/FacetRank.php'
+      - '../../src/Service/FacetSearch.php'
+      - '../../src/Service/FacetSearchAdvanced.php'
+      - '../../src/Service/FastlyPurger.php'
+      - '../../src/Service/FeatureFlagResolver.php'
+      - '../../src/Service/Governance/CategoryGovernanceViewBuilder.php'
+      - '../../src/Service/GraphqlFacetResolver.php'
+      - '../../src/Service/GraphqlResolver.php'
+      - '../../src/Service/ImportFieldMapper.php'
+      - '../../src/Service/ImportPipeline.php'
+      - '../../src/Service/ImportValidator.php'
+      - '../../src/Service/Importer.php'
+      - '../../src/Service/InvalidationPolicy.php'
+      - '../../src/Service/LocaleCoverage.php'
+      - '../../src/Service/LocaleFallback.php'
+      - '../../src/Service/LocaleFilter.php'
+      - '../../src/Service/Mapper.php'
+      - '../../src/Service/MediaLinker.php'
+      - '../../src/Service/MoveEvent.php'
+      - '../../src/Service/MovePolicy.php'
+      - '../../src/Service/NoindexPolicy.php'
+      - '../../src/Service/OidcJwtValidator.php'
+      - '../../src/Service/OidcJwtVerifier.php'
+      - '../../src/Service/Ops/CategoryRuntimeStatusViewBuilder.php'
+      - '../../src/Service/OutboxWriter.php'
+      - '../../src/Service/ProgressTracker.php'
+      - '../../src/Service/ProjectionRunner.php'
+      - '../../src/Service/ProjectionWorker.php'
+      - '../../src/Service/PublishEvent.php'
+      - '../../src/Service/PublishOperation.php'
+      - '../../src/Service/QuotaGuard.php'
+      - '../../src/Service/ReadOptimizer.php'
+      - '../../src/Service/RedirectRule.php'
+      - '../../src/Service/RedirectStore.php'
+      - '../../src/Service/RedirectWriter.php'
+      - '../../src/Service/RegionResolver.php'
+      - '../../src/Service/RollbackOperation.php'
+      - '../../src/Service/SearchService.php'
+      - '../../src/Service/Security/CategoryRole.php'
+      - '../../src/Service/Security/JwkCache.php'
+      - '../../src/Service/Security/RbacPolicy.php'
+      - '../../src/Service/SeoPerLocale.php'
+      - '../../src/Service/ShopifyMapper.php'
+      - '../../src/Service/SitemapGenerator.php'
+      - '../../src/Service/SlugService.php'
+      - '../../src/Service/SlugVersionPolicy.php'
+      - '../../src/Service/SseBroadcaster.php'
+      - '../../src/Service/SseEvent.php'
+      - '../../src/Service/Status.php'
+      - '../../src/Service/StorePolicy.php'
+      - '../../src/Service/StoreScopeResolver.php'
+      - '../../src/Service/StorefrontAdapter.php'
+      - '../../src/Service/SurrogateKeyHeader.php'
+      - '../../src/Service/SynonymProvider.php'
+      - '../../src/Service/TenantFilter.php'
+      - '../../src/Service/TenantQuotaChecker.php'
+      - '../../src/Service/TenantRolePolicy.php'
+      - '../../src/Service/Traceability/CategoryActorTraceabilityViewBuilder.php'
+      - '../../src/Service/TracingDecorator.php'
+      - '../../src/Service/TreeConsistencyChecker.php'
+      - '../../src/Service/TreeLock.php'
+      - '../../src/Service/TreeOperation.php'
+      - '../../src/Service/TreeOperationConcurrency.php'
+      - '../../src/Service/Version.php'
+      - '../../src/Service/VersionCompare.php'
+      - '../../src/Service/WarmupDispatcher.php'
+      - '../../src/Service/WarmupPlan.php'
+      - '../../src/Service/WebhookAdminService.php'
+      - '../../src/Service/WebhookClient.php'
+      - '../../src/Service/WebhookConfigPolicy.php'
+      - '../../src/Service/WebhookDispatcher.php'
+      - '../../src/Service/WebhookEndpoint.php'
+      - '../../src/Service/WebhookNotifier.php'
+      - '../../src/ServiceInterface/Acl/AclRepositoryInterface.php'
+      - '../../src/ServiceInterface/Api/GraphqlResolverInterface.php'
+      - '../../src/ServiceInterface/AtomicMoveInterface.php'
+      - '../../src/ServiceInterface/CanonicalPolicyInterface.php'
+      - '../../src/ServiceInterface/CatalogAccessAssignmentServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogChangeRequestServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogCompletenessServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogDestinationMediaFallbackServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogDestinationMediaPolicyPreferenceServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogDestinationMediaReadinessServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMediaApplicabilityServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMediaCompletenessBridgeServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMediaCoverageServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMediaGovernanceServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMediaPublicationQualityBridgeServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMerchServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogMovePreviewServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogPublicationGateServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogPublicationQualityServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogReadServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogReviewAssignmentServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogReviewDecisionCouplingServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogReviewQueueServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogRuleServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationDeliveryServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationDestinationGovernanceSummaryServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationDestinationServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationFallbackAwarePackageGateServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationGovernanceSummaryServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationGovernanceTrailServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationHistoryServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationMappingServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationPackageGateServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationPolicyAwarePackageGateServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogSyndicationRetryServiceInterface.php'
+      - '../../src/ServiceInterface/CatalogWorkflowTransitionServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryAclPolicyServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryApproxTotalServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryCategoryServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryCollectionImportServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryCollectionServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryGraphqlGuardInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryImportServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryLoaderInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryQuotaServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryRuleAdminServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryRuleEngineInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryRuleSuggestServiceInterface.php'
+      - '../../src/ServiceInterface/Category/CategoryTokenBucketInterface.php'
+      - '../../src/ServiceInterface/Category/Quota/CategoryTokenBucketInterface.php'
+      - '../../src/ServiceInterface/CategoryBreadcrumbBuilderInterface.php'
+      - '../../src/ServiceInterface/CategoryBulkInterface.php'
+      - '../../src/ServiceInterface/CategoryHttpCacheInterface.php'
+      - '../../src/ServiceInterface/CategoryInterface.php'
+      - '../../src/ServiceInterface/CategoryMoveInterface.php'
+      - '../../src/ServiceInterface/CategoryRepositoryInterface.php'
+      - '../../src/ServiceInterface/CategorySerializerInterface.php'
+      - '../../src/ServiceInterface/CategorySitemapGeneratorInterface.php'
+      - '../../src/ServiceInterface/CategorySlugGeneratorInterface.php'
+      - '../../src/ServiceInterface/CollectionRuleServiceInterface.php'
+      - '../../src/ServiceInterface/EdgeClientInterface.php'
+      - '../../src/ServiceInterface/Governance/CategoryGovernanceViewBuilderInterface.php'
+      - '../../src/ServiceInterface/GraphqlFacetResolverInterface.php'
+      - '../../src/ServiceInterface/GraphqlResolverInterface.php'
+      - '../../src/ServiceInterface/Import/ImportRepositoryInterface.php'
+      - '../../src/ServiceInterface/ImporterInterface.php'
+      - '../../src/ServiceInterface/Integration/WebhookClientInterface.php'
+      - '../../src/ServiceInterface/OidcJwtValidatorInterface.php'
+      - '../../src/ServiceInterface/OidcJwtVerifierInterface.php'
+      - '../../src/ServiceInterface/Ops/CategoryRuntimeStatusViewBuilderInterface.php'
+      - '../../src/ServiceInterface/ProjectionRunnerInterface.php'
+      - '../../src/ServiceInterface/Quota/CacheStoreInterface.php'
+      - '../../src/ServiceInterface/RedirectStoreInterface.php'
+      - '../../src/ServiceInterface/Rule/RuleRepositoryInterface.php'
+      - '../../src/ServiceInterface/Security/OidcJwtVerifierInterface.php'
+      - '../../src/ServiceInterface/Security/TenantRolePolicyInterface.php'
+      - '../../src/ServiceInterface/Seo/CanonicalPolicyInterface.php'
+      - '../../src/ServiceInterface/Seo/SeoRepositoryInterface.php'
+      - '../../src/ServiceInterface/ShopifyMapperInterface.php'
+      - '../../src/ServiceInterface/TenantRolePolicyInterface.php'
+      - '../../src/ServiceInterface/Traceability/CategoryActorTraceabilityViewBuilderInterface.php'
+      - '../../src/ServiceInterface/VersionInterface.php'
+      - '../../src/ServiceInterface/WebhookAdminServiceInterface.php'
+      - '../../src/ServiceInterface/WebhookClientInterface.php'
+      - '../../src/EventSubscriber/CategoryChangedSubscriber.php'
+      - '../../src/EventSubscriber/SecurityHeaderListener.php'
+      - '../../src/EntityInterface/CategoryAccessAssignmentInterface.php'
+      - '../../src/EntityInterface/CategoryChangeRequestInterface.php'
+      - '../../src/EntityInterface/CategoryInterface.php'
+      - '../../src/EntityInterface/CategoryLinkInterface.php'
+      - '../../src/EntityInterface/CategoryMediaBindingInterface.php'
+      - '../../src/EntityInterface/CategoryRedirectInterface.php'
+      - '../../src/EntityInterface/CategoryReviewAssignmentInterface.php'
+      - '../../src/EntityInterface/CategorySyndicationDeliveryRecordInterface.php'
+      - '../../src/EntityInterface/CategorySyndicationDestinationInterface.php'
+      - '../../src/EntityInterface/CategoryTaxonomyInterface.php'
+      - '../../src/EntityInterface/CategoryWorkflowInterface.php'
       - '../../src/Entity/'
       - '../../src/Event/'
       - '../../src/EventInterface/'
@@ -93,6 +495,155 @@ services:
   App\Cataloging\RepositoryInterface\Catalog\CatalogSyndicationDestinationRepositoryInterface:
     alias: App\Cataloging\Repository\Catalog\CatalogSyndicationDestinationRepository
 
+  App\Cataloging\Service\CatalogDestinationMediaReadinessService: ~
+  App\Cataloging\ServiceInterface\CatalogDestinationMediaReadinessServiceInterface:
+    alias: App\Cataloging\Service\CatalogDestinationMediaReadinessService
+  App\Cataloging\Service\CatalogMediaApplicabilityService: ~
+  App\Cataloging\ServiceInterface\CatalogMediaApplicabilityServiceInterface:
+    alias: App\Cataloging\Service\CatalogMediaApplicabilityService
+  App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryDestinationMediaReadinessPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy
+  App\Cataloging\Policy\CategoryMediaApplicabilityPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryMediaApplicabilityPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryMediaApplicabilityPolicy
+  App\Cataloging\Repository\CategoryMediaBindingRepository: ~
+  App\Cataloging\RepositoryInterface\CategoryMediaBindingRepositoryInterface:
+    alias: App\Cataloging\Repository\CategoryMediaBindingRepository
+  App\Cataloging\Repository\CategorySyndicationDestinationRepository: ~
+  App\Cataloging\RepositoryInterface\CategorySyndicationDestinationRepositoryInterface:
+    alias: App\Cataloging\Repository\CategorySyndicationDestinationRepository
+  App\Cataloging\Service\CatalogMoveService.pdo:
+    class: PDO
+    factory: ['@doctrine.dbal.postgres_connection', 'getNativeConnection']
+  App\Cataloging\Service\CatalogMoveService:
+    arguments:
+      $pg: '@App\Cataloging\Service\CatalogMoveService.pdo'
+  App\Cataloging\ServiceInterface\CategoryMoveInterface:
+    alias: App\Cataloging\Service\CatalogMoveService
+  App\Cataloging\Service\CatalogPublicationQualityService: ~
+  App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface:
+    alias: App\Cataloging\Service\CatalogPublicationQualityService
+  App\Cataloging\Policy\CategoryPublicationQualityPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryPublicationQualityPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryPublicationQualityPolicy
+  App\Cataloging\Service\CatalogReviewAssignmentService: ~
+  App\Cataloging\ServiceInterface\CatalogReviewAssignmentServiceInterface:
+    alias: App\Cataloging\Service\CatalogReviewAssignmentService
+  App\Cataloging\Repository\CategoryChangeRequestRepository: ~
+  App\Cataloging\RepositoryInterface\CategoryChangeRequestRepositoryInterface:
+    alias: App\Cataloging\Repository\CategoryChangeRequestRepository
+  App\Cataloging\Repository\CategoryReviewAssignmentRepository: ~
+  App\Cataloging\RepositoryInterface\CategoryReviewAssignmentRepositoryInterface:
+    alias: App\Cataloging\Repository\CategoryReviewAssignmentRepository
+  App\Cataloging\Policy\CategoryReviewAssignmentPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryReviewAssignmentPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryReviewAssignmentPolicy
+  App\Cataloging\Service\CatalogReviewQueueService: ~
+  App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface:
+    alias: App\Cataloging\Service\CatalogReviewQueueService
+  App\Cataloging\Service\Ops\CategoryRuntimeStatusViewBuilder: ~
+  App\Cataloging\ServiceInterface\Ops\CategoryRuntimeStatusViewBuilderInterface:
+    alias: App\Cataloging\Service\Ops\CategoryRuntimeStatusViewBuilder
+  App\Cataloging\Service\Governance\CategoryGovernanceViewBuilder: ~
+  App\Cataloging\ServiceInterface\Governance\CategoryGovernanceViewBuilderInterface:
+    alias: App\Cataloging\Service\Governance\CategoryGovernanceViewBuilder
+  App\Cataloging\Service\Traceability\CategoryActorTraceabilityViewBuilder: ~
+  App\Cataloging\ServiceInterface\Traceability\CategoryActorTraceabilityViewBuilderInterface:
+    alias: App\Cataloging\Service\Traceability\CategoryActorTraceabilityViewBuilder
+  App\Cataloging\Repository\CategoryWorkflowRepository: ~
+  App\Cataloging\RepositoryInterface\CategoryWorkflowRepositoryInterface:
+    alias: App\Cataloging\Repository\CategoryWorkflowRepository
+  App\Cataloging\Repository\CategoryAccessAssignmentRepository: ~
+  App\Cataloging\RepositoryInterface\CategoryAccessAssignmentRepositoryInterface:
+    alias: App\Cataloging\Repository\CategoryAccessAssignmentRepository
+  App\Cataloging\Service\CatalogSyndicationGovernanceSummaryService: ~
+  App\Cataloging\ServiceInterface\CatalogSyndicationGovernanceSummaryServiceInterface:
+    alias: App\Cataloging\Service\CatalogSyndicationGovernanceSummaryService
+  App\Cataloging\Policy\CategorySyndicationCategoryGovernanceSummaryPolicy: ~
+  App\Cataloging\PolicyInterface\CategorySyndicationCategoryGovernanceSummaryPolicyInterface:
+    alias: App\Cataloging\Policy\CategorySyndicationCategoryGovernanceSummaryPolicy
+  App\Cataloging\Repository\CategorySyndicationDeliveryRecordRepository: ~
+  App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface:
+    alias: App\Cataloging\Repository\CategorySyndicationDeliveryRecordRepository
+  App\Cataloging\Service\CatalogSyndicationPackageGateService: ~
+  App\Cataloging\ServiceInterface\CatalogSyndicationPackageGateServiceInterface:
+    alias: App\Cataloging\Service\CatalogSyndicationPackageGateService
+  App\Cataloging\Service\CatalogSyndicationMappingService: ~
+  App\Cataloging\ServiceInterface\CatalogSyndicationMappingServiceInterface:
+    alias: App\Cataloging\Service\CatalogSyndicationMappingService
+  App\Cataloging\Policy\CategorySyndicationPackageGatePolicy: ~
+  App\Cataloging\PolicyInterface\CategorySyndicationPackageGatePolicyInterface:
+    alias: App\Cataloging\Policy\CategorySyndicationPackageGatePolicy
+  App\Cataloging\Policy\CategorySyndicationMappingPolicy: ~
+  App\Cataloging\PolicyInterface\CategorySyndicationMappingPolicyInterface:
+    alias: App\Cataloging\Policy\CategorySyndicationMappingPolicy
+  App\Cataloging\Service\CatalogSyndicationRetryService: ~
+  App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface:
+    alias: App\Cataloging\Service\CatalogSyndicationRetryService
+  App\Cataloging\Service\CatalogWorkflowTransitionService: ~
+  App\Cataloging\ServiceInterface\CatalogWorkflowTransitionServiceInterface:
+    alias: App\Cataloging\Service\CatalogWorkflowTransitionService
+  App\Cataloging\Policy\CategoryWorkflowPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryWorkflowPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryWorkflowPolicy
+  App\Cataloging\Service\CatalogMovePreviewService: ~
+  App\Cataloging\ServiceInterface\CatalogMovePreviewServiceInterface:
+    alias: App\Cataloging\Service\CatalogMovePreviewService
+  App\Cataloging\Service\CatalogMerchService: ~
+  App\Cataloging\ServiceInterface\CatalogMerchServiceInterface:
+    alias: App\Cataloging\Service\CatalogMerchService
+  App\Cataloging\Repository\CatalogRepository: ~
+  App\Cataloging\Service\CatalogReadService: ~
+  App\Cataloging\ServiceInterface\CatalogReadServiceInterface:
+    alias: App\Cataloging\Service\CatalogReadService
+  App\Cataloging\Service\CatalogRuleService: ~
+  App\Cataloging\ServiceInterface\CatalogRuleServiceInterface:
+    alias: App\Cataloging\Service\CatalogRuleService
+  App\Cataloging\Service\WarmupPlan: ~
+  App\Cataloging\Service\FacetFilter: ~
+  App\Cataloging\Service\FacetRank: ~
+  App\Cataloging\Service\TreeConsistencyChecker: ~
+  App\Cataloging\Service\ProjectionRunner: ~
+  App\Cataloging\Service\CatalogPublicationGateService: ~
+  App\Cataloging\ServiceInterface\CatalogPublicationGateServiceInterface:
+    alias: App\Cataloging\Service\CatalogPublicationGateService
+  App\Cataloging\Policy\CategoryPublicationGatePolicy: ~
+  App\Cataloging\PolicyInterface\CategoryPublicationGatePolicyInterface:
+    alias: App\Cataloging\Policy\CategoryPublicationGatePolicy
+  App\Cataloging\Policy\CategoryPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryPolicy
+  App\Cataloging\Projection\CategoryProjectionSync: ~
+  App\Cataloging\ProjectionInterface\CategoryProjectionSyncInterface:
+    alias: App\Cataloging\Projection\CategoryProjectionSync
+  App\Cataloging\Outbox\CategoryOutboxRetry: ~
+  App\Cataloging\OutboxInterface\CategoryOutboxRetryInterface:
+    alias: App\Cataloging\Outbox\CategoryOutboxRetry
+  App\Cataloging\Idempotency\CategoryIdempotencyStore: ~
+  App\Cataloging\IdempotencyInterface\CategoryIdempotencyStoreInterface:
+    alias: App\Cataloging\Idempotency\CategoryIdempotencyStore
+  App\Cataloging\Service\CatalogCompletenessService: ~
+  App\Cataloging\ServiceInterface\CatalogCompletenessServiceInterface:
+    alias: App\Cataloging\Service\CatalogCompletenessService
+  App\Cataloging\Service\CatalogSyndicationHistoryService: ~
+  App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface:
+    alias: App\Cataloging\Service\CatalogSyndicationHistoryService
+  App\Cataloging\Service\CatalogSyndicationDestinationGovernanceSummaryService: ~
+  App\Cataloging\ServiceInterface\CatalogSyndicationDestinationGovernanceSummaryServiceInterface:
+    alias: App\Cataloging\Service\CatalogSyndicationDestinationGovernanceSummaryService
+  App\Cataloging\Policy\CategoryCompletenessPolicy: ~
+  App\Cataloging\PolicyInterface\CategoryCompletenessPolicyInterface:
+    alias: App\Cataloging\Policy\CategoryCompletenessPolicy
+  App\Cataloging\Policy\CategorySyndicationHistoryPolicy: ~
+  App\Cataloging\PolicyInterface\CategorySyndicationHistoryPolicyInterface:
+    alias: App\Cataloging\Policy\CategorySyndicationHistoryPolicy
+  App\Cataloging\Policy\CategorySyndicationRetryPolicy: ~
+  App\Cataloging\PolicyInterface\CategorySyndicationRetryPolicyInterface:
+    alias: App\Cataloging\Policy\CategorySyndicationRetryPolicy
+  App\Cataloging\Policy\CategorySyndicationDestinationGovernanceSummaryPolicy: ~
+  App\Cataloging\PolicyInterface\CategorySyndicationDestinationGovernanceSummaryPolicyInterface:
+    alias: App\Cataloging\Policy\CategorySyndicationDestinationGovernanceSummaryPolicy
   App\Cataloging\PolicyInterface\CatalogSyndicationDestinationPolicyInterface:
     alias: App\Cataloging\Policy\CatalogSyndicationDestinationPolicy
   App\Cataloging\PolicyInterface\CatalogSyndicationDestinationGovernanceSummaryPolicyInterface:

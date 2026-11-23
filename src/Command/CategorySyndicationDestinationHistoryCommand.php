@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\ServiceInterface\CatalogSyndicationHistoryServiceInterface;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

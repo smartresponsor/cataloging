@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\ServiceInterface\CatalogPublicationQualityServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogPublicationQualityServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

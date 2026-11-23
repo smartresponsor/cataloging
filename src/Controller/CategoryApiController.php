@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Request\MoveCategoryRequest;
-use App\Request\PublishCategoryRequest;
+use App\Cataloging\Request\MoveCategoryRequest;
+use App\Cataloging\Request\PublishCategoryRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

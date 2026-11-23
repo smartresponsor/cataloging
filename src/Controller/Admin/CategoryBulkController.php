@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Cataloging\Controller\Admin;
 
-use App\Request\CategoryBulkRequest;
-use App\Service\BulkOperator;
+use App\Cataloging\Request\CategoryBulkRequest;
+use App\Cataloging\Service\BulkOperator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

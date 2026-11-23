@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\ServiceInterface\CatalogReviewQueueServiceInterface;
-use App\ValueObjectInterface\CategoryReviewQueueItemInterface;
+use App\Cataloging\ServiceInterface\CatalogReviewQueueServiceInterface;
+use App\Cataloging\ValueObjectInterface\CategoryReviewQueueItemInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

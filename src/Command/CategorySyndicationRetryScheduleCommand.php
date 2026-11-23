@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace App\Cataloging\Command;
 
-use App\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
-use App\ServiceInterface\CatalogSyndicationRetryServiceInterface;
+use App\Cataloging\RepositoryInterface\CategorySyndicationDeliveryRecordRepositoryInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationRetryServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

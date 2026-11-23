@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Request\CategoryRulePreviewRequest;
-use App\Service\CatalogRuleService;
+use App\Cataloging\Request\CategoryRulePreviewRequest;
+use App\Cataloging\Service\CatalogRuleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

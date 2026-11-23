@@ -3,9 +3,9 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\Service\CatalogMerchService;
+use App\Cataloging\Service\CatalogMerchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;

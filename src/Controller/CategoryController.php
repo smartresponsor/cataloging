@@ -3,12 +3,12 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Cataloging\Controller;
 
-use App\ControllerInterface\CategoryControllerInterface;
-use App\RepositoryInterface\CategoryRepositoryInterface;
-use App\ServiceInterface\CategoryBreadcrumbBuilderInterface;
-use App\ServiceInterface\CategoryInterface as CatalogCategoryService;
+use App\Cataloging\ControllerInterface\CategoryControllerInterface;
+use App\Cataloging\RepositoryInterface\CategoryRepositoryInterface;
+use App\Cataloging\ServiceInterface\CategoryBreadcrumbBuilderInterface;
+use App\Cataloging\ServiceInterface\CategoryInterface as CatalogCategoryService;
 
 final class CategoryController implements CategoryControllerInterface
 {
