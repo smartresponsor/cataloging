@@ -20,8 +20,11 @@ final class CreateMovePublishTest extends TestCase
         $webServerPort = $this->freeLocalPort();
         $browserDriverPort = $this->freeLocalPort();
 
+        // Panther uses Chromium WebDriver for Microsoft Edge.
+        $_SERVER['PANTHER_CHROME_BINARY'] = getenv('PANTHER_EDGE_BINARY') ?: '/usr/bin/microsoft-edge';
+
         $client = self::createPantherClient([
-            'browser' => 'firefox',
+            'browser' => 'chrome',
             'webServerDir' => dirname(__DIR__, 3).'/public',
             'router' => dirname(__DIR__, 3).'/public/index.php',
             'hostname' => '127.0.0.1',
