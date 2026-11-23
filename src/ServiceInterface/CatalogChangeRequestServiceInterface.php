@@ -3,10 +3,10 @@
 // Copyright (c) 2025 Oleksandr Tishchenko / Marketing America Corp
 declare(strict_types=1);
 
-namespace App\ServiceInterface;
+namespace App\Cataloging\ServiceInterface;
 
-use App\Entity\CategoryChangeRequest;
-use App\Event\CategoryChangeRequestReviewed;
+use App\Cataloging\Entity\CategoryChangeRequest;
+use App\Cataloging\Event\CategoryChangeRequestReviewed;
 
 interface CatalogChangeRequestServiceInterface
 {
