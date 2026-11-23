@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Policy\CategorySyndicationDestinationPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaFallbackService;
-use App\Service\CatalogSyndicationDestinationService;
+use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
+use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
+use App\Cataloging\Service\CatalogSyndicationDestinationService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaFallbackServiceTest extends TestCase

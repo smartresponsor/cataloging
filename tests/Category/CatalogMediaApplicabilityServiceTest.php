@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryMediaApplicabilityPolicy;
-use App\Policy\CategoryMediaGovernancePolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Service\CatalogMediaApplicabilityService;
-use App\Service\CatalogMediaGovernanceService;
+use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
+use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\Service\CatalogMediaGovernanceService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaApplicabilityServiceTest extends TestCase

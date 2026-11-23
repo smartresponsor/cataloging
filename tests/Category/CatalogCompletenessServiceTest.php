@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryCompletenessPolicy;
-use App\Service\CatalogCompletenessService;
+use App\Cataloging\Policy\CategoryCompletenessPolicy;
+use App\Cataloging\Service\CatalogCompletenessService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogCompletenessServiceTest extends TestCase

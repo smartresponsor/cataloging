@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryMediaGovernancePolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Service\CatalogMediaGovernanceService;
+use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Service\CatalogMediaGovernanceService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaGovernanceServiceTest extends TestCase

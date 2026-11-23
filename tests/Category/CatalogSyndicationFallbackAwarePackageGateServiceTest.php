@@ -9,21 +9,21 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Entity\CategoryMediaBinding;
-use App\Entity\CategorySyndicationDestination;
-use App\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Policy\CategoryMediaApplicabilityPolicy;
-use App\Policy\CategorySyndicationFallbackAwarePackageGatePolicy;
-use App\Policy\CategorySyndicationMappingPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaFallbackService;
-use App\Service\CatalogDestinationMediaReadinessService;
-use App\Service\CatalogMediaApplicabilityService;
-use App\Service\CatalogSyndicationFallbackAwarePackageGateService;
-use App\Service\CatalogSyndicationMappingService;
-use App\ValueObject\CategoryMediaRole;
+use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Entity\CategorySyndicationDestination;
+use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
+use App\Cataloging\Policy\CategorySyndicationFallbackAwarePackageGatePolicy;
+use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
+use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\Service\CatalogSyndicationFallbackAwarePackageGateService;
+use App\Cataloging\Service\CatalogSyndicationMappingService;
+use App\Cataloging\ValueObject\CategoryMediaRole;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationFallbackAwarePackageGateServiceTest extends TestCase

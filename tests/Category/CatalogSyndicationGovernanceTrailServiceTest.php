@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationGovernanceTrailPolicy;
-use App\Service\CatalogSyndicationGovernanceTrailService;
+use App\Cataloging\Policy\CategorySyndicationGovernanceTrailPolicy;
+use App\Cataloging\Service\CatalogSyndicationGovernanceTrailService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationGovernanceTrailServiceTest extends TestCase

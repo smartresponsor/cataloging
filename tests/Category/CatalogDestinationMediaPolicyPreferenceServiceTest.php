@@ -8,18 +8,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Entity\CategoryMediaBinding;
-use App\Entity\CategorySyndicationDestination;
-use App\Policy\CategoryDestinationMediaFallbackPolicy;
-use App\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaFallbackService;
-use App\Service\CatalogDestinationMediaPolicyPreferenceService;
-use App\Service\CatalogDestinationMediaReadinessService;
-use App\Service\CatalogMediaApplicabilityService;
-use App\ValueObject\CategoryMediaRole;
+use App\Cataloging\Entity\CategoryMediaBinding;
+use App\Cataloging\Entity\CategorySyndicationDestination;
+use App\Cataloging\Policy\CategoryDestinationMediaFallbackPolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaFallbackService;
+use App\Cataloging\Service\CatalogDestinationMediaPolicyPreferenceService;
+use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\ValueObject\CategoryMediaRole;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogDestinationMediaPolicyPreferenceServiceTest extends TestCase

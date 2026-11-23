@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryWorkflowPolicy;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryWorkflowPolicyTest extends TestCase

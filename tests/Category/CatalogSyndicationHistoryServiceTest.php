@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Entity\CategorySyndicationDeliveryRecord;
-use App\Policy\CategorySyndicationHistoryPolicy;
-use App\Policy\CategorySyndicationRetryPolicy;
-use App\Service\CatalogSyndicationHistoryService;
-use App\ValueObject\CategorySyndicationDeliveryStatus;
+use App\Cataloging\Entity\CategorySyndicationDeliveryRecord;
+use App\Cataloging\Policy\CategorySyndicationHistoryPolicy;
+use App\Cataloging\Policy\CategorySyndicationRetryPolicy;
+use App\Cataloging\Service\CatalogSyndicationHistoryService;
+use App\Cataloging\ValueObject\CategorySyndicationDeliveryStatus;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationHistoryServiceTest extends TestCase

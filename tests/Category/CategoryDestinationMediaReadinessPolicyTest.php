@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryDestinationMediaReadinessPolicyTest extends TestCase

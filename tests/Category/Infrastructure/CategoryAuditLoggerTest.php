@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category\Infrastructure;
 
-use App\Infrastructure\CategoryAuditLogger;
+use App\Cataloging\Infrastructure\CategoryAuditLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\AbstractLogger;
 

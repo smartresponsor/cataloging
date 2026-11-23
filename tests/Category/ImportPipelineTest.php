@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Service\ImportPipeline;
+use App\Cataloging\Service\ImportPipeline;
 use PHPUnit\Framework\TestCase;
 
 final class ImportPipelineTest extends TestCase

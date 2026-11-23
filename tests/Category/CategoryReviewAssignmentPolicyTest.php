@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Entity\CategoryChangeRequest;
-use App\Policy\CategoryReviewAssignmentPolicy;
-use App\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\Entity\CategoryChangeRequest;
+use App\Cataloging\Policy\CategoryReviewAssignmentPolicy;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryReviewAssignmentPolicyTest extends TestCase

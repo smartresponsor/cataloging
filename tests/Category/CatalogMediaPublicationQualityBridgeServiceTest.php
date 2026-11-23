@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryCompletenessPolicy;
-use App\Policy\CategoryMediaCoveragePolicy;
-use App\Policy\CategoryPublicationQualityPolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Service\CatalogMediaCompletenessBridgeService;
-use App\Service\CatalogMediaCoverageService;
-use App\Service\CatalogMediaPublicationQualityBridgeService;
-use App\Service\CatalogPublicationQualityService;
+use App\Cataloging\Policy\CategoryCompletenessPolicy;
+use App\Cataloging\Policy\CategoryMediaCoveragePolicy;
+use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Service\CatalogMediaCompletenessBridgeService;
+use App\Cataloging\Service\CatalogMediaCoverageService;
+use App\Cataloging\Service\CatalogMediaPublicationQualityBridgeService;
+use App\Cataloging\Service\CatalogPublicationQualityService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogMediaPublicationQualityBridgeServiceTest extends TestCase

@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryWorkflowPolicy;
-use App\Repository\CategoryWorkflowRepository;
-use App\Service\CatalogWorkflowTransitionService;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Policy\CategoryWorkflowPolicy;
+use App\Cataloging\Repository\CategoryWorkflowRepository;
+use App\Cataloging\Service\CatalogWorkflowTransitionService;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogWorkflowTransitionServiceTest extends TestCase

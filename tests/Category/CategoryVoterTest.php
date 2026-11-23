@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Security\CategoryVoter;
+use App\Cataloging\Security\CategoryVoter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;

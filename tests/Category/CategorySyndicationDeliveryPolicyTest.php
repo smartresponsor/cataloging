@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationDeliveryPolicy;
+use App\Cataloging\Policy\CategorySyndicationDeliveryPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategorySyndicationDeliveryPolicyTest extends TestCase

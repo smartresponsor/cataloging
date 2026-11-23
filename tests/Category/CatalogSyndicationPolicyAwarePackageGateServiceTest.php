@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationPolicyAwarePackageGatePolicy;
-use App\Service\CatalogSyndicationPolicyAwarePackageGateService;
-use App\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
-use App\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
+use App\Cataloging\Policy\CategorySyndicationPolicyAwarePackageGatePolicy;
+use App\Cataloging\Service\CatalogSyndicationPolicyAwarePackageGateService;
+use App\Cataloging\ServiceInterface\CatalogDestinationMediaPolicyPreferenceServiceInterface;
+use App\Cataloging\ServiceInterface\CatalogSyndicationFallbackAwarePackageGateServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
@@ -25,7 +25,7 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
              * @param array<string,string> $fieldMap
              * @param list<string>         $requiredFields
              */
-            public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): \App\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
+            public function buildGatedPublishPackage(string $packageId, string $destinationId, string $categoryId, string $version, string $localeMode, array $categoryData, array $fieldMap, array $requiredFields, string $actorId, string $reason): \App\Cataloging\EventInterface\CategorySyndicationFallbackAwarePackageGatedInterface
             {
                 return new \App\Event\CategorySyndicationFallbackAwarePackageGated([
                     'packageId' => $packageId,
@@ -46,7 +46,7 @@ final class CatalogSyndicationPolicyAwarePackageGateServiceTest extends TestCase
         };
 
         $preferenceService = new class implements CatalogDestinationMediaPolicyPreferenceServiceInterface {
-            public function evaluate(string $destinationId, string $categoryId, string $actorId, string $reason): \App\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
+            public function evaluate(string $destinationId, string $categoryId, string $actorId, string $reason): \App\Cataloging\EventInterface\CategoryDestinationMediaPolicyPreferenceEvaluatedInterface
             {
                 return new \App\Event\CategoryDestinationMediaPolicyPreferenceEvaluated([
                     'destinationId' => $destinationId,

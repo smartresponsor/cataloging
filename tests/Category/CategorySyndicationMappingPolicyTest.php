@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationMappingPolicy;
+use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategorySyndicationMappingPolicyTest extends TestCase

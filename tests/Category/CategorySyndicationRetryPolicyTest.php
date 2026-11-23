@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationRetryPolicy;
+use App\Cataloging\Policy\CategorySyndicationRetryPolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategorySyndicationRetryPolicyTest extends TestCase

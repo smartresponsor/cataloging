@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category\Infrastructure;
 
-use App\Infrastructure\ProductWebhookPublisher;
+use App\Cataloging\Infrastructure\ProductWebhookPublisher;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;

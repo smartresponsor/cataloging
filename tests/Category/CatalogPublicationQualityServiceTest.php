@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryPublicationQualityPolicy;
-use App\Service\CatalogPublicationQualityService;
+use App\Cataloging\Policy\CategoryPublicationQualityPolicy;
+use App\Cataloging\Service\CatalogPublicationQualityService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationQualityServiceTest extends TestCase

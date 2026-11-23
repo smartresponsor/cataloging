@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationPackageGatePolicy;
+use App\Cataloging\Policy\CategorySyndicationPackageGatePolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategorySyndicationPackageGatePolicyTest extends TestCase

@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationDeliveryPolicy;
-use App\Repository\CategorySyndicationDeliveryRecordRepository;
-use App\Service\CatalogSyndicationDeliveryService;
+use App\Cataloging\Policy\CategorySyndicationDeliveryPolicy;
+use App\Cataloging\Repository\CategorySyndicationDeliveryRecordRepository;
+use App\Cataloging\Service\CatalogSyndicationDeliveryService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationDeliveryServiceTest extends TestCase

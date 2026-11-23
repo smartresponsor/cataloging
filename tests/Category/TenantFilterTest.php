@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Service\TenantFilter;
+use App\Cataloging\Service\TenantFilter;
 use PHPUnit\Framework\TestCase;
 
 final class TenantFilterTest extends TestCase

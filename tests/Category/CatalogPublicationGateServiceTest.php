@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryPublicationGatePolicy;
-use App\Service\CatalogPublicationGateService;
-use App\ValueObject\CategoryWorkflowState;
+use App\Cataloging\Policy\CategoryPublicationGatePolicy;
+use App\Cataloging\Service\CatalogPublicationGateService;
+use App\Cataloging\ValueObject\CategoryWorkflowState;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogPublicationGateServiceTest extends TestCase

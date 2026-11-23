@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category\GraphQL;
 
-use App\GraphQl\CategoryQuery;
+use App\Cataloging\GraphQl\CategoryQuery;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryQueryAdvancedTest extends TestCase

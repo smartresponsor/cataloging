@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryChangeRequestPolicy;
-use App\ValueObject\CategoryChangeRequestState;
+use App\Cataloging\Policy\CategoryChangeRequestPolicy;
+use App\Cataloging\ValueObject\CategoryChangeRequestState;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryChangeRequestPolicyTest extends TestCase

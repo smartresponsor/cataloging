@@ -8,20 +8,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryDestinationMediaReadinessPolicy;
-use App\Policy\CategoryMediaApplicabilityPolicy;
-use App\Policy\CategoryMediaGovernancePolicy;
-use App\Policy\CategorySyndicationDestinationPolicy;
-use App\Policy\CategorySyndicationMappingPolicy;
-use App\Policy\CategorySyndicationPackageGatePolicy;
-use App\Repository\CategoryMediaBindingRepository;
-use App\Repository\CategorySyndicationDestinationRepository;
-use App\Service\CatalogDestinationMediaReadinessService;
-use App\Service\CatalogMediaApplicabilityService;
-use App\Service\CatalogMediaGovernanceService;
-use App\Service\CatalogSyndicationDestinationService;
-use App\Service\CatalogSyndicationMappingService;
-use App\Service\CatalogSyndicationPackageGateService;
+use App\Cataloging\Policy\CategoryDestinationMediaReadinessPolicy;
+use App\Cataloging\Policy\CategoryMediaApplicabilityPolicy;
+use App\Cataloging\Policy\CategoryMediaGovernancePolicy;
+use App\Cataloging\Policy\CategorySyndicationDestinationPolicy;
+use App\Cataloging\Policy\CategorySyndicationMappingPolicy;
+use App\Cataloging\Policy\CategorySyndicationPackageGatePolicy;
+use App\Cataloging\Repository\CategoryMediaBindingRepository;
+use App\Cataloging\Repository\CategorySyndicationDestinationRepository;
+use App\Cataloging\Service\CatalogDestinationMediaReadinessService;
+use App\Cataloging\Service\CatalogMediaApplicabilityService;
+use App\Cataloging\Service\CatalogMediaGovernanceService;
+use App\Cataloging\Service\CatalogSyndicationDestinationService;
+use App\Cataloging\Service\CatalogSyndicationMappingService;
+use App\Cataloging\Service\CatalogSyndicationPackageGateService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationPackageGateServiceTest extends TestCase

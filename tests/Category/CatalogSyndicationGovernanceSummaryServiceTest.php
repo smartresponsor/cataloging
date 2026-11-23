@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategorySyndicationCategoryGovernanceSummaryPolicy;
-use App\Service\CatalogSyndicationGovernanceSummaryService;
+use App\Cataloging\Policy\CategorySyndicationCategoryGovernanceSummaryPolicy;
+use App\Cataloging\Service\CatalogSyndicationGovernanceSummaryService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogSyndicationGovernanceSummaryServiceTest extends TestCase

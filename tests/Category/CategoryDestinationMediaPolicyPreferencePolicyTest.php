@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
+use App\Cataloging\Policy\CategoryDestinationMediaPolicyPreferencePolicy;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryDestinationMediaPolicyPreferencePolicyTest extends TestCase

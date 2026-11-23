@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Category;
 
-use App\Policy\CategoryChangeRequestPolicy;
-use App\Repository\CategoryChangeRequestRepository;
-use App\Service\CatalogChangeRequestService;
+use App\Cataloging\Policy\CategoryChangeRequestPolicy;
+use App\Cataloging\Repository\CategoryChangeRequestRepository;
+use App\Cataloging\Service\CatalogChangeRequestService;
 use PHPUnit\Framework\TestCase;
 
 final class CatalogChangeRequestServiceTest extends TestCase
