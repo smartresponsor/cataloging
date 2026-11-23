@@ -31,6 +31,13 @@ foreach ($rii as $file) {
         continue;
     }
 
+    // Host integration manifests use stable, unprefixed contract filenames.
+    // Their paths are referenced by config/component/component.yaml.
+    $relativePath = substr($path, strlen(str_replace('\\', '/', $configRoot)) + 1);
+    if (str_starts_with($relativePath, 'component/')) {
+        continue;
+    }
+
     $name = basename($path);
     if (str_starts_with($name, 'catalog_')) {
         continue;
